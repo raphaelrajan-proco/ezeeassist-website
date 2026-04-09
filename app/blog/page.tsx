@@ -1,0 +1,22 @@
+import type { Metadata } from "next";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import BlogContent from "./BlogContent";
+
+export const metadata: Metadata = {
+  title: "Blog — EZee Assist",
+  description:
+    "Insights on franchise operations, AI-powered support, and scaling multi-location brands from the team at EZee Assist.",
+};
+
+export default function BlogPage() {
+  return (
+    <>
+      <Navbar />
+      <main className="flex flex-1 flex-col">
+        <BlogContent />
+      </main>
+      <Footer />
+    </>
+  );
+}
