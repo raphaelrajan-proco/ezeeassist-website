@@ -5,6 +5,11 @@ import { useRef } from "react";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 
+// TODO: Set NEXT_PUBLIC_HUBSPOT_MEETINGS_URL in .env.local and Vercel env variables
+// Find your meetings URL in HubSpot → Sales → Meetings → your meeting link
+// e.g. https://meetings.hubspot.com/raphaelrajan/ezeeassist-demo
+const MEETINGS_URL = process.env.NEXT_PUBLIC_HUBSPOT_MEETINGS_URL;
+
 export default function FinalCTA() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-80px" });
@@ -27,7 +32,7 @@ export default function FinalCTA() {
         }}
       />
 
-      <div ref={ref} className="relative z-10 mx-auto max-w-3xl px-6 py-28 lg:px-8 lg:py-36 text-center">
+      <div ref={ref} className="relative z-10 mx-auto max-w-4xl px-6 py-24 lg:px-8 lg:py-32 text-center">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -47,7 +52,7 @@ export default function FinalCTA() {
             smoothly.
           </p>
 
-          <div className="mt-10 flex flex-wrap justify-center gap-4">
+          <div className="mt-8 flex flex-wrap justify-center gap-4">
             <Link href="/contact">
               <Button size="lg">Book a Demo</Button>
             </Link>
@@ -57,6 +62,28 @@ export default function FinalCTA() {
               </Button>
             </Link>
           </div>
+
+          {/* HubSpot Calendar Embed */}
+          {MEETINGS_URL ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+              className="mt-14"
+            >
+              <p className="text-sm text-gray-500 mb-5">Pick a time that works for you</p>
+              <div className="w-full mx-auto">
+                <iframe
+                  src={`${MEETINGS_URL}?embed=true`}
+                  width="100%"
+                  height="700"
+                  frameBorder="0"
+                  className="rounded-xl border border-[#E5E7EB] shadow-sm min-h-[600px] lg:min-h-[700px]"
+                  title="Book a Demo with EZee Assist"
+                />
+              </div>
+            </motion.div>
+          ) : null}
         </motion.div>
       </div>
     </section>

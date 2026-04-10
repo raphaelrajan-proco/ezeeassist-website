@@ -5,6 +5,10 @@ import { useRef, useState } from "react";
 import { Mail, Phone, Globe, Share2, Link2 } from "lucide-react";
 import Button from "@/components/ui/Button";
 
+// TODO: Set NEXT_PUBLIC_HUBSPOT_MEETINGS_URL in .env.local and Vercel env variables
+// Find your meetings URL in HubSpot → Sales → Meetings → your meeting link
+const MEETINGS_URL = process.env.NEXT_PUBLIC_HUBSPOT_MEETINGS_URL;
+
 const inputClass =
   "w-full rounded-lg border border-[#E5E7EB] bg-white px-4 py-3 text-sm text-[#0A0A0A] placeholder:text-gray-400 focus:border-[#00AEEF] focus:outline-none focus:ring-2 focus:ring-[#00AEEF]/20 transition-all";
 
@@ -237,6 +241,33 @@ export default function ContactContent() {
           </div>
         </div>
       </section>
+
+      {/* ── Calendar embed ────────────────────────────────── */}
+      {MEETINGS_URL && (
+        <section className="w-full border-t border-[#E5E7EB] bg-white">
+          <div className="mx-auto max-w-4xl px-6 py-16 lg:px-8">
+            <div className="text-center mb-8">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
+                Or book directly
+              </p>
+              <h2
+                className="text-2xl font-bold text-[#0A0A0A]"
+                style={{ letterSpacing: "-0.02em" }}
+              >
+                Pick a time that works for you
+              </h2>
+            </div>
+            <iframe
+              src={`${MEETINGS_URL}?embed=true`}
+              width="100%"
+              height="700"
+              frameBorder="0"
+              className="rounded-xl border border-[#E5E7EB] shadow-sm min-h-[600px] lg:min-h-[700px]"
+              title="Book a Demo with EZee Assist"
+            />
+          </div>
+        </section>
+      )}
     </>
   );
 }
