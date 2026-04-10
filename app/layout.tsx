@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import CookieConsent from "@/components/CookieConsent";
-import HubSpotChat from "@/components/HubSpotChat";
+import AnalyticsProvider from "@/components/AnalyticsProvider";
 
 const BASE_URL = "https://www.ezeeassist.com";
 
@@ -59,7 +59,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         {children}
         <CookieConsent />
-        <HubSpotChat />
+        <AnalyticsProvider />
       </body>
     </html>
   );

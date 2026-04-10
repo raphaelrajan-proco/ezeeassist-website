@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { dispatchConsentEvent } from "@/lib/cookie-consent";
 
 const STORAGE_KEY = "cookie-consent";
 
@@ -16,11 +17,13 @@ export default function CookieConsent() {
 
   function handleAccept() {
     localStorage.setItem(STORAGE_KEY, "accepted");
+    dispatchConsentEvent();
     setVisible(false);
   }
 
   function handleDecline() {
     localStorage.setItem(STORAGE_KEY, "declined");
+    dispatchConsentEvent();
     setVisible(false);
   }
 

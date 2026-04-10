@@ -1,16 +1,24 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Script from "next/script";
+import { hasConsentedToCookies, onConsentChange } from "@/lib/cookie-consent";
 
-// To find your HubSpot Portal ID:
-// Go to HubSpot → Settings → Tracking & Analytics → Tracking Code
-// The portal ID is the number in the script src URL
-const PORTAL_ID = process.env.NEXT_PUBLIC_HUBSPOT_PORTAL_ID ?? "YOUR_HUBSPOT_PORTAL_ID";
-// TODO: Replace YOUR_HUBSPOT_PORTAL_ID with actual HubSpot portal ID
-// Set NEXT_PUBLIC_HUBSPOT_PORTAL_ID in .env.local and Vercel env variables
+// Get from: HubSpot → Settings → Tracking & Analytics → Tracking Code
+const PORTAL_ID = process.env.NEXT_PUBLIC_HUBSPOT_PORTAL_ID;
 
 export default function HubSpotChat() {
-  if (!process.env.NEXT_PUBLIC_HUBSPOT_PORTAL_ID) return null;
+  const [consented, setConsented] = useState(false);
+
+  useEffect(() => {
+    if (hasConsentedToCookies()) setConsented(true);
+    const cleanup = onConsentChange(() => {
+      if (hasConsentedToCookies()) setConsented(true);
+    });
+    return cleanup;
+  }, []);
+
+  if (!PORTAL_ID || !consented) return null;
 
   return (
     <Script
