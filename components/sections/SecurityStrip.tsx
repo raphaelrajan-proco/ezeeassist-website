@@ -16,7 +16,7 @@ export default function SecurityStrip() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="w-full bg-[#F7F8FA]">
+    <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
       <div
         ref={ref}
         className="mx-auto max-w-4xl px-6 py-16 lg:px-8 text-center"
@@ -31,9 +31,9 @@ export default function SecurityStrip() {
           <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#00AEEF]/10">
             <ShieldCheck size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
           </div>
-          <p className="text-lg font-bold text-[#0A0A0A] sm:text-xl">
+          <p className="text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-xl">
             Enterprise-grade security.{" "}
-            <span className="text-gray-500 font-normal">
+            <span className="text-gray-500 dark:text-gray-400 font-normal">
               Your data never trains third-party models.
             </span>
           </p>
@@ -49,7 +49,7 @@ export default function SecurityStrip() {
           {badges.map((badge) => (
             <span
               key={badge}
-              className="rounded-full border border-[#E5E7EB] bg-white px-4 py-2 text-xs font-semibold text-gray-500 shadow-sm"
+              className="rounded-full border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 shadow-sm"
             >
               {badge}
             </span>

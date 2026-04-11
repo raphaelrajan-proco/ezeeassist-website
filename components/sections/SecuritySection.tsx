@@ -34,7 +34,7 @@ export default function SecuritySection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="w-full bg-white">
+    <section className="w-full bg-white dark:bg-[#0D0D0D]">
       <div ref={ref} className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
         {/* Heading */}
         <motion.div
@@ -45,13 +45,13 @@ export default function SecuritySection() {
         >
           <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Security</p>
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
             Security is the{" "}
             <span className="text-[#00AEEF]">backbone</span> of our product.
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-gray-600">
+          <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-gray-600 dark:text-gray-400">
             We follow best-in-class security practices to ensure your data is
             completely protected and in line with your privacy policies.
           </p>
@@ -65,13 +65,13 @@ export default function SecuritySection() {
               initial={{ opacity: 0, y: 24 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 + i * 0.1 }}
-              className="card-hover rounded-xl border border-[#E5E7EB] bg-[#F7F8FA] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)]"
+              className="card-hover rounded-xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2),_0_4px_12px_rgba(0,0,0,0.3)]"
             >
               <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#00AEEF]/10">
                 <Icon size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
               </div>
-              <h3 className="text-sm font-bold text-[#0A0A0A] mb-2">{title}</h3>
-              <p className="text-sm leading-6 text-gray-600">{body}</p>
+              <h3 className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-2">{title}</h3>
+              <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">{body}</p>
             </motion.div>
           ))}
         </div>

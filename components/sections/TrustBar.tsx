@@ -18,9 +18,9 @@ export default function TrustBar() {
   const track = [...logos, ...logos];
 
   return (
-    <section className="w-full bg-[#F7F8FA] py-14 overflow-hidden">
+    <section className="w-full bg-[#F7F8FA] dark:bg-[#111111] py-14 overflow-hidden">
       {/* Label */}
-      <p className="text-center text-xs font-semibold uppercase tracking-widest text-gray-400 mb-8">
+      <p className="text-center text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-8">
         Trusted by franchise brands across North America
       </p>
 
@@ -38,9 +38,9 @@ export default function TrustBar() {
           {track.map((name, i) => (
             <div
               key={i}
-              className="flex items-center justify-center rounded-lg bg-white border border-[#E5E7EB] px-7 py-3 min-w-[160px] h-[52px] shadow-sm flex-shrink-0"
+              className="flex items-center justify-center rounded-lg bg-white dark:bg-[#161616] border border-[#E5E7EB] dark:border-white/[0.08] px-7 py-3 min-w-[160px] h-[52px] shadow-sm flex-shrink-0"
             >
-              <span className="text-sm font-semibold text-gray-400 whitespace-nowrap">
+              <span className="text-sm font-semibold text-gray-400 dark:text-gray-500 whitespace-nowrap">
                 {name}
               </span>
             </div>

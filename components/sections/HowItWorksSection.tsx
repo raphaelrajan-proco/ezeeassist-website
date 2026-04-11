@@ -39,12 +39,7 @@ export default function HowItWorksSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section
-      className="relative w-full overflow-hidden"
-      style={{
-        background: "linear-gradient(to bottom, #F7F8FA 0%, #ffffff 100%)",
-      }}
-    >
+    <section className="relative w-full overflow-hidden bg-how-it-works-gradient">
       <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
         {/* Heading */}
         <motion.div
@@ -58,7 +53,7 @@ export default function HowItWorksSection() {
             How It Works
           </p>
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
             Up and running in{" "}
@@ -84,17 +79,17 @@ export default function HowItWorksSection() {
               className="relative flex flex-col items-center text-center md:items-start md:text-left"
             >
               {/* Step circle */}
-              <div className="relative z-10 mb-6 flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full border-2 border-[#00AEEF] bg-white shadow-[0_0_0_6px_rgba(0,174,239,0.08)]">
+              <div className="relative z-10 mb-6 flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full border-2 border-[#00AEEF] bg-white dark:bg-[#161616] shadow-[0_0_0_6px_rgba(0,174,239,0.08)]">
                 <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
               </div>
               <p className="text-xs font-bold uppercase tracking-widest text-[#00AEEF] mb-2">{number}</p>
               <h3
-                className="text-lg font-bold text-[#0A0A0A] mb-3"
+                className="text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3"
                 style={{ letterSpacing: "-0.01em" }}
               >
                 {title}
               </h3>
-              <p className="text-base leading-7 text-gray-600">{body}</p>
+              <p className="text-base leading-7 text-gray-600 dark:text-gray-400">{body}</p>
             </motion.div>
           ))}
         </div>

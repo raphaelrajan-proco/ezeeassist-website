@@ -2,6 +2,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
 
+/* ─── Dark mode variant (Tailwind v4 CSS-first) ───────── */
+@variant dark (&:where(.dark, .dark *));
+
 /* ─── Brand Design Tokens ─────────────────────────────── */
 @theme inline {
   --color-brand-blue:   #00AEEF;
@@ -16,7 +19,10 @@
 /* ─── Base Styles ─────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  color-scheme: light dark;
+}
 
 body {
   background-color: #FFFFFF;
@@ -24,6 +30,42 @@ body {
   font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* ─── Dark mode body ──────────────────────────────────── */
+.dark body {
+  background-color: #0D0D0D;
+  color: #F0F0F0;
+}
+
+/* ─── Section gradient utilities (needed for dark: support) */
+.bg-hero-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%);
+}
+.dark .bg-hero-gradient {
+  background: linear-gradient(135deg, #0D0D0D 0%, #0B1623 100%);
+}
+
+.bg-how-it-works-gradient {
+  background: linear-gradient(to bottom, #F7F8FA 0%, #ffffff 100%);
+}
+.dark .bg-how-it-works-gradient {
+  background: linear-gradient(to bottom, #111111 0%, #0D0D0D 100%);
+}
+
+.bg-final-cta-gradient {
+  background: linear-gradient(to bottom, #ffffff 0%, #F0F9FF 100%);
+}
+.dark .bg-final-cta-gradient {
+  background: linear-gradient(to bottom, #0D0D0D 0%, #0B1623 100%);
+}
+
+.bg-gated-popup-gradient {
+  background: linear-gradient(135deg, #F0F9FF 0%, #ffffff 100%);
+}
+.dark .bg-gated-popup-gradient {
+  background: linear-gradient(135deg, #0B1623 0%, #161616 100%);
 }
 
 /* ─── Marquee Animation ───────────────────────────────── */

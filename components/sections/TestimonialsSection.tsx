@@ -56,7 +56,7 @@ export default function TestimonialsSection() {
   const t = testimonials[current];
 
   return (
-    <section className="w-full bg-white">
+    <section className="w-full bg-white dark:bg-[#0D0D0D]">
       <div className="mx-auto max-w-4xl px-6 py-24 lg:px-8 lg:py-28">
         {/* Heading */}
         <motion.div
@@ -68,7 +68,7 @@ export default function TestimonialsSection() {
         >
           <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Customer Stories</p>
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
             What franchise leaders are saying
@@ -82,7 +82,7 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.5, ease: "easeOut", delay: 0.15 }}
         >
           <div
-            className="relative rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_30px_rgba(0,0,0,0.06)] overflow-hidden"
+            className="relative rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_30px_rgba(0,0,0,0.4)] overflow-hidden"
             style={{ borderLeft: "4px solid #00AEEF" }}
             onMouseEnter={() => setPaused(true)}
             onMouseLeave={() => setPaused(false)}
@@ -102,13 +102,13 @@ export default function TestimonialsSection() {
                   <span className="text-7xl font-extrabold leading-none text-[#00AEEF] select-none -mt-2 mb-2" aria-hidden="true">
                     &ldquo;
                   </span>
-                  <p className="flex-1 text-lg leading-8 text-[#0A0A0A] font-medium sm:text-xl">{t.quote}</p>
+                  <p className="flex-1 text-lg leading-8 text-[#0A0A0A] dark:text-[#F0F0F0] font-medium sm:text-xl">{t.quote}</p>
                 </motion.div>
               </AnimatePresence>
             </div>
 
             {/* Attribution + controls */}
-            <div className="flex items-center justify-between gap-4 border-t border-[#E5E7EB] px-10 py-5 sm:px-14">
+            <div className="flex items-center justify-between gap-4 border-t border-[#E5E7EB] dark:border-white/[0.08] px-10 py-5 sm:px-14">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={current + "-attr"}
@@ -122,10 +122,10 @@ export default function TestimonialsSection() {
                     {t.initials}
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-[#0A0A0A]">{t.name}</p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0]">{t.name}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
                       {t.title},{" "}
-                      <span className="font-medium text-[#0A0A0A]">{t.company}</span>
+                      <span className="font-medium text-[#0A0A0A] dark:text-[#F0F0F0]">{t.company}</span>
                     </p>
                   </div>
                 </motion.div>
@@ -139,7 +139,7 @@ export default function TestimonialsSection() {
                       onClick={() => goTo(i, i > current ? 1 : -1)}
                       aria-label={`Go to testimonial ${i + 1}`}
                       className={`h-2 rounded-full transition-all duration-300 ${
-                        i === current ? "w-5 bg-[#00AEEF]" : "w-2 bg-[#E5E7EB] hover:bg-gray-300"
+                        i === current ? "w-5 bg-[#00AEEF]" : "w-2 bg-[#E5E7EB] dark:bg-white/[0.1] hover:bg-gray-300 dark:hover:bg-white/[0.2]"
                       }`}
                     />
                   ))}
@@ -148,14 +148,14 @@ export default function TestimonialsSection() {
                   <button
                     onClick={prev}
                     aria-label="Previous"
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] text-gray-400 hover:border-[#00AEEF] hover:text-[#00AEEF] transition-colors"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] dark:border-white/[0.08] text-gray-400 hover:border-[#00AEEF] hover:text-[#00AEEF] dark:hover:border-[#00AEEF] transition-colors"
                   >
                     <ChevronLeft size={16} />
                   </button>
                   <button
                     onClick={next}
                     aria-label="Next"
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] text-gray-400 hover:border-[#00AEEF] hover:text-[#00AEEF] transition-colors"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] dark:border-white/[0.08] text-gray-400 hover:border-[#00AEEF] hover:text-[#00AEEF] dark:hover:border-[#00AEEF] transition-colors"
                   >
                     <ChevronRight size={16} />
                   </button>

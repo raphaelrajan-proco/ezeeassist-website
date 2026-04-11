@@ -13,24 +13,24 @@ function RepetitiveQuestionsVisual() {
     { user: "Carlos R.", q: "What are the brand guidelines for signage?" },
   ];
   return (
-    <div className="w-full rounded-2xl bg-white border border-[#E5E7EB] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] p-6 space-y-3">
+    <div className="w-full rounded-2xl bg-white dark:bg-[#161616] border border-[#E5E7EB] dark:border-white/[0.08] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2),_0_8px_24px_rgba(0,0,0,0.3)] p-6 space-y-3">
       <div className="flex items-center gap-2 mb-4">
         <div className="h-3 w-3 rounded-full bg-red-400" />
         <div className="h-3 w-3 rounded-full bg-yellow-400" />
         <div className="h-3 w-3 rounded-full bg-green-400" />
-        <span className="ml-2 text-xs text-gray-400 font-medium">Support Inbox</span>
+        <span className="ml-2 text-xs text-gray-400 dark:text-gray-500 font-medium">Support Inbox</span>
       </div>
       {messages.map(({ user, q }, i) => (
-        <div key={i} className="flex items-start gap-3 rounded-xl bg-[#F7F8FA] p-4">
+        <div key={i} className="flex items-start gap-3 rounded-xl bg-[#F7F8FA] dark:bg-white/[0.04] p-4">
           <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#00AEEF]/15 text-xs font-bold text-[#00AEEF]">{user[0]}</div>
           <div>
-            <p className="text-xs font-semibold text-[#0A0A0A] mb-0.5">{user}</p>
-            <p className="text-xs text-gray-500">{q}</p>
+            <p className="text-xs font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] mb-0.5">{user}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">{q}</p>
           </div>
-          <span className="ml-auto text-[10px] text-gray-300 whitespace-nowrap">just now</span>
+          <span className="ml-auto text-[10px] text-gray-300 dark:text-gray-600 whitespace-nowrap">just now</span>
         </div>
       ))}
-      <div className="pt-1 text-center text-xs text-gray-300">+47 more identical questions today</div>
+      <div className="pt-1 text-center text-xs text-gray-300 dark:text-gray-600">+47 more identical questions today</div>
     </div>
   );
 }
@@ -45,39 +45,39 @@ function ScatteredKnowledgeVisual() {
     { label: "Brand Guide v3 FINAL (2).pdf", color: "bg-red-100 text-red-500",   ext: "PDF" },
   ];
   return (
-    <div className="w-full rounded-2xl bg-white border border-[#E5E7EB] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] p-6">
+    <div className="w-full rounded-2xl bg-white dark:bg-[#161616] border border-[#E5E7EB] dark:border-white/[0.08] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2),_0_8px_24px_rgba(0,0,0,0.3)] p-6">
       <div className="flex items-center gap-2 mb-5">
         <div className="h-3 w-3 rounded-full bg-red-400" />
         <div className="h-3 w-3 rounded-full bg-yellow-400" />
         <div className="h-3 w-3 rounded-full bg-green-400" />
-        <span className="ml-2 text-xs text-gray-400 font-medium">Shared Drive</span>
+        <span className="ml-2 text-xs text-gray-400 dark:text-gray-500 font-medium">Shared Drive</span>
       </div>
       <div className="grid grid-cols-2 gap-2">
         {items.map(({ label, color, ext }, i) => (
-          <div key={i} className="flex items-center gap-2 rounded-lg border border-[#E5E7EB] p-2.5">
+          <div key={i} className="flex items-center gap-2 rounded-lg border border-[#E5E7EB] dark:border-white/[0.06] p-2.5">
             <span className={`flex-shrink-0 rounded px-1.5 py-0.5 text-[9px] font-bold ${color}`}>{ext}</span>
-            <span className="truncate text-[10px] text-gray-500">{label}</span>
+            <span className="truncate text-[10px] text-gray-500 dark:text-gray-400">{label}</span>
           </div>
         ))}
       </div>
-      <p className="mt-4 text-center text-[10px] text-gray-300">Spread across 4 drives, 2 SharePoints, 1 Dropbox</p>
+      <p className="mt-4 text-center text-[10px] text-gray-300 dark:text-gray-600">Spread across 4 drives, 2 SharePoints, 1 Dropbox</p>
     </div>
   );
 }
 
 function AfterHoursVisual() {
   return (
-    <div className="w-full rounded-2xl bg-white border border-[#E5E7EB] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] p-6">
+    <div className="w-full rounded-2xl bg-white dark:bg-[#161616] border border-[#E5E7EB] dark:border-white/[0.08] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2),_0_8px_24px_rgba(0,0,0,0.3)] p-6">
       <div className="flex items-center gap-2 mb-5">
         <div className="h-3 w-3 rounded-full bg-red-400" />
         <div className="h-3 w-3 rounded-full bg-yellow-400" />
         <div className="h-3 w-3 rounded-full bg-green-400" />
-        <span className="ml-2 text-xs text-gray-400 font-medium">Support Chat</span>
+        <span className="ml-2 text-xs text-gray-400 dark:text-gray-500 font-medium">Support Chat</span>
       </div>
-      <div className="rounded-xl bg-gray-50 border border-gray-200 p-4 mb-4 text-center">
+      <div className="rounded-xl bg-gray-50 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.06] p-4 mb-4 text-center">
         <div className="text-2xl mb-1">🌙</div>
-        <p className="text-xs font-semibold text-gray-500">Support is offline</p>
-        <p className="text-[10px] text-gray-400 mt-0.5">Available Mon–Fri, 9am–6pm EST</p>
+        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">Support is offline</p>
+        <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">Available Mon–Fri, 9am–6pm EST</p>
       </div>
       <div className="space-y-2">
         {[
@@ -85,13 +85,13 @@ function AfterHoursVisual() {
           { time: "12:14 AM", msg: "A customer is asking about our allergen policy, help?" },
           { time: "2:07 AM",  msg: "We're out of marketing materials for tomorrow's promo." },
         ].map(({ time, msg }, i) => (
-          <div key={i} className="flex items-start gap-2 rounded-lg bg-[#F7F8FA] px-3 py-2">
-            <span className="text-[10px] text-gray-300 whitespace-nowrap mt-0.5">{time}</span>
-            <p className="text-[10px] text-gray-500">{msg}</p>
+          <div key={i} className="flex items-start gap-2 rounded-lg bg-[#F7F8FA] dark:bg-white/[0.04] px-3 py-2">
+            <span className="text-[10px] text-gray-300 dark:text-gray-600 whitespace-nowrap mt-0.5">{time}</span>
+            <p className="text-[10px] text-gray-500 dark:text-gray-400">{msg}</p>
           </div>
         ))}
       </div>
-      <p className="mt-3 text-center text-[10px] text-gray-300">3 unanswered messages piling up</p>
+      <p className="mt-3 text-center text-[10px] text-gray-300 dark:text-gray-600">3 unanswered messages piling up</p>
     </div>
   );
 }
@@ -140,12 +140,12 @@ function FeatureRow({ row, index }: { row: (typeof rows)[0]; index: number }) {
     >
       <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">{row.eyebrow}</p>
       <h3
-        className="text-2xl font-bold leading-snug text-[#0A0A0A] sm:text-3xl mb-4"
+        className="text-2xl font-bold leading-snug text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-3xl mb-4"
         style={{ letterSpacing: "-0.02em" }}
       >
         {row.title}
       </h3>
-      <p className="text-base leading-7 text-gray-600">{row.body}</p>
+      <p className="text-base leading-7 text-gray-600 dark:text-gray-400">{row.body}</p>
     </motion.div>
   );
 
@@ -163,7 +163,7 @@ function FeatureRow({ row, index }: { row: (typeof rows)[0]; index: number }) {
     <div
       ref={ref}
       className={`grid grid-cols-1 gap-14 items-center md:grid-cols-2 ${
-        index !== rows.length - 1 ? "pb-28 border-b border-[#E5E7EB]" : ""
+        index !== rows.length - 1 ? "pb-28 border-b border-[#E5E7EB] dark:border-white/[0.06]" : ""
       }`}
     >
       {row.flip ? <>{visualCol}{textCol}</> : <>{textCol}{visualCol}</>}
@@ -178,7 +178,7 @@ export default function ProblemSection() {
   const headingInView = useInView(headingRef, { once: true, margin: "-80px" });
 
   return (
-    <section className="w-full bg-white">
+    <section className="w-full bg-white dark:bg-[#0D0D0D]">
       <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28 space-y-24">
         <motion.div
           ref={headingRef}
@@ -188,7 +188,7 @@ export default function ProblemSection() {
           className="text-center"
         >
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
             Franchise support doesn&apos;t scale.{" "}

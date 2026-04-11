@@ -16,7 +16,7 @@ function Slider({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex justify-between items-baseline">
-        <label className="text-sm font-semibold text-[#0A0A0A]">{label}</label>
+        <label className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0]">{label}</label>
         <span className="text-sm font-bold text-[#00AEEF]">{format(value)}</span>
       </div>
       <input
@@ -24,7 +24,7 @@ function Slider({
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full accent-[#00AEEF] h-2 rounded-full"
       />
-      <div className="flex justify-between text-xs text-gray-400">
+      <div className="flex justify-between text-xs text-gray-400 dark:text-gray-500">
         <span>{format(min)}</span><span>{format(max)}</span>
       </div>
     </div>
@@ -57,9 +57,9 @@ export default function ROICalculatorContent() {
   const annualSavings = annualHoursSaved * hourlyCost;
 
   const statCard = (label: string, value: string, highlight = false) => (
-    <div className={`flex flex-col gap-1 rounded-xl p-4 ${highlight ? "bg-[#00AEEF]/[0.06] border border-[#00AEEF]/20" : "bg-white border border-[#E5E7EB]"}`}>
-      <p className="text-xs font-semibold text-gray-500">{label}</p>
-      <p className={`text-2xl font-extrabold ${highlight ? "text-[#00AEEF]" : "text-[#0A0A0A]"}`} style={{ letterSpacing: "-0.02em" }}>{value}</p>
+    <div className={`flex flex-col gap-1 rounded-xl p-4 ${highlight ? "bg-[#00AEEF]/[0.06] border border-[#00AEEF]/20" : "bg-white dark:bg-[#1A1A1A] border border-[#E5E7EB] dark:border-white/[0.08]"}`}>
+      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">{label}</p>
+      <p className={`text-2xl font-extrabold ${highlight ? "text-[#00AEEF]" : "text-[#0A0A0A] dark:text-[#F0F0F0]"}`} style={{ letterSpacing: "-0.02em" }}>{value}</p>
     </div>
   );
 
@@ -68,23 +68,20 @@ export default function ROICalculatorContent() {
       <GatedContentPopup show={show} onClose={() => setShow(false)} />
 
       {/* Hero */}
-      <section
-        className="relative w-full border-b border-[#E5E7EB]"
-        style={{ background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)" }}
-      >
+      <section className="relative w-full border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20 text-center">
           <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">ROI Calculator</p>
-          <h1 className="text-4xl font-bold text-[#0A0A0A] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+          <h1 className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
             Calculate your franchise support savings
           </h1>
-          <p className="mt-5 mx-auto max-w-2xl text-lg leading-8 text-gray-600">
+          <p className="mt-5 mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-400">
             See how much time and money EZee Assist can save your franchise network. Adjust the inputs below to match your organization.
           </p>
         </div>
       </section>
 
       {/* Calculator */}
-      <section className="w-full bg-[#F7F8FA]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
 
@@ -93,9 +90,9 @@ export default function ROICalculatorContent() {
               initial={{ opacity: 0, x: -24 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.55, ease: "easeOut" }}
-              className="rounded-2xl border border-[#E5E7EB] bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] flex flex-col gap-8"
+              className="rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3)] flex flex-col gap-8"
             >
-              <h2 className="text-lg font-bold text-[#0A0A0A]" style={{ letterSpacing: "-0.01em" }}>
+              <h2 className="text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.01em" }}>
                 Your network
               </h2>
 
@@ -104,15 +101,15 @@ export default function ROICalculatorContent() {
               <Slider label="Average time to answer one question (minutes)" value={minutesPerQuestion} min={5} max={30} onChange={setMinutesPerQuestion} />
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-[#0A0A0A]">Average hourly cost of support staff</label>
+                <label className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0]">Average hourly cost of support staff</label>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-gray-400">$</span>
+                  <span className="text-sm font-bold text-gray-400 dark:text-gray-500">$</span>
                   <input
                     type="number" min={10} max={200} value={hourlyCost}
                     onChange={(e) => setHourlyCost(Number(e.target.value))}
-                    className="w-full rounded-lg border border-[#E5E7EB] px-4 py-2.5 text-sm text-[#0A0A0A] focus:border-[#00AEEF] focus:outline-none focus:ring-2 focus:ring-[#00AEEF]/20"
+                    className="w-full rounded-lg border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#1A1A1A] px-4 py-2.5 text-sm text-[#0A0A0A] dark:text-[#F0F0F0] focus:border-[#00AEEF] focus:outline-none focus:ring-2 focus:ring-[#00AEEF]/20"
                   />
-                  <span className="text-sm text-gray-400">/hr</span>
+                  <span className="text-sm text-gray-400 dark:text-gray-500">/hr</span>
                 </div>
               </div>
 
@@ -131,8 +128,8 @@ export default function ROICalculatorContent() {
               transition={{ duration: 0.55, ease: "easeOut", delay: 0.1 }}
               className="flex flex-col gap-6"
             >
-              <div className="rounded-2xl border border-[#E5E7EB] bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                <h2 className="text-lg font-bold text-[#0A0A0A] mb-6" style={{ letterSpacing: "-0.01em" }}>
+              <div className="rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
+                <h2 className="text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-6" style={{ letterSpacing: "-0.01em" }}>
                   Your results
                 </h2>
 
@@ -162,18 +159,18 @@ export default function ROICalculatorContent() {
                   >
                     {fmt(annualSavings)}
                   </motion.p>
-                  <p className="mt-2 text-sm text-gray-500">per year with EZee Assist</p>
+                  <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">per year with EZee Assist</p>
                 </div>
               </div>
             </motion.div>
           </div>
 
           {/* CTA */}
-          <div className="mt-12 rounded-2xl border border-[#E5E7EB] bg-white p-8 text-center shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-            <h3 className="text-xl font-bold text-[#0A0A0A] mb-2" style={{ letterSpacing: "-0.01em" }}>
+          <div className="mt-12 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 text-center shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
+            <h3 className="text-xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-2" style={{ letterSpacing: "-0.01em" }}>
               Want to validate these numbers for your network?
             </h3>
-            <p className="text-gray-600 mb-6">Our team will build a custom ROI model based on your actual support data.</p>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">Our team will build a custom ROI model based on your actual support data.</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/contact"><Button size="lg">Book a Demo</Button></Link>
               <button onClick={() => setShow(true)}>

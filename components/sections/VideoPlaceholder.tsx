@@ -17,7 +17,7 @@ export default function VideoPlaceholder() {
   const [hovered, setHovered] = useState(false);
 
   return (
-    <section className="w-full bg-white">
+    <section className="w-full bg-white dark:bg-[#0D0D0D]">
       <div className="mx-auto max-w-5xl px-6 py-16 lg:px-8">
         <motion.div
           ref={ref}

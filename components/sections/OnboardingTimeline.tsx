@@ -32,7 +32,7 @@ export default function OnboardingTimeline() {
   const stepsInView = useInView(stepsRef, { once: true, margin: "-60px" });
 
   return (
-    <section className="w-full bg-white">
+    <section className="w-full bg-white dark:bg-[#0D0D0D]">
       <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
         {/* Heading */}
         <motion.div
@@ -46,13 +46,13 @@ export default function OnboardingTimeline() {
             Onboarding
           </p>
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
             Live in{" "}
             <span className="text-[#00AEEF]">7 days.</span> Seriously.
           </h2>
-          <p className="mt-4 text-base leading-7 text-gray-600 max-w-xl mx-auto">
+          <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
             Our implementation process is designed to be painless. Most customers
             go live in under a week — with zero disruption to their operations.
           </p>
@@ -76,7 +76,7 @@ export default function OnboardingTimeline() {
                 className="relative flex flex-col items-center text-center md:items-start md:text-left"
               >
                 {/* Icon circle */}
-                <div className="relative z-10 mb-6 flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full border-2 border-[#00AEEF] bg-white shadow-[0_0_0_6px_rgba(0,174,239,0.08)]">
+                <div className="relative z-10 mb-6 flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full border-2 border-[#00AEEF] bg-white dark:bg-[#161616] shadow-[0_0_0_6px_rgba(0,174,239,0.08)]">
                   <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
 
@@ -86,12 +86,12 @@ export default function OnboardingTimeline() {
                 </span>
 
                 <h3
-                  className="text-lg font-bold text-[#0A0A0A] mb-3"
+                  className="text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3"
                   style={{ letterSpacing: "-0.01em" }}
                 >
                   {title}
                 </h3>
-                <p className="text-base leading-7 text-gray-600">{body}</p>
+                <p className="text-base leading-7 text-gray-600 dark:text-gray-400">{body}</p>
               </motion.div>
             ))}
           </div>

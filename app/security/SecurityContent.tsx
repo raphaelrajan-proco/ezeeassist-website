@@ -59,20 +59,20 @@ function AccordionItem({ q, a, index }: { q: string; a: string; index: number })
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.4, ease: "easeOut", delay: index * 0.08 }}
-      className="border-b border-[#E5E7EB] last:border-0"
+      className="border-b border-[#E5E7EB] dark:border-white/[0.08] last:border-0"
     >
       <button
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between gap-6 py-5 text-left group"
         aria-expanded={open}
       >
-        <span className="text-base font-semibold text-[#0A0A0A] group-hover:text-[#00AEEF] transition-colors">
+        <span className="text-base font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] group-hover:text-[#00AEEF] transition-colors">
           {q}
         </span>
         <motion.div
           animate={{ rotate: open ? 180 : 0 }}
           transition={{ duration: 0.25 }}
-          className="flex-shrink-0 text-gray-400"
+          className="flex-shrink-0 text-gray-400 dark:text-gray-500"
         >
           <ChevronDown size={18} />
         </motion.div>
@@ -87,7 +87,7 @@ function AccordionItem({ q, a, index }: { q: string; a: string; index: number })
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="overflow-hidden"
           >
-            <p className="pb-5 text-base leading-7 text-gray-600">{a}</p>
+            <p className="pb-5 text-base leading-7 text-gray-600 dark:text-gray-400">{a}</p>
           </motion.div>
         )}
       </AnimatePresence>
@@ -100,8 +100,7 @@ export default function SecurityContent() {
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
       <section
-        className="relative w-full overflow-hidden border-b border-[#E5E7EB]"
-        style={{ background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)" }}
+        className="relative w-full overflow-hidden border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient"
       >
         <div
           className="pointer-events-none absolute inset-0"

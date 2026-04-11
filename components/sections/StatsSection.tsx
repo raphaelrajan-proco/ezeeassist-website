@@ -38,10 +38,10 @@ function StatCard({ prefix, value, suffix, label, isInView }: (typeof stats)[0] 
 
   return (
     <div className="flex flex-col items-center text-center px-6">
-      <p className="text-5xl font-extrabold tracking-tight text-[#0A0A0A] lg:text-6xl" style={{ letterSpacing: "-0.02em" }}>
+      <p className="text-5xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] lg:text-6xl" style={{ letterSpacing: "-0.02em" }}>
         {prefix}{display}{suffix}
       </p>
-      <p className="mt-3 text-sm leading-6 text-gray-500 max-w-[180px]">{label}</p>
+      <p className="mt-3 text-sm leading-6 text-gray-500 dark:text-gray-400 max-w-[180px]">{label}</p>
     </div>
   );
 }

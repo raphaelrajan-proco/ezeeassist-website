@@ -37,9 +37,9 @@ export default function CookieConsent() {
           transition={{ duration: 0.3, ease: "easeOut" }}
           className="fixed bottom-6 left-0 right-0 z-50 flex justify-center px-4"
         >
-          <div className="w-full max-w-4xl rounded-2xl border border-[#E5E7EB] bg-white/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.12)] px-6 py-4">
+          <div className="w-full max-w-4xl rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white/95 dark:bg-[#161616]/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] px-6 py-4">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm leading-6 text-gray-600">
+              <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">
                 We use cookies to improve your experience and analyze site traffic.{" "}
                 <Link
                   href="/privacy"
@@ -51,7 +51,7 @@ export default function CookieConsent() {
               <div className="flex flex-col gap-2 sm:flex-row sm:flex-shrink-0">
                 <button
                   onClick={handleDecline}
-                  className="rounded-lg border border-[#E5E7EB] px-4 py-2 text-sm font-semibold text-gray-500 transition-colors hover:border-gray-400 hover:text-gray-700 sm:w-auto w-full"
+                  className="rounded-lg border border-[#E5E7EB] dark:border-white/[0.08] px-4 py-2 text-sm font-semibold text-gray-500 dark:text-gray-400 transition-colors hover:border-gray-400 hover:text-gray-700 dark:hover:border-white/20 dark:hover:text-gray-200 sm:w-auto w-full"
                 >
                   Decline
                 </button>

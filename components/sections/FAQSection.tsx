@@ -45,7 +45,7 @@ export default function FAQSection() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <section className="w-full bg-white">
+    <section className="w-full bg-white dark:bg-[#0D0D0D]">
       <div ref={ref} className="mx-auto max-w-3xl px-6 py-16 lg:px-8 lg:py-20">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -55,7 +55,7 @@ export default function FAQSection() {
         >
           <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">FAQ</p>
           <h2
-            className="text-3xl font-bold text-[#0A0A0A] sm:text-4xl"
+            className="text-3xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-4xl"
             style={{ letterSpacing: "-0.02em" }}
           >
             Frequently asked questions
@@ -69,7 +69,7 @@ export default function FAQSection() {
               initial={{ opacity: 0, y: 12 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, ease: "easeOut", delay: i * 0.05 }}
-              className="rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] overflow-hidden"
+              className="rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] overflow-hidden"
             >
               <button
                 className="flex w-full items-center justify-between px-6 py-5 text-left"
@@ -77,12 +77,12 @@ export default function FAQSection() {
                 aria-expanded={open === i}
               >
                 <span
-                  className="text-sm font-semibold text-[#0A0A0A] pr-4"
+                  className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] pr-4"
                   style={{ letterSpacing: "-0.01em" }}
                 >
                   {q}
                 </span>
-                <div className="flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-full border border-[#E5E7EB] bg-white">
+                <div className="flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-full border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616]">
                   <Plus
                     size={14}
                     strokeWidth={2.5}
@@ -100,7 +100,7 @@ export default function FAQSection() {
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
                   >
-                    <div className="px-6 pb-5 text-sm leading-7 text-gray-600 border-t border-[#E5E7EB] pt-4">
+                    <div className="px-6 pb-5 text-sm leading-7 text-gray-600 dark:text-gray-400 border-t border-[#E5E7EB] dark:border-white/[0.08] pt-4">
                       {a}
                     </div>
                   </motion.div>

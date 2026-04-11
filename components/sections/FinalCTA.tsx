@@ -15,12 +15,7 @@ export default function FinalCTA() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section
-      className="relative w-full overflow-hidden"
-      style={{
-        background: "linear-gradient(to bottom, #ffffff 0%, #F0F9FF 100%)",
-      }}
-    >
+    <section className="relative w-full overflow-hidden bg-final-cta-gradient">
       {/* Dot grid overlay */}
       <div className="pointer-events-none absolute inset-0 bg-dot-grid opacity-20" />
       {/* Radial glow */}
@@ -39,14 +34,14 @@ export default function FinalCTA() {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl lg:text-6xl"
+            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl lg:text-6xl"
             style={{ letterSpacing: "-0.02em" }}
           >
             Give your franchisees the support{" "}
             <span className="text-[#00AEEF]">they deserve.</span>
           </h2>
 
-          <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
+          <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600 dark:text-gray-400">
             See how leading brands use EZee Assist to reduce support volume,
             improve franchisee satisfaction, and keep every location running
             smoothly.
@@ -78,7 +73,7 @@ export default function FinalCTA() {
                   width="100%"
                   height="700"
                   frameBorder="0"
-                  className="rounded-xl border border-[#E5E7EB] shadow-sm min-h-[600px] lg:min-h-[700px]"
+                  className="rounded-xl border border-[#E5E7EB] dark:border-white/[0.08] shadow-sm min-h-[600px] lg:min-h-[700px]"
                   title="Book a Demo with EZee Assist"
                 />
               </div>

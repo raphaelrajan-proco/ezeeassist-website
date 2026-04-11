@@ -39,8 +39,7 @@ export default function AboutContent() {
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
       <section
-        className="relative w-full overflow-hidden border-b border-[#E5E7EB]"
-        style={{ background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)" }}
+        className="relative w-full overflow-hidden border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient"
       >
         <div
           className="pointer-events-none absolute inset-0"
@@ -50,12 +49,12 @@ export default function AboutContent() {
           <motion.div {...fadeUp()} className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">About Us</p>
             <h1
-              className="text-5xl font-bold tracking-tight text-[#0A0A0A] sm:text-6xl"
+              className="text-5xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               About our <span className="text-[#00AEEF]">company</span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600 max-w-2xl">
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
               Our team brings deep expertise in solving complex enterprise
               challenges with technology. Our combined experiences include
               strategy consulting, venture capital, AI and Machine Learning.
@@ -65,11 +64,11 @@ export default function AboutContent() {
       </section>
 
       {/* ── Meet the Team ───────────────────────────────── */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
           <motion.div {...fadeUp()} className="mb-14">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">The Team</p>
-            <h2 className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               Meet our <span className="text-[#00AEEF]">team</span>
             </h2>
           </motion.div>
@@ -87,12 +86,12 @@ export default function AboutContent() {
                 <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#00AEEF]/10 border-2 border-[#00AEEF]/20 text-base font-bold text-[#00AEEF] mb-3 transition-all duration-200 group-hover:border-[#00AEEF]/50 group-hover:bg-[#00AEEF]/15">
                   {initials}
                 </div>
-                <p className="text-sm font-bold text-[#0A0A0A] leading-tight">{name}</p>
-                <p className="mt-1 text-xs text-gray-500 leading-snug">{title}</p>
+                <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] leading-tight">{name}</p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 leading-snug">{title}</p>
                 <a
                   href="#"
                   aria-label={`${name} LinkedIn`}
-                  className="mt-2 text-gray-300 hover:text-[#00AEEF] transition-colors"
+                  className="mt-2 text-gray-300 dark:text-gray-600 hover:text-[#00AEEF] transition-colors"
                 >
                   <Link2 size={13} />
                 </a>
@@ -103,12 +102,12 @@ export default function AboutContent() {
       </section>
 
       {/* ── Values ──────────────────────────────────────── */}
-      <section className="w-full bg-[#F7F8FA]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
           <motion.div {...fadeUp()} className="text-center mb-14">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Our Values</p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               What we <span className="text-[#00AEEF]">believe in</span>
@@ -124,12 +123,12 @@ export default function AboutContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.1 }}
-                className="card-hover flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] bg-white p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)]"
+                className="card-hover flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#00AEEF]/10">
                   <Icon size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
-                <p className="text-base font-semibold text-[#0A0A0A] leading-snug">{text}</p>
+                <p className="text-base font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] leading-snug">{text}</p>
               </motion.div>
             ))}
           </div>
@@ -143,12 +142,12 @@ export default function AboutContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.1 }}
-                className="card-hover flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] bg-white p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)]"
+                className="card-hover flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#00AEEF]/10">
                   <Icon size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
-                <p className="text-base font-semibold text-[#0A0A0A] leading-snug">{text}</p>
+                <p className="text-base font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] leading-snug">{text}</p>
               </motion.div>
             ))}
           </div>
@@ -156,7 +155,7 @@ export default function AboutContent() {
       </section>
 
       {/* ── This is EZee Assist ─────────────────────────── */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
           <div className="grid grid-cols-1 gap-14 lg:grid-cols-2 lg:gap-16 items-center">
             <motion.div
@@ -167,19 +166,19 @@ export default function AboutContent() {
             >
               <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Our Culture</p>
               <h2
-                className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl mb-5"
+                className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl mb-5"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 This is <span className="text-[#00AEEF]">EZee Assist</span>
               </h2>
-              <p className="text-base leading-7 text-gray-600">
+              <p className="text-base leading-7 text-gray-600 dark:text-gray-400">
                 We are a digital-first, remote-first organization built on trust,
                 autonomy, and a shared mission to transform how franchise systems
                 operate. Our team spans multiple time zones and brings together
                 diverse backgrounds — from enterprise software to machine
                 learning, franchise operations to venture-backed startups.
               </p>
-              <p className="mt-4 text-base leading-7 text-gray-600">
+              <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400">
                 We move fast, care deeply, and hold ourselves to a high standard.
                 Whether you&apos;re a franchisee at 2am or a support manager
                 reviewing tickets on Monday morning, we&apos;re building for you.
@@ -195,7 +194,7 @@ export default function AboutContent() {
               className="grid grid-cols-5 gap-2"
             >
               {Array.from({ length: 10 }).map((_, i) => (
-                <div key={i} className="aspect-square rounded-xl bg-[#F7F8FA] border border-[#E5E7EB]" />
+                <div key={i} className="aspect-square rounded-xl bg-[#F7F8FA] dark:bg-[#111111] border border-[#E5E7EB] dark:border-white/[0.08]" />
               ))}
             </motion.div>
           </div>
@@ -203,19 +202,19 @@ export default function AboutContent() {
       </section>
 
       {/* ── Investors ───────────────────────────────────── */}
-      <section className="w-full bg-[#F7F8FA] border-t border-[#E5E7EB]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111] border-t border-[#E5E7EB] dark:border-white/[0.06]">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 text-center">
           <motion.div {...fadeUp()}>
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-10">
+            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-10">
               Backed by leading investors
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
               {investors.map((name) => (
                 <div
                   key={name}
-                  className="card-hover flex items-center justify-center rounded-xl border border-[#E5E7EB] bg-white px-8 py-4 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] min-w-[120px]"
+                  className="card-hover flex items-center justify-center rounded-xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] px-8 py-4 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)] min-w-[120px]"
                 >
-                  <span className="text-sm font-bold text-gray-400">{name}</span>
+                  <span className="text-sm font-bold text-gray-400 dark:text-gray-500">{name}</span>
                 </div>
               ))}
             </div>

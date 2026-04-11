@@ -50,8 +50,7 @@ export default function CareersContent() {
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
       <section
-        className="relative w-full overflow-hidden border-b border-[#E5E7EB]"
-        style={{ background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)" }}
+        className="relative w-full overflow-hidden border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient"
       >
         <div
           className="pointer-events-none absolute inset-0"

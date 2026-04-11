@@ -15,7 +15,7 @@ const fadeUp = {
 
 export default function HeroSection() {
   return (
-    <section className="relative w-full overflow-hidden bg-white">
+    <section className="relative w-full overflow-hidden bg-white dark:bg-[#0D0D0D]">
       {/* Radial glow — sits behind everything */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -46,7 +46,7 @@ export default function HeroSection() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mt-8 text-5xl font-bold leading-[1.08] tracking-tight text-[#0A0A0A] sm:text-6xl lg:text-7xl"
+          className="mt-8 text-5xl font-bold leading-[1.08] tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
           style={{ letterSpacing: "-0.02em" }}
         >
           Your franchisees have questions{" "}
@@ -72,7 +72,7 @@ export default function HeroSection() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-gray-600 sm:text-xl"
+          className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-400 sm:text-xl"
         >
           EZee Assist is the AI support platform that gives every franchise
           location instant, accurate answers from your brand&apos;s own knowledge
@@ -101,7 +101,7 @@ export default function HeroSection() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mt-10 text-sm text-gray-400"
+          className="mt-10 text-sm text-gray-400 dark:text-gray-500"
         >
           Trusted by 50+ franchise brands across North America
         </motion.p>

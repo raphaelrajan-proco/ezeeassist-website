@@ -10,9 +10,9 @@ import Button from "@/components/ui/Button";
 const MEETINGS_URL = process.env.NEXT_PUBLIC_HUBSPOT_MEETINGS_URL;
 
 const inputClass =
-  "w-full rounded-lg border border-[#E5E7EB] bg-white px-4 py-3 text-sm text-[#0A0A0A] placeholder:text-gray-400 focus:border-[#00AEEF] focus:outline-none focus:ring-2 focus:ring-[#00AEEF]/20 transition-all";
+  "w-full rounded-lg border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#1A1A1A] px-4 py-3 text-sm text-[#0A0A0A] dark:text-[#F0F0F0] placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:border-[#00AEEF] focus:outline-none focus:ring-2 focus:ring-[#00AEEF]/20 transition-all";
 
-const labelClass = "block text-sm font-semibold text-[#0A0A0A] mb-1.5";
+const labelClass = "block text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] mb-1.5";
 
 const unitOptions = [
   "Select number of units",
@@ -40,10 +40,7 @@ export default function ContactContent() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section
-        className="relative w-full overflow-hidden border-b border-[#E5E7EB]"
-        style={{ background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)" }}
-      >
+      <section className="relative w-full overflow-hidden border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient">
         <div
           className="pointer-events-none absolute inset-0"
           style={{ background: "radial-gradient(ellipse 70% 80% at 0% 50%, rgba(0,174,239,0.06) 0%, transparent 55%)" }}
@@ -57,13 +54,13 @@ export default function ContactContent() {
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Contact</p>
             <h1
-              className="text-5xl font-bold tracking-tight text-[#0A0A0A] sm:text-6xl"
+              className="text-5xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Get in{" "}
               <span className="text-[#00AEEF]">touch</span> with our team
             </h1>
-            <p className="mt-5 text-lg leading-8 text-gray-600">
+            <p className="mt-5 text-lg leading-8 text-gray-600 dark:text-gray-400">
               We look forward to connecting to learn about how we can help your
               brand amplify operations with EZee Assist.
             </p>
@@ -72,7 +69,7 @@ export default function ContactContent() {
       </section>
 
       {/* ── Form + Info ───────────────────────────────────── */}
-      <section className="w-full bg-[#F7F8FA]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
         <div ref={bodyRef} className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1fr_340px]">
 
@@ -81,7 +78,7 @@ export default function ContactContent() {
               initial={{ opacity: 0, x: -24 }}
               animate={bodyInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.55, ease: "easeOut", delay: 0.1 }}
-              className="rounded-2xl border border-[#E5E7EB] bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)]"
+              className="rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
             >
               {submitted ? (
                 <div className="flex flex-col items-center justify-center text-center py-16 gap-4">
@@ -89,12 +86,12 @@ export default function ContactContent() {
                     <Mail size={24} className="text-[#00AEEF]" strokeWidth={1.75} />
                   </div>
                   <h2
-                    className="text-2xl font-bold text-[#0A0A0A]"
+                    className="text-2xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]"
                     style={{ letterSpacing: "-0.01em" }}
                   >
                     Message received!
                   </h2>
-                  <p className="text-sm leading-6 text-gray-600 max-w-sm">
+                  <p className="text-sm leading-6 text-gray-600 dark:text-gray-400 max-w-sm">
                     Thanks for reaching out. Someone from our team will be in
                     touch within one business day.
                   </p>
@@ -108,7 +105,7 @@ export default function ContactContent() {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <h2
-                    className="text-xl font-bold text-[#0A0A0A] mb-6"
+                    className="text-xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-6"
                     style={{ letterSpacing: "-0.01em" }}
                   >
                     Book a Demo
@@ -164,7 +161,7 @@ export default function ContactContent() {
 
                   <div className="pt-2">
                     <Button size="lg" className="w-full" type="submit">Send message</Button>
-                    <p className="mt-3 text-center text-xs text-gray-400">
+                    <p className="mt-3 text-center text-xs text-gray-400 dark:text-gray-500">
                       We&apos;ll respond within one business day.
                     </p>
                   </div>
@@ -179,9 +176,9 @@ export default function ContactContent() {
               transition={{ duration: 0.55, ease: "easeOut", delay: 0.2 }}
               className="flex flex-col gap-6"
             >
-              <div className="rounded-2xl border-2 border-[#00AEEF] bg-white p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,174,239,0.08)]">
+              <div className="rounded-2xl border-2 border-[#00AEEF] bg-white dark:bg-[#161616] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,174,239,0.08)]">
                 <h3
-                  className="text-base font-bold text-[#0A0A0A] mb-6"
+                  className="text-base font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-6"
                   style={{ letterSpacing: "-0.01em" }}
                 >
                   Contact information
@@ -192,8 +189,8 @@ export default function ContactContent() {
                     <Mail size={16} className="text-[#00AEEF]" strokeWidth={1.75} />
                   </div>
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-0.5">Email</p>
-                    <a href="mailto:sales@ezeeassist.com" className="text-sm font-semibold text-[#0A0A0A] hover:text-[#00AEEF] transition-colors">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-0.5">Email</p>
+                    <a href="mailto:sales@ezeeassist.com" className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">
                       sales@ezeeassist.com
                     </a>
                   </div>
@@ -204,15 +201,15 @@ export default function ContactContent() {
                     <Phone size={16} className="text-[#00AEEF]" strokeWidth={1.75} />
                   </div>
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-0.5">Phone</p>
-                    <a href="tel:+18557773933" className="text-sm font-semibold text-[#0A0A0A] hover:text-[#00AEEF] transition-colors">
+                    <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-0.5">Phone</p>
+                    <a href="tel:+18557773933" className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">
                       +1 (855) 777-3933
                     </a>
                   </div>
                 </div>
 
-                <div className="border-t border-[#E5E7EB] pt-5">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Follow us</p>
+                <div className="border-t border-[#E5E7EB] dark:border-white/[0.08] pt-5">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">Follow us</p>
                   <div className="flex gap-2">
                     {socialLinks.map(({ label, href, icon: Icon }) => (
                       <a
@@ -221,7 +218,7 @@ export default function ContactContent() {
                         aria-label={label}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] text-gray-400 hover:border-[#00AEEF] hover:text-[#00AEEF] transition-colors"
+                        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] dark:border-white/[0.08] text-gray-400 hover:border-[#00AEEF] hover:text-[#00AEEF] dark:hover:border-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors"
                       >
                         <Icon size={15} />
                       </a>
@@ -230,9 +227,9 @@ export default function ContactContent() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-[#E5E7EB] bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)]">
-                <p className="text-sm font-bold text-[#0A0A0A] mb-1">Fast response guaranteed</p>
-                <p className="text-sm leading-6 text-gray-600">
+              <div className="rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3)]">
+                <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-1">Fast response guaranteed</p>
+                <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">
                   Our team typically responds within one business day. For urgent inquiries, call us directly.
                 </p>
               </div>
@@ -244,14 +241,14 @@ export default function ContactContent() {
 
       {/* ── Calendar embed ────────────────────────────────── */}
       {MEETINGS_URL && (
-        <section className="w-full border-t border-[#E5E7EB] bg-white">
+        <section className="w-full border-t border-[#E5E7EB] dark:border-white/[0.06] bg-white dark:bg-[#0D0D0D]">
           <div className="mx-auto max-w-4xl px-6 py-16 lg:px-8">
             <div className="text-center mb-8">
               <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
                 Or book directly
               </p>
               <h2
-                className="text-2xl font-bold text-[#0A0A0A]"
+                className="text-2xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 Pick a time that works for you
@@ -262,7 +259,7 @@ export default function ContactContent() {
               width="100%"
               height="700"
               frameBorder="0"
-              className="rounded-xl border border-[#E5E7EB] shadow-sm min-h-[600px] lg:min-h-[700px]"
+              className="rounded-xl border border-[#E5E7EB] dark:border-white/[0.08] shadow-sm min-h-[600px] lg:min-h-[700px]"
               title="Book a Demo with EZee Assist"
             />
           </div>

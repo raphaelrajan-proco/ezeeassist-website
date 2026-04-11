@@ -61,14 +61,14 @@ export default function CaseStudyCarousel() {
   const slide = slides[current];
 
   return (
-    <section className="w-full border-t border-[#E5E7EB] bg-white">
+    <section className="w-full border-t border-[#E5E7EB] dark:border-white/[0.06] bg-white dark:bg-[#0D0D0D]">
       <div className="mx-auto max-w-5xl px-6 py-14 lg:px-8">
         <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-8 text-center">
           Customer results
         </p>
 
         <div
-          className="relative overflow-hidden rounded-2xl border border-[#E5E7EB] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)]"
+          className="relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onTouchStart={handleTouchStart}
@@ -96,15 +96,15 @@ export default function CaseStudyCarousel() {
               </div>
 
               {/* Content */}
-              <div className="flex flex-col justify-center p-8 sm:p-10 bg-white">
+              <div className="flex flex-col justify-center p-8 sm:p-10 bg-white dark:bg-[#161616]">
                 <div
                   className="text-6xl font-extrabold leading-none mb-1"
                   style={{ color: slide.accent, letterSpacing: "-0.03em" }}
                 >
                   {slide.stat}
                 </div>
-                <p className="text-base font-semibold text-gray-500 mb-5">{slide.statLabel}</p>
-                <p className="text-lg font-medium text-[#0A0A0A] italic mb-6">
+                <p className="text-base font-semibold text-gray-500 dark:text-gray-400 mb-5">{slide.statLabel}</p>
+                <p className="text-lg font-medium text-[#0A0A0A] dark:text-[#F0F0F0] italic mb-6">
                   &ldquo;{slide.quote}&rdquo;
                 </p>
                 <Link
@@ -126,7 +126,7 @@ export default function CaseStudyCarousel() {
               key={i}
               onClick={() => setCurrent(i)}
               className={`h-2 rounded-full transition-all duration-300 ${
-                i === current ? "w-6 bg-[#00AEEF]" : "w-2 bg-[#E5E7EB]"
+                i === current ? "w-6 bg-[#00AEEF]" : "w-2 bg-[#E5E7EB] dark:bg-white/[0.1]"
               }`}
               aria-label={`Go to slide ${i + 1}`}
             />
