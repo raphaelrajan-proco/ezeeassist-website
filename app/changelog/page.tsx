@@ -1,0 +1,111 @@
+import type { Metadata } from "next";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+
+export const metadata: Metadata = {
+  title: "Changelog — EZee Assist",
+  description: "Product updates, new features, and improvements from EZee Assist.",
+};
+
+// TODO: Move changelog entries to Sanity CMS for easy editing
+const entries = [
+  {
+    date: "April 2026",
+    tag: "Coming Soon",
+    tagColor: "bg-[#00AEEF]/10 text-[#00AEEF]",
+    title: "Agentic Workflow Builder",
+    body: "Automate multi-step franchise operations with AI agents. From onboarding checklists to vendor coordination — coming to all customers later this year.",
+  },
+  {
+    date: "March 2026",
+    tag: "New Feature",
+    tagColor: "bg-green-50 text-green-600",
+    title: "Enhanced Content Gap Analysis",
+    body: "The insights dashboard now surfaces the top questions your knowledge base can't answer — with recommendations for new content to create.",
+  },
+  {
+    date: "February 2026",
+    tag: "Integration",
+    tagColor: "bg-purple-50 text-purple-600",
+    title: "WhatsApp Channel Support",
+    body: "Franchisees can now ask questions and receive answers via WhatsApp, joining SMS, email, Slack, Teams, and web as supported channels.",
+  },
+  {
+    date: "January 2026",
+    tag: "Improvement",
+    tagColor: "bg-amber-50 text-amber-600",
+    title: "Faster Response Times",
+    body: "Average AI response time reduced to under 20 seconds across all channels, down from 30 seconds.",
+  },
+  {
+    date: "December 2025",
+    tag: "New Feature",
+    tagColor: "bg-green-50 text-green-600",
+    title: "Smart Ticketing with Auto-Categorization",
+    body: "Unanswered questions now automatically become categorized, prioritized tickets routed to the right support team member.",
+  },
+  {
+    date: "November 2025",
+    tag: "Integration",
+    tagColor: "bg-purple-50 text-purple-600",
+    title: "Microsoft Teams Integration",
+    body: "Franchisees can now access EZee Assist directly within Microsoft Teams, alongside Slack, SMS, and email.",
+  },
+];
+
+export default function ChangelogPage() {
+  return (
+    <>
+      <Navbar />
+      <main className="flex flex-1 flex-col">
+        {/* Hero */}
+        <section
+          className="relative w-full border-b border-[#E5E7EB]"
+          style={{ background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)" }}
+        >
+          <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Product</p>
+            <h1 className="text-4xl font-bold text-[#0A0A0A] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+              What&apos;s new at EZee Assist
+            </h1>
+            <p className="mt-4 text-lg text-gray-600">Product updates, new features, and improvements.</p>
+          </div>
+        </section>
+
+        {/* Timeline */}
+        <section className="w-full bg-white">
+          <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8 lg:py-20">
+            <div className="relative">
+              {/* Timeline line */}
+              <div className="absolute left-[7px] top-2 bottom-2 w-px bg-[#E5E7EB]" />
+
+              <div className="flex flex-col gap-10">
+                {entries.map(({ date, tag, tagColor, title, body }) => (
+                  <div key={title} className="relative pl-8">
+                    {/* Dot */}
+                    <div className="absolute left-0 top-1.5 h-3.5 w-3.5 rounded-full border-2 border-[#00AEEF] bg-white" />
+
+                    <div className="flex flex-wrap items-center gap-3 mb-2">
+                      <span className="text-xs font-semibold text-gray-400">{date}</span>
+                      <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-semibold ${tagColor}`}>
+                        {tag}
+                      </span>
+                    </div>
+                    <h2
+                      className="text-lg font-bold text-[#0A0A0A] mb-2"
+                      style={{ letterSpacing: "-0.01em" }}
+                    >
+                      {title}
+                    </h2>
+                    <p className="text-sm leading-7 text-gray-600">{body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
+}

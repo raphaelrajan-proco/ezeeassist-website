@@ -2,15 +2,29 @@ import { Globe, Share2, Link2 } from "lucide-react";
 
 const footerLinks = {
   Product: [
-    { label: "Platform", href: "#platform" },
+    { label: "Platform", href: "/platform" },
     { label: "Case Studies", href: "/case-studies" },
+    { label: "ROI Calculator", href: "/roi-calculator" },
+    { label: "Changelog", href: "/changelog" },
     { label: "Security", href: "/security" },
+    // TODO: Replace # with real status page URL (e.g., UptimeRobot or Instatus)
+    { label: "Status", href: "#" },
+  ],
+  Resources: [
+    { label: "Blog", href: "/blog" },
+    { label: "Why EZee Assist", href: "/why-ezeeassist" },
+    { label: "ROI Calculator", href: "/roi-calculator" },
+    { label: "Changelog", href: "/changelog" },
   ],
   Company: [
-    { label: "Home", href: "/" },
     { label: "About", href: "/about" },
     { label: "Careers", href: "/careers" },
     { label: "Contact", href: "/contact" },
+  ],
+  Policies: [
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Terms of Use", href: "/terms" },
+    { label: "Accessibility", href: "/accessibility" },
   ],
 };
 
@@ -21,15 +35,13 @@ const socialLinks = [
 ];
 
 export default function Footer() {
-  const year = new Date().getFullYear();
-
   return (
     <footer className="w-full border-t border-[#E5E7EB] bg-[#F7F8FA]">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-10 md:grid-cols-[1fr_repeat(4,_auto)]">
 
           {/* Brand column */}
-          <div className="md:col-span-2">
+          <div className="col-span-2 md:col-span-1">
             <span className="text-xl font-bold tracking-tight text-[#0A0A0A]">
               EZee <span className="text-[#00AEEF]">Assist</span>
             </span>
@@ -39,23 +51,15 @@ export default function Footer() {
               knowledge — 24/7.
             </p>
 
-            {/* Contact info */}
             <div className="mt-5 space-y-1">
-              <a
-                href="mailto:sales@ezeeassist.com"
-                className="block text-sm text-gray-500 hover:text-[#00AEEF] transition-colors"
-              >
+              <a href="mailto:sales@ezeeassist.com" className="block text-sm text-gray-500 hover:text-[#00AEEF] transition-colors">
                 sales@ezeeassist.com
               </a>
-              <a
-                href="tel:+18557773933"
-                className="block text-sm text-gray-500 hover:text-[#00AEEF] transition-colors"
-              >
+              <a href="tel:+18557773933" className="block text-sm text-gray-500 hover:text-[#00AEEF] transition-colors">
                 +1 855-777-3933
               </a>
             </div>
 
-            {/* Social links */}
             <div className="mt-6 flex gap-3">
               {socialLinks.map(({ label, href, icon: Icon }) => (
                 <a
@@ -97,16 +101,13 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-12 border-t border-[#E5E7EB] pt-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-gray-400">
-            &copy; {year} EZee Assist. All rights reserved.
+            &copy; 2026 EZee Assist. All rights reserved.
           </p>
-          <p className="text-xs text-gray-400 flex gap-4">
-            <a href="/privacy" className="hover:text-[#00AEEF] transition-colors">
-              Privacy Policy
-            </a>
-            <a href="/terms" className="hover:text-[#00AEEF] transition-colors">
-              Terms of Use
-            </a>
-          </p>
+          <div className="flex gap-4 text-xs text-gray-400">
+            <a href="/privacy" className="hover:text-[#00AEEF] transition-colors">Privacy Policy</a>
+            <a href="/terms" className="hover:text-[#00AEEF] transition-colors">Terms of Use</a>
+            <a href="/accessibility" className="hover:text-[#00AEEF] transition-colors">Accessibility</a>
+          </div>
         </div>
       </div>
     </footer>

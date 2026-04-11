@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import CookieConsent from "@/components/CookieConsent";
 import AnalyticsProvider from "@/components/AnalyticsProvider";
+import ExitIntentPopup from "@/components/ExitIntentPopup";
 
 const BASE_URL = "https://www.ezeeassist.com";
 
@@ -60,6 +61,7 @@ export default function RootLayout({
         {children}
         <CookieConsent />
         <AnalyticsProvider />
+        <ExitIntentPopup />
       </body>
     </html>
   );

@@ -1,7 +1,18 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx create-next-app@latest . --typescript --tailwind --app --no-src-dir --import-alias \"@/*\" --no-eslint)"
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --no-src-dir --import-alias \"@/*\" --no-eslint)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(node -e \"const l = require\\('/Users/raphaelrajan/Desktop/ezeeassist-website/node_modules/lucide-react'\\); const keys = Object.keys\\(l\\); console.log\\(keys.filter\\(k => !k.endsWith\\('Icon'\\) && \\(k === 'Globe' || k === 'Mail' || k === 'Link2' || k === 'Share2' || k === 'ExternalLink'\\)\\)\\)\")",
+      "Bash(ls /Users/raphaelrajan/Desktop/ezeeassist-website/.env*)",
+      "Bash(node -e \"const l = require\\('/Users/raphaelrajan/Desktop/ezeeassist-website/node_modules/lucide-react'\\); const icons = ['Bot','UserCheck','Ticket','Languages','Wifi','RefreshCw','Globe2','Tag','Cpu','BrainCircuit','BarChart2','Users','MapPin','TrendingUp','GitBranch','ListChecks','ClipboardList','Bell','PackageCheck']; icons.forEach\\(i => console.log\\(i, !!l[i]\\)\\)\")",
+      "Bash(node -e \"const l = require\\('/Users/raphaelrajan/Desktop/ezeeassist-website/node_modules/lucide-react'\\); const icons = ['LineChart','Target','Crosshair','PieChart','Activity','Workflow','Layers','Building2','HardDrive','MessageSquare','Phone','ChevronDown','ChevronRight']; icons.forEach\\(i => console.log\\(i, !!l[i]\\)\\)\")",
+      "Bash(node -e \"const l = require\\('/Users/raphaelrajan/Desktop/ezeeassist-website/node_modules/lucide-react'\\); const icons = ['Store','GraduationCap','Building','Utensils','ShoppingBag','Wrench','Clock','Quote','Star','TrendingDown','AlertCircle','Users2']; icons.forEach\\(i => console.log\\(i, !!l[i]\\)\\)\")",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)",
+      "Bash(git remote:*)"
     ]
   }
 }
