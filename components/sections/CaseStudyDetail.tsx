@@ -71,8 +71,7 @@ export default function CaseStudyDetail({
     <>
       {/* ── Hero ───────────────────────────────────────────── */}
       <section
-        className="relative w-full overflow-hidden border-b border-[#E5E7EB]"
-        style={{ background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)" }}
+        className="relative w-full overflow-hidden border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient"
       >
         <div
           className="pointer-events-none absolute inset-0"
@@ -119,20 +118,20 @@ export default function CaseStudyDetail({
                   <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF]">
                     Case Study
                   </p>
-                  <p className="text-sm font-semibold text-gray-500">{companyFull}</p>
+                  <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">{companyFull}</p>
                 </div>
               </div>
 
               {/* Tag */}
               <span
-                className="inline-flex items-center rounded-full border border-[#E5E7EB] bg-[#F7F8FA] px-3 py-1 text-xs font-semibold text-gray-500 mb-5"
+                className="inline-flex items-center rounded-full border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400 mb-5"
               >
                 {tag}
               </span>
 
               {/* Headline */}
               <h1
-                className="text-3xl font-bold leading-tight text-[#0A0A0A] sm:text-4xl lg:text-5xl"
+                className="text-3xl font-bold leading-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-4xl lg:text-5xl"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 {headline}
@@ -150,11 +149,11 @@ export default function CaseStudyDetail({
                 <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-5">
                   Key Results
                 </p>
-                <div className="divide-y divide-[#E5E7EB]">
+                <div className="divide-y divide-[#E5E7EB] dark:divide-white/[0.08]">
                   {results.map(({ value, label }) => (
                     <div key={label} className="flex items-center justify-between py-3.5 first:pt-0 last:pb-0">
-                      <span className="text-sm text-gray-600">{label}</span>
-                      <span className="text-xl font-extrabold text-[#0A0A0A]" style={{ letterSpacing: "-0.02em" }}>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">{label}</span>
+                      <span className="text-xl font-extrabold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.02em" }}>
                         {value}
                       </span>
                     </div>
@@ -167,7 +166,7 @@ export default function CaseStudyDetail({
       </section>
 
       {/* ── Body ───────────────────────────────────────────── */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div ref={bodyRef} className="mx-auto max-w-3xl px-6 py-16 lg:px-8 lg:py-20">
 
           {/* The Challenge */}
@@ -179,12 +178,12 @@ export default function CaseStudyDetail({
             className="mb-12"
           >
             <h2
-              className="text-2xl font-bold text-[#0A0A0A] mb-5"
+              className="text-2xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-5"
               style={{ letterSpacing: "-0.02em" }}
             >
               The Challenge
             </h2>
-            <p className="text-lg leading-8 text-gray-600">{challenge}</p>
+            <p className="text-lg leading-8 text-gray-600 dark:text-gray-400">{challenge}</p>
           </motion.div>
 
           {/* The Solution */}
@@ -196,12 +195,12 @@ export default function CaseStudyDetail({
             className="mb-12"
           >
             <h2
-              className="text-2xl font-bold text-[#0A0A0A] mb-5"
+              className="text-2xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-5"
               style={{ letterSpacing: "-0.02em" }}
             >
               The Solution
             </h2>
-            <p className="text-lg leading-8 text-gray-600">{solution}</p>
+            <p className="text-lg leading-8 text-gray-600 dark:text-gray-400">{solution}</p>
           </motion.div>
 
           {/* The Results */}
@@ -213,12 +212,12 @@ export default function CaseStudyDetail({
             className="mb-12"
           >
             <h2
-              className="text-2xl font-bold text-[#0A0A0A] mb-5"
+              className="text-2xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-5"
               style={{ letterSpacing: "-0.02em" }}
             >
               The Results
             </h2>
-            <p className="text-lg leading-8 text-gray-600">{results_text}</p>
+            <p className="text-lg leading-8 text-gray-600 dark:text-gray-400">{results_text}</p>
           </motion.div>
 
           {/* Optional quote block */}
@@ -237,14 +236,14 @@ export default function CaseStudyDetail({
                   fill="#00AEEF"
                   strokeWidth={0}
                 />
-                <p className="text-lg leading-8 text-gray-700 italic mb-6">&ldquo;{quote}&rdquo;</p>
+                <p className="text-lg leading-8 text-gray-700 dark:text-gray-300 italic mb-6">&ldquo;{quote}&rdquo;</p>
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#00AEEF]/10 flex-shrink-0">
                     <span className="text-sm font-bold text-[#00AEEF]">{quoteInitials}</span>
                   </div>
                   <div>
-                    <p className="text-sm font-bold text-[#0A0A0A]">{quoteName}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0]">{quoteName}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
                       {quoteTitle}
                       {quoteCompany ? `, ${quoteCompany}` : ""}
                     </p>
@@ -260,15 +259,15 @@ export default function CaseStudyDetail({
             initial="hidden"
             animate={bodyInView ? "visible" : "hidden"}
             variants={fadeUp}
-            className="rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] px-8 py-8 text-center"
+            className="rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] px-8 py-8 text-center"
           >
             <p
-              className="text-2xl font-bold text-[#0A0A0A] mb-2"
+              className="text-2xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-2"
               style={{ letterSpacing: "-0.02em" }}
             >
               Want results like these?
             </p>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
               See how EZee Assist can transform support for your brand.
             </p>
             <Link href="/contact">
@@ -279,7 +278,7 @@ export default function CaseStudyDetail({
       </section>
 
       {/* ── Related case studies ───────────────────────────── */}
-      <section className="w-full border-t border-[#E5E7EB] bg-[#F7F8FA]">
+      <section className="w-full border-t border-[#E5E7EB] dark:border-white/[0.06] bg-[#F7F8FA] dark:bg-[#111111]">
         <div ref={relatedRef} className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <motion.p
             initial={{ opacity: 0, y: 12 }}
@@ -300,7 +299,7 @@ export default function CaseStudyDetail({
               >
                 <Link
                   href={slug}
-                  className="group flex items-center gap-5 rounded-2xl border border-[#E5E7EB] bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(0,0,0,0.09)]"
+                  className="group flex items-center gap-5 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(0,0,0,0.09)]"
                 >
                   <div
                     className={`${rbg} flex h-14 w-14 items-center justify-center rounded-2xl border border-white/60 shadow-sm flex-shrink-0`}
@@ -310,14 +309,14 @@ export default function CaseStudyDetail({
                     </span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-base font-bold text-[#0A0A0A] group-hover:text-[#00AEEF] transition-colors">
+                    <p className="text-base font-bold text-[#0A0A0A] dark:text-[#F0F0F0] group-hover:text-[#00AEEF] transition-colors">
                       {rb}
                     </p>
                     <p className="text-sm font-semibold" style={{ color: ra }}>{stat}</p>
                   </div>
                   <ArrowRight
                     size={18}
-                    className="text-gray-300 group-hover:text-[#00AEEF] transition-colors flex-shrink-0"
+                    className="text-gray-300 dark:text-gray-600 group-hover:text-[#00AEEF] transition-colors flex-shrink-0"
                   />
                 </Link>
               </motion.div>

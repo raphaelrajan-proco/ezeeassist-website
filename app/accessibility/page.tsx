@@ -12,20 +12,17 @@ export default function AccessibilityPage() {
     <>
       <Navbar />
       <main className="flex flex-1 flex-col">
-        <section
-          className="relative w-full border-b border-[#E5E7EB]"
-          style={{ background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)" }}
-        >
+        <section className="relative w-full border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Legal</p>
-            <h1 className="text-4xl font-bold text-[#0A0A0A] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h1 className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               Accessibility at EZee Assist
             </h1>
           </div>
         </section>
 
-        <section className="w-full bg-white">
-          <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8 lg:py-20 space-y-8 text-base leading-8 text-gray-600">
+        <section className="w-full bg-white dark:bg-[#0D0D0D]">
+          <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8 lg:py-20 space-y-8 text-base leading-8 text-gray-600 dark:text-gray-400">
             <p>
               EZee Assist is committed to ensuring digital accessibility for people with disabilities. We are continually improving the user experience for everyone and applying the relevant accessibility standards.
             </p>

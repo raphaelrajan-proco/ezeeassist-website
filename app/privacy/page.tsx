@@ -88,44 +88,41 @@ export default function PrivacyPage() {
       <Navbar />
       <main className="flex flex-1 flex-col">
         {/* Hero */}
-        <section
-          className="relative w-full border-b border-[#E5E7EB]"
-          style={{ background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)" }}
-        >
+        <section className="relative w-full border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">
               Legal
             </p>
             <h1
-              className="text-4xl font-bold text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Privacy Policy
             </h1>
-            <p className="mt-4 text-gray-500 text-sm">
+            <p className="mt-4 text-gray-500 dark:text-gray-400 text-sm">
               Effective date: April 10, 2026
             </p>
           </div>
         </section>
 
         {/* Body */}
-        <section className="w-full bg-white">
+        <section className="w-full bg-white dark:bg-[#0D0D0D]">
           <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8 lg:py-20">
-            <p className="text-lg leading-8 text-gray-600 mb-12">
+            <p className="text-lg leading-8 text-gray-600 dark:text-gray-400 mb-12">
               EZee Assist (&ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website at{" "}
-              <span className="font-semibold text-[#0A0A0A]">ezeeassist.com</span>.
+              <span className="font-semibold text-[#0A0A0A] dark:text-[#F0F0F0]">ezeeassist.com</span>.
             </p>
 
             <div className="space-y-10">
               {sections.map(({ title, body }) => (
                 <div key={title}>
                   <h2
-                    className="text-xl font-bold text-[#0A0A0A] mb-4"
+                    className="text-xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-4"
                     style={{ letterSpacing: "-0.01em" }}
                   >
                     {title}
                   </h2>
-                  <div className="text-base leading-8 text-gray-600 whitespace-pre-line">
+                  <div className="text-base leading-8 text-gray-600 dark:text-gray-400 whitespace-pre-line">
                     {body}
                   </div>
                 </div>
