@@ -27,7 +27,7 @@ const evolution = [
     title: "Answers",
     body: "AI answers franchisee questions instantly from your knowledge base.",
     tag: "Available now",
-    tagStyle: "bg-green-100 text-green-700",
+    tagStyle: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
     done: true,
   },
   {
@@ -35,7 +35,7 @@ const evolution = [
     title: "Actions",
     body: "Smart ticketing routes unanswered questions to the right person with full context.",
     tag: "Available now",
-    tagStyle: "bg-green-100 text-green-700",
+    tagStyle: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
     done: true,
   },
   {
@@ -75,7 +75,7 @@ export default function WorkflowsContent() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative w-full overflow-hidden bg-white">
+      <section className="relative w-full overflow-hidden bg-white dark:bg-[#0D0D0D]">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-[500px]"
           style={{ background: "radial-gradient(ellipse 80% 60% at 50% -5%, rgba(0,174,239,0.08) 0%, transparent 65%)" }}
@@ -83,7 +83,7 @@ export default function WorkflowsContent() {
         />
         <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
           <motion.div className="max-w-3xl" {...fadeUp(0)}>
-            <div className="mb-5 flex items-center gap-2 text-xs text-gray-400">
+            <div className="mb-5 flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500">
               <Link href="/platform" className="hover:text-[#00AEEF] transition-colors">Platform</Link>
               <span>/</span>
               <span className="font-semibold text-[#00AEEF]">Workflow Builder</span>
@@ -95,13 +95,13 @@ export default function WorkflowsContent() {
             </div>
 
             <h1
-              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] sm:text-6xl lg:text-7xl"
+              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
               style={{ letterSpacing: "-0.03em" }}
             >
               Go beyond answers.{" "}
               <span className="text-[#00AEEF]">Automate franchise operations.</span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600 max-w-2xl">
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
               EZee Assist&apos;s Agentic Workflow Builder lets you create multi-step
               operational workflows powered by AI — from onboarding checklists to
               vendor coordination to compliance tracking.
@@ -123,8 +123,7 @@ export default function WorkflowsContent() {
 
       {/* ── Evolution: Answers → Actions → Automations ───── */}
       <section
-        className="w-full"
-        style={{ background: "linear-gradient(to bottom, #F7F8FA 0%, #ffffff 100%)" }}
+        className="w-full bg-how-it-works-gradient"
       >
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-16" {...fadeUp(0)}>
@@ -132,7 +131,7 @@ export default function WorkflowsContent() {
               The Roadmap
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               From Answers →{" "}
@@ -148,24 +147,24 @@ export default function WorkflowsContent() {
                 className={`relative overflow-hidden rounded-2xl border p-8 ${
                   !done
                     ? "border-[#00AEEF] bg-[#00AEEF]/[0.03] shadow-[0_0_0_4px_rgba(0,174,239,0.07)]"
-                    : "border-[#E5E7EB] bg-white"
+                    : "border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616]"
                 }`}
               >
                 {!done && (
                   <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/40 via-[#00AEEF] to-[#00AEEF]/40" />
                 )}
-                <div className={`mb-5 flex h-11 w-11 items-center justify-center rounded-xl ${done ? "bg-green-100" : "bg-[#00AEEF]/10"}`}>
-                  <Icon size={20} className={done ? "text-green-600" : "text-[#00AEEF]"} strokeWidth={1.75} />
+                <div className={`mb-5 flex h-11 w-11 items-center justify-center rounded-xl ${done ? "bg-green-100 dark:bg-green-900/30" : "bg-[#00AEEF]/10"}`}>
+                  <Icon size={20} className={done ? "text-green-600 dark:text-green-400" : "text-[#00AEEF]"} strokeWidth={1.75} />
                 </div>
                 <div className="mb-3 flex items-center gap-3">
-                  <h3 className="text-xl font-bold text-[#0A0A0A]" style={{ letterSpacing: "-0.01em" }}>
+                  <h3 className="text-xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.01em" }}>
                     {title}
                   </h3>
                   <span className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide ${tagStyle}`}>
                     {tag}
                   </span>
                 </div>
-                <p className="text-base leading-7 text-gray-600">{body}</p>
+                <p className="text-base leading-7 text-gray-600 dark:text-gray-400">{body}</p>
               </motion.div>
             ))}
           </div>
@@ -173,14 +172,14 @@ export default function WorkflowsContent() {
       </section>
 
       {/* ── Example workflows ────────────────────────────── */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-16" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
               Example Workflows
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               What you&apos;ll be able to{" "}
@@ -193,7 +192,7 @@ export default function WorkflowsContent() {
               <motion.div
                 key={title}
                 {...fadeUp(i * 0.08)}
-                className="card-hover group relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] p-8"
+                className="card-hover group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-8"
               >
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 {/* Coming soon badge */}
@@ -205,10 +204,10 @@ export default function WorkflowsContent() {
                 <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#00AEEF]/10">
                   <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
-                <h3 className="mb-3 text-lg font-bold text-[#0A0A0A]" style={{ letterSpacing: "-0.01em" }}>
+                <h3 className="mb-3 text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.01em" }}>
                   {title}
                 </h3>
-                <p className="text-base leading-7 text-gray-600">{body}</p>
+                <p className="text-base leading-7 text-gray-600 dark:text-gray-400">{body}</p>
               </motion.div>
             ))}
           </div>
@@ -217,8 +216,7 @@ export default function WorkflowsContent() {
 
       {/* ── Early access CTA ─────────────────────────────── */}
       <section
-        className="relative w-full overflow-hidden"
-        style={{ background: "linear-gradient(180deg, #ffffff 0%, #F0F9FF 100%)" }}
+        className="relative w-full overflow-hidden bg-final-cta-gradient"
       >
         <div className="bg-dot-grid pointer-events-none absolute inset-0" style={{ opacity: 0.3 }} aria-hidden="true" />
         <div
@@ -232,7 +230,7 @@ export default function WorkflowsContent() {
               <span className="text-xs font-bold text-[#00AEEF] uppercase tracking-widest">Early Access</span>
             </div>
             <h2
-              className="text-4xl font-bold text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Be the first to automate your{" "}
@@ -242,7 +240,7 @@ export default function WorkflowsContent() {
               <Link href="/contact"><Button size="lg">Join the Waitlist</Button></Link>
               <Link href="/platform"><Button size="lg" variant="secondary">Explore the Platform <ArrowRight size={16} className="ml-2" /></Button></Link>
             </div>
-            <p className="mt-6 text-sm text-gray-400">
+            <p className="mt-6 text-sm text-gray-400 dark:text-gray-500">
               We&apos;re onboarding design partners now. Get early access and help shape the product.
             </p>
           </motion.div>

@@ -83,7 +83,7 @@ export default function TicketingContent() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative w-full overflow-hidden bg-white">
+      <section className="relative w-full overflow-hidden bg-white dark:bg-[#0D0D0D]">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-[500px]"
           style={{
@@ -95,7 +95,7 @@ export default function TicketingContent() {
 
         <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
           <motion.div className="max-w-3xl" {...fadeUp(0)}>
-            <div className="mb-5 flex items-center gap-2 text-xs text-gray-400">
+            <div className="mb-5 flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500">
               <Link href="/platform" className="hover:text-[#00AEEF] transition-colors">Platform</Link>
               <span>/</span>
               <span className="font-semibold text-[#00AEEF]">Intelligent Ticketing</span>
@@ -105,7 +105,7 @@ export default function TicketingContent() {
               Intelligent Ticketing
             </p>
             <h1
-              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] sm:text-6xl lg:text-7xl"
+              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
               style={{ letterSpacing: "-0.03em" }}
             >
               Every unanswered question
@@ -113,7 +113,7 @@ export default function TicketingContent() {
               becomes a{" "}
               <span className="text-[#00AEEF]">smart ticket.</span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600 max-w-2xl">
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
               When AI doesn&apos;t have a confident answer, EZee Assist automatically
               creates a ticket — categorized, prioritized, and routed to the right
               person on your support team. No question falls through the cracks.
@@ -135,8 +135,7 @@ export default function TicketingContent() {
 
       {/* ── Flow diagram ─────────────────────────────────── */}
       <section
-        className="w-full relative overflow-hidden"
-        style={{ background: "linear-gradient(to bottom, #F7F8FA 0%, #ffffff 100%)" }}
+        className="w-full relative overflow-hidden bg-how-it-works-gradient"
       >
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-20" {...fadeUp(0)}>
@@ -144,7 +143,7 @@ export default function TicketingContent() {
               The Flow
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               From question to{" "}
@@ -164,7 +163,7 @@ export default function TicketingContent() {
                   className={`relative flex flex-1 flex-col items-center rounded-2xl p-7 text-center transition-all duration-200 ${
                     highlight
                       ? "border-2 border-[#00AEEF] bg-[#00AEEF]/[0.04] shadow-[0_0_0_4px_rgba(0,174,239,0.08)]"
-                      : "border border-[#E5E7EB] bg-white"
+                      : "border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616]"
                   }`}
                 >
                   {highlight && (
@@ -182,12 +181,12 @@ export default function TicketingContent() {
                     <Icon size={22} strokeWidth={1.75} />
                   </div>
                   <h3
-                    className="mb-2 text-sm font-bold text-[#0A0A0A]"
+                    className="mb-2 text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0]"
                     style={{ letterSpacing: "-0.01em" }}
                   >
                     {label}
                   </h3>
-                  <p className="text-xs leading-5 text-gray-500">{sub}</p>
+                  <p className="text-xs leading-5 text-gray-500 dark:text-gray-400">{sub}</p>
                 </motion.div>
 
                 {/* Arrow between cards — desktop only */}
@@ -209,45 +208,45 @@ export default function TicketingContent() {
           {/* Ticket preview mockup */}
           <motion.div
             {...fadeUp(0.25)}
-            className="mt-14 overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)]"
+            className="mt-14 overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
           >
-            <div className="flex items-center gap-2 border-b border-[#E5E7EB] bg-[#F7F8FA] px-6 py-4">
+            <div className="flex items-center gap-2 border-b border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] px-6 py-4">
               <div className="flex gap-1.5">
                 <div className="h-3 w-3 rounded-full bg-red-400" />
                 <div className="h-3 w-3 rounded-full bg-yellow-400" />
                 <div className="h-3 w-3 rounded-full bg-green-400" />
               </div>
-              <span className="ml-2 text-xs font-medium text-gray-400">EZee Assist — Ticket #1047</span>
-              <span className="ml-auto rounded-full bg-orange-100 px-2.5 py-0.5 text-[10px] font-bold text-orange-600">
+              <span className="ml-2 text-xs font-medium text-gray-400 dark:text-gray-500">EZee Assist — Ticket #1047</span>
+              <span className="ml-auto rounded-full bg-orange-100 dark:bg-orange-900/30 px-2.5 py-0.5 text-[10px] font-bold text-orange-600 dark:text-orange-400">
                 Needs Review
               </span>
             </div>
 
-            <div className="grid grid-cols-1 divide-y divide-[#E5E7EB] md:grid-cols-3 md:divide-x md:divide-y-0">
+            <div className="grid grid-cols-1 divide-y divide-[#E5E7EB] dark:divide-white/[0.08] md:grid-cols-3 md:divide-x md:divide-y-0">
               {/* Original question */}
               <div className="p-6">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
                   Franchisee Question
                 </p>
-                <div className="rounded-xl bg-[#F7F8FA] p-4">
-                  <p className="text-sm text-gray-700">
+                <div className="rounded-xl bg-[#F7F8FA] dark:bg-[#111111] p-4">
+                  <p className="text-sm text-gray-700 dark:text-gray-400">
                     &quot;We&apos;re planning a grand re-opening event next month. What&apos;s the
                     process for getting corporate to co-fund promotional materials?&quot;
                   </p>
                 </div>
                 <div className="mt-3 flex items-center gap-2">
                   <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#00AEEF]/10 text-[9px] font-bold text-[#00AEEF]">JM</div>
-                  <span className="text-xs text-gray-400">Jordan M. — Location #042, Austin TX</span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">Jordan M. — Location #042, Austin TX</span>
                 </div>
               </div>
 
               {/* AI attempt */}
               <div className="p-6">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
                   AI Attempted Answer
                 </p>
-                <div className="rounded-xl border border-orange-200 bg-orange-50 p-4">
-                  <p className="text-sm text-gray-600">
+                <div className="rounded-xl border border-orange-200 dark:border-orange-900/40 bg-orange-50 dark:bg-orange-900/20 p-4">
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
                     I found information about standard marketing support but couldn&apos;t
                     locate a specific co-funding policy for re-opening events. I&apos;ve
                     created a ticket for your support team.
@@ -260,7 +259,7 @@ export default function TicketingContent() {
 
               {/* Ticket details */}
               <div className="p-6">
-                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
                   Auto-Assigned Details
                 </p>
                 <div className="space-y-2.5">
@@ -271,8 +270,8 @@ export default function TicketingContent() {
                     { k: "SLA",       v: "Respond within 4 hours" },
                   ].map(({ k, v }) => (
                     <div key={k} className="flex items-center justify-between text-xs">
-                      <span className="text-gray-400">{k}</span>
-                      <span className="font-semibold text-[#0A0A0A]">{v}</span>
+                      <span className="text-gray-400 dark:text-gray-500">{k}</span>
+                      <span className="font-semibold text-[#0A0A0A] dark:text-[#F0F0F0]">{v}</span>
                     </div>
                   ))}
                 </div>
@@ -287,14 +286,14 @@ export default function TicketingContent() {
       </section>
 
       {/* ── Key features ─────────────────────────────────── */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-16" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
               Key Features
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Tickets that{" "}
@@ -307,19 +306,19 @@ export default function TicketingContent() {
               <motion.div
                 key={title}
                 {...fadeUp(i * 0.1)}
-                className="card-hover group relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] p-8"
+                className="card-hover group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-8"
               >
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#00AEEF]/10">
                   <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
                 <h3
-                  className="mb-3 text-lg font-bold text-[#0A0A0A]"
+                  className="mb-3 text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0]"
                   style={{ letterSpacing: "-0.01em" }}
                 >
                   {title}
                 </h3>
-                <p className="text-base leading-7 text-gray-600">{body}</p>
+                <p className="text-base leading-7 text-gray-600 dark:text-gray-400">{body}</p>
               </motion.div>
             ))}
           </div>
@@ -328,8 +327,7 @@ export default function TicketingContent() {
 
       {/* ── Support team benefits ─────────────────────────── */}
       <section
-        className="w-full"
-        style={{ background: "linear-gradient(to bottom, #F7F8FA 0%, #ffffff 100%)" }}
+        className="w-full bg-how-it-works-gradient"
       >
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-16" {...fadeUp(0)}>
@@ -337,7 +335,7 @@ export default function TicketingContent() {
               For Your Team
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Your support team gets{" "}
@@ -352,12 +350,12 @@ export default function TicketingContent() {
               animate={benefitsInView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
             >
-              <p className="text-lg leading-8 text-gray-600 mb-8">
+              <p className="text-lg leading-8 text-gray-600 dark:text-gray-400 mb-8">
                 FBCs and support staff only see the questions AI couldn&apos;t handle —
                 the ones that actually need human judgment. No more drowning in
                 repetitive queries.
               </p>
-              <p className="text-lg leading-8 text-gray-600 mb-8">
+              <p className="text-lg leading-8 text-gray-600 dark:text-gray-400 mb-8">
                 Every ticket arrives with context, so resolution is faster. And as
                 your team answers tickets, those answers feed back into the AI,
                 making it smarter for next time.
@@ -373,7 +371,7 @@ export default function TicketingContent() {
                     <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#00AEEF]/15">
                       <CheckCircle2 size={12} className="text-[#00AEEF]" strokeWidth={2.5} />
                     </div>
-                    <span className="text-base text-gray-700">{point}</span>
+                    <span className="text-base text-gray-700 dark:text-gray-400">{point}</span>
                   </div>
                 ))}
               </div>
@@ -386,7 +384,7 @@ export default function TicketingContent() {
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
             >
               <div
-                className="relative w-full overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)]"
+                className="relative w-full overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
                 style={{ paddingBottom: "56.25%" }}
               >
                 <div
@@ -397,13 +395,13 @@ export default function TicketingContent() {
                   }}
                 />
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white border border-[#E5E7EB] shadow-sm">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white dark:bg-[#161616] border border-[#E5E7EB] dark:border-white/[0.08] shadow-sm">
                     <Ticket size={22} className="text-[#00AEEF]" strokeWidth={1.75} />
                   </div>
-                  <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
+                  <p className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
                     Ticket Dashboard Preview
                   </p>
-                  <p className="text-[10px] text-gray-300">Screenshot coming soon</p>
+                  <p className="text-[10px] text-gray-300 dark:text-gray-600">Screenshot coming soon</p>
                 </div>
               </div>
             </motion.div>
@@ -413,8 +411,7 @@ export default function TicketingContent() {
 
       {/* ── Final CTA ────────────────────────────────────── */}
       <section
-        className="relative w-full overflow-hidden"
-        style={{ background: "linear-gradient(180deg, #ffffff 0%, #F0F9FF 100%)" }}
+        className="relative w-full overflow-hidden bg-final-cta-gradient"
       >
         <div
           className="bg-dot-grid pointer-events-none absolute inset-0"
@@ -434,13 +431,13 @@ export default function TicketingContent() {
         <div className="relative mx-auto max-w-3xl px-6 py-28 text-center lg:px-8 lg:py-32">
           <motion.div {...fadeUp(0)}>
             <h2
-              className="text-4xl font-bold text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               See intelligent ticketing{" "}
               <span className="text-[#00AEEF]">in action.</span>
             </h2>
-            <p className="mt-5 text-lg leading-8 text-gray-600">
+            <p className="mt-5 text-lg leading-8 text-gray-600 dark:text-gray-400">
               Watch the full AI → ticket → resolution flow live in a 30-minute
               demo with your team&apos;s real content.
             </p>
