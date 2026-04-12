@@ -30,7 +30,6 @@ const resourcesLinks = [
 ];
 
 const navLinks = [
-  { label: "Case Studies", href: "/case-studies" },
   { label: "Security",     href: "/security" },
   { label: "About",        href: "/about" },
   { label: "Contact",      href: "/contact" },
