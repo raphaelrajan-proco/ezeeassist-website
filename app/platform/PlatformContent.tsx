@@ -146,10 +146,7 @@ export default function PlatformContent() {
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
       <section
-        className="relative w-full overflow-hidden"
-        style={{
-          background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)",
-        }}
+        className="relative w-full overflow-hidden bg-hero-gradient"
       >
         {/* Radial glow */}
         <div
@@ -170,7 +167,7 @@ export default function PlatformContent() {
               The Platform
             </p>
             <h1
-              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] sm:text-6xl lg:text-7xl"
+              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
               style={{ letterSpacing: "-0.03em" }}
             >
               Everything your
@@ -178,7 +175,7 @@ export default function PlatformContent() {
               network needs.{" "}
               <span className="text-[#00AEEF]">Nothing it doesn&apos;t.</span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600 max-w-2xl">
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
               EZee Assist combines an AI knowledge engine, omnichannel delivery,
               intelligent escalation, and real-time analytics into one platform
               built exclusively for franchise and multi-location brands.
@@ -199,7 +196,7 @@ export default function PlatformContent() {
       </section>
 
       {/* ── 4 Pillars ────────────────────────────────────── */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div
             className="text-center mb-16"
@@ -209,7 +206,7 @@ export default function PlatformContent() {
               Core Capabilities
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Four pillars.{" "}
@@ -222,7 +219,7 @@ export default function PlatformContent() {
               <motion.div
                 key={title}
                 {...fadeUp(i * 0.1)}
-                className="card-hover group relative overflow-hidden rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] p-8"
+                className="card-hover group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#1A1A1A] p-8"
               >
                 {/* Top accent bar */}
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -232,12 +229,12 @@ export default function PlatformContent() {
                 </div>
 
                 <h3
-                  className="text-xl font-bold text-[#0A0A0A] mb-3"
+                  className="text-xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3"
                   style={{ letterSpacing: "-0.01em" }}
                 >
                   {title}
                 </h3>
-                <p className="text-base leading-7 text-gray-600 mb-6">{description}</p>
+                <p className="text-base leading-7 text-gray-600 dark:text-gray-400 mb-6">{description}</p>
 
                 <ul className="space-y-2.5">
                   {bullets.map((b) => (
@@ -247,7 +244,7 @@ export default function PlatformContent() {
                         className="mt-0.5 flex-shrink-0 text-[#00AEEF]"
                         strokeWidth={2}
                       />
-                      <span className="text-sm text-gray-600">{b}</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">{b}</span>
                     </li>
                   ))}
                 </ul>
@@ -259,10 +256,7 @@ export default function PlatformContent() {
 
       {/* ── How it flows ─────────────────────────────────── */}
       <section
-        className="w-full relative overflow-hidden"
-        style={{
-          background: "linear-gradient(to bottom, #F7F8FA 0%, #ffffff 100%)",
-        }}
+        className="w-full relative overflow-hidden bg-how-it-works-gradient"
       >
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-16" {...fadeUp(0)}>
@@ -270,7 +264,7 @@ export default function PlatformContent() {
               Under the Hood
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               How a question becomes{" "}
@@ -297,18 +291,18 @@ export default function PlatformContent() {
                 >
                   {/* Step circle */}
                   <div
-                    className={`relative z-10 mb-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 bg-white text-sm font-bold ${color}`}
+                    className={`relative z-10 mb-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 bg-white dark:bg-[#161616] text-sm font-bold ${color}`}
                   >
                     {number}
                   </div>
 
                   <h3
-                    className="text-base font-bold text-[#0A0A0A] mb-2"
+                    className="text-base font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-2"
                     style={{ letterSpacing: "-0.01em" }}
                   >
                     {label}
                   </h3>
-                  <p className="text-sm text-gray-500 leading-6">{sub}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-6">{sub}</p>
                 </motion.div>
               ))}
             </div>
@@ -316,31 +310,31 @@ export default function PlatformContent() {
             {/* Visual flow card */}
             <motion.div
               {...fadeUp(0.3)}
-              className="mt-14 overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)]"
+              className="mt-14 overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)]"
             >
               {/* Mock chat UI */}
-              <div className="border-b border-[#E5E7EB] bg-[#F7F8FA] px-6 py-4 flex items-center gap-3">
+              <div className="border-b border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#1A1A1A] px-6 py-4 flex items-center gap-3">
                 <div className="flex gap-1.5">
                   <div className="h-3 w-3 rounded-full bg-red-400" />
                   <div className="h-3 w-3 rounded-full bg-yellow-400" />
                   <div className="h-3 w-3 rounded-full bg-green-400" />
                 </div>
-                <span className="text-xs font-medium text-gray-400 ml-2">EZee Assist — Chat Portal</span>
+                <span className="text-xs font-medium text-gray-400 dark:text-gray-500 ml-2">EZee Assist — Chat Portal</span>
               </div>
 
-              <div className="grid grid-cols-1 divide-y divide-[#E5E7EB] md:grid-cols-3 md:divide-x md:divide-y-0">
+              <div className="grid grid-cols-1 divide-y divide-[#E5E7EB] dark:divide-white/[0.08] md:grid-cols-3 md:divide-x md:divide-y-0">
                 {/* Question */}
                 <div className="p-6">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">Franchisee</p>
-                  <div className="inline-block rounded-2xl rounded-tl-none bg-[#F7F8FA] px-4 py-3">
-                    <p className="text-sm text-gray-700">What&apos;s the approved vendor list for HVAC repairs in the Southwest region?</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Franchisee</p>
+                  <div className="inline-block rounded-2xl rounded-tl-none bg-[#F7F8FA] dark:bg-[#1A1A1A] px-4 py-3">
+                    <p className="text-sm text-gray-700 dark:text-gray-300">What&apos;s the approved vendor list for HVAC repairs in the Southwest region?</p>
                   </div>
-                  <p className="mt-3 text-[10px] text-gray-300">Sent via SMS — 11:42 PM</p>
+                  <p className="mt-3 text-[10px] text-gray-300 dark:text-gray-600">Sent via SMS — 11:42 PM</p>
                 </div>
 
                 {/* Processing */}
                 <div className="p-6 flex flex-col justify-center">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">AI Processing</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">AI Processing</p>
                   <div className="space-y-2.5">
                     {[
                       "Searching Operations Manual v4...",
@@ -349,7 +343,7 @@ export default function PlatformContent() {
                     ].map((s, i) => (
                       <div key={i} className="flex items-center gap-2">
                         <CheckCircle2 size={13} className="text-[#00AEEF] flex-shrink-0" />
-                        <span className="text-xs text-gray-500">{s}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">{s}</span>
                       </div>
                     ))}
                   </div>
@@ -358,16 +352,16 @@ export default function PlatformContent() {
 
                 {/* Answer */}
                 <div className="p-6">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-4">EZee Assist</p>
+                  <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">EZee Assist</p>
                   <div className="inline-block rounded-2xl rounded-tr-none bg-[#00AEEF]/[0.08] px-4 py-3 border border-[#00AEEF]/20">
-                    <p className="text-sm text-[#0A0A0A]">
+                    <p className="text-sm text-[#0A0A0A] dark:text-[#F0F0F0]">
                       The approved HVAC vendors for the Southwest region are listed in the Regional SOP, Section 7.2.
                       Your three approved vendors are <span className="font-semibold">AirPro Services</span>,{" "}
                       <span className="font-semibold">Desert HVAC Co.</span>, and{" "}
                       <span className="font-semibold">SunState Mechanical</span>.
                     </p>
                   </div>
-                  <p className="mt-3 text-[10px] text-gray-400">
+                  <p className="mt-3 text-[10px] text-gray-400 dark:text-gray-500">
                     Source: <span className="text-[#00AEEF]">Regional SOP — Southwest, §7.2</span>
                   </p>
                 </div>
@@ -378,20 +372,20 @@ export default function PlatformContent() {
       </section>
 
       {/* ── Integrations ─────────────────────────────────── */}
-      <section className="w-full bg-white overflow-hidden">
+      <section className="w-full bg-white dark:bg-[#0D0D0D] overflow-hidden">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-12" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
               Works With What You Already Use
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Plug in.{" "}
               <span className="text-[#00AEEF]">No migration required.</span>
             </h2>
-            <p className="mt-4 text-base leading-7 text-gray-600 max-w-xl mx-auto">
+            <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
               EZee Assist connects to your existing tools in minutes. Your content
               stays exactly where it is — we just make it instantly findable.
             </p>
@@ -404,18 +398,10 @@ export default function PlatformContent() {
           >
             {/* Edge fades */}
             <div
-              className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24"
-              style={{
-                background:
-                  "linear-gradient(to right, white 0%, transparent 100%)",
-              }}
+              className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-white dark:from-[#0D0D0D] to-transparent"
             />
             <div
-              className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24"
-              style={{
-                background:
-                  "linear-gradient(to left, white 0%, transparent 100%)",
-              }}
+              className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-white dark:from-[#0D0D0D] to-transparent"
             />
 
             <div className="overflow-hidden">
@@ -423,10 +409,10 @@ export default function PlatformContent() {
                 {integrationsDup.map(({ icon: Icon, label }, i) => (
                   <div
                     key={`${label}-${i}`}
-                    className="flex flex-shrink-0 items-center gap-3 rounded-xl border border-[#E5E7EB] bg-[#F7F8FA] px-5 py-3.5 shadow-sm"
+                    className="flex flex-shrink-0 items-center gap-3 rounded-xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#1A1A1A] px-5 py-3.5 shadow-sm"
                   >
-                    <Icon size={18} className="text-gray-400" strokeWidth={1.5} />
-                    <span className="text-sm font-medium text-gray-600 whitespace-nowrap">
+                    <Icon size={18} className="text-gray-400 dark:text-gray-500" strokeWidth={1.5} />
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">
                       {label}
                     </span>
                   </div>
@@ -438,23 +424,23 @@ export default function PlatformContent() {
       </section>
 
       {/* ── Security callout ──────────────────────────────── */}
-      <section className="w-full bg-[#F7F8FA]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
           <motion.div
             {...fadeUp(0)}
-            className="flex flex-col items-center gap-10 rounded-2xl border border-[#E5E7EB] bg-white p-10 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] md:flex-row"
+            className="flex flex-col items-center gap-10 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-10 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] md:flex-row"
           >
             <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-[#00AEEF]/10">
               <ShieldCheck size={28} className="text-[#00AEEF]" strokeWidth={1.75} />
             </div>
             <div className="flex-1 text-center md:text-left">
               <h3
-                className="text-xl font-bold text-[#0A0A0A] mb-2"
+                className="text-xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-2"
                 style={{ letterSpacing: "-0.01em" }}
               >
                 Built with enterprise security from day one.
               </h3>
-              <p className="text-base text-gray-600">
+              <p className="text-base text-gray-600 dark:text-gray-400">
                 SOC 2 Type II certified, GDPR compliant, and role-based access controls
                 throughout. Your data never trains public AI models.
               </p>
@@ -471,10 +457,7 @@ export default function PlatformContent() {
 
       {/* ── Final CTA ────────────────────────────────────── */}
       <section
-        className="relative w-full overflow-hidden"
-        style={{
-          background: "linear-gradient(180deg, #ffffff 0%, #F0F9FF 100%)",
-        }}
+        className="relative w-full overflow-hidden bg-final-cta-gradient"
       >
         {/* Dot grid */}
         <div
@@ -500,13 +483,13 @@ export default function PlatformContent() {
               Ready to Scale?
             </p>
             <h2
-              className="text-4xl font-bold text-[#0A0A0A] sm:text-5xl lg:text-6xl"
+              className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl lg:text-6xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               See it live in{" "}
               <span className="text-[#00AEEF]">your network.</span>
             </h2>
-            <p className="mt-5 text-lg leading-8 text-gray-600">
+            <p className="mt-5 text-lg leading-8 text-gray-600 dark:text-gray-400">
               Book a 30-minute demo and we&apos;ll walk through exactly how EZee Assist
               would work with your team, your systems, and your franchisees.
             </p>
@@ -521,7 +504,7 @@ export default function PlatformContent() {
                 </Button>
               </Link>
             </div>
-            <p className="mt-6 text-sm text-gray-400">
+            <p className="mt-6 text-sm text-gray-400 dark:text-gray-500">
               Not sure if it fits your industry?{" "}
               <Link href="/industries" className="font-semibold text-[#00AEEF] hover:underline">
                 See how it works for your industry →

@@ -87,8 +87,7 @@ export default function BlogContent() {
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
       <section
-        className="relative w-full overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)" }}
+        className="relative w-full overflow-hidden bg-hero-gradient"
       >
         <div
           className="pointer-events-none absolute left-0 top-0 h-[500px] w-[500px] -translate-x-1/3 -translate-y-1/4"
@@ -104,13 +103,13 @@ export default function BlogContent() {
               The EZee Assist Blog
             </p>
             <h1
-              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] sm:text-6xl"
+              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
               style={{ letterSpacing: "-0.03em" }}
             >
               Insights for{" "}
               <span className="text-[#00AEEF]">franchise leaders.</span>
             </h1>
-            <p className="mt-5 text-lg leading-8 text-gray-600">
+            <p className="mt-5 text-lg leading-8 text-gray-600 dark:text-gray-400">
               Practical advice on scaling operations, adopting AI, and supporting
               your franchisee network — from the team building EZee Assist.
             </p>
@@ -119,7 +118,7 @@ export default function BlogContent() {
       </section>
 
       {/* ── Category filter + posts ──────────────────────── */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
 
           {/* Category tabs */}
@@ -134,7 +133,7 @@ export default function BlogContent() {
                 className={`rounded-full px-4 py-2 text-sm font-semibold transition-all duration-150 ${
                   activeCategory === value
                     ? "bg-[#00AEEF] text-white shadow-sm"
-                    : "border border-[#E5E7EB] bg-[#F7F8FA] text-gray-600 hover:border-[#00AEEF]/40 hover:text-[#00AEEF]"
+                    : "border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] text-gray-600 dark:text-gray-400 hover:border-[#00AEEF]/40 hover:text-[#00AEEF]"
                 }`}
               >
                 {label}
@@ -149,10 +148,10 @@ export default function BlogContent() {
                 <motion.article
                   key={post._id}
                   {...fadeUp(i * 0.08)}
-                  className="card-hover group flex flex-col overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_16px_rgba(0,0,0,0.05)]"
+                  className="card-hover group flex flex-col overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
                 >
                   {/* Image placeholder */}
-                  <div className="relative h-48 w-full overflow-hidden bg-[#F7F8FA]">
+                  <div className="relative h-48 w-full overflow-hidden bg-[#F7F8FA] dark:bg-[#111111]">
                     <div
                       className="absolute inset-0"
                       style={{
@@ -161,7 +160,7 @@ export default function BlogContent() {
                       }}
                     />
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-xs font-semibold text-gray-300 uppercase tracking-widest">
+                      <span className="text-xs font-semibold text-gray-300 dark:text-gray-600 uppercase tracking-widest">
                         Cover image
                       </span>
                     </div>
@@ -175,7 +174,7 @@ export default function BlogContent() {
 
                   {/* Content */}
                   <div className="flex flex-1 flex-col p-6">
-                    <div className="flex items-center gap-4 text-xs text-gray-400 mb-4">
+                    <div className="flex items-center gap-4 text-xs text-gray-400 dark:text-gray-500 mb-4">
                       <span className="flex items-center gap-1.5">
                         <User size={12} />
                         {post.author}
@@ -187,18 +186,18 @@ export default function BlogContent() {
                     </div>
 
                     <h2
-                      className="text-lg font-bold leading-snug text-[#0A0A0A] mb-3 group-hover:text-[#00AEEF] transition-colors duration-150"
+                      className="text-lg font-bold leading-snug text-[#0A0A0A] dark:text-[#F0F0F0] mb-3 group-hover:text-[#00AEEF] transition-colors duration-150"
                       style={{ letterSpacing: "-0.01em" }}
                     >
                       {post.title}
                     </h2>
 
-                    <p className="text-sm leading-6 text-gray-600 flex-1 mb-5">
+                    <p className="text-sm leading-6 text-gray-600 dark:text-gray-400 flex-1 mb-5">
                       {post.excerpt}
                     </p>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-[#E5E7EB]">
-                      <span className="text-xs text-gray-400">
+                    <div className="flex items-center justify-between pt-4 border-t border-[#E5E7EB] dark:border-white/[0.08]">
+                      <span className="text-xs text-gray-400 dark:text-gray-500">
                         {formatDate(post.publishedAt)}
                       </span>
                       <Link
@@ -218,10 +217,10 @@ export default function BlogContent() {
               {...fadeUp(0)}
               className="flex flex-col items-center justify-center py-24 text-center"
             >
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#F7F8FA]">
-                <ArrowRight size={20} className="text-gray-300" />
+              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#F7F8FA] dark:bg-[#111111]">
+                <ArrowRight size={20} className="text-gray-300 dark:text-gray-600" />
               </div>
-              <p className="text-base font-semibold text-gray-400">
+              <p className="text-base font-semibold text-gray-400 dark:text-gray-500">
                 No posts in this category yet.
               </p>
               <button
@@ -236,16 +235,16 @@ export default function BlogContent() {
       </section>
 
       {/* ── Subscribe strip ───────────────────────────────── */}
-      <section className="w-full bg-[#F7F8FA] border-t border-[#E5E7EB]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111] border-t border-[#E5E7EB] dark:border-white/[0.06]">
         <div className="mx-auto max-w-3xl px-6 py-16 text-center lg:px-8">
           <motion.div {...fadeUp(0)}>
             <h2
-              className="text-2xl font-bold text-[#0A0A0A] mb-3"
+              className="text-2xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3"
               style={{ letterSpacing: "-0.02em" }}
             >
               Get new posts in your inbox.
             </h2>
-            <p className="text-gray-600 mb-8">
+            <p className="text-gray-600 dark:text-gray-400 mb-8">
               Practical insights for franchise operators, delivered monthly. No spam.
             </p>
             <form
@@ -255,7 +254,7 @@ export default function BlogContent() {
               <input
                 type="email"
                 placeholder="you@yourfranchise.com"
-                className="flex-1 rounded-xl border border-[#E5E7EB] bg-white px-4 py-3 text-sm text-[#0A0A0A] placeholder-gray-400 outline-none focus:border-[#00AEEF] focus:ring-2 focus:ring-[#00AEEF]/20 transition-all"
+                className="flex-1 rounded-xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#1A1A1A] px-4 py-3 text-sm text-[#0A0A0A] dark:text-[#F0F0F0] placeholder-gray-400 dark:placeholder:text-gray-600 outline-none focus:border-[#00AEEF] focus:ring-2 focus:ring-[#00AEEF]/20 transition-all"
               />
               <button
                 type="submit"

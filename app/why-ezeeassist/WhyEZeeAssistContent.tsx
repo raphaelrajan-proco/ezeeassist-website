@@ -70,8 +70,7 @@ export default function WhyEZeeAssistContent() {
     <>
       {/* ── Hero ── */}
       <section
-        className="relative w-full border-b border-[#E5E7EB]"
-        style={{ background: "linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%)" }}
+        className="relative w-full border-b border-[#E5E7EB] dark:border-white/[0.06] bg-white dark:bg-[#0D0D0D]"
       >
         <div
           className="pointer-events-none absolute inset-0"
@@ -85,11 +84,11 @@ export default function WhyEZeeAssistContent() {
             className="max-w-3xl"
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Why EZee Assist</p>
-            <h1 className="text-4xl font-bold text-[#0A0A0A] sm:text-5xl lg:text-6xl" style={{ letterSpacing: "-0.02em" }}>
+            <h1 className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl lg:text-6xl" style={{ letterSpacing: "-0.02em" }}>
               The model is not the product.{" "}
               <span className="text-[#00AEEF]">The context is the product.</span>
             </h1>
-            <p className="mt-6 text-xl leading-8 text-gray-600">
+            <p className="mt-6 text-xl leading-8 text-gray-600 dark:text-gray-400">
               Any company can plug into an LLM. What makes EZee Assist different is everything around it — the franchise-specific context, the multi-tenant architecture, the channel flexibility, and the operational intelligence that makes AI actually useful for franchise teams.
             </p>
             <div className="mt-8">
@@ -100,24 +99,24 @@ export default function WhyEZeeAssistContent() {
       </section>
 
       {/* ── Why generic AI fails ── */}
-      <section className="w-full bg-[#F7F8FA]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
         <div ref={failsRef} className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={failsInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }} className="mb-10">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">The problem</p>
-            <h2 className="text-3xl font-bold text-[#0A0A0A]" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-3xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.02em" }}>
               Why generic AI fails for franchises
             </h2>
           </motion.div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
             {genericFails.map(({ title, body }, i) => (
               <motion.div key={title} custom={i} initial="hidden" animate={failsInView ? "visible" : "hidden"} variants={fadeUp}
-                className="rounded-2xl border border-[#E5E7EB] bg-white p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
+                className="rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 border border-red-100 mb-5">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/30 mb-5">
                   <X size={16} className="text-red-500" strokeWidth={2.5} />
                 </div>
-                <h3 className="text-base font-bold text-[#0A0A0A] mb-3" style={{ letterSpacing: "-0.01em" }}>{title}</h3>
-                <p className="text-sm leading-6 text-gray-600">{body}</p>
+                <h3 className="text-base font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3" style={{ letterSpacing: "-0.01em" }}>{title}</h3>
+                <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">{body}</p>
               </motion.div>
             ))}
           </div>
@@ -125,24 +124,24 @@ export default function WhyEZeeAssistContent() {
       </section>
 
       {/* ── What makes EZee Assist purpose-built ── */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div ref={diffRef} className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={diffInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }} className="mb-10">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">The solution</p>
-            <h2 className="text-3xl font-bold text-[#0A0A0A]" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-3xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.02em" }}>
               Built for franchise, not adapted from something else.
             </h2>
           </motion.div>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {differentiators.map(({ title, body }, i) => (
               <motion.div key={title} custom={i} initial="hidden" animate={diffInView ? "visible" : "hidden"} variants={fadeUp}
-                className="rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] p-6"
+                className="rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#161616] p-6"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#00AEEF]/10 mb-4">
                   <Check size={15} className="text-[#00AEEF]" strokeWidth={2.5} />
                 </div>
-                <h3 className="text-sm font-bold text-[#0A0A0A] mb-2" style={{ letterSpacing: "-0.01em" }}>{title}</h3>
-                <p className="text-sm leading-6 text-gray-600">{body}</p>
+                <h3 className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-2" style={{ letterSpacing: "-0.01em" }}>{title}</h3>
+                <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">{body}</p>
               </motion.div>
             ))}
           </div>
@@ -150,42 +149,42 @@ export default function WhyEZeeAssistContent() {
       </section>
 
       {/* ── Comparison table ── */}
-      <section className="w-full bg-[#F7F8FA] border-y border-[#E5E7EB]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111] border-y border-[#E5E7EB] dark:border-white/[0.06]">
         <div ref={tableRef} className="mx-auto max-w-5xl px-6 py-16 lg:px-8 lg:py-20">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={tableInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }} className="mb-10">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Comparison</p>
-            <h2 className="text-3xl font-bold text-[#0A0A0A]" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-3xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.02em" }}>
               EZee Assist vs. the alternatives
             </h2>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 16 }} animate={tableInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, delay: 0.15 }}
-            className="overflow-hidden rounded-2xl border border-[#E5E7EB] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
+            className="overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
           >
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-[#E5E7EB]">
-                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-widest text-gray-400">Capability</th>
-                    <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest text-gray-400">Generic AI</th>
-                    <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest text-gray-400">Shared Drive / Wiki</th>
+                  <tr className="border-b border-[#E5E7EB] dark:border-white/[0.08]">
+                    <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Capability</th>
+                    <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Generic AI</th>
+                    <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">Shared Drive / Wiki</th>
                     <th className="px-6 py-4 text-center text-xs font-semibold uppercase tracking-widest text-[#00AEEF]" style={{ borderLeft: "3px solid #00AEEF" }}>EZee Assist</th>
                   </tr>
                 </thead>
                 <tbody>
                   {comparisonRows.map(({ capability, generic, wiki, ezee }, i) => (
-                    <tr key={capability} className={`border-b border-[#E5E7EB] last:border-0 ${i % 2 === 0 ? "" : "bg-[#F7F8FA]"}`}>
-                      <td className="px-6 py-4 font-medium text-[#0A0A0A]">{capability}</td>
-                      <td className="px-6 py-4 text-center text-gray-400">
+                    <tr key={capability} className={`border-b border-[#E5E7EB] dark:border-white/[0.06] last:border-0 ${i % 2 === 0 ? "" : "bg-[#F7F8FA] dark:bg-[#1A1A1A]"}`}>
+                      <td className="px-6 py-4 font-medium text-[#0A0A0A] dark:text-[#F0F0F0]">{capability}</td>
+                      <td className="px-6 py-4 text-center text-gray-400 dark:text-gray-500">
                         {typeof generic === "boolean"
                           ? generic ? <Check size={16} className="inline text-green-500" /> : <X size={16} className="inline text-red-400" />
-                          : <span className="text-xs text-gray-500">{generic}</span>}
+                          : <span className="text-xs text-gray-500 dark:text-gray-400">{generic}</span>}
                       </td>
-                      <td className="px-6 py-4 text-center text-gray-400">
+                      <td className="px-6 py-4 text-center text-gray-400 dark:text-gray-500">
                         {typeof wiki === "boolean"
                           ? wiki ? <Check size={16} className="inline text-green-500" /> : <X size={16} className="inline text-red-400" />
-                          : <span className="text-xs text-gray-500">{wiki}</span>}
+                          : <span className="text-xs text-gray-500 dark:text-gray-400">{wiki}</span>}
                       </td>
-                      <td className="px-6 py-4 text-center bg-[#00AEEF]/[0.03]" style={{ borderLeft: "3px solid #00AEEF" }}>
+                      <td className="px-6 py-4 text-center bg-[#00AEEF]/[0.03] dark:bg-[#00AEEF]/[0.06]" style={{ borderLeft: "3px solid #00AEEF" }}>
                         {typeof ezee === "boolean"
                           ? ezee ? <Check size={16} className="inline text-[#00AEEF]" strokeWidth={2.5} /> : <X size={16} className="inline text-red-400" />
                           : <span className="text-xs font-semibold text-[#00AEEF]">{ezee}</span>}
@@ -200,11 +199,11 @@ export default function WhyEZeeAssistContent() {
       </section>
 
       {/* ── Answers → Actions → Automations arc ── */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div ref={arcRef} className="mx-auto max-w-5xl px-6 py-16 lg:px-8 lg:py-20">
           <motion.div initial={{ opacity: 0, y: 16 }} animate={arcInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5 }} className="text-center mb-14">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Product vision</p>
-            <h2 className="text-3xl font-bold text-[#0A0A0A]" style={{ letterSpacing: "-0.02em" }}>Where we&apos;re going</h2>
+            <h2 className="text-3xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.02em" }}>Where we&apos;re going</h2>
           </motion.div>
           <div className="relative grid grid-cols-1 gap-6 md:grid-cols-3">
             {/* Connector line */}
@@ -212,21 +211,23 @@ export default function WhyEZeeAssistContent() {
             {timeline.map(({ label, done, description, tag }, i) => (
               <motion.div key={label} custom={i} initial="hidden" animate={arcInView ? "visible" : "hidden"} variants={fadeUp}
                 className={`relative rounded-2xl border p-7 text-center ${
-                  !done ? "border-[#00AEEF]/40 bg-[#00AEEF]/[0.04] shadow-[0_0_32px_rgba(0,174,239,0.12)]" : "border-[#E5E7EB] bg-white"
+                  !done
+                    ? "border-[#00AEEF]/40 bg-[#00AEEF]/[0.04] dark:bg-[#00AEEF]/[0.06] shadow-[0_0_32px_rgba(0,174,239,0.12)]"
+                    : "border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616]"
                 }`}
               >
                 <div className={`mx-auto mb-5 flex h-10 w-10 items-center justify-center rounded-full border-2 ${
-                  done ? "border-green-400 bg-green-50" : "border-[#00AEEF] bg-[#00AEEF]/10"
+                  done ? "border-green-400 bg-green-50 dark:bg-green-900/20" : "border-[#00AEEF] bg-[#00AEEF]/10"
                 }`}>
                   {done
                     ? <Check size={18} className="text-green-500" strokeWidth={2.5} />
                     : <span className="text-sm font-bold text-[#00AEEF]">3</span>
                   }
                 </div>
-                <h3 className="text-lg font-bold text-[#0A0A0A] mb-3" style={{ letterSpacing: "-0.01em" }}>{label}</h3>
-                <p className="text-sm leading-6 text-gray-600 mb-4">{description}</p>
+                <h3 className="text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3" style={{ letterSpacing: "-0.01em" }}>{label}</h3>
+                <p className="text-sm leading-6 text-gray-600 dark:text-gray-400 mb-4">{description}</p>
                 <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${
-                  done ? "bg-green-50 text-green-600" : "bg-[#00AEEF]/10 text-[#00AEEF]"
+                  done ? "bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400" : "bg-[#00AEEF]/10 text-[#00AEEF]"
                 }`}>{tag}</span>
               </motion.div>
             ))}
@@ -235,12 +236,12 @@ export default function WhyEZeeAssistContent() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="w-full border-t border-[#E5E7EB] bg-[#F7F8FA]">
+      <section className="w-full border-t border-[#E5E7EB] dark:border-white/[0.06] bg-[#F7F8FA] dark:bg-[#111111]">
         <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-[#0A0A0A] mb-4" style={{ letterSpacing: "-0.02em" }}>
+          <h2 className="text-3xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-4" style={{ letterSpacing: "-0.02em" }}>
             Ready to see what purpose-built franchise AI looks like?
           </h2>
-          <p className="text-gray-600 mb-8">See EZee Assist live in 30 minutes.</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-8">See EZee Assist live in 30 minutes.</p>
           <Link href="/contact"><Button size="lg">Book a Demo</Button></Link>
         </div>
       </section>

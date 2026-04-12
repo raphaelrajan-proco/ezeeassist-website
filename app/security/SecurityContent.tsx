@@ -110,13 +110,13 @@ export default function SecurityContent() {
           <motion.div {...fadeUp()} className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Security</p>
             <h1
-              className="text-5xl font-bold tracking-tight text-[#0A0A0A] sm:text-6xl"
+              className="text-5xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Industry-grade{" "}
               <span className="text-[#00AEEF]">AI standards</span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600 max-w-2xl">
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
               EZee Assist&apos;s AI engine is meticulously developed to surpass
               current AI security, privacy, and compliance protocols. Quality
               and security is ingrained in our foundation.
@@ -129,12 +129,12 @@ export default function SecurityContent() {
       </section>
 
       {/* ── Responsible AI ───────────────────────────────── */}
-      <section className="w-full bg-[#F7F8FA]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
           <motion.div {...fadeUp()} className="mb-14">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Responsible AI</p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl max-w-2xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl max-w-2xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Deployed with an{" "}
@@ -151,14 +151,14 @@ export default function SecurityContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.1 }}
-                className="card-hover flex flex-col gap-5 rounded-2xl border border-[#E5E7EB] bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)]"
+                className="card-hover flex flex-col gap-5 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#00AEEF]/10">
                   <Icon size={22} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-[#0A0A0A] mb-2">{title}</h3>
-                  <p className="text-sm leading-6 text-gray-600">{body}</p>
+                  <h3 className="text-base font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-2">{title}</h3>
+                  <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">{body}</p>
                 </div>
               </motion.div>
             ))}
@@ -167,12 +167,12 @@ export default function SecurityContent() {
       </section>
 
       {/* ── Compliance Standards ─────────────────────────── */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
           <motion.div {...fadeUp()} className="mb-14">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Standards</p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl max-w-2xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl max-w-2xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               State-of-the-art{" "}
@@ -188,14 +188,14 @@ export default function SecurityContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.08 }}
-                className="card-hover flex gap-5 rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)]"
+                className="card-hover flex gap-5 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#00AEEF]/10">
                   <Icon size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-[#0A0A0A] mb-1">{title}</h3>
-                  <p className="text-sm leading-6 text-gray-600">{body}</p>
+                  <h3 className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-1">{title}</h3>
+                  <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">{body}</p>
                 </div>
               </motion.div>
             ))}
@@ -204,18 +204,18 @@ export default function SecurityContent() {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────── */}
-      <section className="w-full bg-[#F7F8FA]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
         <div className="mx-auto max-w-3xl px-6 py-20 lg:px-8 lg:py-28">
           <motion.div {...fadeUp()} className="mb-12">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">FAQ</p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Frequently asked <span className="text-[#00AEEF]">questions</span>
             </h2>
           </motion.div>
-          <div className="rounded-2xl border border-[#E5E7EB] bg-white px-8 py-2 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)]">
+          <div className="rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] px-8 py-2 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]">
             {faqs.map(({ q, a }, i) => (
               <AccordionItem key={q} q={q} a={a} index={i} />
             ))}
@@ -227,19 +227,19 @@ export default function SecurityContent() {
       <TrustBar />
 
       {/* ── Feedback ─────────────────────────────────────── */}
-      <section className="w-full bg-white border-t border-[#E5E7EB]">
+      <section className="w-full bg-white dark:bg-[#0D0D0D] border-t border-[#E5E7EB] dark:border-white/[0.06]">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 text-center">
           <motion.div {...fadeUp()} className="flex flex-col items-center gap-4">
             <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#00AEEF]/10">
               <Mail size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
             </div>
             <h3
-              className="text-2xl font-bold text-[#0A0A0A]"
+              className="text-2xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]"
               style={{ letterSpacing: "-0.01em" }}
             >
               We value your <span className="text-[#00AEEF]">feedback</span>
             </h3>
-            <p className="text-base text-gray-600 max-w-md">
+            <p className="text-base text-gray-600 dark:text-gray-400 max-w-md">
               Have a question about our security practices or want to report a
               concern? We take every message seriously.
             </p>

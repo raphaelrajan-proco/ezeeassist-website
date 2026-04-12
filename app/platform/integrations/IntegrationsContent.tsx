@@ -55,7 +55,7 @@ export default function IntegrationsContent() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative w-full overflow-hidden bg-white">
+      <section className="relative w-full overflow-hidden bg-white dark:bg-[#0D0D0D]">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-[500px]"
           style={{ background: "radial-gradient(ellipse 80% 60% at 50% -5%, rgba(0,174,239,0.08) 0%, transparent 65%)" }}
@@ -63,7 +63,7 @@ export default function IntegrationsContent() {
         />
         <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
           <motion.div className="max-w-3xl" {...fadeUp(0)}>
-            <div className="mb-5 flex items-center gap-2 text-xs text-gray-400">
+            <div className="mb-5 flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500">
               <Link href="/platform" className="hover:text-[#00AEEF] transition-colors">Platform</Link>
               <span>/</span>
               <span className="font-semibold text-[#00AEEF]">Integrations</span>
@@ -72,13 +72,13 @@ export default function IntegrationsContent() {
               Integrations
             </p>
             <h1
-              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] sm:text-6xl lg:text-7xl"
+              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
               style={{ letterSpacing: "-0.03em" }}
             >
               Connects to your entire{" "}
               <span className="text-[#00AEEF]">knowledge ecosystem.</span>
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600 max-w-2xl">
+            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
               EZee Assist plugs into the tools and platforms your franchise already
               uses. No migration. No manual uploads. Your content stays where it
               is — we learn from it directly.
@@ -100,8 +100,7 @@ export default function IntegrationsContent() {
 
       {/* ── Knowledge sources grid ────────────────────────── */}
       <section
-        className="w-full"
-        style={{ background: "linear-gradient(to bottom, #F7F8FA 0%, #ffffff 100%)" }}
+        className="w-full bg-how-it-works-gradient"
       >
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="mb-12" {...fadeUp(0)}>
@@ -109,13 +108,13 @@ export default function IntegrationsContent() {
               Knowledge Sources
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Where your knowledge lives,{" "}
               <span className="text-[#00AEEF]">we connect.</span>
             </h2>
-            <p className="mt-4 text-base leading-7 text-gray-600 max-w-xl">
+            <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400 max-w-xl">
               EZee Assist reads directly from your existing repositories. Add a
               connection in minutes — no migration, no re-uploading, no change to
               your workflows.
@@ -127,15 +126,15 @@ export default function IntegrationsContent() {
               <motion.div
                 key={name}
                 {...fadeUp(i * 0.05)}
-                className="card-hover flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] bg-white p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),_0_4px_12px_rgba(0,0,0,0.04)]"
+                className="card-hover flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 {/* Icon tile */}
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F7F8FA] border border-[#E5E7EB]">
-                  <Icon size={22} className="text-gray-500" strokeWidth={1.5} />
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F7F8FA] dark:bg-[#1A1A1A] border border-[#E5E7EB] dark:border-white/[0.08]">
+                  <Icon size={22} className="text-gray-500 dark:text-gray-400" strokeWidth={1.5} />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-[#0A0A0A] mb-1">{name}</p>
-                  <p className="text-xs leading-5 text-gray-500">{desc}</p>
+                  <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-1">{name}</p>
+                  <p className="text-xs leading-5 text-gray-500 dark:text-gray-400">{desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -144,20 +143,20 @@ export default function IntegrationsContent() {
       </section>
 
       {/* ── Delivery channels ────────────────────────────── */}
-      <section className="w-full bg-white">
+      <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="mb-12" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
               Delivery Channels
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Franchisees access answers through{" "}
               <span className="text-[#00AEEF]">channels they already use.</span>
             </h2>
-            <p className="mt-4 text-base leading-7 text-gray-600 max-w-xl">
+            <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400 max-w-xl">
               No new apps. No new logins. No behavior change required from your
               network — they just ask questions the way they naturally would.
             </p>
@@ -168,15 +167,15 @@ export default function IntegrationsContent() {
               <motion.div
                 key={name}
                 {...fadeUp(i * 0.07)}
-                className="card-hover group relative overflow-hidden flex items-start gap-5 rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] p-7"
+                className="card-hover group relative overflow-hidden flex items-start gap-5 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-7"
               >
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#00AEEF]/10">
                   <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <p className="mb-1 text-base font-bold text-[#0A0A0A]">{name}</p>
-                  <p className="text-sm leading-6 text-gray-600">{desc}</p>
+                  <p className="mb-1 text-base font-bold text-[#0A0A0A] dark:text-[#F0F0F0]">{name}</p>
+                  <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">{desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -185,7 +184,7 @@ export default function IntegrationsContent() {
       </section>
 
       {/* ── Don't see your tool ───────────────────────────── */}
-      <section className="w-full bg-[#F7F8FA] border-y border-[#E5E7EB]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111] border-y border-[#E5E7EB] dark:border-white/[0.06]">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <motion.div
             {...fadeUp(0)}
@@ -193,12 +192,12 @@ export default function IntegrationsContent() {
           >
             <div>
               <h3
-                className="text-2xl font-bold text-[#0A0A0A] mb-2"
+                className="text-2xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-2"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 Don&apos;t see your tool?
               </h3>
-              <p className="text-base text-gray-600 max-w-lg">
+              <p className="text-base text-gray-600 dark:text-gray-400 max-w-lg">
                 We&apos;re adding new integrations regularly. If your team uses a tool
                 that isn&apos;t listed, let us know — we&apos;ll prioritize it.
               </p>
@@ -215,8 +214,7 @@ export default function IntegrationsContent() {
 
       {/* ── Final CTA ────────────────────────────────────── */}
       <section
-        className="relative w-full overflow-hidden"
-        style={{ background: "linear-gradient(180deg, #ffffff 0%, #F0F9FF 100%)" }}
+        className="relative w-full overflow-hidden bg-final-cta-gradient"
       >
         <div className="bg-dot-grid pointer-events-none absolute inset-0" style={{ opacity: 0.3 }} aria-hidden="true" />
         <div
@@ -227,13 +225,13 @@ export default function IntegrationsContent() {
         <div className="relative mx-auto max-w-3xl px-6 py-28 text-center lg:px-8 lg:py-32">
           <motion.div {...fadeUp(0)}>
             <h2
-              className="text-4xl font-bold text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               See how EZee Assist connects{" "}
               <span className="text-[#00AEEF]">to your stack.</span>
             </h2>
-            <p className="mt-5 text-lg leading-8 text-gray-600">
+            <p className="mt-5 text-lg leading-8 text-gray-600 dark:text-gray-400">
               Book a demo and we&apos;ll walk through exactly how we&apos;d connect to your
               existing tools and have you live in under a week.
             </p>

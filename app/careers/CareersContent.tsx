@@ -65,13 +65,13 @@ export default function CareersContent() {
             >
               <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Careers</p>
               <h1
-                className="text-5xl font-bold tracking-tight text-[#0A0A0A] sm:text-6xl"
+                className="text-5xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 Join our{" "}
                 <span className="text-[#00AEEF]">team</span> at EZee Assist
               </h1>
-              <p className="mt-6 text-lg leading-8 text-gray-600 max-w-2xl">
+              <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
                 We are always on the lookout for talented engineers to join our
                 team. If you feel you&apos;d be a good fit for any of the roles
                 below, please reach out.
@@ -95,13 +95,13 @@ export default function CareersContent() {
       </section>
 
       {/* ── Why EZee Assist ──────────────────────────────── */}
-      <section className="w-full bg-[#F7F8FA]">
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
         <div ref={perksRef} className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={perksInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.45, ease: "easeOut" }}
-            className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-8 text-center"
+            className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-8 text-center"
           >
             Why EZee Assist
           </motion.p>
@@ -112,10 +112,10 @@ export default function CareersContent() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={perksInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.4, ease: "easeOut", delay: i * 0.07 }}
-                className="card-hover flex flex-col items-center gap-2 rounded-2xl border border-[#E5E7EB] bg-white px-4 py-5 text-center shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)]"
+                className="card-hover flex flex-col items-center gap-2 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] px-4 py-5 text-center shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <span className="text-2xl">{emoji}</span>
-                <span className="text-xs font-semibold text-gray-600">{label}</span>
+                <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">{label}</span>
               </motion.div>
             ))}
           </div>
@@ -123,7 +123,7 @@ export default function CareersContent() {
       </section>
 
       {/* ── Job Listings ─────────────────────────────────── */}
-      <section id="openings" className="w-full bg-white">
+      <section id="openings" className="w-full bg-white dark:bg-[#0D0D0D]">
         <div ref={jobsRef} className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -133,7 +133,7 @@ export default function CareersContent() {
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Open Roles</p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] sm:text-5xl"
+              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Current <span className="text-[#00AEEF]">openings</span>
@@ -147,13 +147,13 @@ export default function CareersContent() {
                 initial={{ opacity: 0, y: 24 }}
                 animate={jobsInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.12 }}
-                className="card-hover flex flex-col rounded-2xl border border-[#E5E7EB] bg-white p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)]"
+                className="card-hover flex flex-col rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#00AEEF]/10 mb-5">
                   <Sparkles size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
                 <h3
-                  className="text-xl font-bold text-[#0A0A0A] mb-3"
+                  className="text-xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3"
                   style={{ letterSpacing: "-0.01em" }}
                 >
                   {title}
@@ -162,14 +162,14 @@ export default function CareersContent() {
                   {tags.map((tag) => (
                     <span
                       key={tag}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-[#F7F8FA] border border-[#E5E7EB] px-3 py-1 text-xs font-semibold text-gray-500"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[#F7F8FA] dark:bg-[#111111] border border-[#E5E7EB] dark:border-white/[0.08] px-3 py-1 text-xs font-semibold text-gray-500 dark:text-gray-400"
                     >
                       {tag === "Remote" ? <MapPin size={10} /> : <Clock size={10} />}
                       {tag}
                     </span>
                   ))}
                 </div>
-                <p className="text-sm leading-7 text-gray-600 flex-1 mb-6">{description}</p>
+                <p className="text-sm leading-7 text-gray-600 dark:text-gray-400 flex-1 mb-6">{description}</p>
                 <a href={`mailto:${email}?subject=Application: ${title}`}>
                   <Button size="md" className="w-full">Apply now</Button>
                 </a>
@@ -182,11 +182,11 @@ export default function CareersContent() {
             initial={{ opacity: 0, y: 16 }}
             animate={jobsInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.45, ease: "easeOut", delay: 0.3 }}
-            className="mt-10 rounded-2xl border border-[#E5E7EB] bg-[#F7F8FA] px-8 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+            className="mt-10 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] px-8 py-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
           >
             <div>
-              <p className="text-sm font-bold text-[#0A0A0A]">Don&apos;t see a role that fits?</p>
-              <p className="text-sm text-gray-600 mt-0.5">
+              <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0]">Don&apos;t see a role that fits?</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5">
                 We&apos;re always open to hearing from talented people. Send us your resume anyway.
               </p>
             </div>
