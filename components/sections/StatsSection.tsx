@@ -51,7 +51,7 @@ export default function StatsSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ backgroundColor: "rgba(0,174,239,0.04)" }}>
+    <section className="relative w-full overflow-hidden bg-[#F0F9FF] dark:bg-[#111111]">
       {/* Dot grid overlay */}
       <div className="pointer-events-none absolute inset-0 bg-dot-grid opacity-30" />
 

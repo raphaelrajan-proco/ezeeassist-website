@@ -15,20 +15,13 @@ const fadeUp = {
 
 export default function HeroSection() {
   return (
-    <section className="relative w-full overflow-hidden bg-white dark:bg-[#0D0D0D]">
+    <section className="relative w-full overflow-hidden bg-hero-gradient bg-noise">
       {/* Radial glow — sits behind everything */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 90% 60% at 50% -10%, rgba(0,174,239,0.07) 0%, transparent 65%)",
-        }}
-      />
-      {/* Soft gradient fade to light blue at bottom of section */}
-      <div
-        className="pointer-events-none absolute bottom-0 left-0 right-0 h-40"
-        style={{
-          background: "linear-gradient(to bottom, transparent, rgba(240,249,255,0.6))",
+            "radial-gradient(ellipse 90% 60% at 50% -10%, rgba(0,174,239,0.10) 0%, transparent 65%)",
         }}
       />
 
@@ -46,7 +39,7 @@ export default function HeroSection() {
           initial="hidden"
           animate="visible"
           variants={fadeUp}
-          className="mt-8 text-5xl font-bold leading-[1.08] tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
+          className="mt-8 text-5xl font-extrabold leading-[1.05] tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
           style={{ letterSpacing: "-0.02em" }}
         >
           Your franchisees have questions{" "}

@@ -1,5 +1,3 @@
-/* Google Fonts must come first */
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 @import "tailwindcss";
 
 /* ─── Dark mode variant (Tailwind v4 CSS-first) ───────── */
@@ -12,8 +10,13 @@
   --color-brand-white:  #FFFFFF;
   --color-brand-grey:   #F7F8FA;
   --color-brand-border: #E5E7EB;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --radius-card: 12px;
+
+  /* Body font — Inter */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Display / heading font — Plus Jakarta Sans */
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 16px;
 }
 
 /* ─── Base Styles ─────────────────────────────────────── */
@@ -23,7 +26,6 @@ html {
   scroll-behavior: smooth;
   color-scheme: light;
 }
-
 .dark {
   color-scheme: dark;
 }
@@ -31,54 +33,75 @@ html {
 body {
   background-color: #FFFFFF;
   color: #0A0A0A;
-  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.25s ease, color 0.25s ease;
 }
-
-/* ─── Dark mode body ──────────────────────────────────── */
 .dark body {
-  background-color: #0D0D0D;
+  background-color: #0B0F19;
   color: #F0F0F0;
 }
 
-/* ─── Section gradient utilities (needed for dark: support) */
+/* ─── Display font on all headings ────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ─── Section gradient utilities ──────────────────────── */
 .bg-hero-gradient {
-  background: linear-gradient(135deg, #ffffff 0%, #F0F9FF 100%);
+  background: linear-gradient(160deg, #ffffff 0%, #f0f9ff 50%, #ffffff 100%);
 }
 .dark .bg-hero-gradient {
-  background: linear-gradient(135deg, #0D0D0D 0%, #0B1623 100%);
+  background: linear-gradient(160deg, #0B0F19 0%, #0d1525 50%, #0B0F19 100%);
 }
 
 .bg-how-it-works-gradient {
   background: linear-gradient(to bottom, #F7F8FA 0%, #ffffff 100%);
 }
 .dark .bg-how-it-works-gradient {
-  background: linear-gradient(to bottom, #111111 0%, #0D0D0D 100%);
+  background: linear-gradient(to bottom, #111827 0%, #0B0F19 100%);
 }
 
 .bg-final-cta-gradient {
   background: linear-gradient(to bottom, #ffffff 0%, #F0F9FF 100%);
 }
 .dark .bg-final-cta-gradient {
-  background: linear-gradient(to bottom, #0D0D0D 0%, #0B1623 100%);
+  background: linear-gradient(to bottom, #0B0F19 0%, #0d1525 100%);
 }
 
 .bg-gated-popup-gradient {
   background: linear-gradient(135deg, #F0F9FF 0%, #ffffff 100%);
 }
 .dark .bg-gated-popup-gradient {
-  background: linear-gradient(135deg, #0B1623 0%, #161616 100%);
+  background: linear-gradient(135deg, #0d1525 0%, #161616 100%);
 }
 
-/* ─── Marquee Animation ───────────────────────────────── */
+/* ─── Noise / grain texture overlay ───────────────────── */
+.bg-noise {
+  position: relative;
+  isolation: isolate;
+}
+.bg-noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  background-repeat: repeat;
+  opacity: 0.025;
+  mix-blend-mode: overlay;
+}
+
+/* ─── Marquee Animation (slower = more premium) ───────── */
 @keyframes marquee {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
 .animate-marquee {
-  animation: marquee 28s linear infinite;
+  animation: marquee 40s linear infinite;
 }
 .animate-marquee:hover {
   animation-play-state: paused;
@@ -94,11 +117,21 @@ body {
   background-size: 26px 26px;
 }
 
-/* ─── Card hover lift ─────────────────────────────────── */
+/* ─── Card hover — standard lift ─────────────────────── */
 .card-hover {
   transition: transform 0.22s ease, box-shadow 0.22s ease;
 }
 .card-hover:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.09);
+}
+
+/* ─── Card hover — blue glow (Style A feature cards) ──── */
+.card-hover-blue {
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+.card-hover-blue:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0, 174, 239, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 174, 239, 0.35) !important;
 }
