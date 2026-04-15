@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import {
@@ -139,8 +139,26 @@ const integrationsDup = [...integrations, ...integrations];
 /* ─── Component ────────────────────────────────────────── */
 
 export default function PlatformContent() {
-  const flowRef = useRef(null);
-  const flowInView = useInView(flowRef, { once: true, margin: "-60px" });
+  const flowRef  = useRef<HTMLDivElement>(null);
+  const [flowVisible, setFlowVisible]   = useState(false);
+  const [lineVisible, setLineVisible]   = useState(false);
+
+  useEffect(() => {
+    const el = flowRef.current;
+    if (!el) return;
+
+    const stepsObs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setFlowVisible(true); stepsObs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    const lineObs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setLineVisible(true);  lineObs.disconnect();  } },
+      { threshold: 0.3 }
+    );
+    stepsObs.observe(el);
+    lineObs.observe(el);
+    return () => { stepsObs.disconnect(); lineObs.disconnect(); };
+  }, []);
 
   return (
     <>
@@ -219,7 +237,7 @@ export default function PlatformContent() {
               <motion.div
                 key={title}
                 {...fadeUp(i * 0.1)}
-                className="card-hover-blue group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#1A1A1A] p-8"
+                className="card-hover-lift group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#1A1A1A] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 {/* Top accent bar */}
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -274,9 +292,12 @@ export default function PlatformContent() {
 
           {/* Flow diagram */}
           <div ref={flowRef} className="relative">
-            {/* Connector line */}
-            <div
-              className="absolute top-[28px] left-[calc(12.5%+20px)] right-[calc(12.5%+20px)] hidden h-px bg-gradient-to-r from-[#00AEEF]/20 via-[#00AEEF]/60 to-[#00AEEF]/20 lg:block"
+            {/* Animated connector line — draws left-to-right on scroll */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={lineVisible ? { scaleX: 1 } : { scaleX: 0 }}
+              transition={{ duration: 1.4, ease: "easeOut", delay: 0.1 }}
+              className="absolute top-[28px] left-[calc(12.5%+28px)] right-[calc(12.5%+28px)] hidden h-px origin-left bg-gradient-to-r from-[#00AEEF]/20 via-[#00AEEF]/60 to-[#00AEEF]/20 lg:block"
               aria-hidden="true"
             />
 
@@ -285,13 +306,16 @@ export default function PlatformContent() {
                 <motion.div
                   key={number}
                   initial={{ opacity: 0, y: 28 }}
-                  animate={flowInView ? { opacity: 1, y: 0 } : {}}
+                  animate={flowVisible ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.12 }}
                   className="flex flex-col items-center text-center"
                 >
-                  {/* Step circle */}
+                  {/* Step circle — pulses when in view */}
                   <div
-                    className={`relative z-10 mb-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 bg-white dark:bg-[#161616] text-sm font-bold ${color}`}
+                    className={`relative z-10 mb-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border-2 bg-white dark:bg-[#161616] text-sm font-bold ${color} ${
+                      flowVisible ? "animate-pulse-ring" : ""
+                    }`}
+                    style={flowVisible ? { animationDelay: `${i * 0.35}s` } : {}}
                   >
                     {number}
                   </div>
@@ -483,7 +507,7 @@ export default function PlatformContent() {
               Ready to Scale?
             </p>
             <h2
-              className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl lg:text-6xl"
+              className="text-4xl font-extrabold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl lg:text-6xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               See it live in{" "}

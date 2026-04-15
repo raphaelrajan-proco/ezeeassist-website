@@ -1,28 +1,29 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { Link2, Heart, Lightbulb, KeyRound, MessageSquare, Zap } from "lucide-react";
+import { motion } from "framer-motion";
+import { Link2, Heart, Lightbulb, KeyRound, MessageSquare, Zap, ArrowRight } from "lucide-react";
+import Link from "next/link";
+import Button from "@/components/ui/Button";
 
 const team = [
   { name: "Moshood Awari-Yusuf", title: "Sr. Software Engineer",  initials: "MA" },
-  { name: "Gabe Cadamuro",       title: "Co-founder & CTO",        initials: "GC" },
-  { name: "Samuel Chen",         title: "Software Engineer",        initials: "SC" },
-  { name: "Greg Hatt",           title: "Sr. Software Engineer",   initials: "GH" },
-  { name: "Gurkaran Kahlon",     title: "Sr. Software Engineer",   initials: "GK" },
-  { name: "Shashwath Krishna",   title: "Sr. ML Engineer",         initials: "SK" },
-  { name: "Shray Mehra",         title: "Co-founder & COO",        initials: "SM" },
-  { name: "Bborie Park",         title: "Head of Engineering",     initials: "BP" },
-  { name: "Raphael Rajan",       title: "Co-founder & CEO",        initials: "RR" },
-  { name: "Jolomi Tosanwumi",    title: "ML Engineer",             initials: "JT" },
+  { name: "Gabe Cadamuro",       title: "Co-founder & CTO",       initials: "GC" },
+  { name: "Samuel Chen",         title: "Software Engineer",       initials: "SC" },
+  { name: "Greg Hatt",           title: "Sr. Software Engineer",  initials: "GH" },
+  { name: "Gurkaran Kahlon",     title: "Sr. Software Engineer",  initials: "GK" },
+  { name: "Shashwath Krishna",   title: "Sr. ML Engineer",        initials: "SK" },
+  { name: "Shray Mehra",         title: "Co-founder & COO",       initials: "SM" },
+  { name: "Bborie Park",         title: "Head of Engineering",    initials: "BP" },
+  { name: "Raphael Rajan",       title: "Co-founder & CEO",       initials: "RR" },
+  { name: "Jolomi Tosanwumi",    title: "ML Engineer",            initials: "JT" },
 ];
 
 const values = [
-  { icon: Heart,        text: "We are honest and compassionate with all stakeholders" },
-  { icon: Lightbulb,   text: "We have strong opinions, but they are loosely held" },
-  { icon: KeyRound,    text: "We act like owners" },
+  { icon: Heart,         text: "We are honest and compassionate with all stakeholders" },
+  { icon: Lightbulb,    text: "We have strong opinions, but they are loosely held" },
+  { icon: KeyRound,     text: "We act like owners" },
   { icon: MessageSquare, text: "We communicate clearly and in a timely manner" },
-  { icon: Zap,         text: "We execute with urgency, without compromising excellence" },
+  { icon: Zap,          text: "We execute with urgency, without compromising excellence" },
 ];
 
 const investors = ["N49P", "10vc", "Antler", "Hustle Fund"];
@@ -30,7 +31,7 @@ const investors = ["N49P", "10vc", "Antler", "Hustle Fund"];
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-60px" },
+  viewport: { once: true, margin: "-60px" as const },
   transition: { duration: 0.5, ease: "easeOut" as const, delay },
 });
 
@@ -38,9 +39,7 @@ export default function AboutContent() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section
-        className="relative w-full overflow-hidden border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient"
-      >
+      <section className="relative w-full overflow-hidden border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient">
         <div
           className="pointer-events-none absolute inset-0"
           style={{ background: "radial-gradient(ellipse 60% 80% at 100% 50%, rgba(0,174,239,0.05) 0%, transparent 60%)" }}
@@ -49,7 +48,7 @@ export default function AboutContent() {
           <motion.div {...fadeUp()} className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">About Us</p>
             <h1
-              className="text-5xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
+              className="text-5xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               About our <span className="text-[#00AEEF]">company</span>
@@ -67,13 +66,19 @@ export default function AboutContent() {
       <section className="w-full bg-white dark:bg-[#0D0D0D]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
           <motion.div {...fadeUp()} className="mb-14">
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">The Team</p>
-            <h2 className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
+              The Team
+            </p>
+            <h2
+              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+              style={{ letterSpacing: "-0.02em" }}
+            >
               Meet our <span className="text-[#00AEEF]">team</span>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-5">
+          {/* Team grid */}
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
             {team.map(({ name, title, initials }, i) => (
               <motion.div
                 key={name}
@@ -83,11 +88,16 @@ export default function AboutContent() {
                 transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.06 }}
                 className="flex flex-col items-center text-center group"
               >
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#00AEEF]/10 border-2 border-[#00AEEF]/20 text-base font-bold text-[#00AEEF] mb-3 transition-all duration-200 group-hover:border-[#00AEEF]/50 group-hover:bg-[#00AEEF]/15">
+                {/* Avatar */}
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#00AEEF]/10 border-2 border-[#00AEEF]/20 text-base font-bold text-[#00AEEF] mb-3 transition-all duration-250 group-hover:border-[#00AEEF]/60 group-hover:bg-[#00AEEF]/18 group-hover:shadow-[0_0_0_6px_rgba(0,174,239,0.08)] group-hover:scale-105">
                   {initials}
                 </div>
-                <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] leading-tight">{name}</p>
-                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 leading-snug">{title}</p>
+                <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] leading-tight">
+                  {name}
+                </p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400 leading-snug">
+                  {title}
+                </p>
                 <a
                   href="#"
                   aria-label={`${name} LinkedIn`}
@@ -98,6 +108,29 @@ export default function AboutContent() {
               </motion.div>
             ))}
           </div>
+
+          {/* "We're hiring" card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
+            className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-5 rounded-2xl border border-dashed border-[#00AEEF]/40 bg-[#00AEEF]/[0.03] dark:bg-[#00AEEF]/[0.05] px-8 py-6"
+          >
+            <div>
+              <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-1">
+                🚀 We&apos;re hiring
+              </p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                Join a high-growth team building the future of franchise AI. Remote-first, high-ownership culture.
+              </p>
+            </div>
+            <Link href="/careers" className="flex-shrink-0">
+              <Button variant="secondary" size="md">
+                View open roles <ArrowRight size={15} className="ml-1.5" />
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
@@ -105,9 +138,11 @@ export default function AboutContent() {
       <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-28">
           <motion.div {...fadeUp()} className="text-center mb-14">
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Our Values</p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
+              Our Values
+            </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               What we <span className="text-[#00AEEF]">believe in</span>
@@ -123,7 +158,7 @@ export default function AboutContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.1 }}
-                className="card-hover flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+                className="card-hover-blue flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#00AEEF]/10">
                   <Icon size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
@@ -142,7 +177,7 @@ export default function AboutContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.1 }}
-                className="card-hover flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+                className="card-hover-blue flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#00AEEF]/10">
                   <Icon size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
@@ -166,7 +201,7 @@ export default function AboutContent() {
             >
               <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Our Culture</p>
               <h2
-                className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl mb-5"
+                className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl mb-5"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 This is <span className="text-[#00AEEF]">EZee Assist</span>
@@ -194,7 +229,10 @@ export default function AboutContent() {
               className="grid grid-cols-5 gap-2"
             >
               {Array.from({ length: 10 }).map((_, i) => (
-                <div key={i} className="aspect-square rounded-xl bg-[#F7F8FA] dark:bg-[#111111] border border-[#E5E7EB] dark:border-white/[0.08]" />
+                <div
+                  key={i}
+                  className="aspect-square rounded-xl bg-[#F7F8FA] dark:bg-[#111111] border border-[#E5E7EB] dark:border-white/[0.08]"
+                />
               ))}
             </motion.div>
           </div>
