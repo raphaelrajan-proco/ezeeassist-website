@@ -1,66 +1,78 @@
+import Link from "next/link";
 import { Globe, Share2, Link2 } from "lucide-react";
 
 const footerLinks = {
-  Product: [
-    { label: "Platform", href: "/platform" },
-    { label: "Case Studies", href: "/case-studies" },
+  Platform: [
+    { label: "AI Agent",      href: "/platform/ai-agent" },
+    { label: "Ticketing",     href: "/platform/ticketing" },
+    { label: "Insights",      href: "/platform/insights" },
+    { label: "Workflows",     href: "/platform/workflows" },
+    { label: "Integrations",  href: "/platform/integrations" },
     { label: "ROI Calculator", href: "/roi-calculator" },
-    { label: "Changelog", href: "/changelog" },
-    { label: "Security", href: "/security" },
-    // TODO: Replace # with real status page URL (e.g., UptimeRobot or Instatus)
-    { label: "Status", href: "#" },
+  ],
+  Industries: [
+    { label: "Franchising",         href: "/industries/franchising" },
+    { label: "Multi-Location",      href: "/industries/multi-location" },
+    { label: "Universities",        href: "/industries/universities" },
   ],
   Resources: [
-    { label: "Blog", href: "/blog" },
-    { label: "Why EZee Assist", href: "/why-ezeeassist" },
-    { label: "ROI Calculator", href: "/roi-calculator" },
-    { label: "Changelog", href: "/changelog" },
+    { label: "Blog",           href: "/blog" },
+    { label: "Case Studies",   href: "/case-studies" },
+    { label: "Why EZee Assist",href: "/why-ezeeassist" },
+    { label: "Changelog",      href: "/changelog" },
+    { label: "Security",       href: "/security" },
+    { label: "Status",         href: "#" },
   ],
   Company: [
-    { label: "About", href: "/about" },
-    { label: "Careers", href: "/careers" },
-    { label: "Contact", href: "/contact" },
-  ],
-  Policies: [
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Terms of Use", href: "/terms" },
+    { label: "Careers",       href: "/careers" },
+    { label: "Contact",       href: "/contact" },
+    { label: "Privacy Policy",href: "/privacy" },
     { label: "Accessibility", href: "/accessibility" },
   ],
 };
 
 const socialLinks = [
-  { label: "LinkedIn", href: "https://linkedin.com/company/ezeeassist", icon: Link2 },
-  { label: "X / Twitter", href: "https://x.com/ezeeassist", icon: Share2 },
-  { label: "Facebook", href: "https://facebook.com/ezeeassist", icon: Globe },
+  { label: "LinkedIn",   href: "https://linkedin.com/company/ezeeassist", icon: Link2  },
+  { label: "X / Twitter",href: "https://x.com/ezeeassist",               icon: Share2 },
+  { label: "Facebook",   href: "https://facebook.com/ezeeassist",         icon: Globe  },
 ];
 
 export default function Footer() {
   return (
     <footer className="w-full border-t border-[#E5E7EB] dark:border-white/[0.06] bg-[#F7F8FA] dark:bg-[#111111]">
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
-        <div className="grid grid-cols-2 gap-10 md:grid-cols-[1fr_repeat(4,_auto)]">
+      <div className="mx-auto max-w-7xl px-6 pt-16 pb-10 lg:px-8">
+
+        {/* Top grid */}
+        <div className="grid grid-cols-2 gap-10 lg:grid-cols-[1.6fr_repeat(4,_1fr)]">
 
           {/* Brand column */}
-          <div className="col-span-2 md:col-span-1">
-            <span className="text-xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0]">
-              EZee <span className="text-[#00AEEF]">Assist</span>
-            </span>
-            <p className="mt-4 max-w-sm text-sm leading-6 text-gray-500 dark:text-gray-400">
-              AI-powered operational support for franchise and multi-location
-              brands. Instant, accurate answers from your brand&apos;s own
-              knowledge — 24/7.
+          <div className="col-span-2 lg:col-span-1">
+            <Link href="/" className="inline-block">
+              <span className="text-xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0]">
+                EZee <span className="text-[#00AEEF]">Assist</span>
+              </span>
+            </Link>
+            <p className="mt-4 max-w-[260px] text-sm leading-6 text-gray-500 dark:text-gray-400">
+              The AI support platform that gives every franchise location instant,
+              accurate answers — 24/7, from your brand&apos;s own knowledge.
             </p>
 
             <div className="mt-5 space-y-1">
-              <a href="mailto:sales@ezeeassist.com" className="block text-sm text-gray-500 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">
+              <a
+                href="mailto:sales@ezeeassist.com"
+                className="block text-sm text-gray-500 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors"
+              >
                 sales@ezeeassist.com
               </a>
-              <a href="tel:+18557773933" className="block text-sm text-gray-500 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">
+              <a
+                href="tel:+18557773933"
+                className="block text-sm text-gray-500 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors"
+              >
                 +1 855-777-3933
               </a>
             </div>
 
-            <div className="mt-6 flex gap-3">
+            <div className="mt-6 flex gap-2.5">
               {socialLinks.map(({ label, href, icon: Icon }) => (
                 <a
                   key={label}
@@ -85,12 +97,12 @@ export default function Footer() {
               <ul className="mt-4 flex flex-col gap-3">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <a
+                    <Link
                       href={link.href}
                       className="text-sm text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -99,14 +111,14 @@ export default function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 border-t border-[#E5E7EB] dark:border-white/[0.06] pt-8 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 border-t border-[#E5E7EB] dark:border-white/[0.06] pt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-gray-400 dark:text-gray-500">
-            &copy; 2026 EZee Assist. All rights reserved.
+            &copy; {new Date().getFullYear()} EZee Assist. All rights reserved.
           </p>
-          <div className="flex gap-4 text-xs text-gray-400 dark:text-gray-500">
-            <a href="/privacy" className="hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">Privacy Policy</a>
-            <a href="/terms" className="hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">Terms of Use</a>
-            <a href="/accessibility" className="hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">Accessibility</a>
+          <div className="flex flex-wrap gap-4 text-xs text-gray-400 dark:text-gray-500">
+            <Link href="/privacy"       className="hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">Privacy Policy</Link>
+            <Link href="/terms"         className="hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">Terms of Use</Link>
+            <Link href="/accessibility" className="hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">Accessibility</Link>
           </div>
         </div>
       </div>
