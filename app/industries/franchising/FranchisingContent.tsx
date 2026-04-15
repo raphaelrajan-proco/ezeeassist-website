@@ -57,7 +57,7 @@ export default function FranchisingContent() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative w-full overflow-hidden bg-white dark:bg-[#0D0D0D]">
+      <section className="relative w-full overflow-hidden bg-hero-gradient">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[500px]" style={{ background: "radial-gradient(ellipse 80% 60% at 50% -5%, rgba(0,174,239,0.08) 0%, transparent 65%)" }} aria-hidden="true" />
         <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
           <motion.div className="max-w-3xl" {...fadeUp(0)}>
@@ -67,7 +67,7 @@ export default function FranchisingContent() {
               <span className="font-semibold text-[#00AEEF]">Franchising</span>
             </div>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Franchise Brands</p>
-            <h1 className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.03em" }}>
+            <h1 className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.03em" }}>
               The AI support platform built{" "}
               <span className="text-[#00AEEF]">exclusively for franchise brands.</span>
             </h1>
@@ -87,7 +87,7 @@ export default function FranchisingContent() {
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-14" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Who It&apos;s For</p>
-            <h2 className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               Built for every role in the{" "}
               <span className="text-[#00AEEF]">franchise ecosystem.</span>
             </h2>
@@ -113,7 +113,7 @@ export default function FranchisingContent() {
               <motion.div
                 key={label}
                 {...fadeUp(i * 0.1)}
-                className="card-hover group relative flex flex-col overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-10 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+                className="card-hover-blue group relative flex flex-col overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-10 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
                 style={{ borderLeft: "4px solid #00AEEF" }}
               >
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#00AEEF]/10">
@@ -135,14 +135,14 @@ export default function FranchisingContent() {
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-14" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">The Challenge</p>
-            <h2 className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               The support challenges every{" "}
               <span className="text-[#00AEEF]">franchise brand faces.</span>
             </h2>
           </motion.div>
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
             {painPoints.map(({ icon: Icon, title, body }, i) => (
-              <motion.div key={title} {...fadeUp(i * 0.08)} className="card-hover group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-8">
+              <motion.div key={title} {...fadeUp(i * 0.08)} className="card-hover-blue group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-8">
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#00AEEF]/10">
                   <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
@@ -160,14 +160,14 @@ export default function FranchisingContent() {
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-14" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Results</p>
-            <h2 className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               Trusted by franchise brands{" "}
               <span className="text-[#00AEEF]">across North America.</span>
             </h2>
           </motion.div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3 mb-16">
             {caseStudies.map(({ brand, stat, initials }, i) => (
-              <motion.div key={brand} {...fadeUp(i * 0.1)} className="card-hover flex flex-col items-start rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]" style={{ borderTop: "3px solid #00AEEF" }}>
+              <motion.div key={brand} {...fadeUp(i * 0.1)} className="card-hover-blue flex flex-col items-start rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]" style={{ borderTop: "3px solid #00AEEF" }}>
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#00AEEF]/10 text-sm font-bold text-[#00AEEF]">{initials}</div>
                 <p className="mb-2 text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.01em" }}>{brand}</p>
                 <p className="mb-6 flex-1 text-base text-gray-600 dark:text-gray-400">{stat}</p>
@@ -205,7 +205,7 @@ export default function FranchisingContent() {
         <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2" style={{ width: 700, height: 400, background: "radial-gradient(ellipse 80% 80% at 50% 100%, rgba(0,174,239,0.10) 0%, transparent 70%)" }} aria-hidden="true" />
         <div className="relative mx-auto max-w-3xl px-6 py-28 text-center lg:px-8 lg:py-32">
           <motion.div {...fadeUp(0)}>
-            <h2 className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-extrabold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               Give your franchise network the{" "}
               <span className="text-[#00AEEF]">support it deserves.</span>
             </h2>

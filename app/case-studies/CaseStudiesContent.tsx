@@ -64,7 +64,7 @@ export default function CaseStudiesContent() {
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
       <section
-        className="relative w-full overflow-hidden border-b border-[#E5E7EB] dark:border-white/[0.06] bg-white dark:bg-[#0D0D0D]"
+        className="relative w-full overflow-hidden border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient"
       >
         <div
           className="pointer-events-none absolute inset-0"
@@ -81,7 +81,7 @@ export default function CaseStudiesContent() {
               Case Studies
             </p>
             <h1
-              className="text-5xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
+              className="text-5xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               How leading brands{" "}

@@ -55,10 +55,10 @@ export default function IntegrationsContent() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative w-full overflow-hidden bg-white dark:bg-[#0D0D0D]">
+      <section className="relative w-full overflow-hidden bg-hero-gradient">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-[500px]"
-          style={{ background: "radial-gradient(ellipse 80% 60% at 50% -5%, rgba(0,174,239,0.08) 0%, transparent 65%)" }}
+          style={{ background: "radial-gradient(ellipse 80% 60% at 50% -5%, rgba(0,174,239,0.10) 0%, transparent 65%)" }}
           aria-hidden="true"
         />
         <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
@@ -72,7 +72,7 @@ export default function IntegrationsContent() {
               Integrations
             </p>
             <h1
-              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
+              className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
               style={{ letterSpacing: "-0.03em" }}
             >
               Connects to your entire{" "}
@@ -108,7 +108,7 @@ export default function IntegrationsContent() {
               Knowledge Sources
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Where your knowledge lives,{" "}
@@ -126,7 +126,7 @@ export default function IntegrationsContent() {
               <motion.div
                 key={name}
                 {...fadeUp(i * 0.05)}
-                className="card-hover flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+                className="card-hover-blue flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 {/* Icon tile */}
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F7F8FA] dark:bg-[#1A1A1A] border border-[#E5E7EB] dark:border-white/[0.08]">
@@ -150,7 +150,7 @@ export default function IntegrationsContent() {
               Delivery Channels
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Franchisees access answers through{" "}
@@ -167,7 +167,7 @@ export default function IntegrationsContent() {
               <motion.div
                 key={name}
                 {...fadeUp(i * 0.07)}
-                className="card-hover group relative overflow-hidden flex items-start gap-5 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-7"
+                className="card-hover-blue group relative overflow-hidden flex items-start gap-5 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-7"
               >
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#00AEEF]/10">

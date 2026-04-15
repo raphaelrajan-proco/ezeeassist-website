@@ -66,7 +66,7 @@ export default function IndustriesContent() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative w-full overflow-hidden bg-white dark:bg-[#0D0D0D]">
+      <section className="relative w-full overflow-hidden bg-hero-gradient">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-[500px]"
           style={{ background: "radial-gradient(ellipse 80% 60% at 50% -5%, rgba(0,174,239,0.08) 0%, transparent 65%)" }}
@@ -75,7 +75,7 @@ export default function IndustriesContent() {
         <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
           <motion.div className="max-w-3xl" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Industries</p>
-            <h1 className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.03em" }}>
+            <h1 className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.03em" }}>
               Purpose-built AI support for{" "}
               <span className="text-[#00AEEF]">every multi-location business.</span>
             </h1>
@@ -94,7 +94,7 @@ export default function IndustriesContent() {
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-16" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Solutions</p>
-            <h2 className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               Solutions by <span className="text-[#00AEEF]">industry.</span>
             </h2>
           </motion.div>
@@ -104,7 +104,7 @@ export default function IndustriesContent() {
               <motion.div
                 key={title}
                 {...fadeUp(i * 0.1)}
-                className="card-hover group relative flex flex-col overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+                className="card-hover-blue group relative flex flex-col overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-[#00AEEF]/40 via-[#00AEEF] to-[#00AEEF]/40" />
                 <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#00AEEF]/10">
@@ -129,7 +129,7 @@ export default function IndustriesContent() {
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-14" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Universal Benefits</p>
-            <h2 className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               What every multi-location organization <span className="text-[#00AEEF]">gets.</span>
             </h2>
           </motion.div>
@@ -139,7 +139,7 @@ export default function IndustriesContent() {
               <motion.div
                 key={title}
                 {...fadeUp(i * 0.08)}
-                className="card-hover group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-7"
+                className="card-hover-blue group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-7"
               >
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[#00AEEF]/10">
@@ -159,7 +159,7 @@ export default function IndustriesContent() {
         <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2" style={{ width: 700, height: 400, background: "radial-gradient(ellipse 80% 80% at 50% 100%, rgba(0,174,239,0.10) 0%, transparent 70%)" }} aria-hidden="true" />
         <div className="relative mx-auto max-w-3xl px-6 py-28 text-center lg:px-8 lg:py-32">
           <motion.div {...fadeUp(0)}>
-            <h2 className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-extrabold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               See how EZee Assist works for{" "}
               <span className="text-[#00AEEF]">your industry.</span>
             </h2>

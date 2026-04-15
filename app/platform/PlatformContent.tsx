@@ -167,7 +167,7 @@ export default function PlatformContent() {
               The Platform
             </p>
             <h1
-              className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
+              className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
               style={{ letterSpacing: "-0.03em" }}
             >
               Everything your
@@ -206,7 +206,7 @@ export default function PlatformContent() {
               Core Capabilities
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Four pillars.{" "}
@@ -219,7 +219,7 @@ export default function PlatformContent() {
               <motion.div
                 key={title}
                 {...fadeUp(i * 0.1)}
-                className="card-hover group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#1A1A1A] p-8"
+                className="card-hover-blue group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#1A1A1A] p-8"
               >
                 {/* Top accent bar */}
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -264,7 +264,7 @@ export default function PlatformContent() {
               Under the Hood
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               How a question becomes{" "}
@@ -379,7 +379,7 @@ export default function PlatformContent() {
               Works With What You Already Use
             </p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Plug in.{" "}

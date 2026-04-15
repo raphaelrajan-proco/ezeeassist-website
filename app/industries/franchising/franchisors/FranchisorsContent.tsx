@@ -51,7 +51,7 @@ export default function FranchisorsContent() {
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative w-full overflow-hidden bg-white dark:bg-[#0D0D0D]">
+      <section className="relative w-full overflow-hidden bg-hero-gradient">
         <div className="pointer-events-none absolute inset-x-0 top-0 h-[500px]" style={{ background: "radial-gradient(ellipse 80% 60% at 50% -5%, rgba(0,174,239,0.08) 0%, transparent 65%)" }} aria-hidden="true" />
         <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
           <motion.div className="max-w-3xl" {...fadeUp(0)}>
@@ -63,7 +63,7 @@ export default function FranchisorsContent() {
               <span className="font-semibold text-[#00AEEF]">For Franchisors</span>
             </div>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">For Franchisors & Brand Teams</p>
-            <h1 className="text-5xl font-bold leading-[1.1] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.03em" }}>
+            <h1 className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.03em" }}>
               Scale franchise support{" "}
               <span className="text-[#00AEEF]">without scaling your team.</span>
             </h1>
@@ -83,7 +83,7 @@ export default function FranchisorsContent() {
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-16" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">The Problem</p>
-            <h2 className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               Your support team is the bottleneck.{" "}
               <span className="text-[#00AEEF]">It doesn&apos;t have to be.</span>
             </h2>
@@ -140,13 +140,13 @@ export default function FranchisorsContent() {
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-16" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Capabilities</p>
-            <h2 className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               Built for <span className="text-[#00AEEF]">franchisor teams.</span>
             </h2>
           </motion.div>
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map(({ icon: Icon, title, body }, i) => (
-              <motion.div key={title} {...fadeUp(i * 0.07)} className="card-hover group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#161616] p-7">
+              <motion.div key={title} {...fadeUp(i * 0.07)} className="card-hover-blue group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#161616] p-7">
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-[#00AEEF]/10">
                   <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
@@ -164,7 +164,7 @@ export default function FranchisorsContent() {
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-14" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Customer Stories</p>
-            <h2 className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               What franchise leaders <span className="text-[#00AEEF]">are saying.</span>
             </h2>
           </motion.div>
@@ -191,12 +191,12 @@ export default function FranchisorsContent() {
         <div className="bg-dot-grid pointer-events-none absolute inset-0" style={{ opacity: 0.3 }} aria-hidden="true" />
         <div ref={statsRef} className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 20 }} animate={statsInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, ease: "easeOut" }}>
-            <h2 className="text-3xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.02em" }}>The business case for AI-powered franchise support.</h2>
+            <h2 className="text-3xl font-extrabold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.02em" }}>The business case for AI-powered franchise support.</h2>
           </motion.div>
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
             {stats.map(({ value, label, sub }, i) => (
               <motion.div key={label} initial={{ opacity: 0, y: 20 }} animate={statsInView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.1 }} className="flex flex-col items-center text-center rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-sm">
-                <span className="text-5xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.03em" }}>{value}</span>
+                <span className="text-5xl font-extrabold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.03em" }}>{value}</span>
                 <span className="mt-2 text-base text-gray-600 dark:text-gray-400">{label}</span>
                 {sub && <span className="mt-1 text-xs text-gray-400 dark:text-gray-500">{sub}</span>}
               </motion.div>
@@ -211,7 +211,7 @@ export default function FranchisorsContent() {
         <div className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2" style={{ width: 700, height: 400, background: "radial-gradient(ellipse 80% 80% at 50% 100%, rgba(0,174,239,0.10) 0%, transparent 70%)" }} aria-hidden="true" />
         <div className="relative mx-auto max-w-3xl px-6 py-28 text-center lg:px-8 lg:py-32">
           <motion.div {...fadeUp(0)}>
-            <h2 className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
+            <h2 className="text-4xl font-extrabold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
               See how top franchise brands{" "}
               <span className="text-[#00AEEF]">use EZee Assist.</span>
             </h2>

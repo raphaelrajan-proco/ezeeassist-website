@@ -110,7 +110,7 @@ export default function SecurityContent() {
           <motion.div {...fadeUp()} className="max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Security</p>
             <h1
-              className="text-5xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
+              className="text-5xl font-extrabold leading-[1.05] tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Industry-grade{" "}
@@ -134,7 +134,7 @@ export default function SecurityContent() {
           <motion.div {...fadeUp()} className="mb-14">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Responsible AI</p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl max-w-2xl"
+              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl max-w-2xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Deployed with an{" "}
@@ -151,7 +151,7 @@ export default function SecurityContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.1 }}
-                className="card-hover flex flex-col gap-5 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+                className="card-hover-blue flex flex-col gap-5 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#00AEEF]/10">
                   <Icon size={22} className="text-[#00AEEF]" strokeWidth={1.75} />
@@ -172,7 +172,7 @@ export default function SecurityContent() {
           <motion.div {...fadeUp()} className="mb-14">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Standards</p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl max-w-2xl"
+              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl max-w-2xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               State-of-the-art{" "}
@@ -188,7 +188,7 @@ export default function SecurityContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.08 }}
-                className="card-hover flex gap-5 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+                className="card-hover-blue flex gap-5 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-[#00AEEF]/10">
                   <Icon size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
@@ -209,7 +209,7 @@ export default function SecurityContent() {
           <motion.div {...fadeUp()} className="mb-12">
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">FAQ</p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Frequently asked <span className="text-[#00AEEF]">questions</span>

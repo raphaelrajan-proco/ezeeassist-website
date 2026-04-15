@@ -65,7 +65,7 @@ export default function CareersContent() {
             >
               <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Careers</p>
               <h1
-                className="text-5xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
+                className="text-5xl font-extrabold leading-[1.05] tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
                 style={{ letterSpacing: "-0.02em" }}
               >
                 Join our{" "}
@@ -112,7 +112,7 @@ export default function CareersContent() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={perksInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.4, ease: "easeOut", delay: i * 0.07 }}
-                className="card-hover flex flex-col items-center gap-2 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] px-4 py-5 text-center shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+                className="card-hover-blue flex flex-col items-center gap-2 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] px-4 py-5 text-center shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <span className="text-2xl">{emoji}</span>
                 <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">{label}</span>
@@ -133,7 +133,7 @@ export default function CareersContent() {
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Open Roles</p>
             <h2
-              className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Current <span className="text-[#00AEEF]">openings</span>
@@ -147,7 +147,7 @@ export default function CareersContent() {
                 initial={{ opacity: 0, y: 24 }}
                 animate={jobsInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.12 }}
-                className="card-hover flex flex-col rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+                className="card-hover-blue flex flex-col rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
                 <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#00AEEF]/10 mb-5">
                   <Sparkles size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
