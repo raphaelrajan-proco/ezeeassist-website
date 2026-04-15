@@ -121,7 +121,7 @@ export default function FranchisingContent() {
                 </div>
                 <h3 className="mb-3 text-2xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.02em" }}>{label}</h3>
                 <p className="mb-8 flex-1 text-base leading-7 text-gray-600 dark:text-gray-400">{desc}</p>
-                <Link href={href} className="inline-flex items-center gap-2 text-sm font-semibold text-[#00AEEF] hover:gap-3 transition-all duration-150">
+                <Link href={href} className="arrow-link text-sm font-semibold text-[#00AEEF]">
                   {linkLabel} <ArrowRight size={15} />
                 </Link>
               </motion.div>
@@ -171,7 +171,7 @@ export default function FranchisingContent() {
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#00AEEF]/10 text-sm font-bold text-[#00AEEF]">{initials}</div>
                 <p className="mb-2 text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.01em" }}>{brand}</p>
                 <p className="mb-6 flex-1 text-base text-gray-600 dark:text-gray-400">{stat}</p>
-                <Link href="/case-studies" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#00AEEF] hover:gap-2.5 transition-all duration-150">
+                <Link href="/case-studies" className="arrow-link text-sm font-semibold text-[#00AEEF]">
                   Read case study <ArrowRight size={13} />
                 </Link>
               </motion.div>

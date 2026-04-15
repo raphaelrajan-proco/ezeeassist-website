@@ -115,7 +115,7 @@ export default function IndustriesContent() {
                 <div className="mb-6 rounded-xl bg-[#00AEEF]/[0.06] border border-[#00AEEF]/20 px-4 py-3">
                   <p className="text-sm font-semibold text-[#00AEEF]">{stat}</p>
                 </div>
-                <Link href={href} className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#00AEEF] hover:gap-3 transition-all duration-150">
+                <Link href={href} className="arrow-link text-sm font-semibold text-[#00AEEF]">
                   {linkLabel} <ArrowRight size={14} />
                 </Link>
               </motion.div>

@@ -118,7 +118,7 @@ export default function CaseStudyCarousel() {
                 </p>
                 <Link
                   href={slide.href}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold transition-gap duration-150 hover:gap-3"
+                  className="arrow-link text-sm font-semibold"
                   style={{ color: slide.accent }}
                 >
                   Read case study <ArrowRight size={14} />

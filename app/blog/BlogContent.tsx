@@ -135,7 +135,7 @@ function PostCard({ post, index }: { post: typeof PLACEHOLDER_POSTS[0]; index: n
           </span>
           <Link
             href={`/blog/${post.slug.current}`}
-            className="flex items-center gap-1.5 text-xs font-semibold text-[#00AEEF] hover:gap-2.5 transition-all duration-150"
+            className="arrow-link text-xs font-semibold text-[#00AEEF]"
           >
             Read more
             <ArrowRight size={13} />
@@ -256,7 +256,7 @@ export default function BlogContent() {
                     <p className="text-sm leading-6 text-gray-600 dark:text-gray-400 flex-1 mb-5">
                       {topStories[0].excerpt}
                     </p>
-                    <Link href={`/blog/${topStories[0].slug.current}`} className="inline-flex items-center gap-2 text-sm font-semibold text-[#00AEEF] hover:gap-3 transition-all duration-150">
+                    <Link href={`/blog/${topStories[0].slug.current}`} className="arrow-link text-sm font-semibold text-[#00AEEF]">
                       Read article <ArrowRight size={14} />
                     </Link>
                   </div>
@@ -287,7 +287,7 @@ export default function BlogContent() {
                         <div className="flex items-center gap-3 text-xs text-gray-400 dark:text-gray-500">
                           <span className="flex items-center gap-1"><Clock size={11} />{post.readTime}</span>
                         </div>
-                        <Link href={`/blog/${post.slug.current}`} className="flex items-center gap-1 text-xs font-semibold text-[#00AEEF] hover:gap-2 transition-all duration-150">
+                        <Link href={`/blog/${post.slug.current}`} className="arrow-link text-xs font-semibold text-[#00AEEF]">
                           Read <ArrowRight size={12} />
                         </Link>
                       </div>
