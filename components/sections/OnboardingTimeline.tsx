@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { CalendarCheck, Plug, Rocket } from "lucide-react";
 
 const steps = [
@@ -26,10 +26,35 @@ const steps = [
 ];
 
 export default function OnboardingTimeline() {
-  const headingRef = useRef(null);
-  const headingInView = useInView(headingRef, { once: true, margin: "-60px" });
-  const stepsRef = useRef(null);
-  const stepsInView = useInView(stepsRef, { once: true, margin: "-60px" });
+  const headingRef  = useRef<HTMLDivElement>(null);
+  const stepsRef    = useRef<HTMLDivElement>(null);
+
+  const [headingVisible, setHeadingVisible] = useState(false);
+  const [stepsVisible,   setStepsVisible]   = useState(false);
+  const [lineVisible,    setLineVisible]     = useState(false);
+
+  useEffect(() => {
+    const observe = (
+      el: Element | null,
+      setter: (v: boolean) => void,
+      threshold = 0.1
+    ) => {
+      if (!el) return () => {};
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) { setter(true); obs.disconnect(); } },
+        { threshold }
+      );
+      obs.observe(el);
+      return () => obs.disconnect();
+    };
+
+    const cleanups = [
+      observe(headingRef.current, setHeadingVisible),
+      observe(stepsRef.current,   setStepsVisible),
+      observe(stepsRef.current,   setLineVisible, 0.3),
+    ];
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
 
   return (
     <section className="w-full bg-white dark:bg-[#0D0D0D]">
@@ -38,7 +63,7 @@ export default function OnboardingTimeline() {
         <motion.div
           ref={headingRef}
           initial={{ opacity: 0, y: 20 }}
-          animate={headingInView ? { opacity: 1, y: 0 } : {}}
+          animate={headingVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="text-center mb-20"
         >
@@ -46,7 +71,7 @@ export default function OnboardingTimeline() {
             Onboarding
           </p>
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+            className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
             Live in{" "}
@@ -60,9 +85,12 @@ export default function OnboardingTimeline() {
 
         {/* Timeline */}
         <div ref={stepsRef} className="relative">
-          {/* Connector line — desktop only */}
-          <div
-            className="absolute top-[52px] left-[calc(16.67%+24px)] right-[calc(16.67%+24px)] hidden h-0.5 bg-gradient-to-r from-[#00AEEF]/20 via-[#00AEEF] to-[#00AEEF]/20 md:block"
+          {/* Animated connector line — desktop only */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={lineVisible ? { scaleX: 1 } : { scaleX: 0 }}
+            transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
+            className="absolute top-[26px] left-[calc(16.67%+26px)] right-[calc(16.67%+26px)] hidden h-0.5 origin-left bg-gradient-to-r from-[#00AEEF]/20 via-[#00AEEF] to-[#00AEEF]/20 md:block"
             aria-hidden="true"
           />
 
@@ -71,12 +99,17 @@ export default function OnboardingTimeline() {
               <motion.div
                 key={day}
                 initial={{ opacity: 0, y: 28 }}
-                animate={stepsInView ? { opacity: 1, y: 0 } : {}}
+                animate={stepsVisible ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.15 }}
                 className="relative flex flex-col items-center text-center md:items-start md:text-left"
               >
-                {/* Icon circle */}
-                <div className="relative z-10 mb-6 flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full border-2 border-[#00AEEF] bg-white dark:bg-[#161616] shadow-[0_0_0_6px_rgba(0,174,239,0.08)]">
+                {/* Icon circle — pulses when in view */}
+                <div
+                  className={`relative z-10 mb-6 flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full border-2 border-[#00AEEF] bg-white dark:bg-[#161616] shadow-[0_0_0_6px_rgba(0,174,239,0.08)] ${
+                    stepsVisible ? "animate-pulse-ring" : ""
+                  }`}
+                  style={stepsVisible ? { animationDelay: `${i * 0.5}s` } : {}}
+                >
                   <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
 

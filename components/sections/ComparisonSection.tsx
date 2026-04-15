@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { X, Check } from "lucide-react";
 
 const rows = [
@@ -43,10 +43,29 @@ const rows = [
 ];
 
 export default function ComparisonSection() {
-  const headingRef = useRef(null);
-  const headingInView = useInView(headingRef, { once: true, margin: "-60px" });
-  const tableRef = useRef(null);
-  const tableInView = useInView(tableRef, { once: true, margin: "-60px" });
+  const headingRef = useRef<HTMLDivElement>(null);
+  const tableRef   = useRef<HTMLDivElement>(null);
+
+  const [headingVisible, setHeadingVisible] = useState(false);
+  const [tableVisible,   setTableVisible]   = useState(false);
+
+  useEffect(() => {
+    const observe = (el: Element | null, setter: (v: boolean) => void) => {
+      if (!el) return () => {};
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) { setter(true); obs.disconnect(); } },
+        { threshold: 0.1 }
+      );
+      obs.observe(el);
+      return () => obs.disconnect();
+    };
+
+    const cleanups = [
+      observe(headingRef.current, setHeadingVisible),
+      observe(tableRef.current,   setTableVisible),
+    ];
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
 
   return (
     <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
@@ -55,7 +74,7 @@ export default function ComparisonSection() {
         <motion.div
           ref={headingRef}
           initial={{ opacity: 0, y: 20 }}
-          animate={headingInView ? { opacity: 1, y: 0 } : {}}
+          animate={headingVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="text-center mb-14"
         >
@@ -63,7 +82,7 @@ export default function ComparisonSection() {
             Side by Side
           </p>
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+            className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
             The old way vs.{" "}
@@ -75,7 +94,7 @@ export default function ComparisonSection() {
         <motion.div
           ref={tableRef}
           initial={{ opacity: 0, y: 24 }}
-          animate={tableInView ? { opacity: 1, y: 0 } : {}}
+          animate={tableVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.55, ease: "easeOut", delay: 0.1 }}
           className="overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
         >
@@ -95,15 +114,19 @@ export default function ComparisonSection() {
             <motion.div
               key={topic}
               initial={{ opacity: 0, x: -16 }}
-              animate={tableInView ? { opacity: 1, x: 0 } : {}}
+              animate={tableVisible ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.4, ease: "easeOut", delay: 0.15 + i * 0.07 }}
-              className={`grid grid-cols-[1fr_1fr_1fr] ${
-                i !== rows.length - 1 ? "border-b border-[#E5E7EB] dark:border-white/[0.08]" : ""
+              className={`group grid grid-cols-[1fr_1fr_1fr] cursor-default transition-colors duration-150 hover:bg-[#F0F9FF] dark:hover:bg-[#00AEEF]/[0.04] ${
+                i !== rows.length - 1
+                  ? "border-b border-[#E5E7EB] dark:border-white/[0.08]"
+                  : ""
               }`}
             >
               {/* Topic */}
               <div className="flex items-center px-6 py-5">
-                <span className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0]">{topic}</span>
+                <span className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0]">
+                  {topic}
+                </span>
               </div>
 
               {/* Before */}
@@ -115,11 +138,13 @@ export default function ComparisonSection() {
               </div>
 
               {/* After */}
-              <div className="flex items-center gap-3 border-l border-[#00AEEF]/30 bg-[#00AEEF]/[0.03] dark:bg-[#00AEEF]/[0.06] px-6 py-5">
+              <div className="flex items-center gap-3 border-l border-[#00AEEF]/30 bg-[#00AEEF]/[0.03] dark:bg-[#00AEEF]/[0.06] px-6 py-5 group-hover:bg-[#00AEEF]/[0.06] dark:group-hover:bg-[#00AEEF]/[0.09] transition-colors duration-150">
                 <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#00AEEF]/15">
                   <Check size={11} className="text-[#00AEEF]" strokeWidth={2.5} />
                 </div>
-                <span className="text-sm font-medium text-[#0A0A0A] dark:text-[#F0F0F0]">{after}</span>
+                <span className="text-sm font-medium text-[#0A0A0A] dark:text-[#F0F0F0]">
+                  {after}
+                </span>
               </div>
             </motion.div>
           ))}

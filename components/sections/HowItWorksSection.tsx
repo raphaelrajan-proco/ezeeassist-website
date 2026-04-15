@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import { DatabaseZap, MessageCircle, Zap } from "lucide-react";
 
 const steps = [
@@ -35,17 +35,44 @@ const fadeUp = {
 };
 
 export default function HowItWorksSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
+  const headingRef = useRef<HTMLDivElement>(null);
+  const lineRef    = useRef<HTMLDivElement>(null);
+
+  const [headingVisible, setHeadingVisible] = useState(false);
+  const [stepsVisible,   setStepsVisible]   = useState(false);
+  const [lineVisible,    setLineVisible]     = useState(false);
+
+  useEffect(() => {
+    const observe = (
+      el: Element | null,
+      setter: (v: boolean) => void,
+      threshold = 0.1
+    ) => {
+      if (!el) return () => {};
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) { setter(true); obs.disconnect(); } },
+        { threshold }
+      );
+      obs.observe(el);
+      return () => obs.disconnect();
+    };
+
+    const cleanups = [
+      observe(headingRef.current, setHeadingVisible),
+      observe(lineRef.current,    setStepsVisible),
+      observe(lineRef.current,    setLineVisible, 0.3),
+    ];
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
 
   return (
     <section className="relative w-full overflow-hidden bg-how-it-works-gradient">
       <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
         {/* Heading */}
         <motion.div
-          ref={ref}
+          ref={headingRef}
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          animate={headingVisible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="text-center mb-20"
         >
@@ -53,7 +80,7 @@ export default function HowItWorksSection() {
             How It Works
           </p>
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+            className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
             Up and running in{" "}
@@ -62,10 +89,13 @@ export default function HowItWorksSection() {
         </motion.div>
 
         {/* Steps */}
-        <div className="relative grid grid-cols-1 gap-10 md:grid-cols-3">
-          {/* Connector line */}
-          <div
-            className="absolute top-[52px] left-[calc(16.67%+24px)] right-[calc(16.67%+24px)] hidden h-px bg-gradient-to-r from-[#00AEEF]/30 via-[#00AEEF]/60 to-[#00AEEF]/30 md:block"
+        <div ref={lineRef} className="relative grid grid-cols-1 gap-10 md:grid-cols-3">
+          {/* Animated connector line — desktop only */}
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={lineVisible ? { scaleX: 1 } : { scaleX: 0 }}
+            transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
+            className="absolute top-[26px] left-[calc(16.67%+26px)] right-[calc(16.67%+26px)] hidden h-px origin-left bg-gradient-to-r from-[#00AEEF]/30 via-[#00AEEF]/60 to-[#00AEEF]/30 md:block"
             aria-hidden="true"
           />
 
@@ -74,15 +104,22 @@ export default function HowItWorksSection() {
               key={number}
               custom={i}
               initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
+              animate={stepsVisible ? "visible" : "hidden"}
               variants={fadeUp}
               className="relative flex flex-col items-center text-center md:items-start md:text-left"
             >
-              {/* Step circle */}
-              <div className="relative z-10 mb-6 flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full border-2 border-[#00AEEF] bg-white dark:bg-[#161616] shadow-[0_0_0_6px_rgba(0,174,239,0.08)]">
+              {/* Step circle — pulses when in view */}
+              <div
+                className={`relative z-10 mb-6 flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full border-2 border-[#00AEEF] bg-white dark:bg-[#161616] shadow-[0_0_0_6px_rgba(0,174,239,0.08)] ${
+                  stepsVisible ? "animate-pulse-ring" : ""
+                }`}
+                style={stepsVisible ? { animationDelay: `${i * 0.4}s` } : {}}
+              >
                 <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
               </div>
-              <p className="text-xs font-bold uppercase tracking-widest text-[#00AEEF] mb-2">{number}</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-[#00AEEF] mb-2">
+                {number}
+              </p>
               <h3
                 className="text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3"
                 style={{ letterSpacing: "-0.01em" }}

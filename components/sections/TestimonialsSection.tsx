@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
-import { motion, AnimatePresence, useInView } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
 
 const testimonials = [
   {
@@ -23,147 +22,93 @@ const testimonials = [
   },
 ];
 
-const AUTOPLAY_DELAY = 5000;
-
 export default function TestimonialsSection() {
-  const [current, setCurrent]   = useState(0);
-  const [direction, setDirection] = useState(1);
-  const [paused, setPaused]     = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const headingRef = useRef(null);
-  const isInView = useInView(headingRef, { once: true, margin: "-80px" });
-
-  const goTo = useCallback((index: number, dir: number) => {
-    setDirection(dir);
-    setCurrent((index + testimonials.length) % testimonials.length);
-  }, []);
-
-  const next = useCallback(() => goTo(current + 1, 1),  [current, goTo]);
-  const prev = useCallback(() => goTo(current - 1, -1), [current, goTo]);
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (paused) return;
-    timerRef.current = setTimeout(() => next(), AUTOPLAY_DELAY);
-    return () => { if (timerRef.current) clearTimeout(timerRef.current); };
-  }, [current, paused, next]);
-
-  const variants = {
-    enter:  (dir: number) => ({ x: dir > 0 ? 60 : -60, opacity: 0 }),
-    center: { x: 0, opacity: 1, transition: { duration: 0.45, ease: "easeOut" as const } },
-    exit:   (dir: number) => ({ x: dir > 0 ? -60 : 60, opacity: 0, transition: { duration: 0.3, ease: "easeIn" as const } }),
-  };
-
-  const t = testimonials[current];
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section className="w-full bg-white dark:bg-[#0D0D0D]">
-      <div className="mx-auto max-w-4xl px-6 py-24 lg:px-8 lg:py-28">
+      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
         {/* Heading */}
         <motion.div
-          ref={headingRef}
+          ref={ref}
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          animate={visible ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="text-center mb-14"
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Customer Stories</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
+            Customer Stories
+          </p>
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+            className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
-            What franchise leaders are saying
+            What franchise leaders{" "}
+            <span className="text-[#00AEEF]">are saying.</span>
           </h2>
         </motion.div>
 
-        {/* Carousel card */}
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.15 }}
-        >
-          <div
-            className="relative rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_30px_rgba(0,0,0,0.4)] overflow-hidden"
-            style={{ borderLeft: "4px solid #00AEEF" }}
-            onMouseEnter={() => setPaused(true)}
-            onMouseLeave={() => setPaused(false)}
-          >
-            {/* Quote area */}
-            <div className="relative min-h-[280px] px-10 pt-10 pb-8 sm:px-14 sm:pt-12">
-              <AnimatePresence custom={direction} mode="wait">
-                <motion.div
-                  key={current}
-                  custom={direction}
-                  variants={variants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="absolute inset-0 px-10 pt-10 pb-8 sm:px-14 sm:pt-12 flex flex-col"
+        {/* 2-column grid — both visible simultaneously */}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {testimonials.map((t, i) => (
+            <motion.div
+              key={t.name}
+              initial={{ opacity: 0, y: 28 }}
+              animate={visible ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.55, ease: "easeOut", delay: 0.15 + i * 0.12 }}
+              className="card-hover-blue flex flex-col rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_30px_rgba(0,0,0,0.4)] overflow-hidden"
+              style={{ borderLeft: "4px solid #00AEEF" }}
+            >
+              {/* Quote area */}
+              <div className="flex-1 px-8 pt-8 pb-6 sm:px-10 sm:pt-10">
+                <span
+                  className="block text-6xl font-extrabold leading-none text-[#00AEEF] select-none -mt-2 mb-3"
+                  aria-hidden="true"
                 >
-                  <span className="text-7xl font-extrabold leading-none text-[#00AEEF] select-none -mt-2 mb-2" aria-hidden="true">
-                    &ldquo;
-                  </span>
-                  <p className="flex-1 text-lg leading-8 text-[#0A0A0A] dark:text-[#F0F0F0] font-medium sm:text-xl">{t.quote}</p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
+                  &ldquo;
+                </span>
+                <p className="text-lg leading-8 text-[#0A0A0A] dark:text-[#F0F0F0] font-medium">
+                  {t.quote}
+                </p>
+              </div>
 
-            {/* Attribution + controls */}
-            <div className="flex items-center justify-between gap-4 border-t border-[#E5E7EB] dark:border-white/[0.08] px-10 py-5 sm:px-14">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={current + "-attr"}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex items-center gap-4"
-                >
-                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#00AEEF]/15 text-sm font-bold text-[#00AEEF]">
-                    {t.initials}
-                  </div>
-                  <div>
-                    <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0]">{t.name}</p>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {t.title},{" "}
-                      <span className="font-medium text-[#0A0A0A] dark:text-[#F0F0F0]">{t.company}</span>
-                    </p>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
-              <div className="flex items-center gap-4 flex-shrink-0">
-                <div className="flex items-center gap-1.5">
-                  {testimonials.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => goTo(i, i > current ? 1 : -1)}
-                      aria-label={`Go to testimonial ${i + 1}`}
-                      className={`h-2 rounded-full transition-all duration-300 ${
-                        i === current ? "w-5 bg-[#00AEEF]" : "w-2 bg-[#E5E7EB] dark:bg-white/[0.1] hover:bg-gray-300 dark:hover:bg-white/[0.2]"
-                      }`}
-                    />
-                  ))}
+              {/* Attribution */}
+              <div className="flex items-center gap-4 border-t border-[#E5E7EB] dark:border-white/[0.08] px-8 py-5 sm:px-10">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#00AEEF]/15 text-sm font-bold text-[#00AEEF]">
+                  {t.initials}
                 </div>
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={prev}
-                    aria-label="Previous"
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] dark:border-white/[0.08] text-gray-400 hover:border-[#00AEEF] hover:text-[#00AEEF] dark:hover:border-[#00AEEF] transition-colors"
-                  >
-                    <ChevronLeft size={16} />
-                  </button>
-                  <button
-                    onClick={next}
-                    aria-label="Next"
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E5E7EB] dark:border-white/[0.08] text-gray-400 hover:border-[#00AEEF] hover:text-[#00AEEF] dark:hover:border-[#00AEEF] transition-colors"
-                  >
-                    <ChevronRight size={16} />
-                  </button>
+                <div>
+                  <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0]">
+                    {t.name}
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    {t.title},{" "}
+                    <span className="font-medium text-[#0A0A0A] dark:text-[#F0F0F0]">
+                      {t.company}
+                    </span>
+                  </p>
                 </div>
               </div>
-            </div>
-          </div>
-        </motion.div>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   );

@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 const slides = [
   {
     brand: "WSI",
-    bg: "bg-[#00AEEF]/[0.08]",
+    accentRgb: "0,174,239",
     accent: "#00AEEF",
     stat: "67%",
     statLabel: "Support reduction globally",
@@ -17,7 +17,7 @@ const slides = [
   },
   {
     brand: "DekaLash",
-    bg: "bg-[#F9E8F0]",
+    accentRgb: "194,24,91",
     accent: "#C2185B",
     stat: "93%",
     statLabel: "AI resolution rate",
@@ -26,7 +26,7 @@ const slides = [
   },
   {
     brand: "DivaDance",
-    bg: "bg-[#F0E8F9]",
+    accentRgb: "123,31,162",
     accent: "#7B1FA2",
     stat: "2,600+",
     statLabel: "Queries answered in 6 months",
@@ -54,7 +54,8 @@ export default function CaseStudyCarousel() {
   function handleTouchEnd(e: React.TouchEvent) {
     if (touchStartX.current === null) return;
     const diff = touchStartX.current - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) setCurrent((c) => (c + (diff > 0 ? 1 : -1) + slides.length) % slides.length);
+    if (Math.abs(diff) > 40)
+      setCurrent((c) => (c + (diff > 0 ? 1 : -1) + slides.length) % slides.length);
     touchStartX.current = null;
   }
 
@@ -83,16 +84,22 @@ export default function CaseStudyCarousel() {
               transition={{ duration: 0.5 }}
               className="grid grid-cols-1 sm:grid-cols-[200px_1fr]"
             >
-              {/* Brand panel */}
-              <div className={`${slide.bg} flex flex-col items-center justify-center p-10 sm:p-12`}>
-                <div
-                  className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm border border-white/60 mb-3"
-                >
-                  <span className="text-2xl font-extrabold" style={{ color: slide.accent }}>
+              {/* Brand panel — uses inline rgba so it works in both light & dark mode */}
+              <div
+                className="flex flex-col items-center justify-center p-10 sm:p-12"
+                style={{ backgroundColor: `rgba(${slide.accentRgb}, 0.10)` }}
+              >
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white dark:bg-[#1A1A1A] shadow-sm border border-white/60 dark:border-white/10 mb-3">
+                  <span
+                    className="text-2xl font-extrabold"
+                    style={{ color: slide.accent }}
+                  >
                     {slide.brand[0]}
                   </span>
                 </div>
-                <span className="text-sm font-bold" style={{ color: slide.accent }}>{slide.brand}</span>
+                <span className="text-sm font-bold" style={{ color: slide.accent }}>
+                  {slide.brand}
+                </span>
               </div>
 
               {/* Content */}
@@ -103,13 +110,15 @@ export default function CaseStudyCarousel() {
                 >
                   {slide.stat}
                 </div>
-                <p className="text-base font-semibold text-gray-500 dark:text-gray-400 mb-5">{slide.statLabel}</p>
+                <p className="text-base font-semibold text-gray-500 dark:text-gray-400 mb-5">
+                  {slide.statLabel}
+                </p>
                 <p className="text-lg font-medium text-[#0A0A0A] dark:text-[#F0F0F0] italic mb-6">
                   &ldquo;{slide.quote}&rdquo;
                 </p>
                 <Link
                   href={slide.href}
-                  className="inline-flex items-center gap-1.5 text-sm font-semibold"
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold transition-gap duration-150 hover:gap-3"
                   style={{ color: slide.accent }}
                 >
                   Read case study <ArrowRight size={14} />
@@ -126,7 +135,9 @@ export default function CaseStudyCarousel() {
               key={i}
               onClick={() => setCurrent(i)}
               className={`h-2 rounded-full transition-all duration-300 ${
-                i === current ? "w-6 bg-[#00AEEF]" : "w-2 bg-[#E5E7EB] dark:bg-white/[0.1]"
+                i === current
+                  ? "w-6 bg-[#00AEEF]"
+                  : "w-2 bg-[#E5E7EB] dark:bg-white/[0.1]"
               }`}
               aria-label={`Go to slide ${i + 1}`}
             />
