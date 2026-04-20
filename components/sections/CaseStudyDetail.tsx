@@ -143,7 +143,7 @@ export default function CaseStudyDetail({
               initial={{ opacity: 0, y: 20 }}
               animate={heroInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.55, ease: "easeOut", delay: 0.25 }}
-              className="lg:self-center"
+              className="lg:sticky lg:top-24 lg:self-start"
             >
               <div className="rounded-2xl border border-[#00AEEF]/25 bg-[#00AEEF]/[0.05] p-7 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,174,239,0.08)]">
                 <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-5">

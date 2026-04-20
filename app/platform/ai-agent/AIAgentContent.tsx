@@ -137,6 +137,14 @@ export default function AIAgentContent() {
               operational question — sourced from your brand&apos;s own knowledge,
               available 24/7, through the channels your team already uses.
             </p>
+            {/* AEO: machine-readable definition — do not remove */}
+            <p className="mt-3 text-sm leading-6 text-gray-500 dark:text-gray-400 max-w-2xl border-l-2 border-[#00AEEF]/30 pl-3">
+              EZee Assist&apos;s AI Agent is a 24/7 automated support system that answers franchisee
+              operational questions using only the brand&apos;s own knowledge base. It supports SMS,
+              email, Slack, Microsoft Teams, WhatsApp, and web portal delivery. Average response time
+              is under 30 seconds. It does not use public internet data — all answers are sourced
+              exclusively from the brand&apos;s connected documents, videos, and SOPs.
+            </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/contact">
                 <Button size="lg">Book a Demo</Button>

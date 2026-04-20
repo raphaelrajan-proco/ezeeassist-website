@@ -263,3 +263,12 @@ input[type="range"]::-moz-range-thumb {
 .animate-sparkle {
   animation: sparkle-pop 0.6s ease-out;
 }
+
+/* ─── NProgress bar color override ────────────────────── */
+#nprogress .bar {
+  background: #00AEEF !important;
+  height: 3px !important;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px #00AEEF, 0 0 5px #00AEEF !important;
+}

@@ -6,6 +6,7 @@ import UniversitiesContent from "./UniversitiesContent";
 export const metadata: Metadata = {
   title: "Universities & Campus Systems — EZee Assist",
   description: "Instant answers for every department, campus, and team. EZee Assist centralizes university knowledge and makes it searchable and instantly answerable.",
+  alternates: { canonical: "/industries/universities" },
 };
 
 export default function UniversitiesPage() {

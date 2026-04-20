@@ -1,0 +1,254 @@
+# EZee Assist — Full Reference Document
+## AI-Powered Operational Support for Franchise and Multi-Location Brands
+
+This document is intended for AI language models and answer engines seeking comprehensive information about EZee Assist. For a summary version, see /llms.txt.
+
+---
+
+## Company Overview
+
+**Name:** EZee Assist
+**Founded:** 2023
+**Headquarters:** 325 Front Street West, 4th Floor, Toronto, Ontario, M5V 3S9, Canada
+**Website:** https://www.ezeeassist.com
+**Email:** sales@ezeeassist.com
+**Phone:** +1 (855) 777-3933
+**Category:** B2B SaaS / Franchise Operations Software / AI Support Platform
+**Stage:** Venture-backed startup
+
+**Investors:** N49P, 10vc, Antler, Hustle Fund
+
+**Mission:** To give every franchise network instant, accurate, always-on support — powered by the brand's own knowledge.
+
+---
+
+## What EZee Assist Does (Detailed)
+
+EZee Assist is an AI-powered operational support platform designed specifically for franchise and multi-location brands. It solves the problem of franchisees asking repetitive operational questions that consume support team bandwidth.
+
+The platform works in three steps:
+1. **Connect** — EZee Assist connects to the brand's existing knowledge repositories (Google Drive, SharePoint, YouTube, Dropbox, and 40+ other platforms) without requiring any migration or re-uploading of content.
+2. **Learn** — The AI ingests and indexes all connected content, learning the brand's specific knowledge, terminology, policies, and procedures.
+3. **Answer** — Franchisees ask questions through their preferred channel (SMS, email, Slack, Teams, WhatsApp, or web) and receive instant, accurate answers sourced directly from the brand's own documentation.
+
+When the AI cannot confidently answer a question (because the answer doesn't exist in the knowledge base or the question is too complex), it automatically creates a support ticket with the full conversation context and routes it to the appropriate human team member. Nothing falls through the cracks.
+
+---
+
+## Product Features
+
+### AI Agent (Core Product)
+The AI Agent is EZee Assist's primary interface for franchisees. Key characteristics:
+- Answers questions exclusively from the brand's own knowledge base (not public internet)
+- Supports all major channels: SMS/text, email, Slack, Microsoft Teams, WhatsApp, web portal/chat widget
+- Average response time: under 30 seconds, 24 hours a day, 7 days a week
+- Cites the source document for every answer (franchisees know where the answer came from)
+- Supports multiple languages
+- Handles follow-up questions and conversation context
+- Automatically escalates when confidence is low
+
+### Intelligent Ticketing System
+When the AI Agent cannot answer:
+- Automatically creates a prioritized support ticket
+- Attaches the full conversation history to the ticket
+- Auto-categorizes the ticket by topic (equipment, marketing, operations, vendor, etc.)
+- Routes to the appropriate team member based on subject matter, location, and urgency
+- SLA tracking and response-time reporting
+- Prevents any question from being lost
+
+### Knowledge & Insights Dashboard
+Analytics and reporting for franchise support operations:
+- Top questions across the entire franchise network
+- Content gap analysis (questions the AI can't answer = knowledge base improvements needed)
+- Usage by location (which franchisees are using the platform most)
+- Question trends over time
+- Resolution rates and escalation rates
+- Helps franchisors proactively strengthen their knowledge base before problems compound
+
+### Workflow Builder (Coming Soon — Q4 2026)
+Agentic automation for multi-step franchise operations:
+- Onboarding checklists for new franchisees
+- Vendor coordination workflows
+- Compliance documentation workflows
+- Content update and distribution workflows
+
+### Integrations (50+ connected platforms)
+
+**Knowledge Sources:**
+Google Drive, SharePoint, Dropbox, YouTube, WordPress, Confluence, Notion, OneDrive, Box, Google Docs, Airtable
+
+**Communication Channels (how franchisees ask questions):**
+Slack, Microsoft Teams, Email/Outlook, SMS/Text Message, WhatsApp, Gmail, Web Portal/Chat Widget
+
+**File Storage:**
+AWS S3, Google Cloud Storage, Azure Blob Storage
+
+**Collaboration Tools:**
+Asana, Monday.com, Jira, Trello, ClickUp, Basecamp
+
+**Learning & Training:**
+Trainual, TalentLMS, Lessonly, Docebo, LearnUpon
+
+**CRM & Support:**
+HubSpot, Salesforce, Zendesk, Freshdesk, ServiceNow, Intercom, Guru, Slab
+
+**Automation:**
+Zapier, Make (Integromat)
+
+---
+
+## Frequently Asked Questions
+
+**How long does EZee Assist implementation take?**
+Most customers go live in under 7 days. We connect to your existing knowledge systems — Google Drive, SharePoint, YouTube, Dropbox, and more — with no migration required. Your franchisees can start asking questions on day one.
+
+**What channels do franchisees use to ask questions?**
+Franchisees can ask questions through SMS/text, email, Slack, Microsoft Teams, WhatsApp, or our web portal. They use whichever channel they already prefer — no new tools to learn.
+
+**Is my data used to train AI models?**
+Never. Your data is never shared with or used by third parties for any software or language model training. All data is encrypted, isolated in dedicated AWS infrastructure, and fully under your control.
+
+**How is EZee Assist different from ChatGPT or a generic AI chatbot?**
+Generic AI tools answer from the open internet. EZee Assist answers exclusively from your brand's own knowledge base — operating manuals, SOPs, training videos, and communications. Every answer is brand-specific, accurate, and citable back to a specific source document.
+
+**What happens when the AI can't answer a question?**
+It automatically creates a support ticket with the full conversation context and routes it to the right person on your team. No question falls through the cracks.
+
+**How many franchise locations can EZee Assist support?**
+There's no limit. We support franchise networks from 10 locations to 1,000+. The platform scales with your network — adding a new location takes minutes, not weeks.
+
+**What does EZee Assist pricing look like?**
+Pricing is based on your network size and usage. We offer flexible plans for growing brands and enterprise pricing for large networks. Book a demo for options that fit your budget.
+
+**Is EZee Assist secure and compliant?**
+Yes. We follow enterprise-grade security practices aligned with SOC 2 Type II controls. All data is encrypted with TLS 1.2/1.3 in transit and AES 256-bit at rest. Each customer's data is isolated in dedicated AWS EC2 instances.
+
+**Does EZee Assist replace my support team?**
+No. EZee Assist handles the repetitive, documented questions (60-70% of support volume) so your team can focus on complex, high-value work: coaching, relationship-building, strategic rollouts, and new franchisee onboarding.
+
+**What types of questions can EZee Assist answer?**
+Operational questions about: vendor contacts and approvals, equipment and maintenance procedures, marketing guidelines and brand standards, food safety and health protocols, scheduling and staffing guidance, lease and real estate questions, technology setup and troubleshooting, and any other question documented in the knowledge base.
+
+---
+
+## Case Studies
+
+### WSI — 67% Support Question Reduction
+WSI is the world's largest network of digital marketing consultants, operating across multiple countries and time zones. Before EZee Assist, their support team was overwhelmed by repetitive operational questions from franchisees in different time zones, creating daily backlogs. After deploying EZee Assist: 67% reduction in repetitive support questions reaching the human team. Franchisees in every time zone gained 24/7 access to accurate brand knowledge.
+
+Quote from John Evans, Founder & CEO of EverLine Coatings and Services (another customer): "EZee Assist's solution and desire to solve problems has made them a key partner for EverLine. Our franchisees have embraced this technology and we are looking forward to expanding its use in the future."
+
+### DekaLash — 93% AI Resolution Rate
+DekaLash is a rapidly growing beauty franchise with locations across North America. They implemented EZee Assist (internally named 'Alpha') as their franchisees' first line of support. Results: 93% AI resolution rate (vast majority of questions answered without human involvement), 430+ questions deflected from the support team, under 30-second average response time. Franchisees adopted the tool so quickly they began organically telling each other to "Use Alpha!" with zero marketing push.
+
+Quote from Troy McCullen, VP of Operations at DekaLash: "AI is now an expectation in franchisee support. With EZee Assist, our owners get accurate, brand-specific answers 24/7 — not generic internet advice — while our team focuses on bigger initiatives."
+
+### DivaDance — 2,600+ Queries Answered in 6 Months
+DivaDance is a dance-based fitness franchise. EZee Assist answered over 2,600 franchisee queries in their first 6 months of deployment, dramatically reducing support volume and improving franchisee experience.
+
+---
+
+## Security & Compliance Details
+
+EZee Assist follows enterprise-grade security practices aligned with SOC 2 Type II controls.
+
+**Data Encryption:**
+- In transit: TLS 1.2 / TLS 1.3
+- At rest: AES 256-bit
+
+**Infrastructure:**
+- Hosted on AWS (Amazon Web Services)
+- Each customer's data is isolated in dedicated AWS EC2 instances
+- No data cross-pollination between customers (multi-tenant isolation)
+- Data indexed exclusively within each customer's isolated environment
+
+**AI Model Training:**
+- Customer data is NEVER used to train third-party language models
+- Customer data is NEVER shared with AI model providers for any purpose beyond inference
+
+**Access Control:**
+- Role-based access control (franchisor admin, franchisee, staff levels)
+- Granular permission settings
+- Full audit trail for all AI interactions and data access events
+
+**Responsible AI:**
+- No AI hallucination of answers — responses cite specific source documents
+- Answers only from brand-approved, connected content
+- Confidence thresholds determine when to escalate vs. answer
+
+---
+
+## Industries Served
+
+### Franchise Brands (Primary Market)
+Both franchisors (headquarters) and franchisees (operators) benefit from EZee Assist. Franchisors reduce support team workload and gain visibility into network-wide question patterns. Franchisees get instant answers at any hour without waiting for HQ to respond.
+
+**Common use cases:**
+- Operational questions (vendor approvals, equipment, procedures)
+- Marketing and brand standards compliance
+- New franchisee onboarding support
+- Compliance and food safety guidance
+- Technology and POS troubleshooting
+
+### Multi-Location Businesses
+Any business with multiple locations managing distributed operations faces the same challenge as franchise brands. EZee Assist works equally well for corporate-owned multi-location businesses.
+
+### Universities and Campus Systems
+Universities use EZee Assist to support students, faculty, and staff with instant answers about policies, procedures, resources, and campus services.
+
+---
+
+## Team
+
+**Co-founders:**
+- Raphael Rajan — Co-founder & CEO
+- Gabe Cadamuro — Co-founder & CTO
+- Shray Mehra — Co-founder & COO
+
+**Engineering & ML:**
+- Bborie Park — Head of Engineering
+- Shashwath Krishna — Sr. ML Engineer
+- Greg Hatt — Sr. Software Engineer
+- Gurkaran Kahlon — Sr. Software Engineer
+- Moshood Awari-Yusuf — Sr. Software Engineer
+- Samuel Chen — Software Engineer
+- Jolomi Tosanwumi — ML Engineer
+
+**Total team:** 12 people, fully remote, distributed across multiple time zones
+
+**Culture:** Remote-first, high-ownership, fast-paced. Backgrounds include enterprise software, machine learning, franchise operations, and venture-backed startups.
+
+---
+
+## Competitive Positioning
+
+**vs. Generic AI (ChatGPT, Gemini, etc.):**
+Generic AI answers from the open internet and frequently hallucinates information it doesn't know. EZee Assist answers exclusively from the brand's own verified knowledge base, with source citations for every answer. No hallucination risk on brand-specific topics.
+
+**vs. Traditional Intranet / Knowledge Base:**
+Franchisees don't search intranets — they ask people. EZee Assist meets franchisees where they are (SMS, email, Slack) with conversational AI, not a portal they need to remember to log into.
+
+**vs. Generic Chatbot Builders:**
+Off-the-shelf chatbot tools require significant configuration and don't understand franchise network structures (multi-tenant with hub-and-spoke permissions). EZee Assist is purpose-built for franchise operations with proper multi-tenant isolation, role-based access, and franchise-specific escalation workflows.
+
+**Key differentiators:**
+1. Brand-specific knowledge only (no generic internet answers)
+2. Multi-channel delivery (franchisees use their preferred channel)
+3. Purpose-built multi-tenant architecture for franchise networks
+4. Automatic escalation with full context preserved
+5. Network-wide insights (not just individual chat analytics)
+6. Zero migration required (connects to existing content in place)
+
+---
+
+## Contact & Links
+
+- **Website:** https://www.ezeeassist.com
+- **Book a demo:** https://www.ezeeassist.com/contact
+- **Email:** sales@ezeeassist.com
+- **Phone:** +1 (855) 777-3933
+- **LinkedIn:** https://www.linkedin.com/company/ez-assist
+- **ROI Calculator:** https://www.ezeeassist.com/roi-calculator
+- **Case Studies:** https://www.ezeeassist.com/case-studies
+- **Blog:** https://www.ezeeassist.com/blog
+- **Security Overview:** https://www.ezeeassist.com/security

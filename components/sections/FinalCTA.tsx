@@ -66,7 +66,13 @@ export default function FinalCTA() {
               transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
               className="mt-14"
             >
-              <p className="text-sm text-gray-500 mb-5">Pick a time that works for you</p>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="flex-1 h-px bg-[#E5E7EB] dark:bg-white/[0.08]" />
+                <p className="text-lg font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] whitespace-nowrap">
+                  Pick a time that works for you
+                </p>
+                <div className="flex-1 h-px bg-[#E5E7EB] dark:bg-white/[0.08]" />
+              </div>
               <div className="w-full mx-auto">
                 <iframe
                   src={`${MEETINGS_URL}?embed=true`}

@@ -6,6 +6,7 @@ export const metadata = {
   title: "Careers — EZee Assist",
   description:
     "Join our team at EZee Assist. We're hiring talented engineers to help build the future of franchise support.",
+  alternates: { canonical: "/careers" },
 };
 
 export default function CareersPage() {

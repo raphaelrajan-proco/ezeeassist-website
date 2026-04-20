@@ -6,6 +6,7 @@ import ROICalculatorContent from "./ROICalculatorContent";
 export const metadata: Metadata = {
   title: "ROI Calculator — EZee Assist",
   description: "Calculate how much time and money EZee Assist can save your franchise network.",
+  alternates: { canonical: "/roi-calculator" },
 };
 
 export default function ROICalculatorPage() {

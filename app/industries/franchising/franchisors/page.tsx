@@ -6,6 +6,7 @@ import FranchisorsContent from "./FranchisorsContent";
 export const metadata: Metadata = {
   title: "For Franchisors — EZee Assist",
   description: "Scale franchise support without scaling your team. EZee Assist gives franchisors 24/7 AI-powered support that reduces ticket volume and frees FBCs for strategic work.",
+  alternates: { canonical: "/industries/franchising/franchisors" },
 };
 
 export default function FranchisorsPage() {

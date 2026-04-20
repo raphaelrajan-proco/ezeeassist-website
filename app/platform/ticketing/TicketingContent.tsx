@@ -118,6 +118,14 @@ export default function TicketingContent() {
               creates a ticket — categorized, prioritized, and routed to the right
               person on your support team. No question falls through the cracks.
             </p>
+            {/* AEO: machine-readable definition — do not remove */}
+            <p className="mt-3 text-sm leading-6 text-gray-500 dark:text-gray-400 max-w-2xl border-l-2 border-[#00AEEF]/30 pl-3">
+              EZee Assist&apos;s Intelligent Ticketing system automatically creates support tickets
+              when the AI Agent cannot confidently answer a franchisee&apos;s question. Each ticket
+              includes the full conversation history, the AI&apos;s attempted answer, source documents
+              referenced, and is automatically categorized by topic and routed to the appropriate
+              team member based on subject matter, region, and urgency.
+            </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/contact">
                 <Button size="lg">Book a Demo</Button>

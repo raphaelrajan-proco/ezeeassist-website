@@ -3,22 +3,16 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
+import { ArrowRight } from "lucide-react";
 import {
-  FolderOpen,
-  Database,
-  HardDrive,
-  Video,
-  Globe,
-  Mail,
-  Hash,
-  FileText,
-  BookOpen,
-  Layers,
-  MessageCircle,
-  Smartphone,
-  Phone,
-  ArrowRight,
-} from "lucide-react";
+  INTEGRATION_CATEGORIES,
+  groupedIntegrations,
+  type IntegrationCategory,
+} from "@/lib/data/integrations";
+
+// TODO: Once SVG files land in /public/logos/integrations/, replace the initials tile with:
+//   import Image from "next/image";
+//   <Image src={integration.src} alt={integration.name} width={32} height={32} className="object-contain" />
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -27,31 +21,67 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.5, ease: "easeOut" as const, delay },
 });
 
-const knowledgeSources = [
-  { icon: FolderOpen, name: "Google Drive",     desc: "Documents, spreadsheets, and slides" },
-  { icon: Database,   name: "SharePoint",        desc: "Enterprise document management" },
-  { icon: HardDrive,  name: "Dropbox",           desc: "Cloud file storage" },
-  { icon: Video,      name: "YouTube",           desc: "Training and instructional videos" },
-  { icon: Globe,      name: "WordPress",         desc: "Published knowledge base articles" },
-  { icon: Mail,       name: "Outlook",           desc: "Email communications and announcements" },
-  { icon: Globe,      name: "Microsoft Teams",   desc: "Team communications and channels" },
-  { icon: Hash,       name: "Slack",             desc: "Workspace messages and channels" },
-  { icon: BookOpen,   name: "Confluence",        desc: "Wiki and documentation" },
-  { icon: FileText,   name: "Notion",            desc: "Workspace documents and databases" },
-  { icon: Layers,     name: "Box",               desc: "Enterprise cloud storage" },
-  { icon: HardDrive,  name: "OneDrive",          desc: "Personal and shared files" },
-];
+// Category accent colours — matches brand palette
+const categoryMeta: Record<IntegrationCategory, { color: string; bg: string }> = {
+  "Knowledge Sources":     { color: "#00AEEF", bg: "rgba(0,174,239,0.08)" },
+  "Communication Channels":{ color: "#7C3AED", bg: "rgba(124,58,237,0.08)" },
+  "File Storage":          { color: "#059669", bg: "rgba(5,150,105,0.08)" },
+  "Collaboration Tools":   { color: "#D97706", bg: "rgba(217,119,6,0.08)" },
+  "Learning & Training":   { color: "#DB2777", bg: "rgba(219,39,119,0.08)" },
+  "CRM & Support":         { color: "#2563EB", bg: "rgba(37,99,235,0.08)" },
+  "Automation":            { color: "#DC2626", bg: "rgba(220,38,38,0.08)" },
+  "Other":                 { color: "#6B7280", bg: "rgba(107,114,128,0.08)" },
+};
 
-const channels = [
-  { icon: Smartphone,    name: "SMS / Text Message",  desc: "The most-used channel across franchise networks" },
-  { icon: Mail,          name: "Email",                desc: "Support via any email client, no setup required" },
-  { icon: Hash,          name: "Slack",                desc: "Ask questions directly inside your Slack workspace" },
-  { icon: MessageCircle, name: "Microsoft Teams",      desc: "Native integration with your Teams environment" },
-  { icon: Phone,         name: "WhatsApp",             desc: "Mobile-first support for on-the-go operators" },
-  { icon: Globe,         name: "Web Portal",           desc: "Embeddable chat widget for your franchise intranet" },
-];
+function IntegrationCard({
+  name,
+  description,
+  category,
+  index,
+}: {
+  name: string;
+  description: string;
+  category: IntegrationCategory;
+  index: number;
+}) {
+  const { color, bg } = categoryMeta[category];
+  const initials = name
+    .split(" ")
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+
+  return (
+    <motion.div
+      {...fadeUp(index * 0.04)}
+      className="card-hover-blue flex flex-col gap-3 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-5 shadow-[0_1px_3px_rgba(0,0,0,0.03),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+    >
+      {/* Logo tile — replace with <Image> once SVG exists */}
+      <div
+        className="flex h-11 w-11 items-center justify-center rounded-xl border"
+        style={{ background: bg, borderColor: `${color}30` }}
+      >
+        <span className="text-xs font-bold" style={{ color }}>
+          {initials}
+        </span>
+      </div>
+      <div>
+        <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-0.5">{name}</p>
+        <p className="text-xs leading-5 text-gray-500 dark:text-gray-400">{description}</p>
+      </div>
+    </motion.div>
+  );
+}
 
 export default function IntegrationsContent() {
+  const grouped = groupedIntegrations();
+  // Only render categories that have items and are not "Other" placeholder group
+  const visibleCategories = INTEGRATION_CATEGORIES.filter(
+    (cat) => grouped[cat].length > 0 && cat !== "Other"
+  );
+  const otherItems = grouped["Other"];
+
   return (
     <>
       {/* ── Hero ─────────────────────────────────────────── */}
@@ -83,6 +113,23 @@ export default function IntegrationsContent() {
               uses. No migration. No manual uploads. Your content stays where it
               is — we learn from it directly.
             </p>
+            {/* Stats */}
+            <div className="mt-8 flex flex-wrap gap-6">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-extrabold text-[#00AEEF]" style={{ letterSpacing: "-0.02em" }}>50+</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">integrations</span>
+              </div>
+              <div className="w-px h-8 bg-[#E5E7EB] dark:bg-white/[0.08] self-center" />
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-extrabold text-[#00AEEF]" style={{ letterSpacing: "-0.02em" }}>8</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">categories</span>
+              </div>
+              <div className="w-px h-8 bg-[#E5E7EB] dark:bg-white/[0.08] self-center" />
+              <div className="flex items-center gap-2">
+                <span className="text-2xl font-extrabold text-[#00AEEF]" style={{ letterSpacing: "-0.02em" }}>&lt;5 min</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">to connect</span>
+              </div>
+            </div>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/contact">
                 <Button size="lg">Book a Demo</Button>
@@ -98,93 +145,74 @@ export default function IntegrationsContent() {
         </div>
       </section>
 
-      {/* ── Knowledge sources grid ────────────────────────── */}
-      <section
-        className="w-full bg-how-it-works-gradient"
-      >
+      {/* ── Integrations by category ──────────────────────── */}
+      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
-          <motion.div className="mb-12" {...fadeUp(0)}>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
-              Knowledge Sources
-            </p>
-            <h2
-              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              Where your knowledge lives,{" "}
-              <span className="text-[#00AEEF]">we connect.</span>
-            </h2>
-            <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400 max-w-xl">
-              EZee Assist reads directly from your existing repositories. Add a
-              connection in minutes — no migration, no re-uploading, no change to
-              your workflows.
-            </p>
-          </motion.div>
 
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {knowledgeSources.map(({ icon: Icon, name, desc }, i) => (
-              <motion.div
-                key={name}
-                {...fadeUp(i * 0.05)}
-                className="card-hover-blue flex flex-col gap-4 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.03),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
-              >
-                {/* Icon tile */}
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#F7F8FA] dark:bg-[#1A1A1A] border border-[#E5E7EB] dark:border-white/[0.08]">
-                  <Icon size={22} className="text-gray-500 dark:text-gray-400" strokeWidth={1.5} />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-1">{name}</p>
-                  <p className="text-xs leading-5 text-gray-500 dark:text-gray-400">{desc}</p>
+          {visibleCategories.map((category, ci) => (
+            <div key={category} className={ci > 0 ? "mt-16" : ""}>
+              <motion.div className="mb-7" {...fadeUp(0)}>
+                <div className="flex items-center gap-3 mb-1">
+                  <span
+                    className="inline-flex rounded-full px-3 py-1 text-xs font-semibold"
+                    style={{
+                      background: categoryMeta[category].bg,
+                      color: categoryMeta[category].color,
+                    }}
+                  >
+                    {category}
+                  </span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">
+                    {grouped[category].length} integration{grouped[category].length !== 1 ? "s" : ""}
+                  </span>
                 </div>
               </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* ── Delivery channels ────────────────────────────── */}
-      <section className="w-full bg-white dark:bg-[#0D0D0D]">
-        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
-          <motion.div className="mb-12" {...fadeUp(0)}>
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
-              Delivery Channels
-            </p>
-            <h2
-              className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
-              style={{ letterSpacing: "-0.02em" }}
-            >
-              Franchisees access answers through{" "}
-              <span className="text-[#00AEEF]">channels they already use.</span>
-            </h2>
-            <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400 max-w-xl">
-              No new apps. No new logins. No behavior change required from your
-              network — they just ask questions the way they naturally would.
-            </p>
-          </motion.div>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                {grouped[category].map((integration, i) => (
+                  <IntegrationCard
+                    key={integration.name}
+                    name={integration.name}
+                    description={integration.description}
+                    category={category}
+                    index={i}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {channels.map(({ icon: Icon, name, desc }, i) => (
-              <motion.div
-                key={name}
-                {...fadeUp(i * 0.07)}
-                className="card-hover-blue group relative overflow-hidden flex items-start gap-5 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-7"
-              >
-                <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-[#00AEEF]/10">
-                  <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
-                </div>
-                <div>
-                  <p className="mb-1 text-base font-bold text-[#0A0A0A] dark:text-[#F0F0F0]">{name}</p>
-                  <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">{desc}</p>
+          {/* "More coming" row — shows placeholder entries if any exist */}
+          {otherItems.length > 0 && (
+            <div className="mt-16">
+              <motion.div className="mb-7" {...fadeUp(0)}>
+                <div className="flex items-center gap-3">
+                  <span className="inline-flex rounded-full px-3 py-1 text-xs font-semibold bg-gray-100 dark:bg-white/[0.06] text-gray-500 dark:text-gray-400">
+                    More Coming Soon
+                  </span>
+                  <span className="text-xs text-gray-400 dark:text-gray-500">
+                    {otherItems.length} additional integration{otherItems.length !== 1 ? "s" : ""} in development
+                  </span>
                 </div>
               </motion.div>
-            ))}
-          </div>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                {otherItems.map((integration, i) => (
+                  <IntegrationCard
+                    key={integration.name}
+                    name={integration.name}
+                    description={integration.description}
+                    category="Other"
+                    index={i}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
       {/* ── Don't see your tool ───────────────────────────── */}
-      <section className="w-full bg-[#F7F8FA] dark:bg-[#111111] border-y border-[#E5E7EB] dark:border-white/[0.06]">
+      <section className="w-full bg-white dark:bg-[#0D0D0D] border-y border-[#E5E7EB] dark:border-white/[0.06]">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
           <motion.div
             {...fadeUp(0)}
@@ -213,9 +241,7 @@ export default function IntegrationsContent() {
       </section>
 
       {/* ── Final CTA ────────────────────────────────────── */}
-      <section
-        className="relative w-full overflow-hidden bg-final-cta-gradient"
-      >
+      <section className="relative w-full overflow-hidden bg-final-cta-gradient">
         <div className="bg-dot-grid pointer-events-none absolute inset-0" style={{ opacity: 0.3 }} aria-hidden="true" />
         <div
           className="pointer-events-none absolute bottom-0 left-1/2 -translate-x-1/2"

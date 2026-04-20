@@ -4,19 +4,7 @@ import { motion } from "framer-motion";
 import { Link2, Heart, Lightbulb, KeyRound, MessageSquare, Zap, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
-
-const team = [
-  { name: "Moshood Awari-Yusuf", title: "Sr. Software Engineer",  initials: "MA" },
-  { name: "Gabe Cadamuro",       title: "Co-founder & CTO",       initials: "GC" },
-  { name: "Samuel Chen",         title: "Software Engineer",       initials: "SC" },
-  { name: "Greg Hatt",           title: "Sr. Software Engineer",  initials: "GH" },
-  { name: "Gurkaran Kahlon",     title: "Sr. Software Engineer",  initials: "GK" },
-  { name: "Shashwath Krishna",   title: "Sr. ML Engineer",        initials: "SK" },
-  { name: "Shray Mehra",         title: "Co-founder & COO",       initials: "SM" },
-  { name: "Bborie Park",         title: "Head of Engineering",    initials: "BP" },
-  { name: "Raphael Rajan",       title: "Co-founder & CEO",       initials: "RR" },
-  { name: "Jolomi Tosanwumi",    title: "ML Engineer",            initials: "JT" },
-];
+import { teamMembers } from "@/lib/data/team";
 
 const values = [
   { icon: Heart,         text: "We are honest and compassionate with all stakeholders" },
@@ -79,7 +67,7 @@ export default function AboutContent() {
 
           {/* Team grid */}
           <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
-            {team.map(({ name, title, initials }, i) => (
+            {teamMembers.map(({ name, title, initials, linkedin }, i) => (
               <motion.div
                 key={name}
                 initial={{ opacity: 0, y: 24 }}
@@ -99,7 +87,7 @@ export default function AboutContent() {
                   {title}
                 </p>
                 <a
-                  href="#"
+                  href={linkedin}
                   aria-label={`${name} LinkedIn`}
                   className="mt-2 text-gray-300 dark:text-gray-600 hover:text-[#00AEEF] transition-colors"
                 >

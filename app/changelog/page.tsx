@@ -1,11 +1,8 @@
-import type { Metadata } from "next";
+"use client";
+
+import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-
-export const metadata: Metadata = {
-  title: "Changelog — EZee Assist",
-  description: "Product updates, new features, and improvements from EZee Assist.",
-};
 
 // TODO: Move changelog entries to Sanity CMS for easy editing
 const entries = [
@@ -61,11 +58,22 @@ export default function ChangelogPage() {
         {/* Hero */}
         <section className="relative w-full border-b border-[#E5E7EB] dark:border-white/[0.06] bg-hero-gradient">
           <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Product</p>
-            <h1 className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl" style={{ letterSpacing: "-0.02em" }}>
-              What&apos;s new at EZee Assist
-            </h1>
-            <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">Product updates, new features, and improvements.</p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Product</p>
+              <h1
+                className="text-4xl font-extrabold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
+                style={{ letterSpacing: "-0.02em" }}
+              >
+                What&apos;s new at EZee Assist
+              </h1>
+              <p className="mt-4 text-lg text-gray-600 dark:text-gray-400">
+                Product updates, new features, and improvements.
+              </p>
+            </motion.div>
           </div>
         </section>
 
@@ -77,10 +85,17 @@ export default function ChangelogPage() {
               <div className="absolute left-[7px] top-2 bottom-2 w-px bg-[#E5E7EB] dark:bg-white/[0.08]" />
 
               <div className="flex flex-col gap-10">
-                {entries.map(({ date, tag, tagColor, title, body }) => (
-                  <div key={title} className="relative pl-8">
+                {entries.map(({ date, tag, tagColor, title, body }, i) => (
+                  <motion.div
+                    key={title}
+                    className="relative pl-8"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.07 }}
+                  >
                     {/* Dot */}
-                    <div className="absolute left-0 top-1.5 h-3.5 w-3.5 rounded-full border-2 border-[#00AEEF] bg-white dark:bg-[#0D0D0D]" />
+                    <div className="absolute left-0 top-1.5 h-3.5 w-3.5 rounded-full border-2 border-[#00AEEF] bg-white dark:bg-[#0D0D0D] transition-all duration-300" />
 
                     <div className="flex flex-wrap items-center gap-3 mb-2">
                       <span className="text-xs font-semibold text-gray-400 dark:text-gray-500">{date}</span>
@@ -95,7 +110,7 @@ export default function ChangelogPage() {
                       {title}
                     </h2>
                     <p className="text-sm leading-7 text-gray-600 dark:text-gray-400">{body}</p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>

@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Knowledge & Insights — EZee Assist Platform",
   description:
     "Real-time visibility into every question across your franchise network — what's being asked, where content gaps exist, and how your knowledge base is performing.",
+  alternates: { canonical: "/platform/insights" },
 };
 
 export default function InsightsPage() {

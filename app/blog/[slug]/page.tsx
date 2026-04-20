@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import JsonLd from "@/components/JsonLd";
 import BlogPostContent from "./BlogPostContent";
+
+const BASE_URL = "https://www.ezeeassist.com";
 
 /* ─── Placeholder data (mirrors BlogContent.tsx) ─────────── */
 
@@ -16,22 +19,16 @@ const PLACEHOLDER_POSTS = [
     category: "franchise-operations",
     readTime: "6 min read",
     body: [
-      {
-        type: "h2",
-        text: "The hidden cost of repetitive questions",
-      },
+      { type: "h2", text: "The hidden cost of repetitive questions" },
       {
         type: "p",
-        text: 'Every franchise support team knows the feeling. It\'s Tuesday morning, and before 10am your inbox has 14 variations of the same question: "What are the approved vendors for HVAC?" Your team answers it — again. This isn\'t a staffing problem. It\'s a systems problem.',
+        text: "Every franchise support team knows the feeling. It's Tuesday morning, and before 10am your inbox has 14 variations of the same question: \"What are the approved vendors for HVAC?\" Your team answers it — again. This isn't a staffing problem. It's a systems problem.",
       },
       {
         type: "p",
         text: "Our data across 40+ franchise brands shows that the average franchise support team spends 61% of their time answering questions that already exist somewhere in their knowledge base. They're not adding value — they're being a search engine.",
       },
-      {
-        type: "h2",
-        text: "Why traditional approaches fail",
-      },
+      { type: "h2", text: "Why traditional approaches fail" },
       {
         type: "p",
         text: "Most brands have tried to solve this. They build an intranet. They create a FAQ page. They record training videos. These are good instincts — but they miss the core problem: franchisees don't go looking for answers. They go looking for people.",
@@ -40,10 +37,7 @@ const PLACEHOLDER_POSTS = [
         type: "p",
         text: "The fix isn't more documentation. It's delivering the right documentation at the moment of need, through the channels franchisees are already using.",
       },
-      {
-        type: "h2",
-        text: "What 67% deflection actually looks like",
-      },
+      { type: "h2", text: "What 67% deflection actually looks like" },
       {
         type: "p",
         text: "One of our customers — a 200-location QSR brand — was fielding over 800 support requests per month. Six weeks after deploying EZee Assist, that number dropped to 264. The questions that remained were genuinely complex edge cases that required human judgment. Everything else was handled automatically.",
@@ -64,22 +58,16 @@ const PLACEHOLDER_POSTS = [
     category: "ai-technology",
     readTime: "8 min read",
     body: [
-      {
-        type: "h2",
-        text: "The promise vs. the reality",
-      },
+      { type: "h2", text: "The promise vs. the reality" },
       {
         type: "p",
-        text: 'Every franchise operator has experimented with general-purpose AI. You drop a question into ChatGPT, get a plausible-sounding answer, and think: "This could work." Then a franchisee asks about your approved vendor list and the AI makes one up.',
+        text: "Every franchise operator has experimented with general-purpose AI. You drop a question into ChatGPT, get a plausible-sounding answer, and think: \"This could work.\" Then a franchisee asks about your approved vendor list and the AI makes one up.",
       },
       {
         type: "p",
         text: "That's the hallucination problem — and it's existential for franchise support. Brands run on consistency. When AI gives a franchisee incorrect guidance about food safety protocols or marketing spend requirements, the consequences aren't just embarrassing. They're brand-damaging and potentially liability-creating.",
       },
-      {
-        type: "h2",
-        text: "What makes franchise AI different",
-      },
+      { type: "h2", text: "What makes franchise AI different" },
       {
         type: "p",
         text: "The solution isn't better prompting. It's grounding. Answers need to come from your content — your operations manuals, your vendor lists, your training videos — not from the AI's training data. Every answer should be traceable to a specific source your team approved.",
@@ -100,10 +88,7 @@ const PLACEHOLDER_POSTS = [
     category: "franchise-operations",
     readTime: "5 min read",
     body: [
-      {
-        type: "h2",
-        text: "The onboarding paradox",
-      },
+      { type: "h2", text: "The onboarding paradox" },
       {
         type: "p",
         text: "New franchisees need the most help at the moment when your team has the least capacity to give it. Opening day, pre-launch week, the first month of operations — these are peak support demand periods that coincide with your team already being stretched by the logistics of a new location.",
@@ -112,10 +97,7 @@ const PLACEHOLDER_POSTS = [
         type: "p",
         text: "The result is a predictable failure pattern: support queues grow, new franchisees feel unsupported, your team feels overwhelmed, and the brand relationship starts on a rocky footing before the first customer walks through the door.",
       },
-      {
-        type: "h2",
-        text: "Self-service from day one",
-      },
+      { type: "h2", text: "Self-service from day one" },
       {
         type: "p",
         text: "The brands that onboard most effectively have one thing in common: they make it easy for new franchisees to help themselves. Not by pointing them at a 200-page manual — but by giving them a single place to ask any question and get an instant, accurate answer.",
@@ -143,9 +125,19 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const post = PLACEHOLDER_POSTS.find((p) => p.slug === slug);
+  if (!post) return { title: "Blog Post Not Found" };
+
   return {
-    title: post ? `${post.title} — EZee Assist Blog` : "Blog — EZee Assist",
-    description: post?.excerpt ?? "",
+    title: post.title,
+    description: post.excerpt,
+    alternates: { canonical: `/blog/${slug}` },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.excerpt,
+      publishedTime: post.publishedAt,
+      authors: [post.author],
+    },
   };
 }
 
@@ -168,8 +160,37 @@ export default async function BlogPostPage({
       }
     : null;
 
+  // Article JSON-LD
+  const articleSchema = post
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: post.title,
+        description: post.excerpt,
+        author: {
+          "@type": "Person",
+          name: post.author,
+        },
+        publisher: {
+          "@type": "Organization",
+          name: "EZee Assist",
+          logo: {
+            "@type": "ImageObject",
+            url: `${BASE_URL}/logo.svg`,
+          },
+        },
+        datePublished: post.publishedAt,
+        dateModified: post.publishedAt,
+        mainEntityOfPage: {
+          "@type": "WebPage",
+          "@id": `${BASE_URL}/blog/${slug}`,
+        },
+      }
+    : null;
+
   return (
     <>
+      {articleSchema && <JsonLd data={articleSchema} />}
       <Navbar />
       <main className="flex flex-1 flex-col">
         <BlogPostContent post={post} />

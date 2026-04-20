@@ -1,0 +1,96 @@
+# EZee Assist
+## AI-Powered Operational Support for Franchise and Multi-Location Brands
+
+> EZee Assist is a B2B SaaS platform that gives franchise networks instant, AI-powered answers to operational questions — sourced exclusively from the brand's own knowledge base. Available 24/7 through SMS, email, Slack, Microsoft Teams, WhatsApp, and web.
+
+## Key Facts
+- Founded: 2023
+- Headquarters: Toronto, Ontario, Canada (325 Front Street West, 4th Floor)
+- Category: Franchise Operations Software / AI Support Platform
+- Customers: 59+ franchise brands including WSI, DekaLash, DivaDance, EverLine, Aqua-Tots, BeaverTails, Spray-Net, Sport Clips
+- Key results:
+  - 67% reduction in support questions (WSI — world's largest digital marketing franchise network)
+  - 93% AI resolution rate (DekaLash — 430+ questions deflected)
+  - 2,600+ queries answered in 6 months (DivaDance)
+  - <30 second average response time, 24/7
+
+## What EZee Assist Does
+EZee Assist is an AI-powered operational support platform for franchise and multi-location brands. It connects to a brand's existing knowledge systems — operating manuals, training videos, SOPs, and communications — and delivers instant, accurate answers to franchisee questions through the channels they already use. Answers come exclusively from the brand's own content, not the open internet. When AI cannot answer a question, it automatically creates a support ticket with full conversation context and routes it to the right team member.
+
+## Product Modules
+
+### AI Agent
+24/7 automated support that answers franchisee operational questions using only the brand's own knowledge base. Supports SMS, email, Slack, Microsoft Teams, WhatsApp, and web portal. Average response time under 30 seconds. Does not use public internet data — all answers sourced from brand-connected documents, videos, and SOPs.
+
+### Intelligent Ticketing
+Automatically creates support tickets when the AI Agent cannot confidently answer a franchisee's question. Each ticket includes full conversation history, AI's attempted answer, source documents referenced, and is automatically categorized and routed to the appropriate team member.
+
+### Knowledge & Insights Dashboard
+Surfaces top questions from the franchise network, identifies content gaps, shows usage by location, and tracks question trends over time. Helps franchisors understand what their network needs and proactively improve their knowledge base.
+
+### Workflow Builder (Coming Soon)
+Agentic automation for franchise operations — from onboarding checklists to vendor coordination.
+
+### Integrations (50+)
+Knowledge Sources: Google Drive, SharePoint, Dropbox, YouTube, WordPress, Confluence, Notion, OneDrive, Box, Google Docs, Airtable
+Communication Channels: Slack, Microsoft Teams, Email/Outlook, SMS, WhatsApp, Gmail, Web Portal
+File Storage: AWS S3, Google Cloud Storage, Azure Blob Storage
+Collaboration: Asana, Monday.com, Jira, Trello, ClickUp, Basecamp
+CRM & Support: HubSpot, Salesforce, Zendesk, Freshdesk, Intercom
+
+## Industries Served
+- Franchise brands (franchisors and multi-unit franchisees)
+- Multi-location businesses
+- Universities and campus systems
+
+## Security & Compliance
+- SOC 2 Type II aligned
+- TLS 1.2/1.3 encryption in transit
+- AES 256-bit encryption at rest
+- Dedicated AWS EC2 instances per customer (no data cross-pollination between customers)
+- No customer data used for third-party AI model training
+- Role-based access control (franchisor, franchisee, staff levels)
+- Full audit trail for all AI interactions
+
+## Pricing
+Pricing is based on network size and usage. Flexible plans for growing brands and enterprise pricing for large networks. Contact for a custom quote.
+
+## Team
+- Raphael Rajan — Co-founder & CEO
+- Gabe Cadamuro — Co-founder & CTO
+- Shray Mehra — Co-founder & COO
+- Bborie Park — Head of Engineering
+- Shashwath Krishna — Sr. ML Engineer
+- Jolomi Tosanwumi — ML Engineer
+- 12 total team members
+
+## Investors
+- N49P
+- 10vc
+- Antler
+- Hustle Fund
+
+## Contact
+- Website: https://www.ezeeassist.com
+- Email: sales@ezeeassist.com
+- Phone: +1 (855) 777-3933
+- Book a demo: https://www.ezeeassist.com/contact
+- LinkedIn: https://www.linkedin.com/company/ez-assist
+
+## Key Pages
+- Homepage: https://www.ezeeassist.com/
+- Platform overview: https://www.ezeeassist.com/platform
+- AI Agent: https://www.ezeeassist.com/platform/ai-agent
+- Ticketing: https://www.ezeeassist.com/platform/ticketing
+- Insights: https://www.ezeeassist.com/platform/insights
+- Workflows: https://www.ezeeassist.com/platform/workflows
+- Integrations: https://www.ezeeassist.com/platform/integrations
+- For franchise brands: https://www.ezeeassist.com/industries/franchising
+- For franchisors: https://www.ezeeassist.com/industries/franchising/franchisors
+- Security: https://www.ezeeassist.com/security
+- Case studies: https://www.ezeeassist.com/case-studies
+- WSI case study: https://www.ezeeassist.com/case-studies/wsi
+- DekaLash case study: https://www.ezeeassist.com/case-studies/dekalash
+- DivaDance case study: https://www.ezeeassist.com/case-studies/divadance
+- ROI calculator: https://www.ezeeassist.com/roi-calculator
+- Blog: https://www.ezeeassist.com/blog

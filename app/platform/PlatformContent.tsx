@@ -11,15 +11,9 @@ import {
   ShieldCheck,
   ArrowRight,
   CheckCircle2,
-  Globe,
-  Mail,
-  Smartphone,
-  FileText,
-  Video,
-  Database,
-  FolderOpen,
-  Hash,
+  Puzzle,
 } from "lucide-react";
+import { platformMarqueeIntegrations } from "@/lib/data/integrations";
 
 /* ─── Helpers ──────────────────────────────────────────── */
 
@@ -118,23 +112,8 @@ const flowSteps = [
 
 /* ─── Integrations ─────────────────────────────────────── */
 
-const integrations = [
-  { icon: FolderOpen, label: "Google Drive" },
-  { icon: Database,   label: "SharePoint" },
-  { icon: FileText,   label: "Dropbox" },
-  { icon: Video,      label: "YouTube" },
-  { icon: Hash,       label: "Slack" },
-  { icon: Globe,      label: "Microsoft Teams" },
-  { icon: Mail,       label: "Email / Outlook" },
-  { icon: Smartphone, label: "SMS" },
-  { icon: Globe,      label: "WordPress" },
-  { icon: FileText,   label: "Confluence" },
-  { icon: Database,   label: "Notion" },
-  { icon: Globe,      label: "Web Portal" },
-];
-
 // Duplicate for seamless marquee
-const integrationsDup = [...integrations, ...integrations];
+const integrationsDup = [...platformMarqueeIntegrations, ...platformMarqueeIntegrations];
 
 /* ─── Component ────────────────────────────────────────── */
 
@@ -430,14 +409,14 @@ export default function PlatformContent() {
 
             <div className="overflow-hidden">
               <div className="flex gap-4 animate-marquee w-max">
-                {integrationsDup.map(({ icon: Icon, label }, i) => (
+                {integrationsDup.map(({ name }, i) => (
                   <div
-                    key={`${label}-${i}`}
+                    key={`${name}-${i}`}
                     className="flex flex-shrink-0 items-center gap-3 rounded-xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#1A1A1A] px-5 py-3.5 shadow-sm"
                   >
-                    <Icon size={18} className="text-gray-400 dark:text-gray-500" strokeWidth={1.5} />
+                    <Puzzle size={16} className="text-gray-400 dark:text-gray-500 flex-shrink-0" strokeWidth={1.5} />
                     <span className="text-sm font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">
-                      {label}
+                      {name}
                     </span>
                   </div>
                 ))}

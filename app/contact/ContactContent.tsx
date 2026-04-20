@@ -10,7 +10,7 @@ import Button from "@/components/ui/Button";
 const MEETINGS_URL = process.env.NEXT_PUBLIC_HUBSPOT_MEETINGS_URL;
 
 const inputClass =
-  "w-full rounded-lg border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#1A1A1A] px-4 py-3 text-sm text-[#0A0A0A] dark:text-[#F0F0F0] placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:border-[#00AEEF] focus:outline-none focus:ring-2 focus:ring-[#00AEEF]/20 transition-all";
+  "w-full rounded-xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#1A1A1A] px-4 py-3 text-sm text-[#0A0A0A] dark:text-[#F0F0F0] placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:border-[#00AEEF] focus:outline-none focus:ring-2 focus:ring-[#00AEEF]/20 focus:shadow-[0_0_0_3px_rgba(0,174,239,0.12)] transition-all";
 
 const labelClass = "block text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] mb-1.5";
 
@@ -54,7 +54,7 @@ export default function ContactContent() {
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Contact</p>
             <h1
-              className="text-5xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
+              className="text-5xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl"
               style={{ letterSpacing: "-0.02em" }}
             >
               Get in{" "}

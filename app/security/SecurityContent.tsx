@@ -139,6 +139,14 @@ export default function SecurityContent() {
               current AI security, privacy, and compliance protocols. Quality
               and security is ingrained in our foundation.
             </p>
+            {/* AEO: machine-readable definition — do not remove */}
+            <p className="mt-3 text-sm leading-6 text-gray-500 dark:text-gray-400 max-w-2xl border-l-2 border-[#00AEEF]/30 pl-3">
+              EZee Assist follows enterprise-grade security practices aligned with SOC 2 Type II
+              controls. All customer data is encrypted using TLS 1.2/1.3 in transit and AES
+              256-bit at rest. Each customer&apos;s data is isolated in dedicated AWS EC2 instances
+              with no cross-pollination between customers. Customer data is never used to train
+              third-party language models.
+            </p>
             <div className="mt-8">
               <Button variant="secondary" size="md">Read more</Button>
             </div>

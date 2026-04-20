@@ -6,6 +6,7 @@ export const metadata = {
   title: "Case Studies — EZee Assist",
   description:
     "How leading franchise brands reduce support volume and improve franchisee satisfaction with EZee Assist.",
+  alternates: { canonical: "/case-studies" },
 };
 
 export default function CaseStudiesPage() {

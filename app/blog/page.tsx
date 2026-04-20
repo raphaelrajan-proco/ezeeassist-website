@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Blog — EZee Assist",
   description:
     "Insights on franchise operations, AI-powered support, and scaling multi-location brands from the team at EZee Assist.",
+  alternates: { canonical: "/blog" },
 };
 
 export default function BlogPage() {
