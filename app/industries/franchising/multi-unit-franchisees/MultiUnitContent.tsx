@@ -50,11 +50,11 @@ export default function MultiUnitContent() {
             </div>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">For Multi-Unit Operators</p>
             <h1 className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.03em" }}>
-              Run every location with confidence.{" "}
-              <span className="text-[#00AEEF]">Get answers instantly.</span>
+              Run every location with{" "}
+              <span className="text-[#00AEEF]">an AI co-pilot.</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
-              You operate multiple franchise locations. Your staff has questions every day — about procedures, vendors, policies, marketing assets. EZee Assist gives every one of your locations instant access to the brand&apos;s knowledge base, 24/7.
+              Your staff gets instant answers, your managers get coaching, and you get compliance confidence — across every unit you operate.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/contact"><Button size="lg">Book a Demo</Button></Link>

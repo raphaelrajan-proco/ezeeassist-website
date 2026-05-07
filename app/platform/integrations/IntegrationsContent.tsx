@@ -94,29 +94,28 @@ export default function IntegrationsContent() {
         <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
           <motion.div className="max-w-3xl" {...fadeUp(0)}>
             <div className="mb-5 flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500">
-              <Link href="/platform" className="hover:text-[#00AEEF] transition-colors">Platform</Link>
+              <Link href="/solution" className="hover:text-[#00AEEF] transition-colors">Solution</Link>
               <span>/</span>
               <span className="font-semibold text-[#00AEEF]">Integrations</span>
             </div>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">
-              Integrations
+              250+ Integrations
             </p>
             <h1
               className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
               style={{ letterSpacing: "-0.03em" }}
             >
-              Connects to your entire{" "}
-              <span className="text-[#00AEEF]">knowledge ecosystem.</span>
+              Connects to all your{" "}
+              <span className="text-[#00AEEF]">data and systems.</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
-              EZee Assist plugs into the tools and platforms your franchise already
-              uses. No migration. No manual uploads. Your content stays where it
-              is — we learn from it directly.
+              EZee connects to your entire tech stack — no migration, no manual uploads.
+              Your content and data stay where they live.
             </p>
             {/* Stats */}
             <div className="mt-8 flex flex-wrap gap-6">
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-extrabold text-[#00AEEF]" style={{ letterSpacing: "-0.02em" }}>50+</span>
+                <span className="text-2xl font-extrabold text-[#00AEEF]" style={{ letterSpacing: "-0.02em" }}>250+</span>
                 <span className="text-sm text-gray-500 dark:text-gray-400">integrations</span>
               </div>
               <div className="w-px h-8 bg-[#E5E7EB] dark:bg-white/[0.08] self-center" />
@@ -126,17 +125,17 @@ export default function IntegrationsContent() {
               </div>
               <div className="w-px h-8 bg-[#E5E7EB] dark:bg-white/[0.08] self-center" />
               <div className="flex items-center gap-2">
-                <span className="text-2xl font-extrabold text-[#00AEEF]" style={{ letterSpacing: "-0.02em" }}>&lt;5 min</span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">to connect</span>
+                <span className="text-2xl font-extrabold text-[#00AEEF]" style={{ letterSpacing: "-0.02em" }}>0</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">migration required</span>
               </div>
             </div>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/contact">
                 <Button size="lg">Book a Demo</Button>
               </Link>
-              <Link href="/platform">
+              <Link href="/solution">
                 <Button size="lg" variant="secondary">
-                  Explore the Platform
+                  Explore the Solution
                   <ArrowRight size={16} className="ml-2" />
                 </Button>
               </Link>

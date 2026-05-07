@@ -42,9 +42,7 @@ export default function AboutContent() {
               About our <span className="text-[#00AEEF]">company</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
-              Our team brings deep expertise in solving complex enterprise
-              challenges with technology. Our combined experiences include
-              strategy consulting, venture capital, AI and Machine Learning.
+              EZee Assist is building the AI support agent for multi-location execution. Our platform helps franchise and multi-location brands automate support, coach operators, and ensure compliance at scale — connecting to 250+ integrations across the tech stack and delivering through the channels operators already use.
             </p>
           </motion.div>
         </div>

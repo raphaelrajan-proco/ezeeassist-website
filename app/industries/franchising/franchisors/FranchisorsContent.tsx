@@ -64,11 +64,11 @@ export default function FranchisorsContent() {
             </div>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">For Franchisors & Brand Teams</p>
             <h1 className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.03em" }}>
-              Scale franchise support{" "}
+              Scale execution{" "}
               <span className="text-[#00AEEF]">without scaling your team.</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
-              EZee Assist gives your franchise brand 24/7 AI-powered support that answers franchisee questions from your own knowledge base — reducing support volume, improving satisfaction, and freeing your FBCs for strategic work.
+              EZee gives your franchise brand an always-on AI agent that resolves support questions, coaches operators on performance, and monitors compliance — across every location, 24/7.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/contact"><Button size="lg">Book a Demo</Button></Link>

@@ -4,10 +4,10 @@ import Footer from "@/components/Footer";
 import FranchisingContent from "./FranchisingContent";
 
 export const metadata: Metadata = {
-  title: "Franchise Brands — EZee Assist",
-  description: "EZee Assist helps franchise systems reduce support volume by 67%, give franchisees instant answers 24/7, and scale without scaling headcount.",
+  title: "AI for Franchise Execution — EZee Assist",
+  description: "Support, coaching, and compliance automation for franchise brands. 60+ brands, 4,000+ locations. Automate support, coach operators, and ensure brand compliance at scale.",
   alternates: { canonical: "/industries/franchising" },
-  keywords: ["AI for franchising", "franchise support software", "franchisor support tools", "franchisee self-service"],
+  keywords: ["AI for franchising", "franchise execution platform", "franchisor support tools", "franchise coaching compliance", "franchise AI agent"],
 };
 
 export default function FranchisingPage() {

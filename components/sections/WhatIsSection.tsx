@@ -29,23 +29,18 @@ export default function WhatIsSection() {
               What is EZee Assist?
             </h2>
             <p className="text-base leading-8 text-gray-600 dark:text-gray-400 max-w-3xl">
-              EZee Assist is an AI-powered operational support platform purpose-built for franchise
-              and multi-location brands. It connects to a brand&apos;s existing knowledge systems —
-              operating manuals, training videos, SOPs, and communications — and delivers instant,
-              accurate answers to franchisee questions 24/7 through{" "}
-              <Link href="/platform/integrations" className="text-[#00AEEF] hover:underline underline-offset-4 font-medium">
-                SMS, email, Slack, Microsoft Teams, WhatsApp, and web
-              </Link>
-              . Answers come exclusively from the brand&apos;s own content — not the open internet.
-              When the{" "}
-              <Link href="/platform/ai-agent" className="text-[#00AEEF] hover:underline underline-offset-4 font-medium">
-                AI Agent
+              EZee Assist is an AI support agent purpose-built for franchise and multi-location brands.
+              It connects to your entire tech stack —{" "}
+              <Link href="/solution/integrations" className="text-[#00AEEF] hover:underline underline-offset-4 font-medium">
+                250+ integrations across drives, CRMs, POS systems, LMS platforms, marketing tools, and more
               </Link>{" "}
-              cannot answer a question, it automatically creates a{" "}
-              <Link href="/platform/ticketing" className="text-[#00AEEF] hover:underline underline-offset-4 font-medium">
-                support ticket
+              — and becomes your business&apos;s AI coach. Operators receive instant support, perform actions,
+              and trigger automated workflows directly through the channels they already use: SMS, email,
+              Slack, Microsoft Teams, WhatsApp, and web. When human expertise is needed, EZee&apos;s{" "}
+              <Link href="/solution/ticketing" className="text-[#00AEEF] hover:underline underline-offset-4 font-medium">
+                intelligent ticketing system
               </Link>{" "}
-              with full conversation context and routes it to the right team member.
+              loops in the right team member with full context.
             </p>
           </div>
         </div>

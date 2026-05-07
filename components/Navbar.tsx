@@ -15,12 +15,10 @@ import ThemeToggle from "@/components/ThemeToggle";
 /* ─── Nav data ─────────────────────────────────────────── */
 
 const platformLinks = [
-  { label: "Platform Overview",     href: "/platform",                  icon: LayoutGrid,  desc: "Everything your franchise network needs in one platform." },
-  { label: "AI Agent",              href: "/platform/ai-agent",          icon: Bot,         desc: "Instant answers from your brand's own knowledge base." },
-  { label: "Intelligent Ticketing", href: "/platform/ticketing",         icon: Ticket,      desc: "Auto-escalate unresolved questions with full context." },
-  { label: "Knowledge & Insights",  href: "/platform/insights",          icon: BarChart2,   desc: "Real-time visibility across your franchise network." },
-  { label: "Workflow Builder",      href: "/platform/workflows",         icon: Workflow,    desc: "Automate multi-step franchise operations with AI." },
-  { label: "Integrations",          href: "/platform/integrations",      icon: Plug2,       desc: "Connects to your existing tools — no migration required." },
+  { label: "Solution Overview",     href: "/solution",                  icon: LayoutGrid,  desc: "One AI agent. Your entire tech stack. Limitless execution." },
+  { label: "Integrations",          href: "/solution/integrations",     icon: Plug2,       desc: "250+ integrations — drives, CRMs, POS, LMS, and more." },
+  { label: "Intelligent Ticketing", href: "/solution/ticketing",        icon: Ticket,      desc: "Human guaranteed. Your team gets looped in when it matters." },
+  { label: "Agentic Workflows",     href: "/solution/workflows",        icon: Workflow,    desc: "AI-powered workflows. You dream it up, EZee executes it." },
 ];
 
 const industriesLinks = [
@@ -247,7 +245,7 @@ export default function Navbar() {
         {/* Desktop nav */}
         <ul className="hidden md:flex items-center gap-1">
 
-          {/* Platform */}
+          {/* Solution */}
           <li className="relative"
             onMouseEnter={() => setActiveDropdown("platform")}
             onMouseLeave={() => setActiveDropdown(null)}
@@ -261,7 +259,7 @@ export default function Navbar() {
               onClick={() => setActiveDropdown(activeDropdown === "platform" ? null : "platform")}
               aria-expanded={activeDropdown === "platform"}
             >
-              Platform
+              Solution
               <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "platform" ? "rotate-180" : ""}`} />
             </button>
             <DropdownWrapper keyName="platform"><PlatformPanel onClose={closeAll} /></DropdownWrapper>
@@ -347,11 +345,11 @@ export default function Navbar() {
         <div className="md:hidden border-t border-[#E5E7EB] dark:border-white/[0.06] bg-white/95 dark:bg-[#0B0F19]/95 backdrop-blur-md px-6 pb-6">
           <ul className="flex flex-col gap-1 pt-4">
 
-            {/* Platform accordion */}
+            {/* Solution accordion */}
             <li>
               <button className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors"
                 onClick={() => setMobilePlatformOpen((v) => !v)}>
-                Platform
+                Solution
                 <ChevronDown size={14} strokeWidth={2.5} className={`transition-transform duration-200 ${mobilePlatformOpen ? "rotate-180" : ""}`} />
               </button>
               {mobilePlatformOpen && (

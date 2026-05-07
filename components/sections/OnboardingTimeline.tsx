@@ -9,19 +9,19 @@ const steps = [
     icon: CalendarCheck,
     day: "Day 1",
     title: "Kickoff & discovery",
-    body: "We map your knowledge sources, support workflows, and team structure. No IT department required.",
+    body: "We map your knowledge sources, systems, workflows, and team structure. No IT department required.",
   },
   {
     icon: Plug,
     day: "Days 2–5",
     title: "Connect & configure",
-    body: "We connect to your existing systems — Google Drive, SharePoint, Slack, Teams, and more. Your content stays where it lives.",
+    body: "We connect to your entire tech stack — drives, CRMs, POS, LMS, marketing tools. Your content stays where it lives.",
   },
   {
     icon: Rocket,
     day: "Day 7",
     title: "Live for your network",
-    body: "Your franchisees get instant, brand-accurate answers from day one. No training required on their end.",
+    body: "Operators get instant, brand-accurate answers and can trigger workflows from day one. No training required.",
   },
 ];
 
@@ -74,12 +74,12 @@ export default function OnboardingTimeline() {
             className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
-            Live in{" "}
-            <span className="text-[#00AEEF]">7 days.</span> Seriously.
+            Seamless{" "}
+            <span className="text-[#00AEEF]">implementation.</span>
           </h2>
           <p className="mt-4 text-base leading-7 text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
-            Our implementation process is designed to be painless. Most customers
-            go live in under a week — with zero disruption to their operations.
+            Most customers go live in under 7 days — with zero disruption to
+            their operations and no migration required.
           </p>
         </motion.div>
 

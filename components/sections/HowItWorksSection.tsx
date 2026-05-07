@@ -8,20 +8,20 @@ const steps = [
   {
     number: "01",
     icon: DatabaseZap,
-    title: "Connect Your Knowledge",
-    body: "We plug into your existing systems — Google Drive, SharePoint, Dropbox, WordPress, YouTube, and more. No migration required. Your content stays exactly where it is.",
+    title: "Connect your data and systems",
+    body: "EZee connects to all your data and systems — 250+ integrations across drives, CRMs, POS, LMS, marketing, accounting, and more. No migration. Your content stays where it lives.",
   },
   {
     number: "02",
     icon: MessageCircle,
-    title: "Franchisees Ask Questions",
-    body: "Through text message, email, Slack, Microsoft Teams, or our web portal. No new tools to learn. No behavior change required from your network.",
+    title: "Build workflows conversationally",
+    body: "Build support, coaching, and compliance workflows — and much more — conversationally with EZee. You dream it up, EZee maps it out, and executes automations at scale.",
   },
   {
     number: "03",
     icon: Zap,
-    title: "Instant, Accurate Answers",
-    body: "AI delivers brand-specific answers in under 30 seconds, 24/7. If it can't answer, it creates a ticket and routes to your team — with full context already attached.",
+    title: "Operators get instant support and take action",
+    body: "Operators receive instant support and perform actions directly in your tech stack through the channels they're already used to. When it matters most, your team gets intelligently looped in.",
   },
 ];
 
@@ -83,8 +83,8 @@ export default function HowItWorksSection() {
             className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
-            Up and running in{" "}
-            <span className="text-[#00AEEF]">days, not months.</span>
+            Connect everything.{" "}
+            <span className="text-[#00AEEF]">EZee handles the rest.</span>
           </h2>
         </motion.div>
 

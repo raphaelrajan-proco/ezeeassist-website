@@ -11,6 +11,7 @@ import HowItWorksSection from "@/components/sections/HowItWorksSection";
 import StatsSection from "@/components/sections/StatsSection";
 import CaseStudyCarousel from "@/components/sections/CaseStudyCarousel";
 import ComparisonSection from "@/components/sections/ComparisonSection";
+import AnswersActionsAutomations from "@/components/sections/AnswersActionsAutomations";
 import OnboardingTimeline from "@/components/sections/OnboardingTimeline";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import PressSection from "@/components/sections/PressSection";
@@ -20,15 +21,18 @@ import SecuritySection from "@/components/sections/SecuritySection";
 import FinalCTA from "@/components/sections/FinalCTA";
 
 export const metadata: Metadata = {
+  title: "EZee Assist — AI Support Agent for Multi-Location Execution",
+  description:
+    "Automatically resolve support questions, coach operators, and ensure brand compliance at scale. 250+ integrations. 60+ brands. 4,000+ locations.",
   alternates: { canonical: "/" },
   keywords: [
-    "franchise support",
-    "AI franchise support",
-    "franchisee support platform",
-    "franchise knowledge base",
-    "24/7 franchise support",
+    "AI support agent multi-location",
+    "franchise AI platform",
+    "multi-location execution",
+    "franchise support software",
+    "AI coaching compliance",
     "franchise operations AI",
-    "multi-location support software",
+    "agentic workflows franchise",
   ],
 };
 
@@ -42,15 +46,15 @@ const faqSchema = {
       name: "How long does EZee Assist implementation take?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Most customers go live in under 7 days. We connect to your existing knowledge systems — Google Drive, SharePoint, YouTube, Dropbox, and more — with no migration required. Your franchisees can start asking questions on day one.",
+        text: "Most customers go live in under 7 days. We connect to your existing systems and tech stack — 250+ integrations — with no migration required.",
       },
     },
     {
       "@type": "Question",
-      name: "What channels do franchisees use to ask questions?",
+      name: "What channels do operators use to access EZee Assist?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Franchisees can ask questions through SMS/text, email, Slack, Microsoft Teams, WhatsApp, or our web portal. They use whichever channel they already prefer — no new tools to learn.",
+        text: "Operators interact with EZee through SMS, email, Slack, Microsoft Teams, WhatsApp, or our web portal — whichever channel they already use.",
       },
     },
     {
@@ -66,12 +70,12 @@ const faqSchema = {
       name: "How is EZee Assist different from ChatGPT or a generic AI chatbot?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Generic AI tools answer from the open internet. EZee Assist answers exclusively from your brand's own knowledge base — operating manuals, SOPs, training videos, and communications. Every answer is brand-specific, accurate, and citable.",
+        text: "Generic AI answers from the open internet. EZee answers exclusively from your brand's knowledge base, your systems, and your data. Every answer is brand-specific. Every action happens inside your tech stack. Every workflow is built for your operations.",
       },
     },
     {
       "@type": "Question",
-      name: "What happens when the AI can't answer a question?",
+      name: "What happens when AI can't answer a question?",
       acceptedAnswer: {
         "@type": "Answer",
         text: "It automatically creates a support ticket with the full conversation context and routes it to the right person on your team. No question falls through the cracks.",
@@ -79,10 +83,10 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "How many franchise locations can EZee Assist support?",
+      name: "How many locations can EZee Assist support?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "There's no limit. We support franchise networks from 10 locations to 1,000+. The platform scales with your network — adding a new location takes minutes, not weeks.",
+        text: "We support networks from 10 to 4,000+ locations today. The platform scales with your network.",
       },
     },
     {
@@ -95,10 +99,10 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "Is EZee Assist secure and compliant?",
+      name: "What kind of workflows can EZee Assist automate?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. We follow enterprise-grade security practices aligned with SOC 2 Type II controls. All data is encrypted with TLS 1.2/1.3 in transit and AES 256-bit at rest. Each customer's data is isolated in dedicated AWS EC2 instances.",
+        text: "Anything you can describe. Examples: weekly KPI reports pulled from QuickBooks and Mindbody, proactive compliance flags for expired insurance or missing financials, automated staffing optimization based on demand and bookings, onboarding checklists for new locations, and much more. You describe the workflow, EZee builds and executes it.",
       },
     },
   ],
@@ -120,6 +124,7 @@ export default function Home() {
         <StatsSection />
         <CaseStudyCarousel />
         <ComparisonSection />
+        <AnswersActionsAutomations />
         <OnboardingTimeline />
         <TestimonialsSection />
         <PressSection />

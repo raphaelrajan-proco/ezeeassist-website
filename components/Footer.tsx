@@ -2,13 +2,12 @@ import Link from "next/link";
 import { Globe, Share2, Link2 } from "lucide-react";
 
 const footerLinks = {
-  Platform: [
-    { label: "AI Agent",      href: "/platform/ai-agent" },
-    { label: "Ticketing",     href: "/platform/ticketing" },
-    { label: "Insights",      href: "/platform/insights" },
-    { label: "Workflows",     href: "/platform/workflows" },
-    { label: "Integrations",  href: "/platform/integrations" },
-    { label: "ROI Calculator", href: "/roi-calculator" },
+  Solution: [
+    { label: "Solution Overview", href: "/solution" },
+    { label: "Integrations",      href: "/solution/integrations" },
+    { label: "Ticketing",         href: "/solution/ticketing" },
+    { label: "Workflows",         href: "/solution/workflows" },
+    { label: "ROI Calculator",    href: "/roi-calculator" },
   ],
   Industries: [
     { label: "Franchising",         href: "/industries/franchising" },
@@ -53,8 +52,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-4 max-w-[260px] text-sm leading-6 text-gray-500 dark:text-gray-400">
-              The AI support platform that gives every franchise location instant,
-              accurate answers — 24/7, from your brand&apos;s own knowledge.
+              Your AI support agent for multi-location execution. Support. Coaching. Compliance.
             </p>
 
             <div className="mt-5 space-y-1">

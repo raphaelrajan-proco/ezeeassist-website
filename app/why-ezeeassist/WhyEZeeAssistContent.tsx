@@ -30,12 +30,12 @@ const genericFails = [
 ];
 
 const differentiators = [
-  { title: "Your brand's knowledge only",         body: "Every answer comes from your connected documents, videos, and communications — never from the open internet." },
-  { title: "Multi-tenant, role-based access",     body: "Franchisors see everything. Franchisees see only what's relevant to their location and role. Regional managers see their territory." },
-  { title: "Network-wide resolution memory",      body: "When a question gets answered anywhere in the network, that answer is available everywhere. Your knowledge compounds." },
-  { title: "Franchise-specific escalation logic", body: "Tickets route based on topic, region, and urgency — not just to a generic inbox. FBCs get questions that match their expertise." },
-  { title: "Hub-and-spoke deployment",            body: "Corporate deploys once. Every location gets instant access. No per-location setup, no per-location training." },
-  { title: "Channel-native delivery",             body: "SMS, email, Slack, Teams, WhatsApp, web — your franchisees don't install anything new. Zero behavior change." },
+  { title: "250+ integrations, not just documents",       body: "EZee doesn't just read your manuals. It connects to your CRM, POS, LMS, accounting, marketing, and scheduling tools — enabling actions and workflows across your entire tech stack." },
+  { title: "Conversational workflow builder",             body: "Describe any workflow in plain language. EZee maps it out and executes it. Weekly KPI reports, compliance monitoring, staffing optimization — you dream it up." },
+  { title: "Support + Coaching + Compliance in one agent", body: "Not just a support bot. EZee coaches operators on performance gaps, monitors compliance proactively, and ensures brand standards don't drift." },
+  { title: "Multi-tenant, role-based access",             body: "Franchisors see everything. Franchisees see only what's relevant to their location and role. Regional managers see their territory." },
+  { title: "Hub-and-spoke deployment",                    body: "Corporate deploys once. Every location gets instant access. No per-location setup, no per-location training." },
+  { title: "Channel-native delivery",                     body: "SMS, email, Slack, Teams, WhatsApp, web — your operators don't install anything new. Zero behavior change." },
 ];
 
 const comparisonRows = [
@@ -49,9 +49,9 @@ const comparisonRows = [
 ];
 
 const timeline = [
-  { label: "Answers",     done: true,  description: "AI answers franchisee questions instantly from your knowledge base.",                    tag: "Available now" },
-  { label: "Actions",     done: true,  description: "Smart ticketing routes unanswered questions to the right person with full context.",    tag: "Available now" },
-  { label: "Automations", done: false, description: "AI agents execute multi-step workflows: onboarding, compliance, vendor coordination.", tag: "Coming soon"   },
+  { label: "Answers",     done: true,  description: "Instant answers from all your content and systems.",                             tag: "Available now" },
+  { label: "Actions",     done: true,  description: "Take actions directly inside your tech stack through AI.",                       tag: "Available now" },
+  { label: "Automations", done: true,  description: "Always-on workflows running at scale across the value chain.",                   tag: "Available now" },
 ];
 
 function useIO(threshold = 0.1) {
@@ -104,10 +104,9 @@ export default function WhyEZeeAssistContent() {
               <span className="text-[#00AEEF]">The context is the product.</span>
             </h1>
             <p className="mt-6 text-xl leading-8 text-gray-600 dark:text-gray-400">
-              Any company can plug into an LLM. What makes EZee Assist different is
-              everything around it — the franchise-specific context, the multi-tenant
-              architecture, the channel flexibility, and the operational intelligence
-              that makes AI actually useful for franchise teams.
+              Any company can plug into an LLM. What makes EZee different is the deep
+              integration with your tech stack, the franchise-specific intelligence, and
+              the ability to go beyond answers — into actions and automations.
             </p>
             <div className="mt-8">
               <Link href="/contact"><Button size="lg">Book a Demo</Button></Link>

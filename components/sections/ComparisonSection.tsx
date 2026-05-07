@@ -6,39 +6,39 @@ import { X, Check } from "lucide-react";
 
 const rows = [
   {
-    topic: "Response time",
-    before: "Hours to days",
-    after: "Under 30 seconds, 24/7",
+    topic: "Support",
+    before: "Hours to days. Manual responses.",
+    after: "Instant. AI resolves 70%+ automatically.",
   },
   {
-    topic: "Knowledge source",
-    before: "Whoever picks up the phone",
-    after: "Your entire brand knowledge base",
+    topic: "Coaching",
+    before: "Reactive. Only when an FBC is available.",
+    after: "Proactive. AI coaches operators on performance gaps.",
   },
   {
-    topic: "After-hours support",
-    before: "Unanswered messages piling up",
-    after: "Instant answers around the clock",
+    topic: "Compliance",
+    before: "Discovered after the fact.",
+    after: "Monitored continuously. Flagged in real-time.",
   },
   {
-    topic: "Ticket volume",
-    before: "Every question becomes a ticket",
-    after: "67% of tickets deflected automatically",
+    topic: "Knowledge access",
+    before: "Scattered across 10+ systems.",
+    after: "One AI agent, every source connected.",
   },
   {
-    topic: "Consistency",
-    before: "Varies by person and shift",
-    after: "Same brand-accurate answer every time",
+    topic: "After-hours",
+    before: "No one home. Questions pile up.",
+    after: "Always on. Instant answers at 2am.",
   },
   {
-    topic: "Onboarding new franchisees",
-    before: "Weeks of hand-holding",
-    after: "Day-one self-service access",
+    topic: "Onboarding",
+    before: "Weeks of manual training.",
+    after: "Day-one access to all brand knowledge.",
   },
   {
-    topic: "Setup required",
-    before: "New tools, migration, training",
-    after: "Connects to your existing systems",
+    topic: "Workflows",
+    before: "Manual. Repetitive. Error-prone.",
+    after: "AI-powered. Automated. At scale.",
   },
 ];
 
@@ -86,7 +86,7 @@ export default function ComparisonSection() {
             style={{ letterSpacing: "-0.02em" }}
           >
             The old way vs.{" "}
-            <span className="text-[#00AEEF]">the EZee Assist way</span>
+            <span className="text-[#00AEEF]">the EZee way</span>
           </h2>
         </motion.div>
 

@@ -101,25 +101,25 @@ function AfterHoursVisual() {
 const rows = [
   {
     icon: MessageSquare,
-    eyebrow: "The Problem",
-    title: "Your team answers the same questions hundreds of times.",
-    body: "Across dozens of locations, franchisees ask identical questions every day. Your support team handles them manually — one by one. It's expensive, demoralizing, and doesn't scale.",
+    eyebrow: "The Challenge",
+    title: "Support teams are buried in repetitive questions.",
+    body: "Across dozens of locations, operators ask identical questions every day about procedures, vendors, marketing, compliance. Your team handles them manually — one by one. It's expensive, demoralizing, and unsustainable.",
     visual: <RepetitiveQuestionsVisual />,
     flip: false,
   },
   {
     icon: FolderSearch,
-    eyebrow: "The Problem",
-    title: "Your knowledge is scattered. Franchisees can't find it.",
-    body: "Manuals, videos, SOPs, and tribal knowledge live across Google Drive, SharePoint, Dropbox, email threads, and people's heads. Franchisees give up and call you instead.",
+    eyebrow: "The Challenge",
+    title: "Knowledge and systems are scattered everywhere.",
+    body: "SOPs live in Google Drive. Training videos on YouTube. CRM data in HubSpot. Scheduling in Mindbody. Compliance docs in SharePoint. Operators can't find what they need — so they call you instead.",
     visual: <ScatteredKnowledgeVisual />,
     flip: true,
   },
   {
     icon: Clock,
-    eyebrow: "The Problem",
-    title: "When your team logs off, franchisees are on their own.",
-    body: "Operational issues don't respect business hours. Questions pile up overnight. Franchisees make their best guess — or wait until morning. Either way, it costs you.",
+    eyebrow: "The Challenge",
+    title: "Coaching and compliance don't scale with people alone.",
+    body: "You can't have an FBC on every call, at every location, every hour. Training gaps go unnoticed. Compliance issues surface too late. Brand standards drift across the network.",
     visual: <AfterHoursVisual />,
     flip: false,
   },
@@ -187,12 +187,13 @@ export default function ProblemSection() {
           transition={{ duration: 0.55, ease: "easeOut" }}
           className="text-center"
         >
+          <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">The Challenge</p>
           <h2
             className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
             style={{ letterSpacing: "-0.02em" }}
           >
-            Franchise support doesn&apos;t scale.{" "}
-            <span className="text-[#00AEEF]">Until now.</span>
+            Multi-location execution{" "}
+            <span className="text-[#00AEEF]">breaks down at scale.</span>
           </h2>
         </motion.div>
 

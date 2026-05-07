@@ -16,7 +16,7 @@ export default function TrustBar() {
     <section className="w-full bg-[#F7F8FA] dark:bg-[#111111] py-14 overflow-hidden">
       {/* Label */}
       <p className="text-center text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-8">
-        Trusted by franchise brands across North America
+        Trusted by leading brands
       </p>
 
       {/* Marquee wrapper — masks edges with a fade */}

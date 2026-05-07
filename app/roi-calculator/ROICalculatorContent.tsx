@@ -72,7 +72,7 @@ export default function ROICalculatorContent() {
   const [questionsPerLocation, setQuestionsPerLocation] = useState(15);
   const [minutesPerQuestion,   setMinutesPerQuestion]   = useState(10);
   const [hourlyCost,           setHourlyCost]           = useState(35);
-  const [repetitivePct,        setRepetitivePct]        = useState(60);
+  const [repetitivePct,        setRepetitivePct]        = useState(70);
 
   const { show, setShow } = useGatedPopupTrigger();
 

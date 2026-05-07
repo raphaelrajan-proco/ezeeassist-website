@@ -7,11 +7,11 @@ import { Plus } from "lucide-react";
 const faqs = [
   {
     q: "How long does implementation take?",
-    a: "Most customers go live in under 7 days. We connect to your existing knowledge systems — Google Drive, SharePoint, YouTube, Dropbox, and more — with no migration required. Your franchisees can start asking questions on day one.",
+    a: "Most customers go live in under 7 days. We connect to your existing systems and tech stack — 250+ integrations — with no migration required.",
   },
   {
-    q: "What channels do franchisees use to ask questions?",
-    a: "Franchisees can ask questions through SMS/text, email, Slack, Microsoft Teams, WhatsApp, or our web portal. They use whichever channel they already prefer — no new tools to learn.",
+    q: "What channels do operators use?",
+    a: "Operators interact with EZee through SMS, email, Slack, Microsoft Teams, WhatsApp, or our web portal — whichever channel they already use.",
   },
   {
     q: "Is my data used to train AI models?",
@@ -19,23 +19,23 @@ const faqs = [
   },
   {
     q: "How is this different from ChatGPT or a generic AI chatbot?",
-    a: "Generic AI tools answer from the open internet. EZee Assist answers exclusively from your brand's own knowledge base — operating manuals, SOPs, training videos, and communications. Every answer is brand-specific, accurate, and citable.",
+    a: "Generic AI answers from the open internet. EZee answers exclusively from your brand's knowledge base, your systems, and your data. Every answer is brand-specific. Every action happens inside your tech stack. Every workflow is built for your operations.",
   },
   {
-    q: "What happens when the AI can't answer a question?",
+    q: "What happens when AI can't answer a question?",
     a: "It automatically creates a support ticket with the full conversation context and routes it to the right person on your team. No question falls through the cracks.",
   },
   {
-    q: "How many locations can EZee Assist support?",
-    a: "There's no limit. We support franchise networks from 10 locations to 1,000+. The platform scales with your network — adding a new location takes minutes, not weeks.",
+    q: "How many locations can EZee support?",
+    a: "We support networks from 10 to 4,000+ locations today. The platform scales with your network.",
   },
   {
     q: "What does pricing look like?",
-    a: "Pricing is based on your network size and usage. We offer flexible plans for growing brands and enterprise pricing for large networks. Book a demo and we'll walk you through options that fit your budget.",
+    a: "Pricing is based on your network size and usage. We offer flexible plans for growing brands and enterprise pricing for large networks. Book a demo for options that fit your budget.",
   },
   {
-    q: "Is EZee Assist secure and compliant?",
-    a: "Yes. We follow enterprise-grade security practices aligned with SOC 2 Type II controls. All data is encrypted with TLS 1.2/1.3 in transit and AES 256-bit at rest. Each customer's data is isolated in dedicated AWS EC2 instances.",
+    q: "What kind of workflows can EZee automate?",
+    a: "Anything you can describe. Examples: weekly KPI reports pulled from QuickBooks and Mindbody, proactive compliance flags for expired insurance or missing financials, automated staffing optimization based on demand and bookings, onboarding checklists for new locations, and much more. You describe the workflow, EZee builds and executes it.",
   },
 ];
 

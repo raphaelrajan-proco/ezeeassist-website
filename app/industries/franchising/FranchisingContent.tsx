@@ -68,12 +68,21 @@ export default function FranchisingContent() {
             </div>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Franchise Brands</p>
             <h1 className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.03em" }}>
-              The AI support platform built{" "}
-              <span className="text-[#00AEEF]">exclusively for franchise brands.</span>
+              The AI support agent built for{" "}
+              <span className="text-[#00AEEF]">franchise execution.</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
-              EZee Assist helps franchise systems centralize brand knowledge, reduce repetitive support questions by over 60%, and give every franchisee instant answers — 24/7, through the channels they already use.
+              EZee Assist helps franchise systems automate support, coach operators on performance, ensure brand compliance, and drive unstoppable execution across the network.
             </p>
+            <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold text-gray-500 dark:text-gray-400">
+              <span className="text-[#00AEEF]">60+ franchise brands</span>
+              <span>·</span>
+              <span className="text-[#00AEEF]">4,000+ locations</span>
+              <span>·</span>
+              <span className="text-[#00AEEF]">10,000+ users</span>
+              <span>·</span>
+              <span className="text-[#00AEEF]">70%+ support deflection</span>
+            </div>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/contact"><Button size="lg">Book a Demo</Button></Link>
               <Link href="/case-studies"><Button size="lg" variant="secondary">See Case Studies <ArrowRight size={16} className="ml-2" /></Button></Link>

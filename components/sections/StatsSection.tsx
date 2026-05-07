@@ -3,10 +3,10 @@
 import CountUp from "react-countup";
 
 const stats = [
-  { prefix: "",   end: 67,   suffix: "%",  decimals: 0, label: "Support ticket reduction for WSI globally" },
-  { prefix: "",   end: 93,   suffix: "%",  decimals: 0, label: "AI resolution rate at DekaLash" },
-  { prefix: "",   end: 2600, suffix: "+",  decimals: 0, label: "Queries answered for DivaDance in 6 months" },
-  { prefix: "< ", end: 30,   suffix: "s",  decimals: 0, label: "Average response time, around the clock" },
+  { prefix: "",  end: 60,    suffix: "+",  decimals: 0, label: "Franchise brands" },
+  { prefix: "",  end: 4000,  suffix: "+",  decimals: 0, label: "Locations" },
+  { prefix: "",  end: 10000, suffix: "+",  decimals: 0, label: "Users" },
+  { prefix: "",  end: 70,    suffix: "%+", decimals: 0, label: "Support deflection" },
 ];
 
 export default function StatsSection() {

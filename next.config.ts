@@ -10,6 +10,17 @@ const nextConfig: NextConfig = {
     ],
   },
 
+  async redirects() {
+    return [
+      { source: "/platform",               destination: "/solution",               permanent: true },
+      { source: "/platform/ai-agent",      destination: "/solution",               permanent: true },
+      { source: "/platform/insights",      destination: "/solution",               permanent: true },
+      { source: "/platform/integrations",  destination: "/solution/integrations",  permanent: true },
+      { source: "/platform/ticketing",     destination: "/solution/ticketing",     permanent: true },
+      { source: "/platform/workflows",     destination: "/solution/workflows",     permanent: true },
+    ];
+  },
+
   async headers() {
     return [
       {

@@ -16,16 +16,16 @@ const industries = [
   {
     icon: Store,
     title: "Franchise Brands",
-    description: "Give every franchisee instant access to operating manuals, SOPs, training materials, and brand guidelines — without overwhelming your support team.",
-    stat: "67% average support reduction",
+    description: "Automate support, coach operators on performance, ensure brand compliance, and drive unstoppable execution across the franchise network.",
+    stat: "70%+ support deflection",
     href: "/industries/franchising",
     linkLabel: "Explore franchising",
   },
   {
     icon: Building2,
     title: "Multi-Location Businesses",
-    description: "Standardize operations and support across every location. One knowledge base, consistent answers, centralized visibility.",
-    stat: "24/7 support across every location",
+    description: "Centralized AI execution across every location — support, coaching, and compliance automation for multi-location businesses.",
+    stat: "24/7 across every location",
     href: "/industries/multi-location",
     linkLabel: "Explore multi-location",
   },
@@ -76,11 +76,11 @@ export default function IndustriesContent() {
           <motion.div className="max-w-3xl" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Industries</p>
             <h1 className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.03em" }}>
-              Purpose-built AI support for{" "}
-              <span className="text-[#00AEEF]">every multi-location business.</span>
+              Purpose-built AI execution for every{" "}
+              <span className="text-[#00AEEF]">multi-location business.</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
-              Whether you operate a franchise network, multi-location service brand, or a university campus system — EZee Assist gives your teams instant answers from your own knowledge base, 24/7.
+              Whether you operate a franchise network, multi-location service brand, or campus system — EZee gives your operators an AI support agent for support, coaching, and compliance.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/contact"><Button size="lg">Book a Demo</Button></Link>

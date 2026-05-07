@@ -25,7 +25,7 @@ const evolution = [
   {
     icon: CheckCircle2,
     title: "Answers",
-    body: "AI answers franchisee questions instantly from your knowledge base.",
+    body: "Instant answers from all your content and systems.",
     tag: "Available now",
     tagStyle: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
     done: true,
@@ -33,7 +33,7 @@ const evolution = [
   {
     icon: CheckCircle2,
     title: "Actions",
-    body: "Smart ticketing routes unanswered questions to the right person with full context.",
+    body: "Take actions directly inside your tech stack through AI.",
     tag: "Available now",
     tagStyle: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
     done: true,
@@ -41,35 +41,51 @@ const evolution = [
   {
     icon: Zap,
     title: "Automations",
-    body: "AI agents execute multi-step workflows: onboarding sequences, compliance checks, vendor coordination, and more.",
-    tag: "Coming Soon",
+    body: "Always-on workflows running at scale across the value chain.",
+    tag: "Available now",
     tagStyle: "bg-[#00AEEF]/10 text-[#00AEEF]",
-    done: false,
+    done: true,
   },
 ];
 
-const workflows = [
-  {
-    icon: Users,
-    title: "New franchisee onboarding",
-    body: "Automatically trigger a checklist sequence when a new location is added — from system access to training modules to initial compliance checks.",
-  },
-  {
-    icon: Workflow,
-    title: "Vendor coordination",
-    body: "When a franchisee reports an equipment issue, AI identifies the right vendor, drafts the request, and tracks resolution.",
-  },
+const quoteWorkflows = [
   {
     icon: ClipboardList,
-    title: "Compliance monitoring",
-    body: "Automatically check that each location has completed required training, certifications, and documentation on schedule.",
+    title: "Live KPI Reports",
+    quote: "EZee, every Friday, send me a live KPI report by location from QuickBooks, Mindbody, and Google Business Profile.",
   },
   {
     icon: Bell,
-    title: "Content update propagation",
+    title: "Proactive Escalation",
+    quote: "Build a workflow that proactively flags issues needing escalation, like poor reviews, expired insurance, or missing financials.",
+  },
+  {
+    icon: Users,
+    title: "Staffing Optimization",
+    quote: "EZee, optimize my staffing and schedule for this unit based on demand, bookings, and performance trends.",
+  },
+];
+
+const featureWorkflows = [
+  {
+    icon: PackageCheck,
+    title: "New Location Onboarding",
+    body: "Automatically trigger onboarding sequences when a new location is added — system access, training modules, compliance checks.",
+  },
+  {
+    icon: Workflow,
+    title: "Compliance Monitoring",
+    body: "Continuously monitor that each location meets required certifications, insurance, and documentation standards. Flag issues before they become problems.",
+  },
+  {
+    icon: Bell,
+    title: "Brand Standard Enforcement",
     body: "When you update an SOP or policy, automatically notify affected locations and track acknowledgment.",
   },
 ];
+
+// Legacy alias for the existing code below
+const workflows = featureWorkflows;
 
 export default function WorkflowsContent() {
   return (
@@ -84,35 +100,30 @@ export default function WorkflowsContent() {
         <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-8 lg:py-36">
           <motion.div className="max-w-3xl" {...fadeUp(0)}>
             <div className="mb-5 flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500">
-              <Link href="/platform" className="hover:text-[#00AEEF] transition-colors">Platform</Link>
+              <Link href="/solution" className="hover:text-[#00AEEF] transition-colors">Solution</Link>
               <span>/</span>
-              <span className="font-semibold text-[#00AEEF]">Workflow Builder</span>
+              <span className="font-semibold text-[#00AEEF]">Agentic Workflows</span>
             </div>
 
-            {/* Coming soon pill */}
-            <div className="mb-5 inline-flex items-center rounded-full border border-[#00AEEF]/30 bg-[#00AEEF]/[0.07] px-4 py-1.5">
-              <span className="text-xs font-bold text-[#00AEEF] uppercase tracking-widest">Coming Soon</span>
-            </div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-5">Agentic Workflows</p>
 
             <h1
               className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
               style={{ letterSpacing: "-0.03em" }}
             >
-              Go beyond answers.{" "}
-              <span className="text-[#00AEEF]">Automate franchise operations.</span>
+              AI-powered workflows.{" "}
+              <span className="text-[#00AEEF]">Dream it up. EZee executes it.</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
-              EZee Assist&apos;s Agentic Workflow Builder lets you create multi-step
-              operational workflows powered by AI — from onboarding checklists to
-              vendor coordination to compliance tracking.
+              Build any use case across the tech stack. Describe what you want in plain language — EZee maps it out and runs automations at scale.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/contact">
-                <Button size="lg">Join the Waitlist</Button>
+                <Button size="lg">Book a Demo</Button>
               </Link>
-              <Link href="/contact">
+              <Link href="#examples">
                 <Button size="lg" variant="secondary">
-                  Book a Demo to Learn More
+                  See Examples
                   <ArrowRight size={16} className="ml-2" />
                 </Button>
               </Link>
@@ -172,7 +183,7 @@ export default function WorkflowsContent() {
       </section>
 
       {/* ── Example workflows ────────────────────────────── */}
-      <section className="w-full bg-white dark:bg-[#0D0D0D]">
+      <section id="examples" className="w-full bg-white dark:bg-[#0D0D0D]">
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
           <motion.div className="text-center mb-16" {...fadeUp(0)}>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
@@ -182,35 +193,49 @@ export default function WorkflowsContent() {
               className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
-              What you&apos;ll be able to{" "}
-              <span className="text-[#00AEEF]">automate.</span>
+              What you can automate{" "}
+              <span className="text-[#00AEEF]">with EZee.</span>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+          {/* Quote-style cards — operator requests */}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3 mb-6">
+            {quoteWorkflows.map(({ icon: Icon, title, quote }, i) => (
+              <motion.div
+                key={title}
+                {...fadeUp(i * 0.08)}
+                className="card-hover-blue group relative overflow-hidden rounded-2xl border-2 border-[#00AEEF]/20 bg-[#F7F8FA] dark:bg-[#111111] p-7"
+              >
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[#00AEEF]/10">
+                  <Icon size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
+                </div>
+                <h3 className="mb-3 text-base font-bold text-[#0A0A0A] dark:text-[#F0F0F0]">{title}</h3>
+                <p className="text-sm leading-6 text-[#00AEEF] font-medium italic">&ldquo;{quote}&rdquo;</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Feature cards */}
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 mb-8">
             {workflows.map(({ icon: Icon, title, body }, i) => (
               <motion.div
                 key={title}
                 {...fadeUp(i * 0.08)}
-                className="card-hover-blue group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-8"
+                className="card-hover-blue group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-7"
               >
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                {/* Coming soon badge */}
-                <div className="absolute top-5 right-5">
-                  <span className="rounded-full bg-[#00AEEF]/10 px-2.5 py-1 text-[10px] font-bold text-[#00AEEF] uppercase tracking-wide">
-                    Coming Soon
-                  </span>
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[#00AEEF]/10">
+                  <Icon size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
-                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-[#00AEEF]/10">
-                  <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
-                </div>
-                <h3 className="mb-3 text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ letterSpacing: "-0.01em" }}>
-                  {title}
-                </h3>
-                <p className="text-base leading-7 text-gray-600 dark:text-gray-400">{body}</p>
+                <h3 className="mb-2 text-base font-bold text-[#0A0A0A] dark:text-[#F0F0F0]">{title}</h3>
+                <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">{body}</p>
               </motion.div>
             ))}
           </div>
+
+          <motion.p {...fadeUp(0.3)} className="text-center text-sm text-[#00AEEF] font-semibold">
+            +++ and more — any workflow you can describe, EZee can build and execute.
+          </motion.p>
         </div>
       </section>
 
@@ -226,19 +251,19 @@ export default function WorkflowsContent() {
         />
         <div className="relative mx-auto max-w-3xl px-6 py-28 text-center lg:px-8 lg:py-32">
           <motion.div {...fadeUp(0)}>
-            <div className="mb-5 inline-flex items-center rounded-full border border-[#00AEEF]/30 bg-[#00AEEF]/[0.07] px-4 py-1.5">
-              <span className="text-xs font-bold text-[#00AEEF] uppercase tracking-widest">Early Access</span>
-            </div>
             <h2
               className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
-              Be the first to automate your{" "}
-              <span className="text-[#00AEEF]">franchise operations.</span>
+              Ready to automate your{" "}
+              <span className="text-[#00AEEF]">operations?</span>
             </h2>
+            <p className="mt-5 text-lg text-gray-600 dark:text-gray-400 max-w-xl mx-auto leading-8">
+              Describe any workflow. EZee builds and executes it at scale across your entire network.
+            </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
-              <Link href="/contact"><Button size="lg">Join the Waitlist</Button></Link>
-              <Link href="/platform"><Button size="lg" variant="secondary">Explore the Platform <ArrowRight size={16} className="ml-2" /></Button></Link>
+              <Link href="/contact"><Button size="lg">Book a Demo</Button></Link>
+              <Link href="/solution"><Button size="lg" variant="secondary">Explore the Solution <ArrowRight size={16} className="ml-2" /></Button></Link>
             </div>
             <p className="mt-6 text-sm text-gray-400 dark:text-gray-500">
               We&apos;re onboarding design partners now. Get early access and help shape the product.

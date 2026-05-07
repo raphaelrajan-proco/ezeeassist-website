@@ -29,55 +29,73 @@ const fadeUp = (delay = 0) => ({
 const pillars = [
   {
     icon: Brain,
-    title: "AI Knowledge Engine",
+    title: "Integrations & Knowledge Engine",
     description:
-      "Connects to every document, video, and SOP your brand owns. Delivers instant, brand-accurate answers — not generic AI guesses.",
+      "Drives, CRMs, POS, ERP/FMS, LMS, Video, Comms, Marketing, Accounting — EZee connects to it all and becomes your business's universal AI interface.",
     bullets: [
-      "Ingests PDFs, Word docs, Google Drive, SharePoint",
-      "Understands context across your entire knowledge base",
-      "Answers grounded in your content, cited back to source",
+      "250+ integrations across every tech stack category",
+      "No migration — content stays where it lives",
+      "Answers grounded in your data, cited back to source",
       "Updates automatically when your content changes",
     ],
     accent: "#00AEEF",
+    link: { label: "See all integrations →", href: "/solution/integrations" },
   },
   {
-    icon: MessageCircle,
-    title: "Omnichannel Delivery",
+    icon: ShieldCheck,
+    title: "Agentic Workflows",
     description:
-      "Franchisees get answers wherever they already work — no new apps, no training, no behavior change.",
+      "Build any use case across the tech stack. Weekly KPI reports, compliance monitoring, staffing optimization — described conversationally, automated at scale.",
     bullets: [
-      "SMS / text message (most popular)",
-      "Slack & Microsoft Teams",
-      "Email & web portal",
-      "Embeddable chat widget for your intranet",
+      "Conversational workflow builder",
+      "Multi-step automations across your entire stack",
+      "Always-on — runs without human intervention",
+      "You dream it up, EZee executes it",
     ],
-    accent: "#0A0A0A",
+    accent: "#00AEEF",
+    link: { label: "Explore workflows →", href: "/solution/workflows" },
   },
   {
     icon: TrendingUp,
-    title: "Intelligent Escalation",
+    title: "Intelligent Ticketing",
     description:
-      "When AI can't answer, it doesn't just shrug. It opens a ticket with full conversation context pre-attached and routes to the right person.",
+      "When AI needs human judgment, EZee's ticketing system creates a contextual ticket — automatically categorized, prioritized, and routed to the right person.",
     bullets: [
       "Zero-friction handoff from AI to human",
-      "Full conversation history attached to every ticket",
+      "Full conversation history on every ticket",
       "Smart routing by topic, location, or urgency",
       "SLA tracking and response-time reporting",
     ],
     accent: "#00AEEF",
+    link: { label: "Learn about ticketing →", href: "/solution/ticketing" },
   },
   {
-    icon: TrendingUp,
-    title: "Analytics & Insights",
+    icon: MessageCircle,
+    title: "One central platform to manage it all.",
     description:
-      "See exactly what your network is asking, where knowledge gaps exist, and how to fix them — before they become problems.",
+      "Insights. AI training. Communications. Workflows. See what operators are asking, where gaps exist, and how your knowledge base is performing — all from one dashboard.",
     bullets: [
-      "Top questions by location and category",
-      "Deflection rate and resolution time",
       "Knowledge gap detection",
+      "Deflection rate and resolution time",
+      "Operator usage patterns by location",
       "Exportable reports for leadership",
     ],
     accent: "#0A0A0A",
+    link: null,
+  },
+  {
+    icon: TrendingUp,
+    title: "Operators access EZee through channels they already use.",
+    description:
+      "SMS, email, Slack, Microsoft Teams, WhatsApp, web portal. No new apps. No behavior change.",
+    bullets: [
+      "SMS / text message",
+      "Slack & Microsoft Teams",
+      "Email & web portal",
+      "WhatsApp",
+    ],
+    accent: "#0A0A0A",
+    link: null,
   },
 ];
 
@@ -161,21 +179,21 @@ export default function PlatformContent() {
             {...fadeUp(0)}
           >
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">
-              The Platform
+              The Solution
             </p>
             <h1
               className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
               style={{ letterSpacing: "-0.03em" }}
             >
-              Everything your
+              One AI agent.
               <br />
-              network needs.{" "}
-              <span className="text-[#00AEEF]">Nothing it doesn&apos;t.</span>
+              Your entire tech stack.{" "}
+              <span className="text-[#00AEEF]">Limitless execution.</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
-              EZee Assist combines an AI knowledge engine, omnichannel delivery,
-              intelligent escalation, and real-time analytics into one platform
-              built exclusively for franchise and multi-location brands.
+              EZee connects to all your data and systems — 250+ integrations — and becomes
+              your business&apos;s AI coach. Build support, coaching, compliance workflows,
+              and much more. Conversationally.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/contact">
@@ -206,41 +224,60 @@ export default function PlatformContent() {
               className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
-              Four pillars.{" "}
-              <span className="text-[#00AEEF]">One platform.</span>
+              Three pillars.{" "}
+              <span className="text-[#00AEEF]">One agent.</span>
             </h2>
           </motion.div>
 
+          {/* Primary 3 pillars */}
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-3 mb-8">
+            {pillars.slice(0, 3).map(({ icon: Icon, title, description, bullets, link }, i) => (
+              <motion.div
+                key={title}
+                {...fadeUp(i * 0.1)}
+                className="card-hover-lift group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#1A1A1A] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)] flex flex-col"
+              >
+                <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#00AEEF]/10">
+                  <Icon size={22} className="text-[#00AEEF]" strokeWidth={1.75} />
+                </div>
+                <h3 className="text-xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3" style={{ letterSpacing: "-0.01em" }}>{title}</h3>
+                <p className="text-base leading-7 text-gray-600 dark:text-gray-400 mb-6 flex-1">{description}</p>
+                <ul className="space-y-2.5 mb-5">
+                  {bullets.map((b) => (
+                    <li key={b} className="flex items-start gap-3">
+                      <CheckCircle2 size={16} className="mt-0.5 flex-shrink-0 text-[#00AEEF]" strokeWidth={2} />
+                      <span className="text-sm text-gray-600 dark:text-gray-400">{b}</span>
+                    </li>
+                  ))}
+                </ul>
+                {link && (
+                  <Link href={link.href} className="text-sm font-semibold text-[#00AEEF] hover:underline underline-offset-4 mt-auto">
+                    {link.label}
+                  </Link>
+                )}
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Supporting 2 pillars */}
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-            {pillars.map(({ icon: Icon, title, description, bullets }, i) => (
+            {pillars.slice(3).map(({ icon: Icon, title, description, bullets }, i) => (
               <motion.div
                 key={title}
                 {...fadeUp(i * 0.1)}
                 className="card-hover-lift group relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#1A1A1A] p-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_16px_rgba(0,0,0,0.05)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
               >
-                {/* Top accent bar */}
                 <div className="absolute top-0 left-0 h-0.5 w-full bg-gradient-to-r from-[#00AEEF]/60 via-[#00AEEF] to-[#00AEEF]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
                 <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-xl bg-[#00AEEF]/10">
                   <Icon size={22} className="text-[#00AEEF]" strokeWidth={1.75} />
                 </div>
-
-                <h3
-                  className="text-xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3"
-                  style={{ letterSpacing: "-0.01em" }}
-                >
-                  {title}
-                </h3>
+                <h3 className="text-xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3" style={{ letterSpacing: "-0.01em" }}>{title}</h3>
                 <p className="text-base leading-7 text-gray-600 dark:text-gray-400 mb-6">{description}</p>
-
                 <ul className="space-y-2.5">
                   {bullets.map((b) => (
                     <li key={b} className="flex items-start gap-3">
-                      <CheckCircle2
-                        size={16}
-                        className="mt-0.5 flex-shrink-0 text-[#00AEEF]"
-                        strokeWidth={2}
-                      />
+                      <CheckCircle2 size={16} className="mt-0.5 flex-shrink-0 text-[#00AEEF]" strokeWidth={2} />
                       <span className="text-sm text-gray-600 dark:text-gray-400">{b}</span>
                     </li>
                   ))}

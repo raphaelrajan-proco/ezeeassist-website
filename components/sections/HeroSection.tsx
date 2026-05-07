@@ -59,7 +59,7 @@ export default function HeroSection() {
         {/* Badge */}
         <motion.div custom={0} initial="hidden" animate="visible" variants={fadeUp}>
           <span className="inline-flex items-center gap-2 rounded-full border border-[#00AEEF]/25 bg-[#00AEEF]/[0.07] px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-[#00AEEF]">
-            AI-Powered Franchise Support
+            AI-Powered Multi-Location Execution
           </span>
         </motion.div>
 
@@ -72,12 +72,9 @@ export default function HeroSection() {
           className="mt-8 text-5xl font-extrabold leading-[1.05] tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
           style={{ letterSpacing: "-0.02em" }}
         >
-          Your franchisees have questions{" "}
-          <span className="text-[#00AEEF]">at 2am.</span>
-          <br className="hidden sm:block" />
-          {" "}Now they get{" "}
+          Your AI support agent for{" "}
           <span className="relative inline-block">
-            answers.
+            <span className="text-[#00AEEF]">multi-location execution.</span>
             {/* Underline accent — draws in on load */}
             <motion.span
               initial={{ scaleX: 0 }}
@@ -96,9 +93,8 @@ export default function HeroSection() {
           variants={fadeUp}
           className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-gray-600 dark:text-gray-400 sm:text-xl"
         >
-          EZee Assist is the AI support platform that gives every franchise
-          location instant, accurate answers from your brand&apos;s own knowledge
-          —&nbsp;24/7, through the channels they already use.
+          Automatically resolve repetitive questions. Coach operators on driving
+          business performance. Ensure brand compliance at scale.
         </motion.p>
 
         {/* CTAs */}
@@ -125,7 +121,7 @@ export default function HeroSection() {
           variants={fadeUp}
           className="mt-10 text-sm text-gray-400 dark:text-gray-500"
         >
-          Trusted by 50+ franchise brands across North America
+          Trusted by 60+ brands across 4,000+ locations
         </motion.p>
 
         {/* Floating channel pills */}

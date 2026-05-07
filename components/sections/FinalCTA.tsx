@@ -37,14 +37,13 @@ export default function FinalCTA() {
             className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl lg:text-6xl"
             style={{ letterSpacing: "-0.02em" }}
           >
-            Give your franchisees the support{" "}
-            <span className="text-[#00AEEF]">they deserve.</span>
+            Book a demo{" "}
+            <span className="text-[#00AEEF]">with us.</span>
           </h2>
 
           <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600 dark:text-gray-400">
-            See how leading brands use EZee Assist to reduce support volume,
-            improve franchisee satisfaction, and keep every location running
-            smoothly.
+            See how EZee can transform support, coaching, and compliance
+            across your network.
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">

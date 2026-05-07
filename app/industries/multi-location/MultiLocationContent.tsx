@@ -40,15 +40,15 @@ export default function MultiLocationContent() {
             </div>
             <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Multi-Location Businesses</p>
             <h1 className="text-5xl font-extrabold leading-[1.05] text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl" style={{ letterSpacing: "-0.03em" }}>
-              Centralized knowledge. Consistent operations.{" "}
-              <span className="text-[#00AEEF]">Every location.</span>
+              Centralized AI execution.{" "}
+              <span className="text-[#00AEEF]">Every location. Every channel.</span>
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400 max-w-2xl">
-              EZee Assist helps multi-location businesses standardize operations and give every team member instant access to company knowledge — SOPs, procedures, training materials, and policies — 24/7.
+              Support, coaching, and compliance automation for multi-location businesses. One AI agent connected to your entire tech stack — delivering through the channels your teams already use.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
               <Link href="/contact"><Button size="lg">Book a Demo</Button></Link>
-              <Link href="/platform"><Button size="lg" variant="secondary">Explore the Platform <ArrowRight size={16} className="ml-2" /></Button></Link>
+              <Link href="/solution"><Button size="lg" variant="secondary">Explore the Solution <ArrowRight size={16} className="ml-2" /></Button></Link>
             </div>
           </motion.div>
         </div>
