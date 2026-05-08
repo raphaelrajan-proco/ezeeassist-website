@@ -14,12 +14,13 @@ const fadeUp = {
 };
 
 const channels = [
-  { label: "SMS",        emoji: "💬" },
-  { label: "Email",      emoji: "📧" },
-  { label: "Slack",      emoji: "🔷" },
-  { label: "Teams",      emoji: "🔵" },
-  { label: "WhatsApp",   emoji: "💚" },
-  { label: "Web Portal", emoji: "🌐" },
+  { label: "SMS",              emoji: "💬" },
+  { label: "Email",            emoji: "📧" },
+  { label: "Slack",            emoji: "🔷" },
+  { label: "Teams",            emoji: "🔵" },
+  { label: "Google Chat",      emoji: "💙" },
+  { label: "Chrome Extension", emoji: "🌐" },
+  { label: "Web Portal",       emoji: "🖥️" },
 ];
 
 const bobClasses = [
@@ -29,6 +30,7 @@ const bobClasses = [
   "animate-bob-3",
   "animate-bob-4",
   "animate-bob-5",
+  "animate-bob-0",
 ];
 
 export default function HeroSection() {
@@ -72,17 +74,9 @@ export default function HeroSection() {
           className="mt-8 text-5xl font-extrabold leading-[1.05] tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
           style={{ letterSpacing: "-0.02em" }}
         >
-          Your AI support agent for{" "}
-          <span className="relative inline-block">
-            <span className="text-[#00AEEF]">multi-location execution.</span>
-            {/* Underline accent — draws in on load */}
-            <motion.span
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: 1 }}
-              transition={{ duration: 0.6, ease: "easeOut", delay: 0.9 }}
-              className="absolute -bottom-1 left-0 right-0 h-[3px] origin-left rounded-full bg-[#00AEEF]/40"
-            />
-          </span>
+          Your AI support agent for
+          <br />
+          <span className="text-[#00AEEF]">multi-location execution.</span>
         </motion.h1>
 
         {/* Subheadline */}
