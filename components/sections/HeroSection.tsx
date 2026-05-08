@@ -125,10 +125,10 @@ export default function HeroSection() {
           variants={fadeUp}
           className="mt-10 flex flex-wrap justify-center gap-3"
         >
-          {channels.map(({ label, emoji }, i) => (
+          {channels.map(({ label, emoji }) => (
             <span
               key={label}
-              className={`${bobClasses[i]} inline-flex items-center gap-1.5 rounded-full border border-[#E5E7EB] dark:border-white/[0.12] bg-white dark:bg-[#161616] px-4 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 shadow-sm`}
+              className="inline-flex items-center gap-1.5 rounded-full border border-[#E5E7EB] dark:border-white/[0.12] bg-white dark:bg-[#161616] px-4 py-2 text-xs font-semibold text-gray-600 dark:text-gray-300 shadow-sm"
             >
               <span aria-hidden="true">{emoji}</span>
               {label}
