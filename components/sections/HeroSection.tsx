@@ -74,9 +74,8 @@ export default function HeroSection() {
           className="mt-8 text-5xl font-extrabold leading-[1.05] tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-6xl lg:text-7xl"
           style={{ letterSpacing: "-0.02em" }}
         >
-          Your AI support agent for
-          <br />
-          <span className="text-[#00AEEF]">multi-location execution.</span>
+          <span className="block text-[#0A0A0A] dark:text-[#F0F0F0]">Your AI support agent</span>
+          <span className="block text-[#00AEEF]">for multi-location execution.</span>
         </motion.h1>
 
         {/* Subheadline */}
