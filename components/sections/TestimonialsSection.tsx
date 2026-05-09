@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 const testimonials = [
   {
@@ -19,20 +20,100 @@ const testimonials = [
   },
 ];
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-80px" as const },
-  transition: { duration: 0.7, ease: "easeOut" as const, delay },
-});
+function Testimonial({
+  t,
+  index,
+  total,
+}: {
+  t: (typeof testimonials)[number];
+  index: number;
+  total: number;
+}) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const last = index === total - 1;
+
+  return (
+    <div
+      ref={ref}
+      className="py-16 md:py-24 grid grid-cols-1 md:grid-cols-12 gap-8"
+      style={
+        !last
+          ? {
+              borderBottomWidth: "1px",
+              borderBottomStyle: "solid",
+              borderColor: "var(--ed-rule)",
+            }
+          : {}
+      }
+    >
+      <div className="md:col-span-9">
+        <motion.p
+          initial={{ opacity: 0, filter: "blur(8px)" }}
+          animate={
+            inView
+              ? { opacity: 1, filter: "blur(0px)" }
+              : { opacity: 0, filter: "blur(8px)" }
+          }
+          transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+          className="ed-fg text-3xl md:text-4xl lg:text-5xl"
+          style={{
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 500,
+            fontStyle: "italic",
+            letterSpacing: "-0.025em",
+            lineHeight: 1.15,
+          }}
+        >
+          &ldquo;{t.quote}&rdquo;
+        </motion.p>
+      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7, ease: "easeOut", delay: 0.7 }}
+        className="md:col-span-3 flex md:items-end"
+      >
+        <div>
+          <p
+            className="ed-fg text-base md:text-lg"
+            style={{ fontWeight: 500, letterSpacing: "-0.01em" }}
+          >
+            {t.name}
+          </p>
+          <p
+            className="ed-fg-muted text-sm md:text-base mt-1"
+            style={{ lineHeight: 1.4 }}
+          >
+            {t.title}
+          </p>
+          <p
+            className="ed-fg-muted text-sm md:text-base"
+            style={{ lineHeight: 1.4 }}
+          >
+            {t.company}
+          </p>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 export default function TestimonialsSection() {
+  const headRef = useRef(null);
+  const headInView = useInView(headRef, { once: true, margin: "-100px" });
+
   return (
     <section className="w-full ed-bg-alt">
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
 
-        {/* Heading */}
-        <motion.div {...fadeUp(0)} className="max-w-4xl mb-20 md:mb-28">
+        <motion.div
+          ref={headRef}
+          initial={{ opacity: 0, y: 22 }}
+          animate={headInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-4xl mb-20 md:mb-28"
+        >
           <p className="ed-overline mb-8">Customer Stories</p>
           <h2
             className="ed-fg text-5xl md:text-6xl lg:text-7xl"
@@ -48,65 +129,20 @@ export default function TestimonialsSection() {
           </h2>
         </motion.div>
 
-        {/* Style C — typography only, separated by horizontal rules */}
-        <div
-          className="border-t ed-rule"
-          style={{ borderTopWidth: "1px", borderTopStyle: "solid" }}
-        >
-          {testimonials.map((t, i) => (
-            <motion.div
-              key={t.name}
-              {...fadeUp(0.05 + i * 0.1)}
-              className="py-16 md:py-24 grid grid-cols-1 md:grid-cols-12 gap-8"
-              style={
-                i !== testimonials.length - 1
-                  ? {
-                      borderBottomWidth: "1px",
-                      borderBottomStyle: "solid",
-                      borderColor: "var(--ed-rule)",
-                    }
-                  : {}
-              }
-            >
-              <div className="md:col-span-9">
-                <p
-                  className="ed-fg text-3xl md:text-4xl lg:text-5xl"
-                  style={{
-                    fontFamily: "var(--font-editorial)",
-                    fontWeight: 500,
-                    fontStyle: "italic",
-                    letterSpacing: "-0.025em",
-                    lineHeight: 1.15,
-                  }}
-                >
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-              </div>
-              <div className="md:col-span-3 flex md:items-end">
-                <div>
-                  <p
-                    className="ed-fg text-base md:text-lg"
-                    style={{ fontWeight: 500, letterSpacing: "-0.01em" }}
-                  >
-                    {t.name}
-                  </p>
-                  <p
-                    className="ed-fg-muted text-sm md:text-base mt-1"
-                    style={{ lineHeight: 1.4 }}
-                  >
-                    {t.title}
-                  </p>
-                  <p
-                    className="ed-fg-muted text-sm md:text-base"
-                    style={{ lineHeight: 1.4 }}
-                  >
-                    {t.company}
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        <span
+          className="ed-rule-draw"
+          data-visible={headInView}
+          aria-hidden="true"
+        />
+
+        {testimonials.map((t, i) => (
+          <Testimonial
+            key={t.name}
+            t={t}
+            index={i}
+            total={testimonials.length}
+          />
+        ))}
       </div>
     </section>
   );

@@ -23,68 +23,98 @@ const steps = [
 
 function Step({ step, index }: { step: (typeof steps)[0]; index: number }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-100px" });
   const last = index === steps.length - 1;
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 24 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.08 }}
-      className={`grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 py-16 md:py-24 ${
-        last ? "" : "border-b ed-rule"
-      }`}
-      style={!last ? { borderBottomWidth: "1px", borderBottomStyle: "solid" } : {}}
-    >
-      <div className="md:col-span-3">
-        <p
-          className="ed-accent text-8xl md:text-[10rem]"
-          style={{
-            fontFamily: "var(--font-editorial)",
-            fontWeight: 500,
-            letterSpacing: "-0.05em",
-            lineHeight: 0.85,
-          }}
-        >
-          {step.number}
-        </p>
+    <>
+      <div
+        ref={ref}
+        className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 py-16 md:py-24"
+      >
+        <div className="md:col-span-3">
+          {/* Massive number — scale + fade in, with character stagger */}
+          <motion.p
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={inView ? { opacity: 1, scale: 1 } : {}}
+            transition={{ duration: 1.0, ease: [0.22, 1, 0.36, 1] }}
+            className="ed-accent text-8xl md:text-[10rem]"
+            style={{
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+              letterSpacing: "-0.05em",
+              lineHeight: 0.85,
+              transformOrigin: "left bottom",
+            }}
+          >
+            {step.number.split("").map((char, i) => (
+              <motion.span
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{
+                  duration: 0.7,
+                  ease: "easeOut",
+                  delay: 0.1 + i * 0.08,
+                }}
+                style={{ display: "inline-block" }}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </motion.p>
+        </div>
+
+        <div className="md:col-span-9 flex flex-col justify-center">
+          <motion.h3
+            initial={{ opacity: 0, y: 14 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.45 }}
+            className="ed-fg text-3xl md:text-4xl lg:text-5xl mb-6"
+            style={{
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+              letterSpacing: "-0.03em",
+              lineHeight: 1.05,
+            }}
+          >
+            {step.title}
+          </motion.h3>
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.6 }}
+            className="ed-fg-muted text-lg md:text-xl max-w-2xl"
+            style={{ lineHeight: 1.55, fontWeight: 400 }}
+          >
+            {step.body}
+          </motion.p>
+        </div>
       </div>
-      <div className="md:col-span-9 flex flex-col justify-center">
-        <h3
-          className="ed-fg text-3xl md:text-4xl lg:text-5xl mb-6"
-          style={{
-            fontFamily: "var(--font-editorial)",
-            fontWeight: 500,
-            letterSpacing: "-0.03em",
-            lineHeight: 1.05,
-          }}
-        >
-          {step.title}
-        </h3>
-        <p
-          className="ed-fg-muted text-lg md:text-xl max-w-2xl"
-          style={{ lineHeight: 1.55, fontWeight: 400 }}
-        >
-          {step.body}
-        </p>
-      </div>
-    </motion.div>
+
+      {!last && (
+        <span
+          className="ed-rule-draw"
+          data-visible={inView}
+          aria-hidden="true"
+        />
+      )}
+    </>
   );
 }
 
 export default function HowItWorksSection() {
   const headRef = useRef(null);
-  const headInView = useInView(headRef, { once: true, margin: "-80px" });
+  const headInView = useInView(headRef, { once: true, margin: "-100px" });
 
   return (
     <section className="w-full ed-bg-alt">
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
         <motion.div
           ref={headRef}
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 22 }}
           animate={headInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-4xl mb-16 md:mb-24"
         >
           <p className="ed-overline mb-8">How It Works</p>
@@ -102,14 +132,15 @@ export default function HowItWorksSection() {
           </h2>
         </motion.div>
 
-        <div
-          className="border-t ed-rule"
-          style={{ borderTopWidth: "1px", borderTopStyle: "solid" }}
-        >
-          {steps.map((step, i) => (
-            <Step key={step.number} step={step} index={i} />
-          ))}
-        </div>
+        <span
+          className="ed-rule-draw"
+          data-visible={headInView}
+          aria-hidden="true"
+        />
+
+        {steps.map((step, i) => (
+          <Step key={step.number} step={step} index={i} />
+        ))}
       </div>
     </section>
   );

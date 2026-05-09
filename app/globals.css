@@ -143,6 +143,94 @@
   background-color: #0095CC;
 }
 
+/* ── Editorial motion primitives ───────────────────────── */
+
+/* Soft ambient blue blob — used behind the hero headline.
+   Slow drift + opacity breathing. Matches the deck's title-slide accent. */
+@keyframes ed-blob-drift {
+  0%, 100% { transform: translate(0, 0) scale(1);   opacity: 0.55; }
+  33%      { transform: translate(3%, -2%) scale(1.06); opacity: 0.85; }
+  66%      { transform: translate(-2%, 3%) scale(0.96); opacity: 0.50; }
+}
+.theme-editorial .ed-hero-blob {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 9999px;
+  filter: blur(80px);
+  background: radial-gradient(circle, rgba(0,174,239,0.45) 0%, rgba(0,174,239,0.05) 60%, transparent 100%);
+  animation: ed-blob-drift 9s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Horizontal rule that draws itself when entering the viewport.
+   Apply via `data-ed-draw="true"` after IntersectionObserver fires. */
+@keyframes ed-rule-draw {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.theme-editorial .ed-rule-draw {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: var(--ed-rule);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+.theme-editorial .ed-rule-draw[data-visible="true"] {
+  animation: ed-rule-draw 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Blue-wipe for accent words in headlines. The element starts in muted
+   foreground colour, then a clipped overlay sweeps left→right in brand blue. */
+@keyframes ed-blue-wipe {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
+}
+.theme-editorial .ed-blue-wipe {
+  position: relative;
+  color: var(--ed-fg);
+  display: inline-block;
+}
+.theme-editorial .ed-blue-wipe[data-visible="true"]::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  color: var(--ed-accent);
+  clip-path: inset(0 100% 0 0);
+  animation: ed-blue-wipe 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.4s forwards;
+  pointer-events: none;
+}
+
+/* Subtle pulse on the primary "Book a Demo" CTA — slow scale loop. */
+@keyframes ed-cta-pulse {
+  0%, 100% { transform: scale(1);    box-shadow: 0 0 0 0   rgba(0,174,239,0.30); }
+  50%      { transform: scale(1.02); box-shadow: 0 0 0 14px rgba(0,174,239,0); }
+}
+.theme-editorial .ed-cta-pulse {
+  animation: ed-cta-pulse 3.2s ease-in-out infinite;
+  will-change: transform, box-shadow;
+}
+
+/* Hub-and-spoke connector dot animation. Used by IntegrationsHub.
+   Travels along an SVG line from the outer node to the centre node. */
+@keyframes ed-hub-line-draw {
+  from { stroke-dashoffset: var(--dash-len, 220); }
+  to   { stroke-dashoffset: 0; }
+}
+.theme-editorial .ed-hub-line {
+  stroke-dasharray: var(--dash-len, 220);
+  stroke-dashoffset: var(--dash-len, 220);
+}
+.theme-editorial .ed-hub-line[data-visible="true"] {
+  animation: ed-hub-line-draw 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Phone-mockup chat bubble entry — used inside HeroPhoneMockup. */
+@keyframes ed-msg-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
 /* ─── Base Styles ─────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 

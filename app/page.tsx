@@ -8,6 +8,7 @@ import TrustBar from "@/components/sections/TrustBarEditorial";
 import WhatIsSection from "@/components/sections/WhatIsSection";
 import ProblemSection from "@/components/sections/ProblemSection";
 import HowItWorksSection from "@/components/sections/HowItWorksSection";
+import IntegrationsHub from "@/components/sections/IntegrationsHub";
 import StatsSection from "@/components/sections/StatsSection";
 import CaseStudyCarousel from "@/components/sections/CaseStudyCarousel";
 import ComparisonSection from "@/components/sections/ComparisonSection";
@@ -122,6 +123,7 @@ export default function Home() {
         <WhatIsSection />
         <ProblemSection />
         <HowItWorksSection />
+        <IntegrationsHub />
         <StatsSection />
         <CaseStudyCarousel />
         <ComparisonSection />

@@ -43,7 +43,7 @@ export default function FinalCTA() {
           </p>
 
           <div className="mt-12 md:mt-16 flex flex-col sm:flex-row gap-4">
-            <Link href="/contact" className="ed-btn ed-btn-blue">
+            <Link href="/contact" className="ed-btn ed-btn-blue ed-cta-pulse">
               Book a Demo
             </Link>
             <Link href="/industries" className="ed-btn ed-btn-secondary">

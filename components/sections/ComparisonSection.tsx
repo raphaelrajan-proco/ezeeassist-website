@@ -13,22 +13,94 @@ const rows = [
   { topic: "Workflows",        before: "Manual. Repetitive. Error-prone.",          after: "AI-powered. Automated. At scale." },
 ];
 
+function Row({
+  topic,
+  before,
+  after,
+  index,
+  total,
+  inView,
+}: {
+  topic: string;
+  before: string;
+  after: string;
+  index: number;
+  total: number;
+  inView: boolean;
+}) {
+  const last = index === total - 1;
+  const baseDelay = 0.15 + index * 0.08;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: baseDelay }}
+      className="relative grid grid-cols-[1fr_2fr_2fr] gap-6 md:gap-12 py-6 md:py-8"
+      style={
+        !last
+          ? {
+              borderBottomWidth: "1px",
+              borderBottomStyle: "solid",
+              borderColor: "var(--ed-rule)",
+            }
+          : {}
+      }
+    >
+      {/* EZee column blue accent — fills in just after the row arrives */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={inView ? { opacity: 1 } : {}}
+        transition={{ duration: 0.7, ease: "easeOut", delay: baseDelay + 0.25 }}
+        aria-hidden="true"
+        className="absolute pointer-events-none"
+        style={{
+          top: 0,
+          bottom: 0,
+          right: 0,
+          width: "calc(40% - 12px)",
+          backgroundColor: "rgba(0,174,239,0.05)",
+        }}
+      />
+
+      <p
+        className="ed-fg text-base md:text-lg relative"
+        style={{
+          fontFamily: "var(--font-editorial)",
+          fontWeight: 500,
+          letterSpacing: "-0.01em",
+        }}
+      >
+        {topic}
+      </p>
+      <p className="ed-fg-muted text-base md:text-lg relative" style={{ lineHeight: 1.45 }}>
+        {before}
+      </p>
+      <p
+        className="ed-fg text-base md:text-lg relative"
+        style={{ lineHeight: 1.45, fontWeight: 500 }}
+      >
+        {after}
+      </p>
+    </motion.div>
+  );
+}
+
 export default function ComparisonSection() {
   const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
     <section className="w-full ed-bg">
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 22 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, ease: "easeOut" }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-4xl mb-16 md:mb-24"
         >
           <p className="ed-overline mb-8">Side by Side</p>
           <h2
-            ref={ref}
             className="ed-fg text-5xl md:text-6xl lg:text-7xl"
             style={{
               fontFamily: "var(--font-editorial)",
@@ -42,15 +114,24 @@ export default function ComparisonSection() {
           </h2>
         </motion.div>
 
-        {/* Editorial table — no card, no shadow, just rules */}
-        <div
-          className="border-t ed-rule"
-          style={{ borderTopWidth: "1px", borderTopStyle: "solid" }}
-        >
+        <div ref={ref}>
+          <span
+            className="ed-rule-draw"
+            data-visible={inView}
+            aria-hidden="true"
+          />
+
           {/* Header */}
-          <div
-            className="grid grid-cols-[1fr_2fr_2fr] gap-6 md:gap-12 py-6 border-b ed-rule"
-            style={{ borderBottomWidth: "1px", borderBottomStyle: "solid" }}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={inView ? { opacity: 1 } : {}}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="grid grid-cols-[1fr_2fr_2fr] gap-6 md:gap-12 py-6"
+            style={{
+              borderBottomWidth: "1px",
+              borderBottomStyle: "solid",
+              borderColor: "var(--ed-rule)",
+            }}
           >
             <div />
             <p
@@ -65,46 +146,18 @@ export default function ComparisonSection() {
             >
               With EZee
             </p>
-          </div>
+          </motion.div>
 
-          {rows.map(({ topic, before, after }, i) => (
-            <motion.div
-              key={topic}
-              initial={{ opacity: 0, y: 12 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 + i * 0.05 }}
-              className={`grid grid-cols-[1fr_2fr_2fr] gap-6 md:gap-12 py-6 md:py-8 ${
-                i !== rows.length - 1 ? "border-b ed-rule" : ""
-              }`}
-              style={
-                i !== rows.length - 1
-                  ? { borderBottomWidth: "1px", borderBottomStyle: "solid" }
-                  : {}
-              }
-            >
-              <p
-                className="ed-fg text-base md:text-lg"
-                style={{
-                  fontFamily: "var(--font-editorial)",
-                  fontWeight: 500,
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                {topic}
-              </p>
-              <p
-                className="ed-fg-muted text-base md:text-lg"
-                style={{ lineHeight: 1.45 }}
-              >
-                {before}
-              </p>
-              <p
-                className="ed-fg text-base md:text-lg"
-                style={{ lineHeight: 1.45, fontWeight: 500 }}
-              >
-                {after}
-              </p>
-            </motion.div>
+          {rows.map((row, i) => (
+            <Row
+              key={row.topic}
+              topic={row.topic}
+              before={row.before}
+              after={row.after}
+              index={i}
+              total={rows.length}
+              inView={inView}
+            />
           ))}
         </div>
       </div>
