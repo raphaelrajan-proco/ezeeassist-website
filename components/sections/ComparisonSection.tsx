@@ -1,154 +1,112 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { X, Check } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 const rows = [
-  {
-    topic: "Support",
-    before: "Hours to days. Manual responses.",
-    after: "Instant. AI resolves 70%+ automatically.",
-  },
-  {
-    topic: "Coaching",
-    before: "Reactive. Only when an FBC is available.",
-    after: "Proactive. AI coaches operators on performance gaps.",
-  },
-  {
-    topic: "Compliance",
-    before: "Discovered after the fact.",
-    after: "Monitored continuously. Flagged in real-time.",
-  },
-  {
-    topic: "Knowledge access",
-    before: "Scattered across 10+ systems.",
-    after: "One AI agent, every source connected.",
-  },
-  {
-    topic: "After-hours",
-    before: "No one home. Questions pile up.",
-    after: "Always on. Instant answers at 2am.",
-  },
-  {
-    topic: "Onboarding",
-    before: "Weeks of manual training.",
-    after: "Day-one access to all brand knowledge.",
-  },
-  {
-    topic: "Workflows",
-    before: "Manual. Repetitive. Error-prone.",
-    after: "AI-powered. Automated. At scale.",
-  },
+  { topic: "Support",          before: "Hours to days. Manual responses.",          after: "Instant. AI resolves 70%+ automatically." },
+  { topic: "Coaching",         before: "Reactive. Only when an FBC is available.",  after: "Proactive. AI coaches operators on performance gaps." },
+  { topic: "Compliance",       before: "Discovered after the fact.",                after: "Monitored continuously. Flagged in real-time." },
+  { topic: "Knowledge access", before: "Scattered across 10+ systems.",             after: "One AI agent, every source connected." },
+  { topic: "After-hours",      before: "No one home. Questions pile up.",           after: "Always on. Instant answers at 2am." },
+  { topic: "Onboarding",       before: "Weeks of manual training.",                 after: "Day-one access to all brand knowledge." },
+  { topic: "Workflows",        before: "Manual. Repetitive. Error-prone.",          after: "AI-powered. Automated. At scale." },
 ];
 
 export default function ComparisonSection() {
-  const headingRef = useRef<HTMLDivElement>(null);
-  const tableRef   = useRef<HTMLDivElement>(null);
-
-  const [headingVisible, setHeadingVisible] = useState(false);
-  const [tableVisible,   setTableVisible]   = useState(false);
-
-  useEffect(() => {
-    const observe = (el: Element | null, setter: (v: boolean) => void) => {
-      if (!el) return () => {};
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) { setter(true); obs.disconnect(); } },
-        { threshold: 0.1 }
-      );
-      obs.observe(el);
-      return () => obs.disconnect();
-    };
-
-    const cleanups = [
-      observe(headingRef.current, setHeadingVisible),
-      observe(tableRef.current,   setTableVisible),
-    ];
-    return () => cleanups.forEach((fn) => fn());
-  }, []);
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
-      <div className="mx-auto max-w-5xl px-6 py-24 lg:px-8 lg:py-28">
-        {/* Heading */}
+    <section className="w-full ed-bg">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
         <motion.div
-          ref={headingRef}
           initial={{ opacity: 0, y: 20 }}
-          animate={headingVisible ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center mb-14"
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="max-w-4xl mb-16 md:mb-24"
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
-            Side by Side
-          </p>
+          <p className="ed-overline mb-8">Side by Side</p>
           <h2
-            className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
-            style={{ letterSpacing: "-0.02em" }}
+            ref={ref}
+            className="ed-fg text-5xl md:text-6xl lg:text-7xl"
+            style={{
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+              letterSpacing: "-0.04em",
+              lineHeight: 1,
+            }}
           >
-            The old way vs.{" "}
-            <span className="text-[#00AEEF]">the EZee way</span>
+            The old way{" "}
+            <span className="ed-accent">vs. the EZee way.</span>
           </h2>
         </motion.div>
 
-        {/* Table */}
-        <motion.div
-          ref={tableRef}
-          initial={{ opacity: 0, y: 24 }}
-          animate={tableVisible ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55, ease: "easeOut", delay: 0.1 }}
-          className="overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+        {/* Editorial table — no card, no shadow, just rules */}
+        <div
+          className="border-t ed-rule"
+          style={{ borderTopWidth: "1px", borderTopStyle: "solid" }}
         >
-          {/* Header row */}
-          <div className="grid grid-cols-[1fr_1fr_1fr] border-b border-[#E5E7EB] dark:border-white/[0.08]">
-            <div className="px-6 py-4 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500" />
-            <div className="border-l border-[#E5E7EB] dark:border-white/[0.08] px-6 py-4 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
-              Without EZee Assist
-            </div>
-            <div className="border-l border-[#00AEEF]/30 bg-[#00AEEF]/[0.03] dark:bg-[#00AEEF]/[0.06] px-6 py-4 text-xs font-semibold uppercase tracking-widest text-[#00AEEF]">
-              With EZee Assist
-            </div>
+          {/* Header */}
+          <div
+            className="grid grid-cols-[1fr_2fr_2fr] gap-6 md:gap-12 py-6 border-b ed-rule"
+            style={{ borderBottomWidth: "1px", borderBottomStyle: "solid" }}
+          >
+            <div />
+            <p
+              className="ed-fg-muted text-xs"
+              style={{ fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase" }}
+            >
+              Without EZee
+            </p>
+            <p
+              className="ed-accent text-xs"
+              style={{ fontWeight: 500, letterSpacing: "0.2em", textTransform: "uppercase" }}
+            >
+              With EZee
+            </p>
           </div>
 
-          {/* Data rows */}
           {rows.map(({ topic, before, after }, i) => (
             <motion.div
               key={topic}
-              initial={{ opacity: 0, x: -16 }}
-              animate={tableVisible ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.4, ease: "easeOut", delay: 0.15 + i * 0.07 }}
-              className={`group grid grid-cols-[1fr_1fr_1fr] cursor-default transition-colors duration-150 hover:bg-[#F0F9FF] dark:hover:bg-[#00AEEF]/[0.04] ${
-                i !== rows.length - 1
-                  ? "border-b border-[#E5E7EB] dark:border-white/[0.08]"
-                  : ""
+              initial={{ opacity: 0, y: 12 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 + i * 0.05 }}
+              className={`grid grid-cols-[1fr_2fr_2fr] gap-6 md:gap-12 py-6 md:py-8 ${
+                i !== rows.length - 1 ? "border-b ed-rule" : ""
               }`}
+              style={
+                i !== rows.length - 1
+                  ? { borderBottomWidth: "1px", borderBottomStyle: "solid" }
+                  : {}
+              }
             >
-              {/* Topic */}
-              <div className="flex items-center px-6 py-5">
-                <span className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0]">
-                  {topic}
-                </span>
-              </div>
-
-              {/* Before */}
-              <div className="flex items-center gap-3 border-l border-[#E5E7EB] dark:border-white/[0.08] px-6 py-5">
-                <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
-                  <X size={11} className="text-red-500" strokeWidth={2.5} />
-                </div>
-                <span className="text-sm text-gray-500 dark:text-gray-400">{before}</span>
-              </div>
-
-              {/* After */}
-              <div className="flex items-center gap-3 border-l border-[#00AEEF]/30 bg-[#00AEEF]/[0.03] dark:bg-[#00AEEF]/[0.06] px-6 py-5 group-hover:bg-[#00AEEF]/[0.06] dark:group-hover:bg-[#00AEEF]/[0.09] transition-colors duration-150">
-                <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#00AEEF]/15">
-                  <Check size={11} className="text-[#00AEEF]" strokeWidth={2.5} />
-                </div>
-                <span className="text-sm font-medium text-[#0A0A0A] dark:text-[#F0F0F0]">
-                  {after}
-                </span>
-              </div>
+              <p
+                className="ed-fg text-base md:text-lg"
+                style={{
+                  fontFamily: "var(--font-editorial)",
+                  fontWeight: 500,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                {topic}
+              </p>
+              <p
+                className="ed-fg-muted text-base md:text-lg"
+                style={{ lineHeight: 1.45 }}
+              >
+                {before}
+              </p>
+              <p
+                className="ed-fg text-base md:text-lg"
+                style={{ lineHeight: 1.45, fontWeight: 500 }}
+              >
+                {after}
+              </p>
             </motion.div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

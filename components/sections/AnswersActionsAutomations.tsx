@@ -1,125 +1,130 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { MessageSquare, Zap, GitBranch, ArrowRight } from "lucide-react";
 
 const stages = [
   {
-    icon: MessageSquare,
     label: "Answers",
     stat: "Slash support burden by 70%",
     description:
       "Instant answers from all your content, wherever it lives — with one universal AI.",
-    color: "#00AEEF",
-    bgClass: "bg-[#00AEEF]/10 border-[#00AEEF]/25",
-    iconBgClass: "bg-[#00AEEF]/15 border-[#00AEEF]/30",
   },
   {
-    icon: Zap,
     label: "Actions",
     stat: "Coach your coaches and operators",
     description:
       "Take actions directly inside your tech stack with one universal AI. Proactively address training gaps.",
-    color: "#0077A8",
-    bgClass: "bg-[#0077A8]/10 border-[#0077A8]/25",
-    iconBgClass: "bg-[#0077A8]/15 border-[#0077A8]/30",
   },
   {
-    icon: GitBranch,
     label: "Automations",
     stat: "Ensure brand compliance. Drive unstoppable execution.",
     description:
       "Always-on workflows across the value chain, running at scale. You dream it up, EZee executes it.",
-    color: "#004F70",
-    bgClass: "bg-[#004F70]/10 border-[#004F70]/25",
-    iconBgClass: "bg-[#004F70]/15 border-[#004F70]/30",
   },
 ];
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
   whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: "-60px" as const },
-  transition: { duration: 0.55, ease: "easeOut" as const, delay },
+  viewport: { once: true, margin: "-80px" as const },
+  transition: { duration: 0.7, ease: "easeOut" as const, delay },
 });
 
 export default function AnswersActionsAutomations() {
   return (
-    <section className="w-full bg-white dark:bg-[#0D0D0D]">
-      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-32">
+    <section className="w-full" style={{ backgroundColor: "#0A0A0A" }}>
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-40 md:py-48">
+
         {/* Heading */}
-        <motion.div {...fadeUp(0)} className="text-center mb-16">
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">
+        <motion.div {...fadeUp(0)} className="max-w-5xl mb-20 md:mb-28">
+          <p
+            className="mb-10 text-xs"
+            style={{
+              color: "#00AEEF",
+              fontWeight: 500,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+            }}
+          >
             The Product Arc
           </p>
           <h2
-            className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl lg:text-6xl"
-            style={{ letterSpacing: "-0.02em" }}
+            className="text-6xl md:text-7xl lg:text-8xl"
+            style={{
+              color: "#F5EDE0",
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+              letterSpacing: "-0.045em",
+              lineHeight: 0.95,
+            }}
           >
-            Answers{" "}
-            <span className="text-[#00AEEF]">→</span>{" "}
-            Actions{" "}
-            <span className="text-[#00AEEF]">→</span>{" "}
-            Automations
+            Answers.<br />
+            Actions.<br />
+            <span style={{ color: "#00AEEF" }}>Automations.</span>
           </h2>
-          <p className="mt-5 text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-8">
-            EZee evolves with your network — from instant answers to full workflow automation,
-            all through one AI agent connected to your entire tech stack.
+          <p
+            className="mt-10 text-xl md:text-2xl max-w-2xl"
+            style={{ color: "#A89B86", lineHeight: 1.45, fontWeight: 400 }}
+          >
+            EZee evolves with your network — from instant answers to full
+            workflow automation, all through one AI agent connected to your
+            entire tech stack.
           </p>
         </motion.div>
 
-        {/* Three columns */}
-        <div className="relative grid grid-cols-1 gap-6 md:grid-cols-3">
-          {/* Connecting arrows — desktop only */}
-          <div className="absolute hidden md:flex items-center" style={{ top: "40px", left: "calc(33.33% - 12px)", right: "calc(33.33% - 12px)", pointerEvents: "none" }}>
-            <div className="flex-1 flex items-center justify-center">
-              <ArrowRight size={22} className="text-[#00AEEF]/50 mx-auto" strokeWidth={1.5} />
-            </div>
-            <div className="flex-1 flex items-center justify-center">
-              <ArrowRight size={22} className="text-[#00AEEF]/50 mx-auto" strokeWidth={1.5} />
-            </div>
-          </div>
-
-          {stages.map(({ icon: Icon, label, stat, description, color, bgClass, iconBgClass }, i) => (
+        {/* Three cream cards on black — the deck's signature treatment */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+          {stages.map((s, i) => (
             <motion.div
-              key={label}
-              {...fadeUp(i * 0.12)}
-              className={`relative flex flex-col rounded-2xl border-2 p-8 ${bgClass} shadow-[0_2px_8px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)] transition-transform duration-300 hover:-translate-y-1`}
+              key={s.label}
+              {...fadeUp(0.1 + i * 0.15)}
+              className="rounded-3xl p-10 md:p-12 flex flex-col"
+              style={{
+                backgroundColor: "#F5EDE0",
+                color: "#0A0A0A",
+                minHeight: "380px",
+              }}
             >
-              {/* Stage number */}
-              <span
-                className="text-[10px] font-bold uppercase tracking-widest mb-4"
-                style={{ color }}
+              <p
+                className="text-xs mb-8"
+                style={{
+                  color: "#1B5A6E",
+                  fontWeight: 500,
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                }}
               >
                 Stage {String(i + 1).padStart(2, "0")}
-              </span>
-
-              {/* Icon */}
-              <div
-                className={`flex h-14 w-14 items-center justify-center rounded-2xl border-2 mb-6 ${iconBgClass}`}
-              >
-                <Icon size={26} style={{ color }} strokeWidth={1.75} />
-              </div>
-
-              {/* Label */}
-              <h3
-                className="text-3xl font-extrabold mb-2"
-                style={{ color, letterSpacing: "-0.02em" }}
-              >
-                {label}
-              </h3>
-
-              {/* Stat / hook */}
-              <p
-                className="text-sm font-semibold mb-3"
-                style={{ color }}
-              >
-                {stat}
               </p>
 
-              {/* Description */}
-              <p className="text-base leading-7 text-gray-600 dark:text-gray-400 flex-1">
-                {description}
+              <h3
+                className="text-5xl md:text-6xl mb-8"
+                style={{
+                  fontFamily: "var(--font-editorial)",
+                  fontWeight: 500,
+                  letterSpacing: "-0.04em",
+                  lineHeight: 1,
+                }}
+              >
+                {s.label}
+              </h3>
+
+              <p
+                className="text-lg mb-6"
+                style={{
+                  color: "#0A0A0A",
+                  fontWeight: 500,
+                  lineHeight: 1.4,
+                }}
+              >
+                {s.stat}
+              </p>
+
+              <p
+                className="text-base flex-1"
+                style={{ color: "#6B6358", lineHeight: 1.55 }}
+              >
+                {s.description}
               </p>
             </motion.div>
           ))}

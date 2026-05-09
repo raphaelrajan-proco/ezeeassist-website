@@ -1,133 +1,113 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
-import { DatabaseZap, MessageCircle, Zap } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 const steps = [
   {
     number: "01",
-    icon: DatabaseZap,
     title: "Connect your data and systems",
     body: "EZee connects to all your data and systems — 250+ integrations across drives, CRMs, POS, LMS, marketing, accounting, and more. No migration. Your content stays where it lives.",
   },
   {
     number: "02",
-    icon: MessageCircle,
     title: "Build workflows conversationally",
     body: "Build support, coaching, and compliance workflows — and much more — conversationally with EZee. You dream it up, EZee maps it out, and executes automations at scale.",
   },
   {
     number: "03",
-    icon: Zap,
     title: "Operators get instant support and take action",
     body: "Operators receive instant support and perform actions directly in your tech stack through the channels they're already used to. When it matters most, your team gets intelligently looped in.",
   },
 ];
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 28 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut" as const, delay: i * 0.15 },
-  }),
-};
-
-export default function HowItWorksSection() {
-  const headingRef = useRef<HTMLDivElement>(null);
-  const lineRef    = useRef<HTMLDivElement>(null);
-
-  const [headingVisible, setHeadingVisible] = useState(false);
-  const [stepsVisible,   setStepsVisible]   = useState(false);
-  const [lineVisible,    setLineVisible]     = useState(false);
-
-  useEffect(() => {
-    const observe = (
-      el: Element | null,
-      setter: (v: boolean) => void,
-      threshold = 0.1
-    ) => {
-      if (!el) return () => {};
-      const obs = new IntersectionObserver(
-        ([entry]) => { if (entry.isIntersecting) { setter(true); obs.disconnect(); } },
-        { threshold }
-      );
-      obs.observe(el);
-      return () => obs.disconnect();
-    };
-
-    const cleanups = [
-      observe(headingRef.current, setHeadingVisible),
-      observe(lineRef.current,    setStepsVisible),
-      observe(lineRef.current,    setLineVisible, 0.3),
-    ];
-    return () => cleanups.forEach((fn) => fn());
-  }, []);
+function Step({ step, index }: { step: (typeof steps)[0]; index: number }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const last = index === steps.length - 1;
 
   return (
-    <section className="relative w-full overflow-hidden bg-how-it-works-gradient">
-      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
-        {/* Heading */}
-        <motion.div
-          ref={headingRef}
-          initial={{ opacity: 0, y: 20 }}
-          animate={headingVisible ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center mb-20"
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.08 }}
+      className={`grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 py-16 md:py-24 ${
+        last ? "" : "border-b ed-rule"
+      }`}
+      style={!last ? { borderBottomWidth: "1px", borderBottomStyle: "solid" } : {}}
+    >
+      <div className="md:col-span-3">
+        <p
+          className="ed-accent text-8xl md:text-[10rem]"
+          style={{
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 500,
+            letterSpacing: "-0.05em",
+            lineHeight: 0.85,
+          }}
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
-            How It Works
-          </p>
+          {step.number}
+        </p>
+      </div>
+      <div className="md:col-span-9 flex flex-col justify-center">
+        <h3
+          className="ed-fg text-3xl md:text-4xl lg:text-5xl mb-6"
+          style={{
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 500,
+            letterSpacing: "-0.03em",
+            lineHeight: 1.05,
+          }}
+        >
+          {step.title}
+        </h3>
+        <p
+          className="ed-fg-muted text-lg md:text-xl max-w-2xl"
+          style={{ lineHeight: 1.55, fontWeight: 400 }}
+        >
+          {step.body}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+export default function HowItWorksSection() {
+  const headRef = useRef(null);
+  const headInView = useInView(headRef, { once: true, margin: "-80px" });
+
+  return (
+    <section className="w-full ed-bg-alt">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
+        <motion.div
+          ref={headRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={headInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="max-w-4xl mb-16 md:mb-24"
+        >
+          <p className="ed-overline mb-8">How It Works</p>
           <h2
-            className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
-            style={{ letterSpacing: "-0.02em" }}
+            className="ed-fg text-5xl md:text-6xl lg:text-7xl"
+            style={{
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+              letterSpacing: "-0.04em",
+              lineHeight: 1,
+            }}
           >
             Connect everything.{" "}
-            <span className="text-[#00AEEF]">EZee handles the rest.</span>
+            <span className="ed-accent">EZee handles the rest.</span>
           </h2>
         </motion.div>
 
-        {/* Steps */}
-        <div ref={lineRef} className="relative grid grid-cols-1 gap-10 md:grid-cols-3">
-          {/* Animated connector line — desktop only */}
-          <motion.div
-            initial={{ scaleX: 0 }}
-            animate={lineVisible ? { scaleX: 1 } : { scaleX: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-            className="absolute top-[26px] left-[calc(16.67%+26px)] right-[calc(16.67%+26px)] hidden h-px origin-left bg-gradient-to-r from-[#00AEEF]/30 via-[#00AEEF]/60 to-[#00AEEF]/30 md:block"
-            aria-hidden="true"
-          />
-
-          {steps.map(({ number, icon: Icon, title, body }, i) => (
-            <motion.div
-              key={number}
-              custom={i}
-              initial="hidden"
-              animate={stepsVisible ? "visible" : "hidden"}
-              variants={fadeUp}
-              className="relative flex flex-col items-center text-center md:items-start md:text-left"
-            >
-              {/* Step circle — pulses when in view */}
-              <div
-                className={`relative z-10 mb-6 flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-full border-2 border-[#00AEEF] bg-white dark:bg-[#161616] shadow-[0_0_0_6px_rgba(0,174,239,0.08)] ${
-                  stepsVisible ? "animate-pulse-ring" : ""
-                }`}
-                style={stepsVisible ? { animationDelay: `${i * 0.4}s` } : {}}
-              >
-                <Icon size={20} className="text-[#00AEEF]" strokeWidth={1.75} />
-              </div>
-              <p className="text-xs font-bold uppercase tracking-widest text-[#00AEEF] mb-2">
-                {number}
-              </p>
-              <h3
-                className="text-lg font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-3"
-                style={{ letterSpacing: "-0.01em" }}
-              >
-                {title}
-              </h3>
-              <p className="text-base leading-7 text-gray-600 dark:text-gray-400">{body}</p>
-            </motion.div>
+        <div
+          className="border-t ed-rule"
+          style={{ borderTopWidth: "1px", borderTopStyle: "solid" }}
+        >
+          {steps.map((step, i) => (
+            <Step key={step.number} step={step} index={i} />
           ))}
         </div>
       </div>

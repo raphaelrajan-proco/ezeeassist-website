@@ -1,5 +1,39 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Design Versions
+
+The site has two parallel design directions tracked in Git:
+
+- **v1 — Bright SaaS (current production)**
+  - Reference snapshot: `git checkout design-v1-bright-saas`
+  - Production main: `git checkout main`
+  - Documented at `docs/design-system-v1.md`
+- **v2 — Editorial (in progress, Studio Morfar–inspired)**
+  - Working branch: `git checkout design-editorial-pass`
+  - Vercel auto-deploys this branch to a preview URL
+  - Theme tokens live behind the `.theme-editorial` class in `app/globals.css`
+
+### To fully revert v2 and abandon the editorial direction
+
+```bash
+git checkout main
+git branch -D design-editorial-pass
+git push origin --delete design-editorial-pass
+```
+
+### To merge v2 into production after approval
+
+```bash
+git checkout main
+git merge design-editorial-pass
+git push origin main
+```
+
+The v1 tokens are kept intact in `app/globals.css`, so even after a merge the
+old design can be re-enabled by toggling the `theme-editorial` class off.
+
+
+
 ## Getting Started
 
 First, run the development server:

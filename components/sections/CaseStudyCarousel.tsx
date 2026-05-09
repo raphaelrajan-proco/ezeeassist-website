@@ -3,13 +3,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 
 const slides = [
   {
     brand: "WSI",
-    accentRgb: "0,174,239",
-    accent: "#00AEEF",
     stat: "67%",
     statLabel: "Support reduction globally",
     quote: "Our franchisees have embraced this technology.",
@@ -17,8 +14,6 @@ const slides = [
   },
   {
     brand: "DekaLash",
-    accentRgb: "194,24,91",
-    accent: "#C2185B",
     stat: "93%",
     statLabel: "AI resolution rate",
     quote: "AI is now an expectation in franchisee support.",
@@ -26,8 +21,6 @@ const slides = [
   },
   {
     brand: "DivaDance",
-    accentRgb: "123,31,162",
-    accent: "#7B1FA2",
     stat: "2,600+",
     statLabel: "Queries answered in 6 months",
     quote: "Saving 650+ hours of support time.",
@@ -42,9 +35,7 @@ export default function CaseStudyCarousel() {
 
   useEffect(() => {
     if (paused) return;
-    const timer = setInterval(() => {
-      setCurrent((c) => (c + 1) % slides.length);
-    }, 5000);
+    const timer = setInterval(() => setCurrent((c) => (c + 1) % slides.length), 5500);
     return () => clearInterval(timer);
   }, [paused]);
 
@@ -62,14 +53,12 @@ export default function CaseStudyCarousel() {
   const slide = slides[current];
 
   return (
-    <section className="w-full border-t border-[#E5E7EB] dark:border-white/[0.06] bg-white dark:bg-[#0D0D0D]">
-      <div className="mx-auto max-w-5xl px-6 py-14 lg:px-8">
-        <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-8 text-center">
-          Customer results
-        </p>
+    <section className="w-full ed-bg-alt">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
+        <p className="ed-overline mb-12">Customer results</p>
 
         <div
-          className="relative overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_24px_rgba(0,0,0,0.4)]"
+          className="relative"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
           onTouchStart={handleTouchStart}
@@ -78,50 +67,54 @@ export default function CaseStudyCarousel() {
           <AnimatePresence mode="wait">
             <motion.div
               key={current}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
-              className="grid grid-cols-1 sm:grid-cols-[200px_1fr]"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16"
             >
-              {/* Brand panel — uses inline rgba so it works in both light & dark mode */}
-              <div
-                className="flex flex-col items-center justify-center p-10 sm:p-12"
-                style={{ backgroundColor: `rgba(${slide.accentRgb}, 0.10)` }}
-              >
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white dark:bg-[#1A1A1A] shadow-sm border border-white/60 dark:border-white/10 mb-3">
-                  <span
-                    className="text-2xl font-extrabold"
-                    style={{ color: slide.accent }}
-                  >
-                    {slide.brand[0]}
-                  </span>
-                </div>
-                <span className="text-sm font-bold" style={{ color: slide.accent }}>
-                  {slide.brand}
-                </span>
-              </div>
-
-              {/* Content */}
-              <div className="flex flex-col justify-center p-8 sm:p-10 bg-white dark:bg-[#161616]">
-                <div
-                  className="text-6xl font-extrabold leading-none mb-1"
-                  style={{ color: slide.accent, letterSpacing: "-0.03em" }}
+              <div className="md:col-span-3">
+                <p
+                  className="ed-fg-muted text-xs"
+                  style={{
+                    fontWeight: 500,
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                  }}
                 >
-                  {slide.stat}
-                </div>
-                <p className="text-base font-semibold text-gray-500 dark:text-gray-400 mb-5">
+                  {slide.brand}
+                </p>
+              </div>
+              <div className="md:col-span-9">
+                <p
+                  className="ed-fg text-7xl md:text-8xl lg:text-9xl mb-6"
+                  style={{
+                    fontFamily: "var(--font-editorial)",
+                    fontWeight: 500,
+                    letterSpacing: "-0.05em",
+                    lineHeight: 0.9,
+                  }}
+                >
+                  <span className="ed-accent">{slide.stat}</span>
+                </p>
+                <p
+                  className="ed-fg text-xl md:text-2xl mb-8 max-w-2xl"
+                  style={{
+                    fontFamily: "var(--font-editorial)",
+                    fontWeight: 500,
+                    letterSpacing: "-0.02em",
+                  }}
+                >
                   {slide.statLabel}
                 </p>
-                <p className="text-lg font-medium text-[#0A0A0A] dark:text-[#F0F0F0] italic mb-6">
+                <p
+                  className="ed-fg-muted text-lg md:text-xl italic mb-10 max-w-2xl"
+                  style={{ lineHeight: 1.4 }}
+                >
                   &ldquo;{slide.quote}&rdquo;
                 </p>
-                <Link
-                  href={slide.href}
-                  className="arrow-link text-sm font-semibold"
-                  style={{ color: slide.accent }}
-                >
-                  Read case study <ArrowRight size={14} />
+                <Link href={slide.href} className="ed-link text-base">
+                  Read case study →
                 </Link>
               </div>
             </motion.div>
@@ -129,16 +122,17 @@ export default function CaseStudyCarousel() {
         </div>
 
         {/* Dot indicators */}
-        <div className="flex justify-center gap-2 mt-6">
+        <div className="flex gap-3 mt-16">
           {slides.map((_, i) => (
             <button
               key={i}
               onClick={() => setCurrent(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                i === current
-                  ? "w-6 bg-[#00AEEF]"
-                  : "w-2 bg-[#E5E7EB] dark:bg-white/[0.1]"
-              }`}
+              className="h-1 rounded-full transition-all duration-300"
+              style={{
+                width: i === current ? "48px" : "16px",
+                backgroundColor:
+                  i === current ? "var(--ed-accent)" : "var(--ed-rule)",
+              }}
               aria-label={`Go to slide ${i + 1}`}
             />
           ))}

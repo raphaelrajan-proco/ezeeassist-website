@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans, Onest, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react";
 import ThemeProvider from "@/components/ThemeProvider";
@@ -20,6 +20,22 @@ const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-jakarta",
+  display: "swap",
+});
+
+// ── Editorial pass: Onest (primary editorial display) ───────
+const onest = Onest({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-onest",
+  display: "swap",
+});
+
+// ── Editorial pass: Inter Tight (fallback / body alt) ───────
+const interTight = Inter_Tight({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-inter-tight",
   display: "swap",
 });
 
@@ -120,7 +136,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${jakarta.variable} h-full antialiased`}
+      className={`${inter.variable} ${jakarta.variable} ${onest.variable} ${interTight.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>

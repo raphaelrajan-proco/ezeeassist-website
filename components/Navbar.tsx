@@ -9,6 +9,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Button from "@/components/ui/Button";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -187,6 +188,10 @@ export default function Navbar() {
   const [scrolled, setScrolled]                        = useState(false);
   const navRef                                         = useRef<HTMLDivElement>(null);
 
+  // Editorial pass: only the homepage is on the editorial theme right now
+  const pathname = usePathname();
+  const isEditorial = pathname === "/";
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -227,17 +232,33 @@ export default function Navbar() {
     { label: "Contact",  href: "/contact" },
   ];
 
+  // Editorial palette overrides — applied only when isEditorial && on root
+  const editorialHeaderClasses = isEditorial
+    ? scrolled
+      ? "bg-[var(--ed-bg)]/90 backdrop-blur-md border-b border-[var(--ed-rule)]"
+      : "bg-transparent border-b border-transparent"
+    : scrolled
+      ? "bg-white/90 dark:bg-[#0B0F19]/90 backdrop-blur-md border-b border-black/[0.06] dark:border-white/[0.06] shadow-sm dark:shadow-[0_1px_0_rgba(255,255,255,0.04)]"
+      : "bg-white/90 dark:bg-[#0B0F19]/90 backdrop-blur-md border-b border-transparent";
+
+  const linkColor = isEditorial
+    ? "text-[var(--ed-fg)] hover:text-[#00AEEF]"
+    : "text-gray-600 dark:text-gray-300 hover:text-[#00AEEF] hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05]";
+
+  const linkFontWeight = isEditorial ? "font-normal" : "font-medium";
+
   return (
-    <header className={`sticky top-0 z-50 w-full bg-white/90 dark:bg-[#0B0F19]/90 backdrop-blur-md transition-all duration-300 ${
-      scrolled
-        ? "border-b border-black/[0.06] dark:border-white/[0.06] shadow-sm dark:shadow-[0_1px_0_rgba(255,255,255,0.04)]"
-        : "border-b border-transparent"
-    }`}>
-      <nav ref={navRef} className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${editorialHeaderClasses}`}>
+      <nav ref={navRef} className={`mx-auto flex max-w-7xl items-center justify-between py-4 ${isEditorial ? "px-6 md:px-12 lg:px-16" : "px-6 lg:px-8"}`}>
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-          <span className="text-xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0]">
+          <span
+            className={`tracking-tight ${isEditorial ? "text-lg" : "text-xl font-bold"} ${
+              isEditorial ? "text-[var(--ed-fg)]" : "text-[#0A0A0A] dark:text-[#F0F0F0]"
+            }`}
+            style={isEditorial ? { fontFamily: "var(--font-editorial)", fontWeight: 500, letterSpacing: "-0.02em" } : {}}
+          >
             EZee <span className="text-[#00AEEF]">Assist</span>
           </span>
         </Link>

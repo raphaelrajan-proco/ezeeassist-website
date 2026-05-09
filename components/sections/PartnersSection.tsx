@@ -4,10 +4,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
 const partners = [
-  { label: "WSI",  sub: "Partner" },
-  { label: "SFN",  sub: "Verified Member" },
-  { label: "IFA",  sub: "Supplier Forum" },
-  { label: "CFA",  sub: "Member" },
+  { label: "WSI", sub: "Partner" },
+  { label: "SFN", sub: "Verified Member" },
+  { label: "IFA", sub: "Supplier Forum" },
+  { label: "CFA", sub: "Member" },
 ];
 
 export default function PartnersSection() {
@@ -15,49 +15,71 @@ export default function PartnersSection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="w-full bg-[#F7F8FA] dark:bg-[#111111]">
-      <div ref={ref} className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
-        <div className="grid grid-cols-1 gap-16 items-center md:grid-cols-2">
-
-          {/* Logo grid */}
-          <motion.div
-            initial={{ opacity: 0, x: -32 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-            className="grid grid-cols-2 gap-4"
-          >
-            {partners.map(({ label, sub }) => (
-              <div
-                key={label}
-                className="card-hover flex flex-col items-center justify-center gap-1 rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] px-6 py-8 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2),_0_4px_12px_rgba(0,0,0,0.3)]"
-              >
-                <span className="text-2xl font-extrabold text-[#0A0A0A] dark:text-[#F0F0F0]">{label}</span>
-                <span className="text-xs text-gray-400 dark:text-gray-500 font-medium text-center">{sub}</span>
-              </div>
-            ))}
-          </motion.div>
+    <section className="w-full ed-bg">
+      <div ref={ref} className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-16">
 
           {/* Text */}
           <motion.div
-            initial={{ opacity: 0, x: 32 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-            className="flex flex-col justify-center"
+            initial={{ opacity: 0, y: 16 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="md:col-span-7"
           >
-            <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">Our Community</p>
+            <p className="ed-overline mb-8">Our Community</p>
             <h2
-              className="text-3xl font-bold leading-snug text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-4xl"
-              style={{ letterSpacing: "-0.02em" }}
+              className="ed-fg text-5xl md:text-6xl"
+              style={{
+                fontFamily: "var(--font-editorial)",
+                fontWeight: 500,
+                letterSpacing: "-0.04em",
+                lineHeight: 1,
+              }}
             >
-              Proud to be{" "}
-              <span className="text-[#00AEEF]">collaborating</span> with our
-              strategic partners and community.
+              In good{" "}
+              <span className="ed-accent">company.</span>
             </h2>
-            <p className="mt-5 text-base leading-7 text-gray-600 dark:text-gray-400">
+            <p
+              className="ed-fg-muted mt-8 max-w-xl text-lg md:text-xl"
+              style={{ lineHeight: 1.5 }}
+            >
               EZee Assist works alongside the franchise industry&apos;s most
               trusted networks and associations — because great support is built
               on great relationships.
             </p>
+          </motion.div>
+
+          {/* Partner names — typography only, no cards */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 }}
+            className="md:col-span-5 grid grid-cols-2 gap-x-8 gap-y-10 md:gap-y-12"
+          >
+            {partners.map(({ label, sub }) => (
+              <div key={label}>
+                <p
+                  className="ed-fg text-4xl md:text-5xl"
+                  style={{
+                    fontFamily: "var(--font-editorial)",
+                    fontWeight: 500,
+                    letterSpacing: "-0.03em",
+                  }}
+                >
+                  {label}
+                </p>
+                <p
+                  className="ed-fg-muted text-sm mt-2"
+                  style={{
+                    fontWeight: 500,
+                    letterSpacing: "0.12em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {sub}
+                </p>
+              </div>
+            ))}
           </motion.div>
         </div>
       </div>

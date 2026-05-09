@@ -9,7 +9,6 @@ const testimonials = [
     name: "John Evans",
     title: "Founder & CEO",
     company: "EverLine Coatings & Services",
-    initials: "JE",
   },
   {
     quote:
@@ -17,73 +16,91 @@ const testimonials = [
     name: "Troy McCullen",
     title: "Vice President of Operations",
     company: "DekaLash",
-    initials: "TM",
   },
 ];
 
+const fadeUp = (delay = 0) => ({
+  initial: { opacity: 0, y: 24 },
+  whileInView: { opacity: 1, y: 0 },
+  viewport: { once: true, margin: "-80px" as const },
+  transition: { duration: 0.7, ease: "easeOut" as const, delay },
+});
+
 export default function TestimonialsSection() {
   return (
-    <section className="w-full bg-white dark:bg-[#0D0D0D]">
-      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
+    <section className="w-full ed-bg-alt">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
+
         {/* Heading */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center mb-14"
-        >
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
-            Customer Stories
-          </p>
+        <motion.div {...fadeUp(0)} className="max-w-4xl mb-20 md:mb-28">
+          <p className="ed-overline mb-8">Customer Stories</p>
           <h2
-            className="text-4xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
-            style={{ letterSpacing: "-0.02em" }}
+            className="ed-fg text-5xl md:text-6xl lg:text-7xl"
+            style={{
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+              letterSpacing: "-0.04em",
+              lineHeight: 1,
+            }}
           >
             What franchise leaders{" "}
-            <span className="text-[#00AEEF]">are saying.</span>
+            <span className="ed-accent">are saying.</span>
           </h2>
         </motion.div>
 
-        {/* 2-column grid — both visible simultaneously */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        {/* Style C — typography only, separated by horizontal rules */}
+        <div
+          className="border-t ed-rule"
+          style={{ borderTopWidth: "1px", borderTopStyle: "solid" }}
+        >
           {testimonials.map((t, i) => (
             <motion.div
               key={t.name}
-              initial={{ opacity: 0, y: 28 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.55, ease: "easeOut", delay: i * 0.12 }}
-              className="card-hover-blue flex flex-col rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.3),_0_8px_30px_rgba(0,0,0,0.4)] overflow-hidden"
-              style={{ borderLeft: "4px solid #00AEEF" }}
+              {...fadeUp(0.05 + i * 0.1)}
+              className="py-16 md:py-24 grid grid-cols-1 md:grid-cols-12 gap-8"
+              style={
+                i !== testimonials.length - 1
+                  ? {
+                      borderBottomWidth: "1px",
+                      borderBottomStyle: "solid",
+                      borderColor: "var(--ed-rule)",
+                    }
+                  : {}
+              }
             >
-              {/* Quote area */}
-              <div className="flex-1 px-8 pt-8 pb-6 sm:px-10 sm:pt-10">
-                <span
-                  className="block text-6xl font-extrabold leading-none text-[#00AEEF] select-none -mt-2 mb-3"
-                  aria-hidden="true"
+              <div className="md:col-span-9">
+                <p
+                  className="ed-fg text-3xl md:text-4xl lg:text-5xl"
+                  style={{
+                    fontFamily: "var(--font-editorial)",
+                    fontWeight: 500,
+                    fontStyle: "italic",
+                    letterSpacing: "-0.025em",
+                    lineHeight: 1.15,
+                  }}
                 >
-                  &ldquo;
-                </span>
-                <p className="text-lg leading-8 text-[#0A0A0A] dark:text-[#F0F0F0] font-medium">
-                  {t.quote}
+                  &ldquo;{t.quote}&rdquo;
                 </p>
               </div>
-
-              {/* Attribution */}
-              <div className="flex items-center gap-4 border-t border-[#E5E7EB] dark:border-white/[0.08] px-8 py-5 sm:px-10">
-                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-[#00AEEF]/15 text-sm font-bold text-[#00AEEF]">
-                  {t.initials}
-                </div>
+              <div className="md:col-span-3 flex md:items-end">
                 <div>
-                  <p className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0]">
+                  <p
+                    className="ed-fg text-base md:text-lg"
+                    style={{ fontWeight: 500, letterSpacing: "-0.01em" }}
+                  >
                     {t.name}
                   </p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {t.title},{" "}
-                    <span className="font-medium text-[#0A0A0A] dark:text-[#F0F0F0]">
-                      {t.company}
-                    </span>
+                  <p
+                    className="ed-fg-muted text-sm md:text-base mt-1"
+                    style={{ lineHeight: 1.4 }}
+                  >
+                    {t.title}
+                  </p>
+                  <p
+                    className="ed-fg-muted text-sm md:text-base"
+                    style={{ lineHeight: 1.4 }}
+                  >
+                    {t.company}
                   </p>
                 </div>
               </div>

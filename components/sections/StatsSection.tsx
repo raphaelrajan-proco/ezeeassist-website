@@ -3,42 +3,62 @@
 import CountUp from "react-countup";
 
 const stats = [
-  { prefix: "",  end: 60,    suffix: "+",  decimals: 0, label: "Franchise brands" },
-  { prefix: "",  end: 4000,  suffix: "+",  decimals: 0, label: "Locations" },
-  { prefix: "",  end: 10000, suffix: "+",  decimals: 0, label: "Users" },
-  { prefix: "",  end: 70,    suffix: "%+", decimals: 0, label: "Support deflection" },
+  { prefix: "", end: 60,    suffix: "+",  decimals: 0, label: "Franchise brands" },
+  { prefix: "", end: 4000,  suffix: "+",  decimals: 0, label: "Locations" },
+  { prefix: "", end: 10000, suffix: "+",  decimals: 0, label: "Users" },
+  { prefix: "", end: 70,    suffix: "%+", decimals: 0, label: "Support deflection" },
 ];
 
 export default function StatsSection() {
   return (
-    <section className="relative w-full overflow-hidden bg-[#F0F9FF] dark:bg-[#111111]">
-      {/* Dot grid overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-dot-grid opacity-30" />
-
-      <div className="relative z-10 mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <p className="text-center text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-14">
+    <section className="w-full" style={{ backgroundColor: "#0A0A0A" }}>
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
+        <p
+          className="mb-16 md:mb-24 text-xs"
+          style={{
+            color: "#00AEEF",
+            fontWeight: 500,
+            letterSpacing: "0.2em",
+            textTransform: "uppercase",
+          }}
+        >
           Real Results from Real Brands
         </p>
-        <div className="grid grid-cols-2 gap-y-12 md:grid-cols-4 md:gap-y-0 divide-y-2 divide-[#00AEEF]/10 md:divide-y-0 md:divide-x-2">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-20 md:gap-y-24 md:gap-x-16">
           {stats.map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center text-center px-6">
+            <div key={stat.label} className="flex flex-col">
               <p
-                className="text-5xl font-extrabold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] lg:text-6xl"
-                style={{ letterSpacing: "-0.02em" }}
+                className="text-7xl md:text-8xl lg:text-9xl"
+                style={{
+                  color: "#F5EDE0",
+                  fontFamily: "var(--font-editorial)",
+                  fontWeight: 500,
+                  letterSpacing: "-0.05em",
+                  lineHeight: 0.9,
+                }}
               >
                 {stat.prefix}
                 <CountUp
                   end={stat.end}
                   suffix={stat.suffix}
                   decimals={stat.decimals}
-                  duration={2.2}
+                  duration={2.4}
                   useEasing
                   enableScrollSpy
                   scrollSpyOnce
                   separator=","
                 />
               </p>
-              <p className="mt-3 text-sm leading-6 text-gray-500 dark:text-gray-400 max-w-[180px]">
+              <p
+                className="mt-6 text-lg md:text-xl"
+                style={{
+                  color: "#A89B86",
+                  fontFamily: "var(--font-editorial)",
+                  fontWeight: 400,
+                  letterSpacing: "-0.01em",
+                }}
+              >
                 {stat.label}
               </p>
             </div>

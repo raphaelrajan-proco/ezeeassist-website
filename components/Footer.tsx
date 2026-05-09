@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { Globe, Share2, Link2 } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const footerLinks = {
   Solution: [
@@ -37,6 +40,13 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+  const isEditorial = pathname === "/";
+
+  if (isEditorial) {
+    return <FooterEditorial />;
+  }
+
   return (
     <footer className="w-full border-t border-[#E5E7EB] dark:border-white/[0.06] bg-[#F7F8FA] dark:bg-[#111111]">
       <div className="mx-auto max-w-7xl px-6 pt-16 pb-10 lg:px-8">
@@ -117,6 +127,116 @@ export default function Footer() {
             <Link href="/privacy"       className="hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">Privacy Policy</Link>
             <Link href="/terms"         className="hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">Terms of Use</Link>
             <Link href="/accessibility" className="hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors">Accessibility</Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ───────────────────────────────────────────────────────────
+   Editorial footer — newspaper-style, generous whitespace,
+   typography-driven. Used only on the homepage today.
+   ─────────────────────────────────────────────────────────── */
+function FooterEditorial() {
+  return (
+    <footer className="w-full ed-bg" style={{ borderTop: "1px solid var(--ed-rule)" }}>
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-24 md:pt-32 pb-12">
+
+        {/* Massive wordmark */}
+        <Link href="/" className="inline-block">
+          <span
+            className="ed-fg text-7xl md:text-8xl lg:text-9xl"
+            style={{
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+              letterSpacing: "-0.05em",
+              lineHeight: 0.9,
+            }}
+          >
+            EZee <span className="ed-accent">Assist.</span>
+          </span>
+        </Link>
+
+        <p
+          className="ed-fg-muted mt-12 max-w-md text-lg md:text-xl"
+          style={{ lineHeight: 1.5, fontWeight: 400 }}
+        >
+          Your AI support agent for multi-location execution.
+          Support. Coaching. Compliance.
+        </p>
+
+        {/* Nav grid */}
+        <div className="mt-24 md:mt-32 grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-8">
+          {Object.entries(footerLinks).map(([heading, links]) => (
+            <div key={heading}>
+              <p
+                className="ed-fg-muted text-xs mb-6"
+                style={{
+                  fontWeight: 500,
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                }}
+              >
+                {heading}
+              </p>
+              <ul className="flex flex-col gap-3">
+                {links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="ed-fg text-base md:text-lg transition-opacity hover:opacity-60"
+                      style={{ fontFamily: "var(--font-editorial)", fontWeight: 400 }}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Contact + social */}
+        <div
+          className="mt-24 md:mt-32 grid grid-cols-1 md:grid-cols-12 gap-8 pt-12"
+          style={{ borderTop: "1px solid var(--ed-rule)" }}
+        >
+          <div className="md:col-span-6">
+            <a href="mailto:sales@ezeeassist.com" className="ed-link block text-lg md:text-xl mb-2">
+              sales@ezeeassist.com
+            </a>
+            <a href="tel:+18557773933" className="ed-fg-muted block text-base md:text-lg">
+              +1 855-777-3933
+            </a>
+          </div>
+          <div className="md:col-span-6 flex items-end gap-6 md:justify-end">
+            {socialLinks.map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ed-link text-base"
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom legal */}
+        <div
+          className="mt-16 pt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          style={{ borderTop: "1px solid var(--ed-rule)" }}
+        >
+          <p className="ed-fg-muted text-sm">
+            &copy; {new Date().getFullYear()} EZee Assist. All rights reserved.
+          </p>
+          <div className="flex flex-wrap gap-6 text-sm">
+            <Link href="/privacy"       className="ed-fg-muted hover:opacity-60 transition-opacity">Privacy Policy</Link>
+            <Link href="/terms"         className="ed-fg-muted hover:opacity-60 transition-opacity">Terms of Use</Link>
+            <Link href="/accessibility" className="ed-fg-muted hover:opacity-60 transition-opacity">Accessibility</Link>
           </div>
         </div>
       </div>

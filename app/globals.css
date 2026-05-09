@@ -15,8 +15,132 @@
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   /* Display / heading font — Plus Jakarta Sans */
   --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  /* Editorial display — Onest with Inter Tight fallback */
+  --font-editorial: var(--font-onest), var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
 
   --radius-card: 16px;
+}
+
+/* ─────────────────────────────────────────────────────────
+   Editorial theme (Studio Morfar-inspired)
+   Activated by adding `.theme-editorial` to a wrapper.
+   Leaves the default theme above untouched.
+   ───────────────────────────────────────────────────────── */
+.theme-editorial {
+  /* Light mode (cream-on-cream) */
+  --ed-bg:           #F5EDE0;
+  --ed-bg-alt:       #EDE3D4;
+  --ed-fg:           #0A0A0A;
+  --ed-fg-muted:     #6B6358;
+  --ed-border:       #D9CFC0;
+  --ed-card:         #FFFFFF;
+  --ed-card-alt:     #FAEFD8;
+  --ed-accent:       #00AEEF;
+  --ed-accent-muted: #1B5A6E;
+  --ed-rule:         rgba(10,10,10,0.12);
+}
+.dark .theme-editorial,
+.theme-editorial.dark {
+  /* Dark mode (deep black with cream text) */
+  --ed-bg:           #0A0A0A;
+  --ed-bg-alt:       #141414;
+  --ed-fg:           #F5EDE0;
+  --ed-fg-muted:     #A89B86;
+  --ed-border:       #2A2A2A;
+  --ed-card:         #141414;
+  --ed-card-alt:     #F5EDE0;
+  --ed-accent:       #00AEEF;
+  --ed-accent-muted: #1B5A6E;
+  --ed-rule:         rgba(245,237,224,0.14);
+}
+
+/* Editorial theme sets the page background + text color directly so we can
+   move away from white/navy without touching the v1 body styles. */
+.theme-editorial {
+  background-color: var(--ed-bg);
+  color: var(--ed-fg);
+  font-family: var(--font-editorial);
+}
+.theme-editorial h1,
+.theme-editorial h2,
+.theme-editorial h3,
+.theme-editorial h4,
+.theme-editorial h5,
+.theme-editorial h6 {
+  font-family: var(--font-editorial);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+/* Helper utility classes scoped to editorial sections — used by section
+   components without leaking into v1 components on other pages. */
+.theme-editorial .ed-bg          { background-color: var(--ed-bg); }
+.theme-editorial .ed-bg-alt      { background-color: var(--ed-bg-alt); }
+.theme-editorial .ed-card        { background-color: var(--ed-card); color: var(--ed-fg); }
+.theme-editorial .ed-card-alt    { background-color: var(--ed-card-alt); color: var(--ed-fg); }
+.theme-editorial .ed-fg          { color: var(--ed-fg); }
+.theme-editorial .ed-fg-muted    { color: var(--ed-fg-muted); }
+.theme-editorial .ed-border      { border-color: var(--ed-border); }
+.theme-editorial .ed-rule        { border-color: var(--ed-rule); }
+.theme-editorial .ed-accent      { color: var(--ed-accent); }
+.theme-editorial .ed-accent-bg   { background-color: var(--ed-accent); color: #ffffff; }
+.theme-editorial .ed-overline    {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ed-accent);
+}
+.theme-editorial .ed-link {
+  color: var(--ed-fg);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+  transition: text-decoration-thickness 0.15s ease;
+}
+.theme-editorial .ed-link:hover {
+  text-decoration-thickness: 2px;
+}
+
+/* Editorial buttons (additive — used only inside theme-editorial scope) */
+.theme-editorial .ed-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  font-family: var(--font-editorial);
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: -0.005em;
+  transition: transform 0.18s ease, opacity 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+  cursor: pointer;
+}
+.theme-editorial .ed-btn-primary {
+  background-color: var(--ed-fg);
+  color: var(--ed-bg);
+}
+.theme-editorial .ed-btn-primary:hover {
+  transform: scale(1.02);
+  opacity: 0.92;
+}
+.theme-editorial .ed-btn-secondary {
+  background-color: transparent;
+  color: var(--ed-fg);
+  border: 1px solid var(--ed-fg);
+}
+.theme-editorial .ed-btn-secondary:hover {
+  background-color: var(--ed-fg);
+  color: var(--ed-bg);
+}
+.theme-editorial .ed-btn-blue {
+  background-color: var(--ed-accent);
+  color: #ffffff;
+}
+.theme-editorial .ed-btn-blue:hover {
+  transform: scale(1.02);
+  background-color: #0095CC;
 }
 
 /* ─── Base Styles ─────────────────────────────────────── */

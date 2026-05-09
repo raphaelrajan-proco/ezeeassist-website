@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import HeroSection from "@/components/sections/HeroSection";
 import VideoPlaceholder from "@/components/sections/VideoPlaceholder";
-import TrustBar from "@/components/sections/TrustBar";
+import TrustBar from "@/components/sections/TrustBarEditorial";
 import WhatIsSection from "@/components/sections/WhatIsSection";
 import ProblemSection from "@/components/sections/ProblemSection";
 import HowItWorksSection from "@/components/sections/HowItWorksSection";
@@ -110,8 +110,9 @@ const faqSchema = {
 
 export default function Home() {
   return (
-    <>
+    <div className="theme-editorial">
       <JsonLd data={faqSchema} />
+      {/* Navbar reads pathname and switches to editorial styling on `/` */}
       <Navbar />
       <main className="flex flex-1 flex-col">
         <HeroSection />
@@ -134,6 +135,6 @@ export default function Home() {
         <FinalCTA />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }

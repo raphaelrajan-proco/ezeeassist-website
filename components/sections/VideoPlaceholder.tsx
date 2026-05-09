@@ -11,17 +11,17 @@ export default function VideoPlaceholder() {
   const [playing, setPlaying] = useState(false);
 
   return (
-    <section className="w-full bg-white dark:bg-[#0D0D0D]">
-      <div className="mx-auto max-w-5xl px-6 py-16 lg:px-8">
+    <section className="w-full ed-bg">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.55, ease: "easeOut" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
         >
           {/* 16:9 container */}
           <div
-            className="relative w-full overflow-hidden rounded-2xl shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_20px_60px_rgba(0,0,0,0.14)]"
+            className="relative w-full overflow-hidden rounded-3xl"
             style={{ paddingBottom: "56.25%" }}
           >
             {playing ? (

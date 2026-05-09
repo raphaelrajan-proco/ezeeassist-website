@@ -2,204 +2,122 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { MessageSquare, FolderSearch, Clock } from "lucide-react";
-
-/* ─── Inline UI mockups ────────────────────────────────── */
-
-function RepetitiveQuestionsVisual() {
-  const messages = [
-    { user: "Jordan M.", q: "What are the brand guidelines for signage?" },
-    { user: "Priya S.",  q: "What are the brand guidelines for signage?" },
-    { user: "Carlos R.", q: "What are the brand guidelines for signage?" },
-  ];
-  return (
-    <div className="w-full rounded-2xl bg-white dark:bg-[#161616] border border-[#E5E7EB] dark:border-white/[0.08] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2),_0_8px_24px_rgba(0,0,0,0.3)] p-6 space-y-3">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="h-3 w-3 rounded-full bg-red-400" />
-        <div className="h-3 w-3 rounded-full bg-yellow-400" />
-        <div className="h-3 w-3 rounded-full bg-green-400" />
-        <span className="ml-2 text-xs text-gray-400 dark:text-gray-500 font-medium">Support Inbox</span>
-      </div>
-      {messages.map(({ user, q }, i) => (
-        <div key={i} className="flex items-start gap-3 rounded-xl bg-[#F7F8FA] dark:bg-white/[0.04] p-4">
-          <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#00AEEF]/15 text-xs font-bold text-[#00AEEF]">{user[0]}</div>
-          <div>
-            <p className="text-xs font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] mb-0.5">{user}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400">{q}</p>
-          </div>
-          <span className="ml-auto text-[10px] text-gray-300 dark:text-gray-600 whitespace-nowrap">just now</span>
-        </div>
-      ))}
-      <div className="pt-1 text-center text-xs text-gray-300 dark:text-gray-600">+47 more identical questions today</div>
-    </div>
-  );
-}
-
-function ScatteredKnowledgeVisual() {
-  const items = [
-    { label: "Brand Guide v3 FINAL.pdf",    color: "bg-red-100 text-red-500",   ext: "PDF" },
-    { label: "Ops Manual 2022.docx",         color: "bg-blue-100 text-blue-500", ext: "DOC" },
-    { label: "Training Video — Onboarding",  color: "bg-purple-100 text-purple-500", ext: "VID" },
-    { label: "Brand Guide v3 FINAL (1).pdf", color: "bg-red-100 text-red-500",   ext: "PDF" },
-    { label: "SOP_v7_reviewed_jb.xlsx",      color: "bg-green-100 text-green-500", ext: "XLS" },
-    { label: "Brand Guide v3 FINAL (2).pdf", color: "bg-red-100 text-red-500",   ext: "PDF" },
-  ];
-  return (
-    <div className="w-full rounded-2xl bg-white dark:bg-[#161616] border border-[#E5E7EB] dark:border-white/[0.08] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2),_0_8px_24px_rgba(0,0,0,0.3)] p-6">
-      <div className="flex items-center gap-2 mb-5">
-        <div className="h-3 w-3 rounded-full bg-red-400" />
-        <div className="h-3 w-3 rounded-full bg-yellow-400" />
-        <div className="h-3 w-3 rounded-full bg-green-400" />
-        <span className="ml-2 text-xs text-gray-400 dark:text-gray-500 font-medium">Shared Drive</span>
-      </div>
-      <div className="grid grid-cols-2 gap-2">
-        {items.map(({ label, color, ext }, i) => (
-          <div key={i} className="flex items-center gap-2 rounded-lg border border-[#E5E7EB] dark:border-white/[0.06] p-2.5">
-            <span className={`flex-shrink-0 rounded px-1.5 py-0.5 text-[9px] font-bold ${color}`}>{ext}</span>
-            <span className="truncate text-[10px] text-gray-500 dark:text-gray-400">{label}</span>
-          </div>
-        ))}
-      </div>
-      <p className="mt-4 text-center text-[10px] text-gray-300 dark:text-gray-600">Spread across 4 drives, 2 SharePoints, 1 Dropbox</p>
-    </div>
-  );
-}
-
-function AfterHoursVisual() {
-  return (
-    <div className="w-full rounded-2xl bg-white dark:bg-[#161616] border border-[#E5E7EB] dark:border-white/[0.08] shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_8px_24px_rgba(0,0,0,0.06)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2),_0_8px_24px_rgba(0,0,0,0.3)] p-6">
-      <div className="flex items-center gap-2 mb-5">
-        <div className="h-3 w-3 rounded-full bg-red-400" />
-        <div className="h-3 w-3 rounded-full bg-yellow-400" />
-        <div className="h-3 w-3 rounded-full bg-green-400" />
-        <span className="ml-2 text-xs text-gray-400 dark:text-gray-500 font-medium">Support Chat</span>
-      </div>
-      <div className="rounded-xl bg-gray-50 dark:bg-white/[0.04] border border-gray-200 dark:border-white/[0.06] p-4 mb-4 text-center">
-        <div className="text-2xl mb-1">🌙</div>
-        <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">Support is offline</p>
-        <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">Available Mon–Fri, 9am–6pm EST</p>
-      </div>
-      <div className="space-y-2">
-        {[
-          { time: "11:42 PM", msg: "The fryer is making a strange noise — what do I do?" },
-          { time: "12:14 AM", msg: "A customer is asking about our allergen policy, help?" },
-          { time: "2:07 AM",  msg: "We're out of marketing materials for tomorrow's promo." },
-        ].map(({ time, msg }, i) => (
-          <div key={i} className="flex items-start gap-2 rounded-lg bg-[#F7F8FA] dark:bg-white/[0.04] px-3 py-2">
-            <span className="text-[10px] text-gray-300 dark:text-gray-600 whitespace-nowrap mt-0.5">{time}</span>
-            <p className="text-[10px] text-gray-500 dark:text-gray-400">{msg}</p>
-          </div>
-        ))}
-      </div>
-      <p className="mt-3 text-center text-[10px] text-gray-300 dark:text-gray-600">3 unanswered messages piling up</p>
-    </div>
-  );
-}
-
-/* ─── Section data ─────────────────────────────────────── */
 
 const rows = [
   {
-    icon: MessageSquare,
-    eyebrow: "The Challenge",
     title: "Support teams are buried in repetitive questions.",
     body: "Across dozens of locations, operators ask identical questions every day about procedures, vendors, marketing, compliance. Your team handles them manually — one by one. It's expensive, demoralizing, and unsustainable.",
-    visual: <RepetitiveQuestionsVisual />,
-    flip: false,
   },
   {
-    icon: FolderSearch,
-    eyebrow: "The Challenge",
     title: "Knowledge and systems are scattered everywhere.",
     body: "SOPs live in Google Drive. Training videos on YouTube. CRM data in HubSpot. Scheduling in Mindbody. Compliance docs in SharePoint. Operators can't find what they need — so they call you instead.",
-    visual: <ScatteredKnowledgeVisual />,
-    flip: true,
   },
   {
-    icon: Clock,
-    eyebrow: "The Challenge",
     title: "Coaching and compliance don't scale with people alone.",
     body: "You can't have an FBC on every call, at every location, every hour. Training gaps go unnoticed. Compliance issues surface too late. Brand standards drift across the network.",
-    visual: <AfterHoursVisual />,
-    flip: false,
   },
 ];
 
-/* ─── Feature row ──────────────────────────────────────── */
-
-function FeatureRow({ row, index }: { row: (typeof rows)[0]; index: number }) {
+function Row({
+  title,
+  body,
+  index,
+}: {
+  title: string;
+  body: string;
+  index: number;
+}) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
-  const textCol = (
-    <motion.div
-      initial={{ opacity: 0, x: row.flip ? 36 : -36 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-      className="flex flex-col justify-center"
-    >
-      <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">{row.eyebrow}</p>
-      <h3
-        className="text-2xl font-bold leading-snug text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-3xl mb-4"
-        style={{ letterSpacing: "-0.02em" }}
-      >
-        {row.title}
-      </h3>
-      <p className="text-base leading-7 text-gray-600 dark:text-gray-400">{row.body}</p>
-    </motion.div>
-  );
-
-  const visualCol = (
-    <motion.div
-      initial={{ opacity: 0, x: row.flip ? -36 : 36 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
-    >
-      {row.visual}
-    </motion.div>
-  );
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const last = index === rows.length - 1;
 
   return (
-    <div
+    <motion.div
       ref={ref}
-      className={`grid grid-cols-1 gap-14 items-center md:grid-cols-2 ${
-        index !== rows.length - 1 ? "pb-28 border-b border-[#E5E7EB] dark:border-white/[0.06]" : ""
+      initial={{ opacity: 0, y: 24 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className={`grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-16 py-16 md:py-24 ${
+        last ? "" : "border-b ed-rule"
       }`}
+      style={!last ? { borderBottomWidth: "1px", borderBottomStyle: "solid" } : {}}
     >
-      {row.flip ? <>{visualCol}{textCol}</> : <>{textCol}{visualCol}</>}
-    </div>
+      <div className="md:col-span-2">
+        <p
+          className="ed-fg-muted text-7xl md:text-8xl"
+          style={{
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 500,
+            letterSpacing: "-0.04em",
+            lineHeight: 1,
+            opacity: 0.35,
+          }}
+        >
+          {String(index + 1).padStart(2, "0")}
+        </p>
+      </div>
+      <div className="md:col-span-6">
+        <h3
+          className="ed-fg text-3xl md:text-4xl lg:text-5xl"
+          style={{
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 500,
+            letterSpacing: "-0.03em",
+            lineHeight: 1.05,
+          }}
+        >
+          {title}
+        </h3>
+      </div>
+      <div className="md:col-span-4">
+        <p
+          className="ed-fg-muted text-lg md:text-xl"
+          style={{ lineHeight: 1.55, fontWeight: 400 }}
+        >
+          {body}
+        </p>
+      </div>
+    </motion.div>
   );
 }
 
-/* ─── Section ──────────────────────────────────────────── */
-
 export default function ProblemSection() {
-  const headingRef = useRef(null);
-  const headingInView = useInView(headingRef, { once: true, margin: "-80px" });
+  const headRef = useRef(null);
+  const headInView = useInView(headRef, { once: true, margin: "-80px" });
 
   return (
-    <section className="w-full bg-white dark:bg-[#0D0D0D]">
-      <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28 space-y-24">
+    <section className="w-full ed-bg">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
         <motion.div
-          ref={headingRef}
+          ref={headRef}
           initial={{ opacity: 0, y: 20 }}
-          animate={headingInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55, ease: "easeOut" }}
-          className="text-center"
+          animate={headInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="max-w-4xl mb-16 md:mb-24"
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-4">The Challenge</p>
+          <p className="ed-overline mb-8">The Challenge</p>
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
-            style={{ letterSpacing: "-0.02em" }}
+            className="ed-fg text-5xl md:text-6xl lg:text-7xl"
+            style={{
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+              letterSpacing: "-0.04em",
+              lineHeight: 1,
+            }}
           >
             Multi-location execution{" "}
-            <span className="text-[#00AEEF]">breaks down at scale.</span>
+            <span className="ed-accent">breaks down at scale.</span>
           </h2>
         </motion.div>
 
-        {rows.map((row, i) => (
-          <FeatureRow key={i} row={row} index={i} />
-        ))}
+        <div
+          className="border-t ed-rule"
+          style={{ borderTopWidth: "1px", borderTopStyle: "solid" }}
+        >
+          {rows.map((row, i) => (
+            <Row key={i} title={row.title} body={row.body} index={i} />
+          ))}
+        </div>
       </div>
     </section>
   );

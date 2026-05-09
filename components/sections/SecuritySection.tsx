@@ -2,31 +2,13 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ShieldCheck, Lock, Server, Eye } from "lucide-react";
 import Link from "next/link";
-import Button from "@/components/ui/Button";
 
 const pillars = [
-  {
-    icon: Lock,
-    title: "Data isolation",
-    body: "Your content never touches shared infrastructure. Each client environment is fully isolated.",
-  },
-  {
-    icon: Server,
-    title: "No model training",
-    body: "Your data is never used to train third-party AI models — ever. It stays yours.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "SOC 2 aligned",
-    body: "Built on security practices aligned with SOC 2 Type II controls and enterprise requirements.",
-  },
-  {
-    icon: Eye,
-    title: "Full audit trail",
-    body: "Every query, every response, every escalation — logged and available for your review.",
-  },
+  { title: "Data isolation",   body: "Your content never touches shared infrastructure. Each client environment is fully isolated." },
+  { title: "No model training", body: "Your data is never used to train third-party AI models — ever. It stays yours." },
+  { title: "SOC 2 aligned",     body: "Built on security practices aligned with SOC 2 Type II controls and enterprise requirements." },
+  { title: "Full audit trail",  body: "Every query, every response, every escalation — logged and available for your review." },
 ];
 
 export default function SecuritySection() {
@@ -34,59 +16,86 @@ export default function SecuritySection() {
   const isInView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="w-full bg-white dark:bg-[#0D0D0D]">
-      <div ref={ref} className="mx-auto max-w-7xl px-6 py-24 lg:px-8 lg:py-28">
-        {/* Heading */}
+    <section className="w-full ed-bg">
+      <div ref={ref} className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center mb-16"
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="max-w-4xl mb-16 md:mb-24"
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">Security</p>
+          <p className="ed-overline mb-8">Security</p>
           <h2
-            className="text-4xl font-bold tracking-tight text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
-            style={{ letterSpacing: "-0.02em" }}
+            className="ed-fg text-5xl md:text-6xl lg:text-7xl"
+            style={{
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+              letterSpacing: "-0.04em",
+              lineHeight: 1,
+            }}
           >
             Security is the{" "}
-            <span className="text-[#00AEEF]">backbone</span> of our product.
+            <span className="ed-accent">backbone</span> of our product.
           </h2>
-          <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-gray-600 dark:text-gray-400">
+          <p
+            className="ed-fg-muted mt-8 max-w-2xl text-lg md:text-xl"
+            style={{ lineHeight: 1.5 }}
+          >
             We follow best-in-class security practices to ensure your data is
             completely protected and in line with your privacy policies.
           </p>
         </motion.div>
 
-        {/* 4 pillars */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-14">
-          {pillars.map(({ icon: Icon, title, body }, i) => (
+        <div
+          className="border-t ed-rule grid grid-cols-1 md:grid-cols-2"
+          style={{ borderTopWidth: "1px", borderTopStyle: "solid" }}
+        >
+          {pillars.map(({ title, body }, i) => (
             <motion.div
               key={title}
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 + i * 0.1 }}
-              className="card-hover rounded-xl border border-[#E5E7EB] dark:border-white/[0.08] bg-[#F7F8FA] dark:bg-[#111111] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04),_0_4px_12px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2),_0_4px_12px_rgba(0,0,0,0.3)]"
+              transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.08 }}
+              className="py-12 md:py-16 md:px-12"
+              style={{
+                borderBottomWidth: i < pillars.length - 2 ? "1px" : "0",
+                borderBottomStyle: "solid",
+                borderColor: "var(--ed-rule)",
+                ...(i % 2 === 1
+                  ? {
+                      borderLeftWidth: "1px",
+                      borderLeftStyle: "solid",
+                      borderColor: "var(--ed-rule)",
+                    }
+                  : {}),
+              }}
             >
-              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-[#00AEEF]/10">
-                <Icon size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
-              </div>
-              <h3 className="text-sm font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-2">{title}</h3>
-              <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">{body}</p>
+              <h3
+                className="ed-fg text-3xl md:text-4xl mb-5"
+                style={{
+                  fontFamily: "var(--font-editorial)",
+                  fontWeight: 500,
+                  letterSpacing: "-0.025em",
+                  lineHeight: 1.1,
+                }}
+              >
+                {title}
+              </h3>
+              <p
+                className="ed-fg-muted text-base md:text-lg max-w-md"
+                style={{ lineHeight: 1.55 }}
+              >
+                {body}
+              </p>
             </motion.div>
           ))}
         </div>
 
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.5 }}
-          className="text-center"
-        >
-          <Link href="/security">
-            <Button variant="secondary" size="md">Learn More About Security</Button>
+        <div className="mt-16">
+          <Link href="/security" className="ed-btn ed-btn-secondary">
+            Learn more about security
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

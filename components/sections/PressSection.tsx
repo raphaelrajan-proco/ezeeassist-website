@@ -2,109 +2,129 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Newspaper, Mic } from "lucide-react";
-import Link from "next/link";
 
 const articles = [
   {
-    icon: Newspaper,
     label: "BetaKit",
     title: "EZee Assist Reveals $1.85 Million in Funding to Help Franchises Manage Institutional Memory",
-    cta: "Read article →",
+    cta: "Read article",
     href: "#",
   },
   {
-    icon: Mic,
     label: "Emerging Franchise Brands Podcast",
     title: "CEO Raphael Rohit Rajan on the EZee Assist Journey and AI in Franchising",
-    cta: "Listen now →",
+    cta: "Listen",
     href: "#",
   },
   {
-    icon: Mic,
     label: "Modern Business Podcast",
     title: "The Origin Story of EZee Assist — AI, Franchising, and the Future of Support",
-    cta: "Listen now →",
+    cta: "Listen",
     href: "#",
   },
 ];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 16 },
   visible: (i: number) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.5, ease: "easeOut" as const, delay: i * 0.1 },
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" as const, delay: i * 0.08 },
   }),
 };
 
 export default function PressSection() {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section className="w-full bg-[#F7F8FA] dark:bg-[#111111] border-y border-[#E5E7EB] dark:border-white/[0.06]">
-      <div ref={ref} className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
+    <section className="w-full ed-bg">
+      <div ref={ref} className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="mb-10"
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="max-w-4xl mb-16 md:mb-24"
         >
-          <p className="text-xs font-semibold uppercase tracking-widest text-[#00AEEF] mb-3">
-            In the news
-          </p>
+          <p className="ed-overline mb-8">In the news</p>
           <h2
-            className="text-3xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0]"
-            style={{ letterSpacing: "-0.02em" }}
+            className="ed-fg text-5xl md:text-6xl lg:text-7xl"
+            style={{
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+              letterSpacing: "-0.04em",
+              lineHeight: 1,
+            }}
           >
-            EZee Assist in the news
+            EZee Assist in the press.
           </h2>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-          {articles.map(({ icon: Icon, label, title, cta, href }, i) => (
-            <motion.div
-              key={label}
+        {/* Magazine-style article list */}
+        <div
+          className="border-t ed-rule"
+          style={{ borderTopWidth: "1px", borderTopStyle: "solid" }}
+        >
+          {articles.map(({ label, title, cta, href }, i) => (
+            <motion.a
+              key={`${label}-${i}`}
+              href={href}
+              target={href === "#" ? undefined : "_blank"}
+              rel="noopener noreferrer"
               custom={i}
               initial="hidden"
               animate={inView ? "visible" : "hidden"}
               variants={fadeUp}
+              className="group grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 py-10 md:py-12 transition-opacity hover:opacity-80"
+              style={
+                i !== articles.length - 1
+                  ? {
+                      borderBottomWidth: "1px",
+                      borderBottomStyle: "solid",
+                      borderColor: "var(--ed-rule)",
+                    }
+                  : {}
+              }
             >
-              <a
-                href={href}
-                target={href === "#" ? undefined : "_blank"}
-                rel="noopener noreferrer"
-                className="group flex flex-col h-full rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] p-6 shadow-[0_1px_3px_rgba(0,0,0,0.04)] dark:shadow-[0_1px_3px_rgba(0,0,0,0.2)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_24px_rgba(0,0,0,0.09)] dark:hover:shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
+              <p
+                className="ed-fg-muted md:col-span-3 text-xs"
+                style={{
+                  fontWeight: 500,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                }}
               >
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#00AEEF]/10 mb-4 flex-shrink-0">
-                  <Icon size={18} className="text-[#00AEEF]" strokeWidth={1.75} />
-                </div>
-                <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-2">
-                  {label}
-                </p>
-                <p
-                  className="text-sm font-semibold leading-snug text-[#0A0A0A] dark:text-[#F0F0F0] flex-1 mb-4 group-hover:text-[#00AEEF] dark:group-hover:text-[#00AEEF] transition-colors"
-                  style={{ letterSpacing: "-0.01em" }}
-                >
-                  {title}
-                </p>
-                <span className="text-sm font-semibold text-[#00AEEF]">{cta}</span>
-              </a>
-            </motion.div>
+                {label}
+              </p>
+              <p
+                className="ed-fg md:col-span-7 text-2xl md:text-3xl"
+                style={{
+                  fontFamily: "var(--font-editorial)",
+                  fontWeight: 500,
+                  letterSpacing: "-0.025em",
+                  lineHeight: 1.15,
+                }}
+              >
+                {title}
+              </p>
+              <p className="md:col-span-2 self-start md:self-end">
+                <span className="ed-link text-base">{cta} →</span>
+              </p>
+            </motion.a>
           ))}
         </div>
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-8 text-center"
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-12"
         >
           <a
             href="https://linkedin.com/company/ezeeassist"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-semibold text-gray-500 hover:text-[#00AEEF] transition-colors"
+            className="ed-link text-base"
           >
             Follow us on LinkedIn →
           </a>
