@@ -5,6 +5,7 @@ import JsonLd from "@/components/JsonLd";
 import HeroSection from "@/components/sections/HeroSection";
 import VideoPlaceholder from "@/components/sections/VideoPlaceholder";
 import TrustBar from "@/components/sections/TrustBarEditorial";
+import StartingPointSection from "@/components/sections/StartingPointSection";
 import WhatIsSection from "@/components/sections/WhatIsSection";
 import ProblemSection from "@/components/sections/ProblemSection";
 import HowItWorksSection from "@/components/sections/HowItWorksSection";
@@ -12,7 +13,8 @@ import IntegrationsHub from "@/components/sections/IntegrationsHub";
 import StatsSection from "@/components/sections/StatsSection";
 import CaseStudyCarousel from "@/components/sections/CaseStudyCarousel";
 import ComparisonSection from "@/components/sections/ComparisonSection";
-import AnswersActionsAutomations from "@/components/sections/AnswersActionsAutomations";
+import FourPillarsSection from "@/components/sections/AnswersActionsAutomations";
+import PlatformLoopSection from "@/components/sections/PlatformLoopSection";
 import OnboardingTimeline from "@/components/sections/OnboardingTimeline";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import PressSection from "@/components/sections/PressSection";
@@ -24,7 +26,7 @@ import FinalCTA from "@/components/sections/FinalCTA";
 export const metadata: Metadata = {
   title: "EZee Assist — AI Support Agent for Multi-Location Execution",
   description:
-    "Automatically resolve support questions, coach operators, and ensure brand compliance at scale. 250+ integrations. 60+ brands. 4,000+ locations.",
+    "Answers, Actions, Agents, and Apps — through one conversational layer that connects to everything you already run on. 250+ integrations. 60+ brands. 4,500+ locations.",
   alternates: { canonical: "/" },
   keywords: [
     "AI support agent multi-location",
@@ -119,15 +121,17 @@ export default function Home() {
         <HeroSection />
         <VideoPlaceholder />
         <TrustBar />
+        <StartingPointSection />
+        <ProblemSection />
         {/* AEO: machine-readable definition block — do not remove */}
         <WhatIsSection />
-        <ProblemSection />
         <HowItWorksSection />
         <IntegrationsHub />
         <StatsSection />
         <CaseStudyCarousel />
         <ComparisonSection />
-        <AnswersActionsAutomations />
+        <FourPillarsSection />
+        <PlatformLoopSection />
         <OnboardingTimeline />
         <TestimonialsSection />
         <PressSection />

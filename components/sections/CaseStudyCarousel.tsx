@@ -8,22 +8,22 @@ const slides = [
   {
     brand: "WSI",
     stat: "67%",
-    statLabel: "Support reduction globally",
+    statLabel: "Ticket reduction in 30 days",
     quote: "Our franchisees have embraced this technology.",
     href: "/case-studies/wsi",
   },
   {
     brand: "DekaLash",
-    stat: "93%",
-    statLabel: "AI resolution rate",
+    stat: "94%",
+    statLabel: "AI deflection on Mindbody migration",
     quote: "AI is now an expectation in franchisee support.",
     href: "/case-studies/dekalash",
   },
   {
     brand: "DivaDance",
-    stat: "2,600+",
-    statLabel: "Queries answered in 6 months",
-    quote: "Saving 650+ hours of support time.",
+    stat: "650+",
+    statLabel: "Support hours saved in the first 6 months",
+    quote: "Operators get the answers they need in seconds.",
     href: "/case-studies/divadance",
   },
 ];

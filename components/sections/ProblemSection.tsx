@@ -6,7 +6,6 @@ import { useRef } from "react";
 /* ─── Inline editorial illustrations ──────────────────── */
 
 function StackedQuestionsIllo() {
-  // Three nearly-identical stacked chat bubbles, slightly offset, +47 below.
   const lines = [0, 1, 2];
   return (
     <div className="relative w-full max-w-[260px] mx-auto md:mx-0">
@@ -37,7 +36,7 @@ function StackedQuestionsIllo() {
               lineHeight: 1.4,
             }}
           >
-            What are the brand guidelines for signage?
+            Where do I find the new BOGO promo flyer?
           </p>
         </motion.div>
       ))}
@@ -53,7 +52,7 @@ function StackedQuestionsIllo() {
           textTransform: "uppercase",
         }}
       >
-        + 47 more identical questions today
+        + 47 more this morning
       </motion.p>
     </div>
   );
@@ -108,7 +107,7 @@ function ScatteredFilesIllo() {
   );
 }
 
-function KpiAlertIllo() {
+function CoachingGapIllo() {
   return (
     <motion.div
       initial={{ opacity: 0, y: 14 }}
@@ -131,7 +130,7 @@ function KpiAlertIllo() {
             color: "var(--ed-fg-muted)",
           }}
         >
-          Compliance · Location 042
+          Coaching · Last Quarter
         </span>
         <span
           className="h-2 w-2 rounded-full"
@@ -147,11 +146,12 @@ function KpiAlertIllo() {
           letterSpacing: "-0.02em",
         }}
       >
-        Insurance expired
+        Lagging indicators only
       </p>
-      <p className="ed-fg-muted text-xs mb-4">14 days ago · not renewed</p>
+      <p className="ed-fg-muted text-xs mb-4">
+        Reviewed weeks after the moment passed
+      </p>
 
-      {/* Tiny downward sparkline */}
       <svg
         viewBox="0 0 240 60"
         className="w-full h-12"
@@ -176,124 +176,90 @@ function KpiAlertIllo() {
 
 /* ─── Section data ─────────────────────────────────────── */
 
-const rows = [
+const pains = [
   {
-    title: "Support teams are buried in repetitive questions.",
-    body: "Across dozens of locations, operators ask identical questions every day about procedures, vendors, marketing, compliance. Your team handles them manually — one by one. It's expensive, demoralizing, and unsustainable.",
+    stat: "50%",
+    title: "Repetitive questions",
+    body:
+      "Franchisees and teams can't find what they need across 10+ tools, so it all routes to people.",
     illo: <StackedQuestionsIllo />,
-    illoSide: "right" as const,
   },
   {
-    title: "Knowledge and systems are scattered everywhere.",
-    body: "SOPs live in Google Drive. Training videos on YouTube. CRM data in HubSpot. Scheduling in Mindbody. Compliance docs in SharePoint. Operators can't find what they need — so they call you instead.",
+    stat: "30%",
+    title: "Manual compliance work",
+    body:
+      "Pushing data between systems, chasing updates, audits and reporting.",
     illo: <ScatteredFilesIllo />,
-    illoSide: "left" as const,
   },
   {
-    title: "Coaching and compliance don't scale with people alone.",
-    body: "You can't have an FBC on every call, at every location, every hour. Training gaps go unnoticed. Compliance issues surface too late. Brand standards drift across the network.",
-    illo: <KpiAlertIllo />,
-    illoSide: "right" as const,
+    stat: "20%",
+    title: "Real coaching",
+    body:
+      "And even this runs on lagging indicators. Not live signals and proactive loops.",
+    illo: <CoachingGapIllo />,
   },
 ];
 
-/* ─── Single editorial row ─────────────────────────────── */
+/* ─── Single pain column ───────────────────────────────── */
 
-function Row({
+function PainColumn({
+  stat,
   title,
   body,
   illo,
-  illoSide,
   index,
-  total,
 }: {
+  stat: string;
   title: string;
   body: string;
   illo: React.ReactNode;
-  illoSide: "left" | "right";
   index: number;
-  total: number;
 }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
-  const last = index === total - 1;
-  const slideFromX = illoSide === "right" ? -40 : 40;
 
-  const NumberCell = (
-    <div className="md:col-span-2">
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 32 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{
+        duration: 0.85,
+        ease: [0.22, 1, 0.36, 1],
+        delay: index * 0.12,
+      }}
+      className="flex flex-col"
+    >
       <p
-        className="ed-fg-muted text-7xl md:text-8xl"
+        className="ed-accent text-7xl md:text-8xl lg:text-9xl mb-4"
         style={{
           fontFamily: "var(--font-editorial)",
           fontWeight: 500,
-          letterSpacing: "-0.04em",
-          lineHeight: 1,
-          opacity: 0.35,
+          letterSpacing: "-0.05em",
+          lineHeight: 0.9,
         }}
       >
-        {String(index + 1).padStart(2, "0")}
+        {stat}
       </p>
-    </div>
-  );
-
-  const TextCell = (
-    <div className="md:col-span-6">
       <h3
-        className="ed-fg text-3xl md:text-4xl lg:text-5xl mb-6"
+        className="ed-fg text-2xl md:text-3xl mb-4"
         style={{
           fontFamily: "var(--font-editorial)",
           fontWeight: 500,
-          letterSpacing: "-0.03em",
-          lineHeight: 1.05,
+          letterSpacing: "-0.025em",
+          lineHeight: 1.15,
         }}
       >
         {title}
       </h3>
       <p
-        className="ed-fg-muted text-lg md:text-xl max-w-xl"
-        style={{ lineHeight: 1.55, fontWeight: 400 }}
+        className="ed-fg-muted text-base md:text-lg mb-10 max-w-md"
+        style={{ lineHeight: 1.5, fontWeight: 400 }}
       >
         {body}
       </p>
-    </div>
-  );
-
-  const IlloCell = (
-    <div className="md:col-span-4 flex items-center justify-center md:justify-start">
-      {illo}
-    </div>
-  );
-
-  return (
-    <>
-      <motion.div
-        ref={ref}
-        initial={{ opacity: 0, x: slideFromX }}
-        animate={inView ? { opacity: 1, x: 0 } : {}}
-        transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 py-16 md:py-24 items-center"
-      >
-        {NumberCell}
-        {illoSide === "right" ? (
-          <>
-            {TextCell}
-            {IlloCell}
-          </>
-        ) : (
-          <>
-            {IlloCell}
-            {TextCell}
-          </>
-        )}
-      </motion.div>
-      {!last && (
-        <span
-          className="ed-rule-draw"
-          data-visible={inView}
-          aria-hidden="true"
-        />
-      )}
-    </>
+      <div className="mt-auto">{illo}</div>
+    </motion.div>
   );
 }
 
@@ -311,9 +277,9 @@ export default function ProblemSection() {
           initial={{ opacity: 0, y: 22 }}
           animate={headInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-4xl mb-16 md:mb-24"
+          className="max-w-5xl mb-16 md:mb-24"
         >
-          <p className="ed-overline mb-8">The Challenge</p>
+          <p className="ed-overline mb-8">The Reality Today</p>
           <h2
             className="ed-fg text-5xl md:text-6xl lg:text-7xl"
             style={{
@@ -323,8 +289,10 @@ export default function ProblemSection() {
               lineHeight: 1,
             }}
           >
-            Multi-location execution{" "}
-            <span className="ed-accent">breaks down at scale.</span>
+            Built to coach and drive revenue.{" "}
+            <span className="ed-accent">
+              But, massively underleveraged.
+            </span>
           </h2>
         </motion.div>
 
@@ -334,17 +302,44 @@ export default function ProblemSection() {
           aria-hidden="true"
         />
 
-        {rows.map((row, i) => (
-          <Row
-            key={i}
-            title={row.title}
-            body={row.body}
-            illo={row.illo}
-            illoSide={row.illoSide}
-            index={i}
-            total={rows.length}
-          />
-        ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-16 pt-16 md:pt-24">
+          {pains.map((p, i) => (
+            <PainColumn
+              key={p.title}
+              stat={p.stat}
+              title={p.title}
+              body={p.body}
+              illo={p.illo}
+              index={i}
+            />
+          ))}
+        </div>
+
+        {/* Final emphasis line */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+          className="ed-fg mt-24 md:mt-32 text-3xl md:text-4xl lg:text-5xl max-w-5xl"
+          style={{
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 500,
+            letterSpacing: "-0.03em",
+            lineHeight: 1.15,
+          }}
+        >
+          Four days in five go to support and admin.{" "}
+          <span
+            className="ed-accent"
+            style={{
+              borderBottom: "2px solid currentColor",
+              paddingBottom: "0.1em",
+            }}
+          >
+            Not to growth.
+          </span>
+        </motion.p>
       </div>
     </section>
   );

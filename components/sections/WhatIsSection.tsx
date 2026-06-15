@@ -4,38 +4,21 @@ import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
+const PILLARS: { label: string; href: string }[] = [
+  { label: "Answers", href: "#answers" },
+  { label: "Actions", href: "#actions" },
+  { label: "Agents",  href: "#agents"  },
+  { label: "Apps",    href: "#apps"    },
+];
+
 /**
- * AEO-optimised "What is EZee Assist?" definition block — editorial pull-quote.
- *
- * Server-rendered HTML still contains the full definition (the motion wrappers
- * only animate opacity/y, the text is in the DOM on first paint), so AI
- * crawlers (ChatGPT, Perplexity, Claude, Google AI Overviews) can still cite
- * the canonical "What is EZee Assist?" answer.
+ * AEO-optimised "Introducing EZee Assist" definition block — editorial.
+ * Server-rendered HTML still contains the full definition (motion only
+ * animates opacity/y), so AI crawlers can still cite the canonical answer.
  */
 export default function WhatIsSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
-
-  // Pre-split the long definition into clauses so we can fade each in turn —
-  // gives the section a "thoughtful read" cadence instead of arriving as a wall.
-  const clauses: React.ReactNode[] = [
-    "EZee Assist is an AI support agent purpose-built for franchise and multi-location brands.",
-    <>
-      It connects to your entire tech stack —{" "}
-      <Link href="/solution/integrations" className="ed-link">
-        250+ integrations across drives, CRMs, POS, LMS, and marketing tools
-      </Link>{" "}
-      — and becomes your business&apos;s AI coach.
-    </>,
-    "Operators receive instant support, perform actions, and trigger automated workflows directly through the channels they already use: SMS, email, Slack, Microsoft Teams, WhatsApp, and web.",
-    <>
-      When human expertise is needed, EZee&apos;s{" "}
-      <Link href="/solution/ticketing" className="ed-link">
-        intelligent ticketing system
-      </Link>{" "}
-      loops in the right team member with full context.
-    </>,
-  ];
 
   return (
     <section
@@ -50,7 +33,7 @@ export default function WhatIsSection() {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="ed-overline mb-10"
         >
-          What is EZee Assist?
+          Introducing EZee Assist
         </motion.p>
 
         <motion.h2
@@ -65,29 +48,67 @@ export default function WhatIsSection() {
             lineHeight: 1.05,
           }}
         >
-          The AI operating system for franchise and multi-location businesses.
+          <span className="ed-accent">EZee AI</span> turns what
+          you&apos;ve built into{" "}
+          <span className="ed-accent">results at every location.</span>
         </motion.h2>
 
-        <p
+        <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.85, ease: "easeOut", delay: 0.35 }}
           className="ed-fg-muted mt-12 text-xl md:text-2xl max-w-4xl"
           style={{ lineHeight: 1.5, fontWeight: 400 }}
         >
-          {clauses.map((clause, i) => (
+          Every tool you&apos;ve bought. Every SOP you&apos;ve written.
+          Every coach you&apos;ve hired. Finally compounding through one
+          conversational layer.
+        </motion.p>
+
+        {/* AEO definition — kept for crawlers, visually muted */}
+        <p className="sr-only">
+          EZee Assist is an AI agent purpose-built for franchise and
+          multi-location brands. It connects to your entire tech stack —
+          250+ native integrations across drives, CRMs, POS, ERP, LMS,
+          marketing, accounting, and comms tools — and delivers four core
+          capabilities through one conversational layer: Answers (instant
+          responses sourced from every connected system), Actions
+          (executing tasks across CRM, ERP, scheduling, anywhere), Agents
+          (autonomous multi-step workflows triggered on schedule or
+          signal), and Apps (custom mini-apps built from a single
+          natural-language prompt). Available across SMS, WhatsApp, Slack,
+          Teams, Google Chat, Email, Web Portal, and Mobile App. Available
+          24/7. Used by 60+ franchise brands across 4,500+ locations.
+        </p>
+
+        {/* Larger pillar pills with staggered entrance */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.7, ease: "easeOut", delay: 0.6 }}
+          className="mt-12 flex flex-wrap gap-3"
+        >
+          {PILLARS.map((p, i) => (
             <motion.span
-              key={i}
-              initial={{ opacity: 0, y: 8 }}
+              key={p.label}
+              initial={{ opacity: 0, y: 12 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{
-                duration: 0.7,
-                ease: "easeOut",
-                delay: 0.4 + i * 0.18,
+                duration: 0.6,
+                ease: [0.22, 1, 0.36, 1],
+                delay: 0.7 + i * 0.12,
               }}
-              className="block mb-2"
+              className="inline-block"
             >
-              {clause}
+              <Link
+                href={p.href}
+                className="ed-pillar-pill ed-pillar-pill-lg"
+              >
+                {p.label}
+              </Link>
             </motion.span>
           ))}
-        </p>
+        </motion.div>
       </div>
     </section>
   );

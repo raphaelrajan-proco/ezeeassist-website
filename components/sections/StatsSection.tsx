@@ -6,7 +6,7 @@ import { useRef, useState } from "react";
 
 const stats = [
   { prefix: "", end: 60,    suffix: "+",  decimals: 0, label: "Franchise brands" },
-  { prefix: "", end: 4000,  suffix: "+",  decimals: 0, label: "Locations" },
+  { prefix: "", end: 4500,  suffix: "+",  decimals: 0, label: "Locations" },
   { prefix: "", end: 10000, suffix: "+",  decimals: 0, label: "Users" },
   { prefix: "", end: 70,    suffix: "%+", decimals: 0, label: "Support deflection" },
 ];

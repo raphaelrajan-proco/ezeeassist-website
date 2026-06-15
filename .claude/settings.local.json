@@ -32,7 +32,8 @@
       "Bash(python3)",
       "Bash(git tag *)",
       "Bash(git checkout *)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

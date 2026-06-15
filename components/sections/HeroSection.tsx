@@ -1,26 +1,29 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
 import HeroPhoneMockup from "./HeroPhoneMockup";
 
-const ACCENT_TEXT = "for multi-location execution.";
+const PILLARS: { label: string; href: string }[] = [
+  { label: "Answers",  href: "#answers"  },
+  { label: "Actions",  href: "#actions"  },
+  { label: "Agents",   href: "#agents"   },
+  { label: "Apps",     href: "#apps"     },
+];
+
+const CHANNELS: { label: string; emoji: string; extensible?: boolean }[] = [
+  { label: "SMS",            emoji: "💬" },
+  { label: "WhatsApp",       emoji: "🟢" },
+  { label: "Slack",          emoji: "🔷" },
+  { label: "Teams",          emoji: "🔵" },
+  { label: "Google Chat",    emoji: "💙" },
+  { label: "Email",          emoji: "📧" },
+  { label: "Web Portal",     emoji: "🖥️" },
+  { label: "Mobile App",     emoji: "📱" },
+  { label: "Anywhere else",  emoji: "✨", extensible: true },
+];
 
 export default function HeroSection() {
-  const accentRef = useRef<HTMLSpanElement>(null);
-  const inView = useInView(accentRef, { once: true, margin: "-80px" });
-  const [accentVisible, setAccentVisible] = useState(false);
-
-  // Trigger the blue-wipe shortly after the headline lines have arrived,
-  // so the accent fills in last — gives the hero its "arrival" beat.
-  useEffect(() => {
-    if (inView) {
-      const t = setTimeout(() => setAccentVisible(true), 700);
-      return () => clearTimeout(t);
-    }
-  }, [inView]);
-
   return (
     <section className="relative w-full ed-bg overflow-hidden">
       {/* Ambient blue blob — slow drift behind headline */}
@@ -59,12 +62,12 @@ export default function HeroSection() {
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="ed-overline mb-10"
             >
-              AI-Powered Multi-Location Execution
+              AI Purpose-Built for Franchising
             </motion.p>
 
-            {/* Headline — each line ARRIVES separately, slower, ease-out */}
+            {/* Headline */}
             <h1
-              className="ed-fg max-w-[18ch] text-6xl md:text-7xl lg:text-8xl xl:text-[8.5rem]"
+              className="ed-fg max-w-[15ch] text-6xl md:text-7xl lg:text-8xl xl:text-[8.5rem]"
               style={{
                 fontFamily: "var(--font-editorial)",
                 fontWeight: 500,
@@ -78,53 +81,45 @@ export default function HeroSection() {
                 transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
                 className="block"
               >
-                Your AI support agent
+                <span className="ed-accent">AI</span> purpose-built
               </motion.span>
 
               <motion.span
-                ref={accentRef}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.45 }}
-                className="block ed-blue-wipe"
-                data-visible={accentVisible}
-                data-text={ACCENT_TEXT}
+                transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+                className="block"
               >
-                {ACCENT_TEXT}
+                for franchising and
+              </motion.span>
+
+              <motion.span
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.65 }}
+                className="block"
+              >
+                multi-location brands.
               </motion.span>
             </h1>
 
-            {/* Subheadline — clause-staggered fade */}
-            <p
+            {/* Subheadline */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, ease: "easeOut", delay: 1.2 }}
               className="ed-fg-muted mt-10 max-w-2xl text-xl md:text-2xl"
               style={{ lineHeight: 1.4, fontWeight: 400 }}
             >
-              {[
-                "Automatically resolve repetitive questions.",
-                "Coach operators on driving business performance.",
-                "Ensure brand compliance at scale.",
-              ].map((clause, i) => (
-                <motion.span
-                  key={i}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{
-                    duration: 0.7,
-                    ease: "easeOut",
-                    delay: 1.0 + i * 0.18,
-                  }}
-                  className="block"
-                >
-                  {clause}
-                </motion.span>
-              ))}
-            </p>
+              Answers, Actions, Agents, and Apps — through one conversational
+              layer that connects to everything you already run on.
+            </motion.p>
 
-            {/* CTAs — scale + fade entrance after headline finishes */}
+            {/* CTAs */}
             <motion.div
               initial={{ opacity: 0, scale: 0.96, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 0.55, ease: "easeOut", delay: 1.7 }}
+              transition={{ duration: 0.55, ease: "easeOut", delay: 1.5 }}
               className="mt-12 md:mt-16 flex flex-col sm:flex-row gap-4"
             >
               <Link href="/contact" className="ed-btn ed-btn-blue ed-cta-pulse">
@@ -135,17 +130,38 @@ export default function HeroSection() {
               </Link>
             </motion.div>
 
+            {/* Four pillar pills — link to corresponding sections */}
+            <motion.nav
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: "easeOut", delay: 1.8 }}
+              className="mt-8 flex flex-wrap gap-2.5"
+              aria-label="Capabilities"
+            >
+              {PILLARS.map((p) => (
+                <Link
+                  key={p.label}
+                  href={p.href}
+                  className="ed-pillar-pill"
+                >
+                  {p.label}
+                </Link>
+              ))}
+            </motion.nav>
+
             {/* Trust line */}
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 2.0 }}
-              className="ed-fg-muted mt-16 text-base"
+              transition={{ duration: 0.7, ease: "easeOut", delay: 2.1 }}
+              className="ed-fg-muted mt-12 text-base"
               style={{ fontWeight: 400 }}
             >
-              Available on SMS, Email, Slack, Teams, Google Chat, Chrome Extension, and Web.
-              <span className="block mt-2 text-sm" style={{ opacity: 0.7 }}>
-                Trusted by 60+ brands across 4,000+ locations.
+              <span className="ed-fg" style={{ fontWeight: 500 }}>
+                60+ brands. 4,500+ locations.
+              </span>{" "}
+              <span style={{ opacity: 0.75 }}>
+                Trusted across franchise and multi-location networks.
               </span>
             </motion.p>
           </div>
@@ -160,6 +176,35 @@ export default function HeroSection() {
             <HeroPhoneMockup />
           </motion.div>
         </div>
+
+        {/* Channel pill row — restored, with Mobile App + Anywhere else */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-24 md:mt-32"
+        >
+          <p className="ed-overline mb-6">Every Channel</p>
+          <div className="flex flex-wrap gap-2.5 max-w-4xl">
+            {CHANNELS.map(({ label, emoji, extensible }) => (
+              <span
+                key={label}
+                className="ed-channel-pill"
+                data-extensible={extensible ? "true" : undefined}
+              >
+                <span aria-hidden="true">{emoji}</span>
+                {extensible ? <span>+ {label}</span> : label}
+              </span>
+            ))}
+          </div>
+          <p
+            className="ed-fg-muted mt-6 text-sm md:text-base max-w-2xl"
+            style={{ fontWeight: 400 }}
+          >
+            Embedded in your tools and workflows. One assistant, every surface.
+          </p>
+        </motion.div>
       </div>
     </section>
   );
