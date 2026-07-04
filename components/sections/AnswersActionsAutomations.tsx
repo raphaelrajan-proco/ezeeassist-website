@@ -627,34 +627,20 @@ export default function FourPillarsSection() {
               lineHeight: 1,
             }}
           >
-            {["Answers", "Actions", "Agents", "Apps"].map((w, i, arr) => (
-              <motion.span
-                key={w}
-                initial={{ opacity: 0, y: 24 }}
-                animate={headInView ? { opacity: 1, y: 0 } : {}}
-                transition={{
-                  duration: 0.7,
-                  ease: [0.22, 1, 0.36, 1],
-                  delay: 0.15 + i * 0.15,
-                }}
-                className="inline"
-              >
-                {w}
-                {i < arr.length - 1 && (
-                  <span className="ed-accent">{" · "}</span>
-                )}
-              </motion.span>
-            ))}
+            Four capabilities. One platform.{" "}
+            <span className="ed-accent">
+              Every AI idea your brand has, now shippable.
+            </span>
           </h2>
           <motion.p
             initial={{ opacity: 0 }}
             animate={headInView ? { opacity: 1 } : {}}
-            transition={{ duration: 0.7, delay: 1.0 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
             className="ed-fg-muted mt-10 text-xl md:text-2xl max-w-3xl"
             style={{ lineHeight: 1.45, fontWeight: 400 }}
           >
             From instant answers to fully built mini-apps — every
-            capability lives inside one conversational AI agent.
+            capability lives inside one platform, connected to your stack.
           </motion.p>
         </motion.div>
 

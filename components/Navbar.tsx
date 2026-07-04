@@ -6,6 +6,7 @@ import {
   Bot, Ticket, BarChart2, Workflow, Plug2, LayoutGrid,
   Building2, Store, MapPin, GraduationCap,
   FileText, Lightbulb, Calculator, Clock,
+  MessageSquare, Zap, AppWindow, ShieldCheck,
   ArrowRight,
 } from "lucide-react";
 import Link from "next/link";
@@ -16,10 +17,13 @@ import ThemeToggle from "@/components/ThemeToggle";
 /* ─── Nav data ─────────────────────────────────────────── */
 
 const platformLinks = [
-  { label: "Solution Overview",     href: "/solution",                  icon: LayoutGrid,  desc: "One AI agent. Your entire tech stack. Limitless execution." },
-  { label: "Integrations",          href: "/solution/integrations",     icon: Plug2,       desc: "250+ integrations — drives, CRMs, POS, LMS, and more." },
-  { label: "Intelligent Ticketing", href: "/solution/ticketing",        icon: Ticket,      desc: "Human guaranteed. Your team gets looped in when it matters." },
-  { label: "Agentic Workflows",     href: "/solution/workflows",        icon: Workflow,    desc: "AI-powered workflows. You dream it up, EZee executes it." },
+  { label: "Platform Overview", href: "/solution",     icon: LayoutGrid,  desc: "Every AI use case. One platform. Purpose-built for franchising." },
+  { label: "Answers",           href: "/#answers",     icon: MessageSquare, desc: "Instant answers, sourced from your entire stack." },
+  { label: "Actions",           href: "/#actions",     icon: Zap,         desc: "AI that takes action across your tools." },
+  { label: "Agents",            href: "/#agents",      icon: Workflow,    desc: "Autonomous workflows across HQ and locations." },
+  { label: "Apps",              href: "/#apps",        icon: AppWindow,   desc: "Custom apps, from one prompt." },
+  { label: "Integrations",      href: "/#integrations",icon: Plug2,       desc: "250+ native integrations. Connected to everything." },
+  { label: "Governance",        href: "/#governance",  icon: ShieldCheck, desc: "Role-based access, full observability, human-in-the-loop." },
 ];
 
 const industriesLinks = [
@@ -280,7 +284,7 @@ export default function Navbar() {
               onClick={() => setActiveDropdown(activeDropdown === "platform" ? null : "platform")}
               aria-expanded={activeDropdown === "platform"}
             >
-              Solution
+              Platform
               <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "platform" ? "rotate-180" : ""}`} />
             </button>
             <DropdownWrapper keyName="platform"><PlatformPanel onClose={closeAll} /></DropdownWrapper>
@@ -370,7 +374,7 @@ export default function Navbar() {
             <li>
               <button className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors"
                 onClick={() => setMobilePlatformOpen((v) => !v)}>
-                Solution
+                Platform
                 <ChevronDown size={14} strokeWidth={2.5} className={`transition-transform duration-200 ${mobilePlatformOpen ? "rotate-180" : ""}`} />
               </button>
               {mobilePlatformOpen && (

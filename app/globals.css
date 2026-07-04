@@ -134,6 +134,17 @@
   background-color: var(--ed-fg);
   color: var(--ed-bg);
 }
+/* Secondary button for hardcoded-dark sections (Pivot / Governance /
+   Closing CTA) where --ed-fg would resolve to near-black and vanish. */
+.theme-editorial .ed-btn-secondary-dark {
+  background-color: transparent;
+  color: #F5EDE0;
+  border: 1px solid #F5EDE0;
+}
+.theme-editorial .ed-btn-secondary-dark:hover {
+  background-color: #F5EDE0;
+  color: #0A0A0A;
+}
 .theme-editorial .ed-btn-blue {
   background-color: var(--ed-accent);
   color: #ffffff;
