@@ -5,9 +5,8 @@ import JsonLd from "@/components/JsonLd";
 import HeroSection from "@/components/sections/HeroSection";
 import VideoPlaceholder from "@/components/sections/VideoPlaceholder";
 import TrustBar from "@/components/sections/TrustBarEditorial";
-import StartingPointSection from "@/components/sections/StartingPointSection";
+import RealitySection from "@/components/sections/RealitySection";
 import WhatIsSection from "@/components/sections/WhatIsSection";
-import ProblemSection from "@/components/sections/ProblemSection";
 import HowItWorksSection from "@/components/sections/HowItWorksSection";
 import IntegrationsHub from "@/components/sections/IntegrationsHub";
 import StatsSection from "@/components/sections/StatsSection";
@@ -119,10 +118,9 @@ export default function Home() {
       <Navbar />
       <main className="flex flex-1 flex-col">
         <HeroSection />
+        <RealitySection />
         <VideoPlaceholder />
         <TrustBar />
-        <StartingPointSection />
-        <ProblemSection />
         {/* AEO: machine-readable definition block — do not remove */}
         <WhatIsSection />
         <HowItWorksSection />

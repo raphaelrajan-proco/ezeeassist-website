@@ -1,5 +1,26 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Homepage Narrative Versions
+
+- **v3 (current production, franchising agent):** `git checkout main` or `git checkout homepage-v3-franchising-agent`
+- **v4 (platform narrative, in progress):** `git checkout platform-narrative-pass`
+
+To fully abandon v4:
+
+```bash
+git checkout main
+git branch -D platform-narrative-pass
+git push origin --delete platform-narrative-pass
+```
+
+To merge v4 to production:
+
+```bash
+git checkout main
+git merge platform-narrative-pass
+git push origin main
+```
+
 ## Design Versions
 
 The site has two parallel design directions tracked in Git:
