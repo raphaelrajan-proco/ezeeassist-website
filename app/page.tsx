@@ -6,6 +6,8 @@ import HeroSection from "@/components/sections/HeroSection";
 import VideoPlaceholder from "@/components/sections/VideoPlaceholder";
 import TrustBar from "@/components/sections/TrustBarEditorial";
 import RealitySection from "@/components/sections/RealitySection";
+import PivotSection from "@/components/sections/PivotSection";
+import UseCaseMatrix from "@/components/sections/UseCaseMatrix";
 import WhatIsSection from "@/components/sections/WhatIsSection";
 import HowItWorksSection from "@/components/sections/HowItWorksSection";
 import IntegrationsHub from "@/components/sections/IntegrationsHub";
@@ -119,6 +121,8 @@ export default function Home() {
       <main className="flex flex-1 flex-col">
         <HeroSection />
         <RealitySection />
+        <PivotSection />
+        <UseCaseMatrix />
         <VideoPlaceholder />
         <TrustBar />
         {/* AEO: machine-readable definition block — do not remove */}
