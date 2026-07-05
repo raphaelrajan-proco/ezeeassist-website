@@ -31,7 +31,7 @@ export default function HeroSection() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-32 md:py-40 lg:py-48">
+      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
 
           {/* Left: editorial copy */}
@@ -40,19 +40,17 @@ export default function HeroSection() {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="ed-overline mb-10"
+              className="ed-overline mb-6"
             >
               The AI Platform for Franchise &amp; Multi-Location Brands
             </motion.p>
 
             {/* Headline — two lines */}
             <h1
-              className="ed-fg max-w-[16ch] text-6xl md:text-7xl lg:text-8xl"
+              className="ed-fg max-w-[20ch] text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.03em]"
               style={{
                 fontFamily: "var(--font-editorial)",
                 fontWeight: 500,
-                letterSpacing: "-0.04em",
-                lineHeight: 0.95,
               }}
             >
               <motion.span
@@ -61,15 +59,15 @@ export default function HeroSection() {
                 transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
                 className="block"
               >
-                The AI your teams already use.
+                Your teams are already using AI.
               </motion.span>
               <motion.span
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.45 }}
-                className="block mt-4"
+                className="block mt-3"
               >
-                Now built on the platform{" "}
+                Give them one{" "}
                 <span className="ed-accent">your brand can trust.</span>
               </motion.span>
             </h1>
@@ -79,12 +77,12 @@ export default function HeroSection() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut", delay: 1.1 }}
-              className="ed-fg-muted mt-10 max-w-2xl text-xl md:text-2xl"
-              style={{ lineHeight: 1.4, fontWeight: 400 }}
+              className="ed-fg-muted mt-8 max-w-2xl text-lg md:text-xl"
+              style={{ lineHeight: 1.45, fontWeight: 400 }}
             >
-              Every AI answer, action, agent, and app — connected to your
+              AI answers, actions, agents, and apps — connected to your
               stack, governed by your rules, deployed across HQ, coaches,
-              franchisees, and every location. Purpose-built for franchise
+              franchisees, and location staff. Purpose-built for franchise
               and multi-location operations.
             </motion.p>
 
@@ -93,7 +91,7 @@ export default function HeroSection() {
               initial={{ opacity: 0, scale: 0.96, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.55, ease: "easeOut", delay: 1.45 }}
-              className="mt-12 md:mt-16 flex flex-col sm:flex-row gap-4"
+              className="mt-8 md:mt-10 flex flex-col sm:flex-row gap-4"
             >
               <Link href="/contact" className="ed-btn ed-btn-blue ed-cta-pulse">
                 Book a Demo
@@ -108,7 +106,7 @@ export default function HeroSection() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut", delay: 1.75 }}
-              className="ed-fg-muted mt-12 text-base"
+              className="ed-fg-muted mt-8 text-sm md:text-base"
               style={{ fontWeight: 400 }}
             >
               <span className="ed-fg" style={{ fontWeight: 500 }}>
