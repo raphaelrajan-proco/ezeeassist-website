@@ -12,7 +12,7 @@ export default function VideoPlaceholder() {
 
   return (
     <section className="w-full ed-bg">
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
+      <div className="mx-auto max-w-4xl px-6 md:px-8 py-12 md:py-16">
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -93,7 +93,7 @@ export default function VideoPlaceholder() {
 
                 {/* Label */}
                 <p className="relative z-10 text-sm font-semibold text-white/70 tracking-wide">
-                  Watch the 2-minute product tour
+                  See EZee Assist in action
                 </p>
               </div>
             )}

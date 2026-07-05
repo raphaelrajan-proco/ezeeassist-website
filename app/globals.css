@@ -205,6 +205,14 @@
   color: var(--ed-accent);
 }
 
+/* Proof-section logo marquee — slow scroll, pauses on hover */
+.theme-editorial .ed-logo-marquee {
+  animation: marquee 70s linear infinite;
+}
+.theme-editorial .ed-logo-marquee:hover {
+  animation-play-state: paused;
+}
+
 /* Editorial motion primitives ───────────────────────── */
 
 /* Soft ambient blue blob — used behind the hero headline.

@@ -379,9 +379,9 @@ export default function RealitySection() {
             lineHeight: 1.15,
           }}
         >
-          None of it is connected. None of it is governed. None of it knows
-          your brand.{" "}
-          <span className="ed-accent">All of it is happening anyway.</span>
+          Disconnected from your systems. Invisible to your leadership.
+          Blind to your brand.{" "}
+          <span className="ed-accent">And growing every day.</span>
         </motion.p>
       </div>
     </section>

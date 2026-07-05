@@ -136,20 +136,23 @@ export default function ProofSection() {
           </h2>
         </motion.div>
 
-        {/* Logo grid — static, image-based with text fallback */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 items-center gap-x-8 gap-y-10 mb-24 md:mb-32">
-          {logos.map((logo, i) => (
-            <motion.div
-              key={logo.name}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, ease: "easeOut", delay: (i % 4) * 0.05 }}
-              className="flex items-center justify-center"
-            >
-              <LogoTile logo={logo} />
-            </motion.div>
-          ))}
+        {/* Logo marquee — seamless loop, image-based with text fallback */}
+        <div
+          className="relative mb-24 md:mb-32"
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+          }}
+        >
+          <div className="ed-logo-marquee flex w-max items-center gap-10">
+            {[...logos, ...logos].map((logo, i) => (
+              <div key={`${logo.name}-${i}`} className="flex-shrink-0">
+                <LogoTile logo={logo} />
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Stat callouts */}

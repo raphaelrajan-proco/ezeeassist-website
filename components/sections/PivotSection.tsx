@@ -63,7 +63,10 @@ export default function PivotSection() {
           The Platform
         </motion.p>
 
-        <h2
+        <motion.h2
+          initial={{ opacity: 0, y: 28 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
           className="max-w-5xl text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.03em]"
           style={{
             color: "#F5EDE0",
@@ -71,24 +74,12 @@ export default function PivotSection() {
             fontWeight: 500,
           }}
         >
-          <motion.span
-            initial={{ opacity: 0, y: 28 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-            className="block"
-          >
-            <span style={{ color: "#00AEEF" }}>One platform.</span>{" "}
-          </motion.span>
-          <motion.span
-            initial={{ opacity: 0, y: 28 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.45 }}
-            className="block mt-4"
-          >
+          <span style={{ color: "#00AEEF" }}>One platform.</span>{" "}
+          <span>
             Built for the way franchise and multi-location brands actually
             operate.
-          </motion.span>
-        </h2>
+          </span>
+        </motion.h2>
 
         <motion.p
           initial={{ opacity: 0, y: 14 }}

@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import HeroSection from "@/components/sections/HeroSection";
+import VideoPlaceholder from "@/components/sections/VideoPlaceholder";
 import RealitySection from "@/components/sections/RealitySection";
 import PivotSection from "@/components/sections/PivotSection";
 import UseCaseMatrix from "@/components/sections/UseCaseMatrix";
@@ -152,6 +153,7 @@ export default function Home() {
       <p className="sr-only">{PLATFORM_DEFINITION}</p>
       <main className="flex flex-1 flex-col">
         {/* 1 */} <HeroSection />
+        {/* 1b */} <VideoPlaceholder />
         {/* 2 */} <RealitySection />
         {/* 3 */} <PivotSection />
         {/* 4 */} <UseCaseMatrix />

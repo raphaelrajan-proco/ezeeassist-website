@@ -45,32 +45,22 @@ export default function HeroSection() {
               The AI Platform for Franchise &amp; Multi-Location Brands
             </motion.p>
 
-            {/* Headline — two lines */}
-            <h1
-              className="ed-fg max-w-[20ch] text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.03em]"
+            {/* Headline — single flowing block, natural wrapping */}
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+              className="max-w-[24ch] text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.03em]"
               style={{
                 fontFamily: "var(--font-editorial)",
                 fontWeight: 500,
               }}
             >
-              <motion.span
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-                className="block"
-              >
-                Your teams are already using AI.
-              </motion.span>
-              <motion.span
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.45 }}
-                className="block mt-3"
-              >
-                Give them one{" "}
-                <span className="ed-accent">your brand can trust.</span>
-              </motion.span>
-            </h1>
+              <span className="ed-fg">Your teams are already using AI.</span>{" "}
+              <span className="ed-accent">
+                Give them one your brand can trust.
+              </span>
+            </motion.h1>
 
             {/* Subheadline */}
             <motion.p

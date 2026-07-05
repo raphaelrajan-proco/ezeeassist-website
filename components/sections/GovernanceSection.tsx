@@ -77,9 +77,9 @@ export default function GovernanceSection() {
               fontWeight: 500,
             }}
           >
-            Governed by <span style={{ color: "#00AEEF" }}>your rules</span>.
-            Visible to <span style={{ color: "#00AEEF" }}>your leadership</span>.
-            Trusted by <span style={{ color: "#00AEEF" }}>your CIO</span>.
+            <span style={{ color: "#00AEEF" }}>Your rules</span> govern it.
+            Leadership <span style={{ color: "#00AEEF" }}>sees all of it</span>.
+            IT <span style={{ color: "#00AEEF" }}>signs off</span> on it.
           </h2>
           <p
             className="mt-10 max-w-3xl text-xl md:text-2xl"
