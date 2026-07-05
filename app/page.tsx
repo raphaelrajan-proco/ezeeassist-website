@@ -11,6 +11,7 @@ import UseCaseMatrix from "@/components/sections/UseCaseMatrix";
 import ConnectiveTissueSection from "@/components/sections/ConnectiveTissueSection";
 import GovernanceSection from "@/components/sections/GovernanceSection";
 import FourPillarsSection from "@/components/sections/AnswersActionsAutomations";
+import BuildExperienceSection from "@/components/sections/BuildExperienceSection";
 import ProofSection from "@/components/sections/ProofSection";
 import ImplementationSection from "@/components/sections/ImplementationSection";
 import ClosingCTASection from "@/components/sections/ClosingCTASection";
@@ -160,8 +161,9 @@ export default function Home() {
         {/* 3 */} <PivotSection />
         {/* 4 */} <UseCaseMatrix />
         {/* 5 */} <ConnectiveTissueSection />
-        {/* 6 */} <GovernanceSection />
-        {/* 7 */} <FourPillarsSection />
+        {/* 6 */} <FourPillarsSection />
+        {/* 6b */} <BuildExperienceSection />
+        {/* 7 */} <GovernanceSection />
         {/* 8 */} <ProofSection />
         {/* 9 */} <ImplementationSection />
         {/* 10 */} <ClosingCTASection />

@@ -205,6 +205,12 @@
   color: var(--ed-accent);
 }
 
+/* Blinking cursor for the Build Experience typing animation */
+@keyframes ed-cursor-blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
 /* Proof-section logo marquee — slow scroll, pauses on hover */
 .theme-editorial .ed-logo-marquee {
   animation: marquee 70s linear infinite;

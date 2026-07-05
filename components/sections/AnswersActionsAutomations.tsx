@@ -272,7 +272,7 @@ function AgentsMockup() {
 
 /* ─── Mockup: Apps ─────────────────────────────────────── */
 
-function AppsMockup() {
+export function AppsMockup() {
   return (
     <div className="rounded-3xl p-6 md:p-7" style={{ backgroundColor: "#F5EDE0" }}>
       <Overline>▸ Closing Audit · Built from one prompt</Overline>
