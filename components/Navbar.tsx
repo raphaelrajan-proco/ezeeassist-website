@@ -35,15 +35,15 @@ const industriesLinks = [
 
 const resourcesLinks = [
   { label: "Blog",              href: "/blog",            icon: FileText,   desc: "Franchise operations insights and product news." },
-  { label: "Why EZee Assist",   href: "/why-ezeeassist",  icon: Lightbulb,  desc: "The case for AI-powered franchise support." },
-  { label: "ROI Calculator",    href: "/roi-calculator",  icon: Calculator, desc: "See your support cost savings in 60 seconds." },
+  { label: "Why EZee Assist",   href: "/why-ezeeassist",  icon: Lightbulb,  desc: "The case for building AI on a purpose-built platform, not a general one." },
+  { label: "ROI Calculator",    href: "/roi-calculator",  icon: Calculator, desc: "See what your network could recover on the platform." },
   { label: "Changelog",         href: "/changelog",       icon: Clock,      desc: "New features, fixes, and product updates." },
 ];
 
 const caseStudyLinks = [
   { label: "WSI", sub: "67% ticket reduction globally", href: "/case-studies/wsi" },
-  { label: "DekaLash", sub: "93% AI resolution rate", href: "/case-studies/dekalash" },
-  { label: "DivaDance", sub: "2,600+ queries in 6 months", href: "/case-studies/divadance" },
+  { label: "DekaLash", sub: "94% AI deflection · Mindbody migration", href: "/case-studies/dekalash" },
+  { label: "DivaDance", sub: "650+ support hours saved in 6 months", href: "/case-studies/divadance" },
 ];
 
 type DropdownKey = "platform" | "industries" | "resources" | null;

@@ -22,7 +22,7 @@ const routes: Route[] = [
   { url: "/platform/ai-agent",                              priority: 0.85, changeFrequency: "monthly" },
   { url: "/platform/ticketing",                             priority: 0.85, changeFrequency: "monthly" },
   { url: "/platform/insights",                              priority: 0.85, changeFrequency: "monthly" },
-  { url: "/platform/workflows",                             priority: 0.80, changeFrequency: "monthly" },
+  { url: "/solution/agents",                                priority: 0.80, changeFrequency: "monthly" },
   { url: "/platform/integrations",                          priority: 0.85, changeFrequency: "monthly" },
 
   // ── Tier 2: Industries ────────────────────────────────────

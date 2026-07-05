@@ -4,10 +4,10 @@ import Footer from "@/components/Footer";
 import WorkflowsContent from "@/app/platform/workflows/WorkflowsContent";
 
 export const metadata: Metadata = {
-  title: "Agentic Workflows — EZee Assist",
+  title: "Agents — EZee Assist",
   description:
-    "AI-powered workflows you describe in plain language. KPI reports, compliance monitoring, staffing optimization, onboarding automation, and more — executed at scale.",
-  alternates: { canonical: "/solution/workflows" },
+    "AI-powered agentic workflows you describe in plain language. KPI reports, compliance monitoring, staffing optimization, onboarding automation, and more — executed at scale.",
+  alternates: { canonical: "/solution/agents" },
   keywords: [
     "agentic workflows franchise",
     "AI automation multi-location",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function SolutionWorkflowsPage() {
+export default function SolutionAgentsPage() {
   return (
     <>
       <Navbar />

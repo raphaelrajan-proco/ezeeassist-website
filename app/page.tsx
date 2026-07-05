@@ -16,7 +16,7 @@ import ClosingCTASection from "@/components/sections/ClosingCTASection";
 export const metadata: Metadata = {
   title: "The AI Platform for Franchise & Multi-Location Brands — EZee Assist",
   description:
-    "The AI orchestration platform franchise and multi-location brands build on. Every answer, action, agent, and app — connected to your stack, governed by your rules, deployed across HQ, coaches, franchisees, and every location. 60+ brands. 4,500+ locations.",
+    "The AI orchestration platform franchise and multi-location brands build on. AI answers, actions, agents, and apps — connected, governed, and scaled from HQ to every location.",
   alternates: { canonical: "/" },
   keywords: [
     "AI platform for franchising",
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "The AI Platform for Franchise & Multi-Location Brands — EZee Assist",
     description:
-      "Every AI use case — answers, actions, agents, and apps — connected, governed, and scaled from HQ to every location.",
+      "AI answers, actions, agents, and apps — connected, governed, and scaled from HQ to every location.",
     images: [
       {
         url: "/og-image.png",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   twitter: {
     title: "The AI Platform for Franchise & Multi-Location Brands — EZee Assist",
     description:
-      "Every AI use case — answers, actions, agents, and apps — connected, governed, and scaled from HQ to every location.",
+      "AI answers, actions, agents, and apps — connected, governed, and scaled from HQ to every location.",
     images: [
       {
         url: "/og-image.png",

@@ -17,7 +17,8 @@ const nextConfig: NextConfig = {
       { source: "/platform/insights",      destination: "/solution",               permanent: true },
       { source: "/platform/integrations",  destination: "/solution/integrations",  permanent: true },
       { source: "/platform/ticketing",     destination: "/solution/ticketing",     permanent: true },
-      { source: "/platform/workflows",     destination: "/solution/workflows",     permanent: true },
+      { source: "/platform/workflows",     destination: "/solution/agents",        permanent: true },
+      { source: "/solution/workflows",     destination: "/solution/agents",        permanent: true },
     ];
   },
 

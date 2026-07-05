@@ -5,11 +5,11 @@ import { Globe, Share2, Link2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 const footerLinks = {
-  Solution: [
-    { label: "Solution Overview", href: "/solution" },
+  Platform: [
+    { label: "Platform Overview", href: "/solution" },
     { label: "Integrations",      href: "/solution/integrations" },
     { label: "Ticketing",         href: "/solution/ticketing" },
-    { label: "Workflows",         href: "/solution/workflows" },
+    { label: "Agents",            href: "/solution/agents" },
     { label: "ROI Calculator",    href: "/roi-calculator" },
   ],
   Industries: [
@@ -23,7 +23,6 @@ const footerLinks = {
     { label: "Why EZee Assist",href: "/why-ezeeassist" },
     { label: "Changelog",      href: "/changelog" },
     { label: "Security",       href: "/security" },
-    { label: "Status",         href: "#" },
   ],
   Company: [
     { label: "Careers",       href: "/careers" },
@@ -62,7 +61,7 @@ export default function Footer() {
               </span>
             </Link>
             <p className="mt-4 max-w-[260px] text-sm leading-6 text-gray-500 dark:text-gray-400">
-              Your AI support agent for multi-location execution. Support. Coaching. Compliance.
+              The AI platform franchise and multi-location brands build on.
             </p>
 
             <div className="mt-5 space-y-1">
@@ -162,8 +161,7 @@ function FooterEditorial() {
           className="ed-fg-muted mt-12 max-w-md text-lg md:text-xl"
           style={{ lineHeight: 1.5, fontWeight: 400 }}
         >
-          Your AI support agent for multi-location execution.
-          Support. Coaching. Compliance.
+          The AI platform franchise and multi-location brands build on.
         </p>
 
         {/* Nav grid */}
