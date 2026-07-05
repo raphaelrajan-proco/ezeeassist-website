@@ -37,7 +37,8 @@
       "Bash(grep -n \">Solution<\\\\|Solution$\\\\|>Solution$\\\\|Solution\\\\b\" components/Navbar.tsx)",
       "Bash(git commit -q -m 'Polish pass 1/5: Hero refresh — new headline/subhead, smaller type, above-fold fit *)",
       "Bash(git commit -q -m 'Polish pass 2/5: section headlines reduced one step \\(text-4xl/5xl/6xl, leading-[1.05], tracking-[-0.03em]\\) across all 9 sections; pillar display headings untouched *)",
-      "Bash(git commit -q -m 'Polish pass 3/5: '\\\\''every'\\\\'' purge — all 14 specified replacements + 2 filler tightenings; intentional rhetorical uses kept *)"
+      "Bash(git commit -q -m 'Polish pass 3/5: '\\\\''every'\\\\'' purge — all 14 specified replacements + 2 filler tightenings; intentional rhetorical uses kept *)",
+      "Bash(git commit -q -m 'Polish pass 4/5: MOLF fix, richer Locations map \\(10 AI pins + new caption\\), Governance icons per spec \\(Shield/Eye/CheckCircle2\\), Proof stat sizing, image-based trust bar with text fallback *)"
     ]
   }
 }

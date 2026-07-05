@@ -2,14 +2,55 @@
 
 import { motion, useInView } from "framer-motion";
 import CountUp from "react-countup";
-import { useRef } from "react";
-import { customerLogos } from "@/lib/data/customer-logos";
+import Image from "next/image";
+import { useRef, useState } from "react";
+import { customerLogos, type CustomerLogo } from "@/lib/data/customer-logos";
 
 /**
  * Section 8 — Proof. Franchise credibility: a static logo grid (not a
  * marquee, for maximum trust), three stat callouts, and a marquee
  * Paul Preston pull-quote.
  */
+
+/**
+ * Logo tile — renders the customer SVG via next/image, falling back to a
+ * quiet grey text pill until the real logo file lands in
+ * /public/logos/customers/.
+ */
+function LogoTile({ logo }: { logo: CustomerLogo }) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return (
+      <span
+        className="inline-flex items-center rounded-full px-4 py-1.5 text-sm"
+        style={{
+          backgroundColor: "var(--ed-bg-alt)",
+          border: "1px solid var(--ed-rule)",
+          color: "var(--ed-fg-muted)",
+          fontFamily: "var(--font-editorial)",
+          fontWeight: 500,
+          letterSpacing: "-0.01em",
+        }}
+        title={logo.alt}
+      >
+        {logo.name}
+      </span>
+    );
+  }
+
+  return (
+    <Image
+      src={logo.src}
+      alt={logo.alt}
+      width={160}
+      height={48}
+      className="max-h-12 w-auto object-contain"
+      style={{ opacity: 0.7 }}
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 const stats = [
   { end: 67, suffix: "%", label: "Ticket reduction in 30 days", brand: "WSI · 500+ locations" },
@@ -29,12 +70,12 @@ function StatCallout({ stat, index }: { stat: (typeof stats)[number]; index: num
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: index * 0.12 }}
     >
       <p
-        className="ed-accent text-6xl md:text-7xl lg:text-8xl"
+        className="text-5xl md:text-6xl lg:text-7xl tracking-[-0.03em]"
         style={{
+          color: "#00AEEF",
           fontFamily: "var(--font-editorial)",
           fontWeight: 500,
-          letterSpacing: "-0.05em",
-          lineHeight: 0.9,
+          lineHeight: 0.95,
         }}
       >
         <CountUp
@@ -95,25 +136,19 @@ export default function ProofSection() {
           </h2>
         </motion.div>
 
-        {/* Logo grid — static */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-8 gap-y-10 mb-24 md:mb-32">
+        {/* Logo grid — static, image-based with text fallback */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 items-center gap-x-8 gap-y-10 mb-24 md:mb-32">
           {logos.map((logo, i) => (
-            <motion.span
+            <motion.div
               key={logo.name}
               initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 0.55, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.5, ease: "easeOut", delay: (i % 5) * 0.05 }}
-              className="ed-fg text-xl md:text-2xl text-center"
-              style={{
-                fontFamily: "var(--font-editorial)",
-                fontWeight: 500,
-                letterSpacing: "-0.02em",
-              }}
-              title={logo.alt}
+              transition={{ duration: 0.5, ease: "easeOut", delay: (i % 4) * 0.05 }}
+              className="flex items-center justify-center"
             >
-              {logo.name}
-            </motion.span>
+              <LogoTile logo={logo} />
+            </motion.div>
           ))}
         </div>
 

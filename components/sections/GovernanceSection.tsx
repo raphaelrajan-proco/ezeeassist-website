@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { ShieldCheck, Eye, ShieldHalf } from "lucide-react";
+import { Shield, Eye, CheckCircle2 } from "lucide-react";
 
 /**
  * Section 6 — Governance. The enterprise moment: turns "shadow AI
@@ -12,7 +12,7 @@ import { ShieldCheck, Eye, ShieldHalf } from "lucide-react";
 
 const cards = [
   {
-    icon: ShieldCheck,
+    icon: Shield,
     kicker: "Role-based access",
     title: "By role. By location. By your rules.",
     body: "HQ Admin, Coach, Franchisee, Location Staff — each with distinct views, permissions, and guardrails. Configure once. Apply across your network.",
@@ -24,7 +24,7 @@ const cards = [
     body: "Questions asked, actions taken, agents triggered, apps deployed — captured in a central admin log. Your CISO asks what's running. You answer in a minute.",
   },
   {
-    icon: ShieldHalf,
+    icon: CheckCircle2,
     kicker: "Approve before execute",
     title: "AI proposes. You approve. Then it runs.",
     body: "Configure which actions need human approval and which run autonomously. High-stakes actions loop your team in. Routine actions just work.",
@@ -109,12 +109,11 @@ export default function GovernanceSection() {
                 border: "1px solid #2A2A2A",
               }}
             >
-              <div
-                className="mb-8 flex h-12 w-12 items-center justify-center rounded-2xl"
-                style={{ backgroundColor: "rgba(0,174,239,0.10)" }}
-              >
-                <Icon size={22} strokeWidth={1.75} style={{ color: "#00AEEF" }} />
-              </div>
+              <Icon
+                className="w-8 h-8 mb-6"
+                strokeWidth={1.75}
+                style={{ color: "#00AEEF" }}
+              />
               <p
                 className="mb-3 text-[10px]"
                 style={{

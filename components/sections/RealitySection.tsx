@@ -60,29 +60,17 @@ function HQTabsVisual() {
           &ldquo;Rewrite this franchise disclosure section in plain
           English…&rdquo;
         </p>
-        {/* Faded team avatars */}
-        <div className="flex items-center gap-1.5">
-          {["M", "O", "L", "F"].map((a, i) => (
-            <span
-              key={i}
-              className="flex h-6 w-6 items-center justify-center rounded-full text-[9px]"
-              style={{
-                backgroundColor: "rgba(0,174,239,0.10)",
-                color: "var(--ed-fg-muted)",
-                fontWeight: 600,
-                opacity: 0.7 - i * 0.12,
-              }}
-            >
-              {a}
-            </span>
-          ))}
-          <span
-            className="text-[10px] ml-1"
-            style={{ color: "var(--ed-fg-muted)", fontWeight: 500 }}
-          >
-            marketing · ops · legal · finance
-          </span>
-        </div>
+        <p
+          className="text-[10px]"
+          style={{
+            color: "var(--ed-fg-muted)",
+            fontWeight: 500,
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+          }}
+        >
+          marketing · ops · legal · finance
+        </p>
       </div>
     </div>
   );
@@ -144,14 +132,18 @@ function CoachPhonesVisual() {
 /* ─── Visual 3: Location map pins ──────────────────────── */
 
 function LocationMapVisual() {
+  // Each pin: a location running a different AI tool
   const pins = [
-    { x: 18, y: 30, color: "#10A37F" },  // teal-ish (ChatGPT)
-    { x: 42, y: 18, color: "#D97706" },  // amber (Claude)
-    { x: 66, y: 34, color: "#4285F4" },  // blue (Gemini)
-    { x: 30, y: 62, color: "#7C3AED" },  // violet (Copilot)
-    { x: 58, y: 70, color: "#10A37F" },
-    { x: 80, y: 58, color: "#DC2626" },
-    { x: 12, y: 78, color: "#4285F4" },
+    { x: 14, y: 22, color: "#10A37F", initial: "G" },  // ChatGPT green
+    { x: 38, y: 14, color: "#D97706", initial: "C" },  // Claude orange
+    { x: 64, y: 24, color: "#4285F4", initial: "G" },  // Gemini blue
+    { x: 84, y: 16, color: "#7C3AED", initial: "C" },  // Copilot purple
+    { x: 26, y: 46, color: "#6B7280", initial: "X" },  // Grok grey
+    { x: 52, y: 42, color: "#10A37F", initial: "G" },
+    { x: 76, y: 50, color: "#DC2626", initial: "P" },  // Perplexity-ish red
+    { x: 14, y: 72, color: "#4285F4", initial: "G" },
+    { x: 42, y: 76, color: "#7C3AED", initial: "C" },
+    { x: 68, y: 78, color: "#D97706", initial: "C" },
   ];
   return (
     <div
@@ -159,28 +151,40 @@ function LocationMapVisual() {
       style={{
         backgroundColor: "var(--ed-card)",
         border: "1px solid var(--ed-rule)",
-        aspectRatio: "16 / 11",
+        aspectRatio: "16 / 12",
       }}
     >
-      {/* Abstract map lines */}
+      {/* Subtle dot grid — stylized map texture */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage:
+            "radial-gradient(var(--ed-rule) 1px, transparent 1px)",
+          backgroundSize: "18px 18px",
+          opacity: 0.55,
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Abstract map roads */}
       <svg
-        viewBox="0 0 100 70"
+        viewBox="0 0 100 75"
         className="absolute inset-0 w-full h-full"
         preserveAspectRatio="none"
         aria-hidden="true"
       >
         {[
-          "M0,22 C20,18 45,28 70,20 S95,26 100,22",
-          "M0,45 C25,40 50,52 75,44 S95,48 100,45",
-          "M28,0 C24,20 32,45 26,70",
-          "M62,0 C58,22 66,48 60,70",
+          "M0,24 C20,20 45,30 70,22 S95,28 100,24",
+          "M0,48 C25,43 50,55 75,47 S95,51 100,48",
+          "M28,0 C24,22 32,48 26,75",
+          "M62,0 C58,24 66,52 60,75",
         ].map((d, i) => (
           <path
             key={i}
             d={d}
             fill="none"
             stroke="var(--ed-rule)"
-            strokeWidth="0.5"
+            strokeWidth="0.6"
           />
         ))}
       </svg>
@@ -188,35 +192,38 @@ function LocationMapVisual() {
       {pins.map((p, i) => (
         <motion.span
           key={i}
-          initial={{ opacity: 0, scale: 0.4 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.4, y: -6 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.15 + i * 0.09 }}
-          className="absolute flex h-5 w-5 items-center justify-center rounded-full"
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.12 + i * 0.07 }}
+          className="absolute flex h-6 w-6 items-center justify-center rounded-full"
           style={{
             left: `${p.x}%`,
             top: `${p.y}%`,
-            backgroundColor: `${p.color}22`,
+            transform: "translate(-50%, -50%)",
+            backgroundColor: `${p.color}1E`,
             border: `1.5px solid ${p.color}`,
           }}
         >
           <span
-            className="block h-1.5 w-1.5 rounded-full"
-            style={{ backgroundColor: p.color }}
-          />
+            className="text-[8px]"
+            style={{ color: p.color, fontWeight: 700 }}
+          >
+            {p.initial}
+          </span>
         </motion.span>
       ))}
 
       <p
-        className="absolute bottom-3 left-4 text-[9px]"
+        className="absolute bottom-3 left-4 right-4 text-[9px]"
         style={{
           color: "var(--ed-fg-muted)",
           fontWeight: 500,
-          letterSpacing: "0.16em",
+          letterSpacing: "0.14em",
           textTransform: "uppercase",
         }}
       >
-        Every pin, a different AI
+        Different pins. Different AIs. Nothing connected. Nothing captured.
       </p>
     </div>
   );
