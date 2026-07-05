@@ -64,13 +64,11 @@ export default function PivotSection() {
         </motion.p>
 
         <h2
-          className="max-w-5xl text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
+          className="max-w-5xl text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.03em]"
           style={{
             color: "#F5EDE0",
             fontFamily: "var(--font-editorial)",
             fontWeight: 500,
-            letterSpacing: "-0.04em",
-            lineHeight: 0.98,
           }}
         >
           <motion.span

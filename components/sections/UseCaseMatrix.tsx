@@ -142,12 +142,10 @@ export default function UseCaseMatrix() {
         >
           <p className="ed-overline mb-8">Use Cases</p>
           <h2
-            className="ed-fg text-5xl md:text-6xl lg:text-7xl"
+            className="ed-fg text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.03em]"
             style={{
               fontFamily: "var(--font-editorial)",
               fontWeight: 500,
-              letterSpacing: "-0.04em",
-              lineHeight: 1,
             }}
           >
             Everything you&apos;re already trying to do with AI —{" "}

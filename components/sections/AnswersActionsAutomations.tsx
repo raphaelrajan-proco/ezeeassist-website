@@ -619,12 +619,10 @@ export default function FourPillarsSection() {
         >
           <p className="ed-overline mb-8">Capabilities</p>
           <h2
-            className="ed-fg text-5xl md:text-6xl lg:text-7xl"
+            className="ed-fg text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.03em]"
             style={{
               fontFamily: "var(--font-editorial)",
               fontWeight: 500,
-              letterSpacing: "-0.04em",
-              lineHeight: 1,
             }}
           >
             Four capabilities. One platform.{" "}
