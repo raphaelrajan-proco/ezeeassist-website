@@ -60,7 +60,7 @@ export default function PivotSection() {
             textTransform: "uppercase",
           }}
         >
-          The Platform
+          The Solution
         </motion.p>
 
         <motion.h2
@@ -88,12 +88,12 @@ export default function PivotSection() {
           className="mt-12 max-w-3xl text-xl md:text-2xl"
           style={{ color: "#A89B86", lineHeight: 1.5, fontWeight: 400 }}
         >
-          EZee Assist is the AI orchestration platform franchise and
-          multi-location brands build on. Every conversation with your
-          operators, every action your coaches trigger, every workflow that
-          runs overnight, every custom app your ops team ships — all in one
-          place. Connected to your stack. Governed by your rules. Native to
-          how your network actually works.
+          EZee Assist is the AI platform franchise and multi-location
+          brands build on. Every conversation with your operators, every
+          action your coaches trigger, every workflow that runs overnight,
+          every custom app your ops team ships. All in one place.
+          Connected to your stack. Governed by your rules. Native to how
+          your network actually works.
         </motion.p>
 
         {/* Pillar pills */}

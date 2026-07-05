@@ -27,7 +27,7 @@ const phases = [
     icon: MapPin,
     duration: "2 weeks",
     title: "Locations onboarded",
-    body: "In-product onboarding, live sessions, recordings — every franchisee up to speed.",
+    body: "In-product onboarding, live sessions, recordings. Every franchisee up to speed.",
   },
   {
     icon: RefreshCw,
@@ -100,10 +100,10 @@ export default function ImplementationSection() {
                   ease: [0.22, 1, 0.36, 1],
                   delay: 0.3 + i * 0.15,
                 }}
-                className="relative"
+                className="relative flex flex-col"
               >
                 <div
-                  className="flex h-13 w-13 items-center justify-center rounded-2xl mb-6"
+                  className="flex items-center justify-center rounded-2xl mb-6 flex-shrink-0"
                   style={{
                     width: "52px",
                     height: "52px",
@@ -114,7 +114,7 @@ export default function ImplementationSection() {
                   <Icon size={20} strokeWidth={1.75} className="ed-accent" />
                 </div>
                 <p
-                  className="ed-accent text-xs mb-3"
+                  className="ed-accent text-xs mb-3 h-4"
                   style={{
                     fontWeight: 600,
                     letterSpacing: "0.18em",
@@ -123,8 +123,9 @@ export default function ImplementationSection() {
                 >
                   {duration}
                 </p>
+                {/* min-h sized to the longest title so descriptions align */}
                 <h3
-                  className="ed-fg text-2xl md:text-3xl mb-3"
+                  className="ed-fg text-2xl md:text-3xl mb-3 min-h-[3.5rem] md:min-h-[5rem]"
                   style={{
                     fontFamily: "var(--font-editorial)",
                     fontWeight: 500,

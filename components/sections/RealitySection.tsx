@@ -79,13 +79,14 @@ function HQTabsVisual() {
 /* ─── Visual 2: Coach phones ───────────────────────────── */
 
 function CoachPhonesVisual() {
+  // Brand-tinted cards: ChatGPT green, Claude orange, Gemini blue
   const phones = [
-    { tool: "ChatGPT", query: "summarize this franchisee report…", rot: -5 },
-    { tool: "Claude",  query: "what should I tell this zee about…", rot: 0 },
-    { tool: "Gemini",  query: "analyse these location numbers…",    rot: 5 },
+    { tool: "ChatGPT", query: "summarize this franchisee report…",  rot: -4, color: "#10A37F", tint: "rgba(16,163,127,0.07)" },
+    { tool: "Claude",  query: "what should I tell this zee about…", rot: 0,  color: "#D97706", tint: "rgba(217,119,6,0.07)" },
+    { tool: "Gemini",  query: "analyse these location numbers…",    rot: 4,  color: "#4285F4", tint: "rgba(66,133,244,0.07)" },
   ];
   return (
-    <div className="flex items-center justify-center gap-3 w-full max-w-[380px]">
+    <div className="flex items-stretch justify-center gap-3 w-full max-w-[440px]">
       {phones.map((p, i) => (
         <motion.div
           key={p.tool}
@@ -93,20 +94,19 @@ function CoachPhonesVisual() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.15 + i * 0.12 }}
-          className="rounded-2xl px-3 py-4 flex-1"
+          className="rounded-2xl px-4 py-4 flex-1 overflow-hidden"
           style={{
-            backgroundColor: "var(--ed-card)",
+            backgroundColor: p.tint,
             border: "1px solid var(--ed-rule)",
+            borderTop: `3px solid ${p.color}`,
             transform: `rotate(${p.rot}deg)`,
-            aspectRatio: "9 / 15",
-            maxWidth: "120px",
           }}
         >
           <p
-            className="text-[8px] mb-2"
+            className="text-[10px] mb-2.5"
             style={{
-              color: "var(--ed-fg-muted)",
-              fontWeight: 600,
+              color: p.color,
+              fontWeight: 700,
               letterSpacing: "0.14em",
               textTransform: "uppercase",
             }}
@@ -114,11 +114,13 @@ function CoachPhonesVisual() {
             {p.tool}
           </p>
           <p
-            className="text-[10px]"
+            className="text-base md:text-lg"
             style={{
               color: "var(--ed-fg)",
               fontFamily: "var(--font-editorial)",
-              lineHeight: 1.35,
+              fontWeight: 500,
+              lineHeight: 1.3,
+              letterSpacing: "-0.01em",
             }}
           >
             &ldquo;{p.query}&rdquo;
@@ -240,9 +242,9 @@ const rows = [
     visualSide: "right" as const,
   },
   {
-    overline: "At Coaches",
+    overline: "At Field Support",
     statement:
-      "Your field coaches are pasting franchisee reports into whatever AI they trust. Every coach, a different tool. Every insight, a different context.",
+      "Your field coaches and regional managers are pasting franchisee reports into whatever AI they've come to trust. Every coach, a different tool. Every insight, a different context.",
     visual: <CoachPhonesVisual />,
     visualSide: "left" as const,
   },
@@ -260,12 +262,9 @@ function Row({
   statement,
   visual,
   visualSide,
-  index,
-  total,
-}: (typeof rows)[number] & { index: number; total: number }) {
+}: (typeof rows)[number]) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
-  const last = index === total - 1;
   const slideFromX = visualSide === "right" ? -40 : 40;
 
   const Text = (
@@ -321,9 +320,7 @@ function Row({
           </>
         )}
       </motion.div>
-      {!last && (
-        <span className="ed-rule-draw" data-visible={inView} aria-hidden="true" />
-      )}
+      <span className="ed-rule-draw" data-visible={inView} aria-hidden="true" />
     </>
   );
 }
@@ -361,8 +358,8 @@ export default function RealitySection() {
 
         <span className="ed-rule-draw" data-visible={headInView} aria-hidden="true" />
 
-        {rows.map((row, i) => (
-          <Row key={row.overline} {...row} index={i} total={rows.length} />
+        {rows.map((row) => (
+          <Row key={row.overline} {...row} />
         ))}
 
         {/* Closing statement */}
@@ -371,7 +368,7 @@ export default function RealitySection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-          className="ed-fg mt-16 md:mt-24 text-3xl md:text-4xl lg:text-5xl max-w-5xl"
+          className="mt-16 md:mt-24 text-3xl md:text-4xl lg:text-5xl max-w-5xl"
           style={{
             fontFamily: "var(--font-editorial)",
             fontWeight: 500,
@@ -379,9 +376,11 @@ export default function RealitySection() {
             lineHeight: 1.15,
           }}
         >
-          Disconnected from your systems. Invisible to your leadership.
-          Blind to your brand.{" "}
-          <span className="ed-accent">And growing every day.</span>
+          <span className="ed-fg-muted">
+            Disconnected from your systems. Invisible to your leadership.
+            Blind to your brand.
+          </span>{" "}
+          <span className="ed-fg">And growing every day.</span>
         </motion.p>
       </div>
     </section>

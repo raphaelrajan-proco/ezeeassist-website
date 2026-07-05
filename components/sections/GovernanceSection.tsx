@@ -15,13 +15,13 @@ const cards = [
     icon: Shield,
     kicker: "Role-based access",
     title: "By role. By location. By your rules.",
-    body: "HQ Admin, Coach, Franchisee, Location Staff — each with distinct views, permissions, and guardrails. Configure once. Apply across your network.",
+    body: "HQ Admin, Coach, Franchisee, Location Staff. Each with distinct views, permissions, and guardrails. Configure once. Apply across your network.",
   },
   {
     icon: Eye,
     kicker: "Full observability",
     title: "Actions logged. Interactions visible. Trail complete.",
-    body: "Questions asked, actions taken, agents triggered, apps deployed — captured in a central admin log. Your CISO asks what's running. You answer in a minute.",
+    body: "Questions asked, actions taken, agents triggered, apps deployed. All captured in a central admin log. Your CISO asks what's running. You answer in a minute.",
   },
   {
     icon: CheckCircle2,
@@ -78,14 +78,13 @@ export default function GovernanceSection() {
             }}
           >
             <span style={{ color: "#00AEEF" }}>Your rules</span> govern it.
-            Leadership <span style={{ color: "#00AEEF" }}>sees all of it</span>.
-            IT <span style={{ color: "#00AEEF" }}>signs off</span> on it.
+            Leadership sees all of it. IT signs off on it.
           </h2>
           <p
             className="mt-10 max-w-3xl text-xl md:text-2xl"
             style={{ color: "#A89B86", lineHeight: 1.5, fontWeight: 400 }}
           >
-            Actions across your network — logged, permissioned, and
+            Actions across your network: logged, permissioned, and
             role-aware. Franchisors decide what HQ sees. Coaches see their
             territory. Franchisees see their locations. Staff see what they
             need. Nothing more.
@@ -151,8 +150,12 @@ export default function GovernanceSection() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="mt-14 text-lg md:text-xl"
-          style={{ color: "#F5EDE0", fontWeight: 400 }}
+          className="mt-16 text-2xl md:text-3xl tracking-tight"
+          style={{
+            color: "#F5EDE0",
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 500,
+          }}
         >
           Shadow AI becomes visible AI.{" "}
           <span style={{ color: "#00AEEF" }}>

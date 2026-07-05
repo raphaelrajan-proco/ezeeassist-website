@@ -6,240 +6,129 @@ import { useRef } from "react";
 /**
  * Section 5 — The Connective Tissue (Integrations & Access).
  *
- * Left column: 250+ integrations proof + compact hub-and-spoke diagram
- * (EZee at centre, category boxes with tool pills, dotted connectors
- * that draw themselves on scroll).
+ * Left column: 250+ integrations proof + pill grid of tools and
+ * knowledge assets (deck slide 2 treatment).
  * Right column: the 3×3 delivery-channel grid.
  */
 
-/* ─── Hub-and-spoke diagram ────────────────────────────── */
+/* ─── Integration pill grid ───────────────────────────── */
 
-type HubNode = {
-  label: string;
-  tools: string[];
-  x: number;
-  y: number;
-};
+type ToolPill = { name: string; color: string };
 
-// Radial arrangement — clockwise from 12 o'clock
-const NODES: HubNode[] = [
-  { label: "Accounting",    tools: ["QuickBooks", "Xero", "Stripe"],            x: 50, y: 7  },
-  { label: "POS",           tools: ["Square", "Toast", "Lightspeed"],           x: 84, y: 20 },
-  { label: "CRM",           tools: ["Salesforce", "HubSpot", "HighLevel"],      x: 92, y: 50 },
-  { label: "ERP / FMS",     tools: ["NetSuite", "FranConnect", "ServiceTitan"], x: 84, y: 80 },
-  { label: "Drives",        tools: ["Google Drive", "SharePoint", "Dropbox"],   x: 50, y: 93 },
-  { label: "Marketing",     tools: ["Mailchimp", "Canva", "Constant Contact"],  x: 16, y: 80 },
-  { label: "LMS",           tools: ["Trainual", "Docebo", "LearnUpon"],         x: 8,  y: 50 },
-  { label: "Video / Comms", tools: ["YouTube", "Slack", "Zoom"],                x: 16, y: 20 },
+const TOOLS: ToolPill[] = [
+  { name: "Salesforce",       color: "#00A1E0" },
+  { name: "HubSpot",          color: "#FF7A59" },
+  { name: "Slack",            color: "#611F69" },
+  { name: "Teams",            color: "#6264A7" },
+  { name: "WhatsApp",         color: "#25D366" },
+  { name: "QuickBooks",       color: "#2CA01C" },
+  { name: "Xero",             color: "#13B5EA" },
+  { name: "Mindbody",         color: "#F9423A" },
+  { name: "ServiceTitan",     color: "#F05A28" },
+  { name: "FranConnect",      color: "#0072CE" },
+  { name: "SharePoint",       color: "#036C70" },
+  { name: "Google Drive",     color: "#FBBC04" },
+  { name: "Dropbox",          color: "#0061FF" },
+  { name: "YouTube",          color: "#FF0000" },
+  { name: "Mailchimp",        color: "#F2C94C" },
+  { name: "Canva",            color: "#8B3DFF" },
+  { name: "Square",           color: "#4A4A4A" },
+  { name: "Toast",            color: "#FF4C00" },
+  { name: "Trainual",         color: "#7A3BFF" },
+  { name: "Docebo",           color: "#0AB4FF" },
+  { name: "Zoom",             color: "#2D8CFF" },
+  { name: "NetSuite",         color: "#125580" },
+  { name: "Stripe",           color: "#635BFF" },
+  { name: "Constant Contact", color: "#1856ED" },
 ];
 
-const CX = 50;
-const CY = 50;
-// Approximate half-extents in viewBox units: category cards (~120×52px in
-// a 560px canvas) and the hub (~150×72px). Lines start/stop at these edges
-// so they never pass under or through a card.
-const CARD_RX = 12;
-const CARD_RY = 6;
-const HUB_RX = 15;
-const HUB_RY = 8.5;
+const KNOWLEDGE_ASSETS = [
+  "Operating Manual",
+  "Brand SOPs",
+  "Training videos",
+  "Compliance rules",
+];
 
-function connector(n: HubNode) {
-  const dx = CX - n.x;
-  const dy = CY - n.y;
-  const len = Math.hypot(dx, dy);
-  const ux = dx / len;
-  const uy = dy / len;
-  // Leave the card at its edge, arrive at the hub's edge
-  const x1 = n.x + ux * CARD_RX * Math.abs(ux) + ux * CARD_RY * Math.abs(uy);
-  const y1 = n.y + uy * CARD_RX * Math.abs(ux) + uy * CARD_RY * Math.abs(uy);
-  const x2 = CX - (ux * HUB_RX * Math.abs(ux) + ux * HUB_RY * Math.abs(uy));
-  const y2 = CY - (uy * HUB_RX * Math.abs(ux) + uy * HUB_RY * Math.abs(uy));
-  return { x1, y1, x2, y2 };
-}
-
-function CategoryCard({ node }: { node: HubNode }) {
+/**
+ * Pill-grid integrations visual (deck slide 2 treatment): rows of rounded
+ * pills, each with a small colored dot standing in for the tool logo until
+ * real 20×20 SVGs land, followed by muted knowledge-asset pills and one
+ * highlighted "+ 225 more" pill.
+ */
+function IntegrationPillGrid() {
   return (
-    <>
-      <p
-        className="ed-fg text-[11px] mb-0.5"
-        style={{
-          fontFamily: "var(--font-editorial)",
-          fontWeight: 600,
-          letterSpacing: "-0.01em",
-        }}
-      >
-        {node.label}
-      </p>
-      <p className="ed-fg-muted text-[8.5px]" style={{ lineHeight: 1.35 }}>
-        {node.tools.join(" · ")}
-      </p>
-    </>
-  );
-}
+    <div className="flex flex-wrap gap-2.5">
+      {TOOLS.map((t, i) => (
+        <motion.span
+          key={t.name}
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.025 }}
+          className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-transform duration-200 hover:-translate-y-0.5"
+          style={{
+            backgroundColor: "var(--ed-card)",
+            border: "1px solid var(--ed-rule)",
+            color: "var(--ed-fg)",
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 500,
+            letterSpacing: "-0.005em",
+          }}
+        >
+          <span
+            aria-hidden="true"
+            className="block h-[10px] w-[10px] rounded-full flex-shrink-0"
+            style={{ backgroundColor: t.color }}
+          />
+          {t.name}
+        </motion.span>
+      ))}
 
-function HubCardInner() {
-  return (
-    <div>
-      <p
-        className="text-[8px] mb-0.5"
-        style={{
-          color: "#00AEEF",
-          fontWeight: 600,
-          letterSpacing: "0.2em",
-          textTransform: "uppercase",
+      {KNOWLEDGE_ASSETS.map((a, i) => (
+        <motion.span
+          key={a}
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{
+            duration: 0.45,
+            ease: "easeOut",
+            delay: TOOLS.length * 0.025 + i * 0.025,
+          }}
+          className="inline-flex items-center rounded-full px-4 py-2 text-sm transition-transform duration-200 hover:-translate-y-0.5"
+          style={{
+            backgroundColor: "var(--ed-bg-alt)",
+            border: "1px solid var(--ed-rule)",
+            color: "var(--ed-fg-muted)",
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 500,
+          }}
+        >
+          {a}
+        </motion.span>
+      ))}
+
+      <motion.span
+        initial={{ opacity: 0, y: 8 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{
+          duration: 0.45,
+          ease: "easeOut",
+          delay: (TOOLS.length + KNOWLEDGE_ASSETS.length) * 0.025,
         }}
-      >
-        The Hub
-      </p>
-      <p
-        className="text-lg"
+        className="inline-flex items-center rounded-full px-4 py-2 text-sm transition-transform duration-200 hover:-translate-y-0.5"
         style={{
+          backgroundColor: "rgba(0,174,239,0.10)",
+          border: "1px solid rgba(0,174,239,0.30)",
+          color: "var(--ed-accent)",
           fontFamily: "var(--font-editorial)",
           fontWeight: 500,
-          letterSpacing: "-0.02em",
         }}
       >
-        EZee Assist
-      </p>
+        + 225 more
+      </motion.span>
     </div>
-  );
-}
-
-function HubDiagram() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <>
-      {/* ── Desktop: radial diagram ── */}
-      <div
-        ref={ref}
-        className="relative mx-auto w-full hidden md:block"
-        style={{ maxWidth: "560px", aspectRatio: "1 / 1" }}
-      >
-        <svg
-          viewBox="0 0 100 100"
-          className="absolute inset-0 w-full h-full"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          {NODES.map((n, i) => {
-            const { x1, y1, x2, y2 } = connector(n);
-            const segLen = Math.hypot(x2 - x1, y2 - y1);
-            return (
-              <g key={n.label}>
-                <line
-                  x1={x1}
-                  y1={y1}
-                  x2={x2}
-                  y2={y2}
-                  stroke="rgba(0,174,239,0.35)"
-                  strokeWidth="0.25"
-                  strokeDasharray="1 1.4"
-                  strokeLinecap="round"
-                  className="ed-hub-line"
-                  data-visible={inView}
-                  style={
-                    {
-                      ["--dash-len" as string]: `${segLen * 2.5}`,
-                      animationDelay: `${0.3 + i * 0.08}s`,
-                    } as React.CSSProperties
-                  }
-                />
-                {/* Connection-point dots */}
-                <circle cx={x1} cy={y1} r="0.7" fill="rgba(0,174,239,0.55)" />
-                <circle cx={x2} cy={y2} r="0.7" fill="rgba(0,174,239,0.55)" />
-                {/* Data-flow pulse on two of the lines — slow, subtle */}
-                {(i === 1 || i === 5) && (
-                  <circle r="0.8" fill="#00AEEF" opacity="0.8">
-                    <animateMotion
-                      dur={i === 1 ? "4.5s" : "6s"}
-                      repeatCount="indefinite"
-                      path={`M ${x1} ${y1} L ${x2} ${y2}`}
-                    />
-                  </circle>
-                )}
-              </g>
-            );
-          })}
-        </svg>
-
-        {/* Outer category cards */}
-        {NODES.map((n, i) => (
-          <motion.div
-            key={n.label}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{
-              duration: 0.6,
-              ease: [0.22, 1, 0.36, 1],
-              delay: 0.5 + i * 0.07,
-            }}
-            className="absolute rounded-xl px-3 py-2 text-center"
-            style={{
-              left: `${n.x}%`,
-              top: `${n.y}%`,
-              transform: "translate(-50%, -50%)",
-              backgroundColor: "var(--ed-card)",
-              border: "1px solid var(--ed-rule)",
-              minWidth: "108px",
-              maxWidth: "130px",
-            }}
-          >
-            <CategoryCard node={n} />
-          </motion.div>
-        ))}
-
-        {/* Centre hub */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.7 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-          className="absolute rounded-2xl flex items-center justify-center px-6 py-5 text-center"
-          style={{
-            left: `${CX}%`,
-            top: `${CY}%`,
-            transform: "translate(-50%, -50%)",
-            backgroundColor: "#0A0A0A",
-            color: "#F5EDE0",
-            minWidth: "150px",
-            boxShadow:
-              "0 10px 40px rgba(0,0,0,0.25), 0 0 0 6px rgba(0,174,239,0.10)",
-          }}
-        >
-          <HubCardInner />
-        </motion.div>
-      </div>
-
-      {/* ── Mobile: hub on top, 2-col card grid, no lines ── */}
-      <div className="md:hidden">
-        <div
-          className="rounded-2xl flex items-center justify-center px-6 py-5 text-center mb-4"
-          style={{
-            backgroundColor: "#0A0A0A",
-            color: "#F5EDE0",
-            boxShadow:
-              "0 10px 40px rgba(0,0,0,0.25), 0 0 0 6px rgba(0,174,239,0.10)",
-          }}
-        >
-          <HubCardInner />
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          {NODES.map((n) => (
-            <div
-              key={n.label}
-              className="rounded-xl px-3 py-3 text-center"
-              style={{
-                backgroundColor: "var(--ed-card)",
-                border: "1px solid var(--ed-rule)",
-              }}
-            >
-              <CategoryCard node={n} />
-            </div>
-          ))}
-        </div>
-      </div>
-    </>
   );
 }
 
@@ -308,7 +197,7 @@ export default function ConnectiveTissueSection() {
                 )
               )}
             </div>
-            <HubDiagram />
+            <IntegrationPillGrid />
           </div>
 
           {/* Right — channels */}

@@ -2,55 +2,14 @@
 
 import { motion, useInView } from "framer-motion";
 import CountUp from "react-countup";
-import Image from "next/image";
-import { useRef, useState } from "react";
-import { customerLogos, type CustomerLogo } from "@/lib/data/customer-logos";
+import { useRef } from "react";
+import LogoMarquee from "./LogoMarquee";
 
 /**
  * Section 8 — Proof. Franchise credibility: a static logo grid (not a
  * marquee, for maximum trust), three stat callouts, and a marquee
  * Paul Preston pull-quote.
  */
-
-/**
- * Logo tile — renders the customer SVG via next/image, falling back to a
- * quiet grey text pill until the real logo file lands in
- * /public/logos/customers/.
- */
-function LogoTile({ logo }: { logo: CustomerLogo }) {
-  const [failed, setFailed] = useState(false);
-
-  if (failed) {
-    return (
-      <span
-        className="inline-flex items-center rounded-full px-4 py-1.5 text-sm"
-        style={{
-          backgroundColor: "var(--ed-bg-alt)",
-          border: "1px solid var(--ed-rule)",
-          color: "var(--ed-fg-muted)",
-          fontFamily: "var(--font-editorial)",
-          fontWeight: 500,
-          letterSpacing: "-0.01em",
-        }}
-        title={logo.alt}
-      >
-        {logo.name}
-      </span>
-    );
-  }
-
-  return (
-    <Image
-      src={logo.src}
-      alt={logo.alt}
-      width={160}
-      height={48}
-      className="max-h-12 w-auto object-contain"
-      style={{ opacity: 0.7 }}
-      onError={() => setFailed(true)}
-    />
-  );
-}
 
 const stats = [
   { end: 67, suffix: "%", label: "Ticket reduction in 30 days", brand: "WSI · 500+ locations" },
@@ -111,7 +70,6 @@ export default function ProofSection() {
   const quoteInView = useInView(quoteRef, { once: true, margin: "-100px" });
 
   // Named customers only for the credibility grid
-  const logos = customerLogos.filter((l) => !l.name.startsWith("Customer "));
 
   return (
     <section className="w-full ed-bg">
@@ -136,23 +94,9 @@ export default function ProofSection() {
           </h2>
         </motion.div>
 
-        {/* Logo marquee — seamless loop, image-based with text fallback */}
-        <div
-          className="relative mb-24 md:mb-32"
-          style={{
-            maskImage:
-              "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
-            WebkitMaskImage:
-              "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
-          }}
-        >
-          <div className="ed-logo-marquee flex w-max items-center gap-10">
-            {[...logos, ...logos].map((logo, i) => (
-              <div key={`${logo.name}-${i}`} className="flex-shrink-0">
-                <LogoTile logo={logo} />
-              </div>
-            ))}
-          </div>
+        {/* Logo marquee (shared component) */}
+        <div className="mb-24 md:mb-32">
+          <LogoMarquee />
         </div>
 
         {/* Stat callouts */}
@@ -204,8 +148,8 @@ export default function ProofSection() {
           >
             <span className="ed-fg" style={{ fontWeight: 500 }}>
               Paul Preston
-            </span>{" "}
-            — CEO, Aqua-Tots Swim School{" "}
+            </span>
+            , CEO, Aqua-Tots Swim School{" "}
             <span style={{ opacity: 0.7 }}>· 160 locations</span>
           </motion.p>
         </div>

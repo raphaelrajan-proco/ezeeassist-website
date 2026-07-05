@@ -40,7 +40,9 @@
       "Bash(git commit -q -m 'Polish pass 3/5: '\\\\''every'\\\\'' purge — all 14 specified replacements + 2 filler tightenings; intentional rhetorical uses kept *)",
       "Bash(git commit -q -m 'Polish pass 4/5: MOLF fix, richer Locations map \\(10 AI pins + new caption\\), Governance icons per spec \\(Shield/Eye/CheckCircle2\\), Proof stat sizing, image-based trust bar with text fallback *)",
       "Bash(git commit -q -m 'Polish pass 5/5: footer platform rewrite, /solution/agents rename + 301s, navbar mega-menu copy, meta description trim *)",
-      "Bash(git commit -q -m 'Visual & copy fix pass: 7 targeted fixes *)"
+      "Bash(git commit -q -m 'Visual & copy fix pass: 7 targeted fixes *)",
+      "Bash(python3 -)",
+      "Bash(git commit -q -m 'Visual fix pass 2: 12 targeted fixes *)"
     ]
   }
 }

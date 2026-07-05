@@ -70,7 +70,7 @@ export default function HeroSection() {
               className="ed-fg-muted mt-8 max-w-2xl text-lg md:text-xl"
               style={{ lineHeight: 1.45, fontWeight: 400 }}
             >
-              AI answers, actions, agents, and apps — connected to your
+              AI answers, actions, agents, and apps. Connected to your
               stack, governed by your rules, deployed across HQ, coaches,
               franchisees, and location staff. Purpose-built for franchise
               and multi-location operations.

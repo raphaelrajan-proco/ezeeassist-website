@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import HeroSection from "@/components/sections/HeroSection";
+import LogoStrip from "@/components/sections/LogoStrip";
 import VideoPlaceholder from "@/components/sections/VideoPlaceholder";
 import RealitySection from "@/components/sections/RealitySection";
 import PivotSection from "@/components/sections/PivotSection";
@@ -15,9 +16,9 @@ import ImplementationSection from "@/components/sections/ImplementationSection";
 import ClosingCTASection from "@/components/sections/ClosingCTASection";
 
 export const metadata: Metadata = {
-  title: "The AI Platform for Franchise & Multi-Location Brands — EZee Assist",
+  title: "The AI Platform for Franchise & Multi-Location Brands | EZee Assist",
   description:
-    "The AI orchestration platform franchise and multi-location brands build on. AI answers, actions, agents, and apps — connected, governed, and scaled from HQ to every location.",
+    "The AI platform franchise and multi-location brands build on. AI answers, actions, agents, and apps. Connected, governed, and scaled from HQ to every location.",
   alternates: { canonical: "/" },
   keywords: [
     "AI platform for franchising",
@@ -29,24 +30,24 @@ export const metadata: Metadata = {
     "AI answers actions agents apps",
   ],
   openGraph: {
-    title: "The AI Platform for Franchise & Multi-Location Brands — EZee Assist",
+    title: "The AI Platform for Franchise & Multi-Location Brands | EZee Assist",
     description:
-      "AI answers, actions, agents, and apps — connected, governed, and scaled from HQ to every location.",
+      "AI answers, actions, agents, and apps. Connected, governed, and scaled from HQ to every location.",
     images: [
       {
         url: "/og-image.png",
-        alt: "EZee Assist — The AI Platform for Franchise & Multi-Location Brands",
+        alt: "EZee Assist, the AI Platform for Franchise & Multi-Location Brands",
       },
     ],
   },
   twitter: {
-    title: "The AI Platform for Franchise & Multi-Location Brands — EZee Assist",
+    title: "The AI Platform for Franchise & Multi-Location Brands | EZee Assist",
     description:
-      "AI answers, actions, agents, and apps — connected, governed, and scaled from HQ to every location.",
+      "AI answers, actions, agents, and apps. Connected, governed, and scaled from HQ to every location.",
     images: [
       {
         url: "/og-image.png",
-        alt: "EZee Assist — The AI Platform for Franchise & Multi-Location Brands",
+        alt: "EZee Assist, the AI Platform for Franchise & Multi-Location Brands",
       },
     ],
   },
@@ -54,7 +55,7 @@ export const metadata: Metadata = {
 
 // ── Canonical positioning definition (AEO / llms.txt / schema) ──
 const PLATFORM_DEFINITION =
-  "EZee Assist is the AI orchestration platform franchise and multi-location brands build on. It centralizes every AI use case — Answers (instant responses sourced from your entire stack), Actions (executing tasks across CRM, ERP, scheduling, anywhere), Agents (autonomous multi-step workflows triggered on schedule or signal), and Apps (custom apps built from a single natural-language prompt) — connected to 250+ native integrations, governed by role and location, and deployed across SMS, WhatsApp, Slack, Teams, Google Chat, Email, Web Portal, and Mobile App. Purpose-built for franchise and multi-location operations, from HQ to coaches to franchisees to location staff. Used by 60+ brands across 4,500+ locations.";
+  "EZee Assist is the AI platform franchise and multi-location brands build on. It centralizes every AI use case: Answers (instant responses sourced from your entire stack), Actions (executing tasks across CRM, ERP, scheduling, anywhere), Agents (autonomous multi-step workflows triggered on schedule or signal), and Apps (custom apps built from a single natural-language prompt). Connected to 250+ native integrations, governed by role and location, and deployed across SMS, WhatsApp, Slack, Teams, Google Chat, Email, Web Portal, and Mobile App. Purpose-built for franchise and multi-location operations, from HQ to coaches to franchisees to location staff. Used by 60+ brands across 4,500+ locations.";
 
 // ── SoftwareApplication JSON-LD ─────────────────────────────
 const softwareSchema = {
@@ -83,7 +84,7 @@ const organizationSchema = {
   "@type": "Organization",
   name: "EZee Assist",
   description:
-    "The AI orchestration platform franchise and multi-location brands build on — every answer, action, agent, and app, connected, governed, and scaled across the network.",
+    "The AI platform franchise and multi-location brands build on. Every answer, action, agent, and app, connected, governed, and scaled across the network.",
   url: "https://ezeeassist.com",
   logo: "https://ezeeassist.com/logo.png",
 };
@@ -103,7 +104,7 @@ const faqSchema = {
       name: "How long does EZee Assist implementation take?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Full rollout takes about 10 weeks — 6 weeks for integration and planning, 2 weeks for corporate launch, 2 weeks for location onboarding, then ongoing support. Every rollout includes full white-labelling to your brand, multi-lingual capabilities, and forward-deployed engineering.",
+        text: "Full rollout takes about 10 weeks: 6 weeks for integration and planning, 2 weeks for corporate launch, 2 weeks for location onboarding, then ongoing support. Every rollout includes full white-labelling to your brand, multi-lingual capabilities, and forward-deployed engineering.",
       },
     },
     {
@@ -111,7 +112,7 @@ const faqSchema = {
       name: "What channels do operators use to access EZee Assist?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Operators interact with EZee through SMS, WhatsApp, Slack, Microsoft Teams, Google Chat, Email, a Web Portal, and a Mobile App — deployed everywhere your teams already work.",
+        text: "Operators interact with EZee through SMS, WhatsApp, Slack, Microsoft Teams, Google Chat, Email, a Web Portal, and a Mobile App, deployed everywhere your teams already work.",
       },
     },
     {
@@ -153,6 +154,7 @@ export default function Home() {
       <p className="sr-only">{PLATFORM_DEFINITION}</p>
       <main className="flex flex-1 flex-col">
         {/* 1 */} <HeroSection />
+        {/* 1a */} <LogoStrip />
         {/* 1b */} <VideoPlaceholder />
         {/* 2 */} <RealitySection />
         {/* 3 */} <PivotSection />

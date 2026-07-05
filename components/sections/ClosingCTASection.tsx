@@ -74,7 +74,7 @@ export default function ClosingCTASection() {
             className="mt-12 max-w-3xl text-xl md:text-2xl"
             style={{ color: "#A89B86", lineHeight: 1.5, fontWeight: 400 }}
           >
-            Consolidate the scattered AI work onto one platform — connected,
+            Consolidate the scattered AI work onto one platform. Connected,
             governed, and purpose-built for how franchise and multi-location
             brands actually operate.
           </p>

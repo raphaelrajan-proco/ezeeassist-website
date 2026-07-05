@@ -34,7 +34,7 @@ function MoreExamples({
   items,
   indicator,
 }: {
-  items: string[];
+  items: React.ReactNode[];
   indicator: string;
 }) {
   return (
@@ -413,7 +413,7 @@ type Pillar = {
   label: string;
   description: React.ReactNode;
   mockup: React.ReactNode;
-  moreExamples: string[];
+  moreExamples: React.ReactNode[];
   indicator: string;
 };
 
@@ -451,7 +451,7 @@ const pillars: Pillar[] = [
         >
           do
         </span>{" "}
-        the work. Across CRM, ERP, scheduling — anything connected.
+        the work. Across CRM, ERP, scheduling. Anything connected.
       </>
     ),
     mockup: <ActionsMockup />,
@@ -473,8 +473,14 @@ const pillars: Pillar[] = [
     ),
     mockup: <AgentsMockup />,
     moreExamples: [
-      "REVIEW GUARDIAN — Reply to new Google reviews. Escalate 1-stars to the coach.",
-      "LEAD RESCUE — Follow up any lead untouched for 48 hours. Rebook it.",
+      <>
+        <strong>Review guardian:</strong> Reply to new Google reviews.
+        Escalate 1-stars to the coach.
+      </>,
+      <>
+        <strong>Lead rescue:</strong> Follow up any lead untouched for 48
+        hours. Rebook it.
+      </>,
     ],
     indicator: "+ Any workflow you can describe",
   },
@@ -491,8 +497,14 @@ const pillars: Pillar[] = [
     ),
     mockup: <AppsMockup />,
     moreExamples: [
-      "ONBOARDING PORTAL — New-franchisee doc collection + e-sign, tracked end to end.",
-      "INVENTORY REORDER — Par levels per location, one-tap reorder to the vendor.",
+      <>
+        <strong>Onboarding portal:</strong> New-franchisee doc collection +
+        e-sign, tracked end to end.
+      </>,
+      <>
+        <strong>Inventory reorder:</strong> Par levels per location, one-tap
+        reorder to the vendor.
+      </>,
     ],
     indicator: "+ Any app your brand can describe",
   },
@@ -637,7 +649,7 @@ export default function FourPillarsSection() {
             className="ed-fg-muted mt-10 text-xl md:text-2xl max-w-3xl"
             style={{ lineHeight: 1.45, fontWeight: 400 }}
           >
-            From instant answers to fully built mini-apps — all four
+            From instant answers to fully built mini-apps. All four
             capabilities live inside one platform, connected to your stack.
           </motion.p>
         </motion.div>
