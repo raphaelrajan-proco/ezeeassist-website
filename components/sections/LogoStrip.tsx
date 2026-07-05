@@ -3,22 +3,18 @@
 import LogoMarquee from "./LogoMarquee";
 
 /**
- * Compact trust strip directly below the hero. Same marquee as the Proof
- * section; appearing twice on the page is intentional.
+ * Hero closing beat: the trust stats line + customer logo marquee,
+ * merged into one moment that sits tight under the hero.
  */
 export default function LogoStrip() {
   return (
     <section className="w-full ed-bg">
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-8 md:py-10">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-6 pb-10 md:pt-8 md:pb-12">
         <p
-          className="ed-fg-muted text-xs mb-6"
-          style={{
-            fontWeight: 500,
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-          }}
+          className="ed-fg-muted text-center text-sm md:text-base mb-6 tracking-wide"
+          style={{ fontWeight: 500 }}
         >
-          Trusted by leading franchise and multi-location brands
+          60+ brands. 4,500+ locations. 250+ integrations. One platform.
         </p>
         <LogoMarquee />
       </div>

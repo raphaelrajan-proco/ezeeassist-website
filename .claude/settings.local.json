@@ -42,7 +42,8 @@
       "Bash(git commit -q -m 'Polish pass 5/5: footer platform rewrite, /solution/agents rename + 301s, navbar mega-menu copy, meta description trim *)",
       "Bash(git commit -q -m 'Visual & copy fix pass: 7 targeted fixes *)",
       "Bash(python3 -)",
-      "Bash(git commit -q -m 'Visual fix pass 2: 12 targeted fixes *)"
+      "Bash(git commit -q -m 'Visual fix pass 2: 12 targeted fixes *)",
+      "Bash(git commit -q -m 'Answers-first sprint 1/4: hero trust line merged into logo strip *)"
     ]
   }
 }

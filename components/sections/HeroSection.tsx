@@ -91,19 +91,6 @@ export default function HeroSection() {
               </Link>
             </motion.div>
 
-            {/* Trust line */}
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 1.75 }}
-              className="ed-fg-muted mt-8 text-sm md:text-base"
-              style={{ fontWeight: 400 }}
-            >
-              <span className="ed-fg" style={{ fontWeight: 500 }}>
-                60+ brands. 4,500+ locations. 250+ integrations.
-              </span>{" "}
-              One platform.
-            </motion.p>
           </div>
 
           {/* Right: scattered-AI → EZee visual */}
