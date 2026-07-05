@@ -78,7 +78,6 @@ export default function PivotSection() {
             className="block"
           >
             <span style={{ color: "#00AEEF" }}>One platform.</span>{" "}
-            Every AI use case.
           </motion.span>
           <motion.span
             initial={{ opacity: 0, y: 28 }}
@@ -86,7 +85,8 @@ export default function PivotSection() {
             transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.45 }}
             className="block mt-4"
           >
-            Purpose-built for the way you actually operate.
+            Built for the way franchise and multi-location brands actually
+            operate.
           </motion.span>
         </h2>
 

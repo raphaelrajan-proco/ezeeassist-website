@@ -424,7 +424,7 @@ const pillars: Pillar[] = [
     label: "Answers",
     description: (
       <>
-        Operators ask. EZee finds the right answer across every system
+        Operators ask. EZee finds the right answer across the systems
         you&apos;ve connected. Answers in seconds.
       </>
     ),
@@ -627,7 +627,7 @@ export default function FourPillarsSection() {
           >
             Four capabilities. One platform.{" "}
             <span className="ed-accent">
-              Every AI idea your brand has, now shippable.
+              What your brand builds on.
             </span>
           </h2>
           <motion.p
@@ -637,8 +637,8 @@ export default function FourPillarsSection() {
             className="ed-fg-muted mt-10 text-xl md:text-2xl max-w-3xl"
             style={{ lineHeight: 1.45, fontWeight: 400 }}
           >
-            From instant answers to fully built mini-apps — every
-            capability lives inside one platform, connected to your stack.
+            From instant answers to fully built mini-apps — all four
+            capabilities live inside one platform, connected to your stack.
           </motion.p>
         </motion.div>
 

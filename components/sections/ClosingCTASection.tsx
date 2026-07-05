@@ -74,9 +74,9 @@ export default function ClosingCTASection() {
             className="mt-12 max-w-3xl text-xl md:text-2xl"
             style={{ color: "#A89B86", lineHeight: 1.5, fontWeight: 400 }}
           >
-            Bring every AI use case across your network onto one platform —
-            connected, governed, and purpose-built for how franchise and
-            multi-location brands actually operate.
+            Consolidate the scattered AI work onto one platform — connected,
+            governed, and purpose-built for how franchise and multi-location
+            brands actually operate.
           </p>
 
           <div className="mt-12 md:mt-16 flex flex-col sm:flex-row gap-4">

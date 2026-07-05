@@ -14,14 +14,14 @@ const cards = [
   {
     icon: ShieldCheck,
     kicker: "Role-based access",
-    title: "Every role. Every location. Every rule.",
-    body: "HQ Admin, Coach, Franchisee, Location Staff — each with their own view, their own permissions, their own guardrails. Configure once. Apply everywhere.",
+    title: "By role. By location. By your rules.",
+    body: "HQ Admin, Coach, Franchisee, Location Staff — each with distinct views, permissions, and guardrails. Configure once. Apply across your network.",
   },
   {
     icon: Eye,
     kicker: "Full observability",
-    title: "Every action logged. Every interaction visible.",
-    body: "Every question asked, action taken, agent triggered, app deployed — captured in a central admin log. Your CISO asks what's running. You answer in a minute.",
+    title: "Actions logged. Interactions visible. Trail complete.",
+    body: "Questions asked, actions taken, agents triggered, apps deployed — captured in a central admin log. Your CISO asks what's running. You answer in a minute.",
   },
   {
     icon: ShieldHalf,
@@ -85,7 +85,7 @@ export default function GovernanceSection() {
             className="mt-10 max-w-3xl text-xl md:text-2xl"
             style={{ color: "#A89B86", lineHeight: 1.5, fontWeight: 400 }}
           >
-            Every AI action across your network — logged, permissioned, and
+            Actions across your network — logged, permissioned, and
             role-aware. Franchisors decide what HQ sees. Coaches see their
             territory. Franchisees see their locations. Staff see what they
             need. Nothing more.

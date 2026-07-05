@@ -202,8 +202,8 @@ export default function ConnectiveTissueSection() {
               fontWeight: 500,
             }}
           >
-            Connected to{" "}
-            <span className="ed-accent">everything</span> you already run on.
+            Wired into <span className="ed-accent">the stack</span> you
+            already run on.
           </h2>
         </motion.div>
 
@@ -254,7 +254,7 @@ export default function ConnectiveTissueSection() {
                 lineHeight: 1.15,
               }}
             >
-              Deployed everywhere your teams already work
+              Deployed in the channels your teams already work in
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">

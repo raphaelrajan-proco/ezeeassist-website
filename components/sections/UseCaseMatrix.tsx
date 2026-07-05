@@ -29,7 +29,7 @@ const MATRIX: DomainRow[] = [
     cells: {
       Answers: "Where's the current BOGO flyer?",
       Actions: "Log this issue in the ticketing system",
-      Agents: "Auto-triage every incoming question",
+      Agents: "Auto-triage incoming questions",
       Apps: "Franchisee support portal, built to your brand",
     },
   },
@@ -38,7 +38,7 @@ const MATRIX: DomainRow[] = [
     cells: {
       Answers: "What are my location's top three drop-off points?",
       Actions: "Draft a coaching plan for this franchisee",
-      Agents: "Weekly KPI review, emailed to every coach Monday 8am",
+      Agents: "Weekly KPI review, emailed to coaches Monday 8am",
       Apps: "Growth playbook app, personalized per location",
     },
   },
@@ -47,7 +47,7 @@ const MATRIX: DomainRow[] = [
     cells: {
       Answers: "Are all my locations current on insurance?",
       Actions: "Flag missing docs to the compliance team",
-      Agents: "Nightly compliance sweep across every location",
+      Agents: "Nightly compliance sweep across the network",
       Apps: "Compliance dashboard, live per location",
     },
   },
@@ -148,9 +148,9 @@ export default function UseCaseMatrix() {
               fontWeight: 500,
             }}
           >
-            Everything you&apos;re already trying to do with AI —{" "}
+            The AI work living in scattered tabs today.{" "}
             <span className="ed-accent">
-              now built once, deployed everywhere.
+              Now built once, used across your network.
             </span>
           </h2>
         </motion.div>
