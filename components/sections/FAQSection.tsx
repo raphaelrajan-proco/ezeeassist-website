@@ -3,16 +3,7 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 
-const faqs = [
-  { q: "How long does implementation take?", a: "Most customers go live in under 7 days. We connect to your existing systems and tech stack — 250+ integrations — with no migration required." },
-  { q: "What channels do operators use?", a: "Operators interact with EZee through SMS, email, Slack, Microsoft Teams, WhatsApp, or our web portal — whichever channel they already use." },
-  { q: "Is my data used to train AI models?", a: "Never. Your data is never shared with or used by third parties for any software or language model training. All data is encrypted, isolated in dedicated AWS infrastructure, and fully under your control." },
-  { q: "How is this different from ChatGPT or a generic AI chatbot?", a: "Generic AI answers from the open internet. EZee answers exclusively from your brand's knowledge base, your systems, and your data. Every answer is brand-specific. Every action happens inside your tech stack. Every workflow is built for your operations." },
-  { q: "What happens when AI can't answer a question?", a: "It automatically creates a support ticket with the full conversation context and routes it to the right person on your team. No question falls through the cracks." },
-  { q: "How many locations can EZee support?", a: "We support networks from 10 to 4,000+ locations today. The platform scales with your network." },
-  { q: "What does pricing look like?", a: "Pricing is based on your network size and usage. We offer flexible plans for growing brands and enterprise pricing for large networks. Book a demo for options that fit your budget." },
-  { q: "What kind of workflows can EZee automate?", a: "Anything you can describe. Examples: weekly KPI reports pulled from QuickBooks and Mindbody, proactive compliance flags for expired insurance or missing financials, automated staffing optimization based on demand and bookings, onboarding checklists for new locations, and much more. You describe the workflow, EZee builds and executes it." },
-];
+import { faqs } from "@/lib/data/faqs";
 
 export default function FAQSection() {
   const ref = useRef(null);
@@ -30,12 +21,10 @@ export default function FAQSection() {
         >
           <p className="ed-overline mb-8">FAQ</p>
           <h2
-            className="ed-fg text-5xl md:text-6xl lg:text-7xl"
+            className="ed-fg text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.03em]"
             style={{
               fontFamily: "var(--font-editorial)",
               fontWeight: 500,
-              letterSpacing: "-0.04em",
-              lineHeight: 1,
             }}
           >
             Frequently asked.

@@ -7,10 +7,13 @@ import { usePathname } from "next/navigation";
 const footerLinks = {
   Platform: [
     { label: "Platform Overview", href: "/solution" },
-    { label: "Integrations",      href: "/solution/integrations" },
+    { label: "Answers",           href: "/#answers" },
+    { label: "Actions",           href: "/#actions" },
+    { label: "Agents",            href: "/#agents" },
+    { label: "Apps",              href: "/#apps" },
     { label: "Ticketing",         href: "/solution/ticketing" },
-    { label: "Agents",            href: "/solution/agents" },
-    { label: "ROI Calculator",    href: "/roi-calculator" },
+    { label: "Integrations",      href: "/#integrations" },
+    { label: "Governance",        href: "/#governance" },
   ],
   Industries: [
     { label: "Franchising",         href: "/industries/franchising" },
@@ -21,6 +24,7 @@ const footerLinks = {
     { label: "Blog",           href: "/blog" },
     { label: "Case Studies",   href: "/case-studies" },
     { label: "Why EZee Assist",href: "/why-ezeeassist" },
+    { label: "ROI Calculator", href: "/roi-calculator" },
     { label: "Changelog",      href: "/changelog" },
     { label: "Security",       href: "/security" },
   ],

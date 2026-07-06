@@ -14,6 +14,8 @@ import FourPillarsSection from "@/components/sections/AnswersActionsAutomations"
 import BuildExperienceSection from "@/components/sections/BuildExperienceSection";
 import ProofSection from "@/components/sections/ProofSection";
 import ImplementationSection from "@/components/sections/ImplementationSection";
+import FAQSection from "@/components/sections/FAQSection";
+import { faqs } from "@/lib/data/faqs";
 import ClosingCTASection from "@/components/sections/ClosingCTASection";
 
 export const metadata: Metadata = {
@@ -91,56 +93,16 @@ const organizationSchema = {
 };
 
 // ── FAQ JSON-LD ─────────────────────────────────────────────
+// Built from the same array the visible FAQ accordion renders, so the
+// schema always matches the on-page content exactly.
 const faqSchema = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "What is EZee Assist?",
-      acceptedAnswer: { "@type": "Answer", text: PLATFORM_DEFINITION },
-    },
-    {
-      "@type": "Question",
-      name: "How long does EZee Assist implementation take?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Full rollout takes about 10 weeks: 6 weeks for integration and planning, 2 weeks for corporate launch, 2 weeks for location onboarding, then ongoing support. Every rollout includes full white-labelling to your brand, multi-lingual capabilities, and forward-deployed engineering.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What channels do operators use to access EZee Assist?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Operators interact with EZee through SMS, WhatsApp, Slack, Microsoft Teams, Google Chat, Email, a Web Portal, and a Mobile App, deployed everywhere your teams already work.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How is EZee Assist governed?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Every AI action across your network is logged, permissioned, and role-aware. Franchisors decide what HQ sees, coaches see their territory, franchisees see their locations, and staff see what they need. You configure which actions run autonomously and which require human approval.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How is EZee Assist different from ChatGPT or a generic AI chatbot?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Generic AI answers from the open internet with no access to your systems. EZee is a platform connected to your entire stack, governed by your rules, and purpose-built for franchise and multi-location operations. Every answer is brand-specific, every action happens inside your tech stack, and every workflow and app is built for your network.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What does EZee Assist pricing look like?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Our base platform is $60 per location per month. This includes Answers, Actions, Agents, and Apps; the ticketing portal with unlimited seats; unlimited users at every location; all platform integration fees; guided onboarding and training; and a monthly system-level credits allowance. Volume discounts kick in beyond 75 locations. Additional usage is available on demand.",
-      },
-    },
-  ],
+  mainEntity: faqs.map(({ q, a }) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: { "@type": "Answer", text: a },
+  })),
 };
 
 export default function Home() {
@@ -166,6 +128,7 @@ export default function Home() {
         {/* 7 */} <GovernanceSection />
         {/* 8 */} <ProofSection />
         {/* 9 */} <ImplementationSection />
+        {/* 9b */} <FAQSection />
         {/* 10 */} <ClosingCTASection />
       </main>
       <Footer />

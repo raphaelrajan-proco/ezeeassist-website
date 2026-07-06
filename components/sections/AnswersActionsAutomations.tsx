@@ -270,7 +270,143 @@ function AgentsMockup() {
   );
 }
 
-/* ─── Mockup: Apps ─────────────────────────────────────── */
+/* ─── Mockup: Onboarding Portal (Apps pillar) ──────────── */
+
+function OnboardingPortalMockup() {
+  const rows = [
+    { ok: true,  text: "Franchise agreement signed",       tag: "Done" },
+    { ok: true,  text: "Insurance certificate uploaded",   tag: "Done" },
+    { ok: true,  text: "Training modules assigned",        tag: "Done" },
+    { ok: false, text: "Bank details pending",             tag: "Reminder sent" },
+  ];
+  return (
+    <div className="rounded-3xl p-6 md:p-7" style={{ backgroundColor: "#F5EDE0" }}>
+      <Overline>▸ Onboarding Portal · Built from one prompt</Overline>
+
+      {/* Prompt box */}
+      <div
+        className="rounded-xl px-4 py-3 mb-5"
+        style={{
+          backgroundColor: "rgba(10,10,10,0.04)",
+          border: "1px solid rgba(10,10,10,0.08)",
+        }}
+      >
+        <p
+          className="text-sm"
+          style={{
+            color: "#0A0A0A",
+            fontFamily: "var(--font-editorial)",
+            fontStyle: "italic",
+            lineHeight: 1.4,
+          }}
+        >
+          &ldquo;Build a new-franchisee onboarding portal: doc collection,
+          e-signature, progress tracked end to end.&rdquo;
+        </p>
+      </div>
+
+      {/* Browser/app frame */}
+      <div
+        className="rounded-xl overflow-hidden"
+        style={{
+          backgroundColor: "#FFFFFF",
+          border: "1px solid rgba(10,10,10,0.08)",
+        }}
+      >
+        {/* URL bar */}
+        <div
+          className="flex items-center gap-2 px-3 py-2 text-[10px]"
+          style={{
+            backgroundColor: "rgba(10,10,10,0.04)",
+            borderBottom: "1px solid rgba(10,10,10,0.08)",
+            color: "#6B6358",
+            fontWeight: 500,
+          }}
+        >
+          <span className="flex h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#DC2626" }} />
+          <span className="flex h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#D97706" }} />
+          <span className="flex h-1.5 w-1.5 rounded-full" style={{ backgroundColor: "#16A34A" }} />
+          <span className="ml-2 truncate">onboard.brand.ezee.app</span>
+        </div>
+
+        {/* App content */}
+        <div className="px-4 py-4">
+          <div className="flex items-center justify-between mb-3">
+            <p
+              className="text-xs"
+              style={{
+                color: "#1B5A6E",
+                fontWeight: 500,
+                letterSpacing: "0.18em",
+                textTransform: "uppercase",
+              }}
+            >
+              Franchisee Onboarding · Store #087
+            </p>
+            <span
+              className="text-[10px] rounded-full px-2 py-0.5"
+              style={{
+                backgroundColor: "rgba(0,174,239,0.10)",
+                color: "#00AEEF",
+                fontWeight: 600,
+              }}
+            >
+              5 / 8 complete
+            </span>
+          </div>
+
+          <div className="space-y-2 mb-4">
+            {rows.map((r, i) => (
+              <div
+                key={i}
+                className="flex items-center justify-between rounded-lg px-3 py-2"
+                style={{
+                  backgroundColor: r.ok ? "rgba(22,163,74,0.08)" : "rgba(217,119,6,0.08)",
+                }}
+              >
+                <p
+                  className="text-[12px]"
+                  style={{ color: "#0A0A0A", fontFamily: "var(--font-editorial)" }}
+                >
+                  <span style={{ marginRight: "0.4rem", fontWeight: 600 }}>
+                    {r.ok ? "✓" : "!"}
+                  </span>
+                  {r.text}
+                </p>
+                <span
+                  className="text-[10px]"
+                  style={{
+                    color: r.ok ? "#16A34A" : "#D97706",
+                    fontWeight: 600,
+                    letterSpacing: "0.08em",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {r.tag}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            className="w-full rounded-lg py-2.5 text-sm"
+            style={{
+              backgroundColor: "#00AEEF",
+              color: "#FFFFFF",
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+            }}
+          >
+            View full checklist
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Mockup: Apps (Closing Audit — used by BuildExperience) ── */
 
 export function AppsMockup() {
   return (
@@ -554,11 +690,11 @@ const expansionPillars: Pillar[] = [
         and every location.
       </>
     ),
-    mockup: <AppsMockup />,
+    mockup: <OnboardingPortalMockup />,
     moreExamples: [
       <>
-        <strong>Onboarding portal:</strong> New-franchisee doc collection +
-        e-sign, tracked end to end.
+        <strong>Daily sales logger:</strong> Quick mobile entry for cash
+        transactions with auto-reconciliation.
       </>,
       <>
         <strong>Inventory reorder:</strong> Par levels per location, one-tap

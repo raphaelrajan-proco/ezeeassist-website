@@ -139,7 +139,7 @@ export default function PivotSection() {
               textDecorationThickness: "1px",
             }}
           >
-            See how it works ↓
+            See what brands build ↓
           </Link>
         </motion.div>
       </div>
