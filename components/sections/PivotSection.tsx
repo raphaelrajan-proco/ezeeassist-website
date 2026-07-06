@@ -110,9 +110,12 @@ export default function PivotSection() {
               }}
               className="inline-block"
             >
+              {/* Answers is solid (the foundation); the rest are outlined */}
               <Link
                 href={`#${p.toLowerCase()}`}
-                className="ed-pillar-pill ed-pillar-pill-lg"
+                className={`ed-pillar-pill ed-pillar-pill-lg${
+                  p === "Answers" ? "" : " ed-pillar-pill-outline"
+                }`}
               >
                 {p}
               </Link>
