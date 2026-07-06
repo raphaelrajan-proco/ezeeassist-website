@@ -1,14 +1,13 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
-import CountUp from "react-countup";
-import { useRef } from "react";
+import { motion, useInView, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import LogoMarquee from "./LogoMarquee";
 
 /**
- * Section 8 — Proof. Franchise credibility: a static logo grid (not a
- * marquee, for maximum trust), three stat callouts, and a marquee
- * Paul Preston pull-quote.
+ * Section 8 — Proof. Franchise credibility: the logo marquee, three
+ * stat callouts, the Paul Preston marquee quote with two supporting
+ * quotes, and a partner badge strip.
  */
 
 const stats = [
@@ -16,6 +15,46 @@ const stats = [
   { end: 94, suffix: "%", label: "AI deflection during Mindbody migration", brand: "DekaLash · 120 locations" },
   { end: 650, suffix: "+", label: "Support hours saved in 6 months", brand: "DivaDance · 50 locations" },
 ];
+
+/**
+ * Server HTML contains the final value (SEO and AI crawlers see the real
+ * number); on hydration + scroll-in the value animates 0 → end once.
+ * prefers-reduced-motion skips the animation entirely.
+ */
+function AnimatedValue({
+  end,
+  suffix,
+  inView,
+}: {
+  end: number;
+  suffix: string;
+  inView: boolean;
+}) {
+  const reduceMotion = useReducedMotion();
+  const [value, setValue] = useState(end); // SSR renders the final value
+
+  useEffect(() => {
+    if (!inView || reduceMotion) return;
+    let raf: number;
+    const duration = 2500;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const p = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+      setValue(Math.round(end * eased));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, reduceMotion, end]);
+
+  return (
+    <>
+      {value.toLocaleString()}
+      {suffix}
+    </>
+  );
+}
 
 function StatCallout({ stat, index }: { stat: (typeof stats)[number]; index: number }) {
   const ref = useRef(null);
@@ -37,15 +76,7 @@ function StatCallout({ stat, index }: { stat: (typeof stats)[number]; index: num
           lineHeight: 0.95,
         }}
       >
-        <CountUp
-          end={stat.end}
-          suffix={stat.suffix}
-          duration={2.5}
-          useEasing
-          enableScrollSpy
-          scrollSpyOnce
-          separator=","
-        />
+        <AnimatedValue end={stat.end} suffix={stat.suffix} inView={inView} />
       </p>
       <p
         className="ed-fg mt-5 text-lg md:text-xl max-w-xs"

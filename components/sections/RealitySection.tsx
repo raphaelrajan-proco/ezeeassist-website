@@ -191,9 +191,17 @@ function LocationMapVisual() {
         ))}
       </svg>
 
+      {/* One accessible description for the whole visual; the pin letters
+          are decorative and would read as a garble to screen readers. */}
+      <p className="sr-only">
+        Map showing locations across the network, each using a different AI
+        tool.
+      </p>
+
       {pins.map((p, i) => (
         <motion.span
           key={i}
+          aria-hidden="true"
           initial={{ opacity: 0, scale: 0.4, y: -6 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
@@ -208,6 +216,7 @@ function LocationMapVisual() {
           }}
         >
           <span
+            aria-hidden="true"
             className="text-[8px]"
             style={{ color: p.color, fontWeight: 700 }}
           >

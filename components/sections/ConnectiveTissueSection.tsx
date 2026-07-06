@@ -2,6 +2,10 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import {
+  MessageSquare, MessageCircle, Hash, Users, MessagesSquare,
+  Mail, Globe, Smartphone, Plus, type LucideIcon,
+} from "lucide-react";
 
 /**
  * Section 5 — The Connective Tissue (Integrations & Access).
@@ -134,16 +138,20 @@ function IntegrationPillGrid() {
 
 /* ─── Channel grid ─────────────────────────────────────── */
 
-const CHANNELS: { label: string; emoji: string; extensible?: boolean }[] = [
-  { label: "SMS",           emoji: "💬" },
-  { label: "WhatsApp",      emoji: "🟢" },
-  { label: "Slack",         emoji: "🔷" },
-  { label: "Teams",         emoji: "🔵" },
-  { label: "Google Chat",   emoji: "💙" },
-  { label: "Email",         emoji: "📧" },
-  { label: "Web Portal",    emoji: "🖥️" },
-  { label: "Mobile App",    emoji: "📱" },
-  { label: "Anywhere else", emoji: "✨", extensible: true },
+const CHANNELS: {
+  label: string;
+  icon: LucideIcon;
+  extensible?: boolean;
+}[] = [
+  { label: "SMS",           icon: MessageSquare },
+  { label: "WhatsApp",      icon: MessageCircle },
+  { label: "Slack",         icon: Hash },
+  { label: "Teams",         icon: Users },
+  { label: "Google Chat",   icon: MessagesSquare },
+  { label: "Email",         icon: Mail },
+  { label: "Web Portal",    icon: Globe },
+  { label: "Mobile App",    icon: Smartphone },
+  { label: "Anywhere else", icon: Plus, extensible: true },
 ];
 
 /* ─── Section ──────────────────────────────────────────── */
@@ -226,7 +234,7 @@ export default function ConnectiveTissueSection() {
             </p>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {CHANNELS.map(({ label, emoji, extensible }, i) => (
+              {CHANNELS.map(({ label, icon: Icon, extensible }, i) => (
                 <motion.div
                   key={label}
                   initial={{ opacity: 0, y: 12 }}
@@ -243,9 +251,12 @@ export default function ConnectiveTissueSection() {
                       : "1px solid var(--ed-rule)",
                   }}
                 >
-                  <span aria-hidden="true" className="text-base">
-                    {emoji}
-                  </span>
+                  <Icon
+                    aria-hidden="true"
+                    className="w-5 h-5 flex-shrink-0"
+                    strokeWidth={1.75}
+                    style={{ color: "#00AEEF" }}
+                  />
                   <span
                     className="text-sm"
                     style={{
