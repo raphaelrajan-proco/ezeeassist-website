@@ -77,7 +77,7 @@ export default function GovernanceSection() {
               fontWeight: 500,
             }}
           >
-            <span style={{ color: "#00AEEF" }}>Your rules</span> govern it.
+            <span style={{ color: "#00AEEF" }}>Your rules govern it.</span>{" "}
             Leadership sees all of it. IT signs off on it.
           </h2>
           <p

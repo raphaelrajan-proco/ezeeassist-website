@@ -260,7 +260,7 @@ const rows = [
   {
     overline: "At Locations",
     statement:
-      "Your franchisees are Googling procedures at 2am. Your staff are asking ChatGPT things they should be asking your ops team.",
+      "Your franchisees and their staff are asking ChatGPT procedural questions at 10pm, that they should ask their ops teams.",
     visual: <LocationMapVisual />,
     visualSide: "right" as const,
   },

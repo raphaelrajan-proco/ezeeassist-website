@@ -705,31 +705,6 @@ const expansionPillars: Pillar[] = [
   },
 ];
 
-/* ─── "Built on Answers" badge ─────────────────────────── */
-
-function BuiltOnAnswersBadge() {
-  return (
-    <span
-      className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px]"
-      style={{
-        backgroundColor: "rgba(0,174,239,0.08)",
-        border: "1px solid rgba(0,174,239,0.25)",
-        color: "var(--ed-accent)",
-        fontWeight: 600,
-        letterSpacing: "0.08em",
-        textTransform: "uppercase",
-      }}
-    >
-      <span
-        aria-hidden="true"
-        className="block h-1.5 w-1.5 rounded-full"
-        style={{ backgroundColor: "var(--ed-accent)" }}
-      />
-      Built on Answers
-    </span>
-  );
-}
-
 /* ─── Part A: the Answers foundation block ─────────────── */
 
 function AnswersFoundation() {
@@ -864,14 +839,6 @@ function ExpansionPillar({ pillar, index }: { pillar: Pillar; index: number }) {
         reverse ? "lg:order-2" : "lg:order-1"
       }`}
     >
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.7, delay: 0.05 }}
-        className="mb-5"
-      >
-        <BuiltOnAnswersBadge />
-      </motion.div>
       <motion.h3
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -985,8 +952,8 @@ export default function FourPillarsSection() {
             className="ed-fg-muted mt-8 text-xl md:text-2xl max-w-3xl"
             style={{ lineHeight: 1.45, fontWeight: 400 }}
           >
-            Transform support and ticketing first. Then build on the same
-            foundation.
+            Transform support and ticketing. Build on the same foundation
+            for all agentic work.
           </motion.p>
         </motion.div>
 

@@ -9,10 +9,6 @@ export interface Faq {
 
 export const faqs: Faq[] = [
   {
-    q: "What do brands actually buy first?",
-    a: "Answers: AI support and intelligent ticketing across your network. That's the base platform. Actions, Agents, and Apps are unlocked on the same foundation, with no new deployment.",
-  },
-  {
     q: "How long does implementation take?",
     a: "Full rollout takes about 10 weeks. Six weeks for integration and planning, two weeks for corporate launch, two weeks for location onboarding, then ongoing support. Rollouts include full white-labelling, multi-lingual capabilities, and forward-deployed engineering.",
   },
@@ -30,6 +26,6 @@ export const faqs: Faq[] = [
   },
   {
     q: "How many locations can the platform support?",
-    a: "Networks from 10 to 4,500+ locations run on EZee today. Adding a location takes minutes.",
+    a: "Networks from 10s to 1000s of locations. Adding a location takes minutes. Deployed top down from platform group or brand to all HQ members, franchisees, and their staff.",
   },
 ];

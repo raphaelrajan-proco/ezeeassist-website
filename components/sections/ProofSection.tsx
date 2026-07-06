@@ -35,7 +35,7 @@ const SUPPORTING_QUOTES = [
 const PARTNER_BADGES = [
   { name: "IFA Supplier Forum",  src: "/logos/partners/ifa-supplier-forum.svg" },
   { name: "CFA Member",          src: "/logos/partners/cfa-member.svg" },
-  { name: "SFN Verified Member", src: "/logos/partners/sfn-verified-member.svg" },
+  { name: "FSN Verified Member", src: "/logos/partners/fsn-verified-member.svg" },
   { name: "WSI Partner",         src: "/logos/partners/wsi-partner.svg" },
 ];
 
