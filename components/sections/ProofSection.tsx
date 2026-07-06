@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useInView, useReducedMotion } from "framer-motion";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import LogoMarquee from "./LogoMarquee";
 
@@ -15,6 +16,67 @@ const stats = [
   { end: 94, suffix: "%", label: "AI deflection during Mindbody migration", brand: "DekaLash · 120 locations" },
   { end: 650, suffix: "+", label: "Support hours saved in 6 months", brand: "DivaDance · 50 locations" },
 ];
+
+const SUPPORTING_QUOTES = [
+  {
+    quote:
+      "EZee Assist's solution and desire to solve problems has made them a key partner for EverLine. Our franchisees have embraced this technology.",
+    name: "John Evans",
+    title: "Founder & CEO, EverLine Coatings & Services",
+  },
+  {
+    quote:
+      "AI is now an expectation in franchisee support. Our owners get accurate, brand-specific answers 24/7 while our team focuses on bigger initiatives.",
+    name: "Troy McCullen",
+    title: "VP of Operations, DekaLash",
+  },
+];
+
+const PARTNER_BADGES = [
+  { name: "IFA Supplier Forum",  src: "/logos/partners/ifa-supplier-forum.svg" },
+  { name: "CFA Member",          src: "/logos/partners/cfa-member.svg" },
+  { name: "SFN Verified Member", src: "/logos/partners/sfn-verified-member.svg" },
+  { name: "WSI Partner",         src: "/logos/partners/wsi-partner.svg" },
+];
+
+/**
+ * Partner badge — next/image pointing at /logos/partners/, falling back
+ * to a pill (matching the integrations pill-grid style) until the real
+ * badge images are uploaded.
+ */
+function PartnerBadge({ badge }: { badge: (typeof PARTNER_BADGES)[number] }) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return (
+      <span
+        className="inline-flex items-center rounded-full px-4 py-2 text-sm"
+        style={{
+          backgroundColor: "var(--ed-card)",
+          border: "1px solid var(--ed-rule)",
+          color: "var(--ed-fg)",
+          fontFamily: "var(--font-editorial)",
+          fontWeight: 500,
+          letterSpacing: "-0.005em",
+        }}
+      >
+        {badge.name}
+      </span>
+    );
+  }
+
+  return (
+    <Image
+      src={badge.src}
+      alt={badge.name}
+      width={140}
+      height={40}
+      className="max-h-10 w-auto object-contain"
+      style={{ opacity: 0.75 }}
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 /**
  * Server HTML contains the final value (SEO and AI crawlers see the real
@@ -184,6 +246,66 @@ export default function ProofSection() {
             <span style={{ opacity: 0.7 }}>· 160 locations</span>
           </motion.p>
         </div>
+
+        {/* Supporting testimonials — quieter than the marquee */}
+        <div className="mt-20 md:mt-24 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 max-w-5xl">
+          {SUPPORTING_QUOTES.map((t, i) => (
+            <motion.div
+              key={t.name}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: i * 0.12 }}
+              className={i === 1 ? "md:pl-16 md:border-l" : ""}
+              style={i === 1 ? { borderColor: "var(--ed-rule)" } : {}}
+            >
+              <blockquote
+                className="ed-fg text-lg md:text-xl"
+                style={{
+                  fontFamily: "var(--font-editorial)",
+                  fontStyle: "italic",
+                  fontWeight: 400,
+                  lineHeight: 1.4,
+                  letterSpacing: "-0.01em",
+                }}
+              >
+                &ldquo;{t.quote}&rdquo;
+              </blockquote>
+              <p className="ed-fg-muted mt-4 text-sm">
+                <span className="ed-fg" style={{ fontWeight: 500 }}>
+                  {t.name}
+                </span>
+                , {t.title}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Partner badge strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="mt-20 md:mt-24 pt-10"
+          style={{ borderTop: "1px solid var(--ed-rule)" }}
+        >
+          <p
+            className="ed-fg-muted text-xs mb-6"
+            style={{
+              fontWeight: 500,
+              letterSpacing: "0.2em",
+              textTransform: "uppercase",
+            }}
+          >
+            Trusted across the franchise community
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {PARTNER_BADGES.map((b) => (
+              <PartnerBadge key={b.name} badge={b} />
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -89,11 +89,10 @@ export default function PivotSection() {
           style={{ color: "#A89B86", lineHeight: 1.5, fontWeight: 400 }}
         >
           EZee Assist is the AI platform franchise and multi-location
-          brands build on. Every conversation with your operators, every
-          action your coaches trigger, every workflow that runs overnight,
-          every custom app your ops team ships. All in one place.
-          Connected to your stack. Governed by your rules. Native to how
-          your network actually works.
+          brands build on. Operator conversations. Coach-triggered
+          actions. Overnight workflows. Custom apps your ops team ships.
+          All in one place. Connected to your stack. Governed by your
+          rules. Native to how your network actually works.
         </motion.p>
 
         {/* Pillar pills */}

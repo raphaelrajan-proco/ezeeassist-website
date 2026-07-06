@@ -37,7 +37,7 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { label: "LinkedIn",   href: "https://linkedin.com/company/ezeeassist", icon: Link2  },
+  { label: "LinkedIn",   href: "https://www.linkedin.com/company/ez-assist", icon: Link2  },
   { label: "X / Twitter",href: "https://x.com/ezeeassist",               icon: Share2 },
   { label: "Facebook",   href: "https://facebook.com/ezeeassist",         icon: Globe  },
 ];

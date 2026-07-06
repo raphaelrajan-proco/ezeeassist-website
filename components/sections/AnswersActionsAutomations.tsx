@@ -855,8 +855,15 @@ function ExpansionPillar({ pillar, index }: { pillar: Pillar; index: number }) {
   const inView = useInView(ref, { once: true, margin: "-120px" });
   const reverse = index % 2 === 0; // Actions starts mockup-left for rhythm after Answers
 
-  const Text = (
-    <div className="lg:col-span-6">
+  // DOM order is always heading → mockup → examples so mobile stacks
+  // read correctly; desktop alternation is done purely with grid
+  // order/column utilities.
+  const TextTop = (
+    <div
+      className={`lg:col-span-6 order-1 ${
+        reverse ? "lg:order-2" : "lg:order-1"
+      }`}
+    >
       <motion.div
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
@@ -888,13 +895,6 @@ function ExpansionPillar({ pillar, index }: { pillar: Pillar; index: number }) {
       >
         {pillar.description}
       </motion.p>
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.7, ease: "easeOut", delay: 0.45 }}
-      >
-        <MoreExamples items={pillar.moreExamples} indicator={pillar.indicator} />
-      </motion.div>
     </div>
   );
 
@@ -903,9 +903,24 @@ function ExpansionPillar({ pillar, index }: { pillar: Pillar; index: number }) {
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.25 }}
-      className="lg:col-span-6"
+      className={`lg:col-span-6 lg:row-span-2 self-center order-2 ${
+        reverse ? "lg:order-1" : "lg:order-2"
+      }`}
     >
       {pillar.mockup}
+    </motion.div>
+  );
+
+  const Examples = (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, ease: "easeOut", delay: 0.45 }}
+      className={`lg:col-span-6 order-3 ${
+        reverse ? "lg:col-start-7" : "lg:col-start-1"
+      }`}
+    >
+      <MoreExamples items={pillar.moreExamples} indicator={pillar.indicator} />
     </motion.div>
   );
 
@@ -924,18 +939,10 @@ function ExpansionPillar({ pillar, index }: { pillar: Pillar; index: number }) {
           : {}
       }
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-        {reverse ? (
-          <>
-            {Mockup}
-            {Text}
-          </>
-        ) : (
-          <>
-            {Text}
-            {Mockup}
-          </>
-        )}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-x-14 lg:gap-y-6 items-center">
+        {TextTop}
+        {Mockup}
+        {Examples}
       </div>
     </section>
   );
