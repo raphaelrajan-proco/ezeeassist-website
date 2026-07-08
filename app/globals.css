@@ -217,6 +217,26 @@
   color: var(--ed-accent);
 }
 
+/* Gentle independent bob for the bento integration pill cloud */
+@keyframes ed-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+.theme-editorial .ed-bob {
+  animation-name: ed-bob;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-editorial .ed-bob,
+  .theme-editorial .ed-cta-pulse,
+  .theme-editorial .ed-logo-marquee,
+  .theme-editorial .ed-hero-blob {
+    animation: none !important;
+  }
+}
+
 /* Blinking cursor for the Build Experience typing animation */
 @keyframes ed-cursor-blink {
   0%, 100% { opacity: 1; }

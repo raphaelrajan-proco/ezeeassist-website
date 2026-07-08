@@ -548,6 +548,176 @@ function CoreCell() {
   );
 }
 
+/* ─── Cell 2 visual: drifting integration pill cloud ───── */
+// TODO: Replace with real product screen recording
+
+const CLOUD_TOOLS: { name: string; color: string }[] = [
+  { name: "Salesforce",   color: "#00A1E0" },
+  { name: "HubSpot",      color: "#FF7A59" },
+  { name: "Slack",        color: "#611F69" },
+  { name: "Teams",        color: "#6264A7" },
+  { name: "QuickBooks",   color: "#2CA01C" },
+  { name: "Xero",         color: "#13B5EA" },
+  { name: "Mindbody",     color: "#F9423A" },
+  { name: "ServiceTitan", color: "#F05A28" },
+  { name: "FranConnect",  color: "#0072CE" },
+  { name: "SharePoint",   color: "#036C70" },
+  { name: "Google Drive", color: "#FBBC04" },
+  { name: "YouTube",      color: "#FF0000" },
+  { name: "Square",       color: "#8C8C8C" },
+  { name: "Toast",        color: "#FF4C00" },
+  { name: "Trainual",     color: "#7A3BFF" },
+  { name: "Canva",        color: "#8B3DFF" },
+];
+
+function PillCloudVisual() {
+  return (
+    <div className="mt-8 flex flex-wrap gap-2">
+      {CLOUD_TOOLS.map((t, i) => (
+        <motion.span
+          key={t.name}
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.04 }}
+          className="inline-block"
+        >
+          <span
+            className="ed-bob inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px]"
+            style={{
+              backgroundColor: "rgba(245,237,224,0.04)",
+              border: "1px solid #2A2A2A",
+              color: "#F5EDE0",
+              fontWeight: 500,
+              // Organic drift: independent durations and offset starts
+              animationDuration: `${4 + (i % 7) * 0.45}s`,
+              animationDelay: `${-((i * 0.9) % 5)}s`,
+            }}
+          >
+            <span
+              aria-hidden="true"
+              className="block h-[7px] w-[7px] rounded-full flex-shrink-0"
+              style={{ backgroundColor: t.color }}
+            />
+            {t.name}
+          </span>
+        </motion.span>
+      ))}
+      <motion.span
+        initial={{ opacity: 0, y: 8 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.45, ease: "easeOut", delay: CLOUD_TOOLS.length * 0.04 }}
+        className="inline-block"
+      >
+        <span
+          className="ed-bob inline-flex items-center rounded-full px-3 py-1.5 text-[11px]"
+          style={{
+            backgroundColor: "rgba(0,174,239,0.10)",
+            border: "1px solid rgba(0,174,239,0.35)",
+            color: "#00AEEF",
+            fontWeight: 600,
+            animationDuration: "5.5s",
+            animationDelay: "-2s",
+          }}
+        >
+          +225 more
+        </span>
+      </motion.span>
+    </div>
+  );
+}
+
+/* ─── Cell 3 visual: sequencing workflow card ──────────── */
+// TODO: Replace with real product screen recording
+
+const WORKFLOW_STEPS = [
+  "Pull sales vs. target from BI",
+  "Rank locations needing attention",
+  "Draft a prioritized action plan",
+  "Email each coach. Mondays, 8am.",
+];
+
+function WorkflowVisual() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const reduceMotion = useReducedMotion();
+  // Index of the currently lit step; -1 = none, steps light cumulatively
+  const [lit, setLit] = useState(-1);
+
+  useEffect(() => {
+    if (!inView) return;
+    if (reduceMotion) {
+      setLit(WORKFLOW_STEPS.length - 1);
+      return;
+    }
+    let timer: ReturnType<typeof setTimeout>;
+    if (lit < WORKFLOW_STEPS.length - 1) {
+      timer = setTimeout(() => setLit((v) => v + 1), lit < 0 ? 500 : 500);
+    } else {
+      timer = setTimeout(() => setLit(-1), 3000); // hold, then loop
+    }
+    return () => clearTimeout(timer);
+  }, [inView, reduceMotion, lit]);
+
+  return (
+    <div ref={ref} className="mt-8">
+      <div
+        className="rounded-2xl p-4"
+        style={{
+          backgroundColor: "rgba(245,237,224,0.03)",
+          border: "1px solid #2A2A2A",
+        }}
+      >
+        <p
+          className="text-[10px] uppercase tracking-[0.2em] mb-3"
+          style={{ color: "#00AEEF", fontWeight: 600 }}
+        >
+          ▸ Weekly KPI Review · Every location
+        </p>
+        <div className="space-y-1.5">
+          {WORKFLOW_STEPS.map((step, i) => (
+            <div
+              key={step}
+              className="flex items-center gap-2.5 rounded-xl px-3 py-2 transition-colors duration-500"
+              style={{
+                backgroundColor:
+                  i <= lit ? "rgba(0,174,239,0.08)" : "rgba(245,237,224,0.02)",
+                border: `1px solid ${i <= lit ? "rgba(0,174,239,0.30)" : "#2A2A2A"}`,
+              }}
+            >
+              <span
+                className="text-[10px] flex-shrink-0 transition-colors duration-500"
+                style={{
+                  color: i <= lit ? "#00AEEF" : "#A89B86",
+                  fontWeight: 600,
+                  letterSpacing: "0.1em",
+                }}
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <p
+                className="text-[12.5px]"
+                style={{
+                  color: "#F5EDE0",
+                  fontFamily: "var(--font-editorial)",
+                  lineHeight: 1.35,
+                }}
+              >
+                {step}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <p className="mt-3 text-[11px]" style={{ color: "#A89B86", fontWeight: 500 }}>
+        <span aria-hidden="true" style={{ color: "#16A34A" }}>● </span>
+        Ran 4 minutes ago · 214 locations
+      </p>
+    </div>
+  );
+}
+
 /* ─── Cell 2: Connected ────────────────────────────────── */
 
 function ConnectedCell() {
@@ -560,7 +730,7 @@ function ConnectedCell() {
         marketing, accounting, and comms. No data migration. Your content
         stays where it lives and stays current.
       </CellBody>
-      {/* Visual lands in build step 3 */}
+      <PillCloudVisual />
       <CellLink href="#integrations">See all integrations ↓</CellLink>
     </Cell>
   );
@@ -578,7 +748,7 @@ function AutonomousCell() {
         or a trigger, across the tools your network already uses. Weekly
         KPI reviews. Review responses. Lead follow-up. Compliance sweeps.
       </CellBody>
-      {/* Visual lands in build step 3 */}
+      <WorkflowVisual />
       <CellLink href="#agents">See what agents run ↓</CellLink>
     </Cell>
   );

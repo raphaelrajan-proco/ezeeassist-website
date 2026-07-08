@@ -48,7 +48,8 @@
       "Bash(git commit -q -m 'Cleanup pass 2/3 \\(fixes 5-8\\): AEO verify, SSR stat values, map a11y, channel icons *)",
       "Bash(git commit -q -m 'Cleanup pass 3/3 \\(fixes 9-13\\): Pivot copy, mobile order, LinkedIn, testimonials, partner badges *)",
       "Bash(git commit -q -m 'Quick tweaks: 7 small fixes *)",
-      "Bash(git commit -q -m 'Bento sprint 1/5: tag + section framing + six-cell scaffold *)"
+      "Bash(git commit -q -m 'Bento sprint 1/5: tag + section framing + six-cell scaffold *)",
+      "Bash(git commit -q -m 'Bento sprint 3/5: Cell 2 drifting pill cloud + Cell 3 workflow sequencer *)"
     ]
   }
 }
