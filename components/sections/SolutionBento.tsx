@@ -1,9 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import {
   Shield, Lock, KeyRound, Server, EyeOff, Ban, Fingerprint, ScrollText,
+  MessageSquare, Hash, Users, CheckCircle2, ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 
@@ -137,6 +139,365 @@ export function SecurityBadge({
   );
 }
 
+/* ─── Cell 1 visual: the resolve-or-escalate flow ──────── */
+// TODO: Replace with real product screen recording
+
+const QUESTIONS = [
+  { icon: MessageSquare, channel: "SMS",   text: "What's the spa sanitation checklist for tonight's close?" },
+  { icon: Hash,          channel: "Slack", text: "How do I process a membership freeze in Mindbody?" },
+  { icon: Users,         channel: "Teams", text: "Our POS isn't syncing at Store 214." },
+];
+
+/** Sequence phases: 0 idle · 1 bubbles+lines · 2 upper branch · 3 lower branch · 4 convergence · then hold + loop */
+function useFlowSequence(inView: boolean, reduceMotion: boolean) {
+  const [phase, setPhase] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    if (reduceMotion) {
+      setPhase(4);
+      return;
+    }
+    let timer: ReturnType<typeof setTimeout>;
+    if (phase === 0) timer = setTimeout(() => setPhase(1), 300);
+    else if (phase === 1) timer = setTimeout(() => setPhase(2), 1100);
+    else if (phase === 2) timer = setTimeout(() => setPhase(3), 900);
+    else if (phase === 3) timer = setTimeout(() => setPhase(4), 900);
+    else timer = setTimeout(() => setPhase(0), 4000); // hold, then loop
+    return () => clearTimeout(timer);
+  }, [inView, reduceMotion, phase]);
+
+  return phase;
+}
+
+function QuestionBubble({
+  q,
+  i,
+  visible,
+}: {
+  q: (typeof QUESTIONS)[number];
+  i: number;
+  visible: boolean;
+}) {
+  const Icon = q.icon;
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -24 }}
+      animate={visible ? { opacity: 1, x: 0 } : { opacity: 0, x: -24 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: i * 0.2 }}
+      className="flex items-start gap-2.5 rounded-2xl px-4 py-3"
+      style={{
+        backgroundColor: "rgba(245,237,224,0.04)",
+        border: "1px solid #2A2A2A",
+      }}
+    >
+      <Icon aria-hidden="true" className="w-4 h-4 mt-0.5 flex-shrink-0" strokeWidth={1.75} style={{ color: "#00AEEF" }} />
+      <p className="text-[12.5px]" style={{ color: "#F5EDE0", fontFamily: "var(--font-editorial)", lineHeight: 1.4 }}>
+        &ldquo;{q.text}&rdquo;
+      </p>
+    </motion.div>
+  );
+}
+
+function AgentNode() {
+  return (
+    <div
+      className="ed-cta-pulse rounded-2xl px-5 py-4 text-center flex-shrink-0"
+      style={{
+        backgroundColor: "#0A0A0A",
+        border: "1px solid rgba(0,174,239,0.55)",
+        boxShadow: "0 0 0 5px rgba(0,174,239,0.08)",
+      }}
+    >
+      <p className="text-[9px] uppercase tracking-[0.2em] mb-1" style={{ color: "#00AEEF", fontWeight: 600 }}>
+        The Hub
+      </p>
+      <p className="text-base whitespace-nowrap" style={{ color: "#F5EDE0", fontFamily: "var(--font-editorial)", fontWeight: 500 }}>
+        EZee AI Agent
+      </p>
+    </div>
+  );
+}
+
+function ResolvedCard({ visible }: { visible: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      className="rounded-2xl px-4 py-3"
+      style={{
+        backgroundColor: "rgba(0,174,239,0.08)",
+        border: "1px solid rgba(0,174,239,0.35)",
+      }}
+    >
+      <p className="flex items-center gap-2 text-sm mb-2" style={{ color: "#F5EDE0", fontWeight: 500 }}>
+        <CheckCircle2 aria-hidden="true" className="w-4 h-4" strokeWidth={1.75} style={{ color: "#00AEEF" }} />
+        Resolved instantly
+      </p>
+      <div className="flex flex-wrap gap-1.5">
+        {["SANITATION-SOP.PDF", "STORE-214-VENDORS.PDF"].map((f) => (
+          <span
+            key={f}
+            className="rounded-full px-2 py-0.5 text-[9px]"
+            style={{
+              backgroundColor: "rgba(0,174,239,0.12)",
+              color: "#00AEEF",
+              fontWeight: 600,
+              letterSpacing: "0.04em",
+            }}
+          >
+            {f}
+          </span>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+function TicketCard({ visible }: { visible: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={visible ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      className="rounded-2xl px-4 py-3"
+      style={{
+        backgroundColor: "rgba(245,237,224,0.04)",
+        border: "1px solid #2A2A2A",
+      }}
+    >
+      <p className="text-sm mb-2" style={{ color: "#F5EDE0", fontWeight: 500 }}>
+        #18642 · POS sync failure
+      </p>
+      <ul className="space-y-1">
+        {[
+          "Full conversation attached",
+          "AI attempted answer included",
+          "Routed to Operations · Sarah K.",
+        ].map((row) => (
+          <li key={row} className="text-[11px]" style={{ color: "#A89B86", lineHeight: 1.4 }}>
+            {row}
+          </li>
+        ))}
+      </ul>
+    </motion.div>
+  );
+}
+
+function ClosedNode({ visible }: { visible: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={visible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+      className="rounded-2xl px-4 py-3 text-center"
+      style={{
+        backgroundColor: "rgba(245,237,224,0.05)",
+        border: "1px solid #2A2A2A",
+      }}
+    >
+      <p className="text-xs whitespace-nowrap" style={{ color: "#F5EDE0", fontWeight: 500 }}>
+        Closed. Logged. Learned.
+      </p>
+    </motion.div>
+  );
+}
+
+/** Dotted connector lines between the question column and the agent node. */
+function InboundLines({ visible }: { visible: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 40 100"
+      preserveAspectRatio="none"
+      className="h-full w-8 lg:w-10 flex-shrink-0"
+      aria-hidden="true"
+    >
+      {[16, 50, 84].map((y, i) => (
+        <motion.path
+          key={y}
+          d={`M 0 ${y} C 20 ${y}, 24 50, 40 50`}
+          fill="none"
+          stroke="rgba(0,174,239,0.4)"
+          strokeWidth="1.4"
+          strokeDasharray="3 4"
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+          initial={{ pathLength: 0 }}
+          animate={visible ? { pathLength: 1 } : { pathLength: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 0.25 + i * 0.2 }}
+        />
+      ))}
+    </svg>
+  );
+}
+
+/** Two outbound branches: thick blue (resolved) and thin grey (escalated). */
+function BranchLines({
+  upper,
+  lower,
+}: {
+  upper: boolean;
+  lower: boolean;
+}) {
+  return (
+    <svg
+      viewBox="0 0 60 100"
+      preserveAspectRatio="none"
+      className="h-full w-10 lg:w-14 flex-shrink-0"
+      aria-hidden="true"
+      style={{ overflow: "visible" }}
+    >
+      <motion.path
+        d="M 0 50 C 25 50, 30 22, 60 22"
+        fill="none"
+        stroke="#00AEEF"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+        initial={{ pathLength: 0 }}
+        animate={upper ? { pathLength: 1 } : { pathLength: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      />
+      <motion.path
+        d="M 0 50 C 25 50, 30 78, 60 78"
+        fill="none"
+        stroke="#A89B86"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+        initial={{ pathLength: 0 }}
+        animate={lower ? { pathLength: 1 } : { pathLength: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      />
+      {/* Branch labels */}
+      <motion.text
+        x="26" y="14" fontSize="8" fontWeight="600" fill="#00AEEF"
+        initial={{ opacity: 0 }}
+        animate={upper ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+      >
+        70%+
+      </motion.text>
+      <motion.text
+        x="20" y="94" fontSize="7" fontWeight="600" fill="#A89B86"
+        initial={{ opacity: 0 }}
+        animate={lower ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+      >
+        Escalated
+      </motion.text>
+    </svg>
+  );
+}
+
+/** Convergence lines from both outcome cards into the closed node. */
+function ConvergeLines({ visible }: { visible: boolean }) {
+  return (
+    <svg
+      viewBox="0 0 40 100"
+      preserveAspectRatio="none"
+      className="h-full w-8 lg:w-10 flex-shrink-0"
+      aria-hidden="true"
+    >
+      {[22, 78].map((y) => (
+        <motion.path
+          key={y}
+          d={`M 0 ${y} C 20 ${y}, 24 50, 40 50`}
+          fill="none"
+          stroke="rgba(245,237,224,0.35)"
+          strokeWidth="1.2"
+          strokeDasharray="3 4"
+          strokeLinecap="round"
+          vectorEffect="non-scaling-stroke"
+          initial={{ pathLength: 0 }}
+          animate={visible ? { pathLength: 1 } : { pathLength: 0 }}
+          transition={{ duration: 0.55, ease: "easeOut" }}
+        />
+      ))}
+    </svg>
+  );
+}
+
+function CoreFlowVisual() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
+  const reduceMotion = useReducedMotion();
+  const phase = useFlowSequence(inView, Boolean(reduceMotion));
+
+  const bubbles = phase >= 1;
+  const upper = phase >= 2;
+  const lower = phase >= 3;
+  const converge = phase >= 4;
+
+  return (
+    <div ref={ref} className="mt-10">
+      <p className="sr-only">
+        Diagram: questions from SMS, Slack, and Teams flow into the EZee
+        AI agent. Over 70 percent are resolved instantly with cited
+        sources; the rest become fully contextualized tickets routed to
+        the right person. Both paths end closed, logged, and learned.
+      </p>
+
+      {/* ── Desktop flow ── */}
+      <div className="hidden lg:flex items-stretch gap-0">
+        {/* Questions */}
+        <div className="flex flex-col justify-between gap-3 w-[300px] flex-shrink-0">
+          {QUESTIONS.map((q, i) => (
+            <QuestionBubble key={q.channel} q={q} i={i} visible={bubbles} />
+          ))}
+        </div>
+
+        <InboundLines visible={bubbles} />
+
+        {/* Agent node */}
+        <div className="flex items-center">
+          <AgentNode />
+        </div>
+
+        <BranchLines upper={upper} lower={lower} />
+
+        {/* Outcomes */}
+        <div className="flex flex-col justify-between gap-3 w-[300px] flex-shrink-0 py-1">
+          <ResolvedCard visible={upper} />
+          <TicketCard visible={lower} />
+        </div>
+
+        <ConvergeLines visible={converge} />
+
+        {/* Convergence */}
+        <div className="flex items-center">
+          <ClosedNode visible={converge} />
+        </div>
+      </div>
+
+      {/* ── Mobile flow: vertical with chevrons ── */}
+      <div className="lg:hidden">
+        <div className="flex flex-col gap-3">
+          {QUESTIONS.map((q, i) => (
+            <QuestionBubble key={q.channel} q={q} i={i} visible={bubbles} />
+          ))}
+        </div>
+        <div className="flex justify-center py-2">
+          <ChevronDown aria-hidden="true" className="w-4 h-4" style={{ color: "#00AEEF" }} />
+        </div>
+        <AgentNode />
+        <div className="flex justify-center py-2">
+          <ChevronDown aria-hidden="true" className="w-4 h-4" style={{ color: "#00AEEF" }} />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <ResolvedCard visible={upper} />
+          <TicketCard visible={lower} />
+        </div>
+        <div className="flex justify-center py-2">
+          <ChevronDown aria-hidden="true" className="w-4 h-4" style={{ color: "#A89B86" }} />
+        </div>
+        <ClosedNode visible={converge} />
+      </div>
+    </div>
+  );
+}
+
 /* ─── Cell 1: The Core ─────────────────────────────────── */
 
 const CORE_STATS = [
@@ -182,7 +543,7 @@ function CoreCell() {
         ))}
       </div>
 
-      {/* Visual lands in build step 2 */}
+      <CoreFlowVisual />
     </Cell>
   );
 }
