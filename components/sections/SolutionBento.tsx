@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import {
   Shield, Lock, KeyRound, Server, EyeOff, Ban, Fingerprint, ScrollText,
-  MessageSquare, Hash, Users, CheckCircle2, ChevronDown,
+  MessageSquare, Hash, Users, CheckCircle2, ChevronDown, Check,
   type LucideIcon,
 } from "lucide-react";
 
@@ -754,6 +754,203 @@ function AutonomousCell() {
   );
 }
 
+/* ─── Cell 4 visual: permissions matrix ────────────────── */
+// TODO: Replace with real product screen recording
+
+const MATRIX_ROLES = ["HQ Admin", "Coach", "Franchisee", "Staff"];
+const MATRIX_ROWS: { capability: string; grants: boolean[] }[] = [
+  { capability: "View brand SOPs",                  grants: [true, true, true, true] },
+  { capability: "See network analytics",            grants: [true, true, false, false] },
+  { capability: "Trigger actions in connected tools", grants: [true, true, true, false] },
+  { capability: "Approve agent workflows",          grants: [true, false, false, false] },
+];
+
+function PermissionsMatrixVisual() {
+  return (
+    <div className="mt-8 overflow-x-auto">
+      <div className="min-w-[380px]">
+        {/* Role header row */}
+        <div className="grid grid-cols-[1.6fr_repeat(4,1fr)] gap-1.5 mb-1.5">
+          <span />
+          {MATRIX_ROLES.map((r) => (
+            <span
+              key={r}
+              className="text-[9px] uppercase tracking-[0.12em] text-center"
+              style={{ color: "#A89B86", fontWeight: 600 }}
+            >
+              {r}
+            </span>
+          ))}
+        </div>
+        {MATRIX_ROWS.map((row, ri) => (
+          <motion.div
+            key={row.capability}
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.5, ease: "easeOut", delay: ri * 0.15 }}
+            className="grid grid-cols-[1.6fr_repeat(4,1fr)] gap-1.5 mb-1.5 items-center"
+          >
+            <span
+              className="text-[11px] pr-1"
+              style={{ color: "#F5EDE0", fontWeight: 500, lineHeight: 1.3 }}
+            >
+              {row.capability}
+            </span>
+            {row.grants.map((granted, ci) => (
+              <span
+                key={ci}
+                className="flex items-center justify-center rounded-lg py-1.5"
+                style={{
+                  backgroundColor: granted
+                    ? "rgba(0,174,239,0.08)"
+                    : "rgba(245,237,224,0.02)",
+                  border: `1px solid ${granted ? "rgba(0,174,239,0.25)" : "#2A2A2A"}`,
+                }}
+              >
+                {granted ? (
+                  <Check aria-hidden="true" className="w-3.5 h-3.5" strokeWidth={2.25} style={{ color: "#00AEEF" }} />
+                ) : (
+                  <span aria-hidden="true" className="text-[11px]" style={{ color: "#6B6358" }}>–</span>
+                )}
+                <span className="sr-only">{granted ? "allowed" : "not allowed"}</span>
+              </span>
+            ))}
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Cell 5 visual: streaming activity log ────────────── */
+// TODO: Replace with real product screen recording
+
+const LOG_ROWS = [
+  { time: "14:02", kind: "Answer",     detail: "Store #214 · 2 sources cited" },
+  { time: "14:07", kind: "Action",     detail: "Lead created in ServiceTitan" },
+  { time: "14:11", kind: "Agent",      detail: "Weekly KPI Review completed" },
+  { time: "14:15", kind: "Escalation", detail: "Ticket #18642 → Operations" },
+];
+
+function ActivityLogVisual() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const reduceMotion = useReducedMotion();
+  const [head, setHead] = useState(0);
+
+  useEffect(() => {
+    if (!inView || reduceMotion) return;
+    const t = setInterval(() => setHead((h) => (h + 1) % LOG_ROWS.length), 2000);
+    return () => clearInterval(t);
+  }, [inView, reduceMotion]);
+
+  // Newest row first, rotating through the fixture list
+  const visible = Array.from({ length: 4 }, (_, i) => LOG_ROWS[(head - i + LOG_ROWS.length * 2) % LOG_ROWS.length]);
+
+  return (
+    <div ref={ref} className="mt-8">
+      <div
+        className="rounded-2xl p-4"
+        style={{
+          backgroundColor: "rgba(245,237,224,0.03)",
+          border: "1px solid #2A2A2A",
+        }}
+      >
+        <div className="flex items-center justify-between mb-3">
+          <p
+            className="text-[10px] uppercase tracking-[0.2em]"
+            style={{ color: "#00AEEF", fontWeight: 600 }}
+          >
+            Activity log · Live
+          </p>
+          <span aria-hidden="true" className="relative flex h-2 w-2">
+            <span
+              className="absolute inline-flex h-full w-full rounded-full opacity-60"
+              style={{
+                backgroundColor: "#16A34A",
+                animation: "ed-cursor-blink 1.6s ease-in-out infinite",
+              }}
+            />
+            <span className="relative inline-flex h-2 w-2 rounded-full" style={{ backgroundColor: "#16A34A" }} />
+          </span>
+        </div>
+
+        <div className="space-y-1.5 overflow-hidden" style={{ minHeight: "116px" }}>
+          {visible.map((row, i) => (
+            <motion.div
+              key={`${row.time}-${head}-${i}`}
+              initial={i === 0 && !reduceMotion ? { opacity: 0, y: -10 } : false}
+              animate={{ opacity: 1 - i * 0.18, y: 0 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="flex items-baseline gap-2 rounded-lg px-2.5 py-1.5"
+              style={{
+                backgroundColor: "rgba(245,237,224,0.03)",
+              }}
+            >
+              <span className="text-[10px] font-mono flex-shrink-0" style={{ color: "#A89B86" }}>
+                {row.time}
+              </span>
+              <span
+                className="text-[10px] flex-shrink-0"
+                style={{ color: "#00AEEF", fontWeight: 600, letterSpacing: "0.06em" }}
+              >
+                {row.kind}
+              </span>
+              <span className="text-[11px] truncate" style={{ color: "#F5EDE0" }}>
+                {row.detail}
+              </span>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Sparkline */}
+        <div className="mt-3 flex items-end justify-between gap-3">
+          <svg viewBox="0 0 120 28" className="h-6 flex-1" aria-hidden="true" preserveAspectRatio="none">
+            <motion.polyline
+              points="0,24 18,21 36,22 54,17 72,14 90,10 108,7 120,4"
+              fill="none"
+              stroke="#00AEEF"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              vectorEffect="non-scaling-stroke"
+              initial={{ pathLength: 0 }}
+              whileInView={{ pathLength: 1 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 1.1, ease: "easeOut", delay: 0.3 }}
+            />
+          </svg>
+          <span className="text-[11px] flex-shrink-0" style={{ color: "#16A34A", fontWeight: 600 }}>
+            ▲ 23%
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Cell 6 visual: security badge grid ───────────────── */
+// TODO: Replace with real product screen recording
+
+function SecurityBadgeGrid() {
+  return (
+    <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-2">
+      {SECURITY_BADGES.map((b, i) => (
+        <motion.div
+          key={b.label}
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.08 }}
+        >
+          <SecurityBadge icon={b.icon} label={b.label} />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 /* ─── Cell 4: Access ───────────────────────────────────── */
 
 function AccessCell() {
@@ -767,7 +964,7 @@ function AccessCell() {
         their locations. Staff access what their job requires. Configure
         once, apply across the network.
       </CellBody>
-      {/* Visual lands in build step 4 */}
+      <PermissionsMatrixVisual />
       <CellLink href="#governance">See governance ↓</CellLink>
     </Cell>
   );
@@ -785,7 +982,7 @@ function VisibilityCell() {
         All in one admin log with sources, timestamps, and outcomes. Your
         CISO asks what is running. You answer in a minute.
       </CellBody>
-      {/* Visual lands in build step 4 */}
+      <ActivityLogVisual />
       <CellLink href="#governance">See governance ↓</CellLink>
     </Cell>
   );
@@ -803,7 +1000,7 @@ function SecureCell() {
         transit, AES 256-bit at rest. PII redaction before indexing. Your
         data never trains a third-party model.
       </CellBody>
-      {/* Visual lands in build step 4 */}
+      <SecurityBadgeGrid />
       <CellLink href="/security">See security →</CellLink>
     </Cell>
   );
