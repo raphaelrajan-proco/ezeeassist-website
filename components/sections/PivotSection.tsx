@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import { useRef } from "react";
+import SolutionBento from "./SolutionBento";
 
 /**
  * Section 3 — The Pivot: "Now bring it home."
@@ -88,11 +89,10 @@ export default function PivotSection() {
           className="mt-12 max-w-3xl text-xl md:text-2xl"
           style={{ color: "#A89B86", lineHeight: 1.5, fontWeight: 400 }}
         >
-          EZee Assist is the AI platform franchise and multi-location
-          brands build on. Operator conversations. Coach-triggered
-          actions. Overnight workflows. Custom apps your ops team ships.
-          All in one place. Connected to your stack. Governed by your
-          rules. Native to how your network actually works.
+          Your teams have AI. What they lack is a system. EZee gives
+          franchise and multi-location brands one place to run it all:
+          grounded in your knowledge, wired into your stack, scoped to
+          each role, and visible to leadership.
         </motion.p>
 
         {/* Pillar pills */}
@@ -122,25 +122,8 @@ export default function PivotSection() {
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.7, delay: 1.6 }}
-          className="mt-14"
-        >
-          <Link
-            href="#use-cases"
-            className="text-base"
-            style={{
-              color: "#F5EDE0",
-              textDecoration: "underline",
-              textUnderlineOffset: "4px",
-              textDecorationThickness: "1px",
-            }}
-          >
-            See what brands build ↓
-          </Link>
-        </motion.div>
+        {/* Platform bento grid */}
+        <SolutionBento />
       </div>
     </section>
   );
