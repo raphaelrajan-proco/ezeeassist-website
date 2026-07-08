@@ -124,6 +124,37 @@ export default function PivotSection() {
 
         {/* Platform bento grid */}
         <SolutionBento />
+
+        {/* Closing beat */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-16 md:mt-20 text-center"
+        >
+          <p
+            className="text-2xl md:text-3xl tracking-tight mx-auto max-w-3xl"
+            style={{
+              color: "#F5EDE0",
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 500,
+            }}
+          >
+            All of it, one platform.{" "}
+            <span style={{ color: "#00AEEF" }}>
+              Live across your network in about ten weeks.
+            </span>
+          </p>
+          <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+            <Link href="/contact" className="ed-btn ed-btn-blue">
+              Book a Demo
+            </Link>
+            <Link href="#use-cases" className="ed-btn ed-btn-secondary-dark">
+              See what brands build ↓
+            </Link>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,8 +1,10 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
+import Link from "next/link";
 import { useRef } from "react";
 import { Shield, Eye, CheckCircle2 } from "lucide-react";
+import { SECURITY_BADGES, SecurityBadge } from "./SolutionBento";
 
 /**
  * Section 6 — Governance. The enterprise moment: turns "shadow AI
@@ -162,6 +164,41 @@ export default function GovernanceSection() {
             Scattered experiments become governed execution.
           </span>
         </motion.p>
+
+        {/* Security compliance strip */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="mt-14 pt-10"
+          style={{ borderTop: "1px solid #2A2A2A" }}
+        >
+          <p
+            className="text-xs uppercase tracking-[0.2em] mb-5"
+            style={{ color: "#A89B86", fontWeight: 500 }}
+          >
+            Security at Scale
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {SECURITY_BADGES.map((b) => (
+              <SecurityBadge key={b.label} icon={b.icon} label={b.label} />
+            ))}
+          </div>
+          <Link
+            href="/security"
+            className="inline-block mt-6 text-sm transition-opacity hover:opacity-70"
+            style={{
+              color: "#F5EDE0",
+              fontWeight: 500,
+              textDecoration: "underline",
+              textUnderlineOffset: "4px",
+              textDecorationThickness: "1px",
+            }}
+          >
+            Explore EZee Assist security →
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
