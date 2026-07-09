@@ -141,7 +141,7 @@ export default function PivotSection() {
               fontWeight: 500,
             }}
           >
-            All of it, one platform.{" "}
+            Six elements. One platform.{" "}
             <span style={{ color: "#00AEEF" }}>
               Live across your network in about ten weeks.
             </span>
