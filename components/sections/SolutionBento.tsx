@@ -703,6 +703,268 @@ function InstructionToStepsVisual() {
   );
 }
 
+/* ─── Card 4 visual: role cards ────────────────────────── */
+// TODO: Replace with real product screen recording
+
+const ROLE_CARDS = [
+  {
+    role: "HQ Admin",
+    avatars: [{ i: "JM", c: "#0072CE" }, { i: "RS", c: "#7A3BFF" }, { i: "AL", c: "#D97706" }],
+    extra: "+12",
+    scope: "Whole network",
+    perms: [
+      { label: "Answers", on: true },
+      { label: "Actions", on: true },
+      { label: "Agents", on: true },
+      { label: "Approvals", on: true },
+    ],
+  },
+  {
+    role: "Coach",
+    avatars: [{ i: "SK", c: "#16A34A" }, { i: "TB", c: "#F05A28" }],
+    extra: "+8",
+    scope: "Territory: West",
+    perms: [
+      { label: "Answers", on: true },
+      { label: "Actions", on: true },
+      { label: "Agents", on: true },
+      { label: "Approvals", on: false },
+    ],
+  },
+  {
+    role: "Franchisee",
+    avatars: [{ i: "MP", c: "#DB2777" }, { i: "DK", c: "#0AB4FF" }],
+    extra: "+230",
+    scope: "Store #214",
+    perms: [
+      { label: "Answers", on: true },
+      { label: "Actions", on: true },
+      { label: "Agents", on: false },
+      { label: "Approvals", on: false },
+    ],
+  },
+];
+
+function RoleCardsVisual() {
+  return (
+    <GradientFrame>
+      <div className="flex flex-col sm:flex-row justify-center gap-3">
+        {ROLE_CARDS.map((r, ri) => (
+          <motion.div
+            key={r.role}
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55, ease: "easeOut", delay: 0.15 + ri * 0.15 }}
+            className="flex-1 rounded-xl px-3.5 py-3.5 min-w-0"
+            style={MOCK_SURFACE}
+          >
+            <p className="text-[11px] mb-2.5" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
+              {r.role}
+            </p>
+            <p className="text-[8.5px] uppercase tracking-[0.12em] mb-1" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
+              Members
+            </p>
+            <div className="flex items-center mb-2.5">
+              {r.avatars.map((a, i) => (
+                <span key={a.i} style={{ marginLeft: i === 0 ? 0 : "-5px" }}>
+                  <MockAvatar initials={a.i} color={a.c} />
+                </span>
+              ))}
+              <span className="ml-1.5 text-[9px]" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
+                {r.extra}
+              </span>
+            </div>
+            <p className="text-[8.5px] uppercase tracking-[0.12em] mb-0.5" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
+              Scope
+            </p>
+            <p className="text-[10.5px] mb-2.5" style={{ color: MOCK_TEXT, fontWeight: 500 }}>
+              {r.scope}
+            </p>
+            <div className="flex flex-wrap gap-1">
+              {r.perms.map((p) => (
+                <span
+                  key={p.label}
+                  className="rounded-full px-1.5 py-0.5 text-[8px]"
+                  style={
+                    p.on
+                      ? { backgroundColor: "rgba(0,174,239,0.10)", color: "#0077A8", fontWeight: 600 }
+                      : { backgroundColor: "rgba(10,10,10,0.05)", color: "#B4AEA1", fontWeight: 600, textDecoration: "line-through" }
+                  }
+                >
+                  {p.label}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </GradientFrame>
+  );
+}
+
+/* ─── Card 5 visual: activity log + escalation ticket ──── */
+// TODO: Replace with real product screen recording
+
+const AUDIT_ROWS = [
+  { time: "14:02", kind: "Answer",     detail: "2 sources cited",                who: { i: "EZ", c: "#00AEEF" } },
+  { time: "14:07", kind: "Action",     detail: "Lead created in ServiceTitan",  who: { i: "EZ", c: "#00AEEF" } },
+  { time: "14:11", kind: "Agent",      detail: "Weekly KPI Review completed",   who: { i: "EZ", c: "#00AEEF" } },
+  { time: "14:15", kind: "Escalation", detail: "Ticket #18642",                 who: { i: "SK", c: "#16A34A" } },
+];
+
+function AuditAndTicketVisual() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const reduceMotion = useReducedMotion();
+  const [head, setHead] = useState(0);
+
+  useEffect(() => {
+    if (!inView || reduceMotion) return;
+    const t = setInterval(() => setHead((h) => (h + 1) % AUDIT_ROWS.length), 2200);
+    return () => clearInterval(t);
+  }, [inView, reduceMotion]);
+
+  const rows = Array.from(
+    { length: 4 },
+    (_, i) => AUDIT_ROWS[(head - i + AUDIT_ROWS.length * 2) % AUDIT_ROWS.length]
+  );
+
+  return (
+    <GradientFrame>
+      <div ref={ref} className="relative mx-auto max-w-[360px] pb-6">
+        {/* Activity log */}
+        <div className="rounded-xl overflow-hidden" style={MOCK_SURFACE}>
+          <div
+            className="flex items-center justify-between px-3.5 py-2"
+            style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}
+          >
+            <span className="text-[10px] uppercase tracking-[0.12em]" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
+              Activity
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.12em]" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
+              Performed by
+            </span>
+          </div>
+          <div className="overflow-hidden" style={{ minHeight: "128px" }}>
+            {rows.map((row, i) => (
+              <motion.div
+                key={`${row.time}-${head}-${i}`}
+                initial={i === 0 && !reduceMotion ? { opacity: 0, y: -10 } : false}
+                animate={{ opacity: 1 - i * 0.14, y: 0 }}
+                transition={{ duration: 0.45, ease: "easeOut" }}
+                className="flex items-center justify-between px-3.5 py-2"
+                style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}
+              >
+                <span className="flex items-baseline gap-2 min-w-0">
+                  <span className="text-[9px] font-mono flex-shrink-0" style={{ color: MOCK_MUTED }}>
+                    {row.time}
+                  </span>
+                  <span className="text-[10px] flex-shrink-0" style={{ color: "#0077A8", fontWeight: 600 }}>
+                    {row.kind}
+                  </span>
+                  <span className="text-[10.5px] truncate" style={{ color: MOCK_TEXT }}>
+                    {row.detail}
+                  </span>
+                </span>
+                <MockAvatar initials={row.who.i} color={row.who.c} />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Escalation ticket, overlapping */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 0.4 }}
+          className="relative ml-auto -mt-3 w-[84%] rounded-xl px-3.5 py-3"
+          style={MOCK_SURFACE}
+        >
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
+              #18642 · POS sync failure
+            </span>
+            <span
+              className="rounded-full px-2 py-0.5 text-[8.5px]"
+              style={{ backgroundColor: "rgba(217,119,6,0.12)", color: "#B45309", fontWeight: 600 }}
+            >
+              In progress
+            </span>
+          </div>
+          <ul className="space-y-1">
+            {[
+              "Full conversation attached",
+              "AI attempted answer included",
+              "Routed to Operations · Sarah K.",
+            ].map((row) => (
+              <li key={row} className="text-[10px]" style={{ color: MOCK_MUTED, lineHeight: 1.4 }}>
+                {row}
+              </li>
+            ))}
+          </ul>
+        </motion.div>
+      </div>
+    </GradientFrame>
+  );
+}
+
+/* ─── Card 6 visual: compliance panel ──────────────────── */
+// TODO: Replace with real product screen recording
+
+const COMPLIANCE_BADGES: { icon: LucideIcon; label: string }[] = [
+  { icon: ShieldCheck, label: "SOC 2 Type II aligned" },
+  { icon: Lock,        label: "TLS 1.2/1.3" },
+  { icon: KeyRound,    label: "AES 256-bit at rest" },
+  { icon: Server,      label: "Dedicated AWS" },
+  { icon: EyeOff,      label: "PII redaction" },
+  { icon: Ban,         label: "No model training" },
+  { icon: Fingerprint, label: "SSO + SAML" },
+  { icon: ScrollText,  label: "Full audit trail" },
+];
+
+function CompliancePanelVisual() {
+  return (
+    <GradientFrame>
+      <div className="rounded-xl overflow-hidden mx-auto max-w-[360px]" style={MOCK_SURFACE}>
+        <div
+          className="flex items-center justify-between px-3.5 py-2.5"
+          style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}
+        >
+          <span className="text-[11px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
+            Security &amp; compliance
+          </span>
+          <span className="text-[9px]" style={{ color: "#15803D", fontWeight: 600 }}>
+            ● Active
+          </span>
+        </div>
+        <div className="grid grid-cols-2 gap-2 p-3.5">
+          {COMPLIANCE_BADGES.map((b, i) => {
+            const Icon = b.icon;
+            return (
+              <motion.span
+                key={b.label}
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.4, ease: "easeOut", delay: i * 0.08 }}
+                className="flex items-center gap-1.5 rounded-lg px-2 py-1.5"
+                style={{ border: `1px solid ${MOCK_HAIRLINE}`, backgroundColor: "rgba(10,10,10,0.02)" }}
+              >
+                <Icon aria-hidden="true" className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={1.75} style={{ color: "#00AEEF" }} />
+                <span className="text-[9.5px]" style={{ color: MOCK_TEXT, fontWeight: 500, lineHeight: 1.2 }}>
+                  {b.label}
+                </span>
+              </motion.span>
+            );
+          })}
+        </div>
+      </div>
+    </GradientFrame>
+  );
+}
+
 /* ─── The section body ─────────────────────────────────── */
 
 export default function SolutionBento() {
@@ -744,7 +1006,38 @@ export default function SolutionBento() {
           <InstructionToStepsVisual />
         </ElementCard>
 
-        {/* Cards 4-6 land in build step 3 */}
+        <ElementCard
+          id="el-access"
+          overline="Access"
+          headline="HQ, coaches, franchisees, staff. One platform, four views."
+          body="Access scoped by role and location. Franchisors see the network. Coaches work their territory. Franchisees run their locations. Staff get exactly what the job needs. Set once, applied across the network."
+          linkHref="#governance"
+          linkLabel="See governance ↓"
+        >
+          <RoleCardsVisual />
+        </ElementCard>
+
+        <ElementCard
+          id="el-visibility"
+          overline="Visibility & Human in the Loop"
+          headline="See everything the AI does. Loop in a human when judgment matters."
+          body="Answers, actions, and agent runs are logged with sources, timestamps, and outcomes. When the AI shouldn't decide alone, an end-to-end ticket carries the full context to the right person."
+          linkHref="#governance"
+          linkLabel="See ticketing & governance ↓"
+        >
+          <AuditAndTicketVisual />
+        </ElementCard>
+
+        <ElementCard
+          id="el-security"
+          overline="Security"
+          headline="Enterprise security, built into the foundation."
+          body="Dedicated AWS infrastructure per customer. TLS 1.2/1.3 in transit, AES 256-bit at rest. PII redacted before indexing. Your data never trains a third-party model."
+          linkHref="/security"
+          linkLabel="Explore security →"
+        >
+          <CompliancePanelVisual />
+        </ElementCard>
       </div>
     </>
   );
