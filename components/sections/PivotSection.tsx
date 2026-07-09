@@ -61,7 +61,7 @@ export default function PivotSection() {
             textTransform: "uppercase",
           }}
         >
-          The Solution
+          The Platform
         </motion.p>
 
         <motion.h2
@@ -89,10 +89,10 @@ export default function PivotSection() {
           className="mt-12 max-w-3xl text-xl md:text-2xl"
           style={{ color: "#A89B86", lineHeight: 1.5, fontWeight: 400 }}
         >
-          Your teams have AI. What they lack is a system. EZee gives
-          franchise and multi-location brands one place to run it all:
-          grounded in your knowledge, wired into your stack, scoped to
-          each role, and visible to leadership.
+          Your teams have AI scattered across tabs and tools. EZee brings
+          it onto one platform: connected to your stack, available on
+          every surface, acting on your behalf, scoped to each role,
+          fully observable, and secure by default.
         </motion.p>
 
         {/* Pillar pills */}

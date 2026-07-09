@@ -51,7 +51,8 @@
       "Bash(git commit -q -m 'Bento sprint 1/5: tag + section framing + six-cell scaffold *)",
       "Bash(git commit -q -m 'Bento sprint 3/5: Cell 2 drifting pill cloud + Cell 3 workflow sequencer *)",
       "Bash(git commit -q -m 'Bento sprint 4/5: permissions matrix, streaming activity log, security badge grid *)",
-      "Bash(git commit -q -m 'Bento sprint 5/5: closing beat + Governance security strip + QA *)"
+      "Bash(git commit -q -m 'Bento sprint 5/5: closing beat + Governance security strip + QA *)",
+      "Bash(git commit -q -m 'Platform rebuild 1/4: tag + framing + platform diagram with stat strip *)"
     ]
   }
 }
