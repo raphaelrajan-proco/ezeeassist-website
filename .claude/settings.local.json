@@ -57,7 +57,8 @@
       "Bash(git commit -q -m 'Platform rebuild 3/4: element cards 4-6 *)",
       "Bash(git commit -q -m 'Platform rebuild 4/4: closing beat + anchor QA *)",
       "Bash(git commit -q -m 'Growth narrative 1/6: hero + trust strip + the gap *)",
-      "Bash(git commit -q -m 'Growth narrative: full headline + command center hero visual *)"
+      "Bash(git commit -q -m 'Growth narrative: full headline + command center hero visual *)",
+      "Bash(git commit -q -m 'Growth narrative 2/6: The Shift + What Powers It *)"
     ]
   }
 }

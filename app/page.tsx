@@ -5,6 +5,8 @@ import JsonLd from "@/components/JsonLd";
 import GrowthHero from "@/components/growth/Hero";
 import GrowthTrustStrip from "@/components/growth/TrustStrip";
 import TheGap from "@/components/growth/TheGap";
+import TheShift from "@/components/growth/TheShift";
+import WhatPowersIt from "@/components/growth/WhatPowersIt";
 
 export const metadata: Metadata = {
   title: "EZee Assist — Turn Your Franchise Playbooks Into an AI Team",
@@ -56,6 +58,8 @@ export default function Home() {
         {/* 1 */} <GrowthHero />
         {/* 2 */} <GrowthTrustStrip />
         {/* 3 */} <TheGap />
+        {/* 4 */} <TheShift />
+        {/* 5 */} <WhatPowersIt />
       </main>
       <Footer />
     </div>
