@@ -217,6 +217,18 @@
   color: var(--ed-accent);
 }
 
+/* Soft gradient wash behind floating product mockups (growth page).
+   Neutral-to-blue tint in light mode, navy-to-black in dark. */
+.theme-editorial .ed-gradient-frame {
+  background: linear-gradient(135deg, #EAF0F5 0%, #DFE9F0 48%, #D5E3ED 100%);
+  border: 1px solid rgba(10, 10, 10, 0.06);
+}
+.dark .theme-editorial .ed-gradient-frame,
+.theme-editorial.dark .ed-gradient-frame {
+  background: linear-gradient(135deg, #17242F 0%, #101820 48%, #0B0E13 100%);
+  border: 1px solid #232A31;
+}
+
 /* Gentle independent bob for the bento integration pill cloud */
 @keyframes ed-bob {
   0%, 100% { transform: translateY(0); }
