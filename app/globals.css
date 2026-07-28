@@ -28,17 +28,17 @@
    Leaves the default theme above untouched.
    ───────────────────────────────────────────────────────── */
 .theme-editorial {
-  /* Light mode (cream-on-cream) */
-  --ed-bg:           #F5EDE0;
-  --ed-bg-alt:       #EDE3D4;
+  /* Light mode (neutral whites and greys) */
+  --ed-bg:           #FFFFFF;
+  --ed-bg-alt:       #FAFAFA;
   --ed-fg:           #0A0A0A;
-  --ed-fg-muted:     #6B6358;
-  --ed-border:       #D9CFC0;
+  --ed-fg-muted:     #52525B;
+  --ed-border:       #E5E7EB;
   --ed-card:         #FFFFFF;
-  --ed-card-alt:     #FAEFD8;
+  --ed-card-alt:     #F4F4F5;
   --ed-accent:       #00AEEF;
   --ed-accent-muted: #1B5A6E;
-  --ed-rule:         rgba(10,10,10,0.12);
+  --ed-rule:         #E5E7EB;
 }
 .dark .theme-editorial,
 .theme-editorial.dark {
@@ -222,8 +222,8 @@
 /* Soft gradient wash behind floating product mockups (growth page).
    Neutral-to-blue tint in light mode, navy-to-black in dark. */
 .theme-editorial .ed-gradient-frame {
-  background: linear-gradient(135deg, #EAF0F5 0%, #DFE9F0 48%, #D5E3ED 100%);
-  border: 1px solid rgba(10, 10, 10, 0.06);
+  background: linear-gradient(135deg, #FAFAFA 0%, #F4F4F5 48%, #EDEDEF 100%);
+  border: 1px solid #E5E7EB;
 }
 .dark .theme-editorial .ed-gradient-frame,
 .theme-editorial.dark .ed-gradient-frame {

@@ -14,10 +14,10 @@ import { Overline, SectionHeadline, SectionShell } from "./shared";
 type Category = { key: string; label: string; color: string; highlight?: boolean };
 
 const CATEGORIES: Category[] = [
-  { key: "questions",  label: "Repeat questions",     color: "#B9B2A4" },
-  { key: "compliance", label: "Compliance follow-up", color: "#CFC8BA" },
-  { key: "prep",       label: "Call prep",            color: "#DED8CB" },
-  { key: "reporting",  label: "Reporting",            color: "#EAE4D8" },
+  { key: "questions",  label: "Repeat questions",     color: "#A1A1AA" },
+  { key: "compliance", label: "Compliance follow-up", color: "#BFBFC6" },
+  { key: "prep",       label: "Call prep",            color: "#D4D4D8" },
+  { key: "reporting",  label: "Reporting",            color: "#E4E4E7" },
   { key: "coaching",   label: "Coaching",             color: "#00AEEF", highlight: true },
 ];
 
@@ -83,7 +83,7 @@ function Bar({
                 <span
                   className="text-[11px] px-1 truncate"
                   style={{
-                    color: cat.highlight ? "#FFFFFF" : "#4A453C",
+                    color: cat.highlight ? "#FFFFFF" : "#52525B",
                     fontWeight: 600,
                   }}
                 >

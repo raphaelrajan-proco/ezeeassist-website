@@ -58,14 +58,14 @@ export function SectionShell({
 /* ── Mockup chrome (consistent product UI across the page) ── */
 
 export const MOCK_SURFACE: React.CSSProperties = {
-  backgroundColor: "#FCFBF8",
-  border: "1px solid rgba(10,10,10,0.07)",
+  backgroundColor: "#FFFFFF",
+  border: "1px solid #E5E7EB",
   boxShadow:
-    "0 18px 44px -14px rgba(10,20,30,0.28), 0 4px 12px -4px rgba(10,20,30,0.16)",
+    "0 18px 44px -14px rgba(9,9,11,0.16), 0 4px 12px -4px rgba(9,9,11,0.10)",
 };
-export const MOCK_TEXT = "#1D1D1B";
-export const MOCK_MUTED = "#8A8578";
-export const MOCK_HAIRLINE = "rgba(10,10,10,0.07)";
+export const MOCK_TEXT = "#0A0A0A";
+export const MOCK_MUTED = "#52525B";
+export const MOCK_HAIRLINE = "#E5E7EB";
 
 export function GradientFrame({ children }: { children: React.ReactNode }) {
   return (
