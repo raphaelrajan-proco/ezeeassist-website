@@ -183,8 +183,9 @@ export default function GrowthHero() {
       />
 
       <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24">
-        {/* Copy */}
-        <div className="max-w-3xl">
+        {/* Copy. Wider than the subhead measure so the larger H1 wraps to
+            two lines and the hero still clears the fold at 1440x900. */}
+        <div className="max-w-4xl">
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -199,11 +200,10 @@ export default function GrowthHero() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-            className="ed-fg text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.03em]"
+            className="ed-fg text-5xl md:text-6xl lg:text-7xl leading-[1.02] tracking-[-0.03em]"
             style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
           >
-            Your playbooks, <em style={{ fontStyle: "italic" }}>running</em> at
-            every location.
+            The operating system that runs your playbooks.
           </motion.h1>
 
           <motion.p
