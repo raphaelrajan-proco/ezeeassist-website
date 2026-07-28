@@ -1,198 +1,140 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import {
-  Menu, X, ChevronDown,
-  Bot, Ticket, BarChart2, Workflow, Plug2, LayoutGrid,
-  Building2, Store, MapPin, GraduationCap,
-  FileText, Lightbulb, Calculator, Clock,
-  MessageSquare, Zap, AppWindow, ShieldCheck,
-  ArrowRight,
-} from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Button from "@/components/ui/Button";
 import ThemeToggle from "@/components/ThemeToggle";
 
-/* ─── Nav data ─────────────────────────────────────────── */
+/* ─── Nav data ─────────────────────────────────────────────
+   Five top-level items, hard maximum, plus the CTA.
+   Menu items are name + one-line description, no icons.
+   ───────────────────────────────────────────────────────── */
 
-const platformLinks = [
-  { label: "Platform Overview", href: "/solution",     icon: LayoutGrid,  desc: "Every AI use case. One platform. Purpose-built for franchising." },
-  { label: "Answers",           href: "/#answers",     icon: MessageSquare, desc: "Instant answers, sourced from your entire stack." },
-  { label: "Actions",           href: "/#actions",     icon: Zap,         desc: "AI that takes action across your tools." },
-  { label: "Agents",            href: "/#agents",      icon: Workflow,    desc: "Autonomous workflows across HQ and locations." },
-  { label: "Apps",              href: "/#apps",        icon: AppWindow,   desc: "Custom apps, from one prompt." },
-  { label: "Integrations",      href: "/#integrations",icon: Plug2,       desc: "250+ native integrations. Connected to everything." },
-  { label: "Governance",        href: "/#governance",  icon: ShieldCheck, desc: "Role-based access, full observability, human-in-the-loop." },
+type NavItem = { label: string; href: string; desc: string };
+type NavGroup = { heading: string; items: NavItem[] };
+
+const platformGroups: NavGroup[] = [
+  {
+    heading: "Capabilities",
+    items: [
+      { label: "Overview",            href: "/solution",              desc: "The execution layer for franchise networks." },
+      { label: "Unified Answers",     href: "/#capabilities",         desc: "One place operators ask, on the channel they use." },
+      { label: "Compliance at Scale", href: "/#capabilities",         desc: "Locations checked continuously against your standard." },
+      { label: "Workflows",           href: "/solution/agents",       desc: "Recurring work runs on a schedule or a trigger." },
+      { label: "Reporting",           href: "/#capabilities",         desc: "Live performance without a request queue." },
+      { label: "AI Apps",             href: "/#capabilities",         desc: "Describe the tool your network needs." },
+    ],
+  },
+  {
+    heading: "Control",
+    items: [
+      { label: "Control Plane",  href: "/#two-audiences",        desc: "Set who sees what and what runs without a human." },
+      { label: "Integrations",   href: "/solution/integrations", desc: "250+ native connections. No migration." },
+      { label: "Security",       href: "/security",              desc: "Dedicated infrastructure, encrypted end to end." },
+    ],
+  },
 ];
 
-const industriesLinks = [
-  { label: "All Industries",            href: "/industries",                            icon: Building2,      desc: "See how EZee Assist scales across every format." },
-  { label: "Franchising",               href: "/industries/franchising",                icon: Store,          desc: "Purpose-built for franchise brands and their networks." },
-  { label: "Multi-Location Businesses", href: "/industries/multi-location",             icon: MapPin,         desc: "Consistent support across every location, at scale." },
-  { label: "Universities",              href: "/industries/universities",               icon: GraduationCap,  desc: "Instant answers for students, staff, and departments." },
+const solutionsGroups: NavGroup[] = [
+  {
+    heading: "By role",
+    items: [
+      { label: "Coaches and FBCs",      href: "/industries/franchising",                           desc: "Walk into every call already prepared." },
+      { label: "Franchisor HQ",         href: "/industries/franchising/franchisors",               desc: "Publish the standard, then watch it hold." },
+      { label: "Franchisees and Teams", href: "/industries/franchising/multi-unit-franchisees",    desc: "Answers and tools at the hour you work." },
+    ],
+  },
+  {
+    heading: "By outcome",
+    items: [
+      { label: "Support deflection", href: "/#capabilities", desc: "Repetitive questions stop reaching your inbox." },
+      { label: "Compliance",         href: "/#capabilities", desc: "Certifications and audits tracked nightly." },
+      { label: "Growth coaching",    href: "/#the-week",     desc: "Coaching time back, at every location." },
+    ],
+  },
 ];
 
-const resourcesLinks = [
-  { label: "Blog",              href: "/blog",            icon: FileText,   desc: "Franchise operations insights and product news." },
-  { label: "Why EZee Assist",   href: "/why-ezeeassist",  icon: Lightbulb,  desc: "The case for building AI on a purpose-built platform, not a general one." },
-  { label: "ROI Calculator",    href: "/roi-calculator",  icon: Calculator, desc: "See what your network could recover on the platform." },
-  { label: "Changelog",         href: "/changelog",       icon: Clock,      desc: "New features, fixes, and product updates." },
+const resourcesItems: NavItem[] = [
+  { label: "Blog",           href: "/blog",           desc: "Franchise operations insights and product news." },
+  { label: "Case Studies",   href: "/case-studies",   desc: "What brands changed, and what it returned." },
+  { label: "ROI Calculator", href: "/roi-calculator", desc: "See what your network could recover." },
+  { label: "Comparisons",    href: "/why-ezeeassist", desc: "How purpose-built AI differs from a general assistant." },
+  { label: "Changelog",      href: "/changelog",      desc: "New capabilities, fixes, and product updates." },
 ];
 
-const caseStudyLinks = [
-  { label: "WSI", sub: "67% ticket reduction globally", href: "/case-studies/wsi" },
-  { label: "DekaLash", sub: "94% AI deflection · Mindbody migration", href: "/case-studies/dekalash" },
-  { label: "DivaDance", sub: "650+ support hours saved in 6 months", href: "/case-studies/divadance" },
+const companyItems: NavItem[] = [
+  { label: "About",   href: "/about",   desc: "Who we are and why we build this." },
+  { label: "Careers", href: "/careers", desc: "Open roles across engineering and go to market." },
+  { label: "Contact", href: "/contact", desc: "Talk to our team." },
 ];
 
-type DropdownKey = "platform" | "industries" | "resources" | null;
+type DropdownKey = "platform" | "solutions" | "resources" | "company" | null;
 
-/* ─── Shared icon badge ────────────────────────────────── */
+/* ─── Menu primitives ──────────────────────────────────── */
 
-function IconBadge({ icon: Icon, className = "" }: { icon: React.ElementType; className?: string }) {
+function MenuLink({ item, onClose }: { item: NavItem; onClose: () => void }) {
   return (
-    <div className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-[#00AEEF]/10 ${className}`}>
-      <Icon size={17} className="text-[#00AEEF]" strokeWidth={1.75} />
-    </div>
+    <Link
+      href={item.href}
+      onClick={onClose}
+      className="block rounded-xl px-3 py-2.5 transition-colors duration-150 hover:bg-black/[0.03] dark:hover:bg-white/[0.04]"
+    >
+      <span className="block text-[13.5px] text-[#0A0A0A] dark:text-[#F0F0F0]" style={{ fontWeight: 500 }}>
+        {item.label}
+      </span>
+      <span className="block text-[12px] mt-0.5 text-gray-500 dark:text-gray-400 leading-snug">
+        {item.desc}
+      </span>
+    </Link>
   );
 }
 
-/* ─── Dropdown panels ──────────────────────────────────── */
-
-function PlatformPanel({ onClose }: { onClose: () => void }) {
-  const [overview, ...items] = platformLinks;
+function GroupHeading({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-[580px]">
-      {/* Overview highlight */}
-      <div className="border-b border-[#E5E7EB] dark:border-white/[0.08] px-3 pt-3 pb-3">
-        <Link
-          href={overview.href}
-          onClick={onClose}
-          className="flex items-center gap-3 rounded-xl bg-[#00AEEF]/[0.07] px-4 py-3 hover:bg-[#00AEEF]/[0.12] transition-colors group"
-        >
-          <IconBadge icon={overview.icon} />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-[#00AEEF]">{overview.label}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{overview.desc}</p>
+    <p className="px-3 mb-2 text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500" style={{ fontWeight: 600 }}>
+      {children}
+    </p>
+  );
+}
+
+function GroupedPanel({ groups, onClose, width }: { groups: NavGroup[]; onClose: () => void; width: string }) {
+  return (
+    <div className={`grid grid-cols-2 gap-8 p-6 ${width}`}>
+      {groups.map((g) => (
+        <div key={g.heading}>
+          <GroupHeading>{g.heading}</GroupHeading>
+          <div className="flex flex-col gap-0.5">
+            {g.items.map((item) => (
+              <MenuLink key={item.label} item={item} onClose={onClose} />
+            ))}
           </div>
-          <ArrowRight size={14} className="text-[#00AEEF]/50 group-hover:text-[#00AEEF] transition-colors flex-shrink-0" />
-        </Link>
-      </div>
-      {/* 2-column grid */}
-      <div className="grid grid-cols-2 gap-1 px-3 py-3">
-        {items.map(({ label, href, icon, desc }) => (
-          <Link
-            key={href}
-            href={href}
-            onClick={onClose}
-            className="flex items-start gap-3 rounded-xl px-3 py-3 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors group"
-          >
-            <IconBadge icon={icon} className="mt-0.5" />
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] group-hover:text-[#00AEEF] transition-colors">{label}</p>
-              <p className="text-xs leading-5 text-gray-500 dark:text-gray-400 mt-0.5">{desc}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function IndustriesPanel({ onClose }: { onClose: () => void }) {
-  const [overview, ...items] = industriesLinks;
-  return (
-    <div className="w-[340px]">
-      <div className="border-b border-[#E5E7EB] dark:border-white/[0.08] px-3 pt-3 pb-3">
-        <Link
-          href={overview.href}
-          onClick={onClose}
-          className="flex items-center gap-3 rounded-xl bg-[#00AEEF]/[0.07] px-4 py-3 hover:bg-[#00AEEF]/[0.12] transition-colors group"
-        >
-          <IconBadge icon={overview.icon} />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-[#00AEEF]">{overview.label}</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{overview.desc}</p>
-          </div>
-          <ArrowRight size={14} className="text-[#00AEEF]/50 group-hover:text-[#00AEEF] transition-colors flex-shrink-0" />
-        </Link>
-      </div>
-      <div className="flex flex-col gap-1 px-3 py-3">
-        {items.map(({ label, href, icon, desc }) => (
-          <Link
-            key={href}
-            href={href}
-            onClick={onClose}
-            className="flex items-start gap-3 rounded-xl px-3 py-3 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors group"
-          >
-            <IconBadge icon={icon} className="mt-0.5" />
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] group-hover:text-[#00AEEF] transition-colors">{label}</p>
-              <p className="text-xs leading-5 text-gray-500 dark:text-gray-400 mt-0.5">{desc}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function ResourcesPanel({ onClose }: { onClose: () => void }) {
-  return (
-    <div className="w-[480px] flex">
-      {/* Left: resource links */}
-      <div className="flex-1 flex flex-col gap-1 px-3 py-3">
-        {resourcesLinks.map(({ label, href, icon, desc }) => (
-          <Link
-            key={href}
-            href={href}
-            onClick={onClose}
-            className="flex items-start gap-3 rounded-xl px-3 py-3 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors group"
-          >
-            <IconBadge icon={icon} className="mt-0.5" />
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] group-hover:text-[#00AEEF] transition-colors">{label}</p>
-              <p className="text-xs leading-5 text-gray-500 dark:text-gray-400 mt-0.5">{desc}</p>
-            </div>
-          </Link>
-        ))}
-      </div>
-      {/* Right: customer stories */}
-      <div className="w-[176px] flex-shrink-0 border-l border-[#E5E7EB] dark:border-white/[0.08] px-3 py-3">
-        <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 px-3 mb-3">
-          Customer Stories
-        </p>
-        <div className="flex flex-col gap-1">
-          {caseStudyLinks.map(({ label, sub, href }) => (
-            <Link
-              key={href}
-              href={href}
-              onClick={onClose}
-              className="rounded-xl px-3 py-2.5 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors group"
-            >
-              <p className="text-sm font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] group-hover:text-[#00AEEF] transition-colors">{label}</p>
-              <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-0.5 leading-4">{sub}</p>
-            </Link>
-          ))}
         </div>
-      </div>
+      ))}
     </div>
   );
 }
 
-/* ─── Main component ───────────────────────────────────── */
+function ListPanel({ items, onClose }: { items: NavItem[]; onClose: () => void }) {
+  return (
+    <div className="flex flex-col gap-0.5 p-6 w-[340px]">
+      {items.map((item) => (
+        <MenuLink key={item.label} item={item} onClose={onClose} />
+      ))}
+    </div>
+  );
+}
+
+/* ─── Navbar ───────────────────────────────────────────── */
 
 export default function Navbar() {
-  const [mobileOpen, setMobileOpen]                    = useState(false);
-  const [activeDropdown, setActiveDropdown]            = useState<DropdownKey>(null);
-  const [mobilePlatformOpen, setMobilePlatformOpen]    = useState(false);
-  const [mobileIndustriesOpen, setMobileIndustriesOpen] = useState(false);
-  const [mobileResourcesOpen, setMobileResourcesOpen]  = useState(false);
-  const [scrolled, setScrolled]                        = useState(false);
-  const navRef                                         = useRef<HTMLDivElement>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<DropdownKey>(null);
+  const [mobileSection, setMobileSection] = useState<DropdownKey>(null);
+  const [scrolled, setScrolled] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
 
-  // Editorial pass: only the homepage is on the editorial theme right now
   const pathname = usePathname();
   const isEditorial = pathname === "/";
 
@@ -212,56 +154,57 @@ export default function Navbar() {
 
   const closeAll = () => setActiveDropdown(null);
 
+  /** Ada-style panel shell: subtle border, no shadow. */
   function DropdownWrapper({ keyName, children }: { keyName: DropdownKey; children: React.ReactNode }) {
     const open = activeDropdown === keyName;
     return (
       <div
         className={`absolute left-0 top-full pt-3 z-50 transition-all duration-200 ${
           open
-            ? "pointer-events-auto opacity-100 translate-y-0 scale-100"
-            : "pointer-events-none opacity-0 -translate-y-2 scale-[0.97]"
+            ? "pointer-events-auto opacity-100 translate-y-0"
+            : "pointer-events-none opacity-0 -translate-y-1"
         }`}
-        style={{ transformOrigin: "top left" }}
       >
-        <div className="overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#161616] shadow-[0_8px_40px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_40px_rgba(0,0,0,0.5)]">
+        <div className="overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.10] bg-white dark:bg-[#141414]">
           {children}
         </div>
       </div>
     );
   }
 
-  const navLinks = [
-    { label: "Security", href: "/security" },
-    { label: "About",    href: "/about" },
-    { label: "Contact",  href: "/contact" },
-  ];
-
-  // Editorial palette overrides — applied only when isEditorial && on root
-  const editorialHeaderClasses = isEditorial
+  const headerClasses = isEditorial
     ? scrolled
       ? "bg-[var(--ed-bg)]/90 backdrop-blur-md border-b border-[var(--ed-rule)]"
       : "bg-transparent border-b border-transparent"
     : scrolled
-      ? "bg-white/90 dark:bg-[#0B0F19]/90 backdrop-blur-md border-b border-black/[0.06] dark:border-white/[0.06] shadow-sm dark:shadow-[0_1px_0_rgba(255,255,255,0.04)]"
+      ? "bg-white/90 dark:bg-[#0B0F19]/90 backdrop-blur-md border-b border-black/[0.06] dark:border-white/[0.06]"
       : "bg-white/90 dark:bg-[#0B0F19]/90 backdrop-blur-md border-b border-transparent";
 
-  const linkColor = isEditorial
+  const triggerBase =
+    "flex items-center gap-1 rounded-lg px-3 py-2 text-sm transition-colors duration-150";
+  const triggerIdle = isEditorial
     ? "text-[var(--ed-fg)] hover:text-[#00AEEF]"
-    : "text-gray-600 dark:text-gray-300 hover:text-[#00AEEF] hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05]";
+    : "text-gray-600 dark:text-gray-300 hover:text-[#00AEEF]";
+  const triggerActive = "text-[#00AEEF]";
 
-  const linkFontWeight = isEditorial ? "font-normal" : "font-medium";
+  const dropdowns: { key: Exclude<DropdownKey, null>; label: string; panel: React.ReactNode }[] = [
+    { key: "platform",  label: "Platform",  panel: <GroupedPanel groups={platformGroups}  onClose={closeAll} width="w-[720px]" /> },
+    { key: "solutions", label: "Solutions", panel: <GroupedPanel groups={solutionsGroups} onClose={closeAll} width="w-[680px]" /> },
+  ];
 
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${editorialHeaderClasses}`}>
-      <nav ref={navRef} className={`mx-auto flex max-w-7xl items-center justify-between py-4 ${isEditorial ? "px-6 md:px-12 lg:px-16" : "px-6 lg:px-8"}`}>
-
+    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${headerClasses}`}>
+      <nav
+        ref={navRef}
+        className={`mx-auto flex max-w-7xl items-center justify-between py-4 ${
+          isEditorial ? "px-6 md:px-12 lg:px-16" : "px-6 lg:px-8"
+        }`}
+      >
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 flex-shrink-0">
           <span
-            className={`tracking-tight ${isEditorial ? "text-lg" : "text-xl font-bold"} ${
-              isEditorial ? "text-[var(--ed-fg)]" : "text-[#0A0A0A] dark:text-[#F0F0F0]"
-            }`}
-            style={isEditorial ? { fontFamily: "var(--font-editorial)", fontWeight: 500, letterSpacing: "-0.02em" } : {}}
+            className={`tracking-tight text-lg ${isEditorial ? "text-[var(--ed-fg)]" : "text-[#0A0A0A] dark:text-[#F0F0F0]"}`}
+            style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, letterSpacing: "-0.02em" }}
           >
             EZee <span className="text-[#00AEEF]">Assist</span>
           </span>
@@ -269,85 +212,76 @@ export default function Navbar() {
 
         {/* Desktop nav */}
         <ul className="hidden md:flex items-center gap-1">
-
-          {/* Solution */}
-          <li className="relative"
-            onMouseEnter={() => setActiveDropdown("platform")}
-            onMouseLeave={() => setActiveDropdown(null)}
-          >
-            <button
-              className={`flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 ${
-                activeDropdown === "platform"
-                  ? "text-[#00AEEF] bg-[#00AEEF]/[0.07]"
-                  : "text-gray-600 dark:text-gray-300 hover:text-[#00AEEF] hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05]"
-              }`}
-              onClick={() => setActiveDropdown(activeDropdown === "platform" ? null : "platform")}
-              aria-expanded={activeDropdown === "platform"}
+          {dropdowns.map(({ key, label, panel }) => (
+            <li
+              key={key}
+              className="relative"
+              onMouseEnter={() => setActiveDropdown(key)}
+              onMouseLeave={() => setActiveDropdown(null)}
             >
-              Platform
-              <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "platform" ? "rotate-180" : ""}`} />
-            </button>
-            <DropdownWrapper keyName="platform"><PlatformPanel onClose={closeAll} /></DropdownWrapper>
-          </li>
+              <button
+                className={`${triggerBase} ${activeDropdown === key ? triggerActive : triggerIdle}`}
+                onClick={() => setActiveDropdown(activeDropdown === key ? null : key)}
+                aria-expanded={activeDropdown === key}
+              >
+                {label}
+                <ChevronDown
+                  size={13}
+                  strokeWidth={2.5}
+                  className={`transition-transform duration-200 ${activeDropdown === key ? "rotate-180" : ""}`}
+                />
+              </button>
+              <DropdownWrapper keyName={key}>{panel}</DropdownWrapper>
+            </li>
+          ))}
 
-          {/* Industries */}
-          <li className="relative"
-            onMouseEnter={() => setActiveDropdown("industries")}
-            onMouseLeave={() => setActiveDropdown(null)}
-          >
-            <button
-              className={`flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 ${
-                activeDropdown === "industries"
-                  ? "text-[#00AEEF] bg-[#00AEEF]/[0.07]"
-                  : "text-gray-600 dark:text-gray-300 hover:text-[#00AEEF] hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05]"
-              }`}
-              onClick={() => setActiveDropdown(activeDropdown === "industries" ? null : "industries")}
-              aria-expanded={activeDropdown === "industries"}
-            >
-              Industries
-              <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "industries" ? "rotate-180" : ""}`} />
-            </button>
-            <DropdownWrapper keyName="industries"><IndustriesPanel onClose={closeAll} /></DropdownWrapper>
-          </li>
-
-          {/* Case Studies — standalone */}
+          {/* Customers */}
           <li>
-            <Link href="/case-studies" className="block rounded-lg px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-[#00AEEF] hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors duration-150">
-              Case Studies
+            <Link href="/case-studies" className={`block rounded-lg px-3 py-2 text-sm ${triggerIdle}`}>
+              Customers
             </Link>
           </li>
 
           {/* Resources */}
-          <li className="relative"
+          <li
+            className="relative"
             onMouseEnter={() => setActiveDropdown("resources")}
             onMouseLeave={() => setActiveDropdown(null)}
           >
             <button
-              className={`flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150 ${
-                activeDropdown === "resources"
-                  ? "text-[#00AEEF] bg-[#00AEEF]/[0.07]"
-                  : "text-gray-600 dark:text-gray-300 hover:text-[#00AEEF] hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05]"
-              }`}
+              className={`${triggerBase} ${activeDropdown === "resources" ? triggerActive : triggerIdle}`}
               onClick={() => setActiveDropdown(activeDropdown === "resources" ? null : "resources")}
               aria-expanded={activeDropdown === "resources"}
             >
               Resources
               <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "resources" ? "rotate-180" : ""}`} />
             </button>
-            <DropdownWrapper keyName="resources"><ResourcesPanel onClose={closeAll} /></DropdownWrapper>
+            <DropdownWrapper keyName="resources">
+              <ListPanel items={resourcesItems} onClose={closeAll} />
+            </DropdownWrapper>
           </li>
 
-          {/* Other links */}
-          {navLinks.map((link) => (
-            <li key={link.label}>
-              <Link href={link.href} className="block rounded-lg px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-[#00AEEF] hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors duration-150">
-                {link.label}
-              </Link>
-            </li>
-          ))}
+          {/* Company */}
+          <li
+            className="relative"
+            onMouseEnter={() => setActiveDropdown("company")}
+            onMouseLeave={() => setActiveDropdown(null)}
+          >
+            <button
+              className={`${triggerBase} ${activeDropdown === "company" ? triggerActive : triggerIdle}`}
+              onClick={() => setActiveDropdown(activeDropdown === "company" ? null : "company")}
+              aria-expanded={activeDropdown === "company"}
+            >
+              Company
+              <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "company" ? "rotate-180" : ""}`} />
+            </button>
+            <DropdownWrapper keyName="company">
+              <ListPanel items={companyItems} onClose={closeAll} />
+            </DropdownWrapper>
+          </li>
         </ul>
 
-        {/* Desktop CTA + Theme toggle */}
+        {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
           <Link href="/contact">
@@ -357,7 +291,7 @@ export default function Navbar() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden p-2 rounded-lg text-[#0A0A0A] dark:text-gray-300 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors"
+          className="md:hidden p-2 rounded-lg text-[#0A0A0A] dark:text-gray-300 transition-colors"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle menu"
         >
@@ -369,95 +303,93 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="md:hidden border-t border-[#E5E7EB] dark:border-white/[0.06] bg-white/95 dark:bg-[#0B0F19]/95 backdrop-blur-md px-6 pb-6">
           <ul className="flex flex-col gap-1 pt-4">
+            {/* Platform + Solutions accordions */}
+            {[
+              { key: "platform"  as const, label: "Platform",  groups: platformGroups },
+              { key: "solutions" as const, label: "Solutions", groups: solutionsGroups },
+            ].map(({ key, label, groups }) => (
+              <li key={key}>
+                <button
+                  className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300"
+                  style={{ fontWeight: 500 }}
+                  onClick={() => setMobileSection(mobileSection === key ? null : key)}
+                >
+                  {label}
+                  <ChevronDown size={14} strokeWidth={2.5} className={`transition-transform duration-200 ${mobileSection === key ? "rotate-180" : ""}`} />
+                </button>
+                {mobileSection === key && (
+                  <div className="mt-1 ml-3 flex flex-col gap-2 border-l-2 border-[#00AEEF]/20 pl-4 pb-2">
+                    {groups.map((g) => (
+                      <div key={g.heading}>
+                        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-1" style={{ fontWeight: 600 }}>
+                          {g.heading}
+                        </p>
+                        {g.items.map((item) => (
+                          <Link
+                            key={item.label}
+                            href={item.href}
+                            className="block py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] transition-colors"
+                            onClick={() => { setMobileOpen(false); setMobileSection(null); }}
+                          >
+                            {item.label}
+                          </Link>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </li>
+            ))}
 
-            {/* Solution accordion */}
+            {/* Customers */}
             <li>
-              <button className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors"
-                onClick={() => setMobilePlatformOpen((v) => !v)}>
-                Platform
-                <ChevronDown size={14} strokeWidth={2.5} className={`transition-transform duration-200 ${mobilePlatformOpen ? "rotate-180" : ""}`} />
-              </button>
-              {mobilePlatformOpen && (
-                <div className="mt-1 ml-3 flex flex-col gap-0.5 border-l-2 border-[#00AEEF]/20 pl-4">
-                  {platformLinks.map(({ label, href }) => (
-                    <Link key={href} href={href}
-                      className="py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors"
-                      onClick={() => { setMobileOpen(false); setMobilePlatformOpen(false); }}>
-                      {label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </li>
-
-            {/* Industries accordion */}
-            <li>
-              <button className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors"
-                onClick={() => setMobileIndustriesOpen((v) => !v)}>
-                Industries
-                <ChevronDown size={14} strokeWidth={2.5} className={`transition-transform duration-200 ${mobileIndustriesOpen ? "rotate-180" : ""}`} />
-              </button>
-              {mobileIndustriesOpen && (
-                <div className="mt-1 ml-3 flex flex-col gap-0.5 border-l-2 border-[#00AEEF]/20 pl-4">
-                  {industriesLinks.map(({ label, href }) => (
-                    <Link key={href} href={href}
-                      className="py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors"
-                      onClick={() => { setMobileOpen(false); setMobileIndustriesOpen(false); }}>
-                      {label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </li>
-
-            {/* Case Studies */}
-            <li>
-              <Link href="/case-studies"
-                className="block rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] hover:text-[#00AEEF] transition-colors"
-                onClick={() => setMobileOpen(false)}>
-                Case Studies
+              <Link
+                href="/case-studies"
+                className="block rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300"
+                style={{ fontWeight: 500 }}
+                onClick={() => setMobileOpen(false)}
+              >
+                Customers
               </Link>
             </li>
 
-            {/* Resources accordion */}
-            <li>
-              <button className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] transition-colors"
-                onClick={() => setMobileResourcesOpen((v) => !v)}>
-                Resources
-                <ChevronDown size={14} strokeWidth={2.5} className={`transition-transform duration-200 ${mobileResourcesOpen ? "rotate-180" : ""}`} />
-              </button>
-              {mobileResourcesOpen && (
-                <div className="mt-1 ml-3 flex flex-col gap-0.5 border-l-2 border-[#00AEEF]/20 pl-4">
-                  {resourcesLinks.map(({ label, href }) => (
-                    <Link key={href} href={href}
-                      className="py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] dark:hover:text-[#00AEEF] transition-colors"
-                      onClick={() => { setMobileOpen(false); setMobileResourcesOpen(false); }}>
-                      {label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </li>
-
-            {navLinks.map((link) => (
-              <li key={link.label}>
-                <Link href={link.href}
-                  className="block rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-[#F7F8FA] dark:hover:bg-white/[0.05] hover:text-[#00AEEF] transition-colors"
-                  onClick={() => setMobileOpen(false)}>
-                  {link.label}
-                </Link>
+            {/* Resources + Company accordions */}
+            {[
+              { key: "resources" as const, label: "Resources", items: resourcesItems },
+              { key: "company"   as const, label: "Company",   items: companyItems },
+            ].map(({ key, label, items }) => (
+              <li key={key}>
+                <button
+                  className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300"
+                  style={{ fontWeight: 500 }}
+                  onClick={() => setMobileSection(mobileSection === key ? null : key)}
+                >
+                  {label}
+                  <ChevronDown size={14} strokeWidth={2.5} className={`transition-transform duration-200 ${mobileSection === key ? "rotate-180" : ""}`} />
+                </button>
+                {mobileSection === key && (
+                  <div className="mt-1 ml-3 flex flex-col gap-0.5 border-l-2 border-[#00AEEF]/20 pl-4 pb-2">
+                    {items.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="block py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] transition-colors"
+                        onClick={() => { setMobileOpen(false); setMobileSection(null); }}
+                      >
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </li>
             ))}
           </ul>
 
-          {/* Mobile theme toggle + CTA */}
-          <div className="mt-5 flex items-center gap-3">
+          <div className="mt-4 flex items-center gap-3">
             <ThemeToggle />
-            <div className="flex-1">
-              <Link href="/contact" onClick={() => setMobileOpen(false)}>
-                <Button size="md" className="w-full">Book a Demo</Button>
-              </Link>
-            </div>
+            <Link href="/contact" className="flex-1" onClick={() => setMobileOpen(false)}>
+              <Button size="sm" className="w-full">Book a Demo</Button>
+            </Link>
           </div>
         </div>
       )}

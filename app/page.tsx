@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import GrowthHero from "@/components/growth/Hero";
@@ -51,6 +52,7 @@ export default function Home() {
   return (
     <div className="theme-editorial">
       <JsonLd data={softwareSchema} />
+      <AnnouncementBar />
       <Navbar />
       {/* AEO: machine-readable positioning definition — do not remove */}
       <p className="sr-only">{GROWTH_DEFINITION}</p>

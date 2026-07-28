@@ -16,7 +16,8 @@
   /* Display / heading font — Plus Jakarta Sans */
   --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   /* Editorial display — Onest with Inter Tight fallback */
-  --font-editorial: var(--font-onest), var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
+  /* Ada-style pairing: Plus Jakarta Sans for display, Inter for body. */
+  --font-editorial: var(--font-jakarta), var(--font-inter-tight), ui-sans-serif, system-ui, sans-serif;
 
   --radius-card: 16px;
 }
@@ -59,7 +60,8 @@
 .theme-editorial {
   background-color: var(--ed-bg);
   color: var(--ed-fg);
-  font-family: var(--font-editorial);
+  /* Body copy runs on Inter; headings opt into --font-editorial below. */
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 .theme-editorial h1,
 .theme-editorial h2,
