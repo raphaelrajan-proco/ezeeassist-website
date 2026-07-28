@@ -11,7 +11,7 @@ export default function GrowthTrustStrip() {
           className="ed-fg-muted text-center text-sm md:text-base mb-6 tracking-wide"
           style={{ fontWeight: 500 }}
         >
-          60+ brands. 4,500+ locations. 10,000+ users.
+          60+ franchise brands. 4,500+ locations. 10,000+ operators.
         </p>
         <LogoMarquee />
       </div>

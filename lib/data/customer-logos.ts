@@ -8,20 +8,20 @@ export interface CustomerLogo {
 }
 
 export const customerLogos: CustomerLogo[] = [
-  // ── Named customers ──────────────────────────────────────────
-  { name: "EverLine",                src: "/logos/customers/everline.svg",                alt: "EverLine Coatings and Services" },
-  { name: "DekaLash",                src: "/logos/customers/dekalash.svg",                alt: "DekaLash" },
+  // ── Named customers, ordered by recognizability ──────────────
+  { name: "UPS",                     src: "/logos/customers/ups.svg",                     alt: "UPS" },
+  { name: "Sport Clips",             src: "/logos/customers/sport-clips.svg",             alt: "Sport Clips" },
   { name: "WSI",                     src: "/logos/customers/wsi.svg",                     alt: "WSI" },
   { name: "Aqua-Tots",               src: "/logos/customers/aqua-tots.svg",               alt: "Aqua-Tots Swim Schools" },
+  { name: "Massage Heights",         src: "/logos/customers/massage-heights.svg",         alt: "Massage Heights" },
+  { name: "Real Property Management",src: "/logos/customers/real-property-mgmt.svg",     alt: "Real Property Management" },
+  { name: "DekaLash",                src: "/logos/customers/dekalash.svg",                alt: "DekaLash" },
+  { name: "EverLine",                src: "/logos/customers/everline.svg",                alt: "EverLine Coatings and Services" },
   { name: "DivaDance",               src: "/logos/customers/divadance.svg",               alt: "DivaDance" },
+  { name: "Spray-Net",               src: "/logos/customers/spray-net.svg",               alt: "Spray-Net" },
   { name: "New Creations",           src: "/logos/customers/new-creations.svg",           alt: "New Creations" },
   { name: "Fresh Burger",            src: "/logos/customers/fresh-burger.svg",            alt: "Fresh Burger" },
-  { name: "Real Property Management",src: "/logos/customers/real-property-mgmt.svg",     alt: "Real Property Management" },
   { name: "BeaverTails",             src: "/logos/customers/beavertails.svg",             alt: "BeaverTails" },
-  { name: "Spray-Net",               src: "/logos/customers/spray-net.svg",               alt: "Spray-Net" },
-  { name: "Sport Clips",             src: "/logos/customers/sport-clips.svg",             alt: "Sport Clips" },
-  { name: "UPS",                     src: "/logos/customers/ups.svg",                     alt: "UPS" },
-  { name: "Massage Heights",         src: "/logos/customers/massage-heights.svg",         alt: "Massage Heights" },
   { name: "Modern PurAir",           src: "/logos/customers/modern-purair.svg",           alt: "Modern PurAir" },
   { name: "Horse Power",             src: "/logos/customers/horse-power.svg",             alt: "Horse Power" },
   { name: "CEFA",                    src: "/logos/customers/cefa.svg",                    alt: "CEFA Early Learning" },
