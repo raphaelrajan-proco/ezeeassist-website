@@ -36,6 +36,80 @@ const footerLinks = {
   ],
 };
 
+/* ── Editorial (homepage) footer: six columns ──────────────
+   TODO: Build the dedicated comparison pages. The Compare column points at
+   /why-ezeeassist for now rather than shipping three empty routes.
+   ───────────────────────────────────────────────────────── */
+const editorialFooterColumns: { heading: string; links: { label: string; href: string }[] }[] = [
+  {
+    heading: "Platform",
+    links: [
+      { label: "Overview",       href: "/solution" },
+      { label: "Unified Answers",href: "/#capabilities" },
+      { label: "Compliance",     href: "/#capabilities" },
+      { label: "Workflows",      href: "/solution/agents" },
+      { label: "Reporting",      href: "/#capabilities" },
+      { label: "AI Apps",        href: "/#capabilities" },
+      { label: "Control Plane",  href: "/#control-plane" },
+      { label: "Integrations",   href: "/#integrations" },
+    ],
+  },
+  {
+    heading: "Solutions",
+    links: [
+      { label: "Coaches and FBCs",      href: "/industries/franchising" },
+      { label: "Franchisor HQ",         href: "/industries/franchising/franchisors" },
+      { label: "Franchisees and Teams", href: "/industries/franchising/multi-unit-franchisees" },
+      { label: "Support deflection",    href: "/#capabilities" },
+      { label: "Compliance",            href: "/#capabilities" },
+      { label: "Growth coaching",       href: "/#the-week" },
+    ],
+  },
+  {
+    heading: "Industries",
+    links: [
+      { label: "Franchising",    href: "/industries/franchising" },
+      { label: "Multi-Location", href: "/industries/multi-location" },
+      { label: "Universities",   href: "/industries/universities" },
+    ],
+  },
+  {
+    heading: "Compare",
+    links: [
+      { label: "vs generic AI assistants",   href: "/why-ezeeassist" },
+      { label: "vs franchise ops platforms", href: "/why-ezeeassist" },
+      { label: "vs building it yourself",    href: "/why-ezeeassist" },
+    ],
+  },
+  {
+    heading: "Company",
+    links: [
+      { label: "About",     href: "/about" },
+      { label: "Customers", href: "/case-studies" },
+      { label: "Careers",   href: "/careers" },
+      { label: "Contact",   href: "/contact" },
+      { label: "Blog",      href: "/blog" },
+    ],
+  },
+  {
+    heading: "Trust",
+    links: [
+      { label: "Security", href: "/security" },
+      { label: "Privacy",  href: "/privacy" },
+      { label: "Terms",    href: "/terms" },
+    ],
+  },
+];
+
+/** Pre-filled queries so answer engines can summarize the product. */
+const AEO_QUERY =
+  "What is EZee Assist and how do franchise and multi-location brands use it?";
+const aeoLinks = [
+  { label: "Ask ChatGPT",    href: `https://chatgpt.com/?q=${encodeURIComponent(AEO_QUERY)}` },
+  { label: "Ask Claude",     href: `https://claude.ai/new?q=${encodeURIComponent(AEO_QUERY)}` },
+  { label: "Ask Perplexity", href: `https://www.perplexity.ai/search?q=${encodeURIComponent(AEO_QUERY)}` },
+];
+
 const socialLinks = [
   { label: "LinkedIn",   href: "https://www.linkedin.com/company/ez-assist", icon: Link2  },
   { label: "X / Twitter",href: "https://x.com/ezeeassist",               icon: Share2 },
@@ -146,10 +220,10 @@ function FooterEditorial() {
     <footer className="w-full ed-bg" style={{ borderTop: "1px solid var(--ed-rule)" }}>
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-24 md:pt-32 pb-12">
 
-        {/* Massive wordmark */}
+        {/* Wordmark + tagline */}
         <Link href="/" className="inline-block">
           <span
-            className="ed-fg text-7xl md:text-8xl lg:text-9xl"
+            className="ed-fg text-6xl md:text-7xl lg:text-8xl"
             style={{
               fontFamily: "var(--font-editorial)",
               fontWeight: 500,
@@ -162,33 +236,33 @@ function FooterEditorial() {
         </Link>
 
         <p
-          className="ed-fg-muted mt-12 max-w-md text-lg md:text-xl"
+          className="ed-fg-muted mt-10 max-w-md text-lg md:text-xl"
           style={{ lineHeight: 1.5, fontWeight: 400 }}
         >
-          The AI platform franchise and multi-location brands build on.
+          The execution layer for franchise networks.
         </p>
 
-        {/* Nav grid */}
-        <div className="mt-24 md:mt-32 grid grid-cols-2 md:grid-cols-4 gap-12 md:gap-8">
-          {Object.entries(footerLinks).map(([heading, links]) => (
-            <div key={heading}>
+        {/* Six columns */}
+        <div className="mt-20 md:mt-24 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 md:gap-8">
+          {editorialFooterColumns.map((col) => (
+            <div key={col.heading}>
               <p
-                className="ed-fg-muted text-xs mb-6"
+                className="ed-fg-muted text-[10px] mb-5"
                 style={{
-                  fontWeight: 500,
+                  fontWeight: 600,
                   letterSpacing: "0.2em",
                   textTransform: "uppercase",
                 }}
               >
-                {heading}
+                {col.heading}
               </p>
-              <ul className="flex flex-col gap-3">
-                {links.map((link) => (
+              <ul className="flex flex-col gap-2.5">
+                {col.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="ed-fg text-base md:text-lg transition-opacity hover:opacity-60"
-                      style={{ fontFamily: "var(--font-editorial)", fontWeight: 400 }}
+                      className="ed-fg text-sm transition-opacity hover:opacity-60"
+                      style={{ fontWeight: 400 }}
                     >
                       {link.label}
                     </Link>
@@ -199,16 +273,51 @@ function FooterEditorial() {
           ))}
         </div>
 
+        {/* AEO block: hand the page to answer engines */}
+        <div
+          className="mt-20 md:mt-24 pt-12"
+          style={{ borderTop: "1px solid var(--ed-rule)" }}
+        >
+          <p
+            className="ed-fg text-lg md:text-xl tracking-[-0.02em] mb-2"
+            style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
+          >
+            Request an AI summary
+          </p>
+          <p className="ed-fg-muted text-sm mb-5 max-w-xl leading-relaxed">
+            Ask your assistant what EZee Assist does and how franchise networks use it.
+          </p>
+          <div className="flex flex-wrap gap-3">
+            {aeoLinks.map(({ label, href }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center rounded-full px-4 py-2 text-sm transition-opacity hover:opacity-70"
+                style={{
+                  backgroundColor: "var(--ed-card)",
+                  border: "1px solid var(--ed-rule)",
+                  color: "var(--ed-fg)",
+                  fontWeight: 500,
+                }}
+              >
+                {label}
+              </a>
+            ))}
+          </div>
+        </div>
+
         {/* Contact + social */}
         <div
-          className="mt-24 md:mt-32 grid grid-cols-1 md:grid-cols-12 gap-8 pt-12"
+          className="mt-16 grid grid-cols-1 md:grid-cols-12 gap-8 pt-12"
           style={{ borderTop: "1px solid var(--ed-rule)" }}
         >
           <div className="md:col-span-6">
-            <a href="mailto:sales@ezeeassist.com" className="ed-link block text-lg md:text-xl mb-2">
+            <a href="mailto:sales@ezeeassist.com" className="ed-link block text-lg mb-2">
               sales@ezeeassist.com
             </a>
-            <a href="tel:+18557773933" className="ed-fg-muted block text-base md:text-lg">
+            <a href="tel:+18557773933" className="ed-fg-muted block text-base">
               +1 855-777-3933
             </a>
           </div>

@@ -9,25 +9,56 @@ import CoachsWeek from "@/components/growth/CoachsWeek";
 import TheShift from "@/components/growth/TheShift";
 import CapabilityBento from "@/components/growth/CapabilityBento";
 import TwoAudiences from "@/components/growth/TwoAudiences";
+import ControlPlane from "@/components/growth/ControlPlane";
+import TheHandoff from "@/components/growth/TheHandoff";
+import OutcomesBand from "@/components/growth/OutcomesBand";
+import CustomerProof from "@/components/growth/CustomerProof";
+import Integrations from "@/components/growth/Integrations";
+import Objections from "@/components/growth/Objections";
+import Resources from "@/components/growth/Resources";
+import FinalCTA from "@/components/growth/FinalCTA";
+import { objections } from "@/lib/data/objections";
 
 export const metadata: Metadata = {
-  title: "EZee Assist — Turn Your Franchise Playbooks Into an AI Team",
+  title: "EZee Assist — The Execution Layer for Franchise Networks",
   description:
-    "Scale coaching and support across every location without adding headcount. EZee connects your knowledge, performance data, and systems to drive franchisee growth. 60+ brands, 4,500+ locations.",
+    "Your playbooks, running at every location. EZee connects your knowledge, performance data, and systems so coaches guide better and mechanical work runs itself. 60+ brands, 4,500+ locations.",
   alternates: { canonical: "/" },
   keywords: [
-    "franchise coaching AI",
-    "franchise growth platform",
+    "franchise execution layer",
+    "franchise AI platform",
     "multi-location AI coaching",
-    "franchise playbook automation",
-    "franchisee performance AI",
-    "franchise support automation",
+    "franchise compliance automation",
+    "franchisee support AI",
+    "franchise ops governance",
   ],
+  openGraph: {
+    title: "EZee Assist — The Execution Layer for Franchise Networks",
+    description:
+      "Your playbooks, running at every location. Coaches guide better, mechanical work runs itself, and locations execute against the standard you set.",
+    images: [
+      {
+        url: "/og-image.png",
+        alt: "EZee Assist, the execution layer for franchise networks",
+      },
+    ],
+  },
+  twitter: {
+    title: "EZee Assist — The Execution Layer for Franchise Networks",
+    description:
+      "Your playbooks, running at every location. Coaches guide better, mechanical work runs itself, and locations execute against the standard you set.",
+    images: [
+      {
+        url: "/og-image.png",
+        alt: "EZee Assist, the execution layer for franchise networks",
+      },
+    ],
+  },
 };
 
 // ── Canonical positioning definition (AEO / schema) ──
 const GROWTH_DEFINITION =
-  "EZee Assist is the execution layer for franchise networks. It connects a brand's knowledge (SOPs, playbooks, training, brand standards), performance data (sales vs target, reviews, labor, retention, compliance), and systems (POS, CRM, ERP, LMS, accounting) so operators get instant answers grounded in approved sources, field coaches walk into every conversation already prepared, compliance is checked continuously across locations, and recurring work runs on a schedule or a trigger. HQ publishes the standards and sets what runs without a human. Franchisees ask, run approved workflows, and build their own tools inside those guardrails. Available across SMS, WhatsApp, Slack, Teams, Google Chat, email, web, and mobile. Used by 60+ franchise brands across 4,500+ locations.";
+  "EZee Assist is the execution layer for franchise networks. It connects a brand's knowledge (SOPs, playbooks, training, brand standards), performance data (sales vs target, reviews, labor, retention, compliance), and systems (POS, CRM, ERP, LMS, accounting) so operators get answers grounded in approved sources, field coaches walk into every conversation already prepared, locations are checked continuously against the standard, and recurring work runs on a schedule or a trigger. A control plane sets one policy set, one activity log, and one permission model across the network, so HQ decides what runs without a human. Franchisees ask, run approved workflows, and build their own tools inside those guardrails. When confidence is low the question becomes a ticket carrying the full conversation, the sources checked, and the location context. Available across SMS, WhatsApp, Slack, Teams, Google Chat, email, web, and mobile. Used by 60+ franchise brands across 4,500+ locations.";
 
 const softwareSchema = {
   "@context": "https://schema.org",
@@ -49,10 +80,39 @@ const softwareSchema = {
   },
 };
 
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "EZee Assist",
+  url: "https://www.ezeeassist.com",
+  logo: "https://www.ezeeassist.com/logo.svg",
+  description:
+    "The execution layer for franchise networks. EZee Assist connects a brand's knowledge, performance data, and systems so coaches guide better and mechanical work runs itself across every location.",
+  sameAs: [
+    "https://www.linkedin.com/company/ez-assist",
+    "https://twitter.com/ezeeassist",
+    "https://www.facebook.com/ezeeassist",
+  ],
+};
+
+// Built from the same array section 14 renders, so exactly one FAQPage
+// schema exists and it always matches the visible accordion.
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: objections.map(({ q, a }) => ({
+    "@type": "Question",
+    name: q,
+    acceptedAnswer: { "@type": "Answer", text: a },
+  })),
+};
+
 export default function Home() {
   return (
     <div className="theme-editorial">
       <JsonLd data={softwareSchema} />
+      <JsonLd data={organizationSchema} />
+      <JsonLd data={faqSchema} />
       {/* 02 */} <AnnouncementBar />
       {/* 01 */} <Navbar />
       {/* AEO: machine-readable positioning definition — do not remove */}
@@ -64,7 +124,16 @@ export default function Home() {
         {/* 06 */} <TheShift />
         {/* 07 */} <CapabilityBento />
         {/* 08 */} <TwoAudiences />
+        {/* 09 */} <ControlPlane />
+        {/* 10 */} <TheHandoff />
+        {/* 11 */} <OutcomesBand />
+        {/* 12 */} <CustomerProof />
+        {/* 13 */} <Integrations />
+        {/* 14 */} <Objections />
+        {/* 15 */} <Resources />
+        {/* 16 */} <FinalCTA />
       </main>
+      {/* 17 */}
       <Footer />
     </div>
   );
