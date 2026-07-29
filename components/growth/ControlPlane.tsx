@@ -47,18 +47,27 @@ const ITEMS: { icon: LucideIcon; name: string; body: string }[] = [
 
 export default function ControlPlane() {
   return (
-    <section id="control-plane" className="relative w-full overflow-hidden scroll-mt-24" style={{ backgroundColor: "#0A0A0A" }}>
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: "radial-gradient(rgba(245,237,224,0.05) 1px, transparent 1px)",
-          backgroundSize: "34px 34px",
-          opacity: 0.5,
-        }}
-        aria-hidden="true"
-      />
+    <section id="control-plane" className="w-full ed-bg scroll-mt-24">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-24 md:py-32">
+        <div
+          className="relative overflow-hidden rounded-3xl"
+          style={{
+            backgroundColor: "#0A0A0A",
+            border: "1px solid #1D1D1D",
+            boxShadow: "0 1px 2px rgba(0,0,0,0.06), 0 24px 64px rgba(0,0,0,0.18)",
+          }}
+        >
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              backgroundImage: "radial-gradient(rgba(245,237,224,0.05) 1px, transparent 1px)",
+              backgroundSize: "34px 34px",
+              opacity: 0.5,
+            }}
+            aria-hidden="true"
+          />
 
-      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-24 md:py-32 lg:py-40">
+          <div className="relative px-6 md:px-10 lg:px-14 py-16 md:py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -171,6 +180,8 @@ export default function ControlPlane() {
             See the full trust page
           </Link>
         </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -251,14 +251,25 @@ function OrderedPanel({ inView }: { inView: boolean }) {
           initial={{ opacity: 0, scaleX: 0.92 }}
           animate={inView ? { opacity: 1, scaleX: 1 } : {}}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.95 }}
-          className="rounded-lg py-2.5 text-center"
-          style={{ backgroundColor: "rgba(0,174,239,0.10)", border: "1px solid rgba(0,174,239,0.40)" }}
+          className="rounded-xl py-4 text-center"
+          style={{
+            backgroundColor: "rgba(0,174,239,0.10)",
+            border: "1px solid rgba(0,174,239,0.45)",
+            boxShadow: "0 0 32px rgba(0,174,239,0.10)",
+          }}
         >
-          <span className="text-[13px]" style={{ color: "#0077A8", fontFamily: "var(--font-editorial)", fontWeight: 600 }}>
-            EZee execution layer
+          <span className="text-lg md:text-xl" style={{ fontFamily: "var(--font-editorial)", fontWeight: 600 }}>
+            <span style={{ color: "var(--ed-fg)" }}>EZee</span>{" "}
+            <span style={{ color: "var(--ed-accent-text)" }}>execution layer</span>
           </span>
         </motion.div>
       </div>
+      <p
+        className="mt-4 text-center uppercase"
+        style={{ fontSize: "11px", letterSpacing: "0.18em", fontWeight: 500, color: "var(--ed-fg-muted)" }}
+      >
+        People, playbooks, and tools on one layer.
+      </p>
     </div>
   );
 }

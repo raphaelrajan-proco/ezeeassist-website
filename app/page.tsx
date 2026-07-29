@@ -7,6 +7,7 @@ import GrowthHero from "@/components/growth/Hero";
 import GrowthTrustStrip from "@/components/growth/TrustStrip";
 import CoachsWeek from "@/components/growth/CoachsWeek";
 import TheShift from "@/components/growth/TheShift";
+import TheSystem from "@/components/TheSystem";
 import CapabilityBento from "@/components/growth/CapabilityBento";
 import TwoAudiences from "@/components/growth/TwoAudiences";
 import ControlPlane from "@/components/growth/ControlPlane";
@@ -122,6 +123,7 @@ export default function Home() {
         {/* 04 */} <GrowthTrustStrip />
         {/* 05 */} <CoachsWeek />
         {/* 06 */} <TheShift />
+        {/* 06b: the reveal */} <TheSystem />
         {/* 07 */} <CapabilityBento />
         {/* 08 */} <TwoAudiences />
         {/* 09 */} <ControlPlane />
