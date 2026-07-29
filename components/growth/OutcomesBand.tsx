@@ -17,6 +17,12 @@ type Stat = {
   source: string;
 };
 
+// TODO: growth thesis metric slate, pending sourcing. When available, add:
+//   Coaching touchpoints per location, per month
+//   Locations supported per coach
+//   Weeks cut from new franchisee ramp
+// These are leading indicators of franchisee revenue and are the intended
+// replacement for the deflection-weighted band. Keep 70%+ questions resolved.
 const STATS: Stat[] = [
   {
     value: 70,
@@ -86,7 +92,7 @@ export default function OutcomesBand() {
         className="max-w-3xl mb-14 md:mb-16"
       >
         <Overline>Outcomes</Overline>
-        <SectionHeadline>Three numbers you could repeat to your CFO.</SectionHeadline>
+        <SectionHeadline>Here is where the week goes now.</SectionHeadline>
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-8">
