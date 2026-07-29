@@ -61,7 +61,8 @@ export default function CustomerProof() {
         className="max-w-3xl mb-14 md:mb-16"
       >
         <Overline>Proof</Overline>
-        <SectionHeadline>Named brands. Named people. Measured change.</SectionHeadline>
+        {/* TODO: our sales deck states 60+ brands and 4,500+ locations. Confirm which figures are current before publish. */}
+        <SectionHeadline>70+ brands. 5,000+ locations. All building AI on EZee.</SectionHeadline>
       </motion.div>
 
       {/* Lead card: DekaLash */}
@@ -189,6 +190,39 @@ export default function CustomerProof() {
           </div>
         </motion.div>
       </div>
+
+      {/* Partner strip */}
+      {/* TODO: real partner badge images to replace text pills before publish. */}
+      <motion.div
+        initial={{ opacity: 0, y: 14 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-60px" }}
+        transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+        className="mt-16 md:mt-20"
+      >
+        <p
+          className="ed-fg-muted text-[11px] uppercase tracking-[0.2em] mb-6"
+          style={{ fontWeight: 600 }}
+        >
+          Trusted across the franchise community
+        </p>
+        <div className="flex flex-wrap gap-3">
+          {["IFA Supplier Forum", "CFA Member", "FSN Verified Member", "WSI Partner"].map((p) => (
+            <span
+              key={p}
+              className="rounded-full px-5 py-2.5 text-sm"
+              style={{
+                backgroundColor: "var(--ed-card)",
+                border: "1px solid var(--ed-rule)",
+                color: "var(--ed-fg)",
+                fontWeight: 500,
+              }}
+            >
+              {p}
+            </span>
+          ))}
+        </div>
+      </motion.div>
     </SectionShell>
   );
 }

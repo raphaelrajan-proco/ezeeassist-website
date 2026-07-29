@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { MessageSquare, Check, HelpCircle, CircleCheckBig } from "lucide-react";
 import {
@@ -24,14 +24,16 @@ function Node({
   icon: Icon,
   label,
   accent = false,
+  nowrap = true,
 }: {
   icon: typeof MessageSquare;
   label: string;
   accent?: boolean;
+  nowrap?: boolean;
 }) {
   return (
     <div
-      className="flex items-center gap-2 rounded-xl px-4 py-3 whitespace-nowrap"
+      className={`flex items-center gap-2 rounded-xl px-4 py-3 ${nowrap ? "whitespace-nowrap" : ""}`}
       style={{
         backgroundColor: accent ? "rgba(0,174,239,0.08)" : "var(--ed-card)",
         border: `1px solid ${accent ? "rgba(0,174,239,0.35)" : "var(--ed-rule)"}`,
@@ -55,7 +57,11 @@ function CitedPill() {
   return (
     <span
       className="rounded-full px-2 py-0.5 text-[11px]"
-      style={{ backgroundColor: "rgba(0,174,239,0.12)", color: "#0077A8", fontWeight: 600 }}
+      style={{
+        backgroundColor: "color-mix(in srgb, #00AEEF 12%, var(--ed-bg-alt))",
+        color: "var(--ed-accent-text)",
+        fontWeight: 600,
+      }}
     >
       Cited
     </span>
@@ -84,9 +90,9 @@ function ReturnLabel() {
     <span
       className="rounded-full px-3.5 py-1.5 text-[11.5px] whitespace-nowrap"
       style={{
-        backgroundColor: "rgba(0,174,239,0.08)",
+        backgroundColor: "color-mix(in srgb, #00AEEF 8%, var(--ed-bg-alt))",
         border: "1px solid rgba(0,174,239,0.35)",
-        color: "#0077A8",
+        color: "var(--ed-accent-text)",
         fontWeight: 600,
       }}
     >
@@ -96,126 +102,150 @@ function ReturnLabel() {
 }
 
 /* ── Desktop diagram ───────────────────────────────────── */
-/* Percent coordinate system shared by the SVG (viewBox 0-100) and the
-   absolutely positioned HTML nodes, so connectors and nodes cannot
-   drift apart. Diagram rows: upper branch y=16, spine y=50,
-   lower branch y=78, return arc y=94. */
+/* One fixed 800x330 pixel canvas. The SVG and the absolutely
+   positioned nodes share the same pixel coordinates, and every node
+   has a fixed width, so each path lands exactly on a node edge at
+   every viewport. Rows: upper branch y=72, spine y=160, lower
+   branch y=240, return arc y=318. */
 
 const STROKE_BLUE = "#00AEEF";
+const NEUTRAL = "var(--ed-fg-muted)";
+
+/* Node boxes (px): [left, width, centerY]. Heights are 42px. */
+const QUERY = { x: 0, w: 100, cy: 160 };
+const RESOLVED = { x: 300, w: 130, cy: 72 };
+const UNCERTAIN = { x: 220, w: 110, cy: 240 };
+const TICKET = { x: 360, w: 240, cy: 240, h: 92 };
+const CLOSED = { x: 690, w: 110, cy: 160 };
+
+function Arrow({ points, color, opacity = 1, delay, inView, reduceMotion }: {
+  points: string; color: string; opacity?: number; delay: number; inView: boolean;
+  reduceMotion: boolean;
+}) {
+  return (
+    <motion.polygon
+      points={points}
+      style={{ fill: color, fillOpacity: opacity }}
+      initial={reduceMotion ? false : { opacity: 0 }}
+      animate={inView ? { opacity: 1 } : reduceMotion ? {} : { opacity: 0 }}
+      transition={{ duration: 0.25, delay }}
+    />
+  );
+}
 
 function DesktopFlow({ inView }: { inView: boolean }) {
-  const draw = (delay: number) => ({
-    initial: { pathLength: 0 },
-    animate: inView ? { pathLength: 1 } : { pathLength: 0 },
-    transition: { duration: 0.6, ease: "easeOut" as const, delay },
-  });
+  const reduceMotion = Boolean(useReducedMotion());
+  const draw = (delay: number, duration = 0.55) => (reduceMotion
+    ? {}
+    : {
+        initial: { pathLength: 0 },
+        animate: inView ? { pathLength: 1 } : { pathLength: 0 },
+        transition: { duration, ease: "easeOut" as const, delay },
+      });
 
   return (
-    <div className="relative hidden lg:block" style={{ height: "400px" }}>
-      <svg
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        className="absolute inset-0 w-full h-full"
-        aria-hidden="true"
-      >
-        {/* Upper branch: Query → Resolved → converge */}
+    <div className="relative hidden lg:block mx-auto" style={{ width: "800px", height: "330px" }}>
+      <svg width="800" height="330" viewBox="0 0 800 330" className="absolute inset-0" aria-hidden="true">
+        {/* Lower branch first so the shared stem reads blue on top. */}
+        {/* Query → Uncertain */}
         <motion.path
-          d="M 12 50 H 16 Q 19 50 19 46 V 20 Q 19 16 23 16 H 32"
-          fill="none" stroke={STROKE_BLUE} strokeWidth="2.4"
-          strokeLinecap="round" vectorEffect="non-scaling-stroke"
-          {...draw(0.15)}
+          d="M 100 160 H 138 Q 150 160 150 172 V 228 Q 150 240 162 240 H 211"
+          fill="none" stroke={NEUTRAL} strokeOpacity="0.65" strokeWidth="1.5"
+          strokeLinecap="round" {...draw(0.35)}
         />
+        <Arrow points="211,235 220,240 211,245" color={NEUTRAL} opacity={0.65}
+          delay={0.9} inView={inView} reduceMotion={reduceMotion} />
+        {/* Uncertain → ticket */}
         <motion.path
-          d="M 47 16 H 82 Q 85 16 85 20 V 46 Q 85 50 87 50"
-          fill="none" stroke={STROKE_BLUE} strokeWidth="2.4"
-          strokeLinecap="round" vectorEffect="non-scaling-stroke"
-          {...draw(0.45)}
+          d="M 330 240 H 351"
+          fill="none" stroke={NEUTRAL} strokeOpacity="0.65" strokeWidth="1.5"
+          strokeLinecap="round" {...draw(0.95, 0.25)}
         />
+        <Arrow points="351,235 360,240 351,245" color={NEUTRAL} opacity={0.65}
+          delay={1.2} inView={inView} reduceMotion={reduceMotion} />
+        {/* Ticket → Closed */}
+        <motion.path
+          d="M 600 240 H 626 Q 638 240 638 228 V 190 Q 638 178 650 178 H 681"
+          fill="none" stroke={NEUTRAL} strokeOpacity="0.65" strokeWidth="1.5"
+          strokeLinecap="round" {...draw(1.25)}
+        />
+        <Arrow points="681,173 690,178 681,183" color={NEUTRAL} opacity={0.65}
+          delay={1.8} inView={inView} reduceMotion={reduceMotion} />
 
-        {/* Lower branch: Query → Uncertain → ticket → converge */}
+        {/* Upper branch: Query → Resolved */}
         <motion.path
-          d="M 12 50 H 16 Q 19 50 19 54 V 74 Q 19 78 23 78 H 26"
-          fill="none" stroke="var(--ed-fg-muted)" strokeOpacity="0.7" strokeWidth="1.3"
-          strokeLinecap="round" vectorEffect="non-scaling-stroke"
-          {...draw(0.35)}
+          d="M 100 160 H 138 Q 150 160 150 148 V 84 Q 150 72 162 72 H 291"
+          fill="none" stroke={STROKE_BLUE} strokeWidth="2.5"
+          strokeLinecap="round" {...draw(0.15)}
         />
+        <Arrow points="291,66 300,72 291,78" color={STROKE_BLUE} delay={0.7} inView={inView} reduceMotion={reduceMotion} />
+        {/* Resolved → Closed */}
         <motion.path
-          d="M 36 78 H 46"
-          fill="none" stroke="var(--ed-fg-muted)" strokeOpacity="0.7" strokeWidth="1.3"
-          strokeLinecap="round" vectorEffect="non-scaling-stroke"
-          {...draw(0.6)}
+          d="M 430 72 H 626 Q 638 72 638 84 V 130 Q 638 142 650 142 H 681"
+          fill="none" stroke={STROKE_BLUE} strokeWidth="2.5"
+          strokeLinecap="round" {...draw(0.75)}
         />
-        <motion.path
-          d="M 68 78 H 82 Q 85 78 85 74 V 54 Q 85 50 87 50"
-          fill="none" stroke="var(--ed-fg-muted)" strokeOpacity="0.7" strokeWidth="1.3"
-          strokeLinecap="round" vectorEffect="non-scaling-stroke"
-          {...draw(0.75)}
-        />
+        <Arrow points="681,136 690,142 681,148" color={STROKE_BLUE} delay={1.3} inView={inView} reduceMotion={reduceMotion} />
 
-        {/* Return arc: one deliberate curve, Closed back to the start */}
+        {/* Return arc: one continuous curve, Closed back into Query. */}
         <motion.path
-          d="M 93 57 V 88 Q 93 94 87 94 H 13 Q 7 94 7 88 V 58"
-          fill="none" stroke={STROKE_BLUE} strokeOpacity="0.5" strokeWidth="1.4"
-          strokeDasharray="4 4" strokeLinecap="round" vectorEffect="non-scaling-stroke"
-          {...draw(1.05)}
+          d="M 745 181 V 300 Q 745 318 727 318 H 73 Q 55 318 55 300 V 190"
+          fill="none" stroke={STROKE_BLUE} strokeOpacity="0.45" strokeWidth="1.5"
+          strokeLinecap="round" {...draw(1.5, 0.8)}
         />
-        <motion.polyline
-          points="5,62 7,57 9,62"
-          fill="none" stroke={STROKE_BLUE} strokeOpacity="0.5" strokeWidth="1.4"
-          strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke"
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 0.3, delay: 1.7 }}
-        />
+        <Arrow points="50,190 55,181 60,190" color={STROKE_BLUE} opacity={0.45}
+          delay={2.3} inView={inView} reduceMotion={reduceMotion} />
       </svg>
 
-      {/* Nodes, positioned on the same percent grid */}
-      <div className="absolute" style={{ left: "1%", top: "50%", transform: "translateY(-50%)" }}>
+      {/* Nodes on the same pixel grid; fixed widths meet the paths. */}
+      <div className="absolute" style={{ left: QUERY.x, top: QUERY.cy, transform: "translateY(-50%)", width: QUERY.w }}>
         <Node icon={MessageSquare} label="Query" />
       </div>
 
       <motion.div
         className="absolute flex items-center gap-2"
-        style={{ left: "33%", top: "16%", transform: "translateY(-50%)" }}
+        style={{ left: RESOLVED.x, top: RESOLVED.cy, transform: "translateY(-50%)" }}
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.4, delay: 0.4 }}
+        transition={{ duration: 0.4, delay: 0.55 }}
       >
-        <Node icon={Check} label="Resolved" accent />
+        <div style={{ width: RESOLVED.w }}>
+          <Node icon={Check} label="Resolved" accent />
+        </div>
         <CitedPill />
       </motion.div>
 
       <motion.div
         className="absolute"
-        style={{ left: "27%", top: "78%", transform: "translateY(-50%)" }}
+        style={{ left: UNCERTAIN.x, top: UNCERTAIN.cy, transform: "translateY(-50%)", width: UNCERTAIN.w }}
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.4, delay: 0.6 }}
+        transition={{ duration: 0.4, delay: 0.8 }}
       >
         <Node icon={HelpCircle} label="Uncertain" />
       </motion.div>
 
       <motion.div
         className="absolute"
-        style={{ left: "47%", top: "78%", transform: "translateY(-50%)" }}
+        style={{ left: TICKET.x, top: TICKET.cy, transform: "translateY(-50%)", width: TICKET.w }}
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.4, delay: 0.8 }}
+        transition={{ duration: 0.4, delay: 1.05 }}
       >
         <TicketCard />
       </motion.div>
 
-      <div className="absolute" style={{ left: "88%", top: "50%", transform: "translateY(-50%)" }}>
+      <div className="absolute" style={{ left: CLOSED.x, top: CLOSED.cy, transform: "translateY(-50%)", width: CLOSED.w }}>
         <Node icon={CircleCheckBig} label="Closed" />
       </div>
 
       {/* Return-arc label pill, centered on the arc */}
       <motion.div
-        className="absolute left-1/2"
-        style={{ top: "94%", transform: "translate(-50%, -50%)" }}
+        className="absolute"
+        style={{ left: 400, top: 318, transform: "translate(-50%, -50%)" }}
         initial={{ opacity: 0 }}
         animate={inView ? { opacity: 1 } : {}}
-        transition={{ duration: 0.4, delay: 1.5 }}
+        transition={{ duration: 0.4, delay: 2.1 }}
       >
         <ReturnLabel />
       </motion.div>
@@ -223,23 +253,48 @@ function DesktopFlow({ inView }: { inView: boolean }) {
   );
 }
 
-/* ── Mobile: same order, stacked ───────────────────────── */
+/* ── Mobile: same order stacked; the return arc becomes a
+      vertical connector on the left edge. ────────────────── */
 
 function MobileFlow() {
   return (
-    <div className="lg:hidden space-y-4">
-      <Node icon={MessageSquare} label="Query" />
-      <div className="pl-4 space-y-3" style={{ borderLeft: "2px solid var(--ed-rule)" }}>
-        <div className="flex items-center gap-2 flex-wrap">
-          <Node icon={Check} label="Resolved" accent />
-          <CitedPill />
+    <div className="lg:hidden relative pl-7">
+      {/* Return connector: Closed back up to Query along the left edge */}
+      <svg
+        className="absolute left-0 top-0 h-full w-4"
+        viewBox="0 0 16 100"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M 8 96 V 6"
+          fill="none" stroke={STROKE_BLUE} strokeOpacity="0.45" strokeWidth="1.5"
+          strokeLinecap="round" vectorEffect="non-scaling-stroke"
+        />
+      </svg>
+      <span
+        aria-hidden="true"
+        className="absolute"
+        style={{
+          left: "3px", top: "8px", width: 0, height: 0,
+          borderLeft: "5px solid transparent", borderRight: "5px solid transparent",
+          borderBottom: `7px solid ${STROKE_BLUE}`, opacity: 0.55,
+        }}
+      />
+      <div className="space-y-4">
+        <Node icon={MessageSquare} label="Query" />
+        <div className="pl-4 space-y-3" style={{ borderLeft: "2px solid var(--ed-rule)" }}>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Node icon={Check} label="Resolved" accent />
+            <CitedPill />
+          </div>
+          <Node icon={HelpCircle} label="Uncertain, routed to the right human" nowrap={false} />
+          <TicketCard />
         </div>
-        <Node icon={HelpCircle} label="Uncertain, routed to the right human" />
-        <TicketCard />
-      </div>
-      <Node icon={CircleCheckBig} label="Closed" />
-      <div className="flex justify-center pt-1">
-        <ReturnLabel />
+        <Node icon={CircleCheckBig} label="Closed" />
+        <div className="flex justify-center pt-1">
+          <ReturnLabel />
+        </div>
       </div>
     </div>
   );
@@ -270,7 +325,11 @@ export default function TheHandoff() {
         </p>
       </motion.div>
 
-      <div ref={ref}>
+      <div
+        ref={ref}
+        className="mx-auto max-w-4xl rounded-3xl px-6 md:px-8 py-6"
+        style={{ backgroundColor: "var(--ed-bg-alt)", border: "1px solid var(--ed-rule)" }}
+      >
         <p className="sr-only">
           Flow diagram: a query either resolves with citations, or is marked
           uncertain and routed to the right human as a ticket with the full
