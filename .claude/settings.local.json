@@ -98,7 +98,8 @@
       "Bash(git commit -q -m 'Backhalf step 2: two-audiences mockups at full width, legible chrome *)",
       "Bash(git commit -q -m 'Backhalf step 3: control plane density, activity-log ticker *)",
       "Bash(git commit -q -m 'Backhalf step 4: handoff flow rebuilt on a shared percent grid *)",
-      "Bash(git commit -q -m 'Backhalf step 5: outcomes numerals up one step, baselines aligned *)"
+      "Bash(git commit -q -m 'Backhalf step 5: outcomes numerals up one step, baselines aligned *)",
+      "Bash(git commit -q -m 'Backhalf step 6: integrations rebuilt as platform-pass two-column *)"
     ]
   }
 }
