@@ -182,7 +182,9 @@ export default function GrowthHero() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24">
+      {/* lg:py-20 rather than py-24: at text-7xl the hero measured 933px tall
+          against a 900px viewport, so the beat strip clipped at 1440x900. */}
+      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:py-20">
         {/* Copy. Wider than the subhead measure so the larger H1 wraps to
             two lines and the hero still clears the fold at 1440x900. */}
         <div className="max-w-4xl">
@@ -233,7 +235,7 @@ export default function GrowthHero() {
         </div>
 
         {/* Four-beat live product moment */}
-        <div className="mt-12 md:mt-14">
+        <div className="mt-10 md:mt-12">
           <p className="sr-only">
             A franchisee asks whether summer promo pricing applies at their
             location. EZee verifies their role, region eligibility, and the
