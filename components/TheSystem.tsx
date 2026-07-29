@@ -4,7 +4,7 @@ import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import {
   Users, BookOpen, Plug, MessageSquare, RefreshCw, ShieldCheck, BarChart3,
-  type LucideIcon,
+  TrendingUp, type LucideIcon,
 } from "lucide-react";
 import { AnimatedValue } from "@/components/growth/shared";
 import { NETWORK_SCALE, networkScaleNumber } from "@/lib/data/network-scale";
@@ -38,6 +38,7 @@ const OUTPUTS: { icon: LucideIcon; label: string }[] = [
   { icon: RefreshCw,     label: "Work that runs itself" },
   { icon: ShieldCheck,   label: "Compliance that holds" },
   { icon: BarChart3,     label: "Visibility for leadership" },
+  { icon: TrendingUp,    label: "Performance that moves" },
 ];
 
 const STATS: { end: number; suffix?: string; label: string }[] = [
@@ -135,10 +136,11 @@ const IN_PATHS = [
   "M0,83 C45,83 55,50 100,50",
 ];
 const OUT_PATHS = [
-  "M0,50 C45,50 55,13 100,13",
-  "M0,50 C45,50 55,38 100,38",
-  "M0,50 C45,50 55,62 100,62",
-  "M0,50 C45,50 55,87 100,87",
+  "M0,50 C45,50 55,10 100,10",
+  "M0,50 C45,50 55,30 100,30",
+  "M0,50 C45,50 55,50 100,50",
+  "M0,50 C45,50 55,70 100,70",
+  "M0,50 C45,50 55,90 100,90",
 ];
 
 /* ── Section ───────────────────────────────────────────── */
@@ -187,9 +189,9 @@ export default function TheSystem() {
             (SOPs, brand standards, training, policy), and your systems
             (250 plus integrations across POS, scheduling, CRM, and
             accounting). They converge on EZee Assist, the execution
-            layer. Four outputs come from it: answers on every channel,
-            work that runs itself, compliance that holds, and visibility
-            for leadership.
+            layer. Five outputs come from it: answers on every channel,
+            work that runs itself, compliance that holds, visibility for
+            leadership, and performance that moves.
           </p>
 
           {/* Desktop: three inputs, connectors, node, connectors, four outputs */}
