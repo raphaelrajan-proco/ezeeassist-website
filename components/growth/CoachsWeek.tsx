@@ -2,7 +2,7 @@
 
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
-import { Hash, MessageSquare } from "lucide-react";
+import { Hash, MessageSquare, TrendingDown } from "lucide-react";
 import {
   Overline, SectionShell,
   MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED, MOCK_HAIRLINE,
@@ -137,46 +137,67 @@ function ChaseVignette() {
 }
 
 /* ── Vignette 3: what is left ──────────────────────────── */
+/* Coverage grid: one coach's territory for a month. A few tiles got
+   a coaching call, most did not, and some of the ones that did not
+   are below target. No count or ratio is stated anywhere. */
 
-const WEEK: { day: string; blocks: { label: string; blue?: boolean }[] }[] = [
-  { day: "Mon", blocks: [{ label: "Questions" }, { label: "Questions" }, { label: "Reports" }] },
-  { day: "Tue", blocks: [{ label: "Questions" }, { label: "Chasing" }, { label: "Questions" }] },
-  { day: "Wed", blocks: [{ label: "Reports" }, { label: "Questions" }, { label: "Chasing" }] },
-  { day: "Thu", blocks: [{ label: "Questions" }, { label: "Chasing" }, { label: "Reports" }] },
-  { day: "Fri", blocks: [{ label: "Questions" }, { label: "Coaching", blue: true }, { label: "Reports" }] },
-];
+const TERRITORY_TILES = 35;
+const CALLED = new Set([2, 9, 16, 30]);
+const BELOW_TARGET_NO_CALL = new Set([6, 13, 27]);
 
 function WeekVignette() {
   return (
     <div className="rounded-xl p-5 w-full max-w-[30rem]" style={MOCK_SURFACE}>
       <p className="text-sm mb-3" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
-        A coach&apos;s calendar
+        One coach&apos;s territory · this month
       </p>
-      <div className="grid grid-cols-5 gap-2">
-        {WEEK.map((d) => (
-          <div key={d.day}>
-            <p className="text-[11px] text-center mb-1.5 font-mono" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
-              {d.day}
-            </p>
-            <div className="space-y-1.5">
-              {d.blocks.map((b, i) => (
-                <div
-                  key={i}
-                  className="rounded-md px-1 py-2 text-center"
-                  style={{
-                    backgroundColor: b.blue ? "rgba(0,174,239,0.14)" : "rgba(10,10,10,0.05)",
-                    border: `1px solid ${b.blue ? "rgba(0,174,239,0.4)" : "transparent"}`,
-                  }}
-                >
-                  <span className="text-[9px] sm:text-[10.5px] leading-none" style={{ color: b.blue ? "#0077A8" : MOCK_MUTED, fontWeight: b.blue ? 700 : 500 }}>
-                    {b.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
+      <div className="flex items-center gap-4 mb-3">
+        <span className="flex items-center gap-1.5">
+          <span aria-hidden="true" className="block h-2 w-2 rounded-sm" style={{ backgroundColor: "#00AEEF" }} />
+          <span className="text-[10.5px]" style={{ color: MOCK_MUTED, fontWeight: 600 }}>Coaching call</span>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span aria-hidden="true" className="block h-2 w-2 rounded-sm" style={{ backgroundColor: "rgba(10,10,10,0.12)" }} />
+          <span className="text-[10.5px]" style={{ color: MOCK_MUTED, fontWeight: 600 }}>No call</span>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <TrendingDown aria-hidden="true" className="h-3 w-3" strokeWidth={2.25} style={{ color: "#DC2626" }} />
+          <span className="text-[10.5px]" style={{ color: MOCK_MUTED, fontWeight: 600 }}>Below target</span>
+        </span>
       </div>
+      <div className="grid grid-cols-7 gap-1.5" aria-hidden="true">
+        {Array.from({ length: TERRITORY_TILES }, (_, i) => {
+          const called = CALLED.has(i);
+          const flagged = BELOW_TARGET_NO_CALL.has(i);
+          return (
+            <div
+              key={i}
+              className="relative aspect-square rounded-md flex items-center justify-center"
+              style={{
+                backgroundColor: called ? "rgba(0,174,239,0.85)" : "rgba(10,10,10,0.07)",
+                border: `1px solid ${called ? "rgba(0,174,239,0.9)" : "rgba(10,10,10,0.06)"}`,
+              }}
+            >
+              {flagged && (
+                <TrendingDown
+                  aria-hidden="true"
+                  className="h-3.5 w-3.5"
+                  strokeWidth={2.25}
+                  style={{ color: "#DC2626" }}
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
+      <p className="sr-only">
+        A grid of location tiles for one coach&apos;s territory in a month.
+        A few tiles are marked as having had a coaching call. Most had no
+        call, and some of the locations with no call are below target.
+      </p>
+      <p className="mt-3 text-[11.5px]" style={{ color: MOCK_MUTED }}>
+        Attention gets triaged, not distributed.
+      </p>
     </div>
   );
 }
@@ -358,9 +379,12 @@ export default function CoachsWeek() {
         className="mt-14 text-2xl md:text-3xl tracking-[-0.02em]"
         style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, lineHeight: 1.25, textWrap: "balance" }}
       >
-        <span className="ed-fg-muted">Four days in five go to work </span>
+        <span className="ed-fg-muted">
+          Four days in five go to work the playbook already answers. Which
+          leaves about 90 minutes a month per location,{" "}
+        </span>
         <span className="ed-fg" style={{ fontWeight: 600 }}>
-          the playbook already answers.
+          and the locations that need it most are rarely the ones that get it.
         </span>
       </motion.p>
     </SectionShell>
