@@ -93,7 +93,8 @@
       "Bash(git commit -q -m 'Step 2: hero platform-pass presence *)",
       "Bash(git commit -q -m 'Step 3: coach'\\\\''s week restructured as three beats plus synthesis chart *)",
       "Bash(git commit -q -m 'Step 4: The Shift rebuilt with real artifacts *)",
-      "Bash(git commit -q -m 'Step 5: wrap fixes from the visual pass *)"
+      "Bash(git commit -q -m 'Step 5: wrap fixes from the visual pass *)",
+      "Bash(git commit -q -m 'Backhalf step 1: bento fidelity *)"
     ]
   }
 }

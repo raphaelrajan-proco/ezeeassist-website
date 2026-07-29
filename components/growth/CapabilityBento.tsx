@@ -36,7 +36,7 @@ function Tile({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      className={`rounded-3xl p-7 md:p-8 flex flex-col ${span}`}
+      className={`rounded-3xl p-7 md:p-8 flex flex-col transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_2px_4px_rgba(0,0,0,0.04),0_18px_44px_rgba(0,0,0,0.10)] ${span}`}
       style={{ backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-rule)" }}
     >
       <p className="text-xs uppercase tracking-[0.2em] mb-3" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
@@ -63,7 +63,7 @@ function UnifiedAnswersVisual() {
   const CHANNELS = [MessageSquare, Hash, Users];
   return (
     <GradientFrame>
-      <div className="relative mx-auto max-w-[560px]" style={{ minHeight: "330px" }}>
+      <div className="relative w-full" style={{ minHeight: "340px" }}>
         {/* Behind: Slack + Teams frames */}
         <div
           className="absolute right-0 top-0 w-[240px] rounded-xl overflow-hidden"
@@ -153,7 +153,7 @@ function ComplianceVisual() {
   const COLS = ["Insurance", "Training", "Certs", "Brand audit"];
   return (
     <GradientFrame>
-      <div className="rounded-xl overflow-hidden mx-auto max-w-[560px]" style={MOCK_SURFACE}>
+      <div className="rounded-xl overflow-hidden w-full" style={MOCK_SURFACE}>
         <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
           <span className="text-[13px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
             42 of 42 locations checked
@@ -224,7 +224,7 @@ function WorkflowVisual() {
 
   return (
     <GradientFrame>
-      <div ref={ref} className="rounded-xl p-3.5 mx-auto max-w-[460px]" style={MOCK_SURFACE}>
+      <div ref={ref} className="rounded-xl p-3.5 w-full" style={MOCK_SURFACE}>
         <p className="text-[12px] mb-2.5" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
           Weekly KPI review · Every location
         </p>
@@ -267,7 +267,7 @@ function ReportingVisual() {
   const BARS = [42, 58, 51, 67, 74, 81];
   return (
     <GradientFrame>
-      <div className="rounded-xl p-3.5 mx-auto max-w-[460px]" style={MOCK_SURFACE}>
+      <div className="rounded-xl p-3.5 w-full" style={MOCK_SURFACE}>
         <p className="text-[12px] mb-3" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
           West territory · This week
         </p>
@@ -355,7 +355,7 @@ function AiAppsVisual() {
 
   return (
     <GradientFrame>
-      <div ref={ref} className="mx-auto max-w-[460px]" style={{ minHeight: "340px" }}>
+      <div ref={ref} className="w-full" style={{ minHeight: "340px" }}>
         {/* Prompt */}
         <div className="rounded-xl px-3 py-2.5 mb-2" style={MOCK_SURFACE}>
           <p className="text-[13px]" style={{ color: MOCK_TEXT, fontStyle: "italic", lineHeight: 1.4, minHeight: "42px" }}>
