@@ -38,10 +38,13 @@ const ITEMS: { icon: LucideIcon; name: string; body: string }[] = [
     name: "Data boundaries",
     body: "Dedicated infrastructure per customer. Encrypted in transit and at rest. Never used to train a third-party model.",
   },
+  // TODO: blocking before publish. Supply real security posture, either
+  // "SOC 2 Type II audit in progress, report expected [date]" or an honest
+  // alternative, plus the pentest firm if we name one.
   {
     icon: BadgeCheck,
-    name: "Certifications",
-    body: "SOC 2 Type II aligned. SSO and SAML. Independent security review.",
+    name: "Security posture",
+    body: "SSO and SAML. Encrypted in transit and at rest.",
   },
 ];
 
