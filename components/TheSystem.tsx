@@ -149,7 +149,9 @@ export default function TheSystem() {
 
   return (
     <section id="the-system" className="w-full scroll-mt-24" style={{ backgroundColor: DARK_BG }}>
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-28 lg:py-36">
+      {/* Top padding stays slim: the Connections section above shares
+          the same background and the two read as one dark block. */}
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-14 lg:pt-16 pb-28 lg:pb-36">
         {/* Copy */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

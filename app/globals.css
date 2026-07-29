@@ -606,6 +606,28 @@ input[type="range"]::-moz-range-thumb {
   animation: sparkle-pop 0.6s ease-out;
 }
 
+/* ─── Connections rolling integration browser ─────────── */
+/* Track height is exact (rows are fixed-height), so one list-length
+   of travel loops seamlessly against the duplicated copy. */
+@keyframes ed-conn-roll {
+  from { transform: translateY(0); }
+  to   { transform: translateY(calc(-1 * var(--roll-dist, 2112px))); }
+}
+/* One cycle per loop: off while the row re-enters, soft fade on. */
+@keyframes ed-conn-pill {
+  0%   { opacity: 0; }
+  1.5% { opacity: 0; }
+  4%   { opacity: 1; }
+  100% { opacity: 1; }
+}
+.ed-conn-paused * {
+  animation-play-state: paused !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ed-conn-track { animation: none !important; }
+  .ed-conn-pill-anim { animation: none !important; opacity: 1 !important; }
+}
+
 /* ─── NProgress bar color override ────────────────────── */
 #nprogress .bar {
   background: #00AEEF !important;

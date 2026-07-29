@@ -7,6 +7,7 @@ import GrowthHero from "@/components/growth/Hero";
 import GrowthTrustStrip from "@/components/growth/TrustStrip";
 import CoachsWeek from "@/components/growth/CoachsWeek";
 import TheShift from "@/components/growth/TheShift";
+import Connected from "@/components/Connected";
 import TheSystem from "@/components/TheSystem";
 import CapabilityBento from "@/components/growth/CapabilityBento";
 import TwoAudiences from "@/components/growth/TwoAudiences";
@@ -14,7 +15,6 @@ import ControlPlane from "@/components/growth/ControlPlane";
 import TheHandoff from "@/components/growth/TheHandoff";
 import OutcomesBand from "@/components/growth/OutcomesBand";
 import CustomerProof from "@/components/growth/CustomerProof";
-import Integrations from "@/components/growth/Integrations";
 import Objections from "@/components/growth/Objections";
 import Resources from "@/components/growth/Resources";
 import FinalCTA from "@/components/growth/FinalCTA";
@@ -123,19 +123,19 @@ export default function Home() {
         {/* 04 */} <GrowthTrustStrip />
         {/* 05 */} <CoachsWeek />
         {/* 06 */} <TheShift />
-        {/* 06b: the reveal */} <TheSystem />
+        {/* 06b: connections */} <Connected />
+        {/* 06c: the reveal */} <TheSystem />
         {/* 07 */} <CapabilityBento />
         {/* 08 */} <TwoAudiences />
         {/* 09 */} <ControlPlane />
         {/* 10 */} <TheHandoff />
         {/* 11 */} <OutcomesBand />
         {/* 12 */} <CustomerProof />
-        {/* 13 */} <Integrations />
-        {/* 14 */} <Objections />
-        {/* 15 */} <Resources />
-        {/* 16 */} <FinalCTA />
+        {/* 13 */} <Objections />
+        {/* 14 */} <Resources />
+        {/* 15 */} <FinalCTA />
       </main>
-      {/* 17 */}
+      {/* 16 */}
       <Footer />
     </div>
   );

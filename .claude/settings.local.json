@@ -105,7 +105,13 @@
       "Bash(git push *)",
       "Bash(npm run *)",
       "Bash(git add *)",
-      "Bash(git commit -q -m 'Hero v3: Ada-style layout, fluid type, one looped conversation card *)"
+      "Bash(git commit -q -m 'Hero v3: Ada-style layout, fluid type, one looped conversation card *)",
+      "Bash(git commit -m 'Hero v4: fixed-size Teams conversation window, four-line H1 *)",
+      "Bash(git commit -m 'Section 05: consistency pass on the coach'\\\\''s week *)",
+      "Bash(git ls-tree *)",
+      "Bash(git commit -m 'The reveal: EZee Assist introduced between sprawl and capabilities *)",
+      "Bash(git rm *)",
+      "Bash(git commit -m 'Connections: rolling integration browser moved above the reveal *)"
     ]
   }
 }
