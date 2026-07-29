@@ -25,7 +25,7 @@ function BeatShell({ index, children }: { index: number; children: React.ReactNo
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.45 + index * 0.35 }}
     >
       <p
-        className="ed-fg-muted text-[11px] mb-1.5"
+        className="ed-fg-muted text-[11px] mb-1"
         style={{ fontWeight: 500, letterSpacing: "0.04em" }}
       >
         <span style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
@@ -45,7 +45,7 @@ function Connector({ index }: { index: number }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, delay: 0.7 + index * 0.35 }}
-      className="flex justify-center py-1"
+      className="flex justify-center"
       aria-hidden="true"
     >
       <ChevronDown className="w-4 h-4" strokeWidth={2} style={{ color: "#00AEEF", opacity: 0.55 }} />
@@ -56,11 +56,11 @@ function Connector({ index }: { index: number }) {
 /* Beat 1: the question */
 function BeatAsk() {
   return (
-    <div className="rounded-xl p-3" style={MOCK_SURFACE}>
-      <p className="text-[11px] mb-1.5" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
+    <div className="rounded-xl p-2.5" style={MOCK_SURFACE}>
+      <p className="text-[11px] mb-1" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
         Store #214 · SMS
       </p>
-      <div className="rounded-2xl rounded-tl-md px-3 py-2" style={{ backgroundColor: "rgba(10,10,10,0.05)" }}>
+      <div className="rounded-2xl rounded-tl-md px-3 py-1.5" style={{ backgroundColor: "rgba(10,10,10,0.05)" }}>
         <p className={BEAT_BODY} style={{ color: MOCK_TEXT, lineHeight: 1.3 }}>
           Can I run the summer promo pricing at my location this weekend?
         </p>
@@ -78,11 +78,11 @@ const CHECKS = [
 
 function BeatCheck() {
   return (
-    <div className="rounded-xl p-3" style={MOCK_SURFACE}>
-      <p className="text-[11px] mb-2" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
+    <div className="rounded-xl p-2.5" style={MOCK_SURFACE}>
+      <p className="text-[11px] mb-1" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
         Verifying
       </p>
-      <div className="space-y-1">
+      <div className="space-y-0.5">
         {CHECKS.map((c) => (
           <div key={c} className="flex items-start gap-1.5">
             <span
@@ -104,11 +104,11 @@ function BeatCheck() {
 /* Beat 3: the cited answer */
 function BeatAnswer() {
   return (
-    <div className="rounded-xl p-3" style={MOCK_SURFACE}>
-      <p className="text-[11px] mb-1.5" style={{ color: "var(--ed-accent-text)", fontWeight: 600, letterSpacing: "0.06em" }}>
+    <div className="rounded-xl p-2.5" style={MOCK_SURFACE}>
+      <p className="text-[11px] mb-1" style={{ color: "var(--ed-accent-text)", fontWeight: 600, letterSpacing: "0.06em" }}>
         EZee Assist
       </p>
-      <div className="rounded-2xl rounded-tl-md px-3 py-2 mb-1.5" style={{ backgroundColor: "rgba(0,174,239,0.08)" }}>
+      <div className="rounded-2xl rounded-tl-md px-3 py-1.5 mb-1" style={{ backgroundColor: "rgba(0,174,239,0.08)" }}>
         <p className={BEAT_BODY} style={{ color: MOCK_TEXT, lineHeight: 1.3 }}>
           Yes. Weekend pricing is approved for West region through 31 Aug.
           Signage and social assets are in your brand kit.
@@ -132,11 +132,11 @@ function BeatAnswer() {
 /* Beat 4: the action, gated by a human */
 function BeatAction() {
   return (
-    <div className="rounded-xl p-3" style={MOCK_SURFACE}>
-      <p className="text-[11px] mb-1.5" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
+    <div className="rounded-xl p-2.5" style={MOCK_SURFACE}>
+      <p className="text-[11px] mb-1" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
         Suggested
       </p>
-      <p className={`${BEAT_BODY} mb-2`} style={{ color: MOCK_TEXT, lineHeight: 1.3 }}>
+      <p className={`${BEAT_BODY} mb-1.5`} style={{ color: MOCK_TEXT, lineHeight: 1.3 }}>
         Push approved signage to Store #214 print queue
       </p>
       <button
@@ -146,7 +146,7 @@ function BeatAction() {
       >
         Approve
       </button>
-      <p className="text-[11px] mt-1.5" style={{ color: MOCK_MUTED }}>
+      <p className="text-[11px] mt-1" style={{ color: MOCK_MUTED }}>
         Coach notified
       </p>
     </div>

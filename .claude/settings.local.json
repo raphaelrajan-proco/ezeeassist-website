@@ -87,7 +87,9 @@
       "Bash(git commit -q -m 'Growth rebuild 1/6: Ada aesthetic tokens, nav restructure, announcement bar *)",
       "Bash(git commit -q -m 'Growth rebuild 2-6/6: hero, trust strip, coach'\\\\''s week, the shift, bento, two audiences *)",
       "Bash(pwd; echo *)",
-      "Bash(git commit -q -m 'Hero H1 override: operating system headline *)"
+      "Bash(git commit -q -m 'Hero H1 override: operating system headline *)",
+      "Bash(git commit -q -m 'Hero: split into two columns, vertical beat stack, new H1 *)",
+      "Bash(git commit -q -m 'Hero: tighten beat stack to balance the two columns *)"
     ]
   }
 }
