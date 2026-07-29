@@ -297,12 +297,15 @@ export default function TheShift() {
           Everyone is building something. Nobody has a system.
         </SectionHeadline>
         <p className="ed-fg-muted mt-6 text-base md:text-lg leading-relaxed">
-          Your franchisees are independent owners, and they have already
-          started using AI on their own. Different tools, different prompts,
-          different data, none of it visible to you. Your brand is on every
-          output and you have no admin panel. Every location, every coach,
-          and every function solves the same problems separately, and the
-          sprawl multiplies with each one.
+          Your franchisees are independent business owners. Some have
+          already started using AI on their own. The rest will.
+        </p>
+        <p className="ed-fg-muted mt-4 text-base md:text-lg leading-relaxed">
+          Different tools, different prompts, different data, none of it
+          visible to you. Your brand is on every output, and there is no
+          admin panel. Every location, every coach, and every function
+          solves the same problem separately, and the sprawl compounds with
+          each one.
         </p>
       </motion.div>
 
