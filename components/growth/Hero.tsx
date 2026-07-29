@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Check, ChevronDown } from "lucide-react";
+import { Check } from "lucide-react";
 import { MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED } from "./shared";
 
 /**
@@ -24,9 +24,10 @@ function BeatShell({ index, children }: { index: number; children: React.ReactNo
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.45 + index * 0.35 }}
     >
+      {/* Pill backdrop so the label stays legible where cards overlap. */}
       <p
-        className="ed-fg-muted text-[11px] mb-1"
-        style={{ fontWeight: 500, letterSpacing: "0.04em" }}
+        className="ed-fg-muted text-[11px] mb-1 inline-flex items-center rounded-full px-2 py-0.5"
+        style={{ fontWeight: 500, letterSpacing: "0.04em", backgroundColor: "var(--ed-bg-alt)" }}
       >
         <span style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
           {String(index + 1).padStart(2, "0")}
@@ -34,21 +35,6 @@ function BeatShell({ index, children }: { index: number; children: React.ReactNo
         {BEAT_LABELS[index]}
       </p>
       {children}
-    </motion.div>
-  );
-}
-
-/** Downward chevron between stacked beats. */
-function Connector({ index }: { index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4, delay: 0.7 + index * 0.35 }}
-      className="flex justify-center"
-      aria-hidden="true"
-    >
-      <ChevronDown className="w-4 h-4" strokeWidth={2} style={{ color: "#00AEEF", opacity: 0.55 }} />
     </motion.div>
   );
 }
@@ -155,9 +141,9 @@ function BeatAction() {
 
 const BEATS = [<BeatAsk key="a" />, <BeatCheck key="b" />, <BeatAnswer key="c" />, <BeatAction key="d" />];
 
-/** Semibold emphasis inside the H1. */
+/** Brand-blue semibold emphasis inside the H1. */
 function Mark({ children }: { children: React.ReactNode }) {
-  return <span style={{ fontWeight: 600 }}>{children}</span>;
+  return <span style={{ fontWeight: 600, color: "var(--ed-accent)" }}>{children}</span>;
 }
 
 export default function GrowthHero() {
@@ -178,7 +164,7 @@ export default function GrowthHero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="text-xs uppercase tracking-[0.2em] mb-5"
+              className="text-xs uppercase tracking-[0.2em] mb-8"
               style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}
             >
               The execution layer for franchise networks
@@ -188,9 +174,7 @@ export default function GrowthHero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-              /* 60px only from xl up. At lg the column is ~424px wide and
-                 60px pushes the H1 to nine lines, overflowing the fold. */
-              className="ed-fg max-w-xl text-4xl md:text-5xl xl:text-6xl leading-[1.08] tracking-[-0.03em]"
+              className="ed-fg max-w-xl text-5xl lg:text-6xl leading-[1.08] tracking-[-0.03em]"
               style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
             >
               Turn your <Mark>franchise playbooks</Mark> into the unified{" "}
@@ -201,7 +185,7 @@ export default function GrowthHero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
-              className="ed-fg-muted mt-5 max-w-xl text-lg md:text-xl leading-relaxed"
+              className="ed-fg-muted mt-7 max-w-xl text-lg md:text-xl leading-relaxed"
             >
               Scaling coaching and support, without adding headcount.
             </motion.p>
@@ -210,7 +194,7 @@ export default function GrowthHero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: "easeOut", delay: 0.5 }}
-              className="mt-7 flex flex-col sm:flex-row gap-4"
+              className="mt-10 flex flex-col sm:flex-row gap-4"
             >
               <Link href="/contact" className="ed-btn ed-btn-blue">
                 Book a Demo
@@ -221,7 +205,7 @@ export default function GrowthHero() {
             </motion.div>
           </div>
 
-          {/* Right: the four beats, top to bottom */}
+          {/* Right: the four beats as layered product surfaces */}
           <div>
             <p className="sr-only">
               A franchisee asks whether summer promo pricing applies at their
@@ -229,12 +213,23 @@ export default function GrowthHero() {
               approved source document, answers with citations, then suggests
               a follow-up action that a human approves.
             </p>
-            {BEATS.map((beat, i) => (
-              <div key={i}>
-                <BeatShell index={i}>{beat}</BeatShell>
-                {i < BEATS.length - 1 && <Connector index={i} />}
-              </div>
-            ))}
+            <div className="ed-gradient-frame rounded-3xl p-6 md:p-8">
+              {BEATS.map((beat, i) => (
+                <div
+                  key={i}
+                  className={i === 0 ? "relative" : "relative -mt-2.5"}
+                  style={{ zIndex: i + 1 }}
+                >
+                  <BeatShell index={i}>{beat}</BeatShell>
+                </div>
+              ))}
+            </div>
+            <p
+              className="ed-fg-muted mt-4 text-[11px] uppercase tracking-[0.18em] text-center"
+              style={{ fontWeight: 500 }}
+            >
+              Sourced from your systems. Governed by your rules.
+            </p>
           </div>
         </div>
       </div>

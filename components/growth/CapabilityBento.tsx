@@ -162,7 +162,7 @@ function ComplianceVisual() {
         </div>
 
         {/* Column heads */}
-        <div className="grid grid-cols-[74px_repeat(4,1fr)] gap-1 px-3 py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
+        <div className="grid grid-cols-[110px_repeat(4,1fr)] gap-1 px-3 py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
           <span />
           {COLS.map((c) => (
             <span key={c} className="text-[10px] uppercase tracking-[0.08em] text-center" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
@@ -173,7 +173,7 @@ function ComplianceVisual() {
 
         {COMPLIANCE_ROWS.map((r) => (
           <div key={r.store} className="px-3 py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
-            <div className="grid grid-cols-[74px_repeat(4,1fr)] gap-1 items-center">
+            <div className="grid grid-cols-[110px_repeat(4,1fr)] gap-1 items-center">
               <span className="text-[13px] font-mono" style={{ color: MOCK_TEXT }}>{r.store}</span>
               {r.cells.map((ok, i) => (
                 <span key={i} className="flex justify-center">
