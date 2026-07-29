@@ -28,7 +28,7 @@ export default function Objections() {
       </motion.div>
 
       <div
-        className="max-w-4xl"
+        className="max-w-3xl"
         style={{ borderTop: "1px solid var(--ed-rule)" }}
       >
         {objections.map((o, i) => (
@@ -44,12 +44,18 @@ export default function Objections() {
               >
                 {o.q}
               </span>
-              <span
-                className="ed-fg-muted text-2xl flex-shrink-0 transition-transform duration-300"
-                style={{ transform: open === i ? "rotate(45deg)" : "rotate(0deg)", fontWeight: 400 }}
-                aria-hidden="true"
-              >
-                +
+              <span className="relative flex-shrink-0 block h-4 w-4" aria-hidden="true">
+                <span
+                  className="absolute left-0 top-1/2 h-[1.5px] w-4 -translate-y-1/2 rounded-full"
+                  style={{ backgroundColor: "var(--ed-fg-muted)" }}
+                />
+                <span
+                  className="absolute left-1/2 top-0 h-4 w-[1.5px] -translate-x-1/2 rounded-full transition-transform duration-150"
+                  style={{
+                    backgroundColor: "var(--ed-fg-muted)",
+                    transform: open === i ? "rotate(90deg)" : "rotate(0deg)",
+                  }}
+                />
               </span>
             </button>
 
