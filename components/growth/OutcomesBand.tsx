@@ -23,6 +23,8 @@ type Stat = {
 //   Weeks cut from new franchisee ramp
 // These are leading indicators of franchisee revenue and are the intended
 // replacement for the deflection-weighted band. Keep 70%+ questions resolved.
+// The third slot (previously the DekaLash 94%, which duplicated the proof
+// card) returns when the coaching-coverage metrics above are sourced.
 const STATS: Stat[] = [
   {
     value: 70,
@@ -35,12 +37,6 @@ const STATS: Stat[] = [
     suffix: "+",
     label: "Support hours saved in the first six months",
     source: "DivaDance, 50 locations",
-  },
-  {
-    value: 94,
-    suffix: "%",
-    label: "AI deflection during the Mindbody migration",
-    source: "DekaLash, 120 locations",
   },
 ];
 
@@ -92,10 +88,10 @@ export default function OutcomesBand() {
         className="max-w-3xl mb-14 md:mb-16"
       >
         <Overline>Outcomes</Overline>
-        <SectionHeadline>Here is where the week goes now.</SectionHeadline>
+        <SectionHeadline>Here is what comes back.</SectionHeadline>
       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 max-w-4xl">
         {STATS.map((s, i) => (
           <StatCell key={s.label} stat={s} index={i} />
         ))}
