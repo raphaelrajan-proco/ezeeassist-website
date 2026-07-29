@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Overline, SectionHeadline, SectionShell } from "./shared";
 
-const MEETINGS_URL = process.env.NEXT_PUBLIC_HUBSPOT_MEETINGS_URL;
-
 /**
  * Section 16: two paths at different commitment levels. The secondary
  * path is the strategic one, it captures intent from buyers who would
@@ -26,10 +24,10 @@ export default function FinalCTA() {
         className="max-w-3xl"
       >
         <Overline>Ready when you are</Overline>
-        <SectionHeadline>Bring us one workflow from your network.</SectionHeadline>
+        <SectionHeadline>Bring us your three worst-performing locations.</SectionHeadline>
         <p className="ed-fg-muted mt-6 text-base md:text-lg leading-relaxed">
-          We will show you how EZee would run it end to end: the sources it
-          reads, the permissions it checks, the action it takes, and where a
+          We will show you what EZee would surface for each one: the gaps it
+          finds, the actions it would take, the sources it reads, and where a
           human stays in the loop.
         </p>
 
@@ -42,26 +40,6 @@ export default function FinalCTA() {
           </Link>
         </div>
       </motion.div>
-
-      {MEETINGS_URL ? (
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
-          className="mt-16"
-        >
-          <iframe
-            src={`${MEETINGS_URL}?embed=true`}
-            width="100%"
-            height="700"
-            frameBorder="0"
-            className="rounded-3xl min-h-[600px] lg:min-h-[700px]"
-            title="Book a working session with EZee Assist"
-            style={{ backgroundColor: "var(--ed-bg-alt)" }}
-          />
-        </motion.div>
-      ) : null}
     </SectionShell>
   );
 }
