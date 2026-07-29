@@ -26,6 +26,9 @@ export default function FinalCTA() {
         <Overline>Ready when you are</Overline>
         <SectionHeadline>Bring us your three worst-performing locations.</SectionHeadline>
         <p className="ed-fg-muted mt-6 text-base md:text-lg leading-relaxed">
+          Most likely, they are also the three your coaches reach last.
+        </p>
+        <p className="ed-fg-muted mt-4 text-base md:text-lg leading-relaxed">
           We will show you what EZee would surface for each one: the gaps it
           finds, the actions it would take, the sources it reads, and where a
           human stays in the loop.
