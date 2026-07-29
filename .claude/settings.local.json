@@ -95,7 +95,8 @@
       "Bash(git commit -q -m 'Step 4: The Shift rebuilt with real artifacts *)",
       "Bash(git commit -q -m 'Step 5: wrap fixes from the visual pass *)",
       "Bash(git commit -q -m 'Backhalf step 1: bento fidelity *)",
-      "Bash(git commit -q -m 'Backhalf step 2: two-audiences mockups at full width, legible chrome *)"
+      "Bash(git commit -q -m 'Backhalf step 2: two-audiences mockups at full width, legible chrome *)",
+      "Bash(git commit -q -m 'Backhalf step 3: control plane density, activity-log ticker *)"
     ]
   }
 }

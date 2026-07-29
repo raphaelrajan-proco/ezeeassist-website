@@ -102,12 +102,60 @@ export default function ControlPlane() {
           ))}
         </div>
 
+        {/* Activity-log ticker: the artifact behind "One activity log" */}
+        {/* TODO: Replace with real product screen recording */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+          className="mt-10 rounded-2xl overflow-hidden"
+          style={{
+            backgroundColor: "#141414",
+            border: "1px solid #2A2A2A",
+            boxShadow: "0 1px 2px rgba(0,0,0,0.3), 0 12px 32px rgba(0,0,0,0.35)",
+          }}
+        >
+          <div className="flex items-center justify-between px-4 py-2.5" style={{ borderBottom: "1px solid #2A2A2A" }}>
+            <span className="text-[11px] uppercase tracking-[0.18em]" style={{ color: "#A89B86", fontWeight: 600 }}>
+              Activity log
+            </span>
+            <span className="text-[11px]" style={{ color: "#15803D", fontWeight: 600 }}>● Live</span>
+          </div>
+          {[
+            { t: "09:41", body: "Store #214 · answer served · cited SUMMER-PROMO-GUIDE.PDF", hl: true },
+            { t: "09:42", body: "workflow run · nightly compliance sweep", hl: false },
+            { t: "09:44", body: "app deployed · closing audit · 214 locations", hl: false },
+          ].map((row) => (
+            <motion.div
+              key={row.t}
+              initial={false}
+              whileInView={
+                row.hl
+                  ? { backgroundColor: ["rgba(0,174,239,0)", "rgba(0,174,239,0.12)", "rgba(0,174,239,0)"] }
+                  : {}
+              }
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 1.6, times: [0, 0.35, 1], delay: 0.5 }}
+              className="flex items-baseline gap-3 px-4 py-2"
+              style={{ borderBottom: "1px solid #1D1D1D" }}
+            >
+              <span className="text-[12px] font-mono flex-shrink-0" style={{ color: "#A89B86" }}>
+                {row.t}
+              </span>
+              <span className="text-[13px] font-mono truncate" style={{ color: "#F5EDE0" }}>
+                {row.body}
+              </span>
+            </motion.div>
+          ))}
+        </motion.div>
+
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="mt-12"
+          className="mt-10"
         >
           <Link
             href="/security"
