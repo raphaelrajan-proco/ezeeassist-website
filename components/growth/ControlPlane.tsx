@@ -153,12 +153,24 @@ export default function ControlPlane() {
           ))}
         </motion.div>
 
+        <motion.p
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="mt-10 max-w-3xl text-base md:text-lg leading-relaxed"
+          style={{ color: "#A89B86" }}
+        >
+          Set the rules once, and the work that drives revenue runs without
+          waiting for a human.
+        </motion.p>
+
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="mt-10"
+          className="mt-8"
         >
           <Link
             href="/security"
