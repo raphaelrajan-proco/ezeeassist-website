@@ -24,20 +24,12 @@ import { NETWORK_SCALE } from "@/lib/data/network-scale";
 export const metadata: Metadata = {
   title: "EZee Assist — The Execution Layer for Franchise Networks",
   description:
-    "Your playbooks, running at every location. EZee connects your knowledge, performance data, and systems so coaches guide better and mechanical work runs itself. 60+ brands, 4,500+ locations.",
+    "Your playbooks, running at every location. EZee connects your knowledge, performance data, and systems so every location gets the coaching attention only your top priorities used to get.",
   alternates: { canonical: "/" },
-  keywords: [
-    "franchise execution layer",
-    "franchise AI platform",
-    "multi-location AI coaching",
-    "franchise compliance automation",
-    "franchisee support AI",
-    "franchise ops governance",
-  ],
   openGraph: {
     title: "EZee Assist — The Execution Layer for Franchise Networks",
     description:
-      "Your playbooks, running at every location. Coaches guide better, mechanical work runs itself, and locations execute against the standard you set.",
+      "Your playbooks, running at every location. Coaching stops being rationed, and the bottom of your network moves like the top.",
     images: [
       {
         url: "/og-image.png",
@@ -48,7 +40,7 @@ export const metadata: Metadata = {
   twitter: {
     title: "EZee Assist — The Execution Layer for Franchise Networks",
     description:
-      "Your playbooks, running at every location. Coaches guide better, mechanical work runs itself, and locations execute against the standard you set.",
+      "Your playbooks, running at every location. Coaching stops being rationed, and the bottom of your network moves like the top.",
     images: [
       {
         url: "/og-image.png",
@@ -60,7 +52,7 @@ export const metadata: Metadata = {
 
 // ── Canonical positioning definition (AEO / schema) ──
 const GROWTH_DEFINITION =
-  `EZee Assist is the execution layer for franchise networks. It connects a brand's knowledge (SOPs, playbooks, training, brand standards), performance data (sales vs target, reviews, labor, retention, compliance), and systems (POS, CRM, ERP, LMS, accounting) so operators get answers grounded in approved sources, field coaches walk into every conversation already prepared, locations are checked continuously against the standard, and recurring work runs on a schedule or a trigger. A control plane sets one policy set, one activity log, and one permission model across the network, so HQ decides what runs without a human. Franchisees ask, run approved workflows, and build their own tools inside those guardrails. When confidence is low the question becomes a ticket carrying the full conversation, the sources checked, and the location context. Available across SMS, WhatsApp, Slack, Teams, Google Chat, email, web, and mobile. Used by ${NETWORK_SCALE.brands} franchise brands across ${NETWORK_SCALE.locations} locations.`;
+  `EZee Assist is the execution layer for franchise networks. It connects a brand's knowledge (SOPs, playbooks, training, brand standards), performance data (sales vs target, reviews, labor, retention, compliance), and systems (POS, CRM, ERP, LMS, accounting) so every location receives the coaching attention that field teams have historically been able to give only their highest-priority locations. A control plane sets one policy set, one activity log, and one permission model across the network, so HQ decides what runs without a human. Franchisees ask, run approved workflows, and build their own tools inside those guardrails. When confidence is low the question becomes a ticket carrying the full conversation, the sources checked, and the location context. Available across SMS, WhatsApp, Slack, Teams, Google Chat, email, web, and mobile. Used by ${NETWORK_SCALE.brands} franchise brands across ${NETWORK_SCALE.locations} locations.`;
 
 const softwareSchema = {
   "@context": "https://schema.org",
@@ -69,12 +61,10 @@ const softwareSchema = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web, iOS, Android",
   description: GROWTH_DEFINITION,
-  offers: {
-    "@type": "Offer",
-    price: "60",
-    priceCurrency: "USD",
-    description: "Per location, per month.",
-  },
+  // Pricing does not appear on the website in any form, including
+  // structured data. Do not reintroduce an offers block here.
+  // TODO: aggregateRating below is pending human review. If it is not
+  // backed by real collected reviews, remove the whole block.
   aggregateRating: {
     "@type": "AggregateRating",
     ratingValue: "4.9",
