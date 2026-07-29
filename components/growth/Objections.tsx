@@ -50,10 +50,12 @@ export default function Objections() {
                   style={{ backgroundColor: "var(--ed-fg-muted)" }}
                 />
                 <span
-                  className="absolute left-1/2 top-0 h-4 w-[1.5px] -translate-x-1/2 rounded-full transition-transform duration-150"
+                  className="absolute left-1/2 top-0 h-4 w-[1.5px] rounded-full transition-transform duration-150"
                   style={{
                     backgroundColor: "var(--ed-fg-muted)",
-                    transform: open === i ? "rotate(90deg)" : "rotate(0deg)",
+                    transform: open === i
+                      ? "translateX(-50%) rotate(90deg)"
+                      : "translateX(-50%) rotate(0deg)",
                   }}
                 />
               </span>
