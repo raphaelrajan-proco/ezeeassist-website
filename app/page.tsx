@@ -19,6 +19,7 @@ import Objections from "@/components/growth/Objections";
 import Resources from "@/components/growth/Resources";
 import FinalCTA from "@/components/growth/FinalCTA";
 import { objections } from "@/lib/data/objections";
+import { NETWORK_SCALE } from "@/lib/data/network-scale";
 
 export const metadata: Metadata = {
   title: "EZee Assist — The Execution Layer for Franchise Networks",
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
 
 // ── Canonical positioning definition (AEO / schema) ──
 const GROWTH_DEFINITION =
-  "EZee Assist is the execution layer for franchise networks. It connects a brand's knowledge (SOPs, playbooks, training, brand standards), performance data (sales vs target, reviews, labor, retention, compliance), and systems (POS, CRM, ERP, LMS, accounting) so operators get answers grounded in approved sources, field coaches walk into every conversation already prepared, locations are checked continuously against the standard, and recurring work runs on a schedule or a trigger. A control plane sets one policy set, one activity log, and one permission model across the network, so HQ decides what runs without a human. Franchisees ask, run approved workflows, and build their own tools inside those guardrails. When confidence is low the question becomes a ticket carrying the full conversation, the sources checked, and the location context. Available across SMS, WhatsApp, Slack, Teams, Google Chat, email, web, and mobile. Used by 60+ franchise brands across 4,500+ locations.";
+  `EZee Assist is the execution layer for franchise networks. It connects a brand's knowledge (SOPs, playbooks, training, brand standards), performance data (sales vs target, reviews, labor, retention, compliance), and systems (POS, CRM, ERP, LMS, accounting) so operators get answers grounded in approved sources, field coaches walk into every conversation already prepared, locations are checked continuously against the standard, and recurring work runs on a schedule or a trigger. A control plane sets one policy set, one activity log, and one permission model across the network, so HQ decides what runs without a human. Franchisees ask, run approved workflows, and build their own tools inside those guardrails. When confidence is low the question becomes a ticket carrying the full conversation, the sources checked, and the location context. Available across SMS, WhatsApp, Slack, Teams, Google Chat, email, web, and mobile. Used by ${NETWORK_SCALE.brands} franchise brands across ${NETWORK_SCALE.locations} locations.`;
 
 const softwareSchema = {
   "@context": "https://schema.org",

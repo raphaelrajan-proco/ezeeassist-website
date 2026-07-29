@@ -7,6 +7,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { AnimatedValue } from "@/components/growth/shared";
+import { NETWORK_SCALE, networkScaleNumber } from "@/lib/data/network-scale";
 
 /**
  * The reveal. Sits between The Shift (nobody has a system) and the
@@ -42,7 +43,7 @@ const OUTPUTS: { icon: LucideIcon; label: string }[] = [
 const STATS: { end: number; suffix?: string; label: string }[] = [
   { end: 250,  suffix: "+", label: "Integrations" },
   { end: 8,               label: "Channels covered" },
-  { end: 4500, suffix: "+", label: "Locations live" },
+  { end: networkScaleNumber(NETWORK_SCALE.locations), suffix: "+", label: "Locations live" },
   { end: 1,               label: "Platform for all of it" },
 ];
 

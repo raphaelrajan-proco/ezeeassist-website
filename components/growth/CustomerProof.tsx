@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Overline, SectionHeadline, SectionShell, MockAvatar } from "./shared";
+import { NETWORK_SCALE } from "@/lib/data/network-scale";
 
 /**
  * Section 12: named brands, named people, measured change. Ada's
@@ -61,8 +62,10 @@ export default function CustomerProof() {
         className="max-w-3xl mb-14 md:mb-16"
       >
         <Overline>Proof</Overline>
-        {/* TODO: our sales deck states 60+ brands and 4,500+ locations. Confirm which figures are current before publish. */}
-        <SectionHeadline>70+ brands. 5,000+ locations. All building AI on EZee.</SectionHeadline>
+        <SectionHeadline>
+          {NETWORK_SCALE.brands} brands. {NETWORK_SCALE.locations} locations.
+          All building AI on EZee.
+        </SectionHeadline>
       </motion.div>
 
       {/* Lead card: DekaLash */}
