@@ -141,9 +141,11 @@ function ChaseVignette() {
    a coaching call, most did not, and some of the ones that did not
    are below target. No count or ratio is stated anywhere. */
 
+/* Indexes are chosen to scatter across rows and columns so the grid
+   reads as triage, not as a pattern. */
 const TERRITORY_TILES = 35;
-const CALLED = new Set([2, 9, 16, 30]);
-const BELOW_TARGET_NO_CALL = new Set([6, 13, 27]);
+const CALLED = new Set([3, 9, 20, 26]);
+const BELOW_TARGET_NO_CALL = new Set([6, 16, 29]);
 
 function WeekVignette() {
   return (
