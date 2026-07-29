@@ -388,6 +388,14 @@ export default function CoachsWeek() {
         <span className="ed-fg" style={{ fontWeight: 600 }}>
           and the locations that need it most are rarely the ones that get it.
         </span>
+        <span className="block mt-4">
+          <span className="ed-fg-muted">
+            System-wide sales grow when the bottom of the network moves.{" "}
+          </span>
+          <span className="ed-fg" style={{ fontWeight: 600 }}>
+            Rationed coaching is what keeps it still.
+          </span>
+        </span>
       </motion.p>
     </SectionShell>
   );
