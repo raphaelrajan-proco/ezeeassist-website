@@ -123,8 +123,8 @@ export default function Home() {
         {/* 04 */} <GrowthTrustStrip />
         {/* 05 */} <CoachsWeek />
         {/* 06 */} <TheShift />
-        {/* 06b: connections */} <Connected />
-        {/* 06c: the reveal */} <TheSystem />
+        {/* 06b: the reveal */} <TheSystem />
+        {/* 06c: connections */} <Connected />
         {/* 07 */} <CapabilityBento />
         {/* 08 */} <TwoAudiences />
         {/* 09 */} <ControlPlane />

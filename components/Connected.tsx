@@ -9,17 +9,15 @@ import {
 import { MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED, MOCK_HAIRLINE } from "@/components/growth/shared";
 
 /**
- * Connections. Dark section between The Shift and the reveal: the
- * rolling integration browser (deck roster, franchise-native first)
- * and the channel grid carried over from the old integrations
- * section. Continuous dark block with TheSystem below it.
+ * Connections. Light section after the reveal: the rolling
+ * integration browser (deck roster, franchise-native first) and the
+ * channel grid carried over from the old integrations section.
+ * Theme-variable driven so it follows light and dark like every
+ * other light section.
  */
 
-const FG = "#F5F5F5";
-const MUTED = "#A1A1AA";
 const BLUE = "#00AEEF";
-const DARK_CARD = "#141414";
-const DARK_RULE = "#2A2A2A";
+const CARD_SHADOW = "0 1px 2px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.07)";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
@@ -251,8 +249,9 @@ function ChannelGrid() {
           transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.05 }}
           className="flex items-center gap-2.5 rounded-xl px-4 py-3.5"
           style={{
-            backgroundColor: extensible ? "transparent" : DARK_CARD,
-            border: extensible ? "1.5px solid rgba(0,174,239,0.55)" : `1px solid ${DARK_RULE}`,
+            backgroundColor: extensible ? "transparent" : "var(--ed-card)",
+            border: extensible ? "1.5px solid rgba(0,174,239,0.55)" : "1px solid var(--ed-rule)",
+            boxShadow: extensible ? "none" : CARD_SHADOW,
           }}
         >
           <Icon
@@ -261,7 +260,7 @@ function ChannelGrid() {
             strokeWidth={1.75}
             style={{ color: BLUE }}
           />
-          <span className="text-sm" style={{ color: extensible ? BLUE : FG, fontWeight: 500 }}>
+          <span className="text-sm" style={{ color: extensible ? "var(--ed-accent-text)" : "var(--ed-fg)", fontWeight: 500 }}>
             {label}
           </span>
         </motion.div>
@@ -274,8 +273,8 @@ function ChannelGrid() {
 
 export default function Connected() {
   return (
-    <section id="connections" className="w-full scroll-mt-24" style={{ backgroundColor: "#0A0A0A" }}>
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-28 lg:pt-36 pb-14 lg:pb-16">
+    <section id="connections" className="w-full scroll-mt-24 ed-bg-alt">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-24 md:py-32 lg:py-40">
         {/* Copy */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -284,17 +283,17 @@ export default function Connected() {
           transition={{ duration: 0.85, ease: EASE }}
           className="max-w-3xl mb-14 md:mb-16"
         >
-          <p className="flex items-center gap-2.5 text-xs uppercase tracking-[0.2em] mb-8" style={{ color: BLUE, fontWeight: 500 }}>
+          <p className="flex items-center gap-2.5 text-xs uppercase tracking-[0.2em] mb-8" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
             <span aria-hidden="true" className="block h-2 w-2 flex-shrink-0" style={{ backgroundColor: BLUE }} />
             Connections
           </p>
           <h2
-            className="text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em]"
-            style={{ color: FG, fontFamily: "var(--font-editorial)", fontWeight: 500, textWrap: "balance" }}
+            className="ed-fg text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em]"
+            style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, textWrap: "balance" }}
           >
             It connects directly into everything you already run on.
           </h2>
-          <p className="mt-6 text-base md:text-lg leading-relaxed" style={{ color: MUTED }}>
+          <p className="ed-fg-muted mt-6 text-base md:text-lg leading-relaxed">
             EZee connects at the source across scheduling, POS, CRM,
             accounting, drives, learning, marketing, and comms. It reads
             from those systems and writes back to them, so answers are
@@ -313,7 +312,7 @@ export default function Connected() {
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.8, ease: EASE }}
           >
-            <div className="rounded-3xl p-6 md:p-8" style={{ backgroundColor: DARK_CARD, border: `1px solid ${DARK_RULE}` }}>
+            <div className="ed-gradient-frame rounded-3xl p-6 md:p-8">
               <IntegrationBrowser />
             </div>
             <div className="mt-5 flex flex-wrap gap-2">
@@ -321,7 +320,12 @@ export default function Connected() {
                 <span
                   key={q}
                   className="rounded-full px-3 py-1.5 text-[12.5px]"
-                  style={{ backgroundColor: DARK_CARD, border: `1px solid ${DARK_RULE}`, color: MUTED, fontWeight: 600 }}
+                  style={{
+                    backgroundColor: "var(--ed-card)",
+                    border: "1px solid var(--ed-rule)",
+                    color: "var(--ed-fg-muted)",
+                    fontWeight: 600,
+                  }}
                 >
                   {q}
                 </span>
@@ -331,17 +335,17 @@ export default function Connected() {
 
           {/* Beat two: channels */}
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] mb-4" style={{ color: BLUE, fontWeight: 600 }}>
+            <p className="text-xs uppercase tracking-[0.2em] mb-4" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
               Every channel
             </p>
             <p
-              className="text-2xl md:text-3xl tracking-[-0.02em] mb-8 max-w-md"
-              style={{ color: FG, fontFamily: "var(--font-editorial)", fontWeight: 500, lineHeight: 1.15 }}
+              className="ed-fg text-2xl md:text-3xl tracking-[-0.02em] mb-8 max-w-md"
+              style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, lineHeight: 1.15 }}
             >
               Deployed in the channels your teams already work in
             </p>
             <ChannelGrid />
-            <p className="mt-8 text-sm md:text-base max-w-md leading-relaxed" style={{ color: MUTED }}>
+            <p className="ed-fg-muted mt-8 text-sm md:text-base max-w-md leading-relaxed">
               Embedded in your tools and workflows. One platform, every surface.
             </p>
           </div>
@@ -353,8 +357,7 @@ export default function Connected() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="mt-14 text-base md:text-lg leading-relaxed max-w-3xl"
-          style={{ color: MUTED }}
+          className="ed-fg-muted mt-14 text-base md:text-lg leading-relaxed max-w-3xl"
         >
           Every system connected, every action governed, all of it managed
           in one place.

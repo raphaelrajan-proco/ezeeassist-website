@@ -112,7 +112,8 @@
       "Bash(git commit -m 'The reveal: EZee Assist introduced between sprawl and capabilities *)",
       "Bash(git rm *)",
       "Bash(git commit -m 'Connections: rolling integration browser moved above the reveal *)",
-      "Bash(git commit -m 'Back-half fixes: handoff rebuild, three stats, proof header, partner strip *)"
+      "Bash(git commit -m 'Back-half fixes: handoff rebuild, three stats, proof header, partner strip *)",
+      "Bash(git commit -m 'Narrative reorder: reveal before integrations, section 06 reframed *)"
     ]
   }
 }

@@ -24,7 +24,7 @@ function ConsumerChatTile({ ezee = false }: { ezee?: boolean }) {
         <span className="flex items-center gap-1.5">
           <Sparkles aria-hidden="true" className="w-3 h-3" strokeWidth={2} style={{ color: ezee ? "#00AEEF" : "#10A37F" }} />
           <span className="text-[10px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
-            {ezee ? "EZee Assist" : "AI chat"}
+            {ezee ? "Brand AI" : "AI chat"}
           </span>
         </span>
         {ezee && (
@@ -205,7 +205,7 @@ function OrderedPanel({ inView }: { inView: boolean }) {
   return (
     <div>
       <p className="text-xs uppercase tracking-[0.2em] mb-4" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
-        With a system
+        What it needs to be
       </p>
       <div
         className="relative rounded-2xl overflow-hidden flex flex-col justify-between px-5 pt-5 pb-5"
@@ -213,7 +213,7 @@ function OrderedPanel({ inView }: { inView: boolean }) {
       >
         <p className="sr-only">
           The same artifacts, upright and aligned, connected into a single
-          EZee execution layer with role-scoped, source-cited chrome.
+          execution layer with role-scoped, source-cited chrome.
         </p>
 
         {/* Aligned artifacts, scaled to fit two per row */}
@@ -258,9 +258,11 @@ function OrderedPanel({ inView }: { inView: boolean }) {
             boxShadow: "0 0 32px rgba(0,174,239,0.10)",
           }}
         >
-          <span className="text-lg md:text-xl" style={{ fontFamily: "var(--font-editorial)", fontWeight: 600 }}>
-            <span style={{ color: "var(--ed-fg)" }}>EZee</span>{" "}
-            <span style={{ color: "var(--ed-accent-text)" }}>execution layer</span>
+          <span
+            className="text-lg md:text-xl"
+            style={{ fontFamily: "var(--font-editorial)", fontWeight: 600, color: "var(--ed-accent-text)" }}
+          >
+            One execution layer
           </span>
         </motion.div>
       </div>
@@ -290,7 +292,7 @@ export default function TheShift() {
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         className="max-w-3xl mb-16 md:mb-20"
       >
-        <Overline>What changed</Overline>
+        <Overline>The problem, amplified</Overline>
         <SectionHeadline>
           Everyone is building something. Nobody has a system.
         </SectionHeadline>
@@ -298,7 +300,9 @@ export default function TheShift() {
           Your franchisees are independent owners, and they have already
           started using AI on their own. Different tools, different prompts,
           different data, none of it visible to you. Your brand is on every
-          output and you have no admin panel.
+          output and you have no admin panel. Every location, every coach,
+          and every function solves the same problems separately, and the
+          sprawl multiplies with each one.
         </p>
       </motion.div>
 
@@ -318,6 +322,19 @@ export default function TheShift() {
         Nothing gets replaced. Your documents, your systems, and your data
         stay exactly where they are. The playbook stops describing what to do
         and starts doing it.
+      </motion.p>
+
+      <motion.p
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, delay: 0.35 }}
+        className="ed-fg mt-6 max-w-3xl text-lg md:text-xl leading-relaxed"
+        style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
+      >
+        The network needs one system every part of it can use. HQ, coaches,
+        and franchisees work on the same layer instead of each group solving
+        it alone.
       </motion.p>
     </SectionShell>
   );
