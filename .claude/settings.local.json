@@ -101,7 +101,11 @@
       "Bash(git commit -q -m 'Backhalf step 5: outcomes numerals up one step, baselines aligned *)",
       "Bash(git commit -q -m 'Backhalf step 6: integrations rebuilt as platform-pass two-column *)",
       "Bash(git commit -q -m 'Backhalf step 7: objections accordion polish *)",
-      "Bash(git commit -q -m 'Objections: keep the icon centred while rotating *)"
+      "Bash(git commit -q -m 'Objections: keep the icon centred while rotating *)",
+      "Bash(git push *)",
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'Hero v3: Ada-style layout, fluid type, one looped conversation card *)"
     ]
   }
 }

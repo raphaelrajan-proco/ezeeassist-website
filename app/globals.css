@@ -67,6 +67,9 @@
   color: var(--ed-fg);
   /* Body copy runs on Inter; headings opt into --font-editorial below. */
   font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Hidden absolutely-positioned chrome (nav mega-menus) must never
+     create a horizontal scrollbar. Clip x only; sticky is unaffected. */
+  overflow-x: clip;
 }
 .theme-editorial h1,
 .theme-editorial h2,
