@@ -177,7 +177,8 @@ export default function TheSystem() {
           <p className="mt-4 text-base md:text-lg leading-relaxed" style={{ color: MUTED }}>
             HQ publishes the standard once. Coaches see what is happening
             across every location. Franchisees get answers and act on them
-            without waiting.
+            without waiting. Performance gaps surface while there is still
+            time to act on them.
           </p>
         </motion.div>
 
