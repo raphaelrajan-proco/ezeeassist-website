@@ -90,7 +90,8 @@
       "Bash(git commit -q -m 'Hero H1 override: operating system headline *)",
       "Bash(git commit -q -m 'Hero: split into two columns, vertical beat stack, new H1 *)",
       "Bash(git commit -q -m 'Hero: tighten beat stack to balance the two columns *)",
-      "Bash(git commit -q -m 'Step 2: hero platform-pass presence *)"
+      "Bash(git commit -q -m 'Step 2: hero platform-pass presence *)",
+      "Bash(git commit -q -m 'Step 3: coach'\\\\''s week restructured as three beats plus synthesis chart *)"
     ]
   }
 }
