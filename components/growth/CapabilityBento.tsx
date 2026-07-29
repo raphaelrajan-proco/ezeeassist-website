@@ -63,51 +63,51 @@ function UnifiedAnswersVisual() {
   const CHANNELS = [MessageSquare, Hash, Users];
   return (
     <GradientFrame>
-      <div className="relative mx-auto max-w-[380px]" style={{ minHeight: "230px" }}>
+      <div className="relative mx-auto max-w-[560px]" style={{ minHeight: "330px" }}>
         {/* Behind: Slack + Teams frames */}
         <div
-          className="absolute right-0 top-0 w-[170px] rounded-xl overflow-hidden"
+          className="absolute right-0 top-0 w-[240px] rounded-xl overflow-hidden"
           style={{ ...MOCK_SURFACE, opacity: 0.75, transform: "rotate(2.5deg)" }}
           aria-hidden="true"
         >
           <div className="flex items-center gap-1.5 px-2.5 py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
             <Hash className="w-3 h-3" strokeWidth={2} style={{ color: "#611F69" }} />
-            <span className="text-[9px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>franchise-support</span>
+            <span className="text-[11.5px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>franchise-support</span>
           </div>
           <div className="px-2.5 py-2">
-            <span className="text-[9px]" style={{ color: MOCK_MUTED }}>Same answer in Slack.</span>
+            <span className="text-[11.5px]" style={{ color: MOCK_MUTED }}>Same answer in Slack.</span>
           </div>
         </div>
         <div
-          className="absolute left-0 top-6 w-[150px] rounded-xl overflow-hidden"
+          className="absolute left-0 top-6 w-[210px] rounded-xl overflow-hidden"
           style={{ ...MOCK_SURFACE, opacity: 0.62, transform: "rotate(-3deg)" }}
           aria-hidden="true"
         >
           <div className="h-1.5" style={{ backgroundColor: "#6264A7" }} />
           <div className="px-2.5 py-2">
-            <span className="text-[9px]" style={{ color: MOCK_MUTED }}>Same answer in Teams.</span>
+            <span className="text-[11.5px]" style={{ color: MOCK_MUTED }}>Same answer in Teams.</span>
           </div>
         </div>
 
         {/* Front: SMS thread */}
-        <div className="relative mx-auto pt-14 w-[250px]">
+        <div className="relative mx-auto pt-20 w-[360px]">
           <div className="rounded-2xl overflow-hidden" style={MOCK_SURFACE}>
             <div className="flex items-center justify-center py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
-              <span className="text-[9.5px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>EZee Assist</span>
+              <span className="text-[12px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>EZee Assist</span>
             </div>
             <div className="px-3 py-3 space-y-2">
               <div className="ml-auto max-w-[88%] rounded-2xl rounded-br-md px-3 py-1.5" style={{ backgroundColor: "#00AEEF" }}>
-                <p className="text-[10.5px]" style={{ color: "#FFFFFF", lineHeight: 1.35 }}>
+                <p className="text-[13.5px]" style={{ color: "#FFFFFF", lineHeight: 1.35 }}>
                   What is the closing checklist for the spa?
                 </p>
               </div>
               <div className="max-w-[92%] rounded-2xl rounded-bl-md px-3 py-2" style={{ backgroundColor: "rgba(10,10,10,0.05)" }}>
-                <p className="text-[10.5px] mb-1.5" style={{ color: MOCK_TEXT, lineHeight: 1.35 }}>
+                <p className="text-[13.5px] mb-1.5" style={{ color: MOCK_TEXT, lineHeight: 1.35 }}>
                   Six stations, sanitized and logged. Full list below.
                 </p>
                 <div className="flex flex-wrap gap-1">
                   {["SANITATION-SOP.PDF", "STORE-214-ADDENDUM.PDF"].map((f) => (
-                    <span key={f} className="rounded-full px-1.5 py-0.5 text-[7.5px]" style={{ backgroundColor: "rgba(0,174,239,0.10)", color: "#0077A8", fontWeight: 600 }}>
+                    <span key={f} className="rounded-full px-1.5 py-0.5 text-[10px]" style={{ backgroundColor: "rgba(0,174,239,0.10)", color: "#0077A8", fontWeight: 600 }}>
                       {f}
                     </span>
                   ))}
@@ -153,19 +153,19 @@ function ComplianceVisual() {
   const COLS = ["Insurance", "Training", "Certs", "Brand audit"];
   return (
     <GradientFrame>
-      <div className="rounded-xl overflow-hidden mx-auto max-w-[400px]" style={MOCK_SURFACE}>
+      <div className="rounded-xl overflow-hidden mx-auto max-w-[560px]" style={MOCK_SURFACE}>
         <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
-          <span className="text-[10px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
+          <span className="text-[13px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
             42 of 42 locations checked
           </span>
-          <span className="text-[9px]" style={{ color: MOCK_MUTED, fontWeight: 600 }}>Nightly</span>
+          <span className="text-[11.5px]" style={{ color: MOCK_MUTED, fontWeight: 600 }}>Nightly</span>
         </div>
 
         {/* Column heads */}
         <div className="grid grid-cols-[74px_repeat(4,1fr)] gap-1 px-3 py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
           <span />
           {COLS.map((c) => (
-            <span key={c} className="text-[7.5px] uppercase tracking-[0.08em] text-center" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
+            <span key={c} className="text-[10px] uppercase tracking-[0.08em] text-center" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
               {c}
             </span>
           ))}
@@ -174,7 +174,7 @@ function ComplianceVisual() {
         {COMPLIANCE_ROWS.map((r) => (
           <div key={r.store} className="px-3 py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
             <div className="grid grid-cols-[74px_repeat(4,1fr)] gap-1 items-center">
-              <span className="text-[10px] font-mono" style={{ color: MOCK_TEXT }}>{r.store}</span>
+              <span className="text-[13px] font-mono" style={{ color: MOCK_TEXT }}>{r.store}</span>
               {r.cells.map((ok, i) => (
                 <span key={i} className="flex justify-center">
                   {ok ? (
@@ -186,7 +186,7 @@ function ComplianceVisual() {
               ))}
             </div>
             {r.note && (
-              <p className="text-[8.5px] mt-0.5" style={{ color: "#B45309", fontWeight: 600 }}>
+              <p className="text-[11px] mt-0.5" style={{ color: "#B45309", fontWeight: 600 }}>
                 {r.note}
               </p>
             )}
@@ -224,8 +224,8 @@ function WorkflowVisual() {
 
   return (
     <GradientFrame>
-      <div ref={ref} className="rounded-xl p-3.5 mx-auto max-w-[300px]" style={MOCK_SURFACE}>
-        <p className="text-[9.5px] mb-2.5" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
+      <div ref={ref} className="rounded-xl p-3.5 mx-auto max-w-[460px]" style={MOCK_SURFACE}>
+        <p className="text-[12px] mb-2.5" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
           Weekly KPI review · Every location
         </p>
         <div className="space-y-1.5">
@@ -238,14 +238,14 @@ function WorkflowVisual() {
                 border: `1px solid ${i <= lit ? "rgba(0,174,239,0.28)" : MOCK_HAIRLINE}`,
               }}
             >
-              <span className="text-[9px] flex-shrink-0" style={{ color: i <= lit ? "#0077A8" : MOCK_MUTED, fontWeight: 700 }}>
+              <span className="text-[11.5px] flex-shrink-0" style={{ color: i <= lit ? "#0077A8" : MOCK_MUTED, fontWeight: 700 }}>
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <p className="text-[10px]" style={{ color: MOCK_TEXT, lineHeight: 1.3 }}>{s}</p>
+              <p className="text-[13px]" style={{ color: MOCK_TEXT, lineHeight: 1.3 }}>{s}</p>
             </div>
           ))}
         </div>
-        <p className="text-[9px] mt-2.5" style={{ color: MOCK_MUTED, fontWeight: 500 }}>
+        <p className="text-[11.5px] mt-2.5" style={{ color: MOCK_MUTED, fontWeight: 500 }}>
           <span style={{ color: "#15803D" }}>●</span> Ran 4 minutes ago
         </p>
       </div>
@@ -267,8 +267,8 @@ function ReportingVisual() {
   const BARS = [42, 58, 51, 67, 74, 81];
   return (
     <GradientFrame>
-      <div className="rounded-xl p-3.5 mx-auto max-w-[300px]" style={MOCK_SURFACE}>
-        <p className="text-[9.5px] mb-3" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
+      <div className="rounded-xl p-3.5 mx-auto max-w-[460px]" style={MOCK_SURFACE}>
+        <p className="text-[12px] mb-3" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
           West territory · This week
         </p>
         <div className="flex items-end gap-1 h-12 mb-3" aria-hidden="true">
@@ -292,13 +292,13 @@ function ReportingVisual() {
           {RANKED.map((r, i) => (
             <div key={r.store} className="flex items-center justify-between gap-2 py-1" style={{ borderTop: i === 0 ? "none" : `1px solid ${MOCK_HAIRLINE}` }}>
               <span className="flex items-center gap-1.5 min-w-0">
-                <span className="text-[9px]" style={{ color: MOCK_MUTED, fontWeight: 700 }}>{i + 1}</span>
-                <span className="text-[10px] font-mono truncate" style={{ color: MOCK_TEXT }}>{r.store}</span>
+                <span className="text-[11.5px]" style={{ color: MOCK_MUTED, fontWeight: 700 }}>{i + 1}</span>
+                <span className="text-[13px] font-mono truncate" style={{ color: MOCK_TEXT }}>{r.store}</span>
               </span>
               <span className="flex items-center gap-1.5 flex-shrink-0">
-                <span className="text-[9px]" style={{ color: MOCK_MUTED }}>{r.reason}</span>
+                <span className="text-[11.5px]" style={{ color: MOCK_MUTED }}>{r.reason}</span>
                 <span
-                  className="flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[8.5px]"
+                  className="flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[11px]"
                   style={{
                     backgroundColor: r.up ? "rgba(22,163,74,0.12)" : "rgba(220,38,38,0.10)",
                     color: r.up ? "#15803D" : "#B91C1C",
@@ -355,10 +355,10 @@ function AiAppsVisual() {
 
   return (
     <GradientFrame>
-      <div ref={ref} className="mx-auto max-w-[300px]" style={{ minHeight: "236px" }}>
+      <div ref={ref} className="mx-auto max-w-[460px]" style={{ minHeight: "340px" }}>
         {/* Prompt */}
         <div className="rounded-xl px-3 py-2.5 mb-2" style={MOCK_SURFACE}>
-          <p className="text-[10px]" style={{ color: MOCK_TEXT, fontStyle: "italic", lineHeight: 1.4, minHeight: "42px" }}>
+          <p className="text-[13px]" style={{ color: MOCK_TEXT, fontStyle: "italic", lineHeight: 1.4, minHeight: "42px" }}>
             &ldquo;{typed}
             {!reduceMotion && phase === 0 && (
               <span aria-hidden="true" style={{ color: "#00AEEF", fontStyle: "normal", animation: "ed-cursor-blink 0.9s step-start infinite" }}>|</span>
@@ -375,8 +375,8 @@ function AiAppsVisual() {
           className="rounded-xl px-3 py-2.5 mb-2"
           style={MOCK_SURFACE}
         >
-          <p className="text-[9px] mb-1.5" style={{ color: MOCK_MUTED, fontWeight: 600 }}>Plan ready · 4 steps · 2 integrations</p>
-          <button type="button" className="w-full rounded-lg py-1.5 text-[10px]" style={{ backgroundColor: "#00AEEF", color: "#FFFFFF", fontWeight: 600 }}>
+          <p className="text-[11.5px] mb-1.5" style={{ color: MOCK_MUTED, fontWeight: 600 }}>Plan ready · 4 steps · 2 integrations</p>
+          <button type="button" className="w-full rounded-lg py-1.5 text-[13px]" style={{ backgroundColor: "#00AEEF", color: "#FFFFFF", fontWeight: 600 }}>
             Approve and deploy
           </button>
         </motion.div>
@@ -390,16 +390,16 @@ function AiAppsVisual() {
           style={MOCK_SURFACE}
         >
           <div className="flex items-center justify-between px-3 py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
-            <span className="text-[9px] font-mono" style={{ color: MOCK_MUTED }}>audit.brand.ezee.app</span>
-            <span className="text-[8px] rounded-full px-1.5 py-0.5" style={{ backgroundColor: "rgba(22,163,74,0.12)", color: "#15803D", fontWeight: 700 }}>
+            <span className="text-[11.5px] font-mono" style={{ color: MOCK_MUTED }}>audit.brand.ezee.app</span>
+            <span className="text-[10.5px] rounded-full px-1.5 py-0.5" style={{ backgroundColor: "rgba(22,163,74,0.12)", color: "#15803D", fontWeight: 700 }}>
               Live · 214 locations
             </span>
           </div>
           <div className="px-3 py-2 space-y-1">
             {[{ t: "Stations sanitized", ok: true }, { t: "Retail wall restocked", ok: false }].map((r) => (
               <div key={r.t} className="flex items-center justify-between rounded px-2 py-1" style={{ backgroundColor: r.ok ? "rgba(22,163,74,0.07)" : "rgba(217,119,6,0.08)" }}>
-                <span className="text-[9.5px]" style={{ color: MOCK_TEXT }}>{r.t}</span>
-                <span className="text-[8px]" style={{ color: r.ok ? "#15803D" : "#B45309", fontWeight: 700 }}>
+                <span className="text-[12px]" style={{ color: MOCK_TEXT }}>{r.t}</span>
+                <span className="text-[10.5px]" style={{ color: r.ok ? "#15803D" : "#B45309", fontWeight: 700 }}>
                   {r.ok ? "Pass" : "Flag"}
                 </span>
               </div>

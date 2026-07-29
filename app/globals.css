@@ -227,12 +227,12 @@
 /* Soft gradient wash behind floating product mockups (growth page).
    Neutral-to-blue tint in light mode, navy-to-black in dark. */
 .theme-editorial .ed-gradient-frame {
-  background: linear-gradient(135deg, #FAFAFA 0%, #F4F4F5 48%, #EDEDEF 100%);
+  background: linear-gradient(135deg, #F0F9FE 0%, #FAFAFA 100%);
   border: 1px solid #E5E7EB;
 }
 .dark .theme-editorial .ed-gradient-frame,
 .theme-editorial.dark .ed-gradient-frame {
-  background: linear-gradient(135deg, #17242F 0%, #101820 48%, #0B0E13 100%);
+  background: linear-gradient(135deg, #141414 0%, #0f1418 100%);
   border: 1px solid #232A31;
 }
 

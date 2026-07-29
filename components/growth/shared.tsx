@@ -29,7 +29,7 @@ export function SectionHeadline({
 }) {
   return (
     <h2
-      className={`ed-fg text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.03em] ${className}`}
+      className={`ed-fg text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em] ${className}`}
       style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
     >
       {children}
@@ -57,19 +57,30 @@ export function SectionShell({
 
 /* ── Mockup chrome (consistent product UI across the page) ── */
 
+/** Layered elevation for every product mockup card. No flat boxes. */
 export const MOCK_SURFACE: React.CSSProperties = {
   backgroundColor: "#FFFFFF",
-  border: "1px solid #E5E7EB",
+  border: "1px solid var(--ed-border)",
+  borderRadius: "14px",
   boxShadow:
-    "0 18px 44px -14px rgba(9,9,11,0.16), 0 4px 12px -4px rgba(9,9,11,0.10)",
+    "0 1px 2px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.07)",
 };
 export const MOCK_TEXT = "#0A0A0A";
 export const MOCK_MUTED = "#52525B";
 export const MOCK_HAIRLINE = "#E5E7EB";
 
+/** Multi-hue identity dots for third-party tool chips. */
+export const TOOL_COLORS: Record<string, string> = {
+  Salesforce: "#00A1E0", HubSpot: "#FF7A59", Mindbody: "#F9423A",
+  ServiceTitan: "#F05A28", QuickBooks: "#2CA01C", SharePoint: "#036C70",
+  Slack: "#611F69", Toast: "#FF4C00", Teams: "#6264A7", Xero: "#13B5EA",
+  FranConnect: "#0072CE", Zapier: "#FF4F00", Sheets: "#188038",
+  "Google Drive": "#FBBC04", YouTube: "#FF0000", Trainual: "#7A3BFF",
+};
+
 export function GradientFrame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="ed-gradient-frame mt-8 rounded-2xl p-5 md:p-6 overflow-hidden">
+    <div className="ed-gradient-frame mt-8 rounded-3xl p-6 md:p-8 overflow-hidden">
       {children}
     </div>
   );
