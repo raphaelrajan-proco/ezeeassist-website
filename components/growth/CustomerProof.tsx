@@ -163,22 +163,13 @@ export default function CustomerProof() {
             Aqua-Tots
           </p>
           <BrandPlate name="Aqua-Tots" />
-          <div className="grid grid-cols-2 gap-5 mt-6">
+          {/* TODO: source Aqua-Tots second metric. Card returns to the
+              two-metric grid the moment it exists. */}
+          <div className="mt-6">
             <Metric value="160" label="Locations live" />
-            {/* TODO: source Aqua-Tots second metric. */}
-            <div>
-              <p
-                className="text-2xl md:text-3xl tracking-[-0.03em]"
-                style={{ color: "var(--ed-fg-muted)", fontFamily: "var(--font-editorial)", fontWeight: 500, lineHeight: 1, opacity: 0.5 }}
-                aria-hidden="true"
-              >
-                &mdash;
-              </p>
-            </div>
           </div>
 
-          {/* TODO: Replace with a quote describing a change in how the team works.
-              "Transformed our business" is praise, not evidence. */}
+          {/* TODO: replace with a quote describing an operational change, not product praise. Current line is praise-only per our own quote standard. */}
           <blockquote className="ed-fg-muted text-base leading-relaxed mt-6 mb-4" style={{ fontStyle: "italic" }}>
             &ldquo;EZee Assist has transformed our business.&rdquo;
           </blockquote>
