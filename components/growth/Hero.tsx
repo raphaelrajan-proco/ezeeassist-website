@@ -155,13 +155,9 @@ function BeatAction() {
 
 const BEATS = [<BeatAsk key="a" />, <BeatCheck key="b" />, <BeatAnswer key="c" />, <BeatAction key="d" />];
 
-/** Semibold + underlined emphasis inside the H1. */
+/** Semibold emphasis inside the H1. */
 function Mark({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="underline decoration-1 underline-offset-[6px]" style={{ fontWeight: 600 }}>
-      {children}
-    </span>
-  );
+  return <span style={{ fontWeight: 600 }}>{children}</span>;
 }
 
 export default function GrowthHero() {
@@ -192,13 +188,13 @@ export default function GrowthHero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-              className="ed-fg max-w-xl text-4xl md:text-5xl leading-[1.08] tracking-[-0.03em]"
+              /* 60px only from xl up. At lg the column is ~424px wide and
+                 60px pushes the H1 to nine lines, overflowing the fold. */
+              className="ed-fg max-w-xl text-4xl md:text-5xl xl:text-6xl leading-[1.08] tracking-[-0.03em]"
               style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
             >
-              Turn your <Mark>franchise playbooks</Mark>
-              <br />
-              into the unified <Mark>AI Operating System</Mark> that drives
-              franchisee growth.
+              Turn your <Mark>franchise playbooks</Mark> into the unified{" "}
+              <Mark>AI Operating System</Mark> that drives franchisee growth.
             </motion.h1>
 
             <motion.p
