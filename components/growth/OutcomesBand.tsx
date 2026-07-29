@@ -64,7 +64,7 @@ function StatCell({ stat, index }: { stat: Stat; index: number }) {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: index * 0.1 }}
     >
       <p
-        className="text-4xl md:text-5xl lg:text-6xl tracking-[-0.03em]"
+        className="text-5xl md:text-6xl lg:text-7xl tracking-[-0.03em] flex items-end min-h-[1.1em]"
         style={{
           color: "#00AEEF",
           fontFamily: "var(--font-editorial)",
