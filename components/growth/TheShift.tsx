@@ -180,18 +180,18 @@ function ScatteredPanel({ inView }: { inView: boolean }) {
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 + i * 0.08 }}
             className="absolute"
-            style={{
-              left: m.x, top: m.y, zIndex: m.z,
-              transform: `rotate(${m.rot}deg)`,
-              filter: "grayscale(0.55) opacity(0.92)",
-            }}
+            style={{ left: m.x, top: m.y, zIndex: m.z }}
           >
-            {m.el}
-            {m.label && (
-              <p className="mt-1 text-[9.5px]" style={{ color: "var(--ed-fg-muted)", fontWeight: 500 }}>
-                {m.label}
-              </p>
-            )}
+            {/* Rotation lives on an inner div so framer's entrance
+                transform on the motion wrapper cannot clobber it. */}
+            <div style={{ transform: `rotate(${m.rot}deg)`, filter: "grayscale(0.55) opacity(0.92)" }}>
+              {m.el}
+              {m.label && (
+                <p className="mt-1 text-[9.5px]" style={{ color: "var(--ed-fg-muted)", fontWeight: 500 }}>
+                  {m.label}
+                </p>
+              )}
+            </div>
           </motion.div>
         ))}
       </div>
@@ -209,7 +209,7 @@ function OrderedPanel({ inView }: { inView: boolean }) {
       </p>
       <div
         className="relative rounded-2xl overflow-hidden flex flex-col justify-between px-5 pt-5 pb-5"
-        style={{ backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-rule)", height: "360px" }}
+        style={{ backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-rule)", minHeight: "360px" }}
       >
         <p className="sr-only">
           The same artifacts, upright and aligned, connected into a single
@@ -217,7 +217,7 @@ function OrderedPanel({ inView }: { inView: boolean }) {
         </p>
 
         {/* Aligned artifacts, scaled to fit two per row */}
-        <div className="grid grid-cols-2 gap-3 items-start" aria-hidden="true">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start" aria-hidden="true">
           {[<ConsumerChatTile key="a" ezee />, <SpreadsheetTile key="b" />, <PromptDocTile key="c" />, <FlowTile key="d" />].map((tile, i) => (
             <motion.div
               key={i}
