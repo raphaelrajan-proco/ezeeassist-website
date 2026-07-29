@@ -24,10 +24,10 @@ const POLICIES = [
 function HqMockup() {
   return (
     <GradientFrame>
-      <div className="rounded-xl overflow-hidden mx-auto max-w-[460px]" style={MOCK_SURFACE}>
+      <div className="rounded-xl overflow-hidden w-full" style={MOCK_SURFACE}>
         <div className="flex items-center justify-between px-3 py-2" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
           <span className="text-[13px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>Policies</span>
-          <span className="text-[11px] rounded-full px-1.5 py-0.5" style={{ backgroundColor: "rgba(22,163,74,0.12)", color: "#15803D", fontWeight: 700 }}>
+          <span className="text-[12px] rounded-full px-2 py-1" style={{ backgroundColor: "rgba(22,163,74,0.12)", color: "#15803D", fontWeight: 700 }}>
             Published to 42 locations
           </span>
         </div>
@@ -35,16 +35,16 @@ function HqMockup() {
           {POLICIES.map((p) => (
             <div
               key={p.label}
-              className="flex items-center justify-between gap-2 rounded-lg px-2.5 py-2"
+              className="flex items-center justify-between gap-3 rounded-lg px-3.5 py-3"
               style={{ backgroundColor: "rgba(10,10,10,0.025)", border: `1px solid ${MOCK_HAIRLINE}` }}
             >
-              <span className="text-[13px]" style={{ color: MOCK_TEXT, lineHeight: 1.3 }}>{p.label}</span>
+              <span className="text-[14px]" style={{ color: MOCK_TEXT, lineHeight: 1.3 }}>{p.label}</span>
               <span
                 aria-hidden="true"
-                className="flex items-center h-4 w-7 rounded-full flex-shrink-0 px-0.5"
+                className="flex items-center h-5 w-9 rounded-full flex-shrink-0 px-0.5"
                 style={{ backgroundColor: p.on ? "#00AEEF" : "rgba(10,10,10,0.14)", justifyContent: p.on ? "flex-end" : "flex-start" }}
               >
-                <span className="block h-3 w-3 rounded-full bg-white" />
+                <span className="block h-4 w-4 rounded-full bg-white" />
               </span>
               <span className="sr-only">{p.on ? "enabled" : "disabled"}</span>
             </div>
@@ -60,7 +60,7 @@ function HqMockup() {
 function FranchiseeMockup() {
   return (
     <GradientFrame>
-      <div className="rounded-xl overflow-hidden mx-auto max-w-[460px]" style={MOCK_SURFACE}>
+      <div className="rounded-xl overflow-hidden w-full" style={MOCK_SURFACE}>
         <div className="px-3 py-2" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
           <span className="text-[13px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>Store #214</span>
         </div>
@@ -70,7 +70,7 @@ function FranchiseeMockup() {
             className="rounded-lg px-2.5 py-2 mb-2.5"
             style={{ backgroundColor: "rgba(10,10,10,0.03)", border: `1px solid ${MOCK_HAIRLINE}` }}
           >
-            <span className="text-[13px]" style={{ color: MOCK_MUTED }}>Ask, run, or build something</span>
+            <span className="text-[14px]" style={{ color: MOCK_MUTED }}>Ask, run, or build something</span>
           </div>
 
           <p className="text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
@@ -83,14 +83,14 @@ function FranchiseeMockup() {
             ].map((t) => (
               <div
                 key={t.name}
-                className="rounded-lg px-2.5 py-2"
+                className="rounded-lg px-3.5 py-3"
                 style={{
                   backgroundColor: t.mine ? "rgba(0,174,239,0.07)" : "rgba(10,10,10,0.025)",
                   border: `1px solid ${t.mine ? "rgba(0,174,239,0.25)" : MOCK_HAIRLINE}`,
                 }}
               >
-                <p className="text-[13px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>{t.name}</p>
-                <p className="text-[11px] mt-0.5" style={{ color: t.mine ? "#0077A8" : MOCK_MUTED, fontWeight: 500 }}>
+                <p className="text-[14px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>{t.name}</p>
+                <p className="text-[12.5px] mt-1" style={{ color: t.mine ? "#0077A8" : MOCK_MUTED, fontWeight: t.mine ? 700 : 500 }}>
                   {t.by}
                 </p>
               </div>
