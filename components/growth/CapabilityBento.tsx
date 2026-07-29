@@ -201,10 +201,10 @@ function ComplianceVisual() {
 // TODO: Replace with real product screen recording
 
 const WF_STEPS = [
-  "Pull sales vs target from BI",
-  "Rank locations needing attention",
-  "Draft a prioritized action plan",
-  "Email each coach",
+  "Detect next week's bookings below target",
+  "Pull lapsed clients in the local area",
+  "Draft the reactivation offer from the approved playbook",
+  "Send to the owner for approval",
 ];
 
 function WorkflowVisual() {
@@ -226,7 +226,7 @@ function WorkflowVisual() {
     <GradientFrame>
       <div ref={ref} className="rounded-xl p-3.5 w-full" style={MOCK_SURFACE}>
         <p className="text-[12px] mb-2.5" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
-          Weekly KPI review · Every location
+          Off-peak recovery · Every location
         </p>
         <div className="space-y-1.5">
           {WF_STEPS.map((s, i) => (
@@ -256,49 +256,27 @@ function WorkflowVisual() {
 /* ── 04 Reporting ──────────────────────────────────────── */
 // TODO: Replace with real product screen recording
 
-const RANKED = [
-  { store: "Store #331", delta: "-14%", up: false, reason: "Staffing" },
-  { store: "Store #118", delta: "-6%",  up: false, reason: "Pricing" },
-  { store: "Store #052", delta: "+11%", up: true,  reason: "Reviews" },
-  { store: "Store #402", delta: "+4%",  up: true,  reason: "Inventory" },
+const GAPS = [
+  { store: "Store #331", note: "Bookings 12% under target", up: false, flagged: true },
+  { store: "Store #118", note: "Attach rate down 6%",       up: false, flagged: true },
+  { store: "Store #052", note: "Reviews up 11%",            up: true,  flagged: false },
+  { store: "Store #402", note: "Rebooking down 4%",         up: false, flagged: true },
 ];
 
 function ReportingVisual() {
-  const BARS = [42, 58, 51, 67, 74, 81];
   return (
     <GradientFrame>
       <div className="rounded-xl p-3.5 w-full" style={MOCK_SURFACE}>
         <p className="text-[12px] mb-3" style={{ color: MOCK_MUTED, fontWeight: 600, letterSpacing: "0.06em" }}>
-          West territory · This week
+          Gaps this week · West territory
         </p>
-        <div className="flex items-end gap-1 h-12 mb-3" aria-hidden="true">
-          {BARS.map((h, i) => (
-            <motion.span
-              key={i}
-              initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.1 + i * 0.06 }}
-              className="flex-1 rounded-t"
-              style={{
-                height: `${h}%`,
-                backgroundColor: i === BARS.length - 1 ? "#00AEEF" : "rgba(0,174,239,0.28)",
-                transformOrigin: "bottom",
-              }}
-            />
-          ))}
-        </div>
         <div className="space-y-1">
-          {RANKED.map((r, i) => (
-            <div key={r.store} className="flex items-center justify-between gap-2 py-1" style={{ borderTop: i === 0 ? "none" : `1px solid ${MOCK_HAIRLINE}` }}>
-              <span className="flex items-center gap-1.5 min-w-0">
-                <span className="text-[11.5px]" style={{ color: MOCK_MUTED, fontWeight: 700 }}>{i + 1}</span>
-                <span className="text-[13px] font-mono truncate" style={{ color: MOCK_TEXT }}>{r.store}</span>
-              </span>
-              <span className="flex items-center gap-1.5 flex-shrink-0">
-                <span className="text-[11.5px]" style={{ color: MOCK_MUTED }}>{r.reason}</span>
+          {GAPS.map((r, i) => (
+            <div key={r.store} className="flex items-center justify-between gap-2 py-1.5" style={{ borderTop: i === 0 ? "none" : `1px solid ${MOCK_HAIRLINE}` }}>
+              <span className="flex items-center gap-2 min-w-0">
+                <span className="text-[13px] font-mono flex-shrink-0" style={{ color: MOCK_TEXT }}>{r.store}</span>
                 <span
-                  className="flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[11px]"
+                  className="flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[11px] min-w-0"
                   style={{
                     backgroundColor: r.up ? "rgba(22,163,74,0.12)" : "rgba(220,38,38,0.10)",
                     color: r.up ? "#15803D" : "#B91C1C",
@@ -306,14 +284,27 @@ function ReportingVisual() {
                   }}
                 >
                   {r.up
-                    ? <TrendingUp aria-hidden="true" className="w-2.5 h-2.5" strokeWidth={2.5} />
-                    : <TrendingDown aria-hidden="true" className="w-2.5 h-2.5" strokeWidth={2.5} />}
-                  {r.delta}
+                    ? <TrendingUp aria-hidden="true" className="w-2.5 h-2.5 flex-shrink-0" strokeWidth={2.5} />
+                    : <TrendingDown aria-hidden="true" className="w-2.5 h-2.5 flex-shrink-0" strokeWidth={2.5} />}
+                  <span className="truncate">{r.note}</span>
                 </span>
+              </span>
+              <span
+                className="rounded-full px-2 py-0.5 text-[10.5px] flex-shrink-0"
+                style={
+                  r.flagged
+                    ? { backgroundColor: "rgba(10,10,10,0.05)", border: `1px solid ${MOCK_HAIRLINE}`, color: MOCK_MUTED, fontWeight: 600 }
+                    : { color: MOCK_MUTED, fontWeight: 500 }
+                }
+              >
+                {r.flagged ? "Flagged to coach" : "No action"}
               </span>
             </div>
           ))}
         </div>
+        <p className="text-[11.5px] mt-2.5" style={{ color: MOCK_MUTED }}>
+          Surfaced Monday, not at quarter close.
+        </p>
       </div>
     </GradientFrame>
   );
@@ -455,7 +446,7 @@ export default function CapabilityBento() {
           number="03"
           name="Workflows"
           statement="Recurring work runs on a schedule or a trigger."
-          outcome="Mechanical work runs itself."
+          outcome="The work that drives revenue runs itself."
         >
           <WorkflowVisual />
         </Tile>
@@ -465,7 +456,7 @@ export default function CapabilityBento() {
           number="04"
           name="Reporting"
           statement="Live performance across the network, without a request queue."
-          outcome="No more report requests."
+          outcome="Gaps surface before the quarter closes."
         >
           <ReportingVisual />
         </Tile>
