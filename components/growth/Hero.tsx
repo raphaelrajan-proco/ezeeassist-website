@@ -333,15 +333,23 @@ export default function GrowthHero() {
               className="ed-fg mb-8"
               style={{
                 fontFamily: "var(--font-editorial)",
-                fontSize: "clamp(2.125rem, 0.7rem + 2.3vw, 2.875rem)",
+                // Brief specifies clamp(2.5rem, 1.4rem + 3vw, 4rem) as a
+                // two-line render. The copy column is ~540px at 1440, which
+                // caps a single-line "Your playbooks, running at every
+                // location." at ~29px, so the spec is unachievable in this
+                // layout. Deliberate three-line lockup at the largest size
+                // the column holds instead; flagged in the brief summary.
+                fontSize: "clamp(2.25rem, 0.7rem + 2.4vw, 2.875rem)",
                 fontWeight: 500,
                 letterSpacing: "-0.03em",
                 lineHeight: 1.08,
-                textWrap: "balance",
               }}
             >
-              Turn your franchise playbooks into the unified{" "}
-              <Mark>AI Operating System</Mark> that drives franchisee growth.
+              Your playbooks,{" "}
+              <span className="block">running at every location.</span>
+              <span className="block">
+                <Mark>Growing every one.</Mark>
+              </span>
             </motion.h1>
 
             <motion.p
@@ -350,13 +358,17 @@ export default function GrowthHero() {
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
               className="mb-10"
               style={{
-                fontSize: "clamp(1.3125rem, 1rem + 0.9vw, 1.8125rem)",
-                fontWeight: 300,
-                lineHeight: 1.3,
+                fontSize: "clamp(1.0625rem, 0.95rem + 0.45vw, 1.3125rem)",
+                fontWeight: 400,
+                lineHeight: 1.55,
                 color: "var(--ed-fg-muted)",
               }}
             >
-              Scaling coaching and support, without adding headcount.
+              Coaching has always been rationed. The locations on fire get
+              it, the rest get a quarterly call. EZee reads your playbooks,
+              your performance data, and the systems you already run, so
+              every location gets the attention only your top priorities
+              used to get.
             </motion.p>
 
             <motion.div
