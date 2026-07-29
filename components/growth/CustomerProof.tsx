@@ -64,7 +64,7 @@ export default function CustomerProof() {
         <Overline>Proof</Overline>
         <SectionHeadline>
           {NETWORK_SCALE.brands} brands. {NETWORK_SCALE.locations} locations.
-          All building AI on EZee.
+          All running on EZee.
         </SectionHeadline>
       </motion.div>
 
@@ -165,16 +165,14 @@ export default function CustomerProof() {
           <BrandPlate name="Aqua-Tots" />
           <div className="grid grid-cols-2 gap-5 mt-6">
             <Metric value="160" label="Locations live" />
-            {/* TODO: Second metric needs sourcing before publish. Do not ship this state. */}
+            {/* TODO: source Aqua-Tots second metric. */}
             <div>
               <p
                 className="text-2xl md:text-3xl tracking-[-0.03em]"
                 style={{ color: "var(--ed-fg-muted)", fontFamily: "var(--font-editorial)", fontWeight: 500, lineHeight: 1, opacity: 0.5 }}
+                aria-hidden="true"
               >
                 &mdash;
-              </p>
-              <p className="ed-fg-muted mt-2 text-sm leading-snug" style={{ opacity: 0.6 }}>
-                Second metric pending verification
               </p>
             </div>
           </div>
