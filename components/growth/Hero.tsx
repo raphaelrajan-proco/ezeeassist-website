@@ -4,24 +4,33 @@ import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-mot
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
-import { MOCK_TEXT, MOCK_MUTED, MOCK_HAIRLINE } from "./shared";
 
 /**
- * Ada-style hero: generous two-column layout, fluid clamp typography,
- * and one single product surface playing a continuous looped moment.
+ * Ada-style hero. Left: fluid-type lockup. Right: one fixed-size
+ * conversation window playing a continuous looped moment, styled as
+ * Microsoft Teams. The window never changes size; content is
+ * bottom-anchored and earlier content slides up behind a fade mask.
  */
 // TODO: Replace with real product screen recording
 
-/* ── The looped conversation card ──────────────────────── */
-
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/** Loop timeline in ms, measured from cycle start. */
+/* ── Fixed geometry ────────────────────────────────────────
+   The card is hard-sized to its tallest (final) state, measured on
+   the rendered page at the 34rem card width, so the frame and the
+   whole hero row never reflow during the loop. */
+const CARD_BODY_H = 452; // px, measured: full final sequence height
+const CARD_HEADER_H = 49; // px
+const CARD_H = CARD_HEADER_H + CARD_BODY_H;
+const PANEL_PAD = 32; // p-8 on all breakpoints
+const PANEL_H = CARD_H + PANEL_PAD * 2;
+
+/* ── Loop timeline (unchanged) ─────────────────────────── */
 const T_VERIFY = 1000;
 const T_TYPING = 2600;
 const T_ANSWER = 3200;
 const T_ACTION = 4400;
-const T_RESET = 7900; // action + 3.5s hold
+const T_RESET = 7900;
 
 const VERIFY_ROWS = [
   "Schedule: 41 open slots, Thursday and Friday afternoons",
@@ -29,32 +38,34 @@ const VERIFY_ROWS = [
   "Playbook: Off-Peak Demand Guide, approved 4 Jun",
 ];
 
-/** Phases: 1 question · 2 verifying · 3 typing · 4 answer · 5 action */
 type Phase = 1 | 2 | 3 | 4 | 5;
 
-function Block({
-  show,
-  children,
-  duration = 0.5,
-}: {
-  show: boolean;
-  children: React.ReactNode;
-  duration?: number;
-}) {
+const TEAMS_PURPLE = "#6264A7";
+
+function SenderLabel({ children, accent = false }: { children: React.ReactNode; accent?: boolean }) {
   return (
-    <AnimatePresence initial={false}>
-      {show && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration, ease: EASE }}
-          style={{ overflow: "hidden" }}
-        >
-          {children}
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <p
+      className="text-[11px] mb-1"
+      style={{ color: accent ? "var(--ed-accent-text)" : "var(--ed-fg-muted)", fontWeight: 600 }}
+    >
+      {children}
+    </p>
+  );
+}
+
+/** In-place entrance: fade + small translate. Never animates height. */
+function Enter({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
+  const reduceMotion = useReducedMotion();
+  return (
+    <motion.div
+      layout="position"
+      initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5, ease: EASE, delay, layout: { duration: 0.45, ease: EASE } }}
+    >
+      {children}
+    </motion.div>
   );
 }
 
@@ -82,8 +93,6 @@ function ConversationCard() {
   const [phase, setPhase] = useState<Phase>(1);
   const [cycle, setCycle] = useState(0);
 
-  // Loop driver. Pauses off-screen (timers cleared, phase held) and
-  // resumes when the card returns.
   useEffect(() => {
     if (reduceMotion || !inView) return;
     let t: ReturnType<typeof setTimeout>;
@@ -95,13 +104,14 @@ function ConversationCard() {
     return () => clearTimeout(t);
   }, [phase, inView, reduceMotion]);
 
-  const show = (p: Phase) => (reduceMotion ? p !== 3 : phase >= p && (p !== 3 || phase === 3));
+  const teamsBlock = { borderRadius: "6px" };
 
   return (
     <div
       ref={ref}
       className="w-full rounded-2xl overflow-hidden"
       style={{
+        height: `${CARD_H}px`,
         backgroundColor: "var(--ed-card)",
         border: "1px solid var(--ed-rule)",
         boxShadow: "0 1px 2px rgba(0,0,0,0.04), 0 16px 40px rgba(0,0,0,0.08)",
@@ -109,149 +119,180 @@ function ConversationCard() {
     >
       {/* Header */}
       <div
-        className="flex items-center justify-between px-5 py-3"
-        style={{ borderBottom: `1px solid var(--ed-rule)` }}
+        className="flex items-center justify-between px-5"
+        style={{ height: `${CARD_HEADER_H}px`, borderBottom: `1px solid var(--ed-rule)` }}
       >
         <span className="text-[13px]" style={{ color: "var(--ed-fg)", fontWeight: 600 }}>
-          Store #214 · SMS
+          Store #214 · Microsoft Teams
         </span>
-        <span className="relative flex h-2 w-2" aria-hidden="true">
-          <span className="relative inline-flex h-2 w-2 rounded-full" style={{ backgroundColor: "#15803D" }} />
-        </span>
+        <span
+          className="inline-flex h-2 w-2 rounded-full"
+          style={{ backgroundColor: TEAMS_PURPLE }}
+          aria-hidden="true"
+        />
       </div>
 
-      {/* Cross-fade wrapper keyed by cycle so resets are soft */}
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.div
-          key={cycle}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: EASE }}
-          className="px-5 py-4"
-        >
-          {/* Beat 1: inbound, right-aligned, muted grey */}
-          <Block show={show(1)} duration={0.5}>
-            <div className="flex justify-end pb-3">
-              <div
-                className="max-w-[85%] rounded-2xl rounded-br-md px-4 py-2.5"
-                style={{ backgroundColor: "var(--ed-card-alt)" }}
-              >
-                <p className="text-sm" style={{ color: "var(--ed-fg)", lineHeight: 1.4 }}>
-                  Next week is only 62% booked. What can I do?
-                </p>
-              </div>
-            </div>
-          </Block>
-
-          {/* Beat 2: verification strip */}
-          <Block show={show(2)} duration={0.5}>
-            <div
-              className="rounded-xl px-4 py-3 mb-3"
-              style={{ backgroundColor: "var(--ed-bg-alt)", border: `1px solid var(--ed-rule)` }}
-            >
-              <p
-                className="text-[11px] uppercase tracking-[0.14em] mb-2"
-                style={{ color: "var(--ed-fg-muted)", fontWeight: 600 }}
-              >
-                Checking
-              </p>
-              <div className="space-y-1.5">
-                {VERIFY_ROWS.map((row, i) => (
-                  <motion.div
-                    key={row}
-                    initial={reduceMotion ? false : { opacity: 0, x: -6 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, ease: EASE, delay: reduceMotion ? 0 : i * 0.3 }}
-                    className="flex items-start gap-2"
+      {/* Fixed-height, bottom-anchored conversation window */}
+      <div
+        className="relative"
+        style={{
+          height: `${CARD_BODY_H}px`,
+          overflow: "hidden",
+          maskImage: "linear-gradient(to bottom, transparent 0px, black 36px)",
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0px, black 36px)",
+        }}
+      >
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={cycle}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: EASE }}
+            className="absolute inset-x-0 bottom-0 flex flex-col justify-end px-5 py-4"
+          >
+            {/* Beat 1: inbound, Teams block */}
+            {(reduceMotion || phase >= 1) && (
+              <Enter>
+                <div className="pb-3">
+                  <SenderLabel>Store #214 · Owner</SenderLabel>
+                  <div
+                    className="w-full px-4 py-2.5"
+                    style={{ ...teamsBlock, backgroundColor: "var(--ed-card-alt)" }}
                   >
-                    <span
-                      className="flex h-4 w-4 items-center justify-center rounded-full flex-shrink-0 mt-0.5"
-                      style={{ backgroundColor: "rgba(22,163,74,0.12)" }}
-                    >
-                      <Check aria-hidden="true" className="w-2.5 h-2.5" strokeWidth={3} style={{ color: "#15803D" }} />
-                    </span>
-                    <p className="text-[13px]" style={{ color: "var(--ed-fg)", lineHeight: 1.4 }}>
-                      {row}
+                    <p className="text-sm" style={{ color: "var(--ed-fg)", lineHeight: 1.4 }}>
+                      Next week is only 62% booked. What can I do?
                     </p>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </Block>
+                  </div>
+                </div>
+              </Enter>
+            )}
 
-          {/* Beat 3: typing indicator (loop only) */}
-          <Block show={!reduceMotion && phase === 3} duration={0.3}>
-            <div className="flex justify-start pb-2">
-              <div className="rounded-2xl rounded-bl-md" style={{ backgroundColor: "rgba(0,174,239,0.08)" }}>
-                <TypingDots />
-              </div>
-            </div>
-          </Block>
-
-          {/* Beat 4: the answer, left-aligned, pale blue */}
-          <Block show={reduceMotion ? true : phase >= 4} duration={0.55}>
-            <div className="flex flex-col items-start pb-3">
-              <div
-                className="max-w-[92%] rounded-2xl rounded-bl-md px-4 py-2.5"
-                style={{ backgroundColor: "rgba(0,174,239,0.08)" }}
-              >
-                <p className="text-sm" style={{ color: "var(--ed-fg)", lineHeight: 1.45 }}>
-                  Your gap is Thursday and Friday afternoon. The reactivation
-                  offer filled 38 slots last quarter at this lead time. A
-                  draft is ready for 340 lapsed clients in your area.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-1.5 mt-2">
-                {["OFF-PEAK-DEMAND-GUIDE.PDF", "LOCAL-CAMPAIGN-PLAYBOOK.PDF"].map((f) => (
-                  <span
-                    key={f}
-                    className="rounded-full px-2 py-0.5 text-[10px]"
-                    style={{ backgroundColor: "rgba(0,174,239,0.10)", color: "#0077A8", fontWeight: 600 }}
+            {/* Beat 2: verification */}
+            {(reduceMotion || phase >= 2) && (
+              <Enter>
+                <div
+                  className="px-4 py-3 mb-3"
+                  style={{ ...teamsBlock, backgroundColor: "var(--ed-bg-alt)", border: `1px solid var(--ed-rule)` }}
+                >
+                  <p
+                    className="text-[11px] uppercase tracking-[0.14em] mb-2"
+                    style={{ color: "var(--ed-fg-muted)", fontWeight: 600 }}
                   >
-                    {f}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </Block>
+                    Checking
+                  </p>
+                  <div className="space-y-1.5">
+                    {VERIFY_ROWS.map((row, i) => (
+                      <motion.div
+                        key={row}
+                        initial={reduceMotion ? false : { opacity: 0, x: -6 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.4, ease: EASE, delay: reduceMotion ? 0 : i * 0.3 }}
+                        className="flex items-start gap-2"
+                      >
+                        <span
+                          className="flex h-4 w-4 items-center justify-center rounded-full flex-shrink-0 mt-0.5"
+                          style={{ backgroundColor: "rgba(22,163,74,0.12)" }}
+                        >
+                          <Check aria-hidden="true" className="w-2.5 h-2.5" strokeWidth={3} style={{ color: "#15803D" }} />
+                        </span>
+                        <p className="text-[13px]" style={{ color: "var(--ed-fg)", lineHeight: 1.4 }}>
+                          {row}
+                        </p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </Enter>
+            )}
 
-          {/* Beat 5: the action card */}
-          <Block show={reduceMotion ? true : phase >= 5} duration={0.6}>
-            <div
-              className="rounded-xl px-4 py-3.5"
-              style={{ backgroundColor: "var(--ed-bg-alt)", border: `1px solid var(--ed-rule)` }}
-            >
-              <p
-                className="text-[11px] uppercase tracking-[0.14em] mb-1.5"
-                style={{ color: "var(--ed-fg-muted)", fontWeight: 600 }}
-              >
-                Suggested
-              </p>
-              <p className="text-sm mb-3" style={{ color: "var(--ed-fg)", fontWeight: 500, lineHeight: 1.35 }}>
-                Relaunch reactivation offer · 340 clients
-              </p>
-              <button
-                type="button"
-                className="w-full rounded-lg py-2 text-sm"
-                style={{ backgroundColor: "#00AEEF", color: "#FFFFFF", fontWeight: 600 }}
-              >
-                Approve
-              </button>
-              <p className="text-[12px] mt-2" style={{ color: "var(--ed-fg-muted)" }}>
-                Coach notified
-              </p>
-            </div>
-          </Block>
-        </motion.div>
-      </AnimatePresence>
+            {/* Beat 3: typing (loop only) */}
+            <AnimatePresence>
+              {!reduceMotion && phase === 3 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3, ease: EASE }}
+                  className="pb-2"
+                >
+                  <div className="inline-block" style={{ ...teamsBlock, backgroundColor: "rgba(0,174,239,0.08)" }}>
+                    <TypingDots />
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Beat 4: answer */}
+            {(reduceMotion || phase >= 4) && (
+              <Enter>
+                <div className="pb-3">
+                  <SenderLabel accent>EZee Assist</SenderLabel>
+                  <div
+                    className="w-full px-4 py-2.5"
+                    style={{ ...teamsBlock, backgroundColor: "rgba(0,174,239,0.08)" }}
+                  >
+                    <p className="text-sm" style={{ color: "var(--ed-fg)", lineHeight: 1.45 }}>
+                      Your gap is Thursday and Friday afternoon. The
+                      reactivation offer filled 38 slots last quarter at this
+                      lead time. A draft is ready for 340 lapsed clients in
+                      your area.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {["OFF-PEAK-DEMAND-GUIDE.PDF", "LOCAL-CAMPAIGN-PLAYBOOK.PDF"].map((f) => (
+                      <span
+                        key={f}
+                        className="rounded-full px-2 py-0.5 text-[10px]"
+                        style={{ backgroundColor: "rgba(0,174,239,0.10)", color: "#0077A8", fontWeight: 600 }}
+                      >
+                        {f}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </Enter>
+            )}
+
+            {/* Beat 5: action */}
+            {(reduceMotion || phase >= 5) && (
+              <Enter>
+                <div
+                  className="px-4 py-3.5"
+                  style={{ ...teamsBlock, backgroundColor: "var(--ed-bg-alt)", border: `1px solid var(--ed-rule)` }}
+                >
+                  <p
+                    className="text-[11px] uppercase tracking-[0.14em] mb-1.5"
+                    style={{ color: "var(--ed-fg-muted)", fontWeight: 600 }}
+                  >
+                    Suggested
+                  </p>
+                  <p className="text-sm mb-3" style={{ color: "var(--ed-fg)", fontWeight: 500, lineHeight: 1.35 }}>
+                    Relaunch reactivation offer · 340 clients
+                  </p>
+                  <button
+                    type="button"
+                    className="w-full rounded-lg py-2 text-sm"
+                    style={{ backgroundColor: "#00AEEF", color: "#FFFFFF", fontWeight: 600 }}
+                  >
+                    Approve
+                  </button>
+                  <p className="text-[12px] mt-2" style={{ color: "var(--ed-fg-muted)" }}>
+                    Coach notified
+                  </p>
+                </div>
+              </Enter>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
 
 /* ── Hero ──────────────────────────────────────────────── */
 
-/** Brand-blue semibold emphasis inside the H1. */
+/** Brand-blue semibold emphasis. Only "AI Operating System" gets it. */
 function Mark({ children }: { children: React.ReactNode }) {
   return <span style={{ fontWeight: 600, color: "var(--ed-accent)" }}>{children}</span>;
 }
@@ -269,7 +310,7 @@ export default function GrowthHero() {
         <div className="grid grid-cols-1 lg:grid-cols-[48fr_46fr] gap-16 xl:gap-24 items-center">
 
           {/* Left: copy */}
-          <div className="max-w-[36rem]">
+          <div className="max-w-[38rem]">
             <motion.p
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -292,17 +333,14 @@ export default function GrowthHero() {
               className="ed-fg mb-8"
               style={{
                 fontFamily: "var(--font-editorial)",
-                /* Max held to 3.4rem rather than the drafted 3.75rem: at
-                   60px inside the 36rem column this 17-word H1 wraps to 6
-                   lines, and the hard requirement is 5. */
-                fontSize: "clamp(2.25rem, 1.1rem + 2.6vw, 3.4rem)",
+                fontSize: "clamp(2.125rem, 0.7rem + 2.3vw, 2.875rem)",
                 fontWeight: 500,
                 letterSpacing: "-0.03em",
                 lineHeight: 1.08,
                 textWrap: "balance",
               }}
             >
-              Turn your <Mark>franchise playbooks</Mark> into the unified{" "}
+              Turn your franchise playbooks into the unified{" "}
               <Mark>AI Operating System</Mark> that drives franchisee growth.
             </motion.h1>
 
@@ -312,7 +350,7 @@ export default function GrowthHero() {
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
               className="mb-10"
               style={{
-                fontSize: "clamp(1.5rem, 1.1rem + 1.1vw, 2.125rem)",
+                fontSize: "clamp(1.3125rem, 1rem + 0.9vw, 1.8125rem)",
                 fontWeight: 300,
                 lineHeight: 1.3,
                 color: "var(--ed-fg-muted)",
@@ -336,21 +374,25 @@ export default function GrowthHero() {
             </motion.div>
           </div>
 
-          {/* Right: single conversation surface on a gradient panel */}
+          {/* Right: fixed-size conversation window on a fixed-size panel */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: EASE, delay: 0.35 }}
           >
             <p className="sr-only">
-              A live conversation: an operator reports that next week is only
-              62 percent booked. The system checks the schedule, local
-              campaigns, and the approved playbook, answers with the gap and
-              a ready draft for 340 lapsed clients with cited sources, then
-              suggests relaunching the reactivation offer, gated behind a
-              human Approve button, with the coach notified.
+              A live conversation in Microsoft Teams: a location owner
+              reports that next week is only 62 percent booked. The system
+              checks the schedule, local campaigns, and the approved
+              playbook, answers with the gap and a ready draft for 340
+              lapsed clients with cited sources, then suggests relaunching
+              the reactivation offer, gated behind a human Approve button,
+              with the coach notified.
             </p>
-            <div className="ed-gradient-frame rounded-3xl p-8 md:p-12 flex justify-center">
+            <div
+              className="ed-gradient-frame rounded-3xl p-8 flex justify-center items-center"
+              style={{ height: `${PANEL_H}px` }}
+            >
               <div className="w-full max-w-[34rem]">
                 <ConversationCard />
               </div>
