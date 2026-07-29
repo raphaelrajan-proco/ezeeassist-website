@@ -96,7 +96,8 @@
       "Bash(git commit -q -m 'Step 5: wrap fixes from the visual pass *)",
       "Bash(git commit -q -m 'Backhalf step 1: bento fidelity *)",
       "Bash(git commit -q -m 'Backhalf step 2: two-audiences mockups at full width, legible chrome *)",
-      "Bash(git commit -q -m 'Backhalf step 3: control plane density, activity-log ticker *)"
+      "Bash(git commit -q -m 'Backhalf step 3: control plane density, activity-log ticker *)",
+      "Bash(git commit -q -m 'Backhalf step 4: handoff flow rebuilt on a shared percent grid *)"
     ]
   }
 }
