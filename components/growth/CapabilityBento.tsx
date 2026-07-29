@@ -436,7 +436,7 @@ export default function CapabilityBento() {
           number="02"
           name="Compliance at scale"
           statement="Every location checked continuously against the standard you set."
-          outcome="I stop chasing."
+          outcome="I stop chasing, and the standard holds."
         >
           <ComplianceVisual />
         </Tile>
