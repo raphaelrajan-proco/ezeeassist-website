@@ -305,7 +305,9 @@ export default function TheShift() {
           visible to you. Your brand is on every output, and there is no
           admin panel. Every location, every coach, and every function
           solves the same problem separately, and the sprawl compounds with
-          each one.
+          each one. Every one of those workarounds is time a coach spends
+          building instead of coaching, and none of it accumulates into
+          anything the network can reuse.
         </p>
       </motion.div>
 
