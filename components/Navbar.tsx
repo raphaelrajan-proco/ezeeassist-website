@@ -30,7 +30,7 @@ const platformGroups: NavGroup[] = [
   {
     heading: "Control",
     items: [
-      { label: "Control Plane",  href: "/#two-audiences",        desc: "Set who sees what and what runs without a human." },
+      { label: "Control Plane",  href: "/#control-plane",        desc: "Set who sees what and what runs without a human." },
       { label: "Integrations",   href: "/solution/integrations", desc: "250+ native connections. No migration." },
       { label: "Security",       href: "/security",              desc: "Dedicated infrastructure, encrypted end to end." },
     ],
