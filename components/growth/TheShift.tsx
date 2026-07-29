@@ -101,7 +101,7 @@ const ORDERED_LABELS = [
 function OrderedPanel({ inView }: { inView: boolean }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-[0.2em] mb-4" style={{ color: "#00AEEF", fontWeight: 600 }}>
+      <p className="text-xs uppercase tracking-[0.2em] mb-4" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
         With a system
       </p>
       <div

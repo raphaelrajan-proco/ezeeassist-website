@@ -11,15 +11,27 @@ import { Overline, SectionHeadline, SectionShell } from "./shared";
  */
 // TODO: Replace with real product screen recording
 
-type Category = { key: string; label: string; color: string; highlight?: boolean };
+type Category = {
+  key: string;
+  label: string;
+  color: string;
+  /** Text colour for an in-bar label sitting on `color`. */
+  onColor: string;
+  highlight?: boolean;
+};
 
+/** Stepped far enough apart that all four greys read as distinct
+ *  categories in both the bars and the legend dots. */
 const CATEGORIES: Category[] = [
-  { key: "questions",  label: "Repeat questions",     color: "#A1A1AA" },
-  { key: "compliance", label: "Compliance follow-up", color: "#BFBFC6" },
-  { key: "prep",       label: "Call prep",            color: "#D4D4D8" },
-  { key: "reporting",  label: "Reporting",            color: "#E4E4E7" },
-  { key: "coaching",   label: "Coaching",             color: "#00AEEF", highlight: true },
+  { key: "questions",  label: "Repeat questions",     color: "#3F3F46", onColor: "#FFFFFF" },
+  { key: "compliance", label: "Compliance follow-up", color: "#71717A", onColor: "#FFFFFF" },
+  { key: "prep",       label: "Call prep",            color: "#A1A1AA", onColor: "#18181B" },
+  { key: "reporting",  label: "Reporting",            color: "#D4D4D8", onColor: "#18181B" },
+  { key: "coaching",   label: "Coaching",             color: "#00AEEF", onColor: "#FFFFFF", highlight: true },
 ];
+
+/** Segments at or above this width carry a name and percent in-bar. */
+const IN_BAR_LABEL_MIN_PCT = 15;
 
 const BARS: { label: string; values: Record<string, number> }[] = [
   {
@@ -52,7 +64,7 @@ function Bar({
         >
           {bar.label}
         </p>
-        <p className="text-sm" style={{ color: "#00AEEF", fontWeight: 600 }}>
+        <p className="text-sm" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
           {bar.values.coaching}% coaching
         </p>
       </div>
@@ -79,15 +91,20 @@ function Bar({
                 backgroundColor: cat.color,
               }}
             >
-              {pct >= 15 && (
+              {pct >= IN_BAR_LABEL_MIN_PCT && (
                 <span
-                  className="text-[11px] px-1 truncate"
-                  style={{
-                    color: cat.highlight ? "#FFFFFF" : "#52525B",
-                    fontWeight: 600,
-                  }}
+                  className="flex items-baseline gap-1.5 px-2 min-w-0"
+                  style={{ color: cat.onColor }}
                 >
-                  {pct}%
+                  <span
+                    className="text-[11px] truncate hidden sm:inline"
+                    style={{ fontWeight: 500 }}
+                  >
+                    {cat.label}
+                  </span>
+                  <span className="text-[11px] flex-shrink-0" style={{ fontWeight: 700 }}>
+                    {pct}%
+                  </span>
                 </span>
               )}
             </motion.div>
@@ -142,7 +159,7 @@ export default function CoachsWeek() {
               <span
                 className="text-xs"
                 style={{
-                  color: cat.highlight ? "#00AEEF" : "var(--ed-fg-muted)",
+                  color: cat.highlight ? "var(--ed-accent-text)" : "var(--ed-fg-muted)",
                   fontWeight: cat.highlight ? 600 : 500,
                 }}
               >

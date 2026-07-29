@@ -32,7 +32,7 @@ function BeatShell({
         className="ed-fg-muted text-[11px] mb-2.5"
         style={{ fontWeight: 500, letterSpacing: "0.04em" }}
       >
-        <span style={{ color: "#00AEEF", fontWeight: 600 }}>
+        <span style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
           {String(index + 1).padStart(2, "0")}
         </span>{" "}
         {BEAT_LABELS[index]}
@@ -193,7 +193,7 @@ export default function GrowthHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
             className="text-xs uppercase tracking-[0.2em] mb-6"
-            style={{ color: "#00AEEF", fontWeight: 500 }}
+            style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}
           >
             The execution layer for franchise networks
           </motion.p>

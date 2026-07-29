@@ -39,7 +39,7 @@ function Tile({
       className={`rounded-3xl p-7 md:p-8 flex flex-col ${span}`}
       style={{ backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-rule)" }}
     >
-      <p className="text-xs uppercase tracking-[0.2em] mb-3" style={{ color: "#00AEEF", fontWeight: 500 }}>
+      <p className="text-xs uppercase tracking-[0.2em] mb-3" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
         {number} · {name}
       </p>
       <h3

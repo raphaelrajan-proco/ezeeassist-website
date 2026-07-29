@@ -37,6 +37,9 @@
   --ed-card:         #FFFFFF;
   --ed-card-alt:     #F4F4F5;
   --ed-accent:       #00AEEF;
+  /* Accent for small text on light surfaces. #00AEEF measures 2.53:1 on
+     white, which fails AA at overline sizes; this passes at 4.99:1. */
+  --ed-accent-text:  #0077A8;
   --ed-accent-muted: #1B5A6E;
   --ed-rule:         #E5E7EB;
 }
@@ -51,6 +54,8 @@
   --ed-card:         #141414;
   --ed-card-alt:     #F5EDE0;
   --ed-accent:       #00AEEF;
+  /* On dark surfaces #00AEEF already clears AA, so accent text is unchanged. */
+  --ed-accent-text:  #00AEEF;
   --ed-accent-muted: #1B5A6E;
   --ed-rule:         rgba(245,237,224,0.14);
 }

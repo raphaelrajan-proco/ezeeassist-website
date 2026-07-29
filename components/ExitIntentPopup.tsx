@@ -9,6 +9,13 @@ import Button from "@/components/ui/Button";
 
 const DISMISSED_KEY = "exit-intent-dismissed";
 const SUBMITTED_KEY = "gated-content-submitted";
+/** Session-scoped so the modal can fire at most once per visit. */
+const SHOWN_THIS_SESSION_KEY = "exit-intent-shown-session";
+
+/** No modal inside the first 30 seconds of the visit. */
+const MIN_DWELL_MS = 30_000;
+/** No modal until the visitor has scrolled past the hero. */
+const MIN_SCROLL_PX = 700;
 
 const inputClass =
   "w-full rounded-lg border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#1A1A1A] px-4 py-2.5 text-sm text-[#0A0A0A] dark:text-[#F0F0F0] placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:border-[#00AEEF] focus:outline-none focus:ring-2 focus:ring-[#00AEEF]/20 transition-all";
@@ -18,21 +25,50 @@ export default function ExitIntentPopup() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    // Don't show if already dismissed or submitted gated form
-    if (localStorage.getItem(DISMISSED_KEY) || localStorage.getItem(SUBMITTED_KEY)) return;
-
-    // Desktop: exit intent on mouse moving toward top of window
-    let triggered = false;
-    function handleMouseLeave(e: MouseEvent) {
-      if (triggered) return;
-      if (e.clientY <= 8) { triggered = true; setShow(true); }
+    // Don't show if already dismissed, already submitted, or already
+    // shown once in this session.
+    if (
+      localStorage.getItem(DISMISSED_KEY) ||
+      localStorage.getItem(SUBMITTED_KEY) ||
+      sessionStorage.getItem(SHOWN_THIS_SESSION_KEY)
+    ) {
+      return;
     }
 
-    // Mobile: 45s inactivity timer
+    const mountedAt = Date.now();
+    let scrolledPastHero = window.scrollY >= MIN_SCROLL_PX;
+    let triggered = false;
+
+    function trackScroll() {
+      if (window.scrollY >= MIN_SCROLL_PX) scrolledPastHero = true;
+    }
+    window.addEventListener("scroll", trackScroll, { passive: true });
+
+    /** Both gates must pass: dwell time and scroll depth. */
+    function mayShow() {
+      return (
+        !triggered &&
+        Date.now() - mountedAt >= MIN_DWELL_MS &&
+        scrolledPastHero
+      );
+    }
+
+    function fire() {
+      triggered = true;
+      sessionStorage.setItem(SHOWN_THIS_SESSION_KEY, "true");
+      setShow(true);
+    }
+
+    // Desktop: exit intent on mouse moving toward top of window
+    function handleMouseLeave(e: MouseEvent) {
+      if (e.clientY <= 8 && mayShow()) fire();
+    }
+
+    // Mobile: inactivity timer, still subject to both gates
     let inactivityTimer: ReturnType<typeof setTimeout>;
     function resetTimer() {
       clearTimeout(inactivityTimer);
-      inactivityTimer = setTimeout(() => { if (!triggered) { triggered = true; setShow(true); } }, 45_000);
+      inactivityTimer = setTimeout(() => { if (mayShow()) fire(); }, 45_000);
     }
 
     const isMobile = window.matchMedia("(max-width: 768px)").matches;
@@ -46,6 +82,7 @@ export default function ExitIntentPopup() {
 
     return () => {
       document.removeEventListener("mouseleave", handleMouseLeave);
+      window.removeEventListener("scroll", trackScroll);
       window.removeEventListener("scroll", resetTimer);
       window.removeEventListener("touchstart", resetTimer);
       clearTimeout(inactivityTimer);

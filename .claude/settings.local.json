@@ -85,7 +85,9 @@
       "Bash(curl -s -o /dev/null -w \"trip detail: %{http_code}\\\\n\" \"http://localhost:3000/trips/8da8d0ae-f268-48f7-b0e3-22de69c1c214\")",
       "Bash(curl -s -o /dev/null -w \"edit: %{http_code}\\\\n\" \"http://localhost:3000/trips/8da8d0ae-f268-48f7-b0e3-22de69c1c214/edit\")",
       "Bash(git commit -q -m 'Growth rebuild 1/6: Ada aesthetic tokens, nav restructure, announcement bar *)",
-      "Bash(git commit -q -m 'Growth rebuild 2-6/6: hero, trust strip, coach'\\\\''s week, the shift, bento, two audiences *)"
+      "Bash(git commit -q -m 'Growth rebuild 2-6/6: hero, trust strip, coach'\\\\''s week, the shift, bento, two audiences *)",
+      "Bash(pwd; echo *)",
+      "Bash(git commit -q -m 'Hero H1 override: operating system headline *)"
     ]
   }
 }

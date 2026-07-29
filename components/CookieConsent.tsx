@@ -35,33 +35,36 @@ export default function CookieConsent() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="fixed bottom-6 left-0 right-0 z-50 flex justify-center px-4"
+          /* Pinned bottom-left and sized to its content so it never spans
+             the viewport or covers centred section content. */
+          className="fixed bottom-4 left-4 right-4 sm:right-auto z-50 sm:max-w-[420px]"
         >
-          <div className="w-full max-w-4xl rounded-2xl border border-[#E5E7EB] dark:border-white/[0.08] bg-white/95 dark:bg-[#161616]/95 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)] px-6 py-4">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm leading-6 text-gray-600 dark:text-gray-400">
-                We use cookies to improve your experience and analyze site traffic.{" "}
-                <Link
-                  href="/privacy"
-                  className="font-semibold text-[#00AEEF] underline-offset-4 hover:underline"
-                >
-                  Privacy Policy
-                </Link>
-              </p>
-              <div className="flex flex-col gap-2 sm:flex-row sm:flex-shrink-0">
-                <button
-                  onClick={handleDecline}
-                  className="rounded-lg border border-[#E5E7EB] dark:border-white/[0.08] px-4 py-2 text-sm font-semibold text-gray-500 dark:text-gray-400 transition-colors hover:border-gray-400 hover:text-gray-700 dark:hover:border-white/20 dark:hover:text-gray-200 sm:w-auto w-full"
-                >
-                  Decline
-                </button>
-                <button
-                  onClick={handleAccept}
-                  className="rounded-lg bg-[#00AEEF] px-5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 sm:w-auto w-full"
-                >
-                  Accept
-                </button>
-              </div>
+          <div className="flex items-center gap-3 rounded-full border border-[#E5E7EB] dark:border-white/[0.08] bg-white/95 dark:bg-[#161616]/95 backdrop-blur-md px-4 py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+            <p className="text-[12.5px] leading-tight text-gray-600 dark:text-gray-400 min-w-0 flex-1">
+              We use cookies.{" "}
+              <Link
+                href="/privacy"
+                className="text-[#0077A8] dark:text-[#00AEEF] underline-offset-2 hover:underline"
+                style={{ fontWeight: 600 }}
+              >
+                Privacy
+              </Link>
+            </p>
+            <div className="flex items-center gap-1.5 flex-shrink-0">
+              <button
+                onClick={handleDecline}
+                className="rounded-full px-2.5 py-1 text-[12px] text-gray-500 dark:text-gray-400 transition-colors hover:text-gray-800 dark:hover:text-gray-200"
+                style={{ fontWeight: 600 }}
+              >
+                Decline
+              </button>
+              <button
+                onClick={handleAccept}
+                className="rounded-full bg-[#00AEEF] px-3.5 py-1 text-[12px] text-white transition-opacity hover:opacity-90"
+                style={{ fontWeight: 600 }}
+              >
+                Accept
+              </button>
             </div>
           </div>
         </motion.div>
