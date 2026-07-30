@@ -364,11 +364,9 @@ export default function GrowthHero() {
                 color: "var(--ed-fg-muted)",
               }}
             >
-              Coaching has always been rationed. The locations on fire get
-              it, the rest get a quarterly call. EZee reads your playbooks,
-              your performance data, and the systems you already run, so
-              every location gets the attention only your top priorities
-              used to get.
+              Coaching has always been rationed. EZee puts your playbooks
+              and performance data to work at every location, so all of
+              them get the attention only a few used to get.
             </motion.p>
 
             <motion.div
