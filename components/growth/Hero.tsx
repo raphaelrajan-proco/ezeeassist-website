@@ -339,16 +339,16 @@ export default function GrowthHero() {
                 // location." at ~29px, so the spec is unachievable in this
                 // layout. Deliberate three-line lockup at the largest size
                 // the column holds instead; flagged in the brief summary.
-                fontSize: "clamp(2.25rem, 0.7rem + 2.4vw, 2.875rem)",
+                fontSize: "clamp(2.25rem, 0.4rem + 2.5vw, 2.375rem)",
                 fontWeight: 500,
                 letterSpacing: "-0.03em",
                 lineHeight: 1.08,
               }}
             >
-              Your playbooks,{" "}
+              Your playbooks and data,{" "}
               <span className="block">running at every location.</span>
               <span className="block">
-                <Mark>Growing every one.</Mark>
+                <Mark>Growing revenue at every one.</Mark>
               </span>
             </motion.h1>
 
