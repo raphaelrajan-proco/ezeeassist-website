@@ -25,12 +25,12 @@ const CARD_H = CARD_HEADER_H + CARD_BODY_H;
 const PANEL_PAD = 32; // p-8 on all breakpoints
 const PANEL_H = CARD_H + PANEL_PAD * 2;
 
-/* ── Loop timeline (unchanged) ─────────────────────────── */
-const T_VERIFY = 1000;
-const T_TYPING = 2600;
-const T_ANSWER = 3200;
-const T_ACTION = 4400;
-const T_RESET = 7900;
+/* ── Loop timeline, slowed ~1.5x per review thread MWr-_7COduND ── */
+const T_VERIFY = 1600;
+const T_TYPING = 4000;
+const T_ANSWER = 4900;
+const T_ACTION = 6600;
+const T_RESET = 12100;
 
 const VERIFY_ROWS = [
   "Schedule: 41 open slots, Thursday and Friday afternoons",
@@ -187,7 +187,7 @@ function ConversationCard() {
                         key={row}
                         initial={reduceMotion ? false : { opacity: 0, x: -6 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.4, ease: EASE, delay: reduceMotion ? 0 : i * 0.3 }}
+                        transition={{ duration: 0.4, ease: EASE, delay: reduceMotion ? 0 : i * 0.45 }}
                         className="flex items-start gap-2"
                       >
                         <span
