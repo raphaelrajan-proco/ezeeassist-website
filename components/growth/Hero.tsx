@@ -19,10 +19,10 @@ const EASE = [0.22, 1, 0.36, 1] as const;
    The card is hard-sized to its tallest (final) state, measured on
    the rendered page at the 34rem card width, so the frame and the
    whole hero row never reflow during the loop. */
-const CARD_BODY_H = 452; // px, measured: full final sequence height
+const CARD_BODY_H = 424; // px; trimmed for the 1200x790 fold, mask absorbs the difference
 const CARD_HEADER_H = 49; // px
 const CARD_H = CARD_HEADER_H + CARD_BODY_H;
-const PANEL_PAD = 32; // p-8 on all breakpoints
+const PANEL_PAD = 24; // p-6 on all breakpoints, fold budget
 const PANEL_H = CARD_H + PANEL_PAD * 2;
 
 /* ── Loop timeline, slowed ~1.5x per review thread MWr-_7COduND ── */
@@ -306,7 +306,7 @@ export default function GrowthHero() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 lg:py-28">
+      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-[48fr_46fr] gap-16 xl:gap-24 items-center">
 
           {/* Left: copy */}
@@ -400,7 +400,7 @@ export default function GrowthHero() {
               with the coach notified.
             </p>
             <div
-              className="ed-gradient-frame rounded-3xl p-8 flex justify-center items-center"
+              className="ed-gradient-frame rounded-3xl p-6 flex justify-center items-center"
               style={{ height: `${PANEL_H}px` }}
             >
               <div className="w-full max-w-[34rem]">
