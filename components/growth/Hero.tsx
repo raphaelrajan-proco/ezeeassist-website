@@ -378,8 +378,8 @@ export default function GrowthHero() {
               <Link href="/contact" className="ed-btn ed-btn-blue" style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
                 Book a Demo
               </Link>
-              <Link href="#capabilities" className="ed-btn ed-btn-secondary" style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
-                See it work
+              <Link href="#the-week" className="ed-btn ed-btn-secondary" style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
+                See where the week goes
               </Link>
             </motion.div>
           </div>
