@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Button from "@/components/ui/Button";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -30,7 +31,7 @@ const platformGroups: NavGroup[] = [
   {
     heading: "Control",
     items: [
-      { label: "Control Plane",  href: "/#control-plane",        desc: "Set who sees what and what runs without a human." },
+      { label: "Control Plane",  href: "/#trust",                desc: "Set who sees what and what runs without a human." },
       { label: "Integrations",   href: "/solution/integrations", desc: "250+ native connections. No migration." },
       { label: "Security",       href: "/security",              desc: "Dedicated infrastructure, encrypted end to end." },
     ],
@@ -57,8 +58,8 @@ const solutionsGroups: NavGroup[] = [
 ];
 
 const resourcesItems: NavItem[] = [
-  { label: "Blog",           href: "/blog",           desc: "Franchise operations insights and product news." },
   { label: "Case Studies",   href: "/case-studies",   desc: "What brands changed, and what it returned." },
+  { label: "Blog",           href: "/blog",           desc: "Franchise operations insights and product news." },
   { label: "ROI Calculator", href: "/roi-calculator", desc: "See what your network could recover." },
   { label: "Comparisons",    href: "/why-ezeeassist", desc: "How purpose-built AI differs from a general assistant." },
   { label: "Changelog",      href: "/changelog",      desc: "New capabilities, fixes, and product updates." },
@@ -69,6 +70,10 @@ const companyItems: NavItem[] = [
   { label: "Careers", href: "/careers", desc: "Open roles across engineering and go to market." },
   { label: "Contact", href: "/contact", desc: "Talk to our team." },
 ];
+
+/* Both marks share viewBox 0 0 583.2 151.2. */
+const LOGO_H = 34;
+const LOGO_W = Math.round((583.2 / 151.2) * LOGO_H);
 
 type DropdownKey = "platform" | "solutions" | "resources" | "company" | null;
 
@@ -200,14 +205,28 @@ export default function Navbar() {
           isEditorial ? "px-6 md:px-12 lg:px-16" : "px-6 lg:px-8"
         }`}
       >
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-          <span
-            className={`tracking-tight text-lg ${isEditorial ? "text-[var(--ed-fg)]" : "text-[#0A0A0A] dark:text-[#F0F0F0]"}`}
-            style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, letterSpacing: "-0.02em" }}
-          >
-            EZee <span className="text-[#00AEEF]">Assist</span>
-          </span>
+        {/* Logo. Both marks ship in the markup and the theme swap is
+            pure CSS, so there is no flash on load or on toggle. */}
+        <Link href="/" className="flex items-center flex-shrink-0" aria-label="EZee Assist home">
+          <Image
+            src="/logo-black.svg"
+            alt="EZee Assist"
+            width={LOGO_W}
+            height={LOGO_H}
+            priority
+            unoptimized
+            className="block dark:hidden"
+          />
+          <Image
+            src="/logo-white.svg"
+            alt=""
+            aria-hidden="true"
+            width={LOGO_W}
+            height={LOGO_H}
+            priority
+            unoptimized
+            className="hidden dark:block"
+          />
         </Link>
 
         {/* Desktop nav */}
@@ -235,12 +254,7 @@ export default function Navbar() {
             </li>
           ))}
 
-          {/* Customers */}
-          <li>
-            <Link href="/case-studies" className={`block rounded-lg px-3 py-2 text-sm ${triggerIdle}`}>
-              Customers
-            </Link>
-          </li>
+          {/* Customers folded into Resources as Case Studies. */}
 
           {/* Resources */}
           <li
@@ -285,7 +299,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
           <Link href="/contact">
-            <Button size="sm">Book a Demo</Button>
+            <Button size="sm">Speak to an expert</Button>
           </Link>
         </div>
 
@@ -341,17 +355,7 @@ export default function Navbar() {
               </li>
             ))}
 
-            {/* Customers */}
-            <li>
-              <Link
-                href="/case-studies"
-                className="block rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300"
-                style={{ fontWeight: 500 }}
-                onClick={() => setMobileOpen(false)}
-              >
-                Customers
-              </Link>
-            </li>
+            {/* Customers folded into Resources as Case Studies. */}
 
             {/* Resources + Company accordions */}
             {[
@@ -388,7 +392,7 @@ export default function Navbar() {
           <div className="mt-4 flex items-center gap-3">
             <ThemeToggle />
             <Link href="/contact" className="flex-1" onClick={() => setMobileOpen(false)}>
-              <Button size="sm" className="w-full">Book a Demo</Button>
+              <Button size="sm" className="w-full">Speak to an expert</Button>
             </Link>
           </div>
         </div>

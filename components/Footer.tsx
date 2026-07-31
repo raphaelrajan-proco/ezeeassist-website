@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Globe, Share2, Link2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 
@@ -8,12 +9,12 @@ const footerLinks = {
   Platform: [
     { label: "Platform Overview", href: "/solution" },
     { label: "Answers",           href: "/#answers" },
-    { label: "Actions",           href: "/#actions" },
-    { label: "Agents",            href: "/#agents" },
-    { label: "Apps",              href: "/#apps" },
+    { label: "Workflows",         href: "/#workflows" },
+    { label: "Reporting",         href: "/#reporting" },
+    { label: "AI Apps",           href: "/#ai-apps" },
     { label: "Ticketing",         href: "/solution/ticketing" },
-    { label: "Integrations",      href: "/#integrations" },
-    { label: "Governance",        href: "/#governance" },
+    { label: "Integrations",      href: "/#connections" },
+    { label: "Governance",        href: "/#trust" },
   ],
   Industries: [
     { label: "Franchising",         href: "/industries/franchising" },
@@ -50,8 +51,8 @@ const editorialFooterColumns: { heading: string; links: { label: string; href: s
       { label: "Workflows",      href: "/solution/agents" },
       { label: "Reporting",      href: "/#capabilities" },
       { label: "AI Apps",        href: "/#capabilities" },
-      { label: "Control Plane",  href: "/#control-plane" },
-      { label: "Integrations",   href: "/#integrations" },
+      { label: "Control Plane",  href: "/#trust" },
+      { label: "Integrations",   href: "/#connections" },
     ],
   },
   {
@@ -100,6 +101,16 @@ const editorialFooterColumns: { heading: string; links: { label: string; href: s
     ],
   },
 ];
+
+/**
+ * Launch gate. The AEO block is built and kept, but stays off until
+ * after publish. Flip to true to restore it.
+ */
+const SHOW_AEO_BLOCK = false;
+
+/* Both marks share viewBox 0 0 583.2 151.2. */
+const FOOTER_LOGO_H = 64;
+const FOOTER_LOGO_W = Math.round((583.2 / 151.2) * FOOTER_LOGO_H);
 
 /** Pre-filled queries so answer engines can summarize the product. */
 const AEO_QUERY =
@@ -220,19 +231,25 @@ function FooterEditorial() {
     <footer className="w-full ed-bg" style={{ borderTop: "1px solid var(--ed-rule)" }}>
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-24 md:pt-32 pb-12">
 
-        {/* Wordmark + tagline */}
-        <Link href="/" className="inline-block">
-          <span
-            className="ed-fg text-6xl md:text-7xl lg:text-8xl"
-            style={{
-              fontFamily: "var(--font-editorial)",
-              fontWeight: 500,
-              letterSpacing: "-0.05em",
-              lineHeight: 0.9,
-            }}
-          >
-            EZee <span className="ed-accent">Assist.</span>
-          </span>
+        {/* Wordmark + tagline. Both marks ship; the swap is pure CSS. */}
+        <Link href="/" className="inline-block" aria-label="EZee Assist home">
+          <Image
+            src="/logo-black.svg"
+            alt="EZee Assist"
+            width={FOOTER_LOGO_W}
+            height={FOOTER_LOGO_H}
+            unoptimized
+            className="block dark:hidden h-14 md:h-16 w-auto"
+          />
+          <Image
+            src="/logo-white.svg"
+            alt=""
+            aria-hidden="true"
+            width={FOOTER_LOGO_W}
+            height={FOOTER_LOGO_H}
+            unoptimized
+            className="hidden dark:block h-14 md:h-16 w-auto"
+          />
         </Link>
 
         <p
@@ -273,7 +290,8 @@ function FooterEditorial() {
           ))}
         </div>
 
-        {/* AEO block: hand the page to answer engines */}
+        {/* AEO block: hand the page to answer engines. Behind SHOW_AEO_BLOCK. */}
+        {SHOW_AEO_BLOCK && (
         <div
           className="mt-20 md:mt-24 pt-12"
           style={{ borderTop: "1px solid var(--ed-rule)" }}
@@ -307,6 +325,7 @@ function FooterEditorial() {
             ))}
           </div>
         </div>
+        )}
 
         {/* Contact + social */}
         <div
