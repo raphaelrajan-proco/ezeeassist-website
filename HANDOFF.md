@@ -358,19 +358,26 @@ fit is usually 1024 rather than the smallest screen.
   match. It is still an `h2`.
 - The `4/5` figure restates the Today bar (20% coaching leaves four days in
   five). It is not a new claim, and it moves if the chart data moves.
-- **The 4/5 lockup is built to a supplied design spec**, so treat its numbers
-  as fixed: numeral 128px/700/-0.04em, "days" at exactly half/600/-0.03em,
-  both at line-height 0.9 and baseline-aligned, sentence Inter 400 42px/1.15
-  on one line, gaps 18px and 20px, colours `#0B1220`/`#5C6675` light and
-  `#EEF2F8`/`#93A0B5` dark. One clamp (`--stat-numeral` in globals.css)
-  drives all three runs, since every size is a fixed ratio of the numeral.
+- **The 4/5 lockup follows a supplied design spec**, so treat its ratios and
+  colours as fixed: "days" at exactly half the numeral, both at line-height
+  0.9 and baseline-aligned, weights 700/600/400, tracking -0.04em/-0.03em,
+  sentence in Inter at 42/128 of the numeral on one line, colours
+  `#0B1220`/`#5C6675` light and `#EEF2F8`/`#93A0B5` dark. One clamp
+  (`--stat-numeral` in globals.css) drives all three runs.
   **The sentence sets the ceiling**: it needs 14.15px of width per 1px of
-  font size, so 594px at the spec'd 42px, and it must never wrap.
-  That is also why the lockup sits above the bars rather than beside them.
-- `ScatteredPanel` and `StickyTile` in `artifact-panels.tsx` are now **unused**.
-  They drew the old report-building sprawl, which was replaced by
-  `REPORT_SCRAPS` in `CoachsWeek.tsx`. The tile components they share with
-  `OrderedPanel` are still live; only those two exports are dead.
+  font size and must never wrap. The lockup sits in a fixed 20rem column
+  beside the bars, which caps the numeral near 68px; the spec's own 128px
+  only fits if the lockup goes full width, which crushes the bars.
+- **`components/growth/artifact-panels.tsx` is now entirely unused.** Its two
+  exports both lost their last caller: `ScatteredPanel` when report building
+  was rebuilt as `REPORT_SCRAPS`, and `OrderedPanel` when the problem section
+  dropped its closing visual for a connector sentence. The `.ed-tile-fluid`
+  rule in globals.css is dead with it. Nothing else imports either. Kept
+  rather than deleted, since it was not asked for; recoverable from any
+  commit before this one.
+- The problem section now ends on a connector sentence rather than a visual.
+  It has to hand off to `TheSystem`, whose first line is "EZee Assist is that
+  system", so it must land on a noun that "that system" can refer back to.
 - The problem section's three beats are named for the hero descriptor
   (Repetitive questions / Compliance chasing / Report building) on purpose. If
   the hero descriptor changes, change these with it.

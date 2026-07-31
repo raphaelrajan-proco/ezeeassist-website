@@ -10,7 +10,6 @@ import {
   SectionShell,
   MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED,
 } from "./shared";
-import { OrderedPanel } from "./artifact-panels";
 
 /**
  * The problem, as a sandwich: the calendar claim and its chart on top,
@@ -159,11 +158,10 @@ function CoachWeekChart() {
         percent, reports 5 percent, coaching 80 percent.
       </p>
 
-      {/* The lockup sits above the bars rather than beside them. Its sentence
-          runs to 594px at the spec'd 42px and has to stay on one line, which
-          leaves too little room for the bars in a side-by-side split.
-          Stacked, the bars get the full width instead. */}
-      <div className="space-y-8 md:space-y-10">
+      {/* The lockup sits beside the bars. Its column is a fixed 20rem, which
+          is what caps the numeral: the sentence has to hold one line and is
+          the widest run in the piece. */}
+      <div className="grid grid-cols-1 lg:grid-cols-[20rem_1fr] gap-8 lg:gap-12 items-center">
         <StatLockup />
 
         <div className="space-y-4">
@@ -436,12 +434,9 @@ export default function CoachsWeek() {
           color: "var(--ed-accent-text)",
         }}
       >
-        What&rsquo;s missing is a unified execution layer that connects all people, playbooks, and tools.
+        Three kinds of work fill the week, and each one runs on its own tools.
+        Coaching comes back when all of them run on one system.
       </motion.p>
-
-      <div className="mt-8">
-        <OrderedPanel />
-      </div>
     </SectionShell>
   );
 }

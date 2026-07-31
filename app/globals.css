@@ -741,13 +741,14 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* ─── 4/5 stat lockup ──────────────────────────────────────
-   One clamp drives the whole piece: "days" is half the numeral and the
-   sentence is 42/128 of it, per the design spec. The sentence must stay
-   on one line and is by far the widest run, so it sets the ceiling:
-   it needs 14.15px of width per 1px of font size, which at the spec's
-   42px is 594px. The numeral tops out at the spec'd 128px. */
+   The spec's proportions, scaled to sit beside the bars rather than
+   above them: "days" is half the numeral and the sentence is 42/128 of
+   it. The sentence must stay on one line and is by far the widest run,
+   so it sets the ceiling. It needs 14.15px of width per 1px of font
+   size, and the column it lives in is 20rem, which caps the numeral
+   around 68px. The spec's own 128px only fits at full width. */
 .theme-editorial .ed-stat-lockup {
-  --stat-numeral: clamp(3.75rem, 0.147rem + 14.78vw, 8rem);
+  --stat-numeral: clamp(3.75rem, 3.4rem + 0.9vw, 4.25rem);
   color: #0B1220;
 }
 .dark .theme-editorial .ed-stat-lockup {
