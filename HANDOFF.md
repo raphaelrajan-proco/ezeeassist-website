@@ -18,35 +18,35 @@ before picking the work back up in a fresh session.
   the rationale, not just the change.
 - Each step tagged `v3-stepN-pre` marks the state *before* that step.
 
-## Page structure (9 sections, in order)
+## Page structure (8 sections, in order)
 
 | # | Section | File | Anchor |
 |---|---|---|---|
 | 0 | Floating nav pill (overlays the hero) | `components/Navbar.tsx` | — |
 | 1 | Hero (logo band folded in, crops at fold) | `components/growth/Hero.tsx` + `TrustStrip.tsx` | — |
 | 2 | The problem (chart, 3 beats, one-layer payoff) | `components/growth/CoachsWeek.tsx` | `#the-week` |
-| 3 | The reveal | `components/TheSystem.tsx` | `#the-system` |
-| 4 | What it does (pinned scroll, 5 modules) | `components/growth/Capabilities.tsx` | `#capabilities` |
+| 3 | The reveal (convergence diagram) | `components/TheSystem.tsx` | `#the-system` |
+| 4 | What it does (rotating showcase) | `components/growth/Capabilities.tsx` | `#capabilities` |
 | 5 | Proof | `components/growth/CustomerProof.tsx` + `outcomes-stats.tsx` | `#proof` |
 | 6 | Trust and control (6 tabs) | `components/growth/TrustAndControl.tsx` | `#trust` |
-| 7 | Integrations and channels | `components/Connected.tsx` | `#connections` |
-| 8 | FAQ | `components/growth/Objections.tsx` + `lib/data/objections.ts` | `#objections` |
-| 9 | Final CTA | `components/growth/FinalCTA.tsx` | `#book` |
+| 7 | FAQ | `components/growth/Objections.tsx` + `lib/data/objections.ts` | `#objections` |
+| 8 | Final CTA | `components/growth/FinalCTA.tsx` | `#book` |
 
-Capability modules also expose anchors: `#answers`, `#ticketing`, `#workflows`,
-`#reporting`, `#ai-apps`. Nav and footer link to these — check them if you
-rename a section.
+The showcase pills expose anchors: `#answers`, `#agents`, `#reporting`,
+`#compliance`, `#ai-apps`, and the section opens the matching scene from
+`location.hash`. The footer links to four of them, so renaming a pill means
+renaming its id and the footer entry together.
 
 Support modules (not sections): `artifact-panels.tsx`, `audience-duality.tsx`,
 `handoff-flow.tsx`. Unwired-but-kept work lives in `components/growth/_archive/`.
 
-**`artifact-panels.tsx` renders the same four tile components twice**, and the
-titles differ by design. `ScatteredPanel` (inside the Report building beat)
-gets the ad-hoc names — "AI chat", "coach's macro.xlsx", "HQ's prompt doc v7",
-"someone's flow" — because the sprawl *is* the point there. `OrderedPanel`
-passes `ezee` / `governed` to get the product names: Guardrailed Support Agent,
-Coaching Analytics, HQ's benchmarks and standards, Personalized automations.
-Rename one side via its flag, never by editing the shared literal.
+**Three components are now unwired but still in the tree**, all kept rather
+than deleted because removal was never asked for: `artifact-panels.tsx` (lost
+its last caller when the problem section swapped its closing visual for a
+connector sentence), `growth/audience-duality.tsx` (the HQ / franchisee block
+that closed Trust and control), and `Connected.tsx` (the whole integrations
+and channels section). The `.ed-tile-fluid` rule in globals.css is dead with
+the first of them. Nothing imports any of the three.
 
 The hero's copy stack is eyebrow, lead, sub-lead, CTA. Each line carries the
 type of the **slot** it sits in, not type of its own:
@@ -105,13 +105,6 @@ here has to clear 1024 first, not 390.
 
 The eyebrow is bold uppercase at 0.16em, which is wide, so tracking is the
 lever if it ever has to be larger: dropping to 0.10em buys about 1.5px.
-
-`OrderedPanel` in `artifact-panels.tsx` closes the problem section. Four
-artifact tiles run left to right, an SVG spine drops from each into a shared
-rail, and the rail feeds one "One execution layer" bar. Tiles size to their
-grid columns via `.ed-tile-fluid` (`app/globals.css`), which overrides the
-fixed widths the tiles carry for their other callers. Do not reintroduce
-transform scaling here; it was what made the tiles overlap the bar.
 
 ## The floating nav pill
 

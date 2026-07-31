@@ -13,7 +13,7 @@ const footerLinks = {
     { label: "Reporting",         href: "/#reporting" },
     { label: "AI Apps",           href: "/#ai-apps" },
     { label: "Ticketing",         href: "/solution/ticketing" },
-    { label: "Integrations",      href: "/#connections" },
+    { label: "Integrations",      href: "/solution/integrations" },
     { label: "Governance",        href: "/#trust" },
   ],
   Industries: [
@@ -52,7 +52,7 @@ const editorialFooterColumns: { heading: string; links: { label: string; href: s
       { label: "Reporting",      href: "/#capabilities" },
       { label: "AI Apps",        href: "/#capabilities" },
       { label: "Control Plane",  href: "/#trust" },
-      { label: "Integrations",   href: "/#connections" },
+      { label: "Integrations",   href: "/solution/integrations" },
     ],
   },
   {

@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import Link from "next/link";
 import { Check, Minus } from "lucide-react";
-import AudienceDuality from "./audience-duality";
 
 /**
  * Trust and control. Dark regardless of theme. One tabbed control
@@ -413,11 +412,6 @@ export default function TrustAndControl() {
             See the full trust page
           </Link>
         </motion.div>
-
-        {/* HQ / franchisee duality */}
-        <div className="ed-on-dark mt-14 md:mt-16 pt-12" style={{ borderTop: `1px solid ${RULE}` }}>
-          <AudienceDuality />
-        </div>
       </div>
     </section>
   );

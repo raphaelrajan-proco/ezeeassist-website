@@ -9,7 +9,6 @@ import TheSystem from "@/components/TheSystem";
 import Capabilities from "@/components/growth/Capabilities";
 import CustomerProof from "@/components/growth/CustomerProof";
 import TrustAndControl from "@/components/growth/TrustAndControl";
-import Connected from "@/components/Connected";
 import Objections from "@/components/growth/Objections";
 import FinalCTA from "@/components/growth/FinalCTA";
 import { objections } from "@/lib/data/objections";
@@ -109,7 +108,6 @@ export default function Home() {
         {/* 4 */} <Capabilities />
         {/* 5 */} <CustomerProof />
         {/* 6 */} <TrustAndControl />
-        {/* 7 */} <Connected />
         {/* 8 */} <Objections />
         {/* 9 */} <FinalCTA />
       </main>
