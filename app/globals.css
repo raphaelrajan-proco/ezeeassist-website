@@ -662,6 +662,10 @@ input[type="range"]::-moz-range-thumb {
   .ed-conn-pill-anim { animation: none !important; opacity: 1 !important; }
 }
 
+/* Artifact tiles inside the one-layer panel size to their column
+   rather than their own fixed pixel width. */
+.ed-tile-fluid > div { width: 100% !important; }
+
 /* ─── Dark-surface token scope ─────────────────────────── */
 /* Pins the editorial dark palette for light-themed blocks that were
    moved onto the permanently dark Trust and control section, so they

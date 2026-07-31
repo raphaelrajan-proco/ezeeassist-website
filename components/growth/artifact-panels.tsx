@@ -201,88 +201,97 @@ export function ScatteredPanel({ bare = false }: { bare?: boolean } = {}) {
 
 /* ── Right panel: the same artifacts, one layer ────────── */
 
-export function OrderedPanel({ compact = false }: { compact?: boolean } = {}) {
+export function OrderedPanel() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const tiles = [
+    <ConsumerChatTile key="a" ezee />,
+    <SpreadsheetTile key="b" />,
+    <PromptDocTile key="c" />,
+    <FlowTile key="d" />,
+  ];
+
   return (
-    <div ref={ref}>
-      <p className="text-sm uppercase tracking-[0.2em] mb-3" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
-        What it needs to be
+    <div
+      ref={ref}
+      className="relative rounded-2xl overflow-hidden px-5 pt-5 pb-5"
+      style={{ backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-rule)" }}
+    >
+      <p className="sr-only">
+        The same artifacts, upright and aligned, connected into a single
+        execution layer with role-scoped, source-cited chrome.
       </p>
-      <div
-        className="relative rounded-2xl overflow-hidden flex flex-col justify-between px-5 pt-5 pb-5"
+
+      {/* Four artifacts across, each sized to its own column */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 items-start" aria-hidden="true">
+        {tiles.map((tile, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: -8 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, ease: "easeOut", delay: 0.15 + i * 0.08 }}
+            className="ed-tile-fluid flex justify-center"
+          >
+            {tile}
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Left-to-right spine: a stub down from each column, one rail
+          across, then a single drop into the layer bar. */}
+      <svg
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+        className="w-full mt-3"
+        style={{ height: "26px" }}
+        aria-hidden="true"
+      >
+        {[12.5, 37.5, 62.5, 87.5].map((x, i) => (
+          <motion.line
+            key={x}
+            x1={x} y1={0} x2={x} y2={55}
+            stroke="#00AEEF" strokeOpacity="0.45" strokeWidth="1.2"
+            vectorEffect="non-scaling-stroke"
+            initial={{ pathLength: 0 }}
+            animate={inView ? { pathLength: 1 } : {}}
+            transition={{ duration: 0.4, ease: "easeOut", delay: 0.5 + i * 0.06 }}
+          />
+        ))}
+        <motion.line
+          x1={12.5} y1={55} x2={87.5} y2={55}
+          stroke="#00AEEF" strokeOpacity="0.45" strokeWidth="1.2"
+          vectorEffect="non-scaling-stroke"
+          initial={{ pathLength: 0 }}
+          animate={inView ? { pathLength: 1 } : {}}
+          transition={{ duration: 0.5, ease: "easeOut", delay: 0.78 }}
+        />
+        <motion.line
+          x1={50} y1={55} x2={50} y2={100}
+          stroke="#00AEEF" strokeOpacity="0.45" strokeWidth="1.2"
+          vectorEffect="non-scaling-stroke"
+          initial={{ pathLength: 0 }}
+          animate={inView ? { pathLength: 1 } : {}}
+          transition={{ duration: 0.3, ease: "easeOut", delay: 1.05 }}
+        />
+      </svg>
+
+      <motion.div
+        initial={{ opacity: 0, scaleX: 0.94 }}
+        animate={inView ? { opacity: 1, scaleX: 1 } : {}}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 1.15 }}
+        className="rounded-lg py-2 text-center"
         style={{
-          backgroundColor: "var(--ed-card)",
-          border: "1px solid var(--ed-rule)",
-          minHeight: compact ? "168px" : "360px",
+          backgroundColor: "rgba(0,174,239,0.10)",
+          border: "1px solid rgba(0,174,239,0.45)",
         }}
       >
-        <p className="sr-only">
-          The same artifacts, upright and aligned, connected into a single
-          execution layer with role-scoped, source-cited chrome.
-        </p>
-
-        {/* Aligned artifacts, scaled to fit two per row */}
-        <div
-          className={compact ? "grid grid-cols-2 lg:grid-cols-4 gap-2 items-start" : "grid grid-cols-1 sm:grid-cols-2 gap-3 items-start"}
-          aria-hidden="true"
+        <span
+          className="text-sm"
+          style={{ fontFamily: "var(--font-editorial)", fontWeight: 600, color: "var(--ed-accent-text)" }}
         >
-          {[<ConsumerChatTile key="a" ezee />, <SpreadsheetTile key="b" />, <PromptDocTile key="c" />, <FlowTile key="d" />].map((tile, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: -8 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, ease: "easeOut", delay: 0.35 + i * 0.08 }}
-              className="flex justify-center"
-              style={{ transform: `scale(${compact ? 0.58 : 0.82})`, transformOrigin: "top center" }}
-            >
-              {tile}
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Connecting lines into the layer */}
-        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className={compact ? "w-full -mt-16" : "w-full -mt-6"} style={{ height: compact ? "22px" : "34px" }} aria-hidden="true">
-          {[25, 75].map((x, i) => (
-            <motion.line
-              key={x}
-              x1={x} y1={0} x2={x} y2={100}
-              stroke="#00AEEF" strokeOpacity="0.45" strokeWidth="1.2"
-              vectorEffect="non-scaling-stroke"
-              initial={{ pathLength: 0 }}
-              animate={inView ? { pathLength: 1 } : {}}
-              transition={{ duration: 0.5, ease: "easeOut", delay: 0.75 + i * 0.08 }}
-            />
-          ))}
-        </svg>
-
-        <motion.div
-          initial={{ opacity: 0, scaleX: 0.92 }}
-          animate={inView ? { opacity: 1, scaleX: 1 } : {}}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.95 }}
-          className="rounded-xl py-4 text-center"
-          style={{
-            backgroundColor: "rgba(0,174,239,0.10)",
-            border: "1px solid rgba(0,174,239,0.45)",
-            boxShadow: "0 0 32px rgba(0,174,239,0.10)",
-          }}
-        >
-          <span
-            className="text-lg md:text-xl"
-            style={{ fontFamily: "var(--font-editorial)", fontWeight: 600, color: "var(--ed-accent-text)" }}
-          >
-            One execution layer
-          </span>
-        </motion.div>
-      </div>
-      <p
-        className="mt-4 text-center uppercase"
-        style={{ fontSize: "14px", letterSpacing: "0.18em", fontWeight: 500, color: "var(--ed-fg-muted)" }}
-      >
-        People, playbooks, and tools on one layer.
-      </p>
+          One execution layer
+        </span>
+      </motion.div>
     </div>
   );
 }
-
-/* ── Section ───────────────────────────────────────────── */

@@ -5,7 +5,7 @@ import { useRef } from "react";
 import { Hash, Mail, MessageSquare } from "lucide-react";
 import {
   AnimatedValue, SectionShell,
-  MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED, MOCK_HAIRLINE,
+  MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED,
 } from "./shared";
 import { OrderedPanel, ScatteredPanel } from "./artifact-panels";
 
