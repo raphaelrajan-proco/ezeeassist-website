@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { Sparkles, FileText, Zap } from "lucide-react";
 import {
@@ -201,6 +201,87 @@ export function ScatteredPanel({ bare = false }: { bare?: boolean } = {}) {
 
 /* ── Right panel: the same artifacts, one layer ────────── */
 
+/* The spine is drawn with positioned divs rather than an SVG. An SVG with
+ * preserveAspectRatio="none" stretched its 100x100 viewBox into a box about
+ * 1330 wide by 26 tall, so x scaled ~13x and y scaled ~0.26x. That thinned
+ * every horizontal stroke to under a pixel while fattening the verticals,
+ * and the rail rendered as broken fragments. Divs keep the stroke a real
+ * 2px at every width. */
+const SPINE_COLOR = "#00AEEF";
+const SPINE_GLOW = "0 0 6px rgba(0,174,239,0.55), 0 0 14px rgba(0,174,239,0.28)";
+const SPINE_W = 2;          /* line thickness, px */
+const SPINE_H = 44;         /* total spine block height, px */
+const RAIL_Y = 24;          /* rail distance from the top of the block, px */
+const COLS = [12.5, 37.5, 62.5, 87.5];  /* column centres, % */
+
+function Spine({ inView }: { inView: boolean }) {
+  const still = useReducedMotion();
+  /* Reduced motion gets the finished spine with no draw-on. */
+  const draw = (axis: "x" | "y", delay: number) =>
+    still
+      ? {}
+      : {
+          initial: { transform: axis === "x" ? "scaleX(0)" : "scaleY(0)" },
+          animate: inView ? { transform: "scaleX(1) scaleY(1)" } : {},
+          transition: { duration: axis === "x" ? 0.55 : 0.3, ease: "easeOut" as const, delay },
+        };
+
+  const line: React.CSSProperties = {
+    position: "absolute",
+    backgroundColor: SPINE_COLOR,
+    boxShadow: SPINE_GLOW,
+    borderRadius: SPINE_W / 2,
+  };
+
+  return (
+    <div className="relative w-full mt-3" style={{ height: SPINE_H }} aria-hidden="true">
+      {/* A stub down from each column centre */}
+      {COLS.map((x, i) => (
+        <motion.div
+          key={x}
+          {...draw("y", 0.5 + i * 0.06)}
+          style={{
+            ...line,
+            left: `${x}%`,
+            top: 0,
+            width: SPINE_W,
+            height: RAIL_Y,
+            marginLeft: -SPINE_W / 2,
+            transformOrigin: "top",
+          }}
+        />
+      ))}
+
+      {/* One rail across, from the first column centre to the last */}
+      <motion.div
+        {...draw("x", 0.76)}
+        style={{
+          ...line,
+          left: `${COLS[0]}%`,
+          right: `${100 - COLS[COLS.length - 1]}%`,
+          top: RAIL_Y - SPINE_W / 2,
+          height: SPINE_W,
+          transformOrigin: "left",
+        }}
+      />
+
+      {/* A single drop into the layer bar */}
+      <motion.div
+        {...draw("y", 1.05)}
+        style={{
+          ...line,
+          left: "50%",
+          top: RAIL_Y - SPINE_W / 2,
+          width: SPINE_W,
+          height: SPINE_H - RAIL_Y + SPINE_W / 2,
+          marginLeft: -SPINE_W / 2,
+          transformOrigin: "top",
+        }}
+      />
+    </div>
+  );
+}
+
 export function OrderedPanel() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
@@ -239,41 +320,7 @@ export function OrderedPanel() {
 
       {/* Left-to-right spine: a stub down from each column, one rail
           across, then a single drop into the layer bar. */}
-      <svg
-        viewBox="0 0 100 100"
-        preserveAspectRatio="none"
-        className="w-full mt-3"
-        style={{ height: "26px" }}
-        aria-hidden="true"
-      >
-        {[12.5, 37.5, 62.5, 87.5].map((x, i) => (
-          <motion.line
-            key={x}
-            x1={x} y1={0} x2={x} y2={55}
-            stroke="#00AEEF" strokeOpacity="0.45" strokeWidth="1.2"
-            vectorEffect="non-scaling-stroke"
-            initial={{ pathLength: 0 }}
-            animate={inView ? { pathLength: 1 } : {}}
-            transition={{ duration: 0.4, ease: "easeOut", delay: 0.5 + i * 0.06 }}
-          />
-        ))}
-        <motion.line
-          x1={12.5} y1={55} x2={87.5} y2={55}
-          stroke="#00AEEF" strokeOpacity="0.45" strokeWidth="1.2"
-          vectorEffect="non-scaling-stroke"
-          initial={{ pathLength: 0 }}
-          animate={inView ? { pathLength: 1 } : {}}
-          transition={{ duration: 0.5, ease: "easeOut", delay: 0.78 }}
-        />
-        <motion.line
-          x1={50} y1={55} x2={50} y2={100}
-          stroke="#00AEEF" strokeOpacity="0.45" strokeWidth="1.2"
-          vectorEffect="non-scaling-stroke"
-          initial={{ pathLength: 0 }}
-          animate={inView ? { pathLength: 1 } : {}}
-          transition={{ duration: 0.3, ease: "easeOut", delay: 1.05 }}
-        />
-      </svg>
+      <Spine inView={inView} />
 
       <motion.div
         initial={{ opacity: 0, scaleX: 0.94 }}
