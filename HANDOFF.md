@@ -238,6 +238,19 @@ Pill ids double as deep-link anchors and the component reads
 column points at four of them; `Workflows → /#workflows` became
 `Agents → /#agents` when the labels changed.
 
+**Three headlines are pinned to a line count**, and each clamp is fitted to
+measured wrap points rather than picked. Re-derive if the copy changes:
+
+| Headline | Cap | Ceiling at 390 / 768 / 1024+ | Rendered |
+|---|---|---|---|
+| "EZee Assist is the operating system." | 1 line | 21.1 / 41.5 / 55.3px | 20 / 40 / 53px |
+| "EZee flips the 4/5 days to growth, by automating the rest." | 2 lines, one per span | 23 / 45.2 / 51.6px | 22 / 43 / 49px |
+| "To reclaim coaching, all the work needs to flow through one unified system." | 2 lines | 19 / 38 / 43px | 18 / 30 / 30px |
+
+The one-line cap is what drives the system headline down to 20px at 390. It is
+small for a section heading, and the price of holding one line on a 342px
+column.
+
 ## Standing rules
 
 **Scope.** Homepage only unless a prompt grants an explicit exception. If a

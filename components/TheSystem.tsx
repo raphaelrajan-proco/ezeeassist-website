@@ -409,10 +409,14 @@ export default function TheSystem() {
             color: T.text,
             fontFamily: JAKARTA,
             fontWeight: 700,
-            fontSize: "clamp(2.25rem, 1.2rem + 2.6vw, 3.75rem)",
+            /* Held to one line at every width. The string needs 16.21px of
+               width per 1px of font size, and the column is 342px at 390,
+               672 at 768 and 896 from 1024 up, so the ceiling is 21.1 /
+               41.5 / 55.3px. This sits just under each. */
+            fontSize: "clamp(1.25rem, -0.04rem + 5.29vw, 3.3125rem)",
           }}
         >
-          EZee Assist is the AI operating system.
+          EZee Assist is the operating system.
         </motion.h2>
 
         <p className="sr-only">

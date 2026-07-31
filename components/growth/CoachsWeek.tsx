@@ -423,19 +423,22 @@ export default function CoachsWeek() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-        className="mt-14 md:mt-16 text-2xl md:text-3xl tracking-[-0.02em] max-w-3xl"
+        className="mt-14 md:mt-16 tracking-[-0.02em] max-w-3xl"
         style={{
           fontFamily: "var(--font-editorial)",
           fontWeight: 500,
           lineHeight: 1.25,
+          /* Two lines at every width. Holds its former 30px on desktop and
+             drops to 18px at 390, where the two-line ceiling is 19px. */
+          fontSize: "clamp(1.125rem, 0.351rem + 3.17vw, 1.875rem)",
           textWrap: "balance",
           /* The accent token, not raw #00AEEF: brand blue on the section's
              light background sits near 2.4:1, which fails at this size. */
           color: "var(--ed-accent-text)",
         }}
       >
-        Three kinds of work fill the week, and each one runs on its own tools.
-        Coaching comes back when all of them run on one system.
+        To reclaim coaching, all the work needs to flow through one unified
+        system.
       </motion.p>
     </SectionShell>
   );

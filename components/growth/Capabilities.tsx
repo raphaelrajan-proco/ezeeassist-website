@@ -286,9 +286,13 @@ export default function Capabilities() {
       <div className="ed-showcase">
         <h2
           className="ed-fg leading-[1.05] tracking-[-0.03em] mb-10 md:mb-12 max-w-3xl"
-          style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: "clamp(2rem, 1.1rem + 1.9vw, 3rem)" }}
+          /* Two lines, one per span. The first line is the longer of the
+             two and sets the ceiling: 23px at 390, 45.2 at 768, 51.6 from
+             1024 up, against a column of 342 / 672 / 768. */
+          style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: "clamp(1.375rem, 0.02rem + 5.56vw, 3.0625rem)" }}
         >
-          Five things EZee runs at every location.
+          <span className="block">EZee flips the 4/5 days to growth,</span>
+          <span className="block">by automating the rest.</span>
         </h2>
 
         <div
