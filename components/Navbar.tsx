@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -58,6 +58,7 @@ const solutionsGroups: NavGroup[] = [
   },
 ];
 
+/* Customers was folded in here; Case Studies leads the list. */
 const resourcesItems: NavItem[] = [
   { label: "Case Studies",   href: "/case-studies",   desc: "What brands changed, and what it returned." },
   { label: "Blog",           href: "/blog",           desc: "Franchise operations insights and product news." },
@@ -73,7 +74,7 @@ const companyItems: NavItem[] = [
 ];
 
 /* Both marks share viewBox 0 0 583.2 151.2. */
-const LOGO_H = 40;
+const LOGO_H = 36;
 const LOGO_W = Math.round((583.2 / 151.2) * LOGO_H);
 
 type DropdownKey = "platform" | "solutions" | "resources" | "company" | null;
@@ -139,10 +140,17 @@ export default function Navbar() {
   const [activeDropdown, setActiveDropdown] = useState<DropdownKey>(null);
   const [mobileSection, setMobileSection] = useState<DropdownKey>(null);
   const [scrolled, setScrolled] = useState(false);
-  const navRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const burgerRef = useRef<HTMLButtonElement>(null);
+  /* Which trigger opened the current dropdown, so Escape can hand focus back. */
+  const triggerRefs = useRef<Partial<Record<string, HTMLButtonElement | null>>>({});
 
   const pathname = usePathname();
   const isEditorial = pathname === "/";
+  /* The pill overlays the hero, which only the homepage has. Every other
+     route keeps the banded header it already had. */
+  const floating = isEditorial;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -158,27 +166,67 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const closeAll = () => setActiveDropdown(null);
+  const closeAll = useCallback(() => setActiveDropdown(null), []);
 
-  /** Ada-style panel shell: subtle border, no shadow. */
+  const closeMobile = useCallback(() => {
+    setMobileOpen(false);
+    setMobileSection(null);
+  }, []);
+
+  /* Escape closes whatever is open and returns focus to what opened it. */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (mobileOpen) {
+        closeMobile();
+        burgerRef.current?.focus();
+      } else if (activeDropdown) {
+        const trigger = triggerRefs.current[activeDropdown];
+        closeAll();
+        trigger?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [mobileOpen, activeDropdown, closeAll, closeMobile]);
+
+  /* The sheet is modal, so focus moves into it and the page stops scrolling. */
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    sheetRef.current?.querySelector<HTMLElement>("a, button")?.focus();
+    return () => { document.body.style.overflow = prev; };
+  }, [mobileOpen]);
+
+  /** Floating panel beneath the pill, same shadow language as the pill. */
   function DropdownWrapper({ keyName, children }: { keyName: DropdownKey; children: React.ReactNode }) {
     const open = activeDropdown === keyName;
+    /* The wrapper padding doubles as the hover bridge between trigger and
+       panel. On the pill it also has to clear the pill's own bottom edge,
+       since the trigger is centred inside a 64px bar. */
     return (
       <div
-        className={`absolute left-0 top-full pt-3 z-50 transition-all duration-200 ${
+        className={`absolute left-0 top-full z-50 transition-all duration-200 ${
+          floating ? "pt-[1.75rem]" : "pt-3"
+        } ${
           open
-            ? "pointer-events-auto opacity-100 translate-y-0"
-            : "pointer-events-none opacity-0 -translate-y-1"
+            ? "pointer-events-auto visible opacity-100 translate-y-0"
+            : "pointer-events-none invisible opacity-0 -translate-y-1"
         }`}
       >
-        <div className="overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.10] bg-white dark:bg-[#141414]">
+        <div
+          className={`overflow-hidden rounded-2xl border border-[#E5E7EB] dark:border-white/[0.10] bg-white dark:bg-[#141414] ${
+            floating ? "shadow-[0_2px_12px_rgba(0,20,50,0.10)]" : ""
+          }`}
+        >
           {children}
         </div>
       </div>
     );
   }
 
-  const headerClasses = isEditorial
+  const bandedClasses = isEditorial
     ? scrolled
       ? "bg-[var(--ed-bg)]/90 backdrop-blur-md border-b border-[var(--ed-rule)]"
       : "bg-transparent border-b border-transparent"
@@ -198,214 +246,290 @@ export default function Navbar() {
     { key: "solutions", label: "Solutions", panel: <GroupedPanel groups={solutionsGroups} onClose={closeAll} width="w-[680px]" /> },
   ];
 
+  /* Accordion body shared by the mobile sheet. */
+  const mobileAccordions = (
+    <ul className="flex flex-col gap-1">
+      {[
+        { key: "platform"  as const, label: "Platform",  groups: platformGroups },
+        { key: "solutions" as const, label: "Solutions", groups: solutionsGroups },
+      ].map(({ key, label, groups }) => (
+        <li key={key}>
+          <button
+            className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300"
+            style={{ fontWeight: 500 }}
+            onClick={() => setMobileSection(mobileSection === key ? null : key)}
+            aria-expanded={mobileSection === key}
+          >
+            {label}
+            <ChevronDown size={14} strokeWidth={2.5} className={`transition-transform duration-200 ${mobileSection === key ? "rotate-180" : ""}`} />
+          </button>
+          {mobileSection === key && (
+            <div className="mt-1 ml-3 flex flex-col gap-2 border-l-2 border-[#00AEEF]/20 pl-4 pb-2">
+              {groups.map((g) => (
+                <div key={g.heading}>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-1" style={{ fontWeight: 600 }}>
+                    {g.heading}
+                  </p>
+                  {g.items.map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="block py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] transition-colors"
+                      onClick={closeMobile}
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+        </li>
+      ))}
+
+      {[
+        { key: "resources" as const, label: "Resources", items: resourcesItems },
+        { key: "company"   as const, label: "Company",   items: companyItems },
+      ].map(({ key, label, items }) => (
+        <li key={key}>
+          <button
+            className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300"
+            style={{ fontWeight: 500 }}
+            onClick={() => setMobileSection(mobileSection === key ? null : key)}
+            aria-expanded={mobileSection === key}
+          >
+            {label}
+            <ChevronDown size={14} strokeWidth={2.5} className={`transition-transform duration-200 ${mobileSection === key ? "rotate-180" : ""}`} />
+          </button>
+          {mobileSection === key && (
+            <div className="mt-1 ml-3 flex flex-col gap-0.5 border-l-2 border-[#00AEEF]/20 pl-4 pb-2">
+              {items.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="block py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] transition-colors"
+                  onClick={closeMobile}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+
+  const mobileCta = (
+    <div className="mt-4 flex items-center gap-3">
+      <ThemeToggle />
+      <Link href="/contact" className="flex-1" onClick={closeMobile}>
+        <Button size="sm" className="w-full ed-btn-arrow gap-2" style={{ paddingRight: "0.25rem", paddingLeft: "1.125rem" }}>
+          Speak to an expert
+          <span className="ed-btn-arrow-badge ed-btn-arrow-badge-sm" aria-hidden="true">
+            <ArrowRight className="h-3 w-3" strokeWidth={2.25} />
+          </span>
+        </Button>
+      </Link>
+    </div>
+  );
+
+  /* The bar itself. Identical contents in both variants; only the shell
+     around it changes. */
+  const bar = (
+    <>
+      {/* Logo. Both marks ship in the markup and the theme swap is
+          pure CSS, so there is no flash on load or on toggle. */}
+      <Link href="/" className="flex items-center flex-shrink-0" aria-label="EZee Assist home">
+        <Image
+          src="/logo-black.svg"
+          alt="EZee Assist"
+          width={LOGO_W}
+          height={LOGO_H}
+          priority
+          unoptimized
+          className="block dark:hidden"
+        />
+        <Image
+          src="/logo-white.svg"
+          alt=""
+          aria-hidden="true"
+          width={LOGO_W}
+          height={LOGO_H}
+          priority
+          unoptimized
+          className="hidden dark:block"
+        />
+      </Link>
+
+      {/* Desktop nav */}
+      <ul className="hidden md:flex items-center gap-1">
+        {dropdowns.map(({ key, label, panel }) => (
+          <li
+            key={key}
+            className="relative"
+            onMouseEnter={() => setActiveDropdown(key)}
+            onMouseLeave={() => setActiveDropdown(null)}
+          >
+            <button
+              ref={(el) => { triggerRefs.current[key] = el; }}
+              className={`${triggerBase} ${activeDropdown === key ? triggerActive : triggerIdle}`}
+              onClick={() => setActiveDropdown(activeDropdown === key ? null : key)}
+              aria-expanded={activeDropdown === key}
+            >
+              {label}
+              <ChevronDown
+                size={13}
+                strokeWidth={2.5}
+                className={`transition-transform duration-200 ${activeDropdown === key ? "rotate-180" : ""}`}
+              />
+            </button>
+            <DropdownWrapper keyName={key}>{panel}</DropdownWrapper>
+          </li>
+        ))}
+
+        {/* Customers folded into Resources as Case Studies. */}
+
+        {/* Resources */}
+        <li
+          className="relative"
+          onMouseEnter={() => setActiveDropdown("resources")}
+          onMouseLeave={() => setActiveDropdown(null)}
+        >
+          <button
+            ref={(el) => { triggerRefs.current.resources = el; }}
+            className={`${triggerBase} ${activeDropdown === "resources" ? triggerActive : triggerIdle}`}
+            onClick={() => setActiveDropdown(activeDropdown === "resources" ? null : "resources")}
+            aria-expanded={activeDropdown === "resources"}
+          >
+            Resources
+            <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "resources" ? "rotate-180" : ""}`} />
+          </button>
+          <DropdownWrapper keyName="resources">
+            <ListPanel items={resourcesItems} onClose={closeAll} />
+          </DropdownWrapper>
+        </li>
+
+        {/* Company */}
+        <li
+          className="relative"
+          onMouseEnter={() => setActiveDropdown("company")}
+          onMouseLeave={() => setActiveDropdown(null)}
+        >
+          <button
+            ref={(el) => { triggerRefs.current.company = el; }}
+            className={`${triggerBase} ${activeDropdown === "company" ? triggerActive : triggerIdle}`}
+            onClick={() => setActiveDropdown(activeDropdown === "company" ? null : "company")}
+            aria-expanded={activeDropdown === "company"}
+          >
+            Company
+            <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "company" ? "rotate-180" : ""}`} />
+          </button>
+          <DropdownWrapper keyName="company">
+            <ListPanel items={companyItems} onClose={closeAll} />
+          </DropdownWrapper>
+        </li>
+      </ul>
+
+      {/* Desktop CTA */}
+      <div className="hidden md:flex items-center gap-3">
+        <ThemeToggle />
+        <Link href="/contact">
+          <Button size="sm" className="ed-btn-arrow gap-2" style={{ paddingRight: "0.25rem", paddingLeft: "1.125rem" }}>
+            Speak to an expert
+            <span className="ed-btn-arrow-badge ed-btn-arrow-badge-sm" aria-hidden="true">
+              <ArrowRight className="h-3 w-3" strokeWidth={2.25} />
+            </span>
+          </Button>
+        </Link>
+      </div>
+
+      {/* Mobile hamburger */}
+      <button
+        ref={burgerRef}
+        className="md:hidden p-2 rounded-lg text-[#0A0A0A] dark:text-gray-300 transition-colors"
+        onClick={() => setMobileOpen(!mobileOpen)}
+        aria-label={mobileOpen ? "Close menu" : "Open menu"}
+        aria-expanded={mobileOpen}
+      >
+        {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+      </button>
+    </>
+  );
+
+  /* ── Floating pill (homepage) ───────────────────────────
+     Sticky rather than fixed, so an announcement bar above it still
+     pushes it down. The negative bottom margin cancels the header's
+     flow height, which is what lets the hero start at the top of the
+     document and sit behind the pill. */
+  if (floating) {
+    return (
+      <>
+        <header
+          ref={navRef}
+          className="ed-nav sticky z-50 w-full px-4 md:px-6"
+          style={{
+            top: "var(--nav-inset)",
+            marginBottom: "calc(-1 * var(--nav-pill-h))",
+          }}
+        >
+          <nav
+            className="ed-nav-surface mx-auto flex max-w-[1200px] items-center justify-between rounded-2xl md:rounded-full px-4 md:px-6"
+            style={{ height: "var(--nav-pill-h)" }}
+            aria-label="Main"
+          >
+            {bar}
+          </nav>
+        </header>
+
+        {/* Mobile sheet overlay */}
+        {mobileOpen && (
+          <div className="md:hidden ed-nav-sheet">
+            <button
+              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px]"
+              onClick={closeMobile}
+              aria-label="Close menu"
+              tabIndex={-1}
+            />
+            <div
+              ref={sheetRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Site menu"
+              className="fixed z-50 overflow-y-auto rounded-2xl border border-black/[0.08] dark:border-white/[0.10] bg-white dark:bg-[#141414] shadow-[0_2px_12px_rgba(0,20,50,0.10)] px-4 py-4"
+              style={{
+                top: "calc(var(--nav-inset) + var(--nav-pill-h) + 8px)",
+                left: "var(--nav-inset)",
+                right: "var(--nav-inset)",
+                maxHeight: "calc(100dvh - var(--nav-block) - 24px)",
+              }}
+            >
+              {mobileAccordions}
+              {mobileCta}
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  /* ── Banded header (every other route) ──────────────── */
   return (
-    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${headerClasses}`}>
+    <header className={`sticky top-0 z-50 w-full transition-all duration-300 ${bandedClasses}`}>
       <nav
         ref={navRef}
         className={`mx-auto flex max-w-7xl items-center justify-between py-4 ${
           isEditorial ? "px-6 md:px-12 lg:px-16" : "px-6 lg:px-8"
         }`}
+        aria-label="Main"
       >
-        {/* Logo. Both marks ship in the markup and the theme swap is
-            pure CSS, so there is no flash on load or on toggle. */}
-        <Link href="/" className="flex items-center flex-shrink-0" aria-label="EZee Assist home">
-          <Image
-            src="/logo-black.svg"
-            alt="EZee Assist"
-            width={LOGO_W}
-            height={LOGO_H}
-            priority
-            unoptimized
-            className="block dark:hidden"
-          />
-          <Image
-            src="/logo-white.svg"
-            alt=""
-            aria-hidden="true"
-            width={LOGO_W}
-            height={LOGO_H}
-            priority
-            unoptimized
-            className="hidden dark:block"
-          />
-        </Link>
-
-        {/* Desktop nav */}
-        <ul className="hidden md:flex items-center gap-1">
-          {dropdowns.map(({ key, label, panel }) => (
-            <li
-              key={key}
-              className="relative"
-              onMouseEnter={() => setActiveDropdown(key)}
-              onMouseLeave={() => setActiveDropdown(null)}
-            >
-              <button
-                className={`${triggerBase} ${activeDropdown === key ? triggerActive : triggerIdle}`}
-                onClick={() => setActiveDropdown(activeDropdown === key ? null : key)}
-                aria-expanded={activeDropdown === key}
-              >
-                {label}
-                <ChevronDown
-                  size={13}
-                  strokeWidth={2.5}
-                  className={`transition-transform duration-200 ${activeDropdown === key ? "rotate-180" : ""}`}
-                />
-              </button>
-              <DropdownWrapper keyName={key}>{panel}</DropdownWrapper>
-            </li>
-          ))}
-
-          {/* Customers folded into Resources as Case Studies. */}
-
-          {/* Resources */}
-          <li
-            className="relative"
-            onMouseEnter={() => setActiveDropdown("resources")}
-            onMouseLeave={() => setActiveDropdown(null)}
-          >
-            <button
-              className={`${triggerBase} ${activeDropdown === "resources" ? triggerActive : triggerIdle}`}
-              onClick={() => setActiveDropdown(activeDropdown === "resources" ? null : "resources")}
-              aria-expanded={activeDropdown === "resources"}
-            >
-              Resources
-              <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "resources" ? "rotate-180" : ""}`} />
-            </button>
-            <DropdownWrapper keyName="resources">
-              <ListPanel items={resourcesItems} onClose={closeAll} />
-            </DropdownWrapper>
-          </li>
-
-          {/* Company */}
-          <li
-            className="relative"
-            onMouseEnter={() => setActiveDropdown("company")}
-            onMouseLeave={() => setActiveDropdown(null)}
-          >
-            <button
-              className={`${triggerBase} ${activeDropdown === "company" ? triggerActive : triggerIdle}`}
-              onClick={() => setActiveDropdown(activeDropdown === "company" ? null : "company")}
-              aria-expanded={activeDropdown === "company"}
-            >
-              Company
-              <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "company" ? "rotate-180" : ""}`} />
-            </button>
-            <DropdownWrapper keyName="company">
-              <ListPanel items={companyItems} onClose={closeAll} />
-            </DropdownWrapper>
-          </li>
-        </ul>
-
-        {/* Desktop CTA */}
-        <div className="hidden md:flex items-center gap-3">
-          <ThemeToggle />
-          <Link href="/contact">
-            <Button size="sm" className="ed-btn-arrow gap-2" style={{ paddingRight: "0.25rem", paddingLeft: "1.125rem" }}>
-              Speak to an expert
-              <span className="ed-btn-arrow-badge ed-btn-arrow-badge-sm" aria-hidden="true">
-                <ArrowRight className="h-3 w-3" strokeWidth={2.25} />
-              </span>
-            </Button>
-          </Link>
-        </div>
-
-        {/* Mobile hamburger */}
-        <button
-          className="md:hidden p-2 rounded-lg text-[#0A0A0A] dark:text-gray-300 transition-colors"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
-        >
-          {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        {bar}
       </nav>
 
-      {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t border-[#E5E7EB] dark:border-white/[0.06] bg-white/95 dark:bg-[#0B0F19]/95 backdrop-blur-md px-6 pb-6">
-          <ul className="flex flex-col gap-1 pt-4">
-            {/* Platform + Solutions accordions */}
-            {[
-              { key: "platform"  as const, label: "Platform",  groups: platformGroups },
-              { key: "solutions" as const, label: "Solutions", groups: solutionsGroups },
-            ].map(({ key, label, groups }) => (
-              <li key={key}>
-                <button
-                  className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300"
-                  style={{ fontWeight: 500 }}
-                  onClick={() => setMobileSection(mobileSection === key ? null : key)}
-                >
-                  {label}
-                  <ChevronDown size={14} strokeWidth={2.5} className={`transition-transform duration-200 ${mobileSection === key ? "rotate-180" : ""}`} />
-                </button>
-                {mobileSection === key && (
-                  <div className="mt-1 ml-3 flex flex-col gap-2 border-l-2 border-[#00AEEF]/20 pl-4 pb-2">
-                    {groups.map((g) => (
-                      <div key={g.heading}>
-                        <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-1" style={{ fontWeight: 600 }}>
-                          {g.heading}
-                        </p>
-                        {g.items.map((item) => (
-                          <Link
-                            key={item.label}
-                            href={item.href}
-                            className="block py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] transition-colors"
-                            onClick={() => { setMobileOpen(false); setMobileSection(null); }}
-                          >
-                            {item.label}
-                          </Link>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </li>
-            ))}
-
-            {/* Customers folded into Resources as Case Studies. */}
-
-            {/* Resources + Company accordions */}
-            {[
-              { key: "resources" as const, label: "Resources", items: resourcesItems },
-              { key: "company"   as const, label: "Company",   items: companyItems },
-            ].map(({ key, label, items }) => (
-              <li key={key}>
-                <button
-                  className="flex w-full items-center justify-between rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300"
-                  style={{ fontWeight: 500 }}
-                  onClick={() => setMobileSection(mobileSection === key ? null : key)}
-                >
-                  {label}
-                  <ChevronDown size={14} strokeWidth={2.5} className={`transition-transform duration-200 ${mobileSection === key ? "rotate-180" : ""}`} />
-                </button>
-                {mobileSection === key && (
-                  <div className="mt-1 ml-3 flex flex-col gap-0.5 border-l-2 border-[#00AEEF]/20 pl-4 pb-2">
-                    {items.map((item) => (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        className="block py-1.5 text-sm text-gray-600 dark:text-gray-400 hover:text-[#00AEEF] transition-colors"
-                        onClick={() => { setMobileOpen(false); setMobileSection(null); }}
-                      >
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-
-          <div className="mt-4 flex items-center gap-3">
-            <ThemeToggle />
-            <Link href="/contact" className="flex-1" onClick={() => setMobileOpen(false)}>
-              <Button size="sm" className="w-full ed-btn-arrow gap-2" style={{ paddingRight: "0.25rem", paddingLeft: "1.125rem" }}>
-                Speak to an expert
-                <span className="ed-btn-arrow-badge ed-btn-arrow-badge-sm" aria-hidden="true">
-                  <ArrowRight className="h-3 w-3" strokeWidth={2.25} />
-                </span>
-              </Button>
-            </Link>
-          </div>
+          <div className="pt-4">{mobileAccordions}</div>
+          {mobileCta}
         </div>
       )}
     </header>

@@ -305,7 +305,13 @@ function ConversationCard() {
 
 export default function GrowthHero() {
   return (
-    <section className="relative w-full ed-bg overflow-hidden">
+    /* The nav pill floats over this section, so the hero starts at the top
+       of the document and pads its content past the pill. --nav-block is
+       the pill height plus its inset, defined on .theme-editorial. */
+    <section
+      className="relative w-full ed-bg overflow-hidden"
+      style={{ paddingTop: "var(--nav-block)" }}
+    >
       <div
         className="ed-hero-blob"
         style={{ width: "620px", height: "620px", top: "-220px", left: "-220px" }}

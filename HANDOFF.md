@@ -22,6 +22,7 @@ before picking the work back up in a fresh session.
 
 | # | Section | File | Anchor |
 |---|---|---|---|
+| 0 | Floating nav pill (overlays the hero) | `components/Navbar.tsx` | — |
 | 1 | Hero (logo band folded in, crops at fold) | `components/growth/Hero.tsx` + `TrustStrip.tsx` | — |
 | 2 | The problem (chart, 3 beats, one-layer payoff) | `components/growth/CoachsWeek.tsx` | `#the-week` |
 | 3 | The reveal | `components/TheSystem.tsx` | `#the-system` |
@@ -96,6 +97,41 @@ grid columns via `.ed-tile-fluid` (`app/globals.css`), which overrides the
 fixed widths the tiles carry for their other callers. Do not reintroduce
 transform scaling here; it was what made the tiles overlap the bar.
 
+## The floating nav pill
+
+**Homepage only.** `Navbar.tsx` branches on `floating = pathname === "/"`. Every
+other route keeps the banded header it always had, so the pill is not yet a
+site-wide pattern. Rolling it out means dropping that branch, not rewriting.
+
+How it overlays without pushing the hero down:
+
+- The header is **sticky, not fixed**, so an announcement bar above it still
+  pushes it down naturally.
+- The header carries `margin-bottom: calc(-1 * var(--nav-pill-h))`, which
+  cancels its own flow height. That is what lets the hero start at document
+  y=0 and sit behind the pill.
+- The hero pays it back with `padding-top: var(--nav-block)`.
+
+Three variables on `.theme-editorial` hold it together, and **both the nav and
+the hero read them**, which is why they live on the theme root:
+
+| Variable | Mobile | ≥768px |
+|---|---|---|
+| `--nav-inset` | 16px | 24px |
+| `--nav-pill-h` | 56px | 64px |
+| `--nav-block` | 72px | 88px |
+
+If you change the pill height, the hero padding follows automatically. Do not
+hardcode either number anywhere else.
+
+Mega-menu panels hang off their own trigger (`left-0 top-full`) with
+`pt-[1.75rem]`, which is both the hover bridge and the clearance for the pill's
+bottom edge, since the trigger is centred in a 64px bar. Closed panels are
+`invisible`, not just transparent, so their links stay out of the tab order.
+
+`.theme-editorial` sets `overflow-x: clip` rather than `hidden` on purpose:
+clip does not create a scroll container, so sticky still works.
+
 ## Standing rules
 
 **Scope.** Homepage only unless a prompt grants an explicit exception. If a
@@ -147,6 +183,11 @@ fit is usually 1024 rather than the smallest screen.
 - **Scrolled screenshots come back blank.** Workaround: clone the section into a
   `position:fixed` overlay at the top of the viewport, force `opacity:1` on
   descendants, and shift it with `top:-Npx` to pan.
+- **The page cannot actually be scrolled in the pane.** `window.scrollTo` and
+  setting `scrollingElement.scrollTop` both leave `scrollY` at 0. To photograph
+  sticky chrome over a lower section, put `transform: translateY(-Npx)` on
+  `<main>` instead: the header is a sibling, so the real pill composites over
+  the real section.
 - Framer Motion clobbers inline `transform` on `motion.*` — put static rotation
   or offsets on an inner plain `div`.
 - **No lint script exists** in this repo. `npx tsc --noEmit` is the check;
@@ -173,6 +214,16 @@ fit is usually 1024 rather than the smallest screen.
 ## Open TODOs, grouped by what a human must supply
 
 **Blocking before publish**
+- **There is no hero background image.** `public/hero-bg.jpg` sits untracked in
+  the repo, referenced by nothing, and no scrim exists anywhere in the code.
+  The floating-nav prompt asked to "re-check the scrim", so the hero-background
+  work was expected to already be here; it is not, on any branch. The pill
+  currently reads against a near-white hero via its border and shadow rather
+  than against a dark image. Wiring the image is a design pass (crop, focal
+  point, overlay, dark-mode treatment), not a re-check.
+- The hero CTA label is white on `#00AEEF` at 15px/500, which measures
+  **2.53:1** and fails AA (needs 4.5:1 at that size). Pre-existing, in
+  `ed-btn-blue`. Darkening the fill to `#0077A8` clears it at 4.99:1.
 - Real security posture copy for the Trust and control security tab. No
   certification claim may be reintroduced without evidence — "SOC 2 Type II
   aligned" was deliberately removed as unverified.

@@ -42,6 +42,20 @@
   --ed-accent-text:  #0077A8;
   --ed-accent-muted: #1B5A6E;
   --ed-rule:         #E5E7EB;
+
+  /* Floating nav pill. The pill overlays the hero, so the hero starts at
+     the top of the document and pads its content by --nav-block. Both the
+     nav and the hero read these, which is why they live on the theme root
+     rather than on the nav. */
+  --nav-inset:   16px;
+  --nav-pill-h:  56px;
+  --nav-block:   calc(var(--nav-inset) + var(--nav-pill-h));
+}
+@media (min-width: 768px) {
+  .theme-editorial {
+    --nav-inset:  24px;
+    --nav-pill-h: 64px;
+  }
 }
 .dark .theme-editorial,
 .theme-editorial.dark {
@@ -690,4 +704,38 @@ input[type="range"]::-moz-range-thumb {
 }
 #nprogress .peg {
   box-shadow: 0 0 10px #00AEEF, 0 0 5px #00AEEF !important;
+}
+
+/* ─── Floating nav pill ────────────────────────────────────
+   Homepage only. Other routes keep the banded header, so this
+   is all scoped under .theme-editorial. */
+
+.ed-nav-surface {
+  background-color: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(10, 10, 10, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 20, 50, 0.10);
+  -webkit-backdrop-filter: blur(12px) saturate(1.6);
+  backdrop-filter: blur(12px) saturate(1.6);
+}
+.dark .ed-nav-surface {
+  background-color: rgba(20, 20, 20, 0.92);
+  border-color: rgba(255, 255, 255, 0.10);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* Focus rings sit on two surfaces at once: the white pill and whatever
+   the hero puts behind it. The ring carries the contrast, the halo
+   separates it from a busy or dark backdrop. #00AEEF is only 2.5:1 on
+   white, so light mode rings use the darker accent. */
+.ed-nav :is(a, button):focus-visible,
+.ed-nav-sheet :is(a, button):focus-visible {
+  outline: 2px solid #0077A8;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.95);
+  border-radius: 10px;
+}
+.dark .ed-nav :is(a, button):focus-visible,
+.dark .ed-nav-sheet :is(a, button):focus-visible {
+  outline-color: #00AEEF;
+  box-shadow: 0 0 0 4px rgba(10, 10, 10, 0.92);
 }
