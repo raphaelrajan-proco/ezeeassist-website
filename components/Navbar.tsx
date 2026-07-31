@@ -72,7 +72,7 @@ const companyItems: NavItem[] = [
 ];
 
 /* Both marks share viewBox 0 0 583.2 151.2. */
-const LOGO_H = 34;
+const LOGO_H = 40;
 const LOGO_W = Math.round((583.2 / 151.2) * LOGO_H);
 
 type DropdownKey = "platform" | "solutions" | "resources" | "company" | null;

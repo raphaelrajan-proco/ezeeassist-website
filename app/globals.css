@@ -52,7 +52,9 @@
   --ed-fg-muted:     #A89B86;
   --ed-border:       #2A2A2A;
   --ed-card:         #141414;
-  --ed-card-alt:     #F5EDE0;
+  /* Was #F5EDE0, the cream foreground, which made the hero's inbound
+     message bubble unreadable in dark mode. */
+  --ed-card-alt:     #1F1F1F;
   --ed-accent:       #00AEEF;
   /* On dark surfaces #00AEEF already clears AA, so accent text is unchanged. */
   --ed-accent-text:  #00AEEF;

@@ -14,14 +14,20 @@ const ANNOUNCEMENT = {
 };
 
 /**
+ * Launch gate. The bar is built and kept, but stays hidden until the
+ * linked asset exists. Flip SHOW_ANNOUNCEMENT to true to restore it.
+ *
  * Thin dismissible bar above the nav. Single item, no rotation.
  * Dismissal persists in localStorage. Renders nothing until the
  * client has checked storage so a dismissed bar never flashes in.
  */
+const SHOW_ANNOUNCEMENT = false;
+
 export default function AnnouncementBar() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    if (!SHOW_ANNOUNCEMENT) return;
     try {
       if (window.localStorage.getItem(ANNOUNCEMENT.storageKey) !== "dismissed") {
         setVisible(true);

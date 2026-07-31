@@ -165,7 +165,8 @@
       "Bash(git commit -q -m 'feat\\(trust\\): six-tab control centre *)",
       "Bash(git commit -q -m 'feat\\(proof\\): outcome band, customer voices, links out *)",
       "Bash(git commit -q -m 'feat\\(cta\\): ask for one workflow, single live CTA *)",
-      "Bash(git commit -q -m 'feat\\(nav,footer\\): real logo, folded Customers tab, dead anchors fixed *)"
+      "Bash(git commit -q -m 'feat\\(nav,footer\\): real logo, folded Customers tab, dead anchors fixed *)",
+      "Bash(git commit -q -m 'fix\\(hero\\): type lockup, hidden announcement, dark bubble *)"
     ]
   }
 }

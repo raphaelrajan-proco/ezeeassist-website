@@ -316,7 +316,7 @@ export default function GrowthHero() {
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="uppercase mb-4"
               style={{
-                fontSize: "clamp(0.8125rem, 0.7rem + 0.25vw, 0.9375rem)",
+                fontSize: "clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem)",
                 fontWeight: 600,
                 letterSpacing: "0.16em",
                 color: "var(--ed-accent-text)",
@@ -332,13 +332,16 @@ export default function GrowthHero() {
               className="ed-fg mb-4"
               style={{
                 fontFamily: "var(--font-editorial)",
-                fontSize: "clamp(2.5rem, 1.4rem + 3vw, 3.5rem)",
+                fontSize: "clamp(2.25rem, -0.15rem + 4.05vw, 3.125rem)",
                 fontWeight: 500,
                 letterSpacing: "-0.03em",
                 lineHeight: 1.06,
               }}
             >
-              AI Operating System for franchisee success
+              <span className="block">AI Operating System</span>
+              <span className="block">
+                for <strong style={{ fontWeight: 700 }}>franchisee success</strong>.
+              </span>
             </motion.h1>
 
             <motion.p
@@ -347,13 +350,13 @@ export default function GrowthHero() {
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.25 }}
               className="ed-fg mb-4"
               style={{
-                fontSize: "clamp(1.125rem, 0.95rem + 0.6vw, 1.4375rem)",
+                fontSize: "clamp(0.95rem, 0.15rem + 1.2vw, 1.25rem)",
                 fontWeight: 400,
                 lineHeight: 1.4,
               }}
             >
-              Take all the low-value work off your coaches. Amplify their
-              tactical expertise across every location.
+              <span className="block">Take all the low-value work off your coaches.</span>
+              <span className="block">Amplify their tactical expertise across every location.</span>
             </motion.p>
 
             <motion.p
@@ -362,15 +365,17 @@ export default function GrowthHero() {
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.35 }}
               className="mb-6"
               style={{
-                fontSize: "clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem)",
+                fontSize: "clamp(0.8125rem, 0.75rem + 0.2vw, 0.9375rem)",
                 fontWeight: 400,
                 lineHeight: 1.5,
                 color: "var(--ed-fg-muted)",
               }}
             >
-              Repetitive questions. Compliance chasing. Report building. EZee
-              handles all of it, then lets a coach build a play once and run
-              it everywhere. Growth, not headcount.
+              <span className="block">Repetitive questions. Compliance chasing. Report building.</span>
+              <span className="block">
+                EZee handles all of it, then lets a coach build a play once and
+                run it everywhere. Growth, not headcount.
+              </span>
             </motion.p>
 
             <motion.div
@@ -410,8 +415,8 @@ export default function GrowthHero() {
             <p
               className="mt-4 text-center uppercase"
               style={{
-                fontSize: "14px",
-                letterSpacing: "0.18em",
+                fontSize: "7px",
+                letterSpacing: "0.14em",
                 fontWeight: 500,
                 color: "var(--ed-fg-muted)",
               }}
