@@ -209,7 +209,7 @@ export default function AudienceDuality() {
         className="ed-fg mt-10 text-center text-xl md:text-2xl tracking-[-0.02em]"
         style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
       >
-        HQ and franchisees share one platform and one set of guardrails, and each group gets its own view.
+        HQ sets the guardrails, and franchisees build inside them.
       </motion.p>
     </div>
   );
