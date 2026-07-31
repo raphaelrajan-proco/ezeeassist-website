@@ -343,6 +343,22 @@ fit is usually 1024 rather than the smallest screen.
   execution layer that connects all people, playbooks, and tools") rather than
   describing its effect on the week. It carries the "people, playbooks, and
   tools" phrasing that used to sit in a caption under `OrderedPanel`.
+- The problem section's beats go three-across only from **1024**, not 768. At
+  768 the three-column grid left each card 208px, which wrapped every question
+  and compliance badge and overran the shared card height. Below 1024 they
+  stack full width.
+- `CARD_H` (336) is set by the fullest visual at the tightest three-column
+  width, which is 1024. All three cards share it so the row reads as a band,
+  so adding a row to any one visual means re-checking the other two.
+- The problem section's opening line is sized to the hero's lead line
+  (22.5–35px) rather than the old 32–48px section scale, so the two openings
+  match. It is still an `h2`.
+- The `4/5` figure restates the Today bar (20% coaching leaves four days in
+  five). It is not a new claim, and it moves if the chart data moves.
+- `ScatteredPanel` and `StickyTile` in `artifact-panels.tsx` are now **unused**.
+  They drew the old report-building sprawl, which was replaced by
+  `REPORT_SCRAPS` in `CoachsWeek.tsx`. The tile components they share with
+  `OrderedPanel` are still live; only those two exports are dead.
 - The problem section's three beats are named for the hero descriptor
   (Repetitive questions / Compliance chasing / Report building) on purpose. If
   the hero descriptor changes, change these with it.
