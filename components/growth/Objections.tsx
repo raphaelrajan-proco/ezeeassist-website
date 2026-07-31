@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import { objections } from "@/lib/data/objections";
-import { Overline, SectionHeadline, SectionShell } from "./shared";
+import { SectionHeadline, SectionShell } from "./shared";
 
 /**
  * Section 14: three straight answers. One open at a time, smooth
@@ -23,7 +23,6 @@ export default function Objections() {
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         className="max-w-3xl mb-8 md:mb-10"
       >
-        <Overline>FAQ</Overline>
         <SectionHeadline>Seven questions worth asking.</SectionHeadline>
       </motion.div>
 

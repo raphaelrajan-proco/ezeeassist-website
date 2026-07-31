@@ -283,10 +283,6 @@ export default function Connected() {
           transition={{ duration: 0.85, ease: EASE }}
           className="max-w-3xl mb-14 md:mb-16"
         >
-          <p className="flex items-center gap-2.5 text-sm uppercase tracking-[0.2em] mb-8" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
-            <span aria-hidden="true" className="block h-2 w-2 flex-shrink-0" style={{ backgroundColor: BLUE }} />
-            Connections
-          </p>
           <h2
             className="ed-fg leading-[1.05] tracking-[-0.03em]"
             style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, textWrap: "balance", fontSize: "clamp(2rem, 1.1rem + 1.9vw, 3rem)" }}

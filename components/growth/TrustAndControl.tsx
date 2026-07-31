@@ -346,9 +346,6 @@ export default function TrustAndControl() {
           transition={{ duration: 0.85, ease: EASE }}
           className="mb-8 md:mb-10"
         >
-          <p className="text-sm uppercase tracking-[0.2em] mb-6" style={{ color: BLUE, fontWeight: 500 }}>
-            Trust and control
-          </p>
           {/* Hard two-line cap: the clamp maximum is set so this headline
               never reaches a third line at any width. */}
           <h2

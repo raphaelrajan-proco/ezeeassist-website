@@ -191,6 +191,13 @@ routes, picks up dark tokens without being edited. Its trust line takes an
 explicit colour because the dark set resolves `--ed-accent-text` to `#00AEEF`,
 which is 2.3:1 here.
 
+**No section labels.** Every section opens directly on its `h2`. The uppercase
+overlines above them ("The system", "What it does", "Proof", "Trust and
+control", "Connections", "FAQ", "Ready when you are") were all removed. The
+`Overline` component in `growth/shared.tsx` still exists and is still used by
+`components/sections/` on other routes, so it was kept; just do not reach for
+it on the homepage.
+
 ## Standing rules
 
 **Scope.** Homepage only unless a prompt grants an explicit exception. If a

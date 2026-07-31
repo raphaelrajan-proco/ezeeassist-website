@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Overline, SectionHeadline, SectionShell, MockAvatar } from "./shared";
+import { SectionHeadline, SectionShell, MockAvatar } from "./shared";
 import OutcomesStats from "./outcomes-stats";
 
 /**
@@ -105,7 +105,6 @@ export default function CustomerProof() {
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         className="max-w-3xl mb-10 md:mb-12"
       >
-        <Overline>Proof</Overline>
         <SectionHeadline>Here is where the week goes now.</SectionHeadline>
       </motion.div>
 

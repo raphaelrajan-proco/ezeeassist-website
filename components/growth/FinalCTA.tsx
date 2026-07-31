@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Overline, SectionHeadline, SectionShell } from "./shared";
+import { SectionHeadline, SectionShell } from "./shared";
 
 /**
  * The closing ask. One workflow, not three locations: the problem
@@ -24,7 +24,6 @@ export default function FinalCTA() {
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         className="max-w-3xl"
       >
-        <Overline>Ready when you are</Overline>
         <SectionHeadline>
           Bring us one franchise workflow. We&rsquo;ll show you how EZee would run it.
         </SectionHeadline>

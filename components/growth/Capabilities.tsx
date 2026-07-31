@@ -8,7 +8,7 @@ import {
   Smartphone, TrendingDown, TrendingUp, Users, type LucideIcon,
 } from "lucide-react";
 import {
-  Overline, SectionShell,
+  SectionShell,
   MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED, MOCK_HAIRLINE,
 } from "./shared";
 
@@ -478,7 +478,6 @@ export default function Capabilities() {
       <div className="grid grid-cols-1 lg:grid-cols-[34fr_60fr] gap-10 lg:gap-16 items-start">
         {/* Sticky rail */}
         <div className="lg:sticky lg:top-24">
-          <Overline>What it does</Overline>
           <h2
             className="ed-fg leading-[1.05] tracking-[-0.03em]"
             style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, fontSize: "clamp(2rem, 1.1rem + 1.9vw, 3rem)" }}

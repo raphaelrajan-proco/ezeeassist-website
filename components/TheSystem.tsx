@@ -157,9 +157,6 @@ export default function TheSystem() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.85, ease: EASE }}
           >
-            <p className="text-sm uppercase tracking-[0.2em] mb-6" style={{ color: BLUE, fontWeight: 500 }}>
-              The system
-            </p>
             <h2
               className="leading-[1.05] tracking-[-0.03em]"
               style={{ color: FG, fontFamily: "var(--font-editorial)", fontWeight: 500, fontSize: "clamp(2rem, 1.1rem + 1.9vw, 3rem)" }}
