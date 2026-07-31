@@ -292,7 +292,7 @@ export default function CoachsWeek() {
         ))}
       </div>
 
-      {/* Payoff: one layer, and the week goes back to coaching */}
+      {/* Payoff: one layer the people, playbooks and tools all run on */}
       <motion.p
         initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -301,7 +301,7 @@ export default function CoachsWeek() {
         className="ed-fg mt-14 md:mt-16 text-2xl md:text-3xl tracking-[-0.02em] max-w-3xl"
         style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, lineHeight: 1.25, textWrap: "balance" }}
       >
-        What is missing is one system all three run on, so the week goes back to coaching.
+        What&rsquo;s missing is one unified execution layer that connects all people, playbooks, and tools.
       </motion.p>
 
       <div className="mt-8">

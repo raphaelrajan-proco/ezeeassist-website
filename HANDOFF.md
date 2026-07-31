@@ -162,6 +162,10 @@ Note the container caps at `max-w-7xl`, so the hero copy column stops growing at
   was retired from the problem section: the numbers read as unexplained and the
   visual did not support the beat it sat under. It is recoverable from tag
   `v3-step12-pre` if the argument is ever restated.
+- The problem section's payoff line names the layer directly ("one unified
+  execution layer that connects all people, playbooks, and tools") rather than
+  describing its effect on the week. It carries the "people, playbooks, and
+  tools" phrasing that used to sit in a caption under `OrderedPanel`.
 - The problem section's three beats are named for the hero descriptor
   (Repetitive questions / Compliance chasing / Report building) on purpose. If
   the hero descriptor changes, change these with it.
