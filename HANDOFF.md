@@ -39,6 +39,14 @@ rename a section.
 Support modules (not sections): `artifact-panels.tsx`, `audience-duality.tsx`,
 `handoff-flow.tsx`. Unwired-but-kept work lives in `components/growth/_archive/`.
 
+**`artifact-panels.tsx` renders the same four tile components twice**, and the
+titles differ by design. `ScatteredPanel` (inside the Report building beat)
+gets the ad-hoc names — "AI chat", "coach's macro.xlsx", "HQ's prompt doc v7",
+"someone's flow" — because the sprawl *is* the point there. `OrderedPanel`
+passes `ezee` / `governed` to get the product names: Guardrailed Support Agent,
+Coaching Analytics, HQ's benchmarks and standards, Personalized automations.
+Rename one side via its flag, never by editing the shared literal.
+
 The hero's copy stack is eyebrow, lead, sub-lead, CTA. Each line carries the
 type of the **slot** it sits in, not type of its own:
 

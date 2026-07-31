@@ -22,12 +22,12 @@ function ConsumerChatTile({ ezee = false }: { ezee?: boolean }) {
       <div className="flex items-center justify-between px-2.5 py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
         <span className="flex items-center gap-1.5">
           <Sparkles aria-hidden="true" className="w-3 h-3" strokeWidth={2} style={{ color: ezee ? "#00AEEF" : "#10A37F" }} />
-          <span className="text-[10px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
-            {ezee ? "Brand AI" : "AI chat"}
+          <span className="text-[10px] truncate" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
+            {ezee ? "Guardrailed Support Agent" : "AI chat"}
           </span>
         </span>
         {ezee && (
-          <span className="rounded-full px-1.5 py-0.5 text-[8px]" style={{ backgroundColor: "rgba(0,174,239,0.10)", color: "#0077A8", fontWeight: 700 }}>
+          <span className="rounded-full px-1.5 py-0.5 text-[8px] flex-shrink-0 whitespace-nowrap" style={{ backgroundColor: "rgba(0,174,239,0.10)", color: "#0077A8", fontWeight: 700 }}>
             Franchisee · Store #214
           </span>
         )}
@@ -55,13 +55,13 @@ function ConsumerChatTile({ ezee = false }: { ezee?: boolean }) {
   );
 }
 
-function SpreadsheetTile() {
+function SpreadsheetTile({ governed = false }: { governed?: boolean } = {}) {
   return (
     <div className="rounded-xl overflow-hidden w-[220px]" style={MOCK_SURFACE}>
       <div className="flex items-center gap-1.5 px-2.5 py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
         <span aria-hidden="true" className="block h-2 w-2 rounded-sm flex-shrink-0" style={{ backgroundColor: "#188038" }} />
         <span className="text-[10px] truncate" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
-          coach&apos;s macro.xlsx
+          {governed ? "Coaching Analytics" : "coach's macro.xlsx"}
         </span>
       </div>
       <div className="flex items-center gap-1.5 px-2.5 py-1" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}`, backgroundColor: "rgba(10,10,10,0.03)" }}>
@@ -81,13 +81,13 @@ function SpreadsheetTile() {
   );
 }
 
-function PromptDocTile() {
+function PromptDocTile({ governed = false }: { governed?: boolean } = {}) {
   return (
     <div className="rounded-xl overflow-hidden w-[210px]" style={MOCK_SURFACE}>
       <div className="flex items-center gap-1.5 px-2.5 py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
         <FileText aria-hidden="true" className="w-3 h-3 flex-shrink-0" strokeWidth={2} style={{ color: "#4285F4" }} />
         <span className="text-[10px] truncate" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
-          HQ&apos;s prompt doc v7
+          {governed ? "HQ's benchmarks and standards" : "HQ's prompt doc v7"}
         </span>
       </div>
       <div className="px-2.5 py-2 space-y-1">
@@ -105,13 +105,13 @@ function PromptDocTile() {
   );
 }
 
-function FlowTile() {
+function FlowTile({ governed = false }: { governed?: boolean } = {}) {
   return (
     <div className="rounded-xl overflow-hidden w-[200px]" style={MOCK_SURFACE}>
       <div className="flex items-center gap-1.5 px-2.5 py-1.5" style={{ borderBottom: `1px solid ${MOCK_HAIRLINE}` }}>
         <Zap aria-hidden="true" className="w-3 h-3 flex-shrink-0" strokeWidth={2} style={{ color: "#FF4F00" }} />
-        <span className="text-[10px]" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
-          someone&apos;s flow
+        <span className="text-[10px] truncate" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
+          {governed ? "Personalized automations" : "someone's flow"}
         </span>
       </div>
       <div className="px-2.5 py-2 space-y-1">
@@ -208,7 +208,6 @@ export function ScatteredPanel({ bare = false }: { bare?: boolean } = {}) {
  * and the rail rendered as broken fragments. Divs keep the stroke a real
  * 2px at every width. */
 const SPINE_COLOR = "#00AEEF";
-const SPINE_GLOW = "0 0 6px rgba(0,174,239,0.55), 0 0 14px rgba(0,174,239,0.28)";
 const SPINE_W = 2;          /* line thickness, px */
 const SPINE_H = 44;         /* total spine block height, px */
 const RAIL_Y = 24;          /* rail distance from the top of the block, px */
@@ -229,7 +228,6 @@ function Spine({ inView }: { inView: boolean }) {
   const line: React.CSSProperties = {
     position: "absolute",
     backgroundColor: SPINE_COLOR,
-    boxShadow: SPINE_GLOW,
     borderRadius: SPINE_W / 2,
   };
 
@@ -285,11 +283,13 @@ function Spine({ inView }: { inView: boolean }) {
 export function OrderedPanel() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  /* Governed names. The scattered panel renders these same components
+     without the flag, where the ad-hoc names are the whole point. */
   const tiles = [
     <ConsumerChatTile key="a" ezee />,
-    <SpreadsheetTile key="b" />,
-    <PromptDocTile key="c" />,
-    <FlowTile key="d" />,
+    <SpreadsheetTile key="b" governed />,
+    <PromptDocTile key="c" governed />,
+    <FlowTile key="d" governed />,
   ];
 
   return (
@@ -299,8 +299,8 @@ export function OrderedPanel() {
       style={{ backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-rule)" }}
     >
       <p className="sr-only">
-        The same artifacts, upright and aligned, connected into a single
-        execution layer with role-scoped, source-cited chrome.
+        The same artifacts, upright and aligned, connected into a unified
+        operating system with role-scoped, source-cited chrome.
       </p>
 
       {/* Four artifacts across, each sized to its own column */}
@@ -336,7 +336,7 @@ export function OrderedPanel() {
           className="text-sm"
           style={{ fontFamily: "var(--font-editorial)", fontWeight: 600, color: "var(--ed-accent-text)" }}
         >
-          One execution layer
+          Unified Operating System
         </span>
       </motion.div>
     </div>

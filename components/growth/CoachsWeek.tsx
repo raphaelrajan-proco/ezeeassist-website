@@ -313,7 +313,7 @@ export default function CoachsWeek() {
           color: "var(--ed-accent-text)",
         }}
       >
-        What&rsquo;s missing is one unified execution layer that connects all people, playbooks, and tools.
+        What&rsquo;s missing is a unified execution layer that connects all people, playbooks, and tools.
       </motion.p>
 
       <div className="mt-8">
