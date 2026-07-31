@@ -9,7 +9,7 @@ const footerLinks = {
   Platform: [
     { label: "Platform Overview", href: "/solution" },
     { label: "Answers",           href: "/#answers" },
-    { label: "Workflows",         href: "/#workflows" },
+    { label: "Agents",            href: "/#agents" },
     { label: "Reporting",         href: "/#reporting" },
     { label: "AI Apps",           href: "/#ai-apps" },
     { label: "Ticketing",         href: "/solution/ticketing" },

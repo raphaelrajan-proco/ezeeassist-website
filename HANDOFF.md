@@ -219,10 +219,31 @@ Two deliberate departures from the spec, both flagged at the time:
   `lib/data/integrations.ts` so they are at least real. Swap for `<Image>`
   when the assets land.
 
-**The five outputs no longer match the capability modules.** The diagram says
-Answers / Agents / Reporting Hub / Compliance Hub / Applications Hub; section
-4 still says Answers / Ticketing / Workflows / Reporting / AI Apps. That
-one-to-one mapping was previously deliberate. Resolve in one direction.
+The five outputs match section 4's five pills one to one again, which was the
+original intent: Answers / Agents / Reporting Hub / Compliance Hub /
+Applications Hub.
+
+## Capability showcase (section 4)
+
+Also built from a supplied handoff. The old sticky-rail, scroll-driven module
+layout is gone; this is a rail of five pills beside a photo stage that
+auto-advances every 6.5s. Hovering the block pauses it, clicking a pill jumps
+and resets the timer, and `prefers-reduced-motion` stops the auto-advance
+while leaving the pills clickable.
+
+Tokens live in `.ed-showcase` in globals.css. **`--sc-accent-ink` is not
+decoration**: it is the darker accent used anywhere white text or an icon sits
+on an accent fill, because `#00AEEF` under white is 2.5:1. It resolves to
+`#0077A8` in light and `#00AEEF` in dark.
+
+**The photos are Unsplash hotlinks.** The handoff names them as stand-ins and
+subject matter as the spec. That means production currently depends on the
+Unsplash CDN for five images. Swap for owned photography before launch.
+
+Pill ids double as deep-link anchors and the component reads
+`location.hash` on mount to open the matching scene. The footer's Platform
+column points at four of them; `Workflows → /#workflows` became
+`Agents → /#agents` when the labels changed.
 
 ## Standing rules
 

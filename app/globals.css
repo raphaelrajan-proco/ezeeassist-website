@@ -809,3 +809,45 @@ input[type="range"]::-moz-range-thumb {
   .ed-sys-log > *:first-child { opacity: 1 !important }
   .ed-sys-dot          { display: none !important }
 }
+
+/* ─── Capability showcase (auto-rotating stage) ────────────
+   Built from a supplied design handoff. Tokens are section-scoped so the
+   piece keeps its own palette while still following the site's dark
+   mode. Accent maps to the brand blue; --sc-accent-ink is the darker
+   accent used wherever white text or an icon sits on an accent fill,
+   because #00AEEF under white is only 2.5:1. */
+.ed-showcase {
+  --sc-panel:   #FFFFFF;
+  --sc-panel-2: #F8FAFD;
+  --sc-chip:    #F1F4F9;
+  --sc-text:    #0B1220;
+  --sc-muted:   #5C6675;
+  --sc-border:  rgba(12,20,36,.09);
+  --sc-accent:  #00AEEF;
+  --sc-accent-ink: #0077A8;
+  --sc-accent-soft2: rgba(0,174,239,.16);
+  --sc-ok:      #0E9F6E;
+  --sc-stage:   #E9EEF6;
+  --sc-shadow:  0 24px 60px -28px rgba(12,20,36,.25);
+}
+.dark .ed-showcase {
+  --sc-panel:   #0B101C;
+  --sc-panel-2: #0E1524;
+  --sc-chip:    #141B2C;
+  --sc-text:    #EEF2F8;
+  --sc-muted:   #93A0B5;
+  --sc-border:  rgba(238,242,248,.09);
+  --sc-accent:  #00AEEF;
+  --sc-accent-ink: #00AEEF;
+  --sc-accent-soft2: rgba(0,174,239,.25);
+  --sc-ok:      #34D399;
+  --sc-stage:   #0E1524;
+  --sc-shadow:  0 30px 70px -30px rgba(0,0,0,.7);
+}
+
+@keyframes ed-sc-tab-fill { from { width: 0 } to { width: 100% } }
+
+/* Reduced motion stops the auto-advance (handled in JS) and the bar. */
+@media (prefers-reduced-motion: reduce) {
+  .ed-sc-bar { animation: none !important; width: 100% !important }
+}
