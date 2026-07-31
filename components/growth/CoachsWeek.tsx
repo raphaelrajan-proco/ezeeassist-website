@@ -298,8 +298,16 @@ export default function CoachsWeek() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-        className="ed-fg mt-14 md:mt-16 text-2xl md:text-3xl tracking-[-0.02em] max-w-3xl"
-        style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, lineHeight: 1.25, textWrap: "balance" }}
+        className="mt-14 md:mt-16 text-2xl md:text-3xl tracking-[-0.02em] max-w-3xl"
+        style={{
+          fontFamily: "var(--font-editorial)",
+          fontWeight: 500,
+          lineHeight: 1.25,
+          textWrap: "balance",
+          /* The accent token, not raw #00AEEF: brand blue on the section's
+             light background sits near 2.4:1, which fails at this size. */
+          color: "var(--ed-accent-text)",
+        }}
       >
         What&rsquo;s missing is one unified execution layer that connects all people, playbooks, and tools.
       </motion.p>

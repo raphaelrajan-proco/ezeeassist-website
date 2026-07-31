@@ -335,16 +335,20 @@ export default function GrowthHero() {
             )}
 
             {/* Eyebrow slot. The h1 stays on this line so the page's primary
-                statement still matches the title tag and the JSON-LD, even
-                though it now reads at eyebrow size. */}
+                statement still matches the title tag and the JSON-LD.
+                Held to one line at every width. Bold and uppercase at 0.16em
+                is wide, so the column is the ceiling: one line allows 10.5px
+                at 390, 13px at 1024, 16px at 1205, 16.75px at 1440. The
+                clamp sits just under each. Tracking is the lever if this ever
+                needs to be larger; dropping to 0.10em buys about 1.5px. */}
             <motion.h1
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="uppercase mb-4"
               style={{
-                fontSize: "clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem)",
-                fontWeight: 600,
+                fontSize: "clamp(0.625rem, -0.173rem + 1.49vw, 1rem)",
+                fontWeight: 700,
                 letterSpacing: "0.16em",
                 color: "var(--ed-accent-text)",
               }}
@@ -352,15 +356,13 @@ export default function GrowthHero() {
               AI Operating System for franchisee success.
             </motion.h1>
 
-            {/* Lead slot. Sized down from the old 36-48px, because the copy
-                here is now 101 characters rather than 42. "Amplify their
-                tactical expertise across every location." fills the column on
-                its own at 21px, so the old 48px ran it to three lines. The
-                slope holds each sentence to two lines at every width. Sized
-                against measured wrap points, not a width ratio: the ceiling
-                for two lines is 30px at 1024, 37px at 1205, 38.5px at 1440.
-                1024 binds hardest, because that is where the two-column grid
-                starts and squeezes the copy column to 425px. */}
+            {/* Lead slot. The two sentences flow as one wrapped paragraph, so
+                the size is capped by total line count rather than by fitting
+                each sentence to two lines. Sized against measured wrap points,
+                not a width ratio: the ceiling for four lines is 27.5px at 390,
+                34.5px at 1024, 42px at 1205, 43.5px at 1440. 1024 binds
+                hardest, because that is where the two-column grid starts and
+                squeezes the copy column to 425px, narrower than at 768. */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -368,14 +370,14 @@ export default function GrowthHero() {
               className="ed-fg mb-4"
               style={{
                 fontFamily: "var(--font-editorial)",
-                fontSize: "clamp(1.4375rem, 0.74rem + 1.68vw, 2.25rem)",
+                fontSize: "clamp(1.625rem, 0.99rem + 1.68vw, 2.5rem)",
                 fontWeight: 700,
                 letterSpacing: "-0.03em",
                 lineHeight: 1.1,
               }}
             >
-              <span className="block">Take all the low-value work off your coaches.</span>
-              <span className="block">Amplify their tactical expertise across every location.</span>
+              Take all the low-value work off your coaches. Amplify their
+              tactical expertise across every location.
             </motion.p>
 
             <motion.p

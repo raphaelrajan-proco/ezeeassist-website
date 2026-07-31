@@ -44,8 +44,8 @@ type of the **slot** it sits in, not type of its own:
 
 | Slot | Copy | Type |
 |---|---|---|
-| Eyebrow (`h1`) | AI Operating System for franchisee success. | 9.7–11.25px, 600, uppercase, 0.16em, accent blue |
-| Lead | Take all the low-value work off your coaches. / Amplify their tactical expertise across every location. | 23–36px, 700, -0.03em |
+| Eyebrow (`h1`) | AI Operating System for franchisee success. | 10–16px, 700, uppercase, 0.16em, accent blue, one line always |
+| Lead | Take all the low-value work off your coaches. Amplify their tactical expertise across every location. | 26–40px, 700, -0.03em, flows as one paragraph |
 | Sub-lead | Repetitive questions… / EZee handles all of it… | 15.2–20px, 400, `ed-fg` |
 
 The `h1` deliberately sits on the eyebrow line, styled small, so the page's
@@ -56,13 +56,27 @@ The trust line ("Trusted by 70+ brands…") sits below the visual, directly
 above the logo marquee, rendered by `TrustStrip.tsx` rather than the hero. See
 the flag note below for how to put it back.
 
-**Sizing the lead is measurement work, not arithmetic.** A width-ratio
-estimate said 36px would hold two lines per sentence at 1024; real wrapping
-gave three, because breaks land on words. Binary-search the actual wrap in the
-browser instead. Measured ceilings for two lines per sentence: 24.5px at 390,
-30px at 1024, 37px at 1205, 38.5px at 1440. **1024 binds hardest**, since that
-is where the two-column grid starts and the copy column drops to 425px, its
-narrowest anywhere. Anything retuned here has to clear 1024 first.
+**Sizing these two lines is measurement work, not arithmetic.** A width-ratio
+estimate said 36px would hold the lead to two lines per sentence at 1024; real
+wrapping gave three, because breaks land on words. Binary-search the actual
+wrap in the browser instead.
+
+Measured ceilings, both held to their line budget:
+
+| Viewport | Column | Lead, 4 lines | Eyebrow, 1 line |
+|---|---|---|---|
+| 390 | 342 | 27.5px | 10.5px |
+| 768 | 608 | 49.5px | 18.75px |
+| 1024 | 425 | 34.5px | 13px |
+| 1205 | 517 | 42px | 16px |
+| 1440 | 539 | 43.5px | 16.75px |
+
+**1024 binds hardest** for both, since that is where the two-column grid starts
+and the copy column drops to 425px, its narrowest anywhere. Anything retuned
+here has to clear 1024 first, not 390.
+
+The eyebrow is bold uppercase at 0.16em, which is wide, so tracking is the
+lever if it ever has to be larger: dropping to 0.10em buys about 1.5px.
 
 `OrderedPanel` in `artifact-panels.tsx` closes the problem section. Four
 artifact tiles run left to right, an SVG spine drops from each into a shared
@@ -176,9 +190,12 @@ fit is usually 1024 rather than the smallest screen.
 
 ## Known deviations from spec
 
-- The hero lead is a four-line lockup (two lines per sentence), not the
+- The hero lead flows as one wrapped paragraph across four lines, not the
   originally specified single-line-per-sentence version: the copy column
   physically cannot hold it. Sizes are constraint-derived.
+- The problem section's payoff line is accent blue (`--ed-accent-text`), not
+  raw `#00AEEF`. Brand blue on that section's light background measures about
+  2.4:1, which fails at any size. The token gives 4.54:1 light and 7.28:1 dark.
 - The Trust and control H2 holds two lines at 768px and above; it takes three at
   390, where a two-line cap would need ~22px type.
 - Section 7 keeps its full layout rather than becoming a "compact band", since
