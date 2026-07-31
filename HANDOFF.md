@@ -45,8 +45,11 @@ type of the **slot** it sits in, not type of its own:
 | Slot | Copy | Type |
 |---|---|---|
 | Eyebrow (`h1`) | AI Operating System for franchisee success. | 10–16px, 700, uppercase, 0.16em, accent blue, one line always |
-| Lead | Take all the low-value work off your coaches. Amplify their tactical expertise across every location. | 26–40px, 700, -0.03em, flows as one paragraph |
-| Sub-lead | Repetitive questions… / EZee handles all of it… | 15.2–20px, 400, `ed-fg` |
+| Lead | Take all the low-value work off your coaches. **Amplify tactical coaching expertise across every location.** | 26–40px, 700, -0.03em, flows as one paragraph, second sentence in `#00AEEF` |
+| Sub-lead | Repetitive questions… EZee handles all of it… | 15.2–20px, 400, `ed-fg`, flows as one paragraph |
+
+Neither the lead nor the sub-lead carries a forced line break. Both wrap
+naturally, so nothing needs re-breaking when copy changes.
 
 The `h1` deliberately sits on the eyebrow line, styled small, so the page's
 primary statement still matches the title tag and the JSON-LD. Moving it to
@@ -196,6 +199,13 @@ fit is usually 1024 rather than the smallest screen.
 - The problem section's payoff line is accent blue (`--ed-accent-text`), not
   raw `#00AEEF`. Brand blue on that section's light background measures about
   2.4:1, which fails at any size. The token gives 4.54:1 light and 7.28:1 dark.
+- The hero lead's second sentence is raw `#00AEEF` on request, and measures
+  about 2.4:1 on the hero background. It is display type at 26–40px, so it
+  reads, but it does not meet WCAG AA. `--ed-accent-text` is the accessible
+  swap if that ever matters more than the exact brand blue.
+- The coach's-week chart draws Coaching in the same `#00AEEF` in both bars.
+  The Today bar used to tint it to 55%; the contrast the chart makes is width,
+  not shade, and the tint weakened it.
 - The Trust and control H2 holds two lines at 768px and above; it takes three at
   390, where a two-line cap would need ~22px type.
 - Section 7 keeps its full layout rather than becoming a "compact band", since

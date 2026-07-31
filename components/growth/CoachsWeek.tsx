@@ -20,23 +20,25 @@ import { OrderedPanel, ScatteredPanel } from "./artifact-panels";
 
 /* ── Coach's-week chart ────────────────────────────────── */
 
-type Category = { key: string; label: string; color: string; onColor: string; highlight?: boolean };
+type Category = { key: string; label: string; color: string; onColor: string };
 
+/* Coaching reads the same brand blue in both bars. The contrast the chart
+ * makes is width, not shade, so tinting the smaller share weakened it. */
 const CATEGORIES: Category[] = [
   { key: "questions",  label: "Repeat questions", color: "#3F3F46", onColor: "#FFFFFF" },
   { key: "compliance", label: "Compliance",       color: "#71717A", onColor: "#FFFFFF" },
   { key: "prep",       label: "Call prep",        color: "#A1A1AA", onColor: "#18181B" },
   { key: "reporting",  label: "Reports",          color: "#D4D4D8", onColor: "#18181B" },
-  { key: "coaching",   label: "Coaching",         color: "#00AEEF", onColor: "#FFFFFF", highlight: true },
+  { key: "coaching",   label: "Coaching",         color: "#00AEEF", onColor: "#FFFFFF" },
 ];
 
 /** Below this share a label cannot fit inside its own segment at the
  *  narrowest desktop width, so only the majority bands are named. */
 const IN_BAR_LABEL_MIN_PCT = 16;
 
-const BARS: { label: string; values: Record<string, number> }[] = [
+const BARS: { label: string; strong?: boolean; values: Record<string, number> }[] = [
   { label: "Today",             values: { questions: 50, compliance: 15, prep: 10, reporting: 5, coaching: 20 } },
-  { label: "What it should be", values: { questions: 5,  compliance: 5,  prep: 5,  reporting: 5, coaching: 80 } },
+  { label: "What it should be", strong: true, values: { questions: 5, compliance: 5, prep: 5, reporting: 5, coaching: 80 } },
 ];
 
 function Bar({ bar, barIndex, inView, reduceMotion }: {
@@ -44,14 +46,16 @@ function Bar({ bar, barIndex, inView, reduceMotion }: {
 }) {
   return (
     <div>
-      <p className="ed-fg text-sm mb-2" style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}>
+      <p
+        className="ed-fg text-sm mb-2"
+        style={{ fontFamily: "var(--font-editorial)", fontWeight: bar.strong ? 700 : 500 }}
+      >
         {bar.label}
       </p>
 
       <div className="flex w-full overflow-hidden rounded-md" style={{ height: "32px", border: "1px solid var(--ed-rule)" }}>
         {CATEGORIES.map((cat, i) => {
           const pct = bar.values[cat.key];
-          const dimmed = Boolean(cat.highlight && barIndex === 0);
           return (
             <motion.div
               key={cat.key}
@@ -61,13 +65,13 @@ function Bar({ bar, barIndex, inView, reduceMotion }: {
               className="flex items-center justify-center flex-shrink-0 overflow-hidden"
               style={{
                 width: reduceMotion ? `${pct}%` : undefined,
-                backgroundColor: dimmed ? "rgba(0,174,239,0.55)" : cat.color,
+                backgroundColor: cat.color,
               }}
             >
               {pct >= IN_BAR_LABEL_MIN_PCT && (
                 <span
                   className="px-2 text-[11px] whitespace-nowrap"
-                  style={{ color: dimmed ? "var(--ed-fg)" : cat.onColor, fontWeight: 600 }}
+                  style={{ color: cat.onColor, fontWeight: 600 }}
                 >
                   {cat.label}
                 </span>

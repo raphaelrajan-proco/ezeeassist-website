@@ -376,8 +376,10 @@ export default function GrowthHero() {
                 lineHeight: 1.1,
               }}
             >
-              Take all the low-value work off your coaches. Amplify their
-              tactical expertise across every location.
+              Take all the low-value work off your coaches.{" "}
+              <span style={{ color: "#00AEEF" }}>
+                Amplify tactical coaching expertise across every location.
+              </span>
             </motion.p>
 
             <motion.p
@@ -391,11 +393,9 @@ export default function GrowthHero() {
                 lineHeight: 1.4,
               }}
             >
-              <span className="block">Repetitive questions. Compliance chasing. Report building.</span>
-              <span className="block">
-                EZee handles all of it, then lets a coach build a play once and
-                run it everywhere. Growth, not headcount.
-              </span>
+              Repetitive questions. Compliance chasing. Report building. EZee
+              handles all of it, then lets a coach build a play once and run it
+              everywhere. Growth, not headcount.
             </motion.p>
 
             <motion.div
