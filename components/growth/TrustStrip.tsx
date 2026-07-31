@@ -14,7 +14,12 @@ import { NETWORK_SCALE } from "@/lib/data/network-scale";
  *  this background. */
 export default function GrowthTrustStrip({ showTrustLine = false }: { showTrustLine?: boolean }) {
   return (
-    <div className="ed-on-dark w-full">
+    /* relative is load-bearing: the hero's background image and scrims are an
+       absolutely-positioned layer, and positioned elements paint above static
+       ones in the same stacking context. Without it this whole strip renders
+       underneath the scrim. LogoMarquee has its own relative root, which is
+       why the logos survived and only the trust line disappeared. */
+    <div className="ed-on-dark relative w-full">
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-4 pb-8 md:pt-6 md:pb-10">
         {showTrustLine && (
           <p

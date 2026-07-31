@@ -166,6 +166,16 @@ Three scrim layers, all constants at the top of `Hero.tsx`:
 `object-position: left` is load-bearing: it drops the near-white right edge,
 which is the part light text cannot survive.
 
+**Everything inside the hero must be positioned.** The image and scrims are an
+`absolute inset-0` layer, and positioned elements paint above static ones in
+the same stacking context, so any static child renders *underneath* the scrim.
+This already ate the trust line once: `LogoMarquee` has its own `relative`
+root so the logos survived, and only the unpositioned `<p>` above them
+vanished. A DOM check will not catch this, because the element is present with
+correct geometry and colour. Test with
+`document.elementFromPoint(cx, cy) === el`, and note that returns false for
+anything outside the viewport, so offset `<main>` first to bring it on screen.
+
 Copy colours are `HERO_FG` white, `HERO_FG_SOFT` cream, `HERO_ACCENT`
 `#9FE0F8`. The cyan is reserved for the lead's second sentence, which is
 26–40px bold and therefore large text at a 3:1 bar; it does not clear 4.5:1
