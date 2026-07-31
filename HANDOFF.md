@@ -132,6 +132,39 @@ bottom edge, since the trigger is centred in a 64px bar. Closed panels are
 `.theme-editorial` sets `overflow-x: clip` rather than `hidden` on purpose:
 clip does not create a scroll container, so sticky still works.
 
+## The hero background
+
+`public/hero-bg.jpg` (2560x1440) is a blue gradient: deep at the left, near
+white at the bottom right. **The hero runs light on it.** Sampled per pixel,
+the copy column sits around `#1069af`, where the old dark palette died —
+`#0077A8` measured 1.15:1 and `#00AEEF` 2.27:1.
+
+Three scrim layers, all constants at the top of `Hero.tsx`:
+
+| Layer | Value | Why |
+|---|---|---|
+| flat | `rgba(4,32,54,0.30)` | unifies the frame |
+| top fade | `0.15` → 0 by 35% | 390 crops to the image's lightest 19%; without it the eyebrow sat at 4.40:1 |
+| bottom fade | 0 from 50% → `0.90` | the trust line and marquee sit on the brightest part of the frame |
+
+`object-position: left` is load-bearing: it drops the near-white right edge,
+which is the part light text cannot survive.
+
+Copy colours are `HERO_FG` white, `HERO_FG_SOFT` cream, `HERO_ACCENT`
+`#9FE0F8`. The cyan is reserved for the lead's second sentence, which is
+26–40px bold and therefore large text at a 3:1 bar; it does not clear 4.5:1
+and must not be reused at body size.
+
+**Measure against the worst pixel in a band, not its average.** The scrim
+values are the weakest that clear every target that way. Verified at 1205 and
+390: everything passes, tightest is 390 lead-cyan at 3.62:1 against a 3.0 bar.
+If the image is ever swapped, re-derive all three scrim values.
+
+`TrustStrip` carries `ed-on-dark` so `LogoMarquee`, which is shared with other
+routes, picks up dark tokens without being edited. Its trust line takes an
+explicit colour because the dark set resolves `--ed-accent-text` to `#00AEEF`,
+which is 2.3:1 here.
+
 ## Standing rules
 
 **Scope.** Homepage only unless a prompt grants an explicit exception. If a
@@ -214,16 +247,9 @@ fit is usually 1024 rather than the smallest screen.
 ## Open TODOs, grouped by what a human must supply
 
 **Blocking before publish**
-- **There is no hero background image.** `public/hero-bg.jpg` sits untracked in
-  the repo, referenced by nothing, and no scrim exists anywhere in the code.
-  The floating-nav prompt asked to "re-check the scrim", so the hero-background
-  work was expected to already be here; it is not, on any branch. The pill
-  currently reads against a near-white hero via its border and shadow rather
-  than against a dark image. Wiring the image is a design pass (crop, focal
-  point, overlay, dark-mode treatment), not a re-check.
-- The hero CTA label is white on `#00AEEF` at 15px/500, which measures
-  **2.53:1** and fails AA (needs 4.5:1 at that size). Pre-existing, in
-  `ed-btn-blue`. Darkening the fill to `#0077A8` clears it at 4.99:1.
+- `ed-btn-blue` (white label on `#00AEEF` at 15px/500) measures **2.53:1** and
+  fails AA everywhere it is still used. The hero no longer uses it, but other
+  sections do. Darkening the fill to `#0077A8` clears it at 4.99:1.
 - Real security posture copy for the Trust and control security tab. No
   certification claim may be reintroduced without evidence — "SOC 2 Type II
   aligned" was deliberately removed as unverified.

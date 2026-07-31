@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
 import GrowthTrustStrip from "./TrustStrip";
@@ -25,6 +26,34 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  *                        revert; nothing else needs to change.
  */
 export const EYEBROW_ABOVE_LOGOS = true;
+
+/* ── Hero background ───────────────────────────────────────
+   The photograph is a blue gradient, deep at the left and near-white at
+   the bottom right. Sampled per-pixel, the copy column sits around
+   #1069af, where the old dark copy died: #0077A8 measured 1.15:1 and
+   #00AEEF 2.27:1. So the hero runs light on a scrimmed image.
+
+   Scrim strengths are the weakest that clear the targets on the
+   lightest pixel of each band, not on its average:
+     copy column   cream 4.53:1, accent cyan 3.64:1 (large text)
+     trust + logos cream 7.20:1
+     behind pill   white pill 3.62:1, so it reads as deliberate
+   Raising HERO_SCRIM_FLAT darkens the whole frame; the fade only
+   affects the bottom half, where the marquee sits. */
+const HERO_SCRIM = "#0B2C48";     /* solid fallback before the image paints */
+const HERO_SCRIM_FLAT = 0.3;
+const HERO_SCRIM_FADE = 0.9;
+/* The top fade exists for 390. A narrow viewport crops the landscape frame
+   to its leftmost 19%, which is the lightest part of the image, and the
+   eyebrow landed at 4.40:1 there against a 4.5 target. This also lifts the
+   backdrop behind the pill from 3.9:1 to 4.8:1. */
+const HERO_SCRIM_TOP = 0.15;
+
+/* Copy colours for the scrimmed image. Cyan is reserved for the lead's
+   second sentence, which is 26-40px bold and therefore large text. */
+const HERO_FG = "#FFFFFF";
+const HERO_FG_SOFT = "#F5EDE0";
+const HERO_ACCENT = "#9FE0F8";
 
 /* ── Fixed geometry ────────────────────────────────────────
    The card is hard-sized to its tallest (final) state, measured on
@@ -309,14 +338,35 @@ export default function GrowthHero() {
        of the document and pads its content past the pill. --nav-block is
        the pill height plus its inset, defined on .theme-editorial. */
     <section
-      className="relative w-full ed-bg overflow-hidden"
-      style={{ paddingTop: "var(--nav-block)" }}
+      className="ed-hero-shot relative w-full overflow-hidden"
+      style={{ paddingTop: "var(--nav-block)", backgroundColor: HERO_SCRIM }}
     >
-      <div
-        className="ed-hero-blob"
-        style={{ width: "620px", height: "620px", top: "-220px", left: "-220px" }}
-        aria-hidden="true"
-      />
+      {/* Background. The photograph runs to the top of the document, behind
+          the nav pill. object-position keeps the dark left of the frame and
+          drops the near-white right edge, which is the part light text
+          cannot survive. Two scrims follow: a flat wash to unify the frame,
+          then a bottom fade so the trust line and logo marquee sit on a
+          controlled colour rather than on the brightest part of the image. */}
+      <div className="absolute inset-0" aria-hidden="true">
+        <Image
+          src="/hero-bg.jpg"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+          style={{ objectPosition: "left center" }}
+        />
+        <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${HERO_SCRIM_FLAT})` }} />
+        <div
+          className="absolute inset-0"
+          style={{ background: `linear-gradient(to bottom, rgba(4,32,54,${HERO_SCRIM_TOP}) 0%, rgba(4,32,54,0) 35%)` }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 50%, rgba(4,32,54,${HERO_SCRIM_FADE}) 100%)` }}
+        />
+      </div>
 
       <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-4">
         <div className="grid grid-cols-1 lg:grid-cols-[48fr_46fr] gap-16 xl:gap-24 items-center">
@@ -356,7 +406,7 @@ export default function GrowthHero() {
                 fontSize: "clamp(0.625rem, -0.173rem + 1.49vw, 1rem)",
                 fontWeight: 700,
                 letterSpacing: "0.16em",
-                color: "var(--ed-accent-text)",
+                color: HERO_FG,
               }}
             >
               AI Operating System for franchisee success.
@@ -373,17 +423,18 @@ export default function GrowthHero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, ease: EASE, delay: 0.1 }}
-              className="ed-fg mb-4"
+              className="mb-4"
               style={{
                 fontFamily: "var(--font-editorial)",
                 fontSize: "clamp(1.625rem, 0.99rem + 1.68vw, 2.5rem)",
                 fontWeight: 700,
                 letterSpacing: "-0.03em",
                 lineHeight: 1.1,
+                color: HERO_FG,
               }}
             >
               Take all the low-value work off your coaches.{" "}
-              <span style={{ color: "#00AEEF" }}>
+              <span style={{ color: HERO_ACCENT }}>
                 Amplify tactical coaching expertise across every location.
               </span>
             </motion.p>
@@ -392,11 +443,12 @@ export default function GrowthHero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.25 }}
-              className="ed-fg mb-6"
+              className="mb-6"
               style={{
                 fontSize: "clamp(0.95rem, 0.15rem + 1.2vw, 1.25rem)",
                 fontWeight: 400,
                 lineHeight: 1.4,
+                color: HERO_FG_SOFT,
               }}
             >
               Repetitive questions. Compliance chasing. Report building. EZee
@@ -409,9 +461,13 @@ export default function GrowthHero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: "easeOut", delay: 0.45 }}
             >
+              {/* White fill on the image. The blue fill measured 2.07:1
+                  against the scrimmed background, so the button barely
+                  separated from it, and its white label was 2.53:1. */}
               <Link
                 href="/contact"
-                className="ed-btn ed-btn-blue ed-btn-arrow inline-flex"
+                className="ed-btn ed-btn-arrow inline-flex"
+                style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
               >
                 Speak to an expert
                 <span className="ed-btn-arrow-badge" aria-hidden="true">
@@ -450,7 +506,7 @@ export default function GrowthHero() {
                 fontSize: "7px",
                 letterSpacing: "0.14em",
                 fontWeight: 500,
-                color: "var(--ed-fg-muted)",
+                color: "rgba(245,237,224,0.82)",
               }}
             >
               Sourced from your systems. Governed by your rules.
