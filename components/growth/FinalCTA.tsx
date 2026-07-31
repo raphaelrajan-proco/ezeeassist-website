@@ -5,13 +5,14 @@ import Link from "next/link";
 import { Overline, SectionHeadline, SectionShell } from "./shared";
 
 /**
- * Section 16: two paths at different commitment levels. The secondary
- * path is the strategic one, it captures intent from buyers who would
- * never fill a form.
+ * The closing ask. One workflow, not three locations: the problem
+ * section argues that the locations at 98 and 101 percent are the
+ * opportunity, so asking for the worst three contradicted it.
  *
- * TODO: No-form interactive demo. Pick vertical, walk one scenario, see a recommended action,
- * then the form appears. Highest-ROI item beyond the page itself and the most expensive.
- * /demo is currently a stub route.
+ * TODO: the secondary CTA, "Build a workflow yourself", is held back
+ * until the interactive generator exists. It is deliberately not
+ * wired to /demo, which is an empty noindex stub, because shipping a
+ * button to a blank page costs more than shipping one button.
  */
 export default function FinalCTA() {
   return (
@@ -24,22 +25,16 @@ export default function FinalCTA() {
         className="max-w-3xl"
       >
         <Overline>Ready when you are</Overline>
-        <SectionHeadline>Bring us your three worst-performing locations.</SectionHeadline>
+        <SectionHeadline>
+          Bring us one franchise workflow. We&rsquo;ll show you how EZee would run it.
+        </SectionHeadline>
         <p className="ed-fg-muted mt-6 text-base md:text-lg leading-relaxed">
-          Most likely, they are also the three your coaches reach last.
-        </p>
-        <p className="ed-fg-muted mt-4 text-base md:text-lg leading-relaxed">
-          We will show you what EZee would surface for each one: the gaps it
-          finds, the actions it would take, the sources it reads, and where a
-          human stays in the loop.
+          ...and what it frees your coaches to do with the time back.
         </p>
 
         <div className="mt-10 flex flex-col sm:flex-row gap-4">
           <Link href="/contact" className="ed-btn ed-btn-blue">
-            Book a working session
-          </Link>
-          <Link href="/demo" className="ed-btn ed-btn-secondary">
-            Walk a scenario yourself
+            Speak to an expert
           </Link>
         </div>
       </motion.div>

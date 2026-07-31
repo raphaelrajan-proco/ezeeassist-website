@@ -163,7 +163,8 @@
       "Bash(git commit -q -m 'feat\\(reveal\\): stat row out, five module-matched outputs, one scroll view *)",
       "Bash(git commit -q -m 'feat\\(capabilities\\): five-module pinned scroll with production visuals *)",
       "Bash(git commit -q -m 'feat\\(trust\\): six-tab control centre *)",
-      "Bash(git commit -q -m 'feat\\(proof\\): outcome band, customer voices, links out *)"
+      "Bash(git commit -q -m 'feat\\(proof\\): outcome band, customer voices, links out *)",
+      "Bash(git commit -q -m 'feat\\(cta\\): ask for one workflow, single live CTA *)"
     ]
   }
 }
