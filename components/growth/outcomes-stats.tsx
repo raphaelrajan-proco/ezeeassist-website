@@ -5,17 +5,11 @@ import { useRef } from "react";
 import { AnimatedValue } from "./shared";
 
 /**
- * Section 11: three numbers matched to the sales deck, each with a
- * source line. Stats SSR their final value and count up on hydration.
+ * The outcome band. Three numbers, oversized, each with a source
+ * line. Values SSR at their final figure and count up on hydration.
+ * Outcome figures only; network scale lives in the hero eyebrow and
+ * is deliberately not repeated here.
  */
-
-type Stat = {
-  value?: number;
-  suffix?: string;
-  staticValue?: string;
-  label: string;
-  source: string;
-};
 
 // TODO: growth thesis metric slate, pending sourcing. When available, add:
 //   Coaching touchpoints per location, per month
@@ -23,8 +17,14 @@ type Stat = {
 //   Weeks cut from new franchisee ramp
 // These are leading indicators of franchisee revenue and are the intended
 // replacement for the deflection-weighted band. Keep 70%+ questions resolved.
-// The third slot (previously the DekaLash 94%, which duplicated the proof
-// card) returns when the coaching-coverage metrics above are sourced.
+
+type Stat = {
+  value: number;
+  suffix: string;
+  label: string;
+  source: string;
+};
+
 const STATS: Stat[] = [
   {
     value: 70,
@@ -35,8 +35,14 @@ const STATS: Stat[] = [
   {
     value: 650,
     suffix: "+",
-    label: "Support hours saved in the first six months",
+    label: "Support hours saved in six months",
     source: "DivaDance, 50 locations",
+  },
+  {
+    value: 94,
+    suffix: "%",
+    label: "Deflection during the Mindbody migration",
+    source: "DekaLash, 120 locations",
   },
 ];
 
@@ -52,19 +58,16 @@ function StatCell({ stat, index }: { stat: Stat; index: number }) {
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: index * 0.1 }}
     >
       <p
-        className="text-5xl md:text-6xl lg:text-7xl tracking-[-0.03em] flex items-end min-h-[1.1em]"
+        className="tracking-[-0.04em]"
         style={{
           color: "#00AEEF",
           fontFamily: "var(--font-editorial)",
           fontWeight: 500,
-          lineHeight: 1,
+          lineHeight: 0.9,
+          fontSize: "clamp(3.25rem, 2rem + 3.2vw, 5rem)",
         }}
       >
-        {stat.staticValue ? (
-          stat.staticValue
-        ) : (
-          <AnimatedValue end={stat.value ?? 0} suffix={stat.suffix} inView={inView} />
-        )}
+        <AnimatedValue end={stat.value} suffix={stat.suffix} inView={inView} />
       </p>
       <p
         className="ed-fg mt-4 text-base md:text-lg"
@@ -79,7 +82,7 @@ function StatCell({ stat, index }: { stat: Stat; index: number }) {
 
 export default function OutcomesStats() {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 max-w-4xl">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
       {STATS.map((s, i) => (
         <StatCell key={s.label} stat={s} index={i} />
       ))}
