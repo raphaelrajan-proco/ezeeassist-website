@@ -167,7 +167,8 @@
       "Bash(git commit -q -m 'feat\\(cta\\): ask for one workflow, single live CTA *)",
       "Bash(git commit -q -m 'feat\\(nav,footer\\): real logo, folded Customers tab, dead anchors fixed *)",
       "Bash(git commit -q -m 'fix\\(hero\\): type lockup, hidden announcement, dark bubble *)",
-      "Bash(git commit -q -m 'feat\\(hero,nav\\): bold blue-lead H1 and arrow-badge CTA *)"
+      "Bash(git commit -q -m 'feat\\(hero,nav\\): bold blue-lead H1 and arrow-badge CTA *)",
+      "Bash(git commit -q -m 'style\\(cta\\): slim the arrow button to Ada proportions *)"
     ]
   }
 }

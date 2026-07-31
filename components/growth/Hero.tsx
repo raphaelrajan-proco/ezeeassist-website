@@ -384,11 +384,10 @@ export default function GrowthHero() {
               <Link
                 href="/contact"
                 className="ed-btn ed-btn-blue ed-btn-arrow inline-flex"
-                style={{ paddingLeft: "2rem" }}
               >
                 Speak to an expert
                 <span className="ed-btn-arrow-badge" aria-hidden="true">
-                  <ArrowRight className="h-4 w-4" strokeWidth={2} />
+                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
                 </span>
               </Link>
             </motion.div>

@@ -157,24 +157,30 @@
   background-color: #F5EDE0;
   color: #0A0A0A;
 }
-/* CTA with a trailing arrow badge, Ada-style: the label sits in the
-   pill and the arrow rides in a dark circle on the right edge. The
-   badge nudges forward on hover; reduced motion holds it still. */
+/* CTA with a trailing arrow badge, Ada-style: a slim pill, the label
+   inside it, and the arrow riding in a dark circle on the right edge.
+   Sized to a 48px overall height rather than the standard ed-btn box.
+   The badge nudges forward on hover; reduced motion holds it still. */
+.theme-editorial .ed-btn.ed-btn-arrow {
+  padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+  font-size: 0.9375rem;
+  gap: 0.75rem;
+}
 .ed-btn-arrow-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  height: 2.25rem;
-  width: 2.25rem;
+  height: 2rem;
+  width: 2rem;
   border-radius: 9999px;
   background-color: #0A0A0A;
   color: #FFFFFF;
   transition: transform 0.18s ease;
 }
 .ed-btn-arrow-badge-sm {
-  height: 1.75rem;
-  width: 1.75rem;
+  height: 1.5rem;
+  width: 1.5rem;
 }
 .ed-btn-arrow:hover .ed-btn-arrow-badge {
   transform: translateX(2px);
