@@ -8,7 +8,7 @@ import { NETWORK_SCALE } from "@/lib/data/network-scale";
 export default function GrowthTrustStrip() {
   return (
     <div className="w-full ed-bg">
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-2 pb-10 md:pt-3 md:pb-12">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-0 pb-10 md:pb-12">
         <p
           className="ed-fg-muted text-center text-sm md:text-base mb-4 tracking-wide"
           style={{ fontWeight: 500 }}

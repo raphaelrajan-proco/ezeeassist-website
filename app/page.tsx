@@ -16,9 +16,8 @@ import { objections } from "@/lib/data/objections";
 import { NETWORK_SCALE } from "@/lib/data/network-scale";
 
 export const metadata: Metadata = {
-  title: "EZee Assist — The Execution Layer for Franchise Networks",
-  description:
-    "Your playbooks, running at every location. EZee connects your knowledge, performance data, and systems so every location gets the coaching attention only your top priorities used to get.",
+  title: "EZee Assist — The AI Operating System for Franchise Networks",
+  description: `Take the low-value work off your coaches and amplify their expertise across every location. Trusted by ${NETWORK_SCALE.brands} franchise brands across ${NETWORK_SCALE.locations} locations.`,
   alternates: { canonical: "/" },
   openGraph: {
     title: "EZee Assist — The Execution Layer for Franchise Networks",

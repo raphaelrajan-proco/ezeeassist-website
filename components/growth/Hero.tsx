@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
 import GrowthTrustStrip from "./TrustStrip";
+import { NETWORK_SCALE } from "@/lib/data/network-scale";
 
 /**
  * Ada-style hero. Left: fluid-type lockup. Right: one fixed-size
@@ -294,9 +295,6 @@ function ConversationCard() {
 /* ── Hero ──────────────────────────────────────────────── */
 
 /** Brand-blue semibold emphasis. Only "AI Operating System" gets it. */
-function Mark({ children }: { children: React.ReactNode }) {
-  return <span style={{ fontWeight: 600, color: "var(--ed-accent)" }}>{children}</span>;
-}
 
 export default function GrowthHero() {
   return (
@@ -307,7 +305,7 @@ export default function GrowthHero() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-6">
+      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-4">
         <div className="grid grid-cols-1 lg:grid-cols-[48fr_46fr] gap-16 xl:gap-24 items-center">
 
           {/* Left: copy */}
@@ -316,7 +314,7 @@ export default function GrowthHero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="uppercase mb-6"
+              className="uppercase mb-4"
               style={{
                 fontSize: "clamp(0.8125rem, 0.7rem + 0.25vw, 0.9375rem)",
                 fontWeight: 600,
@@ -324,63 +322,64 @@ export default function GrowthHero() {
                 color: "var(--ed-accent-text)",
               }}
             >
-              The execution layer for franchise networks
+              Trusted by {NETWORK_SCALE.brands} brands across {NETWORK_SCALE.locations} locations
             </motion.p>
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, ease: EASE, delay: 0.1 }}
-              className="ed-fg mb-8"
+              className="ed-fg mb-4"
               style={{
                 fontFamily: "var(--font-editorial)",
-                // Brief specifies clamp(2.5rem, 1.4rem + 3vw, 4rem) as a
-                // two-line render. The copy column is ~540px at 1440, which
-                // caps a single-line "Your playbooks, running at every
-                // location." at ~29px, so the spec is unachievable in this
-                // layout. Deliberate three-line lockup at the largest size
-                // the column holds instead; flagged in the brief summary.
-                fontSize: "clamp(2.25rem, 0.4rem + 2.5vw, 2.375rem)",
+                fontSize: "clamp(2.5rem, 1.4rem + 3vw, 3.5rem)",
                 fontWeight: 500,
                 letterSpacing: "-0.03em",
-                lineHeight: 1.08,
+                lineHeight: 1.06,
               }}
             >
-              Your playbooks and data,{" "}
-              <span className="block">running at every location.</span>
-              <span className="block">
-                <Mark>Growing revenue at every one.</Mark>
-              </span>
+              AI Operating System for franchisee success
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 0.3 }}
-              className="mb-10"
+              transition={{ duration: 0.7, ease: "easeOut", delay: 0.25 }}
+              className="ed-fg mb-4"
               style={{
-                fontSize: "clamp(1.0625rem, 0.95rem + 0.45vw, 1.3125rem)",
+                fontSize: "clamp(1.125rem, 0.95rem + 0.6vw, 1.4375rem)",
                 fontWeight: 400,
-                lineHeight: 1.55,
+                lineHeight: 1.4,
+              }}
+            >
+              Take all the low-value work off your coaches. Amplify their
+              tactical expertise across every location.
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, ease: "easeOut", delay: 0.35 }}
+              className="mb-6"
+              style={{
+                fontSize: "clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem)",
+                fontWeight: 400,
+                lineHeight: 1.5,
                 color: "var(--ed-fg-muted)",
               }}
             >
-              Coaching has always been rationed. EZee puts your playbooks
-              and performance data to work at every location, so all of
-              them get the attention only a few used to get.
+              Repetitive questions. Compliance chasing. Report building. EZee
+              handles all of it, then lets a coach build a play once and run
+              it everywhere. Growth, not headcount.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, ease: "easeOut", delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4"
+              transition={{ duration: 0.55, ease: "easeOut", delay: 0.45 }}
             >
-              <Link href="/contact" className="ed-btn ed-btn-blue" style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
-                Book a Demo
-              </Link>
-              <Link href="#the-week" className="ed-btn ed-btn-secondary" style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
-                See where the week goes
+              <Link href="/contact" className="ed-btn ed-btn-blue inline-flex" style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
+                Speak to an expert
               </Link>
             </motion.div>
           </div>
