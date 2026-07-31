@@ -760,3 +760,52 @@ input[type="range"]::-moz-range-thumb {
 .dark .theme-editorial .ed-stat-lockup .ed-stat-sentence {
   color: #93A0B5;
 }
+
+/* ─── The System: convergence diagram ──────────────────────
+   Built from a supplied design handoff. The wire coordinates and the
+   offset-path values below are tied to the diagram's 1180x620 canvas,
+   which is why the canvas is a fixed size that gets scaled rather than
+   a fluid layout. */
+
+@keyframes ed-sys-travel {
+  0%   { offset-distance: 0%;   opacity: 0 }
+  12%  { opacity: 1 }
+  86%  { opacity: 1 }
+  100% { offset-distance: 100%; opacity: 0 }
+}
+@keyframes ed-sys-core-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,174,239,.25), 0 30px 70px -30px rgba(0,0,0,.7) }
+  50%      { box-shadow: 0 0 60px 8px rgba(0,174,239,.25), 0 30px 70px -30px rgba(0,0,0,.7) }
+}
+@keyframes ed-sys-card-pulse {
+  0%, 86%, 100% { border-color: rgba(238,242,248,.09) }
+  93%           { border-color: rgba(0,174,239,.25) }
+}
+/* Three log lines crossfading on one 12s cycle, each visible ~3.3s. */
+@keyframes ed-sys-log1 {
+  0%, 2%    { opacity: 0; transform: translateY(6px) }
+  6%, 27%   { opacity: 1; transform: translateY(0) }
+  32%, 100% { opacity: 0; transform: translateY(-4px) }
+}
+@keyframes ed-sys-log2 {
+  0%, 35%   { opacity: 0; transform: translateY(6px) }
+  39%, 60%  { opacity: 1; transform: translateY(0) }
+  65%, 100% { opacity: 0; transform: translateY(-4px) }
+}
+@keyframes ed-sys-log3 {
+  0%, 68%   { opacity: 0; transform: translateY(6px) }
+  72%, 94%  { opacity: 1; transform: translateY(0) }
+  99%, 100% { opacity: 0; transform: translateY(-4px) }
+}
+
+/* Reduced motion holds every ambient loop still and shows the first
+   log line only, per the handoff. */
+@media (prefers-reduced-motion: reduce) {
+  .ed-sys-canvas *,
+  .ed-sys-stack * {
+    animation: none !important;
+  }
+  .ed-sys-log > *      { opacity: 0 !important; transform: none !important }
+  .ed-sys-log > *:first-child { opacity: 1 !important }
+  .ed-sys-dot          { display: none !important }
+}

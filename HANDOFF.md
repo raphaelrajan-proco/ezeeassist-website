@@ -198,6 +198,32 @@ control", "Connections", "FAQ", "Ready when you are") were all removed. The
 `components/sections/` on other routes, so it was kept; just do not reach for
 it on the homepage.
 
+## The System: convergence diagram
+
+Built from a supplied design handoff. Section runs on the handoff's dark
+tokens (`#05070D` bg, `#0B101C` panels) regardless of site theme.
+
+**The canvas is a fixed 1180x620 that gets scaled**, not a fluid layout. The
+wire paths and the pulse `offset-path` values are absolute coordinates in that
+space, so they cannot be made responsive without redrawing every curve. A
+`ResizeObserver` measures the container and sets `transform: scale(w/1180)`;
+the wrapper's height is `620 * scale`. Below `lg` the scale would make 11.5px
+text illegible, so `StackedDiagram` renders instead.
+
+Two deliberate departures from the spec, both flagged at the time:
+- **The accent is `#00AEEF`, not the spec's `#4373FF`.** The handoff says to
+  map its variables onto existing token names, and a second blue next to the
+  brand blue read as a mistake.
+- **The integration tiles are wordmarks, not brand SVGs.**
+  `/public/logos/integrations/` does not exist. Names come from
+  `lib/data/integrations.ts` so they are at least real. Swap for `<Image>`
+  when the assets land.
+
+**The five outputs no longer match the capability modules.** The diagram says
+Answers / Agents / Reporting Hub / Compliance Hub / Applications Hub; section
+4 still says Answers / Ticketing / Workflows / Reporting / AI Apps. That
+one-to-one mapping was previously deliberate. Resolve in one direction.
+
 ## Standing rules
 
 **Scope.** Homepage only unless a prompt grants an explicit exception. If a
