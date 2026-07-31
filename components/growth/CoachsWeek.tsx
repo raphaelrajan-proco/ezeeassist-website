@@ -200,7 +200,7 @@ function WeekVignette() {
         call, and some of the locations with no call are below target.
       </p>
       <p className="mt-3 text-[11.5px]" style={{ color: MOCK_MUTED }}>
-        Attention gets triaged, not distributed.
+        Most locations get no call at all.
       </p>
     </div>
   );

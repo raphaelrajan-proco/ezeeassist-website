@@ -21,7 +21,7 @@ const ITEMS: { icon: LucideIcon; name: string; body: string }[] = [
   {
     icon: ScrollText,
     name: "One activity log",
-    body: "Questions asked, actions taken, workflows run, apps deployed. Shadow AI becomes visible AI.",
+    body: "Questions asked, actions taken, workflows run, apps deployed. AI activity that used to be invisible to HQ shows up in the log.",
   },
   {
     icon: Users,

@@ -15,16 +15,16 @@ export interface Objection {
 export const objections: Objection[] = [
   {
     q: "Why not just use ChatGPT?",
-    a: "You already tried that. It does not know your playbooks, your permissions, or which location is asking, and nothing it did was logged. That is how the sprawl started in the first place.",
+    a: "A general chatbot does not know your playbooks, your permissions, or which location is asking, and it keeps no record of what it answers. Operators using it on their own is where the sprawl on this page comes from.",
   },
   {
     q: "We already have a franchise ops platform.",
-    a: "This runs above it. FranConnect, Naranga, and the rest hold your records. EZee reads them, acts on them, and puts an interface in front of them that your operators actually use. Nothing gets replaced.",
+    a: "EZee runs as a layer on top of your ops platform. FranConnect, Naranga, and the rest continue to hold your records. EZee reads them, acts on them, and gives your operators an interface they will open every day. Your existing systems all stay in place.",
     link: { label: "See the full comparison", href: "/why-ezeeassist" },
   },
   {
     q: "Will franchisees actually use it?",
-    a: "They reach it in the channels they already use, at the hours they actually work, and they can build their own tools inside your guardrails. People use systems they can build in.",
+    a: "They reach it in the channels they already use, at the hours they actually work, and they can build their own tools inside your guardrails. Being able to build their own tools keeps them using it.",
     link: { label: "See adoption evidence", href: "#proof" },
   },
 ];

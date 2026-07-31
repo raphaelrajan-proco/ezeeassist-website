@@ -324,7 +324,7 @@ export default function TheShift() {
         transition={{ duration: 0.8, delay: 0.3 }}
         className="ed-fg-muted mt-10 max-w-3xl text-base md:text-lg leading-relaxed"
       >
-        Nothing gets replaced. Your documents, your systems, and your data
+        EZee does not replace any of your existing systems. Your documents, your systems, and your data
         stay exactly where they are. The playbook stops describing what to do
         and starts doing it.
       </motion.p>

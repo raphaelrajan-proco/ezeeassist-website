@@ -210,7 +210,7 @@ export default function TwoAudiences() {
         className="ed-fg mt-10 text-center text-xl md:text-2xl tracking-[-0.02em]"
         style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
       >
-        Same platform. Same guardrails. Different doors.
+        HQ and franchisees share one platform and one set of guardrails, and each group gets its own view.
       </motion.p>
     </SectionShell>
   );

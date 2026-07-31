@@ -349,7 +349,7 @@ export default function TheHandoff() {
         className="ed-fg mt-12 text-xl md:text-2xl tracking-[-0.02em]"
         style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
       >
-        The same question does not escalate twice.
+        Once a question is resolved, the answer is already there for the next location that asks.
       </motion.p>
     </SectionShell>
   );
