@@ -89,6 +89,61 @@ function Bar({ bar, barIndex, inView, reduceMotion }: {
   );
 }
 
+/* The 4/5 figure restates the Today bar: 20 percent coaching leaves four days
+   in five on everything else. Nothing new is claimed.
+
+   Built to the design spec. One clamp in globals.css drives all three runs,
+   since the spec's sizes are a fixed ratio: "days" is half the numeral and
+   the sentence is 42/128 of it. The gaps scale with it too, landing on the
+   spec'd 20px and 18px once the numeral reaches its 128px ceiling. */
+function StatLockup() {
+  const numeral = "var(--stat-numeral)";
+  return (
+    <div
+      className="ed-stat-lockup flex flex-col"
+      style={{ gap: `calc(${numeral} * 0.1406)` }}
+    >
+      <div className="flex items-baseline" style={{ gap: `calc(${numeral} * 0.1563)` }}>
+        <span
+          style={{
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 700,
+            fontSize: numeral,
+            letterSpacing: "-0.04em",
+            lineHeight: 0.9,
+            color: "currentColor",
+          }}
+        >
+          4/5
+        </span>
+        <span
+          style={{
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 600,
+            fontSize: `calc(${numeral} * 0.5)`,
+            letterSpacing: "-0.03em",
+            lineHeight: 0.9,
+            color: "currentColor",
+          }}
+        >
+          days
+        </span>
+      </div>
+      <p
+        className="ed-stat-sentence whitespace-nowrap"
+        style={{
+          fontFamily: "var(--font-inter), ui-sans-serif, system-ui, sans-serif",
+          fontWeight: 400,
+          fontSize: `calc(${numeral} * 0.3281)`,
+          lineHeight: 1.15,
+        }}
+      >
+        go to admin work, not growth.
+      </p>
+    </div>
+  );
+}
+
 function CoachWeekChart() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
@@ -104,32 +159,12 @@ function CoachWeekChart() {
         percent, reports 5 percent, coaching 80 percent.
       </p>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 lg:gap-12 items-center">
-        {/* The figure restates the Today bar: 20 percent coaching leaves four
-            days in five on everything else. Nothing new is claimed. */}
-        {/* The caption sits beside the figure, its first line reading across
-            from it: "4/5 days" then two lines under. */}
-        <div className="flex items-start gap-3" aria-hidden="true">
-          <p
-            className="tracking-[-0.04em] flex-shrink-0"
-            style={{
-              fontFamily: "var(--font-editorial)",
-              fontWeight: 500,
-              lineHeight: 0.9,
-              fontSize: "clamp(3rem, 2rem + 2.6vw, 4.5rem)",
-              color: "var(--ed-fg)",
-            }}
-          >
-            4/5
-          </p>
-          <p className="ed-fg-muted text-sm leading-snug">
-            days
-            <br />
-            go to admin work,
-            <br />
-            not growth.
-          </p>
-        </div>
+      {/* The lockup sits above the bars rather than beside them. Its sentence
+          runs to 594px at the spec'd 42px and has to stay on one line, which
+          leaves too little room for the bars in a side-by-side split.
+          Stacked, the bars get the full width instead. */}
+      <div className="space-y-8 md:space-y-10">
+        <StatLockup />
 
         <div className="space-y-4">
           {BARS.map((bar, i) => (

@@ -358,6 +358,15 @@ fit is usually 1024 rather than the smallest screen.
   match. It is still an `h2`.
 - The `4/5` figure restates the Today bar (20% coaching leaves four days in
   five). It is not a new claim, and it moves if the chart data moves.
+- **The 4/5 lockup is built to a supplied design spec**, so treat its numbers
+  as fixed: numeral 128px/700/-0.04em, "days" at exactly half/600/-0.03em,
+  both at line-height 0.9 and baseline-aligned, sentence Inter 400 42px/1.15
+  on one line, gaps 18px and 20px, colours `#0B1220`/`#5C6675` light and
+  `#EEF2F8`/`#93A0B5` dark. One clamp (`--stat-numeral` in globals.css)
+  drives all three runs, since every size is a fixed ratio of the numeral.
+  **The sentence sets the ceiling**: it needs 14.15px of width per 1px of
+  font size, so 594px at the spec'd 42px, and it must never wrap.
+  That is also why the lockup sits above the bars rather than beside them.
 - `ScatteredPanel` and `StickyTile` in `artifact-panels.tsx` are now **unused**.
   They drew the old report-building sprawl, which was replaced by
   `REPORT_SCRAPS` in `CoachsWeek.tsx`. The tile components they share with
