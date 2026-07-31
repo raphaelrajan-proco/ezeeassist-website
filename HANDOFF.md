@@ -3,6 +3,11 @@
 Living context for the `growth-revenue-thesis` homepage work. Read this
 before picking the work back up in a fresh session.
 
+> **Upkeep:** this file is revised at the end of every step, in that step's own
+> commit. If a step moves a section, adds or clears a TODO, accepts a deviation,
+> or turns up a new environment gotcha, it lands here before the step is
+> reported as done. A stale handoff is worse than none, because it gets trusted.
+
 ## Where things stand
 
 - **Branch:** `growth-revenue-thesis` (off `growth-narrative`). Never merge to
