@@ -39,6 +39,18 @@ rename a section.
 Support modules (not sections): `artifact-panels.tsx`, `audience-duality.tsx`,
 `handoff-flow.tsx`. Unwired-but-kept work lives in `components/growth/_archive/`.
 
+The hero's copy stack runs H1, sub-lead, descriptor, CTA. The trust line
+("Trusted by 70+ brands…") sits below the visual, directly above the logo
+marquee, rendered by `TrustStrip.tsx` rather than the hero. See the flag note
+below for how to put it back.
+
+`OrderedPanel` in `artifact-panels.tsx` closes the problem section. Four
+artifact tiles run left to right, an SVG spine drops from each into a shared
+rail, and the rail feeds one "One execution layer" bar. Tiles size to their
+grid columns via `.ed-tile-fluid` (`app/globals.css`), which overrides the
+fixed widths the tiles carry for their other callers. Do not reintroduce
+transform scaling here; it was what made the tiles overlap the bar.
+
 ## Standing rules
 
 **Scope.** Homepage only unless a prompt grants an explicit exception. If a
@@ -92,12 +104,21 @@ Note the container caps at `max-w-7xl`, so the hero copy column stops growing at
 - Deployment-specific Vercel URLs cannot be retrieved from this environment.
   Paste the URL from the dashboard when live verification is needed.
 
-## Feature flags currently off
+## Feature flags
+
+**Off**
 
 - `SHOW_ANNOUNCEMENT` in `components/AnnouncementBar.tsx` — announcement bar,
   off until the linked asset exists.
 - `SHOW_AEO_BLOCK` in `components/Footer.tsx` — Ask ChatGPT/Claude/Perplexity
   block, a launch-gate item wanted back after publish.
+
+**On**
+
+- `EYEBROW_ABOVE_LOGOS` in `components/growth/Hero.tsx` (exported) — the trust
+  line's position. `true` renders it centered above the logo marquee. Set it to
+  `false` to restore the earlier layout, where it sat inside the hero above the
+  H1. One edit flips it; nothing else needs touching.
 
 ## Open TODOs, grouped by what a human must supply
 

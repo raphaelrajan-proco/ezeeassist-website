@@ -17,6 +17,15 @@ import { NETWORK_SCALE } from "@/lib/data/network-scale";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+/**
+ * Layout switch. true  = trust line sits above the logo marquee and the
+ *                        copy stack starts on the H1 (current).
+ *                false = trust line is the hero eyebrow above the H1
+ *                        (previous layout). Flip this one boolean to
+ *                        revert; nothing else needs to change.
+ */
+export const EYEBROW_ABOVE_LOGOS = true;
+
 /* ── Fixed geometry ────────────────────────────────────────
    The card is hard-sized to its tallest (final) state, measured on
    the rendered page at the 34rem card width, so the frame and the
@@ -310,20 +319,22 @@ export default function GrowthHero() {
 
           {/* Left: copy */}
           <div className="max-w-[38rem]">
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
-              className="uppercase mb-4"
-              style={{
-                fontSize: "clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem)",
-                fontWeight: 600,
-                letterSpacing: "0.16em",
-                color: "var(--ed-accent-text)",
-              }}
-            >
-              Trusted by {NETWORK_SCALE.brands} brands across {NETWORK_SCALE.locations} locations
-            </motion.p>
+            {!EYEBROW_ABOVE_LOGOS && (
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+                className="uppercase mb-4"
+                style={{
+                  fontSize: "clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem)",
+                  fontWeight: 600,
+                  letterSpacing: "0.16em",
+                  color: "var(--ed-accent-text)",
+                }}
+              >
+                Trusted by {NETWORK_SCALE.brands} brands across {NETWORK_SCALE.locations} locations
+              </motion.p>
+            )}
 
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -431,7 +442,7 @@ export default function GrowthHero() {
         </div>
       </div>
 
-      <GrowthTrustStrip />
+      <GrowthTrustStrip showTrustLine={EYEBROW_ABOVE_LOGOS} />
     </section>
   );
 }
