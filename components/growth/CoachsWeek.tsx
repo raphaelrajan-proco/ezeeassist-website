@@ -30,8 +30,9 @@ const CATEGORIES: Category[] = [
   { key: "coaching",   label: "Coaching",         color: "#00AEEF", onColor: "#FFFFFF", highlight: true },
 ];
 
-/** Below this share a label cannot fit inside its own segment. */
-const IN_BAR_LABEL_MIN_PCT = 20;
+/** Below this share a label cannot fit inside its own segment at the
+ *  narrowest desktop width, so only the majority bands are named. */
+const IN_BAR_LABEL_MIN_PCT = 16;
 
 const BARS: { label: string; values: Record<string, number> }[] = [
   { label: "Today",             values: { questions: 50, compliance: 15, prep: 10, reporting: 5, coaching: 20 } },
@@ -43,14 +44,9 @@ function Bar({ bar, barIndex, inView, reduceMotion }: {
 }) {
   return (
     <div>
-      <div className="flex items-baseline justify-between mb-2">
-        <p className="ed-fg text-sm" style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}>
-          {bar.label}
-        </p>
-        <p className="text-sm" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
-          {bar.values.coaching}% coaching
-        </p>
-      </div>
+      <p className="ed-fg text-sm mb-2" style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}>
+        {bar.label}
+      </p>
 
       <div className="flex w-full overflow-hidden rounded-md" style={{ height: "32px", border: "1px solid var(--ed-rule)" }}>
         {CATEGORIES.map((cat, i) => {
@@ -90,7 +86,7 @@ function CoachWeekChart() {
   const reduceMotion = Boolean(useReducedMotion());
 
   return (
-    <div ref={ref} className="ed-gradient-frame rounded-3xl p-6 md:p-8 max-w-4xl">
+    <div ref={ref} className="ed-gradient-frame rounded-3xl p-6 md:p-8">
       <p className="sr-only">
         A field coach&apos;s week today gives 20 percent of the time to
         coaching, against 80 percent if the mechanical work were handled.
