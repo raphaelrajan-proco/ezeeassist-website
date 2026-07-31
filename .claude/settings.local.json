@@ -160,7 +160,8 @@
       "Bash(python3 -c \"print\\('hold =', 12100-6600, 'ms'\\)\")",
       "Bash(git commit -q -m 'feat\\(hero\\): AI Operating System lockup with a single CTA *)",
       "Bash(git commit -q -m 'feat\\(problem\\): three-beat cascade with a production coach'\\\\''s-week chart *)",
-      "Bash(git commit -q -m 'feat\\(reveal\\): stat row out, five module-matched outputs, one scroll view *)"
+      "Bash(git commit -q -m 'feat\\(reveal\\): stat row out, five module-matched outputs, one scroll view *)",
+      "Bash(git commit -q -m 'feat\\(capabilities\\): five-module pinned scroll with production visuals *)"
     ]
   }
 }
