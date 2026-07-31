@@ -107,9 +107,11 @@ function CoachWeekChart() {
       <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-8 lg:gap-12 items-center">
         {/* The figure restates the Today bar: 20 percent coaching leaves four
             days in five on everything else. Nothing new is claimed. */}
-        <div className="max-w-[15rem]" aria-hidden="true">
+        {/* The caption sits beside the figure, its first line reading across
+            from it: "4/5 days" then two lines under. */}
+        <div className="flex items-start gap-3" aria-hidden="true">
           <p
-            className="tracking-[-0.04em]"
+            className="tracking-[-0.04em] flex-shrink-0"
             style={{
               fontFamily: "var(--font-editorial)",
               fontWeight: 500,
@@ -118,10 +120,14 @@ function CoachWeekChart() {
               color: "var(--ed-fg)",
             }}
           >
-            4<span style={{ color: "#00AEEF" }}>/</span>5
+            4/5
           </p>
-          <p className="ed-fg-muted mt-3 text-sm leading-snug">
-            days go to admin work, not growth.
+          <p className="ed-fg-muted text-sm leading-snug">
+            days
+            <br />
+            go to admin work,
+            <br />
+            not growth.
           </p>
         </div>
 
@@ -138,16 +144,16 @@ function CoachWeekChart() {
 /* ── Beat visuals. Every card is the same fixed height so the row
       reads as one uniform band. ─────────────────────────────── */
 
-/* All three visuals share one height so the row reads as a band. Set by the
-   fullest card at the tightest width: five threads at 768, where the
-   three-column grid leaves each card about 224px wide. */
-const CARD_H = 336;
+/* Cards grow to the row rather than to a fixed height, so the band is only
+   as tall as its fullest card at the current width. The floor stops a short
+   card from collapsing on its own row at mobile, where each card is alone. */
+const CARD_MIN_H = 260;
 
 function VisualCard({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div
-      className="rounded-xl overflow-hidden w-full flex flex-col"
-      style={{ ...MOCK_SURFACE, height: `${CARD_H}px` }}
+      className="rounded-xl overflow-hidden w-full flex flex-col flex-1"
+      style={{ ...MOCK_SURFACE, minHeight: `${CARD_MIN_H}px` }}
     >
       <p
         className="px-4 pt-4 pb-2.5 text-[12.5px] flex-shrink-0"
@@ -232,77 +238,68 @@ function ComplianceVisual() {
   );
 }
 
-/* 03 Report building: the by-hand sprawl the week actually runs on.
-   Hand-placed, overlapping, slightly rotated. The card clips, so tiles
-   bleeding past the edge are intentional: the pile does not end. */
-type Scrap = {
-  icon: React.ElementType;
-  tint: string;
-  title: string;
-  sub?: string;
-  x: string; y: string; rot: number; z: number;
-  bars?: number[];
-};
+/* 03 Report building: the by-hand reporting the week actually runs on.
+   Tiled rather than scattered. The point is volume, so the chips sit
+   square in a tight two-column grid and the labels stay short enough to
+   read at the narrowest three-column width. */
+type Scrap = { icon: React.ElementType; tint: string; title: string; bars?: number[] };
 
 const REPORT_SCRAPS: Scrap[] = [
-  { icon: FileSpreadsheet, tint: "#188038", title: "week-42-numbers-v7.xlsx", sub: "edited by 3 people",      x: "-2%",  y: "0%",   rot: -4, z: 4 },
-  { icon: BarChart3,       tint: "#0072CE", title: "Regional rollup",                                        x: "52%",  y: "6%",   rot: 3,  z: 3, bars: [40, 70, 45, 85, 60] },
-  { icon: Sparkles,        tint: "#10A37F", title: "ChatGPT",              sub: "“summarise this P&L”", x: "4%", y: "31%", rot: 5,  z: 6 },
-  { icon: Mail,            tint: "#C5221F", title: "RE: RE: weekly numbers", sub: "4 attachments",            x: "46%",  y: "38%",  rot: -3, z: 5 },
-  { icon: LayoutDashboard, tint: "#7C3AED", title: "Ops dashboard",        sub: "last synced 9 days ago",     x: "-4%",  y: "58%",  rot: 2,  z: 2 },
-  { icon: MessageSquare,   tint: "#15803D", title: "can you resend the deck?",                               x: "50%",  y: "70%",  rot: 6,  z: 7 },
-  { icon: FileSpreadsheet, tint: "#188038", title: "rollup-FINAL-v2.xlsx",                                   x: "12%",  y: "80%",  rot: -6, z: 1 },
+  { icon: FileSpreadsheet, tint: "#188038", title: "week-42-v7.xlsx" },
+  { icon: FileSpreadsheet, tint: "#188038", title: "rollup-FINAL.xlsx" },
+  { icon: BarChart3,       tint: "#0072CE", title: "Regional rollup", bars: [40, 70, 45, 85, 60] },
+  { icon: Sparkles,        tint: "#10A37F", title: "ChatGPT analysis" },
+  { icon: Mail,            tint: "#C5221F", title: "RE: RE: numbers" },
+  { icon: MessageSquare,   tint: "#15803D", title: "resend the deck?" },
+  { icon: LayoutDashboard, tint: "#7C3AED", title: "Ops dashboard" },
+  { icon: FileSpreadsheet, tint: "#188038", title: "labour-hours.xlsx" },
+  { icon: BarChart3,       tint: "#0072CE", title: "P&L chart", bars: [55, 35, 75, 50, 65] },
+  { icon: Mail,            tint: "#C5221F", title: "FW: which version?" },
+  { icon: FileSpreadsheet, tint: "#188038", title: "Q3-numbers-v3.xlsx" },
+  { icon: MessageSquare,   tint: "#15803D", title: "sending mine over" },
 ];
-
-function ReportScrap({ s }: { s: Scrap }) {
-  const Icon = s.icon;
-  return (
-    <div
-      className="absolute rounded-md px-2 py-1.5"
-      style={{
-        left: s.x, top: s.y, zIndex: s.z,
-        transform: `rotate(${s.rot}deg)`,
-        backgroundColor: "#FFFFFF",
-        border: "1px solid rgba(10,10,10,0.10)",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.10)",
-        maxWidth: "58%",
-      }}
-    >
-      <span className="flex items-center gap-1.5">
-        <Icon aria-hidden="true" className="h-3 w-3 flex-shrink-0" strokeWidth={2} style={{ color: s.tint }} />
-        <span className="text-[10px] truncate" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
-          {s.title}
-        </span>
-      </span>
-      {s.sub && (
-        <span className="block text-[9px] mt-0.5 truncate" style={{ color: MOCK_MUTED }}>
-          {s.sub}
-        </span>
-      )}
-      {s.bars && (
-        <span className="mt-1 flex items-end gap-0.5" style={{ height: 22 }} aria-hidden="true">
-          {s.bars.map((h, i) => (
-            <span key={i} className="block w-1.5 rounded-sm" style={{ height: `${h}%`, backgroundColor: i === 3 ? "#0072CE" : "#C7CDD4" }} />
-          ))}
-        </span>
-      )}
-    </div>
-  );
-}
 
 function ReportsVisual() {
   return (
     <VisualCard title="This week's numbers, by hand">
-      <div className="relative h-full" aria-hidden="true">
-        {REPORT_SCRAPS.map((s, i) => (
-          <ReportScrap key={i} s={s} />
-        ))}
+      <div className="grid grid-cols-2 gap-1.5" aria-hidden="true">
+        {REPORT_SCRAPS.map((s, i) => {
+          const Icon = s.icon;
+          return (
+            <div
+              key={i}
+              className="rounded-md px-1.5 py-1 min-w-0"
+              style={{
+                backgroundColor: "#FFFFFF",
+                border: "1px solid rgba(10,10,10,0.10)",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+              }}
+            >
+              <span className="flex items-center gap-1 min-w-0">
+                <Icon aria-hidden="true" className="h-3 w-3 flex-shrink-0" strokeWidth={2} style={{ color: s.tint }} />
+                <span className="text-[9.5px] truncate" style={{ color: MOCK_TEXT, fontWeight: 600 }}>
+                  {s.title}
+                </span>
+              </span>
+              {s.bars && (
+                <span className="mt-1 flex items-end gap-0.5" style={{ height: 14 }}>
+                  {s.bars.map((h, j) => (
+                    <span
+                      key={j}
+                      className="block w-1 rounded-sm"
+                      style={{ height: `${h}%`, backgroundColor: j === 3 ? "#0072CE" : "#C7CDD4" }}
+                    />
+                  ))}
+                </span>
+              )}
+            </div>
+          );
+        })}
       </div>
       <p className="sr-only">
-        A pile of hand-made reporting: spreadsheets edited by several people,
-        a regional rollup chart, a one-off ChatGPT analysis of a P&amp;L, a
-        long email thread with four attachments, a dashboard last synced nine
-        days ago, and a text message asking for the deck again.
+        Twelve separate pieces of hand-made reporting: several spreadsheet
+        versions, two charts, a one-off ChatGPT analysis, two email threads,
+        two text messages, and a dashboard.
       </p>
     </VisualCard>
   );
@@ -362,7 +359,13 @@ export default function CoachsWeek() {
       {/* Three across only from 1024. At 768 the three-column grid left each
           card 208px wide, which wrapped every question and badge and
           overran the shared card height. */}
-      <div className="mt-12 md:mt-14 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-8 items-start">
+      {/* The row stretches rather than sizing each card to a fixed height.
+          A fixed height had to cover the worst case, which is 1024, and that
+          left dead space at every wider viewport. Stretching makes the row
+          exactly as tall as its fullest card at whatever width is current.
+          The body reserves three lines so all three cards still start on the
+          same line, which is what makes the row read as a band. */}
+      <div className="mt-12 md:mt-14 grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-8">
         {BEATS.map((b, i) => (
           <motion.div
             key={b.label}
@@ -370,12 +373,12 @@ export default function CoachsWeek() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-70px" }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: i * 0.12 }}
-            className="flex flex-col"
+            className="flex flex-col h-full"
           >
             <p className="ed-fg text-base md:text-lg leading-snug mb-2" style={{ fontFamily: "var(--font-editorial)", fontWeight: 600 }}>
               {b.label}
             </p>
-            <p className="ed-fg-muted text-sm leading-snug mb-5 min-h-[2.5rem]">{b.body}</p>
+            <p className="ed-fg-muted text-sm leading-snug mb-5 min-h-[3.75rem]">{b.body}</p>
             {b.visual}
           </motion.div>
         ))}

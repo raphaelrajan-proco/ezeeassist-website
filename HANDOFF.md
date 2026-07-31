@@ -347,9 +347,12 @@ fit is usually 1024 rather than the smallest screen.
   768 the three-column grid left each card 208px, which wrapped every question
   and compliance badge and overran the shared card height. Below 1024 they
   stack full width.
-- `CARD_H` (336) is set by the fullest visual at the tightest three-column
-  width, which is 1024. All three cards share it so the row reads as a band,
-  so adding a row to any one visual means re-checking the other two.
+- The beat cards **stretch to the row** rather than taking a fixed height. A
+  fixed height had to cover the worst case (1024) and so left dead space at
+  every wider viewport. The grid stretches, the card is `flex-1` over a
+  `CARD_MIN_H` floor, and the beat body reserves three lines (`min-h-[3.75rem]`)
+  so all three cards still start on the same line. Result at 1205: cards are
+  279px with 1–22px of slack, against 336px with ~59px before.
 - The problem section's opening line is sized to the hero's lead line
   (22.5–35px) rather than the old 32–48px section scale, so the two openings
   match. It is still an `h2`.
