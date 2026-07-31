@@ -291,7 +291,7 @@ export default function Capabilities() {
              1024 up, against a column of 342 / 672 / 768. */
           style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: "clamp(1.375rem, 0.02rem + 5.56vw, 3.0625rem)" }}
         >
-          <span className="block">EZee flips the 4/5 days to growth,</span>
+          <span className="block" style={{ color: "#00AEEF" }}>EZee flips the 4/5 days to growth,</span>
           <span className="block">by automating the rest.</span>
         </h2>
 

@@ -15,8 +15,8 @@ export interface Objection {
 
 export const objections: Objection[] = [
   {
-    q: "Why not just use ChatGPT or Copilot?",
-    a: "General AI tools do not know your playbooks, your brand standards, or which location is asking. They cannot read your performance data or act inside your systems, and nothing they do is recorded. Most franchise teams are already using them without any of that context, and that is the gap EZee closes.",
+    q: "Why not just use ChatGPT, CoPilot, or Claude?",
+    a: "Use them. They are easy to pick up, and we encourage teams to experiment and build prototypes in them. What they cannot do is run a network: they do not know your playbooks, your brand standards, or which location is asking, they cannot read your performance data or act inside your systems, and nothing they do is recorded. EZee takes what works in those prototypes and productionizes it at scale, with access controls, visibility across every location, and human-in-the-loop workflows on anything that matters.",
   },
   {
     q: "We already have a franchise operations platform. Where does EZee fit?",

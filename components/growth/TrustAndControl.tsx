@@ -353,11 +353,21 @@ export default function TrustAndControl() {
               color: FG,
               fontFamily: "var(--font-editorial)",
               fontWeight: 500,
-              fontSize: "clamp(1.875rem, 1.1rem + 1.6vw, 2.625rem)",
+              /* One line per span. Line two is the wider of the pair and
+                 sets the ceiling: 22.4px at 390, 44 at 768, 58.7 from
+                 1024 up, against a column of 342 / 672 / 896. */
+              fontSize: "clamp(1.34375rem, 0.022rem + 5.42vw, 2.625rem)",
               textWrap: "balance",
             }}
           >
-            Ungoverned AI is brand risk. This is the layer that removes it.
+            {/* Line one takes the section foreground rather than black: this
+                section is dark regardless of theme, so black would vanish. */}
+            <span className="block" style={{ fontWeight: 700 }}>
+              Ungoverned AI is a brand risk.
+            </span>
+            <span className="block" style={{ color: BLUE }}>
+              EZee is the system that removes it.
+            </span>
           </h2>
         </motion.div>
 

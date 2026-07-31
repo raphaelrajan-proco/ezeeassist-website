@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Globe, Share2, Link2 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { CLOSING_BASE } from "@/components/growth/FinalCTA";
 
 const footerLinks = {
   Platform: [
@@ -228,39 +229,40 @@ export default function Footer() {
    ─────────────────────────────────────────────────────────── */
 function FooterEditorial() {
   return (
-    <footer className="w-full ed-bg" style={{ borderTop: "1px solid var(--ed-rule)" }}>
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-24 md:pt-32 pb-12">
+    /* Continues the closing band: FinalCTA's bottom fade resolves to this
+       exact colour, so there is no seam and no rule between them.
+       ed-on-dark pins the dark token set for the light-mode page. */
+    <footer className="ed-on-dark w-full" style={{ backgroundColor: CLOSING_BASE }}>
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-14 md:pt-16 pb-12">
 
         {/* Wordmark + tagline. Both marks ship; the swap is pure CSS. */}
         <Link href="/" className="inline-block" aria-label="EZee Assist home">
+          {/* Always the white mark: the band is dark in both themes. */}
           <Image
-            src="/logo-black.svg"
+            src="/logo-white.svg"
             alt="EZee Assist"
             width={FOOTER_LOGO_W}
             height={FOOTER_LOGO_H}
             unoptimized
-            className="block dark:hidden h-14 md:h-16 w-auto"
-          />
-          <Image
-            src="/logo-white.svg"
-            alt=""
-            aria-hidden="true"
-            width={FOOTER_LOGO_W}
-            height={FOOTER_LOGO_H}
-            unoptimized
-            className="hidden dark:block h-14 md:h-16 w-auto"
+            className="h-14 md:h-16 w-auto"
           />
         </Link>
 
+        {/* One line at every width; nowrap plus a clamp rather than a
+            wrapping paragraph. */}
         <p
-          className="ed-fg-muted mt-10 max-w-md text-lg md:text-xl"
-          style={{ lineHeight: 1.5, fontWeight: 400 }}
+          className="ed-fg-muted mt-8 whitespace-nowrap"
+          style={{
+            lineHeight: 1.5,
+            fontWeight: 400,
+            fontSize: "clamp(0.8125rem, 0.36rem + 1.86vw, 1.25rem)",
+          }}
         >
-          The execution layer for franchise networks.
+          AI Operating System for Franchisee Success
         </p>
 
         {/* Six columns */}
-        <div className="mt-20 md:mt-24 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 md:gap-8">
+        <div className="mt-14 md:mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 md:gap-8">
           {editorialFooterColumns.map((col) => (
             <div key={col.heading}>
               <p
@@ -329,7 +331,7 @@ function FooterEditorial() {
 
         {/* Contact + social */}
         <div
-          className="mt-16 grid grid-cols-1 md:grid-cols-12 gap-8 pt-12"
+          className="mt-14 grid grid-cols-1 md:grid-cols-12 gap-8 pt-10"
           style={{ borderTop: "1px solid var(--ed-rule)" }}
         >
           <div className="md:col-span-6">

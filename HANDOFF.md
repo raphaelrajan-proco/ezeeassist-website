@@ -251,6 +251,17 @@ The one-line cap is what drives the system headline down to 20px at 390. It is
 small for a section heading, and the price of holding one line on a 342px
 column.
 
+## The closing band
+
+`FinalCTA` and the editorial footer are one continuous blue band. The CTA
+carries the hero's background image and scrims; its bottom fade resolves to
+**solid `CLOSING_BASE` (`#042036`)**, which the footer sets as its background.
+`CLOSING_BASE` is exported from `FinalCTA.tsx` and imported by `Footer.tsx`
+precisely so the two cannot drift; change it in one place. The footer has no
+top border, and `ed-on-dark` pins the dark token set so its light-mode text
+stays legible on the band. It also ships only the white logo, since the band
+is dark in both themes.
+
 ## Standing rules
 
 **Scope.** Homepage only unless a prompt grants an explicit exception. If a

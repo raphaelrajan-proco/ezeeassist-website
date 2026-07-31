@@ -398,13 +398,16 @@ function StackedDiagram() {
 export default function TheSystem() {
   return (
     <section id="the-system" className="w-full scroll-mt-24" style={{ backgroundColor: T.bg }}>
-      <div className="mx-auto max-w-[1180px] px-6 py-20 md:py-28 lg:py-32">
+      {/* Padding is set so the whole section clears an 1205x793 viewport in
+          one screen: the canvas is 595 tall there, plus the headline and
+          its margin, which leaves about 48px a side. */}
+      <div className="mx-auto max-w-[1180px] px-6 py-10 md:py-12">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.85, ease: EASE }}
-          className="leading-[1.05] tracking-[-0.03em] max-w-4xl mb-14 md:mb-16"
+          className="leading-[1.05] tracking-[-0.03em] max-w-4xl mb-8 md:mb-10"
           style={{
             color: T.text,
             fontFamily: JAKARTA,
