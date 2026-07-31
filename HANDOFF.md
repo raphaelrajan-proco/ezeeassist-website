@@ -39,10 +39,30 @@ rename a section.
 Support modules (not sections): `artifact-panels.tsx`, `audience-duality.tsx`,
 `handoff-flow.tsx`. Unwired-but-kept work lives in `components/growth/_archive/`.
 
-The hero's copy stack runs H1, sub-lead, descriptor, CTA. The trust line
-("Trusted by 70+ brands…") sits below the visual, directly above the logo
-marquee, rendered by `TrustStrip.tsx` rather than the hero. See the flag note
-below for how to put it back.
+The hero's copy stack is eyebrow, lead, sub-lead, CTA. Each line carries the
+type of the **slot** it sits in, not type of its own:
+
+| Slot | Copy | Type |
+|---|---|---|
+| Eyebrow (`h1`) | AI Operating System for franchisee success. | 9.7–11.25px, 600, uppercase, 0.16em, accent blue |
+| Lead | Take all the low-value work off your coaches. / Amplify their tactical expertise across every location. | 23–36px, 700, -0.03em |
+| Sub-lead | Repetitive questions… / EZee handles all of it… | 15.2–20px, 400, `ed-fg` |
+
+The `h1` deliberately sits on the eyebrow line, styled small, so the page's
+primary statement still matches the title tag and the JSON-LD. Moving it to
+the visually dominant lead is a one-line swap if that is ever preferred.
+
+The trust line ("Trusted by 70+ brands…") sits below the visual, directly
+above the logo marquee, rendered by `TrustStrip.tsx` rather than the hero. See
+the flag note below for how to put it back.
+
+**Sizing the lead is measurement work, not arithmetic.** A width-ratio
+estimate said 36px would hold two lines per sentence at 1024; real wrapping
+gave three, because breaks land on words. Binary-search the actual wrap in the
+browser instead. Measured ceilings for two lines per sentence: 24.5px at 390,
+30px at 1024, 37px at 1205, 38.5px at 1440. **1024 binds hardest**, since that
+is where the two-column grid starts and the copy column drops to 425px, its
+narrowest anywhere. Anything retuned here has to clear 1024 first.
 
 `OrderedPanel` in `artifact-panels.tsx` closes the problem section. Four
 artifact tiles run left to right, an SVG spine drops from each into a shared
@@ -87,6 +107,11 @@ Line counts: `Math.round(el.getBoundingClientRect().height / parseFloat(getCompu
 Note the container caps at `max-w-7xl`, so the hero copy column stops growing at
 **539px** — it is the same at 1440 and 1600. Size clamps against that, with
 ~5% headroom, and remember bold text is wider than medium.
+
+Copy column widths, measured: 342 at 390, 608 at 768, **425 at 1024**, 517 at
+1205, 539 from 1440 up. The sequence is not monotonic, because 1024 switches
+the hero to two columns. A `vw` clamp only sees the viewport, so the tightest
+fit is usually 1024 rather than the smallest screen.
 
 ## Environment gotchas (these cost hours to rediscover)
 
@@ -151,9 +176,9 @@ Note the container caps at `max-w-7xl`, so the hero copy column stops growing at
 
 ## Known deviations from spec
 
-- Hero H1 is a two-line lockup, not the originally specified single-line-per-
-  sentence version: the copy column physically cannot hold it. Sizes are
-  constraint-derived.
+- The hero lead is a four-line lockup (two lines per sentence), not the
+  originally specified single-line-per-sentence version: the copy column
+  physically cannot hold it. Sizes are constraint-derived.
 - The Trust and control H2 holds two lines at 768px and above; it takes three at
   390, where a two-line cap would need ~22px type.
 - Section 7 keeps its full layout rather than becoming a "compact band", since

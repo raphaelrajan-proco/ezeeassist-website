@@ -303,8 +303,6 @@ function ConversationCard() {
 
 /* ── Hero ──────────────────────────────────────────────── */
 
-/** Brand-blue semibold emphasis. Only "AI Operating System" gets it. */
-
 export default function GrowthHero() {
   return (
     <section className="relative w-full ed-bg overflow-hidden">
@@ -336,32 +334,44 @@ export default function GrowthHero() {
               </motion.p>
             )}
 
+            {/* Eyebrow slot. The h1 stays on this line so the page's primary
+                statement still matches the title tag and the JSON-LD, even
+                though it now reads at eyebrow size. */}
             <motion.h1
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+              className="uppercase mb-4"
+              style={{
+                fontSize: "clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem)",
+                fontWeight: 600,
+                letterSpacing: "0.16em",
+                color: "var(--ed-accent-text)",
+              }}
+            >
+              AI Operating System for franchisee success.
+            </motion.h1>
+
+            {/* Lead slot. Sized down from the old 36-48px, because the copy
+                here is now 101 characters rather than 42. "Amplify their
+                tactical expertise across every location." fills the column on
+                its own at 21px, so the old 48px ran it to three lines. The
+                slope holds each sentence to two lines at every width. Sized
+                against measured wrap points, not a width ratio: the ceiling
+                for two lines is 30px at 1024, 37px at 1205, 38.5px at 1440.
+                1024 binds hardest, because that is where the two-column grid
+                starts and squeezes the copy column to 425px. */}
+            <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, ease: EASE, delay: 0.1 }}
               className="ed-fg mb-4"
               style={{
                 fontFamily: "var(--font-editorial)",
-                fontSize: "clamp(2.25rem, -0.2rem + 4vw, 3rem)",
+                fontSize: "clamp(1.4375rem, 0.74rem + 1.68vw, 2.25rem)",
                 fontWeight: 700,
                 letterSpacing: "-0.03em",
-                lineHeight: 1.06,
-              }}
-            >
-              <span className="block" style={{ color: "#00AEEF" }}>AI Operating System</span>
-              <span className="block">for franchisee success.</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 0.25 }}
-              className="ed-fg mb-4"
-              style={{
-                fontSize: "clamp(0.95rem, 0.15rem + 1.2vw, 1.25rem)",
-                fontWeight: 400,
-                lineHeight: 1.4,
+                lineHeight: 1.1,
               }}
             >
               <span className="block">Take all the low-value work off your coaches.</span>
@@ -371,13 +381,12 @@ export default function GrowthHero() {
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, ease: "easeOut", delay: 0.35 }}
-              className="mb-6"
+              transition={{ duration: 0.7, ease: "easeOut", delay: 0.25 }}
+              className="ed-fg mb-6"
               style={{
-                fontSize: "clamp(0.8125rem, 0.75rem + 0.2vw, 0.9375rem)",
+                fontSize: "clamp(0.95rem, 0.15rem + 1.2vw, 1.25rem)",
                 fontWeight: 400,
-                lineHeight: 1.5,
-                color: "var(--ed-fg-muted)",
+                lineHeight: 1.4,
               }}
             >
               <span className="block">Repetitive questions. Compliance chasing. Report building.</span>
