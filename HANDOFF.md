@@ -54,11 +54,27 @@ type of the **slot** it sits in, not type of its own:
 | Slot | Copy | Type |
 |---|---|---|
 | Eyebrow (`h1`) | AI Operating System for franchisee success. | 10–16px, 700, uppercase, 0.16em, accent blue, one line always |
-| Lead | Take all the low-value work off your coaches. **Amplify tactical coaching expertise across every location.** | 26–40px, 700, -0.03em, flows as one paragraph, second sentence in `#00AEEF` |
-| Sub-lead | Repetitive questions… EZee handles all of it… | 15.2–20px, 400, `ed-fg`, flows as one paragraph |
+| Lead | Take the low-value work off your coaches. **Multiply their expertise across every location.** | 22.5–35px, 700, -0.03em, second sentence in `HERO_ACCENT` |
+| Sub-lead | Repetitive questions… **Growth, not headcount.** | 11.75–18.5px, 400, cream, last sentence at 700 |
 
 Neither the lead nor the sub-lead carries a forced line break. Both wrap
 naturally, so nothing needs re-breaking when copy changes.
+
+**Both are capped at three lines at every width**, which is what sets their
+clamps. Measured ceilings for three lines:
+
+| Viewport | Column | Lead | Sub-lead |
+|---|---|---|---|
+| 390 | 342 | 23.5px | 12.25px |
+| 768 | 608 | 41.75px | 21.75px |
+| 1024 | 425 | 29px | 15.25px |
+| 1205 | 517 | 35.5px | 18.5px |
+| 1440 | 539 | 37px | 19.25px |
+
+The clamps sit ~4% under each. The sub-lead is 168 characters, so three lines
+costs it **11.75px at 390** — small for body copy, and the price of the cap.
+Allowing four lines there would buy 16.25px. Any copy edit to either line
+means re-deriving these ceilings, since both sit right against them.
 
 The `h1` deliberately sits on the eyebrow line, styled small, so the page's
 primary statement still matches the title tag and the JSON-LD. Moving it to
@@ -223,6 +239,12 @@ fit is usually 1024 rather than the smallest screen.
   the real section.
 - Framer Motion clobbers inline `transform` on `motion.*` — put static rotation
   or offsets on an inner plain `div`.
+- **`LogoTile` reaches its text pill only through `onError`.** No customer SVGs
+  exist yet, so every tile depends on a 404 firing. A lazy image that never
+  enters the viewport never loads, never errors, and leaves a zero-width tile,
+  which silently dropped whole brands from the marquee. It now loads eagerly.
+  If the tile ever goes back to lazy, the fallback has to become the default
+  state rather than the error state.
 - **No lint script exists** in this repo. `npx tsc --noEmit` is the check;
   add `--noUnusedLocals` to catch dead imports.
 - Deployment-specific Vercel URLs cannot be retrieved from this environment.
@@ -259,6 +281,14 @@ fit is usually 1024 rather than the smallest screen.
   pricing does not appear on the site in any form, including structured data.
 
 **Content**
+- **`Deka+` in the logo strip vs `DekaLash` everywhere else.** The customer
+  logo list was renamed to Deka+ on request, but the brand is still DekaLash
+  in `app/case-studies/dekalash/`, `CaseStudiesContent.tsx`,
+  `FranchisingContent.tsx`, `FranchisorsContent.tsx` (a named testimonial),
+  and two related-case-study lists. Decide whether the rename is site-wide.
+- `Home Helpers` was added to the customer list and is not backed by anything
+  else in the repo. `UPS` became `UPS Store` and `Massage Heights` became
+  `Heights Wellness`; neither had other references.
 - Coaching-coverage metrics (touchpoints per location per month, locations per
   coach, weeks cut from ramp). Until these exist the page argues growth and
   proves cost.

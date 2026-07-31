@@ -41,6 +41,12 @@ export function LogoTile({ logo }: { logo: CustomerLogo }) {
       height={48}
       className="max-h-12 w-auto object-contain"
       style={{ opacity: 0.7 }}
+      /* The text pill is reached only through onError, and a lazy image that
+         never enters the viewport never loads, never errors, and leaves a
+         zero-width tile. In a marquee most tiles start off-screen, so whole
+         brands were silently dropping out of the strip. Eager loading makes
+         the fallback deterministic. */
+      loading="eager"
       onError={() => setFailed(true)}
     />
   );

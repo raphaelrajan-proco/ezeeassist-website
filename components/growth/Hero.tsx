@@ -412,13 +412,12 @@ export default function GrowthHero() {
               AI Operating System for franchisee success.
             </motion.h1>
 
-            {/* Lead slot. The two sentences flow as one wrapped paragraph, so
-                the size is capped by total line count rather than by fitting
-                each sentence to two lines. Sized against measured wrap points,
-                not a width ratio: the ceiling for four lines is 27.5px at 390,
-                34.5px at 1024, 42px at 1205, 43.5px at 1440. 1024 binds
-                hardest, because that is where the two-column grid starts and
-                squeezes the copy column to 425px, narrower than at 768. */}
+            {/* Lead slot, held to three lines at every width. Sized against
+                measured wrap points, not a width ratio: the ceiling for three
+                lines is 23.5px at 390, 29px at 1024, 35.5px at 1205, 37px at
+                1440. 1024 binds hardest, because that is where the two-column
+                grid starts and squeezes the copy column to 425px, narrower
+                than at 768. The clamp sits ~4% under each ceiling. */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -426,16 +425,16 @@ export default function GrowthHero() {
               className="mb-4"
               style={{
                 fontFamily: "var(--font-editorial)",
-                fontSize: "clamp(1.625rem, 0.99rem + 1.68vw, 2.5rem)",
+                fontSize: "clamp(1.40625rem, 0.67rem + 1.68vw, 2.1875rem)",
                 fontWeight: 700,
                 letterSpacing: "-0.03em",
                 lineHeight: 1.1,
                 color: HERO_FG,
               }}
             >
-              Take all the low-value work off your coaches.{" "}
+              Take the low-value work off your coaches.{" "}
               <span style={{ color: HERO_ACCENT }}>
-                Amplify tactical coaching expertise across every location.
+                Multiply their expertise across every location.
               </span>
             </motion.p>
 
@@ -445,15 +444,19 @@ export default function GrowthHero() {
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.25 }}
               className="mb-6"
               style={{
-                fontSize: "clamp(0.95rem, 0.15rem + 1.2vw, 1.25rem)",
+                /* Three lines at every width. This copy is 168 characters, so
+                   the ceiling is tight: 12.25px at 390, 15.25px at 1024,
+                   18.5px at 1205, 19.25px at 1440. Mobile is the cost of the
+                   three-line cap; allowing four lines there would buy 16.25px. */
+                fontSize: "clamp(0.734rem, 0.3125rem + 0.9375vw, 1.15625rem)",
                 fontWeight: 400,
                 lineHeight: 1.4,
                 color: HERO_FG_SOFT,
               }}
             >
               Repetitive questions. Compliance chasing. Report building. EZee
-              handles all of it, then lets a coach build a play once and run it
-              everywhere. Growth, not headcount.
+              handles all of it, so a coach can build the plays once and every
+              location runs them. <strong style={{ fontWeight: 700 }}>Growth, not headcount.</strong>
             </motion.p>
 
             <motion.div
@@ -500,17 +503,6 @@ export default function GrowthHero() {
                 <ConversationCard />
               </div>
             </div>
-            <p
-              className="mt-4 text-center uppercase"
-              style={{
-                fontSize: "7px",
-                letterSpacing: "0.14em",
-                fontWeight: 500,
-                color: "rgba(245,237,224,0.82)",
-              }}
-            >
-              Sourced from your systems. Governed by your rules.
-            </p>
           </motion.div>
         </div>
       </div>

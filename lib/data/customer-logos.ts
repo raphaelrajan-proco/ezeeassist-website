@@ -7,30 +7,32 @@ export interface CustomerLogo {
   alt: string;
 }
 
+// The first six are a fixed, requested opening order; TheSystem also shows
+// exactly this slice. Everything after them is ordered by recognizability.
 export const customerLogos: CustomerLogo[] = [
-  // ── Named customers, ordered by recognizability ──────────────
-  { name: "UPS",                     src: "/logos/customers/ups.svg",                     alt: "UPS" },
+  // ── Opening six, order requested ─────────────────────────────
+  { name: "UPS Store",               src: "/logos/customers/ups-store.svg",               alt: "The UPS Store" },
   { name: "Sport Clips",             src: "/logos/customers/sport-clips.svg",             alt: "Sport Clips" },
-  { name: "WSI",                     src: "/logos/customers/wsi.svg",                     alt: "WSI" },
   { name: "Aqua-Tots",               src: "/logos/customers/aqua-tots.svg",               alt: "Aqua-Tots Swim Schools" },
-  { name: "Massage Heights",         src: "/logos/customers/massage-heights.svg",         alt: "Massage Heights" },
+  { name: "Heights Wellness",        src: "/logos/customers/heights-wellness.svg",        alt: "Heights Wellness Retreat" },
+  { name: "Deka+",                   src: "/logos/customers/deka-plus.svg",               alt: "Deka+" },
+  { name: "Home Helpers",            src: "/logos/customers/home-helpers.svg",            alt: "Home Helpers Home Care" },
+  // ── Remaining named customers ────────────────────────────────
+  { name: "WSI",                     src: "/logos/customers/wsi.svg",                     alt: "WSI" },
   { name: "Real Property Management",src: "/logos/customers/real-property-mgmt.svg",     alt: "Real Property Management" },
-  { name: "DekaLash",                src: "/logos/customers/dekalash.svg",                alt: "DekaLash" },
   { name: "EverLine",                src: "/logos/customers/everline.svg",                alt: "EverLine Coatings and Services" },
-  { name: "DivaDance",               src: "/logos/customers/divadance.svg",               alt: "DivaDance" },
   { name: "Spray-Net",               src: "/logos/customers/spray-net.svg",               alt: "Spray-Net" },
-  { name: "New Creations",           src: "/logos/customers/new-creations.svg",           alt: "New Creations" },
-  { name: "Fresh Burger",            src: "/logos/customers/fresh-burger.svg",            alt: "Fresh Burger" },
-  { name: "BeaverTails",             src: "/logos/customers/beavertails.svg",             alt: "BeaverTails" },
   { name: "Modern PurAir",           src: "/logos/customers/modern-purair.svg",           alt: "Modern PurAir" },
-  { name: "Horse Power",             src: "/logos/customers/horse-power.svg",             alt: "Horse Power" },
-  { name: "CEFA",                    src: "/logos/customers/cefa.svg",                    alt: "CEFA Early Learning" },
   { name: "Zoom Drain",              src: "/logos/customers/zoom-drain.svg",              alt: "Zoom Drain" },
+  { name: "CEFA",                    src: "/logos/customers/cefa.svg",                    alt: "CEFA Early Learning" },
+  { name: "Athletic Republic",       src: "/logos/customers/athletic-republic.svg",       alt: "Athletic Republic" },
+  { name: "DivaDance",               src: "/logos/customers/divadance.svg",               alt: "DivaDance" },
+  { name: "New Creations",           src: "/logos/customers/new-creations.svg",           alt: "New Creations" },
   { name: "The Drip Bar",            src: "/logos/customers/the-drip-bar.svg",            alt: "The Drip Bar" },
   { name: "Fastest Labs",            src: "/logos/customers/fastest-labs.svg",            alt: "Fastest Labs" },
-  { name: "Athletic Republic",       src: "/logos/customers/athletic-republic.svg",       alt: "Athletic Republic" },
   { name: "Wisdom Senior Care",      src: "/logos/customers/wisdom-senior-care.svg",      alt: "Wisdom Senior Care" },
   { name: "Bumble Bee Blinds",       src: "/logos/customers/bumble-bee-blinds.svg",       alt: "Bumble Bee Blinds" },
+  { name: "Horse Power",             src: "/logos/customers/horse-power.svg",             alt: "Horse Power" },
   // ── Placeholder entries (replace names + swap SVGs later) ────
   { name: "Customer 12",  src: "/logos/customers/customer-12.svg",  alt: "Customer 12" },
   { name: "Customer 13",  src: "/logos/customers/customer-13.svg",  alt: "Customer 13" },
