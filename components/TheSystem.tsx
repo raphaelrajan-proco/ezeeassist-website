@@ -3,13 +3,11 @@
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import {
-  Users, BookOpen, Plug, MessageSquare, RefreshCw, ShieldCheck, BarChart3,
-  TrendingUp, type LucideIcon,
+  Users, BookOpen, Plug, MessageSquare, LifeBuoy, RefreshCw, BarChart3,
+  LayoutGrid, type LucideIcon,
 } from "lucide-react";
-import { AnimatedValue } from "@/components/growth/shared";
-import { NETWORK_SCALE, networkScaleNumber } from "@/lib/data/network-scale";
 import { OrderedPanel } from "@/components/growth/artifact-panels";
-import { ROWS as INTEGRATION_ROWS } from "@/components/Connected";
+import { customerLogos } from "@/lib/data/customer-logos";
 
 /**
  * The reveal. Sits between The Shift (nobody has a system) and the
@@ -32,34 +30,31 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 const INPUTS: { icon: LucideIcon; label: string; detail: string }[] = [
   { icon: Users,    label: "Your people",    detail: "HQ, coaches, franchisees, location staff" },
   { icon: BookOpen, label: "Your playbooks", detail: "SOPs, brand standards, training, policy" },
-  { icon: Plug,     label: "Your systems",   detail: "250+ integrations across POS, scheduling, CRM, accounting" },
+  { icon: Plug,     label: "Your systems",   detail: "POS, scheduling, CRM, accounting" },
 ];
 
+/* Labels match the five capability modules one to one, so the eye
+   carries them straight into the next section. */
 const OUTPUTS: { icon: LucideIcon; label: string }[] = [
-  { icon: MessageSquare, label: "Answers on every channel" },
-  { icon: RefreshCw,     label: "Work that runs itself" },
-  { icon: ShieldCheck,   label: "Compliance that holds" },
-  { icon: BarChart3,     label: "Visibility for leadership" },
-  { icon: TrendingUp,    label: "Performance that moves" },
-];
-
-const STATS: { end: number; suffix?: string; label: string }[] = [
-  { end: 250,  suffix: "+", label: "Integrations" },
-  { end: 8,               label: "Channels covered" },
-  { end: networkScaleNumber(NETWORK_SCALE.locations), suffix: "+", label: "Locations live" },
-  { end: 1,               label: "Platform for all of it" },
+  { icon: MessageSquare, label: "Answers" },
+  { icon: LifeBuoy,      label: "Tickets" },
+  { icon: RefreshCw,     label: "Workflows" },
+  { icon: BarChart3,     label: "Reporting" },
+  { icon: LayoutGrid,    label: "Apps" },
 ];
 
 /* ── Diagram pieces ────────────────────────────────────── */
 
 function InputCard({ icon: Icon, label, detail }: (typeof INPUTS)[number]) {
   return (
-    <div className="rounded-2xl p-5" style={{ backgroundColor: DARK_CARD, border: `1px solid ${DARK_RULE}` }}>
-      <Icon aria-hidden="true" className="w-5 h-5 mb-3" strokeWidth={1.75} style={{ color: BLUE }} />
-      <p className="text-base mb-1" style={{ color: FG, fontFamily: "var(--font-editorial)", fontWeight: 500 }}>
-        {label}
-      </p>
-      <p className="text-[13px] leading-relaxed" style={{ color: MUTED }}>
+    <div className="rounded-2xl px-4 py-3.5" style={{ backgroundColor: DARK_CARD, border: `1px solid ${DARK_RULE}` }}>
+      <div className="flex items-center gap-2.5">
+        <Icon aria-hidden="true" className="w-4 h-4 flex-shrink-0" strokeWidth={1.75} style={{ color: BLUE }} />
+        <p className="text-[15px]" style={{ color: FG, fontFamily: "var(--font-editorial)", fontWeight: 500 }}>
+          {label}
+        </p>
+      </div>
+      <p className="mt-1 text-[12.5px] leading-snug" style={{ color: MUTED }}>
         {detail}
       </p>
     </div>
@@ -154,151 +149,120 @@ export default function TheSystem() {
 
   return (
     <section id="the-system" className="w-full scroll-mt-24" style={{ backgroundColor: DARK_BG }}>
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
-        {/* Copy */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.85, ease: EASE }}
-          className="max-w-3xl mb-16 md:mb-20"
-        >
-          <p className="text-sm uppercase tracking-[0.2em] mb-8" style={{ color: BLUE, fontWeight: 500 }}>
-            The system
-          </p>
-          <h2
-            className="leading-[1.05] tracking-[-0.03em]"
-            style={{ color: FG, fontFamily: "var(--font-editorial)", fontWeight: 500, fontSize: "clamp(2rem, 1.1rem + 1.9vw, 3rem)" }}
-          >
-            EZee Assist is that system.
-          </h2>
-          <p className="mt-6 text-lg md:text-xl leading-relaxed" style={{ color: MUTED }}>
-            One layer connecting the people who run your network, the
-            playbooks they work from, and the tools they already use.
-          </p>
-          <p className="mt-4 text-base md:text-lg leading-relaxed" style={{ color: MUTED }}>
-            HQ publishes the standard once. Coaches see what is happening
-            across every location. Franchisees get answers and act on them
-            without waiting. Performance gaps surface while there is still
-            time to act on them.
-          </p>
-        </motion.div>
-
-        {/* Diagram */}
-        <div ref={ref}>
-          <p className="sr-only">
-            Architecture diagram. Three inputs feed one layer: your people
-            (HQ, coaches, franchisees, location staff), your playbooks
-            (SOPs, brand standards, training, policy), and your systems
-            (250 plus integrations across POS, scheduling, CRM, and
-            accounting). They converge on EZee Assist, the execution
-            layer. Five outputs come from it: answers on every channel,
-            work that runs itself, compliance that holds, visibility for
-            leadership, and performance that moves.
-          </p>
-
-          {/* Desktop: three inputs, connectors, node, connectors, four outputs */}
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-10 md:py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-[34fr_62fr] gap-10 lg:gap-12 items-center">
+          {/* Copy and credibility */}
           <motion.div
-            aria-hidden="true"
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: EASE }}
-            className="hidden lg:grid grid-cols-[1fr_5rem_auto_5rem_1fr] items-stretch"
+            transition={{ duration: 0.85, ease: EASE }}
           >
-            <div className="flex flex-col justify-between gap-4">
-              {INPUTS.map((c) => <InputCard key={c.label} {...c} />)}
-            </div>
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-full w-full">
-              {IN_PATHS.map((d) => (
-                <PulsePath key={d} d={d} run={inView} delay={0} reduceMotion={reduceMotion} />
-              ))}
-            </svg>
-            <div className="flex items-center">
-              <EzeeNode />
-            </div>
-            <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-full w-full">
-              {OUT_PATHS.map((d) => (
-                <PulsePath key={d} d={d} run={inView} delay={0.6} reduceMotion={reduceMotion} />
-              ))}
-            </svg>
-            <div className="flex flex-col justify-between gap-3">
-              {OUTPUTS.map((c) => <OutputCard key={c.label} {...c} />)}
+            <p className="text-sm uppercase tracking-[0.2em] mb-6" style={{ color: BLUE, fontWeight: 500 }}>
+              The system
+            </p>
+            <h2
+              className="leading-[1.05] tracking-[-0.03em]"
+              style={{ color: FG, fontFamily: "var(--font-editorial)", fontWeight: 500, fontSize: "clamp(2rem, 1.1rem + 1.9vw, 3rem)" }}
+            >
+              EZee Assist is that system.
+            </h2>
+            <p className="mt-5 text-lg md:text-xl leading-snug" style={{ color: MUTED }}>
+              Your people, your playbooks, and your systems on one layer.
+            </p>
+
+            {/* Credibility strip */}
+            <div className="mt-8 pt-6" style={{ borderTop: `1px solid ${DARK_RULE}` }}>
+              <p className="text-sm" style={{ color: FG, fontWeight: 500 }}>
+                250+ native integrations · 8 channels · nothing migrates
+              </p>
+              {/* TODO: swap for real customer logo SVGs once they land. */}
+              <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5" aria-hidden="true">
+                {customerLogos.slice(0, 6).map((l) => (
+                  <span key={l.name} className="text-[13px] whitespace-nowrap" style={{ color: MUTED, fontWeight: 500 }}>
+                    {l.name}
+                  </span>
+                ))}
+              </div>
             </div>
           </motion.div>
 
-          {/* Below lg: stacked with vertical connectors */}
-          <motion.div
-            aria-hidden="true"
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.8, ease: EASE }}
-            className="lg:hidden"
-          >
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {INPUTS.map((c) => <InputCard key={c.label} {...c} />)}
-            </div>
-            <div className="flex justify-center">
-              <svg viewBox="0 0 10 100" preserveAspectRatio="none" className="h-10 w-2.5">
-                <PulsePath d="M5,0 L5,100" run={inView} delay={0} reduceMotion={reduceMotion} />
+          {/* Architecture diagram */}
+          <div ref={ref}>
+            <p className="sr-only">
+              Architecture diagram. Three inputs feed one layer: your people
+              (HQ, coaches, franchisees, location staff), your playbooks
+              (SOPs, brand standards, training, policy), and your systems
+              (POS, scheduling, CRM, accounting). They converge on EZee
+              Assist, the execution layer. Five outputs come from it:
+              answers, tickets, workflows, reporting, and apps.
+            </p>
+
+            {/* Desktop: three inputs, connectors, node, connectors, five outputs */}
+            <motion.div
+              aria-hidden="true"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: EASE }}
+              className="hidden lg:grid grid-cols-[1fr_3.5rem_auto_3.5rem_1fr] items-stretch"
+            >
+              <div className="flex flex-col justify-between gap-3">
+                {INPUTS.map((c) => <InputCard key={c.label} {...c} />)}
+              </div>
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-full w-full">
+                {IN_PATHS.map((d) => (
+                  <PulsePath key={d} d={d} run={inView} delay={0} reduceMotion={reduceMotion} />
+                ))}
               </svg>
-            </div>
-            <div className="flex justify-center">
-              <EzeeNode />
-            </div>
-            <div className="flex justify-center">
-              <svg viewBox="0 0 10 100" preserveAspectRatio="none" className="h-10 w-2.5">
-                <PulsePath d="M5,0 L5,100" run={inView} delay={0.6} reduceMotion={reduceMotion} />
+              <div className="flex items-center">
+                <EzeeNode />
+              </div>
+              <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="h-full w-full">
+                {OUT_PATHS.map((d) => (
+                  <PulsePath key={d} d={d} run={inView} delay={0.6} reduceMotion={reduceMotion} />
+                ))}
               </svg>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {OUTPUTS.map((c) => <OutputCard key={c.label} {...c} />)}
-            </div>
-          </motion.div>
-        </div>
+              <div className="flex flex-col justify-between gap-2">
+                {OUTPUTS.map((c) => <OutputCard key={c.label} {...c} />)}
+              </div>
+            </motion.div>
 
-        {/* The same artifacts, on one layer */}
-        <div className="ed-on-dark mt-16 md:mt-20">
-          <OrderedPanel />
-        </div>
-
-        {/* Thin integrations credibility strip */}
-        <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2">
-          {INTEGRATION_ROWS.slice(0, 8).map((r) => (
-            <span key={r.name} className="inline-flex items-center gap-2 text-sm" style={{ color: MUTED }}>
-              <span aria-hidden="true" className="block h-2 w-2 rounded-full" style={{ backgroundColor: r.color }} />
-              {r.name}
-            </span>
-          ))}
-          <span className="text-sm" style={{ color: BLUE, fontWeight: 600 }}>
-            +242 more
-          </span>
-        </div>
-
-        {/* Stat band */}
-        <div className="mt-16 md:mt-20 pt-10" style={{ borderTop: `1px solid #1F1F1F` }}>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
-            {STATS.map((s, i) => (
-              <motion.div
-                key={s.label}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.7, ease: EASE, delay: i * 0.08 }}
-              >
-                <p
-                  className="text-4xl md:text-5xl tracking-[-0.03em]"
-                  style={{ color: FG, fontFamily: "var(--font-editorial)", fontWeight: 500, lineHeight: 1 }}
-                >
-                  <AnimatedValue end={s.end} suffix={s.suffix ?? ""} inView={inView} />
-                </p>
-                <p className="mt-2.5 text-sm uppercase tracking-[0.18em]" style={{ color: MUTED, fontWeight: 600 }}>
-                  {s.label}
-                </p>
-              </motion.div>
-            ))}
+            {/* Below lg: stacked with vertical connectors */}
+            <motion.div
+              aria-hidden="true"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8, ease: EASE }}
+              className="lg:hidden"
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                {INPUTS.map((c) => <InputCard key={c.label} {...c} />)}
+              </div>
+              <div className="flex justify-center">
+                <svg viewBox="0 0 10 100" preserveAspectRatio="none" className="h-10 w-2.5">
+                  <PulsePath d="M5,0 L5,100" run={inView} delay={0} reduceMotion={reduceMotion} />
+                </svg>
+              </div>
+              <div className="flex justify-center">
+                <EzeeNode />
+              </div>
+              <div className="flex justify-center">
+                <svg viewBox="0 0 10 100" preserveAspectRatio="none" className="h-10 w-2.5">
+                  <PulsePath d="M5,0 L5,100" run={inView} delay={0.6} reduceMotion={reduceMotion} />
+                </svg>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {OUTPUTS.map((c) => <OutputCard key={c.label} {...c} />)}
+              </div>
+            </motion.div>
           </div>
+        </div>
+
+        {/* Payoff: the same artifacts, snapped onto one layer */}
+        <div className="ed-on-dark mt-8 md:mt-10">
+          <OrderedPanel compact />
         </div>
       </div>
     </section>

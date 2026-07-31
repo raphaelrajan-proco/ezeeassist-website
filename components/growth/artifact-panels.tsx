@@ -202,17 +202,21 @@ export function ScatteredPanel() {
 
 /* ── Right panel: the same artifacts, one layer ────────── */
 
-export function OrderedPanel() {
+export function OrderedPanel({ compact = false }: { compact?: boolean } = {}) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   return (
     <div ref={ref}>
-      <p className="text-sm uppercase tracking-[0.2em] mb-4" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
+      <p className="text-sm uppercase tracking-[0.2em] mb-3" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
         What it needs to be
       </p>
       <div
         className="relative rounded-2xl overflow-hidden flex flex-col justify-between px-5 pt-5 pb-5"
-        style={{ backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-rule)", minHeight: "360px" }}
+        style={{
+          backgroundColor: "var(--ed-card)",
+          border: "1px solid var(--ed-rule)",
+          minHeight: compact ? "168px" : "360px",
+        }}
       >
         <p className="sr-only">
           The same artifacts, upright and aligned, connected into a single
@@ -220,7 +224,10 @@ export function OrderedPanel() {
         </p>
 
         {/* Aligned artifacts, scaled to fit two per row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start" aria-hidden="true">
+        <div
+          className={compact ? "grid grid-cols-2 lg:grid-cols-4 gap-2 items-start" : "grid grid-cols-1 sm:grid-cols-2 gap-3 items-start"}
+          aria-hidden="true"
+        >
           {[<ConsumerChatTile key="a" ezee />, <SpreadsheetTile key="b" />, <PromptDocTile key="c" />, <FlowTile key="d" />].map((tile, i) => (
             <motion.div
               key={i}
@@ -228,7 +235,7 @@ export function OrderedPanel() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, ease: "easeOut", delay: 0.35 + i * 0.08 }}
               className="flex justify-center"
-              style={{ transform: "scale(0.82)", transformOrigin: "top center" }}
+              style={{ transform: `scale(${compact ? 0.58 : 0.82})`, transformOrigin: "top center" }}
             >
               {tile}
             </motion.div>
@@ -236,7 +243,7 @@ export function OrderedPanel() {
         </div>
 
         {/* Connecting lines into the layer */}
-        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="w-full -mt-6" style={{ height: "34px" }} aria-hidden="true">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" className={compact ? "w-full -mt-16" : "w-full -mt-6"} style={{ height: compact ? "22px" : "34px" }} aria-hidden="true">
           {[25, 75].map((x, i) => (
             <motion.line
               key={x}
