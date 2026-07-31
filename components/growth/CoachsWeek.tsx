@@ -7,6 +7,7 @@ import {
   Overline, SectionShell,
   MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED, MOCK_HAIRLINE,
 } from "./shared";
+import { ScatteredPanel } from "./artifact-panels";
 
 /**
  * The coach's week. Three story beats with product vignettes on the
@@ -343,6 +344,11 @@ export default function CoachsWeek() {
         {BEATS.map((b, i) => (
           <Beat key={b.label} beat={b} first={i === 0} />
         ))}
+      </div>
+
+      {/* Third beat's evidence: what the network actually runs on today */}
+      <div className="mb-12 md:mb-14">
+        <ScatteredPanel />
       </div>
 
       {/* The synthesis: Today vs Should-be */}

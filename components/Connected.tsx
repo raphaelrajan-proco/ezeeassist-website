@@ -32,7 +32,7 @@ type Row = {
   connected?: boolean;
 };
 
-const ROWS: Row[] = [
+export const ROWS: Row[] = [
   // ERP and FMS
   { name: "Mindbody",         cat: "ERP & FMS",     color: "#F9423A", connected: true },
   { name: "ServiceTitan",     cat: "ERP & FMS",     color: "#F05A28", connected: true },

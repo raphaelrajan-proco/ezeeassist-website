@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Overline, SectionHeadline, SectionShell } from "./shared";
+import { Overline, SectionHeadline, SectionShell } from "../shared";
 
 /**
  * Section 15: shell only.

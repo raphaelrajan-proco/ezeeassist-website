@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { AnimatedValue } from "@/components/growth/shared";
 import { NETWORK_SCALE, networkScaleNumber } from "@/lib/data/network-scale";
+import { OrderedPanel } from "@/components/growth/artifact-panels";
+import { ROWS as INTEGRATION_ROWS } from "@/components/Connected";
 
 /**
  * The reveal. Sits between The Shift (nobody has a system) and the
@@ -254,6 +256,24 @@ export default function TheSystem() {
               {OUTPUTS.map((c) => <OutputCard key={c.label} {...c} />)}
             </div>
           </motion.div>
+        </div>
+
+        {/* The same artifacts, on one layer */}
+        <div className="ed-on-dark mt-16 md:mt-20">
+          <OrderedPanel />
+        </div>
+
+        {/* Thin integrations credibility strip */}
+        <div className="mt-10 flex flex-wrap items-center gap-x-5 gap-y-2">
+          {INTEGRATION_ROWS.slice(0, 8).map((r) => (
+            <span key={r.name} className="inline-flex items-center gap-2 text-sm" style={{ color: MUTED }}>
+              <span aria-hidden="true" className="block h-2 w-2 rounded-full" style={{ backgroundColor: r.color }} />
+              {r.name}
+            </span>
+          ))}
+          <span className="text-sm" style={{ color: BLUE, fontWeight: 600 }}>
+            +242 more
+          </span>
         </div>
 
         {/* Stat band */}

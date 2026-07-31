@@ -4,7 +4,7 @@ import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { MessageSquare, Check, HelpCircle, CircleCheckBig } from "lucide-react";
 import {
-  Overline, SectionHeadline, SectionShell,
+  SectionHeadline,
   MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED,
 } from "./shared";
 
@@ -302,20 +302,19 @@ function MobileFlow() {
 
 /* ── Section ───────────────────────────────────────────── */
 
-export default function TheHandoff() {
+export default function HandoffFlow() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <SectionShell id="handoff">
+    <div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        className="max-w-3xl mb-14 md:mb-16"
+        className="max-w-3xl mb-10"
       >
-        <Overline>The handoff</Overline>
         <SectionHeadline>What happens when it should not answer.</SectionHeadline>
         <p className="ed-fg-muted mt-6 text-base md:text-lg leading-relaxed">
           Confidence is scored on every query. Below the threshold, nothing is
@@ -351,6 +350,6 @@ export default function TheHandoff() {
       >
         Once a question is resolved, the answer is already there for the next location that asks.
       </motion.p>
-    </SectionShell>
+    </div>
   );
 }

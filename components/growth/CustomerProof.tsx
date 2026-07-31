@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Overline, SectionHeadline, SectionShell, MockAvatar } from "./shared";
 import { NETWORK_SCALE } from "@/lib/data/network-scale";
+import OutcomesStats from "./outcomes-stats";
 
 /**
  * Section 12: named brands, named people, measured change. Ada's
@@ -181,6 +182,11 @@ export default function CustomerProof() {
             </p>
           </div>
         </motion.div>
+      </div>
+
+      {/* Outcomes stats, merged in from the killed outcomes band */}
+      <div className="mt-16 md:mt-20">
+        <OutcomesStats />
       </div>
 
       {/* Partner strip */}

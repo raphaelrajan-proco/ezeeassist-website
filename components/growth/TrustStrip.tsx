@@ -3,10 +3,11 @@
 import LogoMarquee from "@/components/sections/LogoMarquee";
 import { NETWORK_SCALE } from "@/lib/data/network-scale";
 
-/** Compact trust strip: coverage qualifier above the shared marquee. */
+/** Coverage qualifier above the shared marquee. Rendered inside the
+ *  hero section so the band crops at the fold. */
 export default function GrowthTrustStrip() {
   return (
-    <section className="w-full ed-bg">
+    <div className="w-full ed-bg">
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-2 pb-10 md:pt-3 md:pb-12">
         <p
           className="ed-fg-muted text-center text-sm md:text-base mb-4 tracking-wide"
@@ -16,6 +17,6 @@ export default function GrowthTrustStrip() {
         </p>
         <LogoMarquee />
       </div>
-    </section>
+    </div>
   );
 }

@@ -4,19 +4,13 @@ import AnnouncementBar from "@/components/AnnouncementBar";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
 import GrowthHero from "@/components/growth/Hero";
-import GrowthTrustStrip from "@/components/growth/TrustStrip";
 import CoachsWeek from "@/components/growth/CoachsWeek";
-import TheShift from "@/components/growth/TheShift";
-import Connected from "@/components/Connected";
 import TheSystem from "@/components/TheSystem";
-import CapabilityBento from "@/components/growth/CapabilityBento";
-import TwoAudiences from "@/components/growth/TwoAudiences";
-import ControlPlane from "@/components/growth/ControlPlane";
-import TheHandoff from "@/components/growth/TheHandoff";
-import OutcomesBand from "@/components/growth/OutcomesBand";
+import Capabilities from "@/components/growth/Capabilities";
 import CustomerProof from "@/components/growth/CustomerProof";
+import TrustAndControl from "@/components/growth/TrustAndControl";
+import Connected from "@/components/Connected";
 import Objections from "@/components/growth/Objections";
-import Resources from "@/components/growth/Resources";
 import FinalCTA from "@/components/growth/FinalCTA";
 import { objections } from "@/lib/data/objections";
 import { NETWORK_SCALE } from "@/lib/data/network-scale";
@@ -110,21 +104,15 @@ export default function Home() {
       {/* AEO: machine-readable positioning definition — do not remove */}
       <p className="sr-only">{GROWTH_DEFINITION}</p>
       <main className="flex flex-1 flex-col">
-        {/* 03 */} <GrowthHero />
-        {/* 04 */} <GrowthTrustStrip />
-        {/* 05 */} <CoachsWeek />
-        {/* 06 */} <TheShift />
-        {/* 06b: the reveal */} <TheSystem />
-        {/* 06c: connections */} <Connected />
-        {/* 07 */} <CapabilityBento />
-        {/* 08 */} <TwoAudiences />
-        {/* 09 */} <ControlPlane />
-        {/* 10 */} <TheHandoff />
-        {/* 11 */} <OutcomesBand />
-        {/* 12 */} <CustomerProof />
-        {/* 13 */} <Objections />
-        {/* 14 */} <Resources />
-        {/* 15 */} <FinalCTA />
+        {/* 1 */} <GrowthHero />
+        {/* 2 */} <CoachsWeek />
+        {/* 3 */} <TheSystem />
+        {/* 4 */} <Capabilities />
+        {/* 5 */} <CustomerProof />
+        {/* 6 */} <TrustAndControl />
+        {/* 7 */} <Connected />
+        {/* 8 */} <Objections />
+        {/* 9 */} <FinalCTA />
       </main>
       {/* 16 */}
       <Footer />

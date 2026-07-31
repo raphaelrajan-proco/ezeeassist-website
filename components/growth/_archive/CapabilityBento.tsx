@@ -7,7 +7,7 @@ import { Check, AlertTriangle, Hash, Users, MessageSquare, TrendingUp, TrendingD
 import {
   Overline, SectionHeadline, SectionShell, GradientFrame,
   MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED, MOCK_HAIRLINE,
-} from "./shared";
+} from "../shared";
 
 /**
  * Five capability tiles. Tiles 01 and 02 are large (3 of 6 columns),

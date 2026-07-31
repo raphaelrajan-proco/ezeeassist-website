@@ -2,7 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Overline, SectionHeadline, SectionShell, AnimatedValue } from "./shared";
+import { AnimatedValue } from "./shared";
 
 /**
  * Section 11: three numbers matched to the sales deck, each with a
@@ -77,25 +77,12 @@ function StatCell({ stat, index }: { stat: Stat; index: number }) {
   );
 }
 
-export default function OutcomesBand() {
+export default function OutcomesStats() {
   return (
-    <SectionShell alt id="outcomes">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        className="max-w-3xl mb-14 md:mb-16"
-      >
-        <Overline>Outcomes</Overline>
-        <SectionHeadline>Here is what comes back.</SectionHeadline>
-      </motion.div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 max-w-4xl">
-        {STATS.map((s, i) => (
-          <StatCell key={s.label} stat={s} index={i} />
-        ))}
-      </div>
-    </SectionShell>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 max-w-4xl">
+      {STATS.map((s, i) => (
+        <StatCell key={s.label} stat={s} index={i} />
+      ))}
+    </div>
   );
 }

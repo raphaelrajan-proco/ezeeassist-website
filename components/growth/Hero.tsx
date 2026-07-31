@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-mot
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Check } from "lucide-react";
+import GrowthTrustStrip from "./TrustStrip";
 
 /**
  * Ada-style hero. Left: fluid-type lockup. Right: one fixed-size
@@ -421,6 +422,8 @@ export default function GrowthHero() {
           </motion.div>
         </div>
       </div>
+
+      <GrowthTrustStrip />
     </section>
   );
 }

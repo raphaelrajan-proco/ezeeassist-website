@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import {
-  Overline, SectionHeadline, SectionShell, GradientFrame,
+  SectionHeadline, GradientFrame,
   MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED, MOCK_HAIRLINE,
 } from "./shared";
 
@@ -163,17 +163,16 @@ function AudienceColumn({
   );
 }
 
-export default function TwoAudiences() {
+export default function AudienceDuality() {
   return (
-    <SectionShell id="two-audiences">
+    <div>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        className="max-w-3xl mb-14 md:mb-16"
+        className="max-w-3xl mb-10"
       >
-        <Overline>Adoption</Overline>
         <SectionHeadline>HQ builds it. Franchisees build on it.</SectionHeadline>
       </motion.div>
 
@@ -212,6 +211,6 @@ export default function TwoAudiences() {
       >
         HQ and franchisees share one platform and one set of guardrails, and each group gets its own view.
       </motion.p>
-    </SectionShell>
+    </div>
   );
 }

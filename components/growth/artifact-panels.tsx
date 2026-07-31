@@ -4,12 +4,11 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Sparkles, FileText, Zap } from "lucide-react";
 import {
-  Overline, SectionHeadline, SectionShell,
   MOCK_SURFACE, MOCK_TEXT, MOCK_MUTED, MOCK_HAIRLINE,
 } from "./shared";
 
 /**
- * The Shift, two beats. The opening is a market observation, never a
+ * The two artifact panels. The opening is a market observation, never a
  * diagnosis of the reader. The resolution contrasts real scattered
  * artifacts against the same artifacts snapped into one layer.
  */
@@ -156,9 +155,11 @@ const SCATTER: { el: React.ReactNode; x: string; y: string; rot: number; z: numb
   { el: <StickyTile />,       x: "8%",   y: "72%", rot: -6, z: 5 },
 ];
 
-function ScatteredPanel({ inView }: { inView: boolean }) {
+export function ScatteredPanel() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
   return (
-    <div>
+    <div ref={ref}>
       <p className="ed-fg-muted text-sm uppercase tracking-[0.2em] mb-4" style={{ fontWeight: 600 }}>
         Today
       </p>
@@ -201,9 +202,11 @@ function ScatteredPanel({ inView }: { inView: boolean }) {
 
 /* ── Right panel: the same artifacts, one layer ────────── */
 
-function OrderedPanel({ inView }: { inView: boolean }) {
+export function OrderedPanel() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
   return (
-    <div>
+    <div ref={ref}>
       <p className="text-sm uppercase tracking-[0.2em] mb-4" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
         What it needs to be
       </p>
@@ -277,70 +280,3 @@ function OrderedPanel({ inView }: { inView: boolean }) {
 }
 
 /* ── Section ───────────────────────────────────────────── */
-
-export default function TheShift() {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-
-  return (
-    <SectionShell>
-      {/* Beat one: the observation */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        className="max-w-3xl mb-16 md:mb-20"
-      >
-        <Overline>The problem, amplified</Overline>
-        <SectionHeadline>
-          Everyone is building something. Nobody has a system.
-        </SectionHeadline>
-        <p className="ed-fg-muted mt-6 text-base md:text-lg leading-relaxed">
-          Your franchisees are independent business owners. Some have
-          already started using AI on their own. The rest will.
-        </p>
-        <p className="ed-fg-muted mt-4 text-base md:text-lg leading-relaxed">
-          Different tools, different prompts, different data, none of it
-          visible to you. Your brand is on every output, and there is no
-          admin panel. Every location, every coach, and every function
-          solves the same problem separately, and the sprawl compounds with
-          each one. Every one of those workarounds is time a coach spends
-          building instead of coaching, and none of it accumulates into
-          anything the network can reuse.
-        </p>
-      </motion.div>
-
-      {/* Beat two: the resolution */}
-      <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-        <ScatteredPanel inView={inView} />
-        <OrderedPanel inView={inView} />
-      </div>
-
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-        className="ed-fg-muted mt-10 max-w-3xl text-base md:text-lg leading-relaxed"
-      >
-        EZee does not replace any of your existing systems. Your documents, your systems, and your data
-        stay exactly where they are. The playbook stops describing what to do
-        and starts doing it.
-      </motion.p>
-
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.8, delay: 0.35 }}
-        className="ed-fg mt-6 max-w-3xl text-lg md:text-xl leading-relaxed"
-        style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
-      >
-        The network needs one system every part of it can use. HQ, coaches,
-        and franchisees work on the same layer instead of each group solving
-        it alone.
-      </motion.p>
-    </SectionShell>
-  );
-}

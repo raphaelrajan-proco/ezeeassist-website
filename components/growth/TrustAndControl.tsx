@@ -1,14 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useState } from "react";
 import Link from "next/link";
+import HandoffFlow from "./handoff-flow";
+import AudienceDuality from "./audience-duality";
 import {
   Shield, ScrollText, Users, Boxes, Server, BadgeCheck, type LucideIcon,
 } from "lucide-react";
 
 /**
- * Section 09: the control plane. Dark regardless of theme, and the
- * densest block on the page. Governance presented as a reason to buy.
+ * Trust and control. Dark regardless of theme, and the densest block
+ * on the page. Three tabs: the governance grid, the human-in-the-loop
+ * handoff flow, and the activity log. The HQ / franchisee duality
+ * closes the section.
  */
 
 // TODO: Confirm exact certification status before publish. List only what is formally current, and state what is in progress.
@@ -48,38 +53,8 @@ const ITEMS: { icon: LucideIcon; name: string; body: string }[] = [
   },
 ];
 
-export default function ControlPlane() {
+function GovernanceGrid() {
   return (
-    <section id="control-plane" className="relative w-full overflow-hidden scroll-mt-24" style={{ backgroundColor: "#0A0A0A" }}>
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: "radial-gradient(rgba(245,237,224,0.05) 1px, transparent 1px)",
-          backgroundSize: "34px 34px",
-          opacity: 0.5,
-        }}
-        aria-hidden="true"
-      />
-
-      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-          className="max-w-3xl mb-14 md:mb-16"
-        >
-          <p className="text-sm uppercase tracking-[0.2em] mb-8" style={{ color: "#00AEEF", fontWeight: 500 }}>
-            Control
-          </p>
-          <h2
-            className="leading-[1.05] tracking-[-0.03em]"
-            style={{ color: "#F5EDE0", fontFamily: "var(--font-editorial)", fontWeight: 500, fontSize: "clamp(2rem, 1.1rem + 1.9vw, 3rem)" }}
-          >
-            Ungoverned AI is brand risk. This is the layer that removes it.
-          </h2>
-        </motion.div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {ITEMS.map(({ icon: Icon, name, body }, i) => (
             <motion.div
@@ -104,15 +79,19 @@ export default function ControlPlane() {
             </motion.div>
           ))}
         </div>
+  );
+}
 
-        {/* Activity-log ticker: the artifact behind "One activity log" */}
-        {/* TODO: Replace with real product screen recording */}
+/* The artifact behind "One activity log". */
+// TODO: Replace with real product screen recording
+function ActivityLog() {
+  return (
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
-          className="mt-10 rounded-2xl overflow-hidden"
+          className="rounded-2xl overflow-hidden"
           style={{
             backgroundColor: "#141414",
             border: "1px solid #2A2A2A",
@@ -152,6 +131,80 @@ export default function ControlPlane() {
             </motion.div>
           ))}
         </motion.div>
+  );
+}
+
+const TABS = [
+  { id: "governance", label: "Governance" },
+  { id: "human",      label: "Human in the loop" },
+  { id: "log",        label: "Activity log" },
+] as const;
+
+export default function TrustAndControl() {
+  const [tab, setTab] = useState<(typeof TABS)[number]["id"]>("governance");
+
+  return (
+    <section id="trust" className="relative w-full overflow-hidden scroll-mt-24" style={{ backgroundColor: "#0A0A0A" }}>
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage: "radial-gradient(rgba(245,237,224,0.05) 1px, transparent 1px)",
+          backgroundSize: "34px 34px",
+          opacity: 0.5,
+        }}
+        aria-hidden="true"
+      />
+
+      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+          className="max-w-3xl mb-10"
+        >
+          <p className="text-sm uppercase tracking-[0.2em] mb-8" style={{ color: "#00AEEF", fontWeight: 500 }}>
+            Trust and control
+          </p>
+          <h2
+            className="leading-[1.05] tracking-[-0.03em]"
+            style={{ color: "#F5EDE0", fontFamily: "var(--font-editorial)", fontWeight: 500, fontSize: "clamp(2rem, 1.1rem + 1.9vw, 3rem)" }}
+          >
+            Ungoverned AI is brand risk. This is the layer that removes it.
+          </h2>
+        </motion.div>
+
+        {/* Tabs */}
+        <div className="flex flex-wrap gap-2 mb-8" role="tablist" aria-label="Trust and control">
+          {TABS.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              role="tab"
+              aria-selected={tab === t.id}
+              onClick={() => setTab(t.id)}
+              className="rounded-full px-4 py-2 text-sm transition-colors"
+              style={{
+                backgroundColor: tab === t.id ? "rgba(0,174,239,0.12)" : "#141414",
+                border: `1px solid ${tab === t.id ? "rgba(0,174,239,0.45)" : "#2A2A2A"}`,
+                color: tab === t.id ? "#00AEEF" : "#A89B86",
+                fontWeight: 500,
+              }}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        <div role="tabpanel">
+          {tab === "governance" && <GovernanceGrid />}
+          {tab === "human" && (
+            <div className="ed-on-dark">
+              <HandoffFlow />
+            </div>
+          )}
+          {tab === "log" && <ActivityLog />}
+        </div>
 
         <motion.p
           initial={{ opacity: 0 }}
@@ -186,6 +239,11 @@ export default function ControlPlane() {
             See the full trust page
           </Link>
         </motion.div>
+
+        {/* HQ / franchisee duality, moved from the killed adoption section */}
+        <div className="ed-on-dark mt-16 md:mt-20 pt-14" style={{ borderTop: "1px solid #2A2A2A" }}>
+          <AudienceDuality />
+        </div>
       </div>
     </section>
   );

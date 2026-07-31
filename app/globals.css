@@ -628,6 +628,23 @@ input[type="range"]::-moz-range-thumb {
   .ed-conn-pill-anim { animation: none !important; opacity: 1 !important; }
 }
 
+/* ─── Dark-surface token scope ─────────────────────────── */
+/* Pins the editorial dark palette for light-themed blocks that were
+   moved onto the permanently dark Trust and control section, so they
+   render as designed in both themes without being restyled. */
+.ed-on-dark {
+  --ed-bg:           #0A0A0A;
+  --ed-bg-alt:       #141414;
+  --ed-fg:           #F5EDE0;
+  --ed-fg-muted:     #A89B86;
+  --ed-border:       #2A2A2A;
+  --ed-card:         #141414;
+  --ed-card-alt:     #1F1F1F;
+  --ed-accent-text:  #00AEEF;
+  --ed-rule:         rgba(245,237,224,0.14);
+  color: var(--ed-fg);
+}
+
 /* ─── NProgress bar color override ────────────────────── */
 #nprogress .bar {
   background: #00AEEF !important;
