@@ -37,7 +37,7 @@ export default function Resources() {
           className="rounded-3xl p-7 md:p-8"
           style={{ backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-rule)" }}
         >
-          <p className="ed-fg-muted text-xs uppercase tracking-[0.2em] mb-4" style={{ fontWeight: 600 }}>
+          <p className="ed-fg-muted text-sm uppercase tracking-[0.2em] mb-4" style={{ fontWeight: 600 }}>
             Placeholder
           </p>
           <p

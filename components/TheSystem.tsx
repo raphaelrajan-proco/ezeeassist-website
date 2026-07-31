@@ -152,7 +152,7 @@ export default function TheSystem() {
 
   return (
     <section id="the-system" className="w-full scroll-mt-24" style={{ backgroundColor: DARK_BG }}>
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-28 lg:py-36">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
         {/* Copy */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -161,12 +161,12 @@ export default function TheSystem() {
           transition={{ duration: 0.85, ease: EASE }}
           className="max-w-3xl mb-16 md:mb-20"
         >
-          <p className="text-xs uppercase tracking-[0.2em] mb-8" style={{ color: BLUE, fontWeight: 500 }}>
+          <p className="text-sm uppercase tracking-[0.2em] mb-8" style={{ color: BLUE, fontWeight: 500 }}>
             The system
           </p>
           <h2
-            className="text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em]"
-            style={{ color: FG, fontFamily: "var(--font-editorial)", fontWeight: 500 }}
+            className="leading-[1.05] tracking-[-0.03em]"
+            style={{ color: FG, fontFamily: "var(--font-editorial)", fontWeight: 500, fontSize: "clamp(2rem, 1.1rem + 1.9vw, 3rem)" }}
           >
             EZee Assist is that system.
           </h2>
@@ -273,7 +273,7 @@ export default function TheSystem() {
                 >
                   <AnimatedValue end={s.end} suffix={s.suffix ?? ""} inView={inView} />
                 </p>
-                <p className="mt-2.5 text-[11px] uppercase tracking-[0.18em]" style={{ color: MUTED, fontWeight: 600 }}>
+                <p className="mt-2.5 text-sm uppercase tracking-[0.18em]" style={{ color: MUTED, fontWeight: 600 }}>
                   {s.label}
                 </p>
               </motion.div>

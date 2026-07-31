@@ -72,7 +72,7 @@ function StatCell({ stat, index }: { stat: Stat; index: number }) {
       >
         {stat.label}
       </p>
-      <p className="ed-fg-muted mt-2 text-xs leading-relaxed">{stat.source}</p>
+      <p className="ed-fg-muted mt-2 text-sm leading-relaxed">{stat.source}</p>
     </motion.div>
   );
 }

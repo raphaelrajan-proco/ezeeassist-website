@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from "react";
 export function Overline({ children }: { children: React.ReactNode }) {
   return (
     <p
-      className="text-xs uppercase tracking-[0.2em] mb-8"
+      className="text-sm uppercase tracking-[0.2em] mb-8"
       style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}
     >
       {children}
@@ -23,14 +23,21 @@ export function Overline({ children }: { children: React.ReactNode }) {
 export function SectionHeadline({
   children,
   className = "",
+  maxRem = 3,
 }: {
   children: React.ReactNode;
   className?: string;
+  /** Clamp ceiling in rem; lowered per headline where two lines would break. */
+  maxRem?: number;
 }) {
   return (
     <h2
-      className={`ed-fg text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em] ${className}`}
-      style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
+      className={`ed-fg leading-[1.05] tracking-[-0.03em] ${className}`}
+      style={{
+        fontFamily: "var(--font-editorial)",
+        fontWeight: 500,
+        fontSize: `clamp(2rem, 1.1rem + 1.9vw, ${maxRem}rem)`,
+      }}
     >
       {children}
     </h2>
@@ -48,7 +55,7 @@ export function SectionShell({
 }) {
   return (
     <section id={id} className={`w-full scroll-mt-24 ${alt ? "ed-bg-alt" : "ed-bg"}`}>
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-24 md:py-32 lg:py-40">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
         {children}
       </div>
     </section>

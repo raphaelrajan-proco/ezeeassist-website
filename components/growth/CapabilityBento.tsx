@@ -39,7 +39,7 @@ function Tile({
       className={`rounded-3xl p-7 md:p-8 flex flex-col transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_2px_4px_rgba(0,0,0,0.04),0_18px_44px_rgba(0,0,0,0.10)] ${span}`}
       style={{ backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-rule)" }}
     >
-      <p className="text-xs uppercase tracking-[0.2em] mb-3" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
+      <p className="text-sm uppercase tracking-[0.2em] mb-3" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
         {number} · {name}
       </p>
       <h3

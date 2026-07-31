@@ -61,7 +61,7 @@ export default function ControlPlane() {
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-24 md:py-32 lg:py-40">
+      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -69,12 +69,12 @@ export default function ControlPlane() {
           transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-3xl mb-14 md:mb-16"
         >
-          <p className="text-xs uppercase tracking-[0.2em] mb-8" style={{ color: "#00AEEF", fontWeight: 500 }}>
+          <p className="text-sm uppercase tracking-[0.2em] mb-8" style={{ color: "#00AEEF", fontWeight: 500 }}>
             Control
           </p>
           <h2
-            className="text-4xl md:text-5xl lg:text-6xl leading-[1.05] tracking-[-0.03em]"
-            style={{ color: "#F5EDE0", fontFamily: "var(--font-editorial)", fontWeight: 500 }}
+            className="leading-[1.05] tracking-[-0.03em]"
+            style={{ color: "#F5EDE0", fontFamily: "var(--font-editorial)", fontWeight: 500, fontSize: "clamp(2rem, 1.1rem + 1.9vw, 3rem)" }}
           >
             Ungoverned AI is brand risk. This is the layer that removes it.
           </h2>

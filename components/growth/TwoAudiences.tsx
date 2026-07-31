@@ -73,7 +73,7 @@ function FranchiseeMockup() {
             <span className="text-[14px]" style={{ color: MOCK_MUTED }}>Ask, run, or build something</span>
           </div>
 
-          <p className="text-[11px] uppercase tracking-[0.12em] mb-1.5" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
+          <p className="text-sm uppercase tracking-[0.12em] mb-1.5" style={{ color: MOCK_MUTED, fontWeight: 600 }}>
             Saved tools
           </p>
           <div className="space-y-1.5">
@@ -137,7 +137,7 @@ function AudienceColumn({
         {verbs.map((v) => (
           <span
             key={v}
-            className="rounded-full px-3 py-1 text-xs"
+            className="rounded-full px-3 py-1 text-sm"
             style={{
               backgroundColor: "rgba(0,174,239,0.08)",
               border: "1px solid rgba(0,174,239,0.25)",

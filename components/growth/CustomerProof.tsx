@@ -193,7 +193,7 @@ export default function CustomerProof() {
         className="mt-16 md:mt-20"
       >
         <p
-          className="ed-fg-muted text-[11px] uppercase tracking-[0.2em] mb-6"
+          className="ed-fg-muted text-sm uppercase tracking-[0.2em] mb-6"
           style={{ fontWeight: 600 }}
         >
           Trusted across the franchise community

@@ -410,7 +410,7 @@ export default function GrowthHero() {
             <p
               className="mt-4 text-center uppercase"
               style={{
-                fontSize: "11px",
+                fontSize: "14px",
                 letterSpacing: "0.18em",
                 fontWeight: 500,
                 color: "var(--ed-fg-muted)",

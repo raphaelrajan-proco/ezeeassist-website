@@ -240,7 +240,7 @@ function Beat({ beat, first }: { beat: (typeof BEATS)[number]; first: boolean })
       style={first ? {} : { borderTop: "1px solid var(--ed-rule)" }}
     >
       <div className={beat.flip ? "md:order-2" : ""}>
-        <p className="text-[11px] uppercase tracking-[0.2em] mb-3" style={{ color: "var(--ed-fg-muted)", fontWeight: 600 }}>
+        <p className="text-sm uppercase tracking-[0.2em] mb-3" style={{ color: "var(--ed-fg-muted)", fontWeight: 600 }}>
           {beat.label}
         </p>
         <p className="ed-fg-muted text-base md:text-lg leading-relaxed max-w-lg">
@@ -328,8 +328,8 @@ export default function CoachsWeek() {
       >
         <Overline>The problem</Overline>
         <h2
-          className="ed-fg text-4xl md:text-5xl leading-[1.05] tracking-[-0.03em]"
-          style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, textWrap: "balance" }}
+          className="ed-fg leading-[1.05] tracking-[-0.03em]"
+          style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, textWrap: "balance", fontSize: "clamp(2rem, 1.1rem + 1.9vw, 3rem)" }}
         >
           Your coaches were hired to grow locations.
         </h2>
@@ -360,7 +360,7 @@ export default function CoachsWeek() {
           {CATEGORIES.map((cat) => (
             <span key={cat.key} className="flex items-center gap-2">
               <span className="block h-2.5 w-2.5 rounded-sm flex-shrink-0" style={{ backgroundColor: cat.color }} />
-              <span className="text-xs" style={{ color: cat.highlight ? "var(--ed-accent-text)" : "var(--ed-fg-muted)", fontWeight: cat.highlight ? 600 : 500 }}>
+              <span className="text-sm" style={{ color: cat.highlight ? "var(--ed-accent-text)" : "var(--ed-fg-muted)", fontWeight: cat.highlight ? 600 : 500 }}>
                 {cat.label}
               </span>
             </span>

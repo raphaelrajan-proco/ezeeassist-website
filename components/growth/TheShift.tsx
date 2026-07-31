@@ -159,7 +159,7 @@ const SCATTER: { el: React.ReactNode; x: string; y: string; rot: number; z: numb
 function ScatteredPanel({ inView }: { inView: boolean }) {
   return (
     <div>
-      <p className="ed-fg-muted text-xs uppercase tracking-[0.2em] mb-4" style={{ fontWeight: 600 }}>
+      <p className="ed-fg-muted text-sm uppercase tracking-[0.2em] mb-4" style={{ fontWeight: 600 }}>
         Today
       </p>
       <div
@@ -204,7 +204,7 @@ function ScatteredPanel({ inView }: { inView: boolean }) {
 function OrderedPanel({ inView }: { inView: boolean }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-[0.2em] mb-4" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
+      <p className="text-sm uppercase tracking-[0.2em] mb-4" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
         What it needs to be
       </p>
       <div
@@ -268,7 +268,7 @@ function OrderedPanel({ inView }: { inView: boolean }) {
       </div>
       <p
         className="mt-4 text-center uppercase"
-        style={{ fontSize: "11px", letterSpacing: "0.18em", fontWeight: 500, color: "var(--ed-fg-muted)" }}
+        style={{ fontSize: "14px", letterSpacing: "0.18em", fontWeight: 500, color: "var(--ed-fg-muted)" }}
       >
         People, playbooks, and tools on one layer.
       </p>
