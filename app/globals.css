@@ -30,7 +30,7 @@
 .theme-editorial {
   /* Light mode (neutral whites and greys) */
   --ed-bg:           #FFFFFF;
-  --ed-bg-alt:       #FAFAFA;
+  --ed-bg-alt:       #F4F4F5;
   --ed-fg:           #0A0A0A;
   --ed-fg-muted:     #52525B;
   --ed-border:       #E5E7EB;

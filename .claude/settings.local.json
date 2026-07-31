@@ -168,7 +168,10 @@
       "Bash(git commit -q -m 'feat\\(nav,footer\\): real logo, folded Customers tab, dead anchors fixed *)",
       "Bash(git commit -q -m 'fix\\(hero\\): type lockup, hidden announcement, dark bubble *)",
       "Bash(git commit -q -m 'feat\\(hero,nav\\): bold blue-lead H1 and arrow-badge CTA *)",
-      "Bash(git commit -q -m 'style\\(cta\\): slim the arrow button to Ada proportions *)"
+      "Bash(git commit -q -m 'style\\(cta\\): slim the arrow button to Ada proportions *)",
+      "Bash(git commit -q -m 'docs: working handoff for the homepage rebuild *)",
+      "Bash(git commit -q -m 'docs: handoff is maintained per step *)",
+      "Bash(git commit -q -m 'feat\\(problem\\): three work types, decluttered chart, payoff panel *)"
     ]
   }
 }

@@ -23,7 +23,7 @@ before picking the work back up in a fresh session.
 | # | Section | File | Anchor |
 |---|---|---|---|
 | 1 | Hero (logo band folded in, crops at fold) | `components/growth/Hero.tsx` + `TrustStrip.tsx` | — |
-| 2 | The problem (3-beat cascade + chart) | `components/growth/CoachsWeek.tsx` | `#the-week` |
+| 2 | The problem (chart, 3 beats, one-layer payoff) | `components/growth/CoachsWeek.tsx` | `#the-week` |
 | 3 | The reveal | `components/TheSystem.tsx` | `#the-system` |
 | 4 | What it does (pinned scroll, 5 modules) | `components/growth/Capabilities.tsx` | `#capabilities` |
 | 5 | Proof | `components/growth/CustomerProof.tsx` + `outcomes-stats.tsx` | `#proof` |
@@ -137,3 +137,12 @@ Note the container caps at `max-w-7xl`, so the hero copy column stops growing at
   390, where a two-line cap would need ~22px type.
 - Section 7 keeps its full layout rather than becoming a "compact band", since
   compacting would be a visual redesign.
+- The territory-coverage grid (71% / 98% / 101% tiles and the "next 4%" caption)
+  was retired from the problem section: the numbers read as unexplained and the
+  visual did not support the beat it sat under. It is recoverable from tag
+  `v3-step12-pre` if the argument is ever restated.
+- The problem section's three beats are named for the hero descriptor
+  (Repetitive questions / Compliance chasing / Report building) on purpose. If
+  the hero descriptor changes, change these with it.
+- `--ed-bg-alt` is the section alternation grey (#F4F4F5 light). It was lifted
+  from #FAFAFA so the problem section separates visibly from the white hero.

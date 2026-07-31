@@ -155,17 +155,16 @@ const SCATTER: { el: React.ReactNode; x: string; y: string; rot: number; z: numb
   { el: <StickyTile />,       x: "8%",   y: "72%", rot: -6, z: 5 },
 ];
 
-export function ScatteredPanel() {
+export function ScatteredPanel({ bare = false }: { bare?: boolean } = {}) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   return (
-    <div ref={ref}>
-      <p className="ed-fg-muted text-sm uppercase tracking-[0.2em] mb-4" style={{ fontWeight: 600 }}>
-        Today
-      </p>
+    <div ref={ref} className={bare ? "h-full" : undefined}>
       <div
-        className="relative rounded-2xl overflow-hidden"
-        style={{ backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-rule)", height: "360px" }}
+        className={bare ? "relative overflow-hidden h-full" : "relative rounded-2xl overflow-hidden"}
+        style={bare
+          ? undefined
+          : { backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-rule)", height: "360px" }}
       >
         <p className="sr-only">
           Five disconnected AI artifacts scattered across a franchise

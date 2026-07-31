@@ -6,7 +6,6 @@ import {
   Users, BookOpen, Plug, MessageSquare, LifeBuoy, RefreshCw, BarChart3,
   LayoutGrid, type LucideIcon,
 } from "lucide-react";
-import { OrderedPanel } from "@/components/growth/artifact-panels";
 import { customerLogos } from "@/lib/data/customer-logos";
 
 /**
@@ -258,11 +257,6 @@ export default function TheSystem() {
               </div>
             </motion.div>
           </div>
-        </div>
-
-        {/* Payoff: the same artifacts, snapped onto one layer */}
-        <div className="ed-on-dark mt-8 md:mt-10">
-          <OrderedPanel compact />
         </div>
       </div>
     </section>
