@@ -12,7 +12,7 @@ import { Overline, SectionHeadline, SectionShell } from "./shared";
  * FAQPage schema cannot drift from what renders.
  */
 export default function Objections() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [open, setOpen] = useState<number | null>(null);
 
   return (
     <SectionShell id="objections">
@@ -21,10 +21,10 @@ export default function Objections() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        className="max-w-3xl mb-12 md:mb-14"
+        className="max-w-3xl mb-8 md:mb-10"
       >
-        <Overline>Straight answers</Overline>
-        <SectionHeadline>Three questions worth asking.</SectionHeadline>
+        <Overline>FAQ</Overline>
+        <SectionHeadline>Seven questions worth asking.</SectionHeadline>
       </motion.div>
 
       <div
@@ -34,12 +34,12 @@ export default function Objections() {
         {objections.map((o, i) => (
           <div key={o.q} style={{ borderBottom: "1px solid var(--ed-rule)" }}>
             <button
-              className="flex w-full items-center justify-between gap-6 py-6 md:py-7 text-left transition-opacity hover:opacity-70"
+              className="flex w-full items-center justify-between gap-6 py-4 text-left transition-opacity hover:opacity-70"
               onClick={() => setOpen(open === i ? null : i)}
               aria-expanded={open === i}
             >
               <span
-                className="ed-fg text-xl md:text-2xl tracking-[-0.02em]"
+                className="ed-fg text-lg md:text-xl tracking-[-0.02em]"
                 style={{ fontFamily: "var(--font-editorial)", fontWeight: 500, lineHeight: 1.25 }}
               >
                 {o.q}
@@ -71,7 +71,7 @@ export default function Objections() {
                   transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                   style={{ overflow: "hidden" }}
                 >
-                  <div className="pb-7 max-w-3xl">
+                  <div className="pb-5 max-w-3xl">
                     <p className="ed-fg-muted text-base md:text-lg leading-relaxed">
                       {o.a}
                     </p>
