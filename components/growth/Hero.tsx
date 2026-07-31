@@ -3,7 +3,7 @@
 import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import GrowthTrustStrip from "./TrustStrip";
 import { NETWORK_SCALE } from "@/lib/data/network-scale";
 
@@ -332,16 +332,14 @@ export default function GrowthHero() {
               className="ed-fg mb-4"
               style={{
                 fontFamily: "var(--font-editorial)",
-                fontSize: "clamp(2.25rem, -0.15rem + 4.05vw, 3.125rem)",
-                fontWeight: 500,
+                fontSize: "clamp(2.25rem, -0.2rem + 4vw, 3rem)",
+                fontWeight: 700,
                 letterSpacing: "-0.03em",
                 lineHeight: 1.06,
               }}
             >
-              <span className="block">AI Operating System</span>
-              <span className="block">
-                for <strong style={{ fontWeight: 700 }}>franchisee success</strong>.
-              </span>
+              <span className="block" style={{ color: "#00AEEF" }}>AI Operating System</span>
+              <span className="block">for franchisee success.</span>
             </motion.h1>
 
             <motion.p
@@ -383,8 +381,15 @@ export default function GrowthHero() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: "easeOut", delay: 0.45 }}
             >
-              <Link href="/contact" className="ed-btn ed-btn-blue inline-flex" style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
+              <Link
+                href="/contact"
+                className="ed-btn ed-btn-blue ed-btn-arrow inline-flex"
+                style={{ paddingLeft: "2rem" }}
+              >
                 Speak to an expert
+                <span className="ed-btn-arrow-badge" aria-hidden="true">
+                  <ArrowRight className="h-4 w-4" strokeWidth={2} />
+                </span>
               </Link>
             </motion.div>
           </div>

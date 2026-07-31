@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Button from "@/components/ui/Button";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -299,7 +300,12 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           <ThemeToggle />
           <Link href="/contact">
-            <Button size="sm">Speak to an expert</Button>
+            <Button size="sm" className="ed-btn-arrow gap-2" style={{ paddingRight: "0.3rem" }}>
+              Speak to an expert
+              <span className="ed-btn-arrow-badge ed-btn-arrow-badge-sm" aria-hidden="true">
+                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
+              </span>
+            </Button>
           </Link>
         </div>
 
@@ -392,7 +398,12 @@ export default function Navbar() {
           <div className="mt-4 flex items-center gap-3">
             <ThemeToggle />
             <Link href="/contact" className="flex-1" onClick={() => setMobileOpen(false)}>
-              <Button size="sm" className="w-full">Speak to an expert</Button>
+              <Button size="sm" className="w-full ed-btn-arrow gap-2" style={{ paddingRight: "0.3rem" }}>
+                Speak to an expert
+                <span className="ed-btn-arrow-badge ed-btn-arrow-badge-sm" aria-hidden="true">
+                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
+                </span>
+              </Button>
             </Link>
           </div>
         </div>

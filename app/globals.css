@@ -157,6 +157,32 @@
   background-color: #F5EDE0;
   color: #0A0A0A;
 }
+/* CTA with a trailing arrow badge, Ada-style: the label sits in the
+   pill and the arrow rides in a dark circle on the right edge. The
+   badge nudges forward on hover; reduced motion holds it still. */
+.ed-btn-arrow-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 2.25rem;
+  width: 2.25rem;
+  border-radius: 9999px;
+  background-color: #0A0A0A;
+  color: #FFFFFF;
+  transition: transform 0.18s ease;
+}
+.ed-btn-arrow-badge-sm {
+  height: 1.75rem;
+  width: 1.75rem;
+}
+.ed-btn-arrow:hover .ed-btn-arrow-badge {
+  transform: translateX(2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ed-btn-arrow:hover .ed-btn-arrow-badge { transform: none; }
+}
+
 .theme-editorial .ed-btn-blue {
   background-color: var(--ed-accent);
   color: #ffffff;
