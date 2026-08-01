@@ -27,7 +27,7 @@ before picking the work back up in a fresh session.
 | 2 | The problem (chart, 3 beats, one-layer payoff) | `components/growth/CoachsWeek.tsx` | `#the-week` |
 | 3 | The reveal (convergence diagram) | `components/TheSystem.tsx` | `#the-system` |
 | 4 | What it does (rotating showcase) | `components/growth/Capabilities.tsx` | `#capabilities` |
-| 5 | Proof | `components/growth/CustomerProof.tsx` + `outcomes-stats.tsx` | `#proof` |
+| 5 | Proof (sticky story stack) | `components/growth/CustomerProof.tsx` | `#proof` |
 | 6 | Trust and control (6 tabs) | `components/growth/TrustAndControl.tsx` | `#trust` |
 | 7 | FAQ | `components/growth/Objections.tsx` + `lib/data/objections.ts` | `#objections` |
 | 8 | Final CTA | `components/growth/FinalCTA.tsx` | `#book` |
@@ -261,6 +261,34 @@ precisely so the two cannot drift; change it in one place. The footer has no
 top border, and `ed-on-dark` pins the dark token set so its light-mode text
 stays legible on the band. It also ships only the white logo, since the band
 is dark in both themes.
+
+## Proof: the sticky story stack
+
+Built from the quotes-scroll handoff. Four cards, each `position: sticky` at a
+staggered top (24 / 42 / 60 / 78px, 18px apart). That stagger is the whole
+effect: it leaves each covered card's coloured edge bar showing above the next
+one. **Pure CSS, no listeners and no observers**, so it survives the preview
+pane and reduced motion untouched. The `35vh` spacer after the last card gives
+it room to pin.
+
+Two departures from the handoff, both forced by our narrower container:
+
+- **Columns are 300/250, not the handoff's 400/300.** Its layout assumes a
+  1160px canvas; ours is 1077 at 1205, which left the middle column 248px and
+  wrapped every headline. Both new values stay inside the handoff's 240 and
+  230 minimums.
+- **The headline clamps to 23–40px, not a flat 44px.** "Human-power back to"
+  is the widest of the eight lines at 10.57px per 1px of font size, and 1024
+  binds hardest with a 248px middle column.
+
+Assets live in `public/logos/stories/` and `public/photos/`. **The logos are
+deliberately not in `public/logos/customers/`**, which is the path
+`LogoMarquee` resolves against: dropping `wsi.svg` there would make one
+marquee tile render as an image among twenty text-pill fallbacks.
+
+The partner pills are a single non-wrapping row of eight. They fit without
+scrolling from 1024 up (896px available, 842 needed); below that the row
+scrolls sideways, because eight pills cannot fit a phone at a readable size.
 
 ## Standing rules
 
