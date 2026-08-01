@@ -805,50 +805,21 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* ─── Operating system diagram ─────────────────────────────
-   Built from a supplied design handoff, which ships light and dark token
-   sets. Scoped to `.ed-os`, the same arrangement `.ed-problem` and
-   `.ed-showcase` use.
+   Built from a supplied design handoff. Scoped to `.ed-os`, the same
+   arrangement `.ed-problem` and `.ed-showcase` use.
 
-   Accent is remapped from the handoff's #1B55E9 / #4373FF to the EZee
-   family, matching the other two. `--os-accent` is a *fill* under white
-   text (the +250 tile), so it stays #0077A8 in both modes at 4.99:1;
-   #00AEEF is 2.53:1 and fails. `--os-accent-ink` is accent *text* and
-   follows the site's usual light/dark split. */
+   **The section runs on the handoff's dark tokens in both themes**, by
+   request, so it stays the dark band it has always been on this page.
+   That is why there is no `.dark .ed-os` block: there is nothing to
+   switch. The handoff's light set is not used anywhere, and the core
+   renders the white wordmark unconditionally.
+
+   Accent is remapped from the handoff's #4373FF to the EZee family,
+   matching the other two sections. `--os-accent` is a *fill* under white
+   text (the +250 tile), so it is #0077A8 at 4.99:1; #00AEEF is 2.53:1
+   and fails. `--os-accent-ink` is accent *text* on the dark panels,
+   where #00AEEF clears comfortably. */
 .ed-os {
-  --os-bg:           #F5F7FB;
-  --os-panel:        #FFFFFF;
-  --os-panel-2:      #F8FAFD;
-  --os-chip:         #F1F4F9;
-  --os-tile:         #DCE2EC;
-  --os-tile-border:  rgba(12, 20, 36, 0.14);
-  --os-text:         #0B1220;
-  --os-muted:        #5C6675;
-  --os-border:       rgba(12, 20, 36, 0.09);
-  --os-accent:       #0077A8;
-  /* Accent text sits on accent-soft in the governed pill, which tints the
-     backdrop just enough that #0077A8 lands at 4.37:1. This clears 4.5. */
-  --os-accent-ink:   #0071A0;
-  --os-accent-soft:  rgba(0, 174, 239, 0.07);
-  --os-accent-soft2: rgba(0, 174, 239, 0.16);
-  --os-wire:         rgba(12, 20, 36, 0.14);
-  --os-shadow:       0 24px 60px -28px rgba(12, 20, 36, 0.25);
-
-  /* Flow coding. Answers joins the accent remap; Actions and Agents keep
-     the handoff's hues. All three are 11.5px/600 on their own soft
-     background, so they carry the 4.5:1 bar, not the 3:1 large-text one.
-     The handoff's light values measured 4.25 / 4.13 / 4.52 that way;
-     these are the least darkening that clears it. Measured 4.62 / 4.64 /
-     4.66. Do not lighten them back. */
-  --os-answers:      #0071A0;
-  --os-answers-soft: rgba(0, 174, 239, 0.1);
-  --os-actions:      #8C5E0E;
-  --os-actions-soft: rgba(180, 121, 26, 0.12);
-  --os-agents:       #6B4DCC;
-  --os-agents-soft:  rgba(109, 79, 208, 0.12);
-
-  --os-mono: ui-monospace, "SF Mono", Menlo, monospace;
-}
-.dark .ed-os {
   --os-bg:           #05070D;
   --os-panel:        #0B101C;
   --os-panel-2:      #0E1524;
@@ -858,18 +829,25 @@ input[type="range"]::-moz-range-thumb {
   --os-text:         #EEF2F8;
   --os-muted:        #93A0B5;
   --os-border:       rgba(238, 242, 248, 0.09);
+  --os-accent:       #0077A8;
   --os-accent-ink:   #00AEEF;
   --os-accent-soft:  rgba(0, 174, 239, 0.1);
   --os-accent-soft2: rgba(0, 174, 239, 0.25);
   --os-wire:         rgba(238, 242, 248, 0.13);
   --os-shadow:       0 30px 70px -30px rgba(0, 0, 0, 0.7);
 
+  /* Flow coding. Answers joins the accent remap; Actions and Agents are
+     the handoff's own dark values. All three are 11.5px/600 on their own
+     soft background, so they carry the 4.5:1 bar, not the 3:1 large-text
+     one. Measured 6.74 / 8.82 / 6.27. */
   --os-answers:      #00AEEF;
   --os-answers-soft: rgba(0, 174, 239, 0.14);
   --os-actions:      #F5B33C;
   --os-actions-soft: rgba(245, 179, 60, 0.14);
   --os-agents:       #A78BFA;
   --os-agents-soft:  rgba(167, 139, 250, 0.14);
+
+  --os-mono: ui-monospace, "SF Mono", Menlo, monospace;
 }
 
 /* Pulses ride the same path strings as the SVG wires. */

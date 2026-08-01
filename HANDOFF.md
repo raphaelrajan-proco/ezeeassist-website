@@ -286,29 +286,29 @@ Rebuilt from the v2 handoff. Three HQ input cards feed a central core, eleven
 wires carry two-way colour-coded pulses, and the store column grows sideways
 into a field of location tiles on scroll.
 
-**Tokens live on `.ed-os` in globals.css.** The section now **follows the site
-theme** instead of being permanently dark, because this handoff ships both
-token sets. It was a hard dark band before.
+**Tokens live on `.ed-os` in globals.css.** The section **runs on the
+handoff's dark tokens in both themes**, by request, so it stays the dark band
+it has always been on this page. There is deliberately **no `.dark .ed-os`
+block**: there is nothing to switch. The handoff's light set is unused.
 
-**The accent is remapped** from `#1B55E9` / `#4373FF` to the EZee family, the
-same call `.ed-problem` and `.ed-showcase` make. `--os-accent` is a fill under
-white text (the +250 tile) so it stays `#0077A8` at 4.99:1 in both modes;
-`--os-accent-ink` is accent text and splits light/dark.
+Two things follow from that and will break if anyone reintroduces theme
+switching here:
 
-**The light-mode flow colours are darker than the handoff's.** All three are
-11.5px/600 sitting on their own soft background, so they carry the 4.5:1 bar,
-not the 3:1 large-text one. The handoff's values measured 4.25 / 4.13 / 4.52
-that way. Current values are the least darkening that clears it:
+- `CoreLogo` renders `/logo-white.svg` unconditionally. Gating it on `dark:`
+  puts a black wordmark on a near-black panel in light mode.
+- The flow colours are the handoff's dark values only. Its light values are
+  not in the stylesheet.
 
-| Flow | Handoff light | Shipped light | Measured | Dark |
-|---|---|---|---|---|
-| Answers | `#1B55E9` | `#0071A0` | 4.62 | `#00AEEF` 6.74 |
-| Actions | `#B4791A` | `#8C5E0E` | 4.62 | `#F5B33C` 8.82 |
-| Agents | `#6D4FD0` | `#6B4DCC` | 4.67 | `#A78BFA` 6.27 |
+**The accent is remapped** from `#4373FF` to the EZee family, the same call
+`.ed-problem` and `.ed-showcase` make. `--os-accent` is a fill under white
+text (the +250 tile), so it is `#0077A8` at 4.99:1; `#00AEEF` is 2.53:1 and
+fails. `--os-accent-ink` is accent text on the dark panels, where `#00AEEF`
+clears comfortably.
 
-`--os-accent-ink` light is `#0071A0` rather than `#0077A8` for the same
-reason: on `accent-soft` the governed pill measured 4.37. Do not lighten any
-of these back.
+Measured on the dark surface, all above the 4.5:1 bar (the flow pills are
+11.5px/600 on their own soft background, so they do not get the 3:1
+large-text allowance): Answers 6.74, Actions 8.82, Agents 6.27, governed pill
+7.16, `NOTHING MIGRATES` 7.51, white on +250 5.0, store labels 16.91.
 
 ### The logos, which went missing once before
 

@@ -174,16 +174,13 @@ function SystemsCard() {
   );
 }
 
-/** Both wordmarks render; the theme decides which one is visible. */
+/** The section runs dark in both themes, so the wordmark is always the
+ *  white one. Do not gate this on `dark:` unless the section's tokens go
+ *  back to switching, or it renders black on a near-black panel. */
 function CoreLogo({ height }: { height: number }) {
-  const shared: React.CSSProperties = { height, width: "auto", maxWidth: 170 };
   return (
-    <>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/logo-black.svg" alt="EZee Assist" style={shared} className="block dark:hidden" />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/logo-white.svg" alt="" aria-hidden="true" style={shared} className="hidden dark:block" />
-    </>
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img src="/logo-white.svg" alt="EZee Assist" style={{ height, width: "auto", maxWidth: 170 }} />
   );
 }
 
