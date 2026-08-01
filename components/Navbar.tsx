@@ -73,8 +73,11 @@ const companyItems: NavItem[] = [
   { label: "Contact", href: "/contact", desc: "Talk to our team." },
 ];
 
-/* Both marks share viewBox 0 0 583.2 151.2. */
-const LOGO_H = 36;
+/* Both marks share viewBox 0 0 583.2 151.2. Sized to the pill: 40px in a
+   56px bar, 48px in a 64px bar, leaving 8px of breathing above and below.
+   The intrinsic width/height below is only the aspect hint; the rendered
+   size comes from the h-10/md:h-12 classes. */
+const LOGO_H = 48;
 const LOGO_W = Math.round((583.2 / 151.2) * LOGO_H);
 
 type DropdownKey = "platform" | "solutions" | "resources" | "company" | null;
@@ -348,7 +351,7 @@ export default function Navbar() {
           height={LOGO_H}
           priority
           unoptimized
-          className="block dark:hidden"
+          className="block dark:hidden h-10 md:h-12 w-auto"
         />
         <Image
           src="/logo-white.svg"
@@ -358,7 +361,7 @@ export default function Navbar() {
           height={LOGO_H}
           priority
           unoptimized
-          className="hidden dark:block"
+          className="hidden dark:block h-10 md:h-12 w-auto"
         />
       </Link>
 

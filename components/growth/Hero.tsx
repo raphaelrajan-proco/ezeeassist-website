@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useInView, useReducedMotion } from "framer-mot
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, TrendingDown, TrendingUp } from "lucide-react";
 import GrowthTrustStrip from "./TrustStrip";
 import { NETWORK_SCALE } from "@/lib/data/network-scale";
 
@@ -54,6 +54,8 @@ const HERO_SCRIM_TOP = 0.15;
 const HERO_FG = "#FFFFFF";
 const HERO_FG_SOFT = "#F5EDE0";
 const HERO_ACCENT = "#9FE0F8";
+/* Eyebrow reads as a muted label, not a second headline. */
+const HERO_EYEBROW = "rgba(245,237,224,0.78)";
 
 /* ── Fixed geometry ────────────────────────────────────────
    The card is hard-sized to its tallest (final) state, measured on
@@ -65,12 +67,20 @@ const CARD_H = CARD_HEADER_H + CARD_BODY_H;
 const PANEL_PAD = 24; // p-6 on all breakpoints, fold budget
 const PANEL_H = CARD_H + PANEL_PAD * 2;
 
-/* ── Loop timeline, slowed ~1.5x per review thread MWr-_7COduND ── */
+/* ── Loop timeline ─────────────────────────────────────────
+   Two scenes. Scene A (phases 1-5) is the asked-and-answered thread.
+   Scene B (phases 6-9) is the same store on Monday morning, where the
+   work starts itself. Each scene holds ~4s once complete before the
+   next begins, so a reader who arrives mid-loop still catches one. */
 const T_VERIFY = 1600;
 const T_TYPING = 4000;
 const T_ANSWER = 4900;
 const T_ACTION = 6600;
-const T_RESET = 12100;
+const T_SCENE_B = 10600;
+const T_KPIS = 12000;
+const T_ACTIONS = 14200;
+const T_EXECUTE = 16600;
+const T_RESET = 20600;
 
 const VERIFY_ROWS = [
   "Schedule: 41 open slots, Thursday and Friday afternoons",
@@ -78,7 +88,21 @@ const VERIFY_ROWS = [
   "Playbook: Off-Peak Demand Guide, approved 4 Jun",
 ];
 
-type Phase = 1 | 2 | 3 | 4 | 5;
+/* Mock digest figures, the same register as the rest of the card: this
+   is a product screen, not a claim about results. */
+const KPI_ROWS: { label: string; value: string; note: string; good: boolean }[] = [
+  { label: "Bookings, next 7 days", value: "68%",  note: "target 80%",  good: false },
+  { label: "Rebook rate",           value: "47%",  note: "target 55%",  good: false },
+  { label: "Average ticket",        value: "$82",  note: "up 6%",       good: true  },
+  { label: "Retail attach",         value: "22%",  note: "up 3 pts",    good: true  },
+];
+
+const DIGEST_ACTIONS = [
+  "Relaunch the reactivation offer to 340 lapsed clients",
+  "Open 2 more Thursday afternoon shifts",
+];
+
+type Phase = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 const TEAMS_PURPLE = "#6264A7";
 
@@ -140,11 +164,17 @@ function ConversationCard() {
     else if (phase === 2) t = setTimeout(() => setPhase(3), T_TYPING - T_VERIFY);
     else if (phase === 3) t = setTimeout(() => setPhase(4), T_ANSWER - T_TYPING);
     else if (phase === 4) t = setTimeout(() => setPhase(5), T_ACTION - T_ANSWER);
-    else t = setTimeout(() => { setCycle((c) => c + 1); setPhase(1); }, T_RESET - T_ACTION);
+    else if (phase === 5) t = setTimeout(() => setPhase(6), T_SCENE_B - T_ACTION);
+    else if (phase === 6) t = setTimeout(() => setPhase(7), T_KPIS - T_SCENE_B);
+    else if (phase === 7) t = setTimeout(() => setPhase(8), T_ACTIONS - T_KPIS);
+    else if (phase === 8) t = setTimeout(() => setPhase(9), T_EXECUTE - T_ACTIONS);
+    else t = setTimeout(() => { setCycle((c) => c + 1); setPhase(1); }, T_RESET - T_EXECUTE);
     return () => clearTimeout(t);
   }, [phase, inView, reduceMotion]);
 
   const teamsBlock = { borderRadius: "6px" };
+  /* Reduced motion never leaves phase 1, so it holds scene A complete. */
+  const scene: "A" | "B" = phase >= 6 ? "B" : "A";
 
   return (
     <div
@@ -184,15 +214,140 @@ function ConversationCard() {
       >
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
-            key={cycle}
+            key={`${cycle}-${scene}`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: EASE }}
             className="absolute inset-x-0 bottom-0 flex flex-col justify-end px-5 py-4"
           >
+            {/* ── Scene B: Monday morning, the work starts itself ── */}
+            {scene === "B" && (
+              <>
+                {/* One digest card that grows: header, then figures, then the
+                    recommended actions. Kept as a single block so the whole
+                    scene clears the fixed body height without clipping. */}
+                <Enter>
+                  <div className="pb-2.5">
+                    <SenderLabel accent>EZee Assist · automated</SenderLabel>
+                    <div
+                      className="w-full px-4 py-2.5"
+                      style={{ ...teamsBlock, backgroundColor: "var(--ed-bg-alt)", border: `1px solid var(--ed-rule)` }}
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-sm" style={{ color: "var(--ed-fg)", fontWeight: 600 }}>
+                          Salon Health KPI Digest
+                        </p>
+                        <span className="text-[11px] whitespace-nowrap" style={{ color: "var(--ed-fg-muted)" }}>
+                          Mon 8:00 AM
+                        </span>
+                      </div>
+
+                      {phase >= 7 && (
+                        <Enter>
+                          <div
+                            className="mt-2.5 pt-2.5 space-y-1.5"
+                            style={{ borderTop: `1px solid var(--ed-rule)` }}
+                          >
+                            {KPI_ROWS.map((k, i) => (
+                              <motion.div
+                                key={k.label}
+                                initial={reduceMotion ? false : { opacity: 0, x: -6 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ duration: 0.35, ease: EASE, delay: reduceMotion ? 0 : i * 0.28 }}
+                                className="flex items-center justify-between gap-3"
+                              >
+                                <span className="text-[13px] min-w-0" style={{ color: "var(--ed-fg)" }}>
+                                  {k.label}
+                                </span>
+                                <span className="flex items-center gap-1.5 flex-shrink-0">
+                                  <span
+                                    className="text-[13px] tabular-nums"
+                                    style={{ color: k.good ? "#15803D" : "#B45309", fontWeight: 700 }}
+                                  >
+                                    {k.value}
+                                  </span>
+                                  {k.good
+                                    ? <TrendingUp aria-hidden="true" className="h-3 w-3" strokeWidth={2.5} style={{ color: "#15803D" }} />
+                                    : <TrendingDown aria-hidden="true" className="h-3 w-3" strokeWidth={2.5} style={{ color: "#B45309" }} />}
+                                  <span className="text-[11px] whitespace-nowrap" style={{ color: "var(--ed-fg-muted)" }}>
+                                    {k.note}
+                                  </span>
+                                </span>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </Enter>
+                      )}
+
+                      {phase >= 8 && (
+                        <Enter>
+                          <div
+                            className="mt-2.5 pt-2.5"
+                            style={{ borderTop: `1px solid var(--ed-rule)` }}
+                          >
+                            <p
+                              className="text-[11px] uppercase tracking-[0.14em] mb-1.5"
+                              style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}
+                            >
+                              Recommended
+                            </p>
+                            <div className="space-y-1">
+                              {DIGEST_ACTIONS.map((a) => (
+                                <div key={a} className="flex items-start gap-2">
+                                  <span
+                                    className="block h-1.5 w-1.5 rounded-full flex-shrink-0 mt-[6px]"
+                                    style={{ backgroundColor: "#00AEEF" }}
+                                  />
+                                  <p className="text-[13px]" style={{ color: "var(--ed-fg)", lineHeight: 1.4 }}>
+                                    {a}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </Enter>
+                      )}
+                    </div>
+                  </div>
+                </Enter>
+
+                {phase >= 9 && (
+                  <Enter>
+                    <div className="pb-2.5">
+                      <SenderLabel>Store #214 · Owner</SenderLabel>
+                      <div
+                        className="w-full px-4 py-2.5 mb-2"
+                        style={{ ...teamsBlock, backgroundColor: "var(--ed-card-alt)" }}
+                      >
+                        <p className="text-sm" style={{ color: "var(--ed-fg)", lineHeight: 1.4 }}>
+                          Yes, help me do it.
+                        </p>
+                      </div>
+                      <div
+                        className="px-4 py-2.5"
+                        style={{ ...teamsBlock, backgroundColor: "rgba(0,174,239,0.08)" }}
+                      >
+                        <div className="flex items-start gap-2">
+                          <span
+                            className="flex h-4 w-4 items-center justify-center rounded-full flex-shrink-0 mt-0.5"
+                            style={{ backgroundColor: "rgba(22,163,74,0.12)" }}
+                          >
+                            <Check aria-hidden="true" className="w-2.5 h-2.5" strokeWidth={3} style={{ color: "#15803D" }} />
+                          </span>
+                          <p className="text-[13px]" style={{ color: "var(--ed-fg)", lineHeight: 1.4 }}>
+                            Offer live at 9:00 AM. Shifts posted. Coach notified.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </Enter>
+                )}
+              </>
+            )}
+
             {/* Beat 1: inbound, Teams block */}
-            {(reduceMotion || phase >= 1) && (
+            {scene === "A" && (reduceMotion || phase >= 1) && (
               <Enter>
                 <div className="pb-3">
                   <SenderLabel>Store #214 · Owner</SenderLabel>
@@ -209,7 +364,7 @@ function ConversationCard() {
             )}
 
             {/* Beat 2: verification */}
-            {(reduceMotion || phase >= 2) && (
+            {scene === "A" && (reduceMotion || phase >= 2) && (
               <Enter>
                 <div
                   className="px-4 py-3 mb-3"
@@ -248,7 +403,7 @@ function ConversationCard() {
 
             {/* Beat 3: typing (loop only) */}
             <AnimatePresence>
-              {!reduceMotion && phase === 3 && (
+              {scene === "A" && !reduceMotion && phase === 3 && (
                 <motion.div
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -264,7 +419,7 @@ function ConversationCard() {
             </AnimatePresence>
 
             {/* Beat 4: answer */}
-            {(reduceMotion || phase >= 4) && (
+            {scene === "A" && (reduceMotion || phase >= 4) && (
               <Enter>
                 <div className="pb-3">
                   <SenderLabel accent>EZee Assist</SenderLabel>
@@ -295,7 +450,7 @@ function ConversationCard() {
             )}
 
             {/* Beat 5: action */}
-            {(reduceMotion || phase >= 5) && (
+            {scene === "A" && (reduceMotion || phase >= 5) && (
               <Enter>
                 <div
                   className="px-4 py-3.5"
@@ -310,16 +465,18 @@ function ConversationCard() {
                   <p className="text-sm mb-3" style={{ color: "var(--ed-fg)", fontWeight: 500, lineHeight: 1.35 }}>
                     Relaunch reactivation offer · 340 clients
                   </p>
-                  <button
-                    type="button"
-                    className="w-full rounded-lg py-2 text-sm"
-                    style={{ backgroundColor: "#00AEEF", color: "#FFFFFF", fontWeight: 600 }}
-                  >
-                    Approve
-                  </button>
-                  <p className="text-[12px] mt-2" style={{ color: "var(--ed-fg-muted)" }}>
-                    Coach notified
-                  </p>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      className="rounded-full px-4 py-1.5 text-[13px]"
+                      style={{ backgroundColor: "#00AEEF", color: "#FFFFFF", fontWeight: 600 }}
+                    >
+                      Approve
+                    </button>
+                    <span className="text-[12px]" style={{ color: "var(--ed-fg-muted)" }}>
+                      Coach notified
+                    </span>
+                  </div>
                 </div>
               </Enter>
             )}
@@ -390,45 +547,45 @@ export default function GrowthHero() {
               </motion.p>
             )}
 
-            {/* Eyebrow slot. The h1 stays on this line so the page's primary
-                statement still matches the title tag and the JSON-LD.
-                Held to one line at every width. Bold and uppercase at 0.16em
-                is wide, so the column is the ceiling: one line allows 10.5px
-                at 390, 13px at 1024, 16px at 1205, 16.75px at 1440. The
-                clamp sits just under each. Tracking is the lever if this ever
-                needs to be larger; dropping to 0.10em buys about 1.5px. */}
-            <motion.h1
+            {/* Eyebrow: a label, not a headline. Small, uppercase, letter
+                spaced and muted, so it reads as context in peripheral vision
+                and hands off to the statement below. It is no longer the h1;
+                that moved to the statement line. Held to one line at every
+                width, and bold uppercase at 0.16em is wide, so the column is
+                the ceiling: 10.5px at 390, 13px at 1024, 16px at 1205. */}
+            <motion.p
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="uppercase mb-4"
               style={{
-                fontSize: "clamp(0.625rem, -0.173rem + 1.49vw, 1rem)",
-                fontWeight: 700,
+                fontSize: "clamp(0.75rem, 0.09rem + 1.23vw, 0.9375rem)",
+                fontWeight: 600,
                 letterSpacing: "0.16em",
-                color: HERO_FG,
+                color: HERO_EYEBROW,
               }}
             >
               AI Operating System for franchisee success.
-            </motion.h1>
+            </motion.p>
 
-            {/* Lead slot, held to three lines at every width. Sized against
-                measured wrap points, not a width ratio: the ceiling for three
-                lines is 23.5px at 390, 29px at 1024, 35.5px at 1205, 37px at
-                1440. 1024 binds hardest, because that is where the two-column
-                grid starts and squeezes the copy column to 425px, narrower
-                than at 768. The clamp sits ~4% under each ceiling. */}
-            <motion.p
+            {/* The statement, and the page's h1. Sized to the largest that
+                still holds three lines, measured rather than estimated: the
+                ceiling is 23.5px at 390, 29px at 1024, 35.5px at 1205 and
+                37px at 1440. 1024 binds hardest, since that is where the
+                two-column grid squeezes the copy column to 425px.
+                Note this tops out under the 40px an h1 usually wants; the
+                three-line cap and this copy length are what hold it there. */}
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, ease: EASE, delay: 0.1 }}
               className="mb-4"
               style={{
                 fontFamily: "var(--font-editorial)",
-                fontSize: "clamp(1.40625rem, 0.67rem + 1.68vw, 2.1875rem)",
-                fontWeight: 700,
-                letterSpacing: "-0.03em",
-                lineHeight: 1.1,
+                fontSize: "clamp(1.40625rem, 0.519rem + 1.92vw, 2.25rem)",
+                fontWeight: 800,
+                letterSpacing: "-0.035em",
+                lineHeight: 1.08,
                 color: HERO_FG,
               }}
             >
@@ -436,7 +593,7 @@ export default function GrowthHero() {
               <span style={{ color: HERO_ACCENT }}>
                 Multiply their expertise across every location.
               </span>
-            </motion.p>
+            </motion.h1>
 
             <motion.p
               initial={{ opacity: 0 }}
@@ -487,13 +644,22 @@ export default function GrowthHero() {
             transition={{ duration: 0.9, ease: EASE, delay: 0.35 }}
           >
             <p className="sr-only">
-              A live conversation in Microsoft Teams: a location owner
-              reports that next week is only 62 percent booked. The system
-              checks the schedule, local campaigns, and the approved
-              playbook, answers with the gap and a ready draft for 340
-              lapsed clients with cited sources, then suggests relaunching
-              the reactivation offer, gated behind a human Approve button,
-              with the coach notified.
+              Two moments in Microsoft Teams. First, a location owner reports
+              that next week is only 62 percent booked. The system checks the
+              schedule, local campaigns, and the approved playbook, answers
+              with the gap and a ready draft for 340 lapsed clients with
+              cited sources, then suggests relaunching the reactivation
+              offer, gated behind a human Approve button, with the coach
+              notified. Second, on Monday at 8am the same store receives an
+              automated Salon Health KPI Digest: bookings for the next seven
+              days at 68 percent against an 80 percent target, rebook rate 47
+              percent against 55, average ticket 82 dollars and up 6 percent,
+              retail attach 22 percent and up 3 points. It recommends
+              relaunching the reactivation offer to 340 lapsed clients and
+              opening two more Thursday afternoon shifts. The owner replies
+              in plain language, yes, help me do it, and the work is carried
+              out: the offer is scheduled for 9am, shifts are posted to the
+              team, and the coach is notified.
             </p>
             <div
               className="ed-gradient-frame rounded-3xl p-6 flex justify-center items-center"

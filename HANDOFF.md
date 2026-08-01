@@ -191,6 +191,48 @@ control", "Connections", "FAQ", "Ready when you are") were all removed. The
 `components/sections/` on other routes, so it was kept; just do not reach for
 it on the homepage.
 
+## The hero lockup and the conversation loop
+
+**Type roles are carried by the tags.** The eyebrow is a `<p>`, the lead is the
+page's single `<h1>`, and the sub-lead is a `<p>`. This was the other way round
+once; if you swap the visual order again, move the tags with it.
+
+| Slot | Size at 1205 / 1440 | Weight | Tracking |
+|---|---|---|---|
+| eyebrow | 15px (12px floor at 390) | 600 | `0.16em`, uppercase, `HERO_EYEBROW` |
+| lead `<h1>` | 31.4 / 36px | 800 | `-0.035em` |
+| sub-lead | 16.3 / 18.5px | 400 | normal |
+
+**The `<h1>` cannot reach 40px at three lines.** The brief asked for 40–72px.
+The measured three-line ceilings for the current lead copy are 23.5px at 390,
+29px at 1024, 35.5px at 1205 and 37px at 1440, so the clamp tops out at 36px.
+The binding constraints are the three-line cap, the 89-character lead, and the
+copy column, which is capped because the product card is hard-sized at `34rem`.
+Reaching 40px means one of: shorter lead copy, a four-line allowance, or a
+narrower card. Do not raise the clamp without changing one of those, or the
+lead wraps to four lines.
+
+The eyebrow wraps to two lines at 390. Tracking was tested down to `0.09em`
+and it still wraps, so tightening it buys nothing and only weakens the label
+read. Left at `0.16em`.
+
+**The card plays two scenes on one timeline.** `phase` runs 1–9;
+`scene = phase >= 6 ? "B" : "A"`. Scene A is the asked-and-answered thread,
+scene B is Monday's automated KPI digest. `AnimatePresence` keys on
+`` `${cycle}-${scene}` `` so the swap crossfades. Every scene A beat is gated
+on `scene === "A"`, otherwise reduced motion (which never leaves phase 1) would
+render both.
+
+**Scene B is one growing card, not three stacked blocks.** Built as three it
+measured 513px in a 424px `CARD_BODY_H` and the digest header clipped off the
+top of the mask. Header, figures and recommended actions now share a single
+bordered block separated by hairlines, and the confirmation line is one line
+of copy, which lands the whole scene at 422px. **If you add a KPI row or
+lengthen the confirmation, re-measure**; there are 2px of slack.
+
+`CARD_BODY_H` is the fold budget, not a guess. Growing it pushes the logo
+marquee below 793.
+
 ## The System: convergence diagram
 
 Built from a supplied design handoff. Section runs on the handoff's dark
