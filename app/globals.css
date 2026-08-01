@@ -740,25 +740,68 @@ input[type="range"]::-moz-range-thumb {
   box-shadow: 0 0 0 4px rgba(10, 10, 10, 0.92);
 }
 
-/* ─── 4/5 stat lockup ──────────────────────────────────────
-   The spec's proportions, scaled to sit beside the bars rather than
-   above them: "days" is half the numeral and the sentence is 42/128 of
-   it. The sentence must stay on one line and is by far the widest run,
-   so it sets the ceiling. It needs 14.15px of width per 1px of font
-   size, and the column it lives in is 20rem, which caps the numeral
-   around 68px. The spec's own 128px only fits at full width. */
-.theme-editorial .ed-stat-lockup {
-  --stat-numeral: clamp(3.75rem, 3.4rem + 0.9vw, 4.25rem);
-  color: #0B1220;
+/* ─── Problem section ──────────────────────────────────────
+   Built from a supplied design handoff, which ships its own token set.
+   Scoped to `.ed-problem` so it cannot leak, the same arrangement the
+   capability showcase uses.
+
+   One deliberate departure from the handoff: its accent is #1B55E9, a
+   royal blue that is not the brand's. Accent is remapped to the EZee
+   family, matching what `.ed-showcase` already does.
+
+   `--pb-accent` is a *fill* that carries white text, so it has to clear
+   4.5:1 against white. #00AEEF measures 2.53:1 and fails; #0077A8 is
+   4.99:1 and is used in both modes, since white-on-fill contrast does
+   not care what surrounds it. `--pb-accent-ink` is accent *text* on the
+   section surface and follows the site's usual light/dark split. */
+.ed-problem {
+  --pb-panel:        #FFFFFF;
+  --pb-panel-2:      #F8FAFD;
+  --pb-chip:         #F1F4F9;
+  --pb-text:         #0B1220;
+  --pb-muted:        #5C6675;
+  --pb-border:       rgba(12, 20, 36, 0.09);
+  --pb-border-strong:rgba(12, 20, 36, 0.16);
+  --pb-accent:       #0077A8;
+  --pb-accent-ink:   #0077A8;
+  --pb-accent-soft:  rgba(0, 174, 239, 0.07);
+  --pb-accent-soft2: rgba(0, 174, 239, 0.16);
+  --pb-ok:           #0E9F6E;
+  --pb-ok-soft:      rgba(14, 159, 110, 0.12);
+  --pb-warn:         #B45309;
+  --pb-warn-soft:    rgba(180, 83, 9, 0.1);
+  --pb-shadow:       0 24px 60px -28px rgba(12, 20, 36, 0.25);
+
+  /* Admin ramp. Darkened by the handoff so white text clears AA on
+     tones 1 to 3. Do not lighten these. */
+  --pb-admin-1: #333A4A;
+  --pb-admin-2: #4E5666;
+  --pb-admin-3: #6B7386;
+  --pb-admin-4: #98A0AF;
+
+  --pb-mono: ui-monospace, "SF Mono", Menlo, monospace;
 }
-.dark .theme-editorial .ed-stat-lockup {
-  color: #EEF2F8;
-}
-.theme-editorial .ed-stat-lockup .ed-stat-sentence {
-  color: #5C6675;
-}
-.dark .theme-editorial .ed-stat-lockup .ed-stat-sentence {
-  color: #93A0B5;
+.dark .ed-problem {
+  --pb-panel:        #0B101C;
+  --pb-panel-2:      #0E1524;
+  --pb-chip:         #141B2C;
+  --pb-text:         #EEF2F8;
+  --pb-muted:        #93A0B5;
+  --pb-border:       rgba(238, 242, 248, 0.09);
+  --pb-border-strong:rgba(238, 242, 248, 0.16);
+  --pb-accent-ink:   #00AEEF;
+  --pb-accent-soft:  rgba(0, 174, 239, 0.1);
+  --pb-accent-soft2: rgba(0, 174, 239, 0.25);
+  --pb-ok:           #34D399;
+  --pb-ok-soft:      rgba(52, 211, 153, 0.12);
+  --pb-warn:         #FBBF24;
+  --pb-warn-soft:    rgba(251, 191, 36, 0.12);
+  --pb-shadow:       0 30px 70px -30px rgba(0, 0, 0, 0.7);
+
+  --pb-admin-1: #242B3A;
+  --pb-admin-2: #333B4D;
+  --pb-admin-3: #454E62;
+  --pb-admin-4: #5E6779;
 }
 
 /* ─── The System: convergence diagram ──────────────────────

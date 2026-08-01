@@ -24,7 +24,7 @@ before picking the work back up in a fresh session.
 |---|---|---|---|
 | 0 | Floating nav pill (overlays the hero) | `components/Navbar.tsx` | — |
 | 1 | Hero (logo band folded in, crops at fold) | `components/growth/Hero.tsx` + `TrustStrip.tsx` | — |
-| 2 | The problem (chart, 3 beats, one-layer payoff) | `components/growth/CoachsWeek.tsx` | `#the-week` |
+| 2 | The problem (bar, 3 pillars, capacity block, closing) | `components/growth/CoachsWeek.tsx` | `#the-week` |
 | 3 | The reveal (convergence diagram) | `components/TheSystem.tsx` | `#the-system` |
 | 4 | What it does (rotating showcase) | `components/growth/Capabilities.tsx` | `#capabilities` |
 | 5 | Proof (sticky story stack) | `components/growth/CustomerProof.tsx` | `#proof` |
@@ -232,6 +232,53 @@ lengthen the confirmation, re-measure**; there are 2px of slack.
 
 `CARD_BODY_H` is the fold budget, not a guess. Growing it pushes the logo
 marquee below 793.
+
+## The problem section
+
+Rebuilt from a supplied design handoff. The order is the argument and must
+stay in it: claim, Today bar, the three kinds of work, the capacity block,
+the corrected bar, the closing line. The bar sits *above* the pillars so it
+reads as the summary and they read as its breakdown.
+
+**Tokens live on `.ed-problem` in globals.css**, not in the component, the
+same arrangement `.ed-showcase` uses.
+
+**The handoff's accent is remapped.** It ships `#1B55E9`, a royal blue that
+is not the brand's. `--pb-accent` is the *fill* under white text, so it has
+to clear 4.5:1 on white: `#00AEEF` is 2.53:1 and fails, `#0077A8` is 4.99:1
+and is used in both modes, since white-on-fill contrast does not care what
+surrounds it. `--pb-accent-ink` is accent *text* and follows the site's usual
+light/dark split (`#0077A8` / `#00AEEF`). Measured: coaching fill 5.0:1 in
+both themes, dark eyebrow 7.51:1, dark closing line 7.28:1.
+
+**The admin ramp is deliberately dark** so white would pass on tones 1–3. Do
+not lighten it. The four grey segments carry no labels; the pillar swatches
+below identify them, so **swatch tone and segment tone have to stay in step**.
+
+Two places where the build departs from the prototype, both forced:
+
+- **The report chips wrap, they do not truncate.** The handoff mandates
+  keeping the existing file-type icons and also specifies a 12px chip label.
+  The icon costs 18px of a chip that has ~100px of text room at 1205, and
+  four filenames no longer fit on one line. The prototype fits them only
+  because it omits the icons. Wrapping keeps every label readable; the grid
+  rows stay aligned to each other.
+- **`min-h` on the pillar heading blocks is 106px, not the handoff's 104.**
+  The longest description runs to three lines from 1024 up and measures
+  105.4, so a 104 floor left card 1 starting 1.4px low.
+
+At 390 the 20 percent segment is 68px wide and cannot hold both the word and
+the figure, so `Coaching` is hidden below `sm` on that bar only and the
+figure centres. The 80 percent bar keeps both at every width.
+
+The capacity figures (30/1, 120/4, 300/10) are an illustrative ratio, not
+measured data. The point is that the coach count grows and owners-per-coach
+does not. **Keep it on the coach's side**: nothing here mentions salary,
+cost, or headcount spend.
+
+Motion is `whileInView` throughout, matching the rest of the file. The bar
+animates as one `scaleX` from `transform-origin: left` rather than per
+segment, which keeps the proportions exact and never re-lays-out the flex row.
 
 ## The System: convergence diagram
 
@@ -499,21 +546,8 @@ fit is usually 1024 rather than the smallest screen.
   `CARD_MIN_H` floor, and the beat body reserves three lines (`min-h-[3.75rem]`)
   so all three cards still start on the same line. Result at 1205: cards are
   279px with 1–22px of slack, against 336px with ~59px before.
-- The problem section's opening line is sized to the hero's lead line
-  (22.5–35px) rather than the old 32–48px section scale, so the two openings
-  match. It is still an `h2`.
 - The `4/5` figure restates the Today bar (20% coaching leaves four days in
   five). It is not a new claim, and it moves if the chart data moves.
-- **The 4/5 lockup follows a supplied design spec**, so treat its ratios and
-  colours as fixed: "days" at exactly half the numeral, both at line-height
-  0.9 and baseline-aligned, weights 700/600/400, tracking -0.04em/-0.03em,
-  sentence in Inter at 42/128 of the numeral on one line, colours
-  `#0B1220`/`#5C6675` light and `#EEF2F8`/`#93A0B5` dark. One clamp
-  (`--stat-numeral` in globals.css) drives all three runs.
-  **The sentence sets the ceiling**: it needs 14.15px of width per 1px of
-  font size and must never wrap. The lockup sits in a fixed 20rem column
-  beside the bars, which caps the numeral near 68px; the spec's own 128px
-  only fits if the lockup goes full width, which crushes the bars.
 - **`components/growth/artifact-panels.tsx` is now entirely unused.** Its two
   exports both lost their last caller: `ScatteredPanel` when report building
   was rebuilt as `REPORT_SCRAPS`, and `OrderedPanel` when the problem section
