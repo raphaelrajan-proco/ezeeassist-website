@@ -26,16 +26,17 @@ before picking the work back up in a fresh session.
 | 1 | Hero (logo band folded in, crops at fold) | `components/growth/Hero.tsx` + `TrustStrip.tsx` | — |
 | 2 | The problem (bar, 3 pillars, capacity block, closing) | `components/growth/CoachsWeek.tsx` | `#the-week` |
 | 3 | The reveal (operating system diagram) | `components/TheSystem.tsx` | `#the-system` |
-| 4 | What it does (rotating showcase) | `components/growth/Capabilities.tsx` | `#capabilities` |
+| 4 | On demand (3-tile showcase) | `components/growth/Capabilities.tsx` | `#capabilities` |
 | 5 | Proof (sticky story stack) | `components/growth/CustomerProof.tsx` | `#proof` |
 | 6 | Trust and control (6 tabs) | `components/growth/TrustAndControl.tsx` | `#trust` |
 | 7 | FAQ | `components/growth/Objections.tsx` + `lib/data/objections.ts` | `#objections` |
 | 8 | Final CTA | `components/growth/FinalCTA.tsx` | `#book` |
 
-The showcase pills expose anchors: `#answers`, `#agents`, `#reporting`,
-`#compliance`, `#ai-apps`, and the section opens the matching scene from
-`location.hash`. The footer links to four of them, so renaming a pill means
-renaming its id and the footer entry together.
+The showcase pills expose anchors: `#answers`, `#reporting`, `#ai-apps`, and
+the section opens the matching scene from `location.hash`. `#agents` and
+`#compliance` went away when the rail dropped from five pills to three.
+**`Footer.tsx` still links `/#agents`, which is dead.** See the showcase
+section below.
 
 Support modules (not sections): `artifact-panels.tsx`, `audience-duality.tsx`,
 `handoff-flow.tsx`. Unwired-but-kept work lives in `components/growth/_archive/`.
@@ -361,40 +362,92 @@ To test the reveal in the preview pane, which pins `scrollY` at 0:
 `Object.defineProperty(window, 'scrollY', { get: () => 500 })` then dispatch a
 `scroll` event.
 
-## Capability showcase (section 4)
+## On demand showcase (section 4)
 
-Also built from a supplied handoff. The old sticky-rail, scroll-driven module
-layout is gone; this is a rail of five pills beside a photo stage that
-auto-advances every 6.5s. Hovering the block pauses it, clicking a pill jumps
-and resets the timer, and `prefers-reduced-motion` stops the auto-advance
-while leaving the pills clickable.
+Rebuilt from the v2 handoff. Three pills beside a photo stage, auto-advancing
+every **9.5s** (was five pills at 6.5s). Hovering pauses, clicking a pill jumps
+and resets the timer, `prefers-reduced-motion` stops the auto-advance and every
+entrance while leaving the pills clickable.
 
-Tokens live in `.ed-showcase` in globals.css. **`--sc-accent-ink` is not
-decoration**: it is the darker accent used anywhere white text or an icon sits
-on an accent fill, because `#00AEEF` under white is 2.5:1. It resolves to
-`#0077A8` in light and `#00AEEF` in dark.
+Each scene proves its tile's claim rather than illustrating it. **Keep that
+intent** if the copy is revisited:
 
-**The photos are Unsplash hotlinks.** The handoff names them as stand-ins and
-subject matter as the spec. That means production currently depends on the
-Unsplash CDN for five images. Swap for owned photography before launch.
+- Tile 1's caption states the scoping, because scoping is invisible in a
+  screenshot.
+- Tile 2 closes on "no one built a dashboard", which is the actual claim.
+- Tile 3 is two panels because "built by an owner, not a developer" is the
+  sentence that de-risks it.
+- Store #214's closing audit appearing here at 3:45pm and again later at
+  5:20pm is **deliberate continuity, not duplication**.
 
-Pill ids double as deep-link anchors and the component reads
-`location.hash` on mount to open the matching scene. The footer's Platform
-column points at four of them; `Workflows → /#workflows` became
-`Agents → /#agents` when the labels changed.
+**Only the active scene is mounted.** That is what replays the entrance
+sequence on every advance, and the sequence ordering is the design: the gap
+between question and answer in scene 1 reads as the system responding, the gap
+between the two panels in scene 3 is the twenty minutes.
 
-**Three headlines are pinned to a line count**, and each clamp is fitted to
-measured wrap points rather than picked. Re-derive if the copy changes:
+### Things that will bite
 
-| Headline | Cap | Ceiling at 390 / 768 / 1024+ | Rendered |
-|---|---|---|---|
-| "EZee Assist is the operating system." | 1 line | 21.1 / 41.5 / 55.3px | 20 / 40 / 53px |
-| "EZee flips the 4/5 days to growth, by automating the rest." | 2 lines, one per span | 23 / 45.2 / 51.6px | 22 / 43 / 49px |
-| "To reclaim coaching, all the work needs to flow through one unified system." | 2 lines | 19 / 38 / 43px | 18 / 30 / 30px |
+**The section does not use `SectionShell`.** The handoff asks for a 1480
+wrapper so the stage approaches its 1100; SectionShell caps at 1280, which left
+the stage at 816. It now runs its own shell, matching the operating system
+section next door. Stage measures 1024 at 1440, 789 at 1205.
 
-The one-line cap is what drives the system headline down to 20px at 390. It is
-small for a section heading, and the price of holding one line on a 342px
-column.
+**The stage is fixed 580 tall from lg with a fluid width**, not a scaled 1100.
+Scaling would shrink 15px body copy along with everything else; fixing the
+height keeps the handoff's vertical geometry (48 / 88 / 120 insets, 270px
+cards) exact where it matters. Below lg the content falls into normal flow.
+
+**The trend SVG must scale uniformly.** It was briefly
+`preserveAspectRatio="none"`, which stretched the 300x150 box to 255x158 and
+thinned the 3px stroke unevenly. Same bug class as the old spine line. It now
+carries a fixed 150px height.
+
+**`.theme-editorial` sets `overflow-x: clip`, so a headline overrun is silently
+cut rather than scrolling.** `scrollWidth > clientWidth` does not catch it on a
+block element either. Measure the text with a `Range` against the column width.
+The headline needs **27.97px of width per 1px of font size**, so the one-line
+ceilings are 21.2 / 24.6 / 33.7 / 40.2 / 42.9px at 640 / 768 / 1024 / 1205 /
+1280. The clamp sits 3 to 5 percent under each and tops out at the spec's 42px.
+Below 640 it wraps; one line there would need 16px type.
+
+**The eyebrow is 14px, not 10.5px**, and the handoff says explicitly not to
+shrink it back. Note this reintroduces a section label after the earlier
+"kill the titles" pass; it is the newer instruction.
+
+### Anchors and the footer
+
+Pill ids are deep-link anchors and the component reads `location.hash` on
+mount. Going from five pills to three **dropped `#agents` and `#compliance`**.
+`#answers`, `#reporting` and `#ai-apps` were kept on the three surviving tiles
+precisely so the footer keeps resolving.
+
+**`components/Footer.tsx` still links `/#agents`, which is now dead.** The
+footer is shared with every other route, so it was left alone rather than
+edited unilaterally. The fix is one line: point it at `/solution/agents`, which
+exists and is what the nav already uses.
+
+### Colours
+
+Tokens live in `.ed-showcase`. **`--sc-accent-ink` is not decoration**: it is
+the darker accent for text and for anything white sitting on an accent fill,
+because `#00AEEF` under white is 2.5:1. `#0077A8` light, `#00AEEF` dark.
+
+The handoff's `warn`, `bad` and `violet` were darkened for light mode so the
+exception rows and the "live" pill clear 4.5:1 on their own soft backgrounds.
+Measured light: ask titles 5.0, bad rows 5.45, warn rows 4.79, violet pill
+4.99, source chips 4.67, mono labels 5.81, rail subs 5.27. Dark: 7.51 / 5.89 /
+8.75 / 5.53 / 6.58 / 6.49.
+
+**Captions carry a text-shadow, which the handoff does not specify.** The scrim
+falls to 0.18-0.2 alpha at its right end and the scene 2 and 3 captions span
+the full stage, so their tails land on bright photo.
+
+**The photos are Unsplash hotlinks.** Production depends on the Unsplash CDN
+for three images. Swap for owned photography before launch.
+
+**Channel glyphs are inline SVG on `currentColor`**, not brand marks: the icon
+CDN does not serve Slack or Teams. If brand assets land, commit local SVGs and
+check dark mode.
 
 ## The closing band
 

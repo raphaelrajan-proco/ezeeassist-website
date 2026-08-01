@@ -933,8 +933,17 @@ input[type="range"]::-moz-range-thumb {
   --sc-border:  rgba(12,20,36,.09);
   --sc-accent:  #00AEEF;
   --sc-accent-ink: #0077A8;
+  --sc-accent-soft: rgba(0,174,239,.07);
   --sc-accent-soft2: rgba(0,174,239,.16);
+  --sc-border-strong: rgba(12,20,36,.16);
+  --sc-track:   #E4E9F1;
   --sc-ok:      #0E9F6E;
+  --sc-warn:      #8C5E0E;
+  --sc-warn-soft: rgba(180,83,9,.12);
+  --sc-bad:       #A8380B;
+  --sc-bad-soft:  rgba(194,65,12,.12);
+  --sc-violet:      #6B4DCC;
+  --sc-violet-soft: rgba(109,79,208,.12);
   --sc-stage:   #E9EEF6;
   --sc-shadow:  0 24px 60px -28px rgba(12,20,36,.25);
 }
@@ -947,15 +956,36 @@ input[type="range"]::-moz-range-thumb {
   --sc-border:  rgba(238,242,248,.09);
   --sc-accent:  #00AEEF;
   --sc-accent-ink: #00AEEF;
+  --sc-accent-soft: rgba(0,174,239,.1);
   --sc-accent-soft2: rgba(0,174,239,.25);
+  --sc-border-strong: rgba(238,242,248,.16);
+  --sc-track:   #1B2437;
   --sc-ok:      #34D399;
+  --sc-warn:      #FBBF24;
+  --sc-warn-soft: rgba(251,191,36,.14);
+  --sc-bad:       #FB7185;
+  --sc-bad-soft:  rgba(251,113,133,.14);
+  --sc-violet:      #A78BFA;
+  --sc-violet-soft: rgba(167,139,250,.16);
   --sc-stage:   #0E1524;
   --sc-shadow:  0 30px 70px -30px rgba(0,0,0,.7);
 }
 
+/* Scene entrances. The ordering of the delays is the design: on scene 1
+   the gap between question and answer is what reads as the system
+   responding, and on scene 3 the gap between the two panels is the
+   twenty minutes. Delays are set inline per element. */
 @keyframes ed-sc-tab-fill { from { width: 0 } to { width: 100% } }
+@keyframes ed-sc-scene-in { from { opacity: 0 } to { opacity: 1 } }
+@keyframes ed-sc-rise  { from { opacity: 0; transform: translateY(14px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes ed-sc-slide { from { opacity: 0; transform: translateX(-16px) } to { opacity: 1; transform: translateX(0) } }
+@keyframes ed-sc-grow  { from { transform: scaleX(0) } to { transform: scaleX(1) } }
+@keyframes ed-sc-draw  { from { stroke-dashoffset: 420 } to { stroke-dashoffset: 0 } }
 
-/* Reduced motion stops the auto-advance (handled in JS) and the bar. */
+/* Reduced motion stops the auto-advance (handled in JS), the bar, and
+   every entrance. Each element lands on its final state. */
 @media (prefers-reduced-motion: reduce) {
   .ed-sc-bar { animation: none !important; width: 100% !important }
+  .ed-sc-anim { animation: none !important; opacity: 1 !important; transform: none !important }
+  .ed-sc-draw { animation: none !important; stroke-dashoffset: 0 !important }
 }

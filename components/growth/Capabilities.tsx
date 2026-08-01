@@ -1,21 +1,24 @@
 "use client";
 
-import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowRight } from "lucide-react";
-import { SectionShell } from "./shared";
 
 /**
- * What it does, built from the auto-rotating showcase design handoff.
- * A rail of five capability pills beside a photo stage. The stage
- * advances every 6.5s, the active pill carries a progress bar, and
- * clicking a pill jumps to its scene and resets the timer.
+ * On demand, built from the showcase design handoff. A rail of three
+ * capability pills beside a photo stage that auto-advances every 9.5s.
+ * Each scene is a demo that proves its tile's claim rather than
+ * illustrating it, which is why the dwell is longer than the five-tile
+ * version it replaces.
  *
- * Colours come from `.ed-showcase` in globals.css so the section keeps
- * the handoff palette while still following the site's dark mode.
+ * Only the active scene is mounted. That is what makes the entrance
+ * sequence replay on every advance, and the sequence ordering is the
+ * design: on scene 1 the gap between question and answer reads as the
+ * system responding, on scene 3 the gap between panels is the twenty
+ * minutes.
+ *
+ * Colours come from `.ed-showcase` in globals.css.
  */
 
-const DWELL = 6500;
+const DWELL = 9500;
 
 const MONO = "ui-monospace, SFMono-Regular, Menlo, monospace";
 const JAKARTA = "var(--font-editorial)";
@@ -25,225 +28,344 @@ const JAKARTA = "var(--font-editorial)";
    TODO: replace with owned imagery before launch. */
 const PHOTO = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=1600&q=80`;
 
-type Scene = {
-  id: string;
-  label: string;
-  sub: string;
-  photo: string;
-  alt: string;
-  cta: string;
-  href: string;
-};
-
-/* ids double as deep-link anchors; the footer points at four of them. */
-const SCENES: Scene[] = [
+/* ids double as deep-link anchors. The footer points at /#answers,
+   /#reporting and /#ai-apps, so these three names are load-bearing
+   outside this file. See HANDOFF for the fourth, /#agents, which lost
+   its tile when the rail went from five to three. */
+const TABS = [
   {
-    id: "answers", label: "Answers", sub: "Cited, 24/7, every channel",
-    photo: PHOTO("photo-1560066984-138dadb4c035"), alt: "Salon front desk",
-    cta: "Answers in every channel", href: "/solution",
+    id: "answers",
+    label: "Ask for anything, in any channel",
+    sub: "One question, any channel. Cited from your approved sources, scoped to that person’s role and location.",
+    photo: PHOTO("photo-1560066984-138dadb4c035"),
+    alt: "Front desk at a location",
+    scrim: "linear-gradient(105deg, rgba(5,7,13,.62), rgba(5,7,13,.18))",
   },
   {
-    id: "agents", label: "Agents", sub: "Multi-step work, human-gated",
-    photo: PHOTO("photo-1556910103-1c02745aae4d"), alt: "Restaurant back of house",
-    cta: "Describe it once, it runs everywhere", href: "/solution/agents",
+    id: "reporting",
+    label: "See the data any way you want",
+    sub: "The same numbers, rendered however the question demands. No analyst, no request queue, no static dashboard.",
+    photo: PHOTO("photo-1551288049-bebda4e38f71"),
+    alt: "Performance numbers on a laptop",
+    scrim: "linear-gradient(105deg, rgba(5,7,13,.66), rgba(5,7,13,.2))",
   },
   {
-    id: "reporting", label: "Reporting and BI Hub", sub: "Live numbers, no queue",
-    photo: PHOTO("photo-1551288049-bebda4e38f71"), alt: "Performance dashboard on a laptop",
-    cta: "Live numbers, no analyst queue", href: "/solution",
-  },
-  {
-    id: "compliance", label: "Compliance Hub", sub: "Checked nightly, everywhere",
-    photo: PHOTO("photo-1454165804606-c3d57bc86b40"), alt: "Standards review with a checklist",
-    cta: "Your standard, holding everywhere", href: "/#trust",
-  },
-  {
-    id: "ai-apps", label: "Applications Hub", sub: "Built inside your guardrails",
-    photo: PHOTO("photo-1556742049-0cfed4f6a45d"), alt: "Tablet in use at the counter",
-    cta: "Anyone builds, HQ governs", href: "/solution",
+    id: "ai-apps",
+    label: "Build the tool that is missing",
+    sub: "Describe a tool your network needs. It ships inside the guardrails HQ set.",
+    photo: PHOTO("photo-1556742049-0cfed4f6a45d"),
+    alt: "Tablet in use at the counter",
+    scrim: "linear-gradient(105deg, rgba(5,7,13,.64), rgba(5,7,13,.2))",
   },
 ];
 
-/* ── Card primitives ───────────────────────────────────── */
+const EASE_OUT = "cubic-bezier(.2,.8,.2,1)";
 
-const cardStyle: React.CSSProperties = {
+/** Entrance helper. `anim` names the keyframe, `d` is the delay in seconds. */
+const enter = (anim: string, d: number, dur = 0.55): React.CSSProperties => ({
+  animation: `${anim} ${dur}s ${anim === "ed-sc-scene-in" ? "ease" : EASE_OUT} both ${d}s`,
+});
+
+const card: React.CSSProperties = {
   background: "var(--sc-panel)",
   border: "1px solid var(--sc-border)",
   borderRadius: 18,
   boxShadow: "var(--sc-shadow)",
-  padding: 20,
-  display: "flex",
-  flexDirection: "column",
-  gap: 12,
+  boxSizing: "border-box",
 };
 
-const rowStyle: React.CSSProperties = {
-  display: "flex", justifyContent: "space-between", gap: 10, fontSize: 12.5,
-  background: "var(--sc-panel-2)", border: "1px solid var(--sc-border)",
-  borderRadius: 9, padding: "9px 12px", color: "var(--sc-text)",
+const monoLabel: React.CSSProperties = {
+  fontFamily: MONO, fontSize: 11, letterSpacing: ".06em", color: "var(--sc-muted)",
 };
 
-function Mono({ children, tone = "muted" }: { children: React.ReactNode; tone?: "muted" | "ok" }) {
+/* Captions sit on the photo, not on a panel, so they take a fixed light
+   ink rather than a theme token. The scrim is dark in both themes.
+   The shadow is the one addition to the handoff here: the scrim runs to
+   0.18-0.2 alpha at the right end, and the captions in scenes 2 and 3
+   span the full stage, so their tails land on bright photo. */
+const caption: React.CSSProperties = {
+  fontSize: 13.5, lineHeight: 1.5, color: "#E6ECF7",
+  textShadow: "0 1px 3px rgba(5,7,13,.75), 0 0 12px rgba(5,7,13,.5)",
+};
+
+/* ── Channel glyphs ────────────────────────────────────────
+   Inline, `currentColor`, no external requests. The icon CDN does not
+   serve Slack or Teams marks, which is why these are generic glyphs
+   rather than brand marks. Swap for committed local SVGs if brand
+   assets land; never reference a CDN from production. */
+
+const CHANNELS: { name: string; path: React.ReactNode }[] = [
+  {
+    name: "Slack",
+    path: <><path d="M9 4v10.5a2.5 2.5 0 1 1-2.5-2.5H17a2.5 2.5 0 1 1-2.5 2.5V4" /><path d="M4 9h10.5" /></>,
+  },
+  {
+    name: "SMS",
+    path: <><path d="M21 12a8 8 0 0 1-11.5 7.2L4 21l1.8-5.5A8 8 0 1 1 21 12z" /><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" /><circle cx="12.5" cy="12" r="1" fill="currentColor" stroke="none" /><circle cx="16" cy="12" r="1" fill="currentColor" stroke="none" /></>,
+  },
+  {
+    name: "Teams",
+    path: <><circle cx="9" cy="8" r="3" /><path d="M3.5 19a5.5 5.5 0 0 1 11 0" /><circle cx="17" cy="9.5" r="2.2" /><path d="M15.4 15.2A4.4 4.4 0 0 1 21 19" /></>,
+  },
+  {
+    name: "Email",
+    path: <><rect x="3" y="5.5" width="18" height="13" rx="2.5" /><path d="M3.8 7.2 12 13l8.2-5.8" /></>,
+  },
+  {
+    name: "WhatsApp",
+    path: <><path d="M21 11.6a8.4 8.4 0 0 1-12.3 7.5L3.5 20.5l1.5-5A8.4 8.4 0 1 1 21 11.6z" /><path d="M9.2 9.1c.3 2.6 2.3 4.6 4.9 5l1.1-1.4 1.6.9-.5 1.6a5.6 5.6 0 0 1-6.2-2 5.6 5.6 0 0 1-1.6-4l1.6-.6z" /></>,
+  },
+];
+
+const pillCircle: React.CSSProperties = {
+  width: 40, height: 40, borderRadius: "50%", flex: "none",
+  background: "var(--sc-panel)", border: "1px solid var(--sc-border)",
+  display: "flex", alignItems: "center", justifyContent: "center",
+};
+
+function ChannelRow() {
   return (
-    <span style={{ fontFamily: MONO, fontSize: 9.5, letterSpacing: ".12em", color: tone === "ok" ? "var(--sc-ok)" : "var(--sc-muted)", whiteSpace: "nowrap" }}>
-      {children}
-    </span>
-  );
-}
-
-function CardTitle({ children }: { children: React.ReactNode }) {
-  return <span style={{ fontFamily: JAKARTA, fontSize: 14, fontWeight: 700, color: "var(--sc-text)" }}>{children}</span>;
-}
-
-function Chip({ children }: { children: React.ReactNode }) {
-  return (
-    <span style={{ fontFamily: MONO, fontSize: 9, letterSpacing: ".06em", padding: "4px 8px", borderRadius: 5, background: "var(--sc-chip)", border: "1px solid var(--sc-border)", color: "var(--sc-muted)" }}>
-      {children}
-    </span>
-  );
-}
-
-/* ── The five scene cards ──────────────────────────────── */
-
-function AnswersCard() {
-  return (
-    <div style={{ ...cardStyle, width: 380 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Mono>STORE #118 · SLACK</Mono>
-        <Mono tone="ok">● 24/7</Mono>
-      </div>
-      <div style={{ alignSelf: "flex-end", background: "var(--sc-accent-ink)", color: "#fff", padding: "10px 14px", borderRadius: "14px 14px 4px 14px", fontSize: 13, lineHeight: 1.5, maxWidth: 280 }}>
-        Can I run the summer promo alongside the loyalty offer?
-      </div>
-      <div style={{ background: "var(--sc-panel-2)", border: "1px solid var(--sc-border)", padding: "12px 14px", borderRadius: "4px 14px 14px 14px", fontSize: 13, lineHeight: 1.55, color: "var(--sc-text)" }}>
-        No. Promotions don&apos;t stack with loyalty redemptions. Apply the higher of the two and note it at close.
-      </div>
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-        <Chip>SUMMER-PROMO-GUIDE.PDF</Chip>
-        <Chip>LOYALTY-POLICY.PDF</Chip>
-      </div>
+    <div className="ed-sc-anim flex flex-wrap items-center gap-2.5" style={enter("ed-sc-rise", 0.05, 0.5)}>
+      {CHANNELS.map((c) => (
+        <span key={c.name} aria-label={c.name} title={c.name} role="img" style={{ ...pillCircle, color: "var(--sc-text)" }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            {c.path}
+          </svg>
+        </span>
+      ))}
+      <span
+        aria-hidden="true"
+        style={{ ...pillCircle, fontFamily: JAKARTA, fontSize: 13, fontWeight: 600, letterSpacing: ".1em", color: "var(--sc-muted)" }}
+      >
+        ++
+      </span>
     </div>
   );
 }
 
-function AgentsCard() {
-  const steps = [
-    "Pull last night's closing photos, every location",
-    "Score each against the brand standard",
-    "Open tasks · notify the owner and coach",
-  ];
-  return (
-    <div style={{ ...cardStyle, width: 400 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-        <CardTitle>Nightly compliance sweep</CardTitle>
-        <Mono>AGENT · RUNS 02:00</Mono>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {steps.map((s, i) => (
-          <div key={s} style={{ display: "flex", gap: 10, alignItems: "center", fontSize: 12.5, color: "var(--sc-text)" }}>
-            <span style={{ width: 18, height: 18, flex: "none", borderRadius: "50%", background: "var(--sc-accent-soft2)", color: "var(--sc-accent-ink)", fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              {i + 1}
-            </span>
-            {s}
-          </div>
-        ))}
-      </div>
-      <div style={{ borderTop: "1px solid var(--sc-border)", paddingTop: 12, fontSize: 12, color: "var(--sc-muted)" }}>
-        <span style={{ color: "var(--sc-ok)" }}>●</span> Last run 02:04 · 214 locations · 9 tasks opened · no one touched it
-      </div>
-    </div>
-  );
-}
+/* ── Scene 1: Answers ──────────────────────────────────── */
 
-function ReportingCard() {
-  const rows = [
-    { store: "Store #331", note: "bookings 12% under", action: "Flagged to coach", accent: true },
-    { store: "Store #118", note: "attach rate down 6%", action: "Flagged to coach", accent: true },
-    { store: "Store #052", note: "reviews up 11%", action: "No action", accent: false },
-  ];
+function SceneAnswers() {
   return (
-    <div style={{ ...cardStyle, width: 400, gap: 14 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-        <CardTitle>West territory · this week</CardTitle>
-        <Mono>REFRESHED 06:00</Mono>
-      </div>
-      <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-        <span style={{ fontFamily: JAKARTA, fontSize: 40, fontWeight: 800, letterSpacing: "-.03em", lineHeight: 1, color: "var(--sc-text)" }}>66%</span>
-        <span style={{ fontSize: 12, color: "var(--sc-muted)" }}>bookings vs target</span>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {rows.map((r) => (
-          <div key={r.store} style={rowStyle}>
-            <span><b>{r.store}</b> · {r.note}</span>
-            <span style={{ color: r.accent ? "var(--sc-accent-ink)" : "var(--sc-muted)", fontWeight: 600, whiteSpace: "nowrap" }}>{r.action}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+    <>
+      <ChannelRow />
 
-function ComplianceCard() {
-  const rows = [
-    { store: "Store #331", note: "insurance expires in 14 days", action: "Task opened", tone: "accent" },
-    { store: "Store #118", note: "2 modules outstanding", action: "Owner notified", tone: "accent" },
-    { store: "Store #214", note: "all current", action: "✓ Pass", tone: "ok" },
-  ];
-  return (
-    <div style={{ ...cardStyle, width: 400 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-        <CardTitle>Compliance · West territory</CardTitle>
-        <Mono>CHECKED NIGHTLY</Mono>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {rows.map((r) => (
-          <div key={r.store} style={rowStyle}>
-            <span><b>{r.store}</b> · {r.note}</span>
-            <span style={{ color: r.tone === "ok" ? "var(--sc-ok)" : "var(--sc-accent-ink)", fontWeight: 600, whiteSpace: "nowrap" }}>{r.action}</span>
-          </div>
-        ))}
-      </div>
-      <div style={{ fontSize: 11.5, color: "var(--sc-muted)" }}>
-        Certifications and audits tracked nightly. No chasing.
-      </div>
-    </div>
-  );
-}
-
-function AppsCard() {
-  const tiles = ["Front desk", "Treatment rooms", "Retail floor", "Back of house"];
-  return (
-    <div style={{ width: 390, display: "flex", flexDirection: "column", gap: 14 }}>
-      <div style={{ alignSelf: "flex-end", background: "var(--sc-accent-ink)", color: "#fff", padding: "12px 16px", borderRadius: "16px 16px 4px 16px", fontSize: 12.5, lineHeight: 1.5, maxWidth: 330, boxShadow: "var(--sc-shadow)" }}>
-        Build a daily closing audit: photo checklist per station, auto-score, flag fails to the coach
-      </div>
-      <div style={cardStyle}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 10 }}>
-          <CardTitle>Daily closing audit</CardTitle>
-          <Mono tone="ok">● LIVE AT 1 LOCATION</Mono>
+      <div className="ed-sc-anim flex flex-col gap-3.5 p-5" style={{ ...card, ...enter("ed-sc-rise", 0.18) }}>
+        <div style={monoLabel}>STORE #118 · SHIFT LEAD · 9:14AM</div>
+        <div style={{ fontSize: 16, fontWeight: 600, lineHeight: 1.45, color: "var(--sc-text)" }}>
+          Can I run the summer promo alongside the loyalty offer?
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-          {tiles.map((t) => (
-            <span key={t} style={{ fontSize: 12, padding: "9px 12px", borderRadius: 9, background: "var(--sc-panel-2)", border: "1px solid var(--sc-border)", color: "var(--sc-text)" }}>
-              ✓ {t}
+        <div style={{ height: 1, background: "var(--sc-border)" }} />
+        {/* The delay here is deliberate. It reads as the system answering. */}
+        <div className="ed-sc-anim" style={{ fontSize: 15, lineHeight: 1.55, color: "var(--sc-text)", ...enter("ed-sc-rise", 0.5, 0.5) }}>
+          No. Promotions don&apos;t stack with loyalty redemptions. Apply the
+          higher of the two and note it at close.
+        </div>
+        <div className="ed-sc-anim flex flex-wrap items-center gap-2" style={enter("ed-sc-rise", 0.78, 0.5)}>
+          {["summer-promo-guide.pdf", "loyalty-policy.pdf"].map((f) => (
+            <span
+              key={f}
+              style={{
+                fontSize: 11.5, fontWeight: 600, padding: "5px 10px", borderRadius: 6,
+                background: "var(--sc-accent-soft)", color: "var(--sc-accent-ink)",
+              }}
+            >
+              {f}
             </span>
           ))}
-        </div>
-        <div style={{ fontSize: 11.5, color: "var(--sc-muted)" }}>
-          Published to their team, inside the guardrails HQ set.
+          <span style={{ fontSize: 12, color: "var(--sc-muted)" }}>answered in 6s</span>
         </div>
       </div>
+
+      <div className="ed-sc-anim" style={{ ...caption, ...enter("ed-sc-scene-in", 1, 0.5) }}>
+        A district manager asking the same question sees margin impact too. A
+        shift lead doesn&apos;t.
+      </div>
+    </>
+  );
+}
+
+/* ── Scene 2: See the data any way you want ────────────── */
+
+const RANK_ROWS = [
+  { store: "#052", pct: 96, delay: 0.4, muted: false },
+  { store: "#214", pct: 88, delay: 0.5, muted: false },
+  { store: "#331", pct: 66, delay: 0.6, muted: false },
+  { store: "#118", pct: 50, delay: 0.7, muted: false },
+  { store: "#402", pct: 24, delay: 0.8, muted: true },
+];
+
+const BEHIND_ROWS = [
+  { store: "#402", delta: "−18%", tone: "bad" as const, delay: 0.55 },
+  { store: "#118", delta: "−11%", tone: "bad" as const, delay: 0.68 },
+  { store: "#331", delta: "−4%", tone: "warn" as const, delay: 0.81 },
+];
+
+function AskTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ fontSize: 14.5, fontWeight: 600, color: "var(--sc-accent-ink)", lineHeight: 1.4 }}>
+      {children}
     </div>
   );
 }
 
-/* Card placement per scene, alternating sides for rhythm. */
-const CARDS: { node: React.ReactNode; pos: React.CSSProperties }[] = [
-  { node: <AnswersCard />,    pos: { top: 64, right: 64 } },
-  { node: <AgentsCard />,     pos: { top: 70, right: 70 } },
-  { node: <ReportingCard />,  pos: { top: 70, left: 80 } },
-  { node: <ComplianceCard />, pos: { top: 80, right: 70 } },
-  { node: <AppsCard />,       pos: { top: 60, right: 70 } },
+function SceneData() {
+  return (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-[18px]">
+        <div className="ed-sc-anim flex flex-col gap-4 p-5 lg:h-[270px]" style={{ ...card, ...enter("ed-sc-rise", 0.08) }}>
+          <AskTitle>&ldquo;Rank my territory by attach rate&rdquo;</AskTitle>
+          <div className="flex flex-col gap-[11px]">
+            {RANK_ROWS.map((r) => (
+              <div key={r.store} className="flex items-center gap-3">
+                <span style={{ fontFamily: MONO, fontSize: 11.5, color: "var(--sc-muted)", width: 42, flex: "none" }}>
+                  {r.store}
+                </span>
+                <span style={{ height: 11, width: "100%", background: "var(--sc-track)", borderRadius: 6, overflow: "hidden" }}>
+                  <span
+                    className="ed-sc-anim block h-full"
+                    style={{
+                      width: `${r.pct}%`, borderRadius: 6, transformOrigin: "left",
+                      background: r.muted ? "var(--sc-muted)" : "var(--sc-accent)",
+                      ...enter("ed-sc-grow", r.delay, 0.7),
+                    }}
+                  />
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="ed-sc-anim flex flex-col gap-4 p-5 lg:h-[270px]" style={{ ...card, ...enter("ed-sc-rise", 0.2) }}>
+          <AskTitle>&ldquo;Show that as a trend instead&rdquo;</AskTitle>
+          {/* Uniform scaling only. `preserveAspectRatio="none"` stretched
+              the 300x150 box to 255x158 here, which scales x and y by
+              different factors and thins the 3px stroke unevenly. */}
+          <svg viewBox="0 0 300 150" className="w-full" style={{ height: 150 }} aria-hidden="true">
+            <path
+              d="M10 134 C 70 132 120 128 170 126 C 220 124 260 120 288 116"
+              fill="none" stroke="var(--sc-muted)" strokeWidth="2" strokeDasharray="5 7" opacity=".55"
+            />
+            <path
+              className="ed-sc-draw"
+              d="M10 118 C 60 112 78 104 112 106 C 150 108 186 74 220 62 C 250 52 268 40 288 30"
+              fill="none" stroke="var(--sc-accent)" strokeWidth="3" strokeLinecap="round" strokeDasharray="420"
+              style={{ animation: "ed-sc-draw 1.1s ease both .45s" }}
+            />
+            <circle className="ed-sc-anim" cx="288" cy="30" r="6" fill="var(--sc-accent)" style={enter("ed-sc-scene-in", 1.5, 0.4)} />
+          </svg>
+          <div className="flex justify-between" style={{ fontSize: 12, color: "var(--sc-muted)" }}>
+            <span>wk 40</span><span>wk 45</span>
+          </div>
+        </div>
+
+        <div className="ed-sc-anim flex flex-col gap-4 p-5 lg:h-[270px]" style={{ ...card, ...enter("ed-sc-rise", 0.32) }}>
+          <AskTitle>&ldquo;Just the ones behind plan, weekly&rdquo;</AskTitle>
+          <div className="flex flex-col gap-2.5">
+            {BEHIND_ROWS.map((r) => (
+              <div
+                key={r.store}
+                className="ed-sc-anim flex items-center justify-between"
+                style={{
+                  padding: "11px 14px", borderRadius: 10,
+                  background: r.tone === "bad" ? "var(--sc-bad-soft)" : "var(--sc-warn-soft)",
+                  ...enter("ed-sc-slide", r.delay, 0.5),
+                }}
+              >
+                <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: `var(--sc-${r.tone})` }}>
+                  {r.store}
+                </span>
+                <span style={{ fontSize: 13.5, fontWeight: 700, color: `var(--sc-${r.tone})` }}>{r.delta}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ fontSize: 12, color: "var(--sc-muted)" }}>3 of 12 locations</div>
+        </div>
+      </div>
+
+      <div className="ed-sc-anim" style={{ ...caption, ...enter("ed-sc-scene-in", 1.05, 0.5) }}>
+        Same underlying numbers. Three questions, three renderings, no one
+        built a dashboard.
+      </div>
+    </>
+  );
+}
+
+/* ── Scene 3: Build the tool that is missing ───────────── */
+
+const AUDIT_ROWS = [
+  { label: "Front desk", done: true, delay: 0.8 },
+  { label: "Treatment rooms", done: true, delay: 0.92 },
+  { label: "Retail floor", done: true, delay: 1.04 },
+  { label: "Back of house", done: false, delay: 1.16 },
+];
+
+function SceneApps() {
+  return (
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
+        <div className="ed-sc-anim flex flex-col gap-3.5 p-5 lg:p-6" style={{ ...card, ...enter("ed-sc-rise", 0.08) }}>
+          <div style={monoLabel}>STORE #214 · OWNER · 3:45PM</div>
+          <div style={{ fontSize: 16.5, lineHeight: 1.5, fontWeight: 500, color: "var(--sc-text)" }}>
+            &ldquo;Build a daily closing audit. Photo checklist per station,
+            auto-score it, flag fails to my coach.&rdquo;
+          </div>
+        </div>
+
+        {/* The delay against the panel above is the twenty minutes. */}
+        <div
+          className="ed-sc-anim flex flex-col gap-3.5 p-5 lg:p-6"
+          style={{ ...card, border: "1px solid var(--sc-accent-soft2)", ...enter("ed-sc-rise", 0.55) }}
+        >
+          <div className="flex items-center justify-between gap-3">
+            <span style={{ fontFamily: JAKARTA, fontSize: 16, fontWeight: 700, color: "var(--sc-text)" }}>
+              Daily closing audit
+            </span>
+            <span
+              style={{
+                fontSize: 11.5, fontWeight: 700, padding: "5px 10px", borderRadius: 999,
+                background: "var(--sc-violet-soft)", color: "var(--sc-violet)", whiteSpace: "nowrap",
+              }}
+            >
+              live · 20 min later
+            </span>
+          </div>
+          <div className="flex flex-col gap-2.5">
+            {AUDIT_ROWS.map((r) => (
+              <div
+                key={r.label}
+                className="ed-sc-anim flex items-center gap-2.5"
+                style={{
+                  fontSize: 14,
+                  color: r.done ? "var(--sc-text)" : "var(--sc-muted)",
+                  ...enter("ed-sc-slide", r.delay, 0.45),
+                }}
+              >
+                <span aria-hidden="true" style={{ fontWeight: 700, color: r.done ? "var(--sc-ok)" : "inherit" }}>
+                  {r.done ? "✓" : "◻"}
+                </span>
+                {r.label}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="ed-sc-anim" style={{ ...caption, ...enter("ed-sc-scene-in", 1.35, 0.5) }}>
+        Built by an owner, not a developer. HQ reviewed it and published it to
+        all 214 locations the same evening.
+      </div>
+    </>
+  );
+}
+
+/* Content insets per scene, from the handoff. Scene 1 is a 600px column
+   at the top left; the other two span the stage. Only applied from lg,
+   where the stage is its full 580px tall. */
+const SCENES = [
+  { render: SceneAnswers, box: "lg:left-12 lg:top-12 lg:w-[600px]" },
+  { render: SceneData,    box: "lg:left-12 lg:right-12 lg:top-[88px]" },
+  { render: SceneApps,    box: "lg:left-12 lg:right-12 lg:top-[120px]" },
 ];
 
 /* ── Section ───────────────────────────────────────────── */
@@ -261,7 +383,7 @@ export default function Capabilities() {
   const startTimer = useCallback(() => {
     stopTimer();
     if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    timer.current = setInterval(() => setTab((t) => (t + 1) % SCENES.length), DWELL);
+    timer.current = setInterval(() => setTab((t) => (t + 1) % TABS.length), DWELL);
   }, [stopTimer]);
 
   useEffect(() => {
@@ -270,9 +392,9 @@ export default function Capabilities() {
     return stopTimer;
   }, [paused, startTimer, stopTimer]);
 
-  /* Deep links land on their scene: the footer points at four of these. */
+  /* Deep links land on their scene: the footer points at three of these. */
   useEffect(() => {
-    const i = SCENES.findIndex((s) => `#${s.id}` === window.location.hash);
+    const i = TABS.findIndex((t) => `#${t.id}` === window.location.hash);
     if (i >= 0) setTab(i);
   }, []);
 
@@ -281,19 +403,43 @@ export default function Capabilities() {
     startTimer();
   };
 
+  const Active = SCENES[tab].render;
+  const activeTab = TABS[tab];
+
   return (
-    <SectionShell alt id="capabilities">
-      <div className="ed-showcase">
-        <h2
-          className="ed-fg leading-[1.05] tracking-[-0.03em] mb-10 md:mb-12 max-w-3xl"
-          /* Two lines, one per span. The first line is the longer of the
-             two and sets the ceiling: 23px at 390, 45.2 at 768, 51.6 from
-             1024 up, against a column of 342 / 672 / 768. */
-          style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: "clamp(1.375rem, 0.02rem + 5.56vw, 3.0625rem)" }}
-        >
-          <span className="block" style={{ color: "#00AEEF" }}>EZee flips the 4/5 days to growth,</span>
-          <span className="block">by automating the rest.</span>
-        </h2>
+    /* The handoff's own wrapper, not SectionShell: it asks for a 1480
+       container so the stage gets near its 1100, and the operating system
+       section next door already runs at 1480. SectionShell caps at 1280,
+       which left the stage at 816. */
+    <section id="capabilities" className="w-full scroll-mt-24 ed-bg-alt">
+      <div className="ed-showcase mx-auto max-w-[1480px] px-6 md:px-10 pt-16 md:pt-24 pb-12 md:pb-[72px] flex flex-col gap-8 lg:gap-10">
+        <div className="flex flex-col gap-3">
+          <div
+            className="uppercase"
+            style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, letterSpacing: ".18em", color: "var(--sc-muted)" }}
+          >
+            On demand
+          </div>
+          <h2
+            className="whitespace-normal sm:whitespace-nowrap"
+            style={{
+              fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.1,
+              color: "var(--sc-text)",
+              /* One line from 640 up, which is what the handoff asks for,
+                 topping out at its 42px. The string needs 27.97px of width
+                 per 1px of font size, so the one-line ceilings are 21.2 /
+                 24.6 / 33.7 / 40.2 / 42.9px at 640 / 768 / 1024 / 1205 /
+                 1280. This sits 3 to 5 percent under each.
+                 `.theme-editorial` sets `overflow-x: clip`, so an overrun
+                 here is silently cut rather than scrolling: re-derive
+                 these if the headline copy ever changes.
+                 Below 640 it wraps; one line there would need 16px type. */
+              fontSize: "clamp(1.25rem, 3.18vw, 2.625rem)",
+            }}
+          >
+            Ask for anything. See it how you like. Build what&apos;s missing.
+          </h2>
+        </div>
 
         <div
           className="flex flex-col lg:flex-row gap-6 lg:gap-9 lg:items-stretch"
@@ -301,115 +447,88 @@ export default function Capabilities() {
           onMouseLeave={() => setPaused(false)}
         >
           {/* Rail */}
-          <div
-            className="flex flex-row lg:flex-col gap-3 lg:w-[250px] lg:flex-none lg:justify-center overflow-x-auto lg:overflow-visible"
-            role="tablist"
-            aria-label="Capabilities"
-          >
-            {SCENES.map((s, i) => {
-              const active = i === tab;
-              return (
-                <button
-                  key={s.id}
-                  id={s.id}
-                  role="tab"
-                  aria-selected={active}
-                  aria-controls={`scene-${s.id}`}
-                  onClick={() => select(i)}
-                  className="relative overflow-hidden text-left flex-none lg:flex-auto scroll-mt-28"
-                  style={{
-                    padding: "14px 18px", borderRadius: 14, boxSizing: "border-box",
-                    minWidth: 190,
-                    background: active ? "var(--sc-panel)" : "var(--sc-chip)",
-                    border: `1.5px solid ${active ? "var(--sc-accent)" : "var(--sc-border)"}`,
-                    boxShadow: active ? "var(--sc-shadow)" : "none",
-                    transition: "background .3s, border-color .3s",
-                  }}
-                >
-                  <div style={{ fontFamily: JAKARTA, fontSize: 14.5, fontWeight: 700, color: "var(--sc-text)" }}>{s.label}</div>
-                  <div style={{ fontSize: 11.5, color: "var(--sc-muted)", marginTop: 2 }}>{s.sub}</div>
-                  {active && (
-                    /* key restarts the fill on every tab change */
-                    <span
-                      key={`${tab}-${paused}`}
-                      className="ed-sc-bar"
-                      style={{
-                        position: "absolute", left: 0, bottom: 0, height: 2.5,
-                        background: "var(--sc-accent)",
-                        animation: paused ? undefined : `ed-sc-tab-fill ${DWELL}ms linear forwards`,
-                        width: paused ? "100%" : undefined,
-                      }}
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Stage */}
-          <div
-            className="relative flex-1 rounded-3xl overflow-hidden"
-            style={{ aspectRatio: "1100 / 560", border: "1px solid var(--sc-border)", background: "var(--sc-stage)" }}
-          >
-            {SCENES.map((s, i) => {
-              const active = i === tab;
-              return (
-                <div
-                  key={s.id}
-                  id={`scene-${s.id}`}
-                  role="tabpanel"
-                  aria-label={s.label}
-                  aria-hidden={!active}
-                  className="absolute inset-0"
-                  style={{ opacity: active ? 1 : 0, transition: "opacity .8s ease", pointerEvents: active ? undefined : "none" }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={s.photo}
-                    alt={s.alt}
-                    loading={i === 0 ? "eager" : "lazy"}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0" style={{ background: "linear-gradient(120deg, rgba(5,7,13,.3), rgba(5,7,13,.06))" }} />
-
-                  {/* Floating product card. Hidden below md, where the stage
-                      is too narrow to hold a 400px card. */}
-                  <div className="hidden md:block absolute" style={CARDS[i].pos}>
-                    {CARDS[i].node}
-                  </div>
-
-                  {/* The longest labels run to 312px, which overruns a 342px
-                      stage at 390. Below md the pill tightens its insets,
-                      type and padding, and the label truncates rather than
-                      clipping against the stage edge. */}
-                  <Link
-                    href={s.href}
-                    className="absolute flex items-center gap-2 md:gap-3 bottom-3 right-3 md:bottom-7 md:right-7 p-1.5 md:p-2.5 max-w-[calc(100%-1.5rem)] md:max-w-[calc(100%-3.5rem)]"
+          <div className="lg:w-[300px] lg:flex-none flex flex-col lg:justify-center gap-3.5">
+            <div className="flex flex-row lg:flex-col gap-3.5 overflow-x-auto lg:overflow-visible" role="tablist" aria-label="On demand">
+              {TABS.map((t, i) => {
+                const active = i === tab;
+                return (
+                  <button
+                    key={t.id}
+                    id={t.id}
+                    role="tab"
+                    aria-selected={active}
+                    aria-controls="on-demand-stage"
+                    onClick={() => select(i)}
+                    className="relative overflow-hidden text-left flex-none lg:flex-auto scroll-mt-28 min-w-[240px] lg:min-w-0"
                     style={{
-                      background: "var(--sc-panel)", border: "1px solid var(--sc-border)",
-                      borderRadius: 999, boxShadow: "var(--sc-shadow)",
+                      padding: "18px 20px", borderRadius: 16, boxSizing: "border-box",
+                      background: active ? "var(--sc-panel)" : "var(--sc-chip)",
+                      border: `1.5px solid ${active ? "var(--sc-accent-ink)" : "var(--sc-border)"}`,
+                      boxShadow: active ? "var(--sc-shadow)" : "none",
+                      transition: "background .3s, border-color .3s",
                     }}
                   >
-                    <span
-                      className="truncate pl-2.5 md:pl-4 text-[12px] md:text-[14px]"
-                      style={{ fontFamily: JAKARTA, fontWeight: 600, color: "var(--sc-text)" }}
-                    >
-                      {s.cta}
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      className="h-7 w-7 md:h-[34px] md:w-[34px]"
-                      style={{ borderRadius: "50%", background: "var(--sc-accent-ink)", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", flex: "none" }}
-                    >
-                      <ArrowRight className="h-3.5 w-3.5 md:h-4 md:w-4" strokeWidth={2.25} />
-                    </span>
-                  </Link>
-                </div>
-              );
-            })}
+                    <div style={{ fontFamily: JAKARTA, fontSize: 17, fontWeight: 700, letterSpacing: "-0.015em", lineHeight: 1.25, color: "var(--sc-text)" }}>
+                      {t.label}
+                    </div>
+                    <div style={{ fontSize: 12.5, lineHeight: 1.5, color: "var(--sc-muted)", marginTop: 4 }}>
+                      {t.sub}
+                    </div>
+                    {active && (
+                      /* key restarts the fill on every tab change */
+                      <span
+                        key={`${tab}-${paused}`}
+                        className="ed-sc-bar"
+                        style={{
+                          position: "absolute", left: 0, bottom: 0, height: 3,
+                          background: "var(--sc-accent-ink)",
+                          animation: paused ? undefined : `ed-sc-tab-fill ${DWELL}ms linear forwards`,
+                          width: paused ? "100%" : undefined,
+                        }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+            {/* Signals "and more" without listing more. */}
+            <div
+              aria-hidden="true"
+              className="hidden lg:block text-right pr-2"
+              style={{ fontFamily: JAKARTA, fontSize: 15, fontWeight: 600, letterSpacing: ".22em", color: "var(--sc-muted)", opacity: 0.75 }}
+            >
+              +++
+            </div>
+          </div>
+
+          {/* Stage. Fixed 580 tall from lg so the handoff's vertical
+              geometry (48 / 88 / 120 insets, 270px cards) is exact; the
+              width is fluid rather than a scaled 1100, which keeps the
+              type at its real size instead of shrinking it. */}
+          <div
+            id="on-demand-stage"
+            role="tabpanel"
+            aria-label={activeTab.label}
+            className="relative flex-1 min-w-0 rounded-3xl overflow-hidden lg:h-[580px]"
+            style={{ border: "1px solid var(--sc-border)", background: "var(--sc-stage)" }}
+          >
+            {/* key remounts the scene, which is what replays the sequence */}
+            <div key={activeTab.id} className="ed-sc-anim relative w-full h-full" style={enter("ed-sc-scene-in", 0, 0.5)}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={activeTab.photo}
+                alt={activeTab.alt}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0" style={{ background: activeTab.scrim }} />
+
+              <div className={`relative lg:absolute p-5 sm:p-8 lg:p-0 flex flex-col gap-4 lg:gap-[18px] ${SCENES[tab].box}`}>
+                <Active />
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </SectionShell>
+    </section>
   );
 }
