@@ -48,7 +48,7 @@ const SCENES: Scene[] = [
     cta: "Describe it once, it runs everywhere", href: "/solution/agents",
   },
   {
-    id: "reporting", label: "Reporting Hub", sub: "Live numbers, no queue",
+    id: "reporting", label: "Reporting and BI Hub", sub: "Live numbers, no queue",
     photo: PHOTO("photo-1551288049-bebda4e38f71"), alt: "Performance dashboard on a laptop",
     cta: "Live numbers, no analyst queue", href: "/solution",
   },

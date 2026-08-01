@@ -62,7 +62,7 @@ const SYSTEMS = ["Salesforce", "Slack", "HubSpot", "Teams", "Drive", "Zendesk", 
 const OUTPUTS = [
   { label: "Answers",          sub: "Cited, 24/7, in every channel",        y: 40,  delay: "-0.1s" },
   { label: "Agents",           sub: "Multi-step agentic work, human-gated", y: 148, delay: "-1s" },
-  { label: "Reporting Hub",    sub: "Live numbers, no analyst queue",       y: 256, delay: "-1.8s" },
+  { label: "Reporting and BI Hub",    sub: "Live numbers, no analyst queue",       y: 256, delay: "-1.8s" },
   { label: "Compliance Hub",   sub: "Every location checked nightly",       y: 364, delay: "-2.6s" },
   { label: "Applications Hub", sub: "Built by anyone, inside your guardrails", y: 472, delay: "-3.2s" },
 ];
@@ -431,7 +431,7 @@ export default function TheSystem() {
           converge on EZee Assist, which is governed and human-gated. Five
           outputs come from it: Answers, cited and available 24/7 in every
           channel; Agents, running multi-step work behind a human gate;
-          Reporting Hub, live numbers with no analyst queue; Compliance Hub,
+          Reporting and BI Hub, live numbers with no analyst queue; Compliance Hub,
           every location checked nightly; and Applications Hub, built by
           anyone inside your guardrails.
         </p>

@@ -109,7 +109,9 @@ const PARTNERS = [
 
 function StoryCard({ s }: { s: Story }) {
   return (
-    <div className="sticky mb-12" style={{ top: s.top }}>
+    /* Almost flush: 4px between cards rather than 48. The deck effect comes
+       from the staggered sticky tops, not from the gap. */
+    <div className="sticky mb-1" style={{ top: s.top }}>
       <div
         className="rounded-2xl overflow-hidden"
         style={{
@@ -120,11 +122,12 @@ function StoryCard({ s }: { s: Story }) {
       >
         <div style={{ height: 14, background: s.edge }} aria-hidden="true" />
 
-        {/* The handoff's 400/300 outer columns assume its own 1160px canvas.
-            Ours is 1077 at 1205, which left the middle column 281px and
-            wrapped both headline lines. Tightened to 300/250, still inside
-            the handoff's 240 and 230 minimums, which gives it 431px. */}
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(240px,300px)_minmax(0,1fr)_minmax(230px,250px)] lg:min-h-[520px]">
+        {/* The quote rail is wider than the handoff's 230-300 so the quote
+            runs fewer lines, which is what lets the card come down to 364px.
+            The logo panel gives up the width. Two steps, because at 1024 a
+            360px rail would leave the middle column too narrow to hold a
+            headline line. */}
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(180px,240px)_minmax(0,1fr)_minmax(280px,340px)] lg:min-h-[364px]">
           {/* Logo panel, hazy brand tint */}
           <div className="relative overflow-hidden flex items-center justify-center p-10 min-h-[200px]">
             <div
@@ -148,7 +151,7 @@ function StoryCard({ s }: { s: Story }) {
           </div>
 
           {/* Headline, stat and CTA */}
-          <div className="flex flex-col justify-between gap-8 px-8 py-10 lg:px-12 lg:pt-12 lg:pb-9">
+          <div className="flex flex-col justify-between gap-6 px-8 py-8 lg:px-10 lg:pt-9 lg:pb-7">
             <h3
               className="ed-fg"
               style={{
@@ -158,10 +161,10 @@ function StoryCard({ s }: { s: Story }) {
                 lineHeight: 1.12,
                 /* One line per span. "Human-power back to" is the widest of
                    the eight lines at 10.57px per 1px of font size, and the
-                   middle column measures 248px at 1024, 431 at 1205 and 506
-                   at 1440, so the ceiling is 23.5 / 40.8 / 47.9px. 1024 is
-                   the binding width. */
-                fontSize: "clamp(1.375rem, -1.178rem + 4.09vw, 2.5rem)",
+                   widened quote rail takes width off the middle column, so
+                   the ceiling is now 20.8px at 1024, 37.9 at 1205 and 45 at
+                   1440. 1024 binds. */
+                fontSize: "clamp(1.25rem, -1.2125rem + 3.85vw, 2.25rem)",
               }}
             >
               <span className="block">{s.headline[0]}</span>
@@ -195,7 +198,7 @@ function StoryCard({ s }: { s: Story }) {
 
           {/* Quote rail */}
           <figure
-            className="flex flex-col gap-5 px-8 py-10 lg:px-8 lg:py-10 lg:border-l border-t lg:border-t-0"
+            className="flex flex-col gap-4 px-8 py-8 lg:px-7 lg:py-7 lg:border-l border-t lg:border-t-0"
             style={{ borderColor: "var(--ed-rule)" }}
           >
             <Image
@@ -232,25 +235,32 @@ export default function CustomerProof() {
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         className="max-w-3xl mb-12 md:mb-14"
       >
-        <SectionHeadline>Trusted across the franchise community.</SectionHeadline>
+        <SectionHeadline>Making an impact with franchise leaders</SectionHeadline>
       </motion.div>
 
       {STORIES.map((s) => (
         <StoryCard key={s.brand} s={s} />
       ))}
 
-      {/* Room for the last card to pin before the section ends. */}
-      <div className="h-[35vh]" aria-hidden="true" />
+      {/* Room for the last card to pin before the section ends. Shorter than
+          the handoff's 35vh, since the cards are now 364px rather than 520. */}
+      <div className="h-[18vh]" aria-hidden="true" />
 
-      {/* Partner memberships. The headline already says "trusted across the
-          franchise community", so these carry no label of their own.
+      {/* Partner memberships.
           TODO: real partner badge images to replace text pills before publish. */}
       <motion.div
         initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-60px" }}
         transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+        className="mt-12 md:mt-16"
       >
+        <p
+          className="ed-fg-muted text-sm uppercase tracking-[0.2em] mb-6"
+          style={{ fontWeight: 600 }}
+        >
+          Collaborating with trusted partners
+        </p>
         {/* All eight on one line. Sized so they fit without scrolling from
             1024 up, where the row has 896px and needs 842. Below that the
             row scrolls rather than wrapping, since eight pills cannot fit a

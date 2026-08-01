@@ -273,13 +273,18 @@ it room to pin.
 
 Two departures from the handoff, both forced by our narrower container:
 
-- **Columns are 300/250, not the handoff's 400/300.** Its layout assumes a
-  1160px canvas; ours is 1077 at 1205, which left the middle column 248px and
-  wrapped every headline. Both new values stay inside the handoff's 240 and
-  230 minimums.
-- **The headline clamps to 23–40px, not a flat 44px.** "Human-power back to"
+- **Columns are 240/340, not the handoff's 400/300.** The quote rail is wider
+  than the handoff on purpose: a wider rail means fewer quote lines, which is
+  what brings the card height down. The logo panel gives up that width.
+- **The headline clamps to 20–36px, not a flat 44px.** "Human-power back to"
   is the widest of the eight lines at 10.57px per 1px of font size, and 1024
-  binds hardest with a 248px middle column.
+  binds hardest, where the widened rail leaves the middle column 220px.
+- **Cards land at 0.73–0.80x of the handoff's 520px**, not a flat 0.7. The
+  `min-h` is 364 but it is not what decides the height: the two longest
+  quotes, WSI and DivaDance, set 418px on their own. Shortening those quotes
+  is the only way further down.
+- Cards sit 4px apart, near flush. The deck effect comes from the staggered
+  sticky tops, not from the gap, so closing it costs nothing.
 
 Assets live in `public/logos/stories/` and `public/photos/`. **The logos are
 deliberately not in `public/logos/customers/`**, which is the path
