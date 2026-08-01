@@ -25,7 +25,7 @@ before picking the work back up in a fresh session.
 | 0 | Floating nav pill (overlays the hero) | `components/Navbar.tsx` | — |
 | 1 | Hero (logo band folded in, crops at fold) | `components/growth/Hero.tsx` + `TrustStrip.tsx` | — |
 | 2 | The problem (bar, 3 pillars, capacity block, closing) | `components/growth/CoachsWeek.tsx` | `#the-week` |
-| 3 | The reveal (convergence diagram) | `components/TheSystem.tsx` | `#the-system` |
+| 3 | The reveal (operating system diagram) | `components/TheSystem.tsx` | `#the-system` |
 | 4 | What it does (rotating showcase) | `components/growth/Capabilities.tsx` | `#capabilities` |
 | 5 | Proof (sticky story stack) | `components/growth/CustomerProof.tsx` | `#proof` |
 | 6 | Trust and control (6 tabs) | `components/growth/TrustAndControl.tsx` | `#trust` |
@@ -280,30 +280,86 @@ Motion is `whileInView` throughout, matching the rest of the file. The bar
 animates as one `scaleX` from `transform-origin: left` rather than per
 segment, which keeps the proportions exact and never re-lays-out the flex row.
 
-## The System: convergence diagram
+## The operating system diagram
 
-Built from a supplied design handoff. Section runs on the handoff's dark
-tokens (`#05070D` bg, `#0B101C` panels) regardless of site theme.
+Rebuilt from the v2 handoff. Three HQ input cards feed a central core, eleven
+wires carry two-way colour-coded pulses, and the store column grows sideways
+into a field of location tiles on scroll.
 
-**The canvas is a fixed 1180x620 that gets scaled**, not a fluid layout. The
-wire paths and the pulse `offset-path` values are absolute coordinates in that
-space, so they cannot be made responsive without redrawing every curve. A
-`ResizeObserver` measures the container and sets `transform: scale(w/1180)`;
-the wrapper's height is `620 * scale`. Below `lg` the scale would make 11.5px
-text illegible, so `StackedDiagram` renders instead.
+**Tokens live on `.ed-os` in globals.css.** The section now **follows the site
+theme** instead of being permanently dark, because this handoff ships both
+token sets. It was a hard dark band before.
 
-Two deliberate departures from the spec, both flagged at the time:
-- **The accent is `#00AEEF`, not the spec's `#4373FF`.** The handoff says to
-  map its variables onto existing token names, and a second blue next to the
-  brand blue read as a mistake.
-- **The integration tiles are wordmarks, not brand SVGs.**
-  `/public/logos/integrations/` does not exist. Names come from
-  `lib/data/integrations.ts` so they are at least real. Swap for `<Image>`
-  when the assets land.
+**The accent is remapped** from `#1B55E9` / `#4373FF` to the EZee family, the
+same call `.ed-problem` and `.ed-showcase` make. `--os-accent` is a fill under
+white text (the +250 tile) so it stays `#0077A8` at 4.99:1 in both modes;
+`--os-accent-ink` is accent text and splits light/dark.
 
-The five outputs match section 4's five pills one to one again, which was the
-original intent: Answers / Agents / Reporting Hub / Compliance Hub /
-Applications Hub.
+**The light-mode flow colours are darker than the handoff's.** All three are
+11.5px/600 sitting on their own soft background, so they carry the 4.5:1 bar,
+not the 3:1 large-text one. The handoff's values measured 4.25 / 4.13 / 4.52
+that way. Current values are the least darkening that clears it:
+
+| Flow | Handoff light | Shipped light | Measured | Dark |
+|---|---|---|---|---|
+| Answers | `#1B55E9` | `#0071A0` | 4.62 | `#00AEEF` 6.74 |
+| Actions | `#B4791A` | `#8C5E0E` | 4.62 | `#F5B33C` 8.82 |
+| Agents | `#6D4FD0` | `#6B4DCC` | 4.67 | `#A78BFA` 6.27 |
+
+`--os-accent-ink` light is `#0071A0` rather than `#0077A8` for the same
+reason: on `accent-soft` the governed pill measured 4.37. Do not lighten any
+of these back.
+
+### The logos, which went missing once before
+
+**All 11 marks are local files.** Nine integration SVGs live in
+`/public/logos/integrations/`, plus `/logo-black.svg` and `/logo-white.svg`
+for the core. **Never reference `cdn.simpleicons.org` at runtime.** Both
+wordmarks render and the theme picks one with `dark:hidden` / `hidden
+dark:block`, so the core can never be an empty rectangle.
+
+**`notion.svg` is deliberately the grey variant, not brand black.** A
+near-black mark disappears on the dark chip `#141B2C`. If you swap in another
+near-black brand (Square, and others), give it a light variant or it vanishes
+in dark mode. Verify by loading both themes and counting marks; a missing file
+still renders an `<img>` box, so check `naturalWidth > 0`, not just presence.
+
+### Geometry
+
+**The canvas is a fixed 1400x660 that gets scaled.** The wire paths and the
+pulse `offset-path` values are absolute coordinates in that space, so they
+cannot be made responsive without redrawing every curve. A `ResizeObserver`
+sets `transform: scale(w/1400)`.
+
+**`PATHS` is one array feeding both the SVG `d` attributes and the pulse
+offset-paths.** Generating them separately lets them drift and the dots float
+in empty space. `getComputedStyle` normalises `M300` to `M 300`, so compare
+whitespace-normalised when verifying, not raw.
+
+**The right column's width math has to land on exactly 400**:
+`120 + 10 + (5 x 46) + (4 x 10)`. `box-sizing: border-box` on the tiles is
+load-bearing; without it the 1px borders make them 48px and every row drifts.
+Verified at 400.00 with rows aligned.
+
+**The canvas renders from 1200px, not `lg`.** At 1024 the scale is 0.674,
+which puts the 11.5px store labels at 7.75px. The handoff says to reflow below
+~1200, so `min-[1200px]:block` on the canvas and `min-[1200px]:hidden` on the
+stacked version. At 1200 the scale is 0.80.
+
+### Pulses and the reveal
+
+Pulses are randomised **once, in a mount effect**, not during render (which
+would reshuffle every pass) and not at module scope (which would make the
+server and client markup disagree). 27 pulses over 11 paths.
+
+The reveal needs both an IntersectionObserver and a plain scroll listener,
+and **the `scrollY > 80` guard is load-bearing**: without it the reveal fires
+on load in tall viewports and the moment is lost. Reduced motion renders the
+columns already expanded and freezes the pulses and the core glow.
+
+To test the reveal in the preview pane, which pins `scrollY` at 0:
+`Object.defineProperty(window, 'scrollY', { get: () => 500 })` then dispatch a
+`scroll` event.
 
 ## Capability showcase (section 4)
 

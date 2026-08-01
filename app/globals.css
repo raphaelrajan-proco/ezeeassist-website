@@ -804,6 +804,93 @@ input[type="range"]::-moz-range-thumb {
   --pb-admin-4: #5E6779;
 }
 
+/* ─── Operating system diagram ─────────────────────────────
+   Built from a supplied design handoff, which ships light and dark token
+   sets. Scoped to `.ed-os`, the same arrangement `.ed-problem` and
+   `.ed-showcase` use.
+
+   Accent is remapped from the handoff's #1B55E9 / #4373FF to the EZee
+   family, matching the other two. `--os-accent` is a *fill* under white
+   text (the +250 tile), so it stays #0077A8 in both modes at 4.99:1;
+   #00AEEF is 2.53:1 and fails. `--os-accent-ink` is accent *text* and
+   follows the site's usual light/dark split. */
+.ed-os {
+  --os-bg:           #F5F7FB;
+  --os-panel:        #FFFFFF;
+  --os-panel-2:      #F8FAFD;
+  --os-chip:         #F1F4F9;
+  --os-tile:         #DCE2EC;
+  --os-tile-border:  rgba(12, 20, 36, 0.14);
+  --os-text:         #0B1220;
+  --os-muted:        #5C6675;
+  --os-border:       rgba(12, 20, 36, 0.09);
+  --os-accent:       #0077A8;
+  /* Accent text sits on accent-soft in the governed pill, which tints the
+     backdrop just enough that #0077A8 lands at 4.37:1. This clears 4.5. */
+  --os-accent-ink:   #0071A0;
+  --os-accent-soft:  rgba(0, 174, 239, 0.07);
+  --os-accent-soft2: rgba(0, 174, 239, 0.16);
+  --os-wire:         rgba(12, 20, 36, 0.14);
+  --os-shadow:       0 24px 60px -28px rgba(12, 20, 36, 0.25);
+
+  /* Flow coding. Answers joins the accent remap; Actions and Agents keep
+     the handoff's hues. All three are 11.5px/600 on their own soft
+     background, so they carry the 4.5:1 bar, not the 3:1 large-text one.
+     The handoff's light values measured 4.25 / 4.13 / 4.52 that way;
+     these are the least darkening that clears it. Measured 4.62 / 4.64 /
+     4.66. Do not lighten them back. */
+  --os-answers:      #0071A0;
+  --os-answers-soft: rgba(0, 174, 239, 0.1);
+  --os-actions:      #8C5E0E;
+  --os-actions-soft: rgba(180, 121, 26, 0.12);
+  --os-agents:       #6B4DCC;
+  --os-agents-soft:  rgba(109, 79, 208, 0.12);
+
+  --os-mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+.dark .ed-os {
+  --os-bg:           #05070D;
+  --os-panel:        #0B101C;
+  --os-panel-2:      #0E1524;
+  --os-chip:         #141B2C;
+  --os-tile:         #182032;
+  --os-tile-border:  rgba(238, 242, 248, 0.11);
+  --os-text:         #EEF2F8;
+  --os-muted:        #93A0B5;
+  --os-border:       rgba(238, 242, 248, 0.09);
+  --os-accent-ink:   #00AEEF;
+  --os-accent-soft:  rgba(0, 174, 239, 0.1);
+  --os-accent-soft2: rgba(0, 174, 239, 0.25);
+  --os-wire:         rgba(238, 242, 248, 0.13);
+  --os-shadow:       0 30px 70px -30px rgba(0, 0, 0, 0.7);
+
+  --os-answers:      #00AEEF;
+  --os-answers-soft: rgba(0, 174, 239, 0.14);
+  --os-actions:      #F5B33C;
+  --os-actions-soft: rgba(245, 179, 60, 0.14);
+  --os-agents:       #A78BFA;
+  --os-agents-soft:  rgba(167, 139, 250, 0.14);
+}
+
+/* Pulses ride the same path strings as the SVG wires. */
+@keyframes ed-os-travel {
+  0%   { offset-distance: 0%;   opacity: 0 }
+  14%  { opacity: 1 }
+  84%  { opacity: 1 }
+  100% { offset-distance: 100%; opacity: 0 }
+}
+@keyframes ed-os-core-glow {
+  0%, 100% { box-shadow: 0 0 0 0 var(--os-accent-soft2) }
+  50%      { box-shadow: 0 0 64px 8px var(--os-accent-soft2) }
+}
+/* Reduced motion freezes the pulses and the core, and the columns render
+   already expanded (handled in the component). */
+@media (prefers-reduced-motion: reduce) {
+  .ed-os-pulse { animation: none !important; opacity: 0.9 !important }
+  .ed-os-core  { animation: none !important }
+  .ed-os-col   { transition: none !important }
+}
+
 /* ─── The System: convergence diagram ──────────────────────
    Built from a supplied design handoff. The wire coordinates and the
    offset-path values below are tied to the diagram's 1180x620 canvas,
