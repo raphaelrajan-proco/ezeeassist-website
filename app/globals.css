@@ -1011,6 +1011,41 @@ input[type="range"]::-moz-range-thumb {
   --wl-shadow:       0 26px 60px -34px rgba(0, 0, 0, 0.8);
 }
 
+/* ─── Control center ───────────────────────────────────────
+   Built from a supplied design handoff. Scoped to `.ed-cc`.
+
+   The band is a shade off the page background, not a hard panel: darker
+   than the page in light mode, lighter in dark. That is what makes the
+   section read as a quiet inset rather than another card. Adjusting the
+   band shade means re-checking muted contrast.
+
+   Accent is remapped from the handoff's #1B55E9 / #5B8CFF to the EZee
+   family, matching the other sections. `--cc-accent` is the CTA fill
+   under white text, so it is #0077A8 in both modes; #00AEEF is 2.53:1
+   and fails. `--cc-accent-ink` is the headline's second line.
+
+   `--cc-glyph` is the icon colour: a mid-tone that reads as ink.
+   **Icons are never accent-coloured.** */
+.ed-cc {
+  --cc-band:          #EBEEF4;
+  --cc-text:          #0B1220;
+  --cc-muted:         #4E5766;
+  --cc-border:        rgba(12, 20, 36, 0.1);
+  --cc-border-strong: rgba(12, 20, 36, 0.18);
+  --cc-accent:        #0077A8;
+  --cc-accent-ink:    #0077A8;
+  --cc-glyph:         #5C6675;
+}
+.dark .ed-cc {
+  --cc-band:          #141924;
+  --cc-text:          #EEF2F8;
+  --cc-muted:         #A3AEC0;
+  --cc-border:        rgba(238, 242, 248, 0.1);
+  --cc-border-strong: rgba(238, 242, 248, 0.2);
+  --cc-accent-ink:    #00AEEF;
+  --cc-glyph:         #B6C0D0;
+}
+
 /* Card entrance inside the band viewport. Replayed on every step by
    remounting the grid, so the stagger reads on each band rather than
    only the first. */

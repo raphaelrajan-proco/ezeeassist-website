@@ -29,7 +29,7 @@ before picking the work back up in a fresh session.
 | 4 | On demand (3-tile showcase) | `components/growth/Capabilities.tsx` | `#capabilities` |
 | 5 | Always on (pinned 4-band stepper) | `components/growth/AlwaysOn.tsx` | `#always-on` |
 | 6 | Proof (sticky story stack) | `components/growth/CustomerProof.tsx` | `#proof` |
-| 7 | Trust and control (6 tabs) | `components/growth/TrustAndControl.tsx` | `#trust` |
+| 7 | Control center (5 guarantees, static) | `components/growth/TrustAndControl.tsx` + `ControlCenterIcons.tsx` | `#trust` |
 | 8 | FAQ | `components/growth/Objections.tsx` + `lib/data/objections.ts` | `#objections` |
 | 9 | Final CTA | `components/growth/FinalCTA.tsx` | `#book` |
 
@@ -540,6 +540,67 @@ own soft card background, so they carry 4.5:1, not the 3:1 large-text
 allowance. Measured light 4.55 / 4.69, dark 5.94 / 5.60; neutral meta and card
 body 5.81 light, 7.18 dark.
 
+## Control center (section 7)
+
+Rebuilt from a supplied handoff. The old version was a six-tab strip over a
+live policy-table panel: a lot of chrome for a section whose only job is to
+say "this is governed."
+
+**All five guarantees are stated at once, and nothing is interactive.** No
+`useState`, no active tab, no panel swap. Verified: zero buttons, zero
+`role="tab"`, one link. **Model choice is gone**, so five items and not six.
+The policy-table mock went with it; it only ever showed one tab's content.
+
+**Container alignment was the reason the handoff called for a rebuild**, and
+it is the one place the literal spec was not followed. It asks for a
+hardcoded `1180px` with 40px padding, and also says to prefer an existing
+container token if one exists. One does: these are `SectionShell`'s values,
+which Proof directly above and the FAQ directly below both use. Measured at
+1205, all three now sit at **64 to 1141**. The handoff's literal numbers would
+have put this section at 27 to 1179 and jogged against both neighbours.
+
+**The band is a shade off the page background**, not a hard panel: darker than
+the page in light mode, lighter in dark. That is what makes it read as a quiet
+inset rather than another card. Changing the band shade means re-checking
+muted contrast.
+
+### The icons
+
+**`ControlCenterIcons.tsx` is inline SVG and must stay that way.** The five
+glyphs are custom, built from the EZee Assist mark's own primitives: the
+flat-top hexagon, the circle, the rounded capsule. They are deliberately not a
+generic icon set.
+
+**Do not substitute Lucide or Heroicons equivalents and do not redraw them.**
+The file carries a note on what each one means so nobody improves one into
+meaninglessness. Every path inherits `--cc-glyph`; verified no hardcoded hex
+inside any of the five, and all render at 76x76 on `stroke="var(--cc-glyph)"`.
+
+**Icons are never accent-coloured.** `--cc-glyph` is a mid-tone that reads as
+ink.
+
+### Layout and colour
+
+`repeat(auto-fit, minmax(176px, 1fr))` collapses without a media query.
+Verified 5 columns at 1205 and 1440, 4 at 1024, 3 at 768, 1 at 390, no
+overflow at any width.
+
+Accent is remapped to the EZee family. `--cc-accent` is the CTA fill under
+white text so it is `#0077A8` in both modes; `--cc-accent-ink` is the
+headline's second line.
+
+Measured light: headline 16.11, accent line 4.30, sub and body 6.28, white on
+CTA 5.0, glyph 5.0. Dark: 15.65 / 6.95 / 7.85 / 5.0 / 9.58.
+
+**The accent headline line is 4.30 in light, which passes on the large-text
+bar, not the 4.5 one.** It is 26px at its smallest and bold throughout, so it
+stays large text. If that headline is ever set below 24px, this needs
+re-deriving.
+
+Motion is the one touch the handoff allows: the five columns fade up with a
+60ms stagger on first scroll into view, gated on reduced motion. Nothing
+hovers, nothing swaps, nothing loops.
+
 ## The closing band
 
 `FinalCTA` and the editorial footer are one continuous blue band. The CTA
@@ -675,9 +736,9 @@ fit is usually 1024 rather than the smallest screen.
 - `ed-btn-blue` (white label on `#00AEEF` at 15px/500) measures **2.53:1** and
   fails AA everywhere it is still used. The hero no longer uses it, but other
   sections do. Darkening the fill to `#0077A8` clears it at 4.99:1.
-- Real security posture copy for the Trust and control security tab. No
-  certification claim may be reintroduced without evidence — "SOC 2 Type II
-  aligned" was deliberately removed as unverified.
+- Real security posture copy for the control center's Security posture
+  column. No certification claim may be reintroduced without evidence:
+  "SOC 2 Type II aligned" was deliberately removed as unverified.
 - Decide on the SoftwareApplication `aggregateRating` in `app/page.tsx`
   (`ratingValue 4.9`, `ratingCount 60`). Nothing in the repo backs it. The
   per-location pricing `offers` block was already removed and must not return —
@@ -724,10 +785,8 @@ fit is usually 1024 rather than the smallest screen.
 - The coach's-week chart draws Coaching in the same `#00AEEF` in both bars.
   The Today bar used to tint it to 55%; the contrast the chart makes is width,
   not shade, and the tint weakened it.
-- The Trust and control H2 holds two lines at 768px and above; it takes three at
-  390, where a two-line cap would need ~22px type.
-- Section 7 keeps its full layout rather than becoming a "compact band", since
-  compacting would be a visual redesign.
+- The control center H2 holds two lines from 768 up and takes four at 390,
+  where each sentence wraps. The break between the sentences is hard.
 - The territory-coverage grid (71% / 98% / 101% tiles and the "next 4%" caption)
   was retired from the problem section: the numbers read as unexplained and the
   visual did not support the beat it sat under. It is recoverable from tag
