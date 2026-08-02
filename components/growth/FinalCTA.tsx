@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useEffect } from "react";
 
 /**
  * The closing ask, and the top of the closing band. This section carries
@@ -17,6 +18,55 @@ import Image from "next/image";
 
 /** Shared with the footer. The bottom fade resolves to exactly this. */
 export const CLOSING_BASE = "#042036";
+
+const MEETING_URL =
+  "https://meetings-na2.hubspot.com/raphael-rajan/raphael-rajan-ezee-assist";
+const MEETINGS_SCRIPT =
+  "https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js";
+
+/**
+ * The HubSpot meetings widget. The embed script scans the DOM for
+ * `.meetings-iframe-container` when it executes, so it is injected in an
+ * effect on every mount rather than through next/script: next/script
+ * dedupes by src and never re-runs, which leaves the container empty
+ * whenever the page is returned to through client-side navigation. The
+ * cleanup removes the tag so the next mount injects and re-runs it.
+ */
+function MeetingsEmbed() {
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = MEETINGS_SCRIPT;
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      script.remove();
+    };
+  }, []);
+
+  return (
+    <div
+      id="book-a-time"
+      className="mt-10 w-full max-w-[900px] rounded-2xl overflow-hidden"
+      style={{
+        /* The widget manages its own height (~756px desktop) via the
+           script; the min height stops the section collapsing while it
+           loads, and the fallback link covers the script being blocked. */
+        minHeight: 640,
+        backgroundColor: "rgba(255,255,255,0.04)",
+      }}
+    >
+      <div
+        className="meetings-iframe-container w-full"
+        data-src={`${MEETING_URL}?embed=true`}
+      />
+      <noscript>
+        <a href={MEETING_URL} style={{ color: "#FFFFFF", textDecoration: "underline" }}>
+          Book a time
+        </a>
+      </noscript>
+    </div>
+  );
+}
 
 export default function FinalCTA() {
   return (
@@ -69,32 +119,7 @@ export default function FinalCTA() {
           <span className="block">We&rsquo;ll show you how EZee runs it.</span>
         </h2>
 
-        {/* HubSpot meetings embed lands here, replacing the old
-            Speak-to-an-expert button. TODO: swap the placeholder body for
-            the real embed snippet when it is supplied. The container is
-            sized to the meetings widget's usual footprint so the section
-            does not reflow when the embed drops in. */}
-        <div
-          id="book-a-time"
-          className="mt-10 w-full max-w-[760px] rounded-2xl flex items-center justify-center"
-          style={{
-            minHeight: 480,
-            backgroundColor: "rgba(255,255,255,0.06)",
-            border: "1.5px dashed rgba(255,255,255,0.35)",
-          }}
-        >
-          <div className="text-center px-8 py-12">
-            <p
-              className="text-white text-lg"
-              style={{ fontFamily: "var(--font-editorial)", fontWeight: 600 }}
-            >
-              Calendar embed placeholder
-            </p>
-            <p className="mt-2 text-sm" style={{ color: "rgba(245,237,224,0.75)" }}>
-              The HubSpot meetings widget replaces this block.
-            </p>
-          </div>
-        </div>
+        <MeetingsEmbed />
       </motion.div>
     </section>
   );

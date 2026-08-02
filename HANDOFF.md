@@ -623,6 +623,25 @@ hovers, nothing swaps, nothing loops.
 
 ## The closing band
 
+**The closing section embeds the HubSpot meetings widget** in place of the
+old Speak-to-an-expert button. The booking page is
+`meetings-na2.hubspot.com/raphael-rajan/raphael-rajan-ezee-assist`, and the
+container id is `book-a-time`.
+
+The embed script (`MeetingsEmbedCode.js`) scans the DOM for
+`.meetings-iframe-container` once, when it executes. It is therefore injected
+in a `useEffect` on every mount and removed on unmount, **not** through
+`next/script`: next/script dedupes by src and never re-runs, which leaves the
+container empty whenever the page is returned to through client-side
+navigation. The widget manages its own iframe height (756px measured);
+`minHeight: 640` on the container stops the section collapsing while it
+loads, and a `<noscript>` link to the booking page is the fallback.
+
+Verified: iframe created at 900px wide at desktop and 342px at 390 with no
+overflow, and the frame's `load` event fires. **The pane screenshots
+cross-origin iframes as blank**; that is compositing, not a failure.
+
+
 `FinalCTA` and the editorial footer are one continuous blue band. The CTA
 carries the hero's background image and scrims; its bottom fade resolves to
 **solid `CLOSING_BASE` (`#042036`)**, which the footer sets as its background.
