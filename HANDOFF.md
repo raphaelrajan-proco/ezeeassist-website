@@ -630,6 +630,18 @@ Motion is the one touch the handoff allows: the five columns fade up with a
 60ms stagger on first scroll into view, gated on reduced motion. Nothing
 hovers, nothing swaps, nothing loops.
 
+## A splice that has bitten once
+
+`app/globals.css` holds the scoped token blocks back to back:
+`.ed-showcase`, `.ed-wall`, `.ed-cc`, then the shared keyframes. A scripted
+edit that spliced from `.ed-wall {` to the card-entrance comment **deleted the
+whole `.ed-cc` block**, and the control center rendered white because every
+`var(--cc-*)` resolved to nothing. Nothing errors when a custom property is
+missing, so a build passes and only a screenshot catches it.
+
+When replacing one of these blocks, anchor on that block's own closing brace,
+not on the next comment down, and re-check the sections either side.
+
 ## Share metadata
 
 Title, `og:title` and `twitter:title` are **"EZee Assist - Franchise AI

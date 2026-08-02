@@ -190,7 +190,8 @@ export default function ExitIntentPopup() {
                     </h2>
                     <p className="text-[15px] mb-7" style={{ color: "var(--ed-fg-muted)", lineHeight: 1.6 }}>
                       Get the free Franchise AI Playbook, the same plays run by
-                      brands like WSI, DekaLash, and DivaDance.
+                      brands like WSI, Aqua-Tots, HorsePower Brands, Deka+ and
+                      more.
                     </p>
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                       <div className="flex flex-col gap-1.5">
@@ -202,24 +203,28 @@ export default function ExitIntentPopup() {
                         <input id="ei-company" name="company" type="text" required placeholder="Franchise Brand Inc." className={inputClass} style={inputStyle} />
                       </div>
                       {/* Same shape as the hero CTA. */}
+                      {/* Label centred, arrow pinned to the right edge. The
+                          spacer mirrors the badge so the label stays
+                          optically centred rather than pushed left by it.
+                          `justifyContent` is inline because
+                          `.theme-editorial .ed-btn` sets `center` at a
+                          higher specificity than Tailwind's utility. */}
                       <button
                         type="submit"
-                        className="ed-btn ed-btn-arrow mt-1 w-full justify-center"
-                        style={{ backgroundColor: "var(--ed-accent-text)", color: "#FFFFFF" }}
+                        className="ed-btn ed-btn-arrow mt-1 w-full"
+                        style={{
+                          backgroundColor: "var(--ed-accent-text)",
+                          color: "#FFFFFF",
+                          justifyContent: "space-between",
+                        }}
                       >
+                        <span aria-hidden="true" className="h-8 w-8 flex-none" />
                         Send me the playbook
                         <span className="ed-btn-arrow-badge" aria-hidden="true">
                           <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
                         </span>
                       </button>
                     </form>
-                    <button
-                      onClick={handleDismiss}
-                      className="mt-5 w-full text-center text-[13px] transition-opacity hover:opacity-70"
-                      style={{ color: "var(--ed-fg-muted)" }}
-                    >
-                      No thanks, I&apos;ll figure it out myself
-                    </button>
                   </>
                 )}
               </div>

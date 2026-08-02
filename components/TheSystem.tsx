@@ -516,16 +516,20 @@ export default function TheSystem() {
             color: "var(--os-text)",
             fontFamily: JAKARTA,
             fontWeight: 700,
-            /* Held to one line at every width. The string needs 16.21px of
-               width per 1px of font size, and the column is 342px at 390,
-               688 at 768 and 1400 from 1024 up, so the ceiling is 21.1 /
-               42.4 / 86px. This sits under each and stops at the spec's 44. */
-            fontSize: "clamp(1.25rem, 0.393rem + 3.51vw, 2.75rem)",
+            /* Held to one line at every width. The string needs 17.39px of
+               width per 1px of font size, up from 16.21 before "AI" was
+               added, and the column is 342px at 390, 688 at 768 and 1360
+               at 1024, so the one-line ceilings are 19.7 / 39.6 / 54.3px.
+               Measured directly at 390: 19.5 fits, 20 wraps. The whole
+               clamp is refitted rather than just the floor, since the
+               middle term was what bound there. Tops at the spec's 44. */
+            fontSize: "clamp(1.1875rem, 0.246rem + 3.91vw, 2.75rem)",
             letterSpacing: "-0.028em",
             lineHeight: 1.1,
           }}
         >
-          EZee Assist is the operating system.
+          EZee Assist is the{" "}
+          <span style={{ color: "var(--os-accent-ink)" }}>AI Operating System</span>
         </motion.h2>
 
         <p className="sr-only">
