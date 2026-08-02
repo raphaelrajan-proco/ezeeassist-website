@@ -468,7 +468,7 @@ function CapacityBlock() {
             color: "var(--pb-text)",
           }}
         >
-          Growth adds coaches. It never adds coaching.
+          Growth adds coaches. It does not add coaching.
         </h3>
         <p className="text-[15px] md:text-[16px] max-w-[620px]" style={{ color: "var(--pb-muted)", lineHeight: 1.6 }}>
           Add thirty more owners, add another coach. The team keeps growing.
@@ -580,11 +580,13 @@ export default function CoachsWeek() {
           ))}
         </div>
 
-        <CapacityBlock />
+        <div className="-mt-4 md:-mt-6">
+          <CapacityBlock />
+        </div>
 
         <TimeBar
           title="What it should be"
-          lede="the admin load carried by the system, not the coach."
+          lede="the admin workload conducted by the system, not the coach."
           eyebrow="The same week, with EZee Assist"
           eyebrowAccent
           segments={SHOULD_SEGMENTS}
@@ -594,11 +596,9 @@ export default function CoachsWeek() {
           ariaLabel="With EZee Assist: 80 percent coaching, 20 percent admin work."
         />
 
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.9, ease: EASE, delay: 0.2 }}
+        {/* No entrance on this one by request: it sits still rather than
+            rising in. */}
+        <p
           style={{
             fontFamily: "var(--font-editorial)",
             fontWeight: 700,
@@ -613,7 +613,7 @@ export default function CoachsWeek() {
           Reclaiming coaching time needs HQ
           <br className="hidden md:block" />{" "}
           to reclaim the operating system.
-        </motion.p>
+        </p>
       </div>
     </SectionShell>
   );

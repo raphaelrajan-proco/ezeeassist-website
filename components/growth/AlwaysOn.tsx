@@ -278,7 +278,7 @@ function Counter({ innerRef }: { innerRef?: React.RefObject<HTMLDivElement | nul
           {COUNT.toLocaleString()}
         </div>
         <div className="text-[13.5px]" style={{ color: "var(--wl-muted)" }}>
-          more moments across the network in the last 24 hours
+          moments across the network in the last 24 hours
         </div>
       </div>
       <div

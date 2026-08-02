@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Globe, Share2, Link2 } from "lucide-react";
+import { Globe, Share2, Link2, ArrowRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { CLOSING_BASE } from "@/components/growth/FinalCTA";
 
@@ -103,10 +103,7 @@ const editorialFooterColumns: { heading: string; links: { label: string; href: s
   },
 ];
 
-/**
- * Launch gate. The AEO block is built and kept, but stays off until
- * after publish. Flip to true to restore it.
- */
+/** Gate for the answer-engine + newsletter band under the tagline. */
 const SHOW_AEO_BLOCK = true;
 
 /* Both marks share viewBox 0 0 583.2 151.2. */
@@ -263,6 +260,84 @@ function FooterEditorial() {
           AI Operating System for Franchisee Success
         </p>
 
+        {/* Answer engines + newsletter, one band directly under the
+            tagline and above the columns. No divider by request. */}
+        {SHOW_AEO_BLOCK && (
+          <div className="mt-10 md:mt-12 grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] gap-10 lg:gap-12">
+            <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-8">
+              <p
+                className="text-[15px] whitespace-nowrap flex-none"
+                style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}
+              >
+                Request an AI summary
+              </p>
+              <div className="flex flex-col gap-3">
+                <p className="text-sm max-w-[19rem] leading-relaxed" style={{ color: "rgba(255,255,255,0.82)" }}>
+                  Ask your assistant what EZee Assist does and how franchise
+                  networks use it.
+                </p>
+                <div className="flex flex-wrap gap-2 max-w-none">
+                  {aeoLinks.map(({ label, href }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center rounded-full px-3.5 py-1.5 text-[13px] transition-opacity hover:opacity-70"
+                      style={{
+                        backgroundColor: "var(--ed-card)",
+                        border: "1px solid var(--ed-rule)",
+                        color: "var(--ed-fg)",
+                        fontWeight: 500,
+                      }}
+                    >
+                      {label}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-8">
+              <p
+                className="text-[15px] whitespace-nowrap flex-none"
+                style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}
+              >
+                Get the latest insights
+              </p>
+              {/* TODO: no subscribe endpoint exists yet. This matches the
+                  blog's strip, which is also a no-op, and needs wiring to
+                  the real list before launch. */}
+              <form
+                onSubmit={(e) => e.preventDefault()}
+                className="relative w-full max-w-sm"
+              >
+                <label htmlFor="footer-email" className="sr-only">Business email</label>
+                <input
+                  id="footer-email"
+                  type="email"
+                  required
+                  placeholder="Business Email"
+                  className="w-full rounded-lg py-3 pl-4 pr-14 text-sm outline-none"
+                  style={{
+                    backgroundColor: "transparent",
+                    border: "1px solid var(--ed-rule)",
+                    color: "var(--ed-fg)",
+                  }}
+                />
+                <button
+                  type="submit"
+                  aria-label="Subscribe"
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full transition-opacity hover:opacity-80"
+                  style={{ width: 34, height: 34, backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
+                >
+                  <ArrowRight className="h-4 w-4" strokeWidth={2.25} />
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+
         {/* Six columns */}
         <div className="mt-14 md:mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 md:gap-8">
           {editorialFooterColumns.map((col) => (
@@ -293,43 +368,6 @@ function FooterEditorial() {
             </div>
           ))}
         </div>
-
-        {/* AEO block: hand the page to answer engines. Behind SHOW_AEO_BLOCK. */}
-        {SHOW_AEO_BLOCK && (
-        <div
-          className="mt-20 md:mt-24 pt-12"
-          style={{ borderTop: "1px solid var(--ed-rule)" }}
-        >
-          <p
-            className="ed-fg text-lg md:text-xl tracking-[-0.02em] mb-2"
-            style={{ fontFamily: "var(--font-editorial)", fontWeight: 500 }}
-          >
-            Request an AI summary
-          </p>
-          <p className="ed-fg-muted text-sm mb-5 max-w-xl leading-relaxed">
-            Ask your assistant what EZee Assist does and how franchise networks use it.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            {aeoLinks.map(({ label, href }) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center rounded-full px-4 py-2 text-sm transition-opacity hover:opacity-70"
-                style={{
-                  backgroundColor: "var(--ed-card)",
-                  border: "1px solid var(--ed-rule)",
-                  color: "var(--ed-fg)",
-                  fontWeight: 500,
-                }}
-              >
-                {label}
-              </a>
-            ))}
-          </div>
-        </div>
-        )}
 
         {/* Contact + social */}
         <div

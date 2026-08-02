@@ -336,6 +336,10 @@ still renders an `<img>` box, so check `naturalWidth > 0`, not just presence.
 
 ### Geometry
 
+**The flow legend sits above the governed pill**, swapping the handoff's
+order. Both keep the handoff's two y slots (394 and 440), exchanged. The
+stacked version below 1200 follows the same order.
+
 **The payoff line carries no rule above it and is a centred lockup**, not a
 three-column grid. On a full-width grid the three lines spread to the far
 edges and read as left-justified rather than as a group.
@@ -617,9 +621,29 @@ bar, not the 4.5 one.** It is 26px at its smallest and bold throughout, so it
 stays large text. If that headline is ever set below 24px, this needs
 re-deriving.
 
+**Every column body is capped at four lines.** The column is 190px at 1205
+and the body is 14.5px, so four lines allows about 101 characters. Permissions
+and Human in the loop were both rewritten to fit; re-measure if any of the
+five is edited.
+
 Motion is the one touch the handoff allows: the five columns fade up with a
 60ms stagger on first scroll into view, gated on reduced motion. Nothing
 hovers, nothing swaps, nothing loops.
+
+## The footer band
+
+Directly under the tagline and above the six columns, no divider: a two-part
+row modelled on Ada's footer. Left is "Request an AI summary" with the
+pre-filled answer-engine links; right is "Get the latest insights" with an
+email capture.
+
+The grid is `lg:grid-cols-[1.35fr_1fr]`, not an even split: at 1fr each, the
+three Ask pills wrapped to a second row. Verified all three share one row.
+
+**The email field has no endpoint.** It is `onSubmit={e => e.preventDefault()}`,
+matching the blog's subscribe strip, which is also a no-op. **Neither collects
+anything.** Wire both to the real list before launch; there is a `TODO` on the
+form.
 
 ## The closing band
 
@@ -868,6 +892,8 @@ fit is usually 1024 rather than the smallest screen.
   279px with 1–22px of slack, against 336px with ~59px before.
 - The `4/5` figure restates the Today bar (20% coaching leaves four days in
   five). It is not a new claim, and it moves if the chart data moves.
+- The closing line ("Reclaiming coaching time needs HQ…") carries **no
+  entrance animation** by request; it is a plain `<p>`.
 - **Both bars carry three greys, one per pillar below**, so the bar and the
   caption ("the three blocks below") agree. A fourth, lightest tone was
   dropped and its share redistributed proportionally; `--pb-admin-4` went with

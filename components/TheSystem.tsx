@@ -410,11 +410,14 @@ function OsCanvas() {
         <div style={{ position: "absolute", left: 556, top: 250, zIndex: 2 }}>
           <Core w={208} h={130} />
         </div>
-        <div style={{ position: "absolute", left: 578, top: 394, zIndex: 2 }}>
-          <GovernedPill width={164} />
-        </div>
-        <div style={{ position: "absolute", left: 532, top: 440, width: 256, zIndex: 2 }}>
+        {/* Legend first, governed pill under it: the two swapped places
+            from the handoff's order by request. The y values are the
+            handoff's two slots, just exchanged. */}
+        <div style={{ position: "absolute", left: 532, top: 394, width: 256, zIndex: 2 }}>
           <FlowLegend />
+        </div>
+        <div style={{ position: "absolute", left: 578, top: 440, zIndex: 2 }}>
+          <GovernedPill width={164} />
         </div>
 
         {/* 120 + 10 + (5 x 46) + (4 x 10) = 400 exactly. box-sizing on the
@@ -474,10 +477,11 @@ function StackedDiagram() {
         <span style={{ width: 1, height: 40, background: "var(--os-wire)" }} />
       </div>
 
+      {/* Same order as the canvas: legend, then the governed pill. */}
       <div className="flex flex-col items-center gap-3">
         <Core w={208} h={128} />
-        <GovernedPill />
         <FlowLegend />
+        <GovernedPill />
       </div>
 
       <div className="flex justify-center py-5">

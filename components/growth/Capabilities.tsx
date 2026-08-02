@@ -35,7 +35,7 @@ const PHOTO = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit
 const TABS = [
   {
     id: "answers",
-    label: "Ask for anything, in any channel",
+    label: "Ask for anything",
     sub: "One question, any channel. Cited from your approved sources, scoped to that person’s role and location.",
     photo: PHOTO("photo-1560066984-138dadb4c035"),
     alt: "Front desk at a location",
@@ -43,8 +43,8 @@ const TABS = [
   },
   {
     id: "reporting",
-    label: "See the data any way you want",
-    sub: "The same numbers, rendered however the question demands. No analyst, no request queue, no static dashboard.",
+    label: "See the data how you want",
+    sub: "The same numbers, rendered however you ask. No analyst, no queue, no dashboard.",
     photo: PHOTO("photo-1551288049-bebda4e38f71"),
     alt: "Performance numbers on a laptop",
     scrim: "linear-gradient(105deg, rgba(5,7,13,.66), rgba(5,7,13,.2))",
@@ -94,11 +94,9 @@ const caption: React.CSSProperties = {
    rather than brand marks. Swap for committed local SVGs if brand
    assets land; never reference a CDN from production. */
 
+/* The Slack hash glyph was dropped: without the brand mark it read as a
+   command key rather than a channel. Four channels plus the ++ pill. */
 const CHANNELS: { name: string; path: React.ReactNode }[] = [
-  {
-    name: "Slack",
-    path: <><path d="M9 4v10.5a2.5 2.5 0 1 1-2.5-2.5H17a2.5 2.5 0 1 1-2.5 2.5V4" /><path d="M4 9h10.5" /></>,
-  },
   {
     name: "SMS",
     path: <><path d="M21 12a8 8 0 0 1-11.5 7.2L4 21l1.8-5.5A8 8 0 1 1 21 12z" /><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" /><circle cx="12.5" cy="12" r="1" fill="currentColor" stroke="none" /><circle cx="16" cy="12" r="1" fill="currentColor" stroke="none" /></>,
@@ -185,7 +183,7 @@ function SceneAnswers() {
   );
 }
 
-/* ── Scene 2: See the data any way you want ────────────── */
+/* ── Scene 2: See the data how you want ────────────────── */
 
 const RANK_ROWS = [
   { store: "#052", pct: 96, delay: 0.4, muted: false },

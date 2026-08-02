@@ -26,17 +26,17 @@ const GUARANTEES = [
   {
     Icon: IconPolicies,
     title: "Policies",
-    body: "Define what runs on its own and what waits for a human. Written once at HQ, applied at every location.",
+    body: "Define what runs on its own and what waits for a human. Written once at HQ, applied everywhere.",
   },
   {
     Icon: IconPermissions,
     title: "Permissions",
-    body: "Everyone sees exactly what their role and their location allow. A shift lead and a district manager get different answers to the same question.",
+    body: "Everyone sees exactly what their role and location allow. The same question gets different answers.",
   },
   {
     Icon: IconHumanLoop,
     title: "Human in the loop",
-    body: "Anything that reaches a client, a public channel, or your books stops at a named approver first. Nothing sends itself.",
+    body: "Anything reaching a client, a channel, or your books stops at an approver. Nothing sends itself.",
   },
   {
     Icon: IconActivityLog,
