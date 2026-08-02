@@ -7,6 +7,7 @@ import GrowthHero from "@/components/growth/Hero";
 import CoachsWeek from "@/components/growth/CoachsWeek";
 import TheSystem from "@/components/TheSystem";
 import Capabilities from "@/components/growth/Capabilities";
+import AlwaysOn from "@/components/growth/AlwaysOn";
 import CustomerProof from "@/components/growth/CustomerProof";
 import TrustAndControl from "@/components/growth/TrustAndControl";
 import Objections from "@/components/growth/Objections";
@@ -106,8 +107,9 @@ export default function Home() {
         {/* 2 */} <CoachsWeek />
         {/* 3 */} <TheSystem />
         {/* 4 */} <Capabilities />
-        {/* 5 */} <CustomerProof />
-        {/* 6 */} <TrustAndControl />
+        {/* 5 */} <AlwaysOn />
+        {/* 6 */} <CustomerProof />
+        {/* 7 */} <TrustAndControl />
         {/* 8 */} <Objections />
         {/* 9 */} <FinalCTA />
       </main>

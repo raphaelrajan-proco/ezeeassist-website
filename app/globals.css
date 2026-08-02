@@ -971,6 +971,61 @@ input[type="range"]::-moz-range-thumb {
   --sc-shadow:  0 30px 70px -30px rgba(0,0,0,.7);
 }
 
+/* ─── Always on wall ───────────────────────────────────────
+   Built from a supplied design handoff. Scoped to `.ed-wall`, the same
+   arrangement `.ed-problem`, `.ed-os` and `.ed-showcase` use.
+
+   Accent is remapped from the handoff's #1B55E9 / #5B8CFF to the EZee
+   family, matching the other three. The accent and violet meta rows are
+   12px mono on their own soft card background, so they carry the 4.5:1
+   bar; the light values below are the least darkening that clears it. */
+.ed-wall {
+  --wl-panel:        #FFFFFF;
+  --wl-panel-2:      #F8FAFD;
+  --wl-text:         #0B1220;
+  --wl-muted:        #5C6675;
+  --wl-border:       rgba(12, 20, 36, 0.09);
+  --wl-rule:         rgba(12, 20, 36, 0.1);
+  --wl-accent:       #0071A0;
+  --wl-accent-soft:  rgba(0, 174, 239, 0.09);
+  --wl-accent-soft2: rgba(0, 174, 239, 0.4);
+  --wl-violet:       #6B4DCC;
+  --wl-violet-soft:  rgba(109, 79, 208, 0.1);
+  --wl-violet-soft2: rgba(109, 79, 208, 0.3);
+  --wl-shadow:       0 20px 46px -30px rgba(12, 20, 36, 0.3);
+  --wl-mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+.dark .ed-wall {
+  --wl-panel:        #0B101C;
+  --wl-panel-2:      #0E1524;
+  --wl-text:         #EEF2F8;
+  --wl-muted:        #93A0B5;
+  --wl-border:       rgba(238, 242, 248, 0.09);
+  --wl-rule:         rgba(238, 242, 248, 0.1);
+  --wl-accent:       #00AEEF;
+  --wl-accent-soft:  rgba(0, 174, 239, 0.14);
+  --wl-accent-soft2: rgba(0, 174, 239, 0.45);
+  --wl-violet:       #A78BFA;
+  --wl-violet-soft:  rgba(167, 139, 250, 0.13);
+  --wl-violet-soft2: rgba(167, 139, 250, 0.36);
+  --wl-shadow:       0 26px 60px -34px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes ed-wl-thread-draw { from { stroke-dashoffset: 3000 } to { stroke-dashoffset: 0 } }
+@keyframes ed-wl-thread-run {
+  0%   { offset-distance: 0%;   opacity: 0 }
+  10%  { opacity: 1 }
+  88%  { opacity: 1 }
+  100% { offset-distance: 100%; opacity: 0 }
+}
+/* Reduced motion: bands render revealed and the counter lands on its
+   final value (both handled in the component), the thread draws with no
+   animation, and the travelling dot is removed entirely. */
+@media (prefers-reduced-motion: reduce) {
+  .ed-wl-thread { animation: none !important; stroke-dashoffset: 0 !important }
+  .ed-wl-dot    { display: none !important }
+}
+
 /* Scene entrances. The ordering of the delays is the design: on scene 1
    the gap between question and answer is what reads as the system
    responding, and on scene 3 the gap between the two panels is the
