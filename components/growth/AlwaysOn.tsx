@@ -385,7 +385,7 @@ export default function AlwaysOn() {
   if (!isDesktop) {
     return (
       <section id="always-on" className="ed-wall w-full scroll-mt-24 ed-bg-alt">
-        <div className="mx-auto max-w-[1480px] px-6 py-16 flex flex-col gap-9">
+        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-16 flex flex-col gap-9">
           {header}
           {BANDS.map((b) => (
             <div key={b.title}>
@@ -413,7 +413,7 @@ export default function AlwaysOn() {
       style={{ height: `calc(100vh + ${(BANDS.length - 1) * STEP_VH}vh)` }}
     >
       <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="mx-auto max-w-[1480px] h-full px-6 md:px-10 py-6 flex flex-col justify-center gap-5">
+        <div className="mx-auto max-w-7xl h-full px-6 md:px-12 lg:px-16 py-6 flex flex-col justify-center gap-5">
           {header}
 
           {/* The viewport is a fixed height whatever the band holds, so

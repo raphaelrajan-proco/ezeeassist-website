@@ -772,12 +772,13 @@ input[type="range"]::-moz-range-thumb {
   --pb-warn-soft:    rgba(180, 83, 9, 0.1);
   --pb-shadow:       0 24px 60px -28px rgba(12, 20, 36, 0.25);
 
-  /* Admin ramp. Darkened by the handoff so white text clears AA on
-     tones 1 to 3. Do not lighten these. */
+  /* Admin ramp, one tone per pillar below the bar. Darkened by the
+     handoff so white text clears AA on all three. Do not lighten these.
+     A fourth, lightest tone was dropped: the caption says "the three
+     blocks below", and a fourth segment made that a miscount. */
   --pb-admin-1: #333A4A;
   --pb-admin-2: #4E5666;
   --pb-admin-3: #6B7386;
-  --pb-admin-4: #98A0AF;
 
   --pb-mono: ui-monospace, "SF Mono", Menlo, monospace;
 }
@@ -801,7 +802,6 @@ input[type="range"]::-moz-range-thumb {
   --pb-admin-1: #242B3A;
   --pb-admin-2: #333B4D;
   --pb-admin-3: #454E62;
-  --pb-admin-4: #5E6779;
 }
 
 /* ─── Operating system diagram ─────────────────────────────

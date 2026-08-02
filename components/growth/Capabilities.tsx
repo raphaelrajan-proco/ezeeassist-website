@@ -407,12 +407,13 @@ export default function Capabilities() {
   const activeTab = TABS[tab];
 
   return (
-    /* The handoff's own wrapper, not SectionShell: it asks for a 1480
-       container so the stage gets near its 1100, and the operating system
-       section next door already runs at 1480. SectionShell caps at 1280,
-       which left the stage at 816. */
+    /* Container matches the hero and the problem section (SectionShell's
+       values) rather than the handoff's 1480. Running wider made this
+       section reach the page edge while its neighbours did not, which
+       read as a break in the page rather than as a wider section. The
+       stage gives up width for it; the rail is narrowed to compensate. */
     <section id="capabilities" className="w-full scroll-mt-24 ed-bg-alt">
-      <div className="ed-showcase mx-auto max-w-[1480px] px-6 md:px-10 pt-16 md:pt-24 pb-12 md:pb-[72px] flex flex-col gap-8 lg:gap-10">
+      <div className="ed-showcase mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20 flex flex-col gap-8 lg:gap-10">
         <div className="flex flex-col gap-3">
           <div
             className="uppercase"
@@ -442,12 +443,12 @@ export default function Capabilities() {
         </div>
 
         <div
-          className="flex flex-col lg:flex-row gap-6 lg:gap-9 lg:items-stretch"
+          className="flex flex-col lg:flex-row gap-6 lg:gap-7 lg:items-stretch"
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
         >
           {/* Rail */}
-          <div className="lg:w-[300px] lg:flex-none flex flex-col lg:justify-center gap-3.5">
+          <div className="lg:w-[268px] lg:flex-none flex flex-col lg:justify-center gap-3.5">
             <div className="flex flex-row lg:flex-col gap-3.5 overflow-x-auto lg:overflow-visible" role="tablist" aria-label="On demand">
               {TABS.map((t, i) => {
                 const active = i === tab;

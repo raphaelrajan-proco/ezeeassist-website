@@ -25,18 +25,20 @@ const EASE = [0.22, 1, 0.36, 1] as const;
 
 type Segment = { flex: number; fill: string };
 
+/* Three greys, one per pillar below, so the bar and the caption agree:
+   there were four, which made "the three blocks below" a miscount. The
+   dropped fourth was redistributed across the remaining three in
+   proportion, so each bar still splits 80/20 the way it did. */
 const TODAY_SEGMENTS: Segment[] = [
-  { flex: 26, fill: "var(--pb-admin-1)" },
-  { flex: 22, fill: "var(--pb-admin-2)" },
-  { flex: 19, fill: "var(--pb-admin-3)" },
-  { flex: 13, fill: "var(--pb-admin-4)" },
+  { flex: 31, fill: "var(--pb-admin-1)" },
+  { flex: 26, fill: "var(--pb-admin-2)" },
+  { flex: 23, fill: "var(--pb-admin-3)" },
 ];
 
 const SHOULD_SEGMENTS: Segment[] = [
-  { flex: 7, fill: "var(--pb-admin-1)" },
-  { flex: 6, fill: "var(--pb-admin-2)" },
-  { flex: 4, fill: "var(--pb-admin-3)" },
-  { flex: 3, fill: "var(--pb-admin-4)" },
+  { flex: 8, fill: "var(--pb-admin-1)" },
+  { flex: 7, fill: "var(--pb-admin-2)" },
+  { flex: 5, fill: "var(--pb-admin-3)" },
 ];
 
 function TimeBar({
@@ -107,33 +109,43 @@ function TimeBar({
         {segments.map((s, i) => (
           <div key={i} style={{ flex: s.flex, backgroundColor: s.fill }} />
         ))}
-        {/* At 390 the 20 percent segment is 68px wide, which cannot hold
-            both the word and the figure. The figure is the part that
-            carries the meaning, so the word steps aside below sm. */}
+        {/* The flex item itself carries no padding, and the padding lives
+            on the row inside it. `flex-basis: 0%` cannot shrink a box
+            below its own padding, so padding here would sit on top of the
+            item's share: the coaching segment drew 22.6% of the Today bar
+            while its label read 20%. The greys have no padding, so only
+            this one was affected. */}
         <div
-          className={`flex items-center gap-2 px-4 md:px-[18px] min-w-0 ${
-            coachingFlex < 50 ? "justify-center sm:justify-between" : "justify-between"
-          }`}
+          className="min-w-0"
           style={{ flex: coachingFlex, backgroundColor: "var(--pb-accent)", color: "#FFFFFF" }}
         >
-          <span
-            className={`text-[12.5px] md:text-[13.5px] truncate ${
-              coachingFlex < 50 ? "hidden sm:block" : ""
+          {/* At 390 the 20 percent segment is 68px wide, which cannot hold
+              both the word and the figure. The figure is the part that
+              carries the meaning, so the word steps aside below sm. */}
+          <div
+            className={`flex h-full w-full items-center gap-2 px-4 md:px-[18px] min-w-0 ${
+              coachingFlex < 50 ? "justify-center sm:justify-between" : "justify-between"
             }`}
-            style={{ fontWeight: 600 }}
           >
-            Coaching
-          </span>
-          <span
-            style={{
-              fontFamily: "var(--font-editorial)",
-              fontWeight: 800,
-              fontSize: `${pctSize}px`,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            {pct}
-          </span>
+            <span
+              className={`text-[12.5px] md:text-[13.5px] truncate ${
+                coachingFlex < 50 ? "hidden sm:block" : ""
+              }`}
+              style={{ fontWeight: 600 }}
+            >
+              Coaching
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--font-editorial)",
+                fontWeight: 800,
+                fontSize: `${pctSize}px`,
+                letterSpacing: "-0.02em",
+              }}
+            >
+              {pct}
+            </span>
+          </div>
         </div>
       </motion.div>
 

@@ -540,14 +540,15 @@ export default function TheSystem() {
           <StackedDiagram />
         </motion.div>
 
-        <div
-          className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 pt-7"
-          style={{ borderTop: "1px solid var(--os-border)" }}
-        >
+        {/* No rule above this and no grid: the three lines sit as one
+            centred lockup. On a full-width three-column grid they spread
+            to the far edges and read as left-justified rather than as a
+            group. */}
+        <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-x-12 gap-y-3 -mt-2">
           {PAYOFF.map((line) => (
             <div
               key={line}
-              className="text-[18px] md:text-[22px]"
+              className="text-[18px] md:text-[22px] text-center"
               style={{ fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.02em", color: "var(--os-text)" }}
             >
               {line}

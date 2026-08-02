@@ -39,6 +39,14 @@ the section opens the matching scene from `location.hash`. `#agents` and
 **`Footer.tsx` still links `/#agents`, which is dead.** See the showcase
 section below.
 
+**Every section shares one container**: `max-w-7xl px-6 md:px-12 lg:px-16`,
+which is `SectionShell`'s and the hero's. Measured content edges are 64 at
+1205, 144 at 1440, 24 at 390, identical across the hero, the problem, on
+demand, always on, proof, the control center and the FAQ. **The operating
+system diagram is the one exception at `max-w-[1480px] px-6 md:px-10`**, kept
+deliberately so the 1400-wide canvas has room. Anything new lines up with the
+7xl set, not with the diagram.
+
 Support modules (not sections): `artifact-panels.tsx`, `audience-duality.tsx`,
 `handoff-flow.tsx`. Unwired-but-kept work lives in `components/growth/_archive/`.
 
@@ -328,6 +336,10 @@ still renders an `<img>` box, so check `naturalWidth > 0`, not just presence.
 
 ### Geometry
 
+**The payoff line carries no rule above it and is a centred lockup**, not a
+three-column grid. On a full-width grid the three lines spread to the far
+edges and read as left-justified rather than as a group.
+
 **The canvas is a fixed 1400x660 that gets scaled.** The wire paths and the
 pulse `offset-path` values are absolute coordinates in that space, so they
 cannot be made responsive without redrawing every curve. A `ResizeObserver`
@@ -388,10 +400,11 @@ between the two panels in scene 3 is the twenty minutes.
 
 ### Things that will bite
 
-**The section does not use `SectionShell`.** The handoff asks for a 1480
-wrapper so the stage approaches its 1100; SectionShell caps at 1280, which left
-the stage at 816. It now runs its own shell, matching the operating system
-section next door. Stage measures 1024 at 1440, 789 at 1205.
+**The section uses the site's shared container**, not the handoff's 1480.
+Running wider made it reach the page edge while its neighbours did not, which
+read as a break in the page rather than as a wider section. The rail gives up
+width to compensate (268 rather than 300, gap 28 rather than 36), so the stage
+still measures 856 at 1440 and 781 at 1205.
 
 **The stage is fixed 580 tall from lg with a fluid width**, not a scaled 1100.
 Scaling would shrink 15px body copy along with everything else; fixing the
@@ -807,6 +820,15 @@ fit is usually 1024 rather than the smallest screen.
   279px with 1–22px of slack, against 336px with ~59px before.
 - The `4/5` figure restates the Today bar (20% coaching leaves four days in
   five). It is not a new claim, and it moves if the chart data moves.
+- **Both bars carry three greys, one per pillar below**, so the bar and the
+  caption ("the three blocks below") agree. A fourth, lightest tone was
+  dropped and its share redistributed proportionally; `--pb-admin-4` went with
+  it. Today is 31/26/23 + 20, the corrected bar is 8/7/5 + 80.
+- **The coaching segment's padding lives on an inner row, not on the flex item
+  itself.** `flex-basis: 0%` cannot shrink a box below its own padding, so
+  padding on the item sits *on top of* its share: the Today bar's coaching
+  segment drew 22.6% while its label read 20%. The greys have no padding, so
+  only that one was affected. Verified 31/26/23/20 and 8/7/5/80 exactly.
 - **`components/growth/artifact-panels.tsx` is now entirely unused.** Its two
   exports both lost their last caller: `ScatteredPanel` when report building
   was rebuilt as `REPORT_SCRAPS`, and `OrderedPanel` when the problem section
