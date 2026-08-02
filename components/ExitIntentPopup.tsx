@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
-import Button from "@/components/ui/Button";
+import { ArrowRight, X } from "lucide-react";
 
 // TODO: Wire form submission to HubSpot Forms API or custom endpoint
 
@@ -17,8 +16,22 @@ const MIN_DWELL_MS = 30_000;
 /** No modal until the visitor has scrolled past the hero. */
 const MIN_SCROLL_PX = 700;
 
+/* The modal runs on the homepage's editorial tokens rather than the old
+   v1 greys, so its type and surfaces match the hero. It mounts from
+   `layout.tsx`, outside the homepage's `.theme-editorial` wrapper, so the
+   card carries that class itself or every `--ed-*` resolves to nothing. */
+const JAKARTA = "var(--font-editorial)";
+
 const inputClass =
-  "w-full rounded-lg border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#1A1A1A] px-4 py-2.5 text-sm text-[#0A0A0A] dark:text-[#F0F0F0] placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:border-[#00AEEF] focus:outline-none focus:ring-2 focus:ring-[#00AEEF]/20 transition-all";
+  "w-full rounded-xl px-4 py-3 text-[15px] outline-none transition-colors focus:border-[#0077A8]";
+const inputStyle: React.CSSProperties = {
+  background: "var(--ed-bg)",
+  border: "1px solid var(--ed-border)",
+  color: "var(--ed-fg)",
+};
+const labelStyle: React.CSSProperties = {
+  fontFamily: JAKARTA, fontSize: 13, fontWeight: 600, color: "var(--ed-fg)",
+};
 
 export default function ExitIntentPopup() {
   const [show, setShow] = useState(false);
@@ -128,51 +141,82 @@ export default function ExitIntentPopup() {
             transition={{ duration: 0.35, ease: "easeOut" }}
             className="fixed left-0 right-0 top-0 z-[101] flex justify-center px-4 pt-6"
           >
-            <div className="relative w-full max-w-lg rounded-2xl bg-white dark:bg-[#161616] shadow-[0_24px_80px_rgba(0,0,0,0.18)] dark:shadow-[0_24px_80px_rgba(0,0,0,0.6)] overflow-hidden">
+            <div
+              className="theme-editorial relative w-full max-w-lg rounded-3xl overflow-hidden"
+              style={{
+                background: "var(--ed-card)",
+                border: "1px solid var(--ed-border)",
+                boxShadow: "0 32px 90px -30px rgba(4,32,54,0.45)",
+              }}
+            >
               {/* Close */}
               <button
                 onClick={handleDismiss}
-                className="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full border border-[#E5E7EB] dark:border-white/[0.08] bg-white dark:bg-[#1A1A1A] text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+                className="absolute top-5 right-5 flex h-9 w-9 items-center justify-center rounded-full transition-opacity hover:opacity-70"
+                style={{ border: "1px solid var(--ed-border)", background: "var(--ed-bg)", color: "var(--ed-fg-muted)" }}
                 aria-label="Close"
               >
-                <X size={15} />
+                <X size={16} />
               </button>
 
-              <div className="p-8">
+              <div className="p-8 md:p-10">
                 {submitted ? (
-                  <div className="text-center py-4">
-                    <p className="text-xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-2">On its way! 📬</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Check your email for the download link.</p>
+                  <div className="py-6">
+                    <p
+                      className="mb-2"
+                      style={{ fontFamily: JAKARTA, fontWeight: 700, fontSize: 24, letterSpacing: "-0.03em", color: "var(--ed-fg)" }}
+                    >
+                      On its way.
+                    </p>
+                    <p className="text-[15px]" style={{ color: "var(--ed-fg-muted)", lineHeight: 1.6 }}>
+                      Check your email for the download link.
+                    </p>
                   </div>
                 ) : (
                   <>
-                    {/* Blue accent bar */}
-                    <div className="w-10 h-1 bg-[#00AEEF] rounded mb-5" />
+                    <div
+                      className="mb-6"
+                      style={{ width: 44, height: 4, borderRadius: 999, background: "var(--ed-accent-text)" }}
+                    />
                     <h2
-                      className="text-2xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] mb-2"
-                      style={{ letterSpacing: "-0.02em" }}
+                      className="mb-3"
+                      style={{
+                        fontFamily: JAKARTA, fontWeight: 700,
+                        fontSize: "clamp(1.5rem, 1.2rem + 1.2vw, 2rem)",
+                        letterSpacing: "-0.035em", lineHeight: 1.1, color: "var(--ed-fg)",
+                      }}
                     >
-                      Before you go...
+                      Before you go.
                     </h2>
-                    <p className="text-sm leading-6 text-gray-600 dark:text-gray-400 mb-6">
-                      Get our free Franchise AI Support Playbook — the same strategies used by brands like WSI, DekaLash, and DivaDance.
+                    <p className="text-[15px] mb-7" style={{ color: "var(--ed-fg-muted)", lineHeight: 1.6 }}>
+                      Get the free Franchise AI Playbook, the same plays run by
+                      brands like WSI, DekaLash, and DivaDance.
                     </p>
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-                      <div>
-                        <label className="block text-xs font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] mb-1">Work Email *</label>
-                        <input name="email" type="email" required placeholder="jane@yourfranchise.com" className={inputClass} />
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                      <div className="flex flex-col gap-1.5">
+                        <label htmlFor="ei-email" style={labelStyle}>Work email</label>
+                        <input id="ei-email" name="email" type="email" required placeholder="jane@yourfranchise.com" className={inputClass} style={inputStyle} />
                       </div>
-                      <div>
-                        <label className="block text-xs font-semibold text-[#0A0A0A] dark:text-[#F0F0F0] mb-1">Company Name *</label>
-                        <input name="company" type="text" required placeholder="Franchise Brand Inc." className={inputClass} />
+                      <div className="flex flex-col gap-1.5">
+                        <label htmlFor="ei-company" style={labelStyle}>Company name</label>
+                        <input id="ei-company" name="company" type="text" required placeholder="Franchise Brand Inc." className={inputClass} style={inputStyle} />
                       </div>
-                      <Button size="md" className="w-full mt-1" type="submit">
-                        Send Me the Playbook
-                      </Button>
+                      {/* Same shape as the hero CTA. */}
+                      <button
+                        type="submit"
+                        className="ed-btn ed-btn-arrow mt-1 w-full justify-center"
+                        style={{ backgroundColor: "var(--ed-accent-text)", color: "#FFFFFF" }}
+                      >
+                        Send me the playbook
+                        <span className="ed-btn-arrow-badge" aria-hidden="true">
+                          <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
+                        </span>
+                      </button>
                     </form>
                     <button
                       onClick={handleDismiss}
-                      className="mt-4 w-full text-center text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                      className="mt-5 w-full text-center text-[13px] transition-opacity hover:opacity-70"
+                      style={{ color: "var(--ed-fg-muted)" }}
                     >
                       No thanks, I&apos;ll figure it out myself
                     </button>

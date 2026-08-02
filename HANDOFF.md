@@ -630,6 +630,35 @@ Motion is the one touch the handoff allows: the five columns fade up with a
 60ms stagger on first scroll into view, gated on reduced motion. Nothing
 hovers, nothing swaps, nothing loops.
 
+## Share metadata
+
+Title, `og:title` and `twitter:title` are **"EZee Assist - Franchise AI
+Operating System"** in both `app/layout.tsx` and `app/page.tsx`.
+
+**Next replaces a page's `openGraph` object wholesale rather than merging it
+with the layout's.** `siteName` and `type` are therefore repeated in
+`page.tsx`; without them the homepage share card loses its site name. Verified
+`og:site_name` renders as "EZee Assist" on `/`.
+
+## The exit intent modal
+
+`ExitIntentPopup.tsx` runs on the homepage's editorial tokens so its type and
+surfaces match the hero: Jakarta headline at -0.035em, the same arrow-badge
+CTA, `--ed-*` surfaces.
+
+**It mounts from `layout.tsx`, outside the homepage's `.theme-editorial`
+wrapper, so the card carries that class itself.** Without it every `--ed-*`
+resolves to nothing and the modal renders unstyled.
+
+Copy is general rather than support-focused: "the free Franchise AI Playbook".
+
+**The form has no endpoint.** `handleSubmit` logs to the console and sets a
+localStorage flag; there is a `TODO` for HubSpot Forms. Same gap as the footer
+newsletter and the blog strip.
+
+Gating is unchanged: 30s dwell plus 700px scroll, then desktop mouseleave or
+a 45s mobile inactivity timer, at most once per session.
+
 ## The footer band
 
 Directly under the tagline and above the six columns, no divider: a two-part

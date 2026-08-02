@@ -16,28 +16,33 @@ import { objections } from "@/lib/data/objections";
 import { NETWORK_SCALE } from "@/lib/data/network-scale";
 
 export const metadata: Metadata = {
-  title: "EZee Assist — The AI Operating System for Franchise Networks",
+  title: "EZee Assist - Franchise AI Operating System",
   description: `Take the low-value work off your coaches and amplify their expertise across every location. Trusted by ${NETWORK_SCALE.brands} franchise brands across ${NETWORK_SCALE.locations} locations.`,
   alternates: { canonical: "/" },
   openGraph: {
-    title: "EZee Assist — The Execution Layer for Franchise Networks",
+    /* Next replaces the layout's openGraph object wholesale rather than
+       merging it, so siteName and type have to be repeated here or the
+       share card loses them. */
+    type: "website",
+    siteName: "EZee Assist",
+    title: "EZee Assist - Franchise AI Operating System",
     description:
       "Your playbooks, running at every location. Coaching stops being rationed, and the bottom of your network moves like the top.",
     images: [
       {
         url: "/og-image.png",
-        alt: "EZee Assist, the execution layer for franchise networks",
+        alt: "EZee Assist - Franchise AI Operating System",
       },
     ],
   },
   twitter: {
-    title: "EZee Assist — The Execution Layer for Franchise Networks",
+    title: "EZee Assist - Franchise AI Operating System",
     description:
       "Your playbooks, running at every location. Coaching stops being rationed, and the bottom of your network moves like the top.",
     images: [
       {
         url: "/og-image.png",
-        alt: "EZee Assist, the execution layer for franchise networks",
+        alt: "EZee Assist - Franchise AI Operating System",
       },
     ],
   },

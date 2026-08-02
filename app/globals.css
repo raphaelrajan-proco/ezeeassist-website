@@ -985,63 +985,30 @@ input[type="range"]::-moz-range-thumb {
    12px mono on their own soft card background, so they carry the 4.5:1
    bar; the light values below are the least darkening that clears it. */
 .ed-wall {
-  /* Section wash: a step darker and bluer than the showcase above it, so
-     the two bands read as related but distinct. */
-  --wl-bg:           #E4EEF7;
-  --wl-panel:        #FFFFFF;
-  --wl-panel-2:      #F8FAFD;
-  --wl-text:         #0B1220;
-  --wl-muted:        #5C6675;
-  --wl-border:       rgba(12, 20, 36, 0.09);
-  --wl-rule:         rgba(12, 20, 36, 0.1);
-  --wl-accent:       #0071A0;
-  --wl-accent-soft:  rgba(0, 174, 239, 0.09);
-  --wl-accent-soft2: rgba(0, 174, 239, 0.4);
-  --wl-violet:       #6B4DCC;
-  --wl-violet-soft:  rgba(109, 79, 208, 0.1);
-  --wl-violet-soft2: rgba(109, 79, 208, 0.3);
-  --wl-shadow:       0 20px 46px -30px rgba(12, 20, 36, 0.3);
+  /* A deep blue band in both themes, by request: this section is meant to
+     land, not to recede. That means the light-mode set is the dark one,
+     the same call `.ed-os` and `.ed-cc` make, so there is no
+     `.dark .ed-wall` block. The blue is what separates it from those two
+     near-black bands and from the showcase's pale wash above it.
+
+     The card tints are alpha over `--wl-panel`, so the panel has to stay
+     dark: on a light panel over a dark band the accent cards would read
+     as holes. */
+  --wl-bg:           #0A2A47;
+  --wl-panel:        #103654;
+  --wl-panel-2:      #0D2F4B;
+  --wl-text:         #F2F6FA;
+  --wl-muted:        #A9C0D6;
+  --wl-border:       rgba(242, 246, 250, 0.14);
+  --wl-rule:         rgba(242, 246, 250, 0.16);
+  --wl-accent:       #57C8F5;
+  --wl-accent-soft:  rgba(0, 174, 239, 0.18);
+  --wl-accent-soft2: rgba(87, 200, 245, 0.5);
+  --wl-violet:       #B9A2FF;
+  --wl-violet-soft:  rgba(167, 139, 250, 0.18);
+  --wl-violet-soft2: rgba(185, 162, 255, 0.45);
+  --wl-shadow:       0 26px 60px -34px rgba(0, 0, 0, 0.65);
   --wl-mono: ui-monospace, "SF Mono", Menlo, monospace;
-}
-.dark .ed-wall {
-  --wl-bg:           #111B29;
-  --wl-panel:        #0B101C;
-  --wl-panel-2:      #0E1524;
-  --wl-text:         #EEF2F8;
-  --wl-muted:        #93A0B5;
-  --wl-border:       rgba(238, 242, 248, 0.09);
-  --wl-rule:         rgba(238, 242, 248, 0.1);
-  --wl-accent:       #00AEEF;
-  --wl-accent-soft:  rgba(0, 174, 239, 0.14);
-  --wl-accent-soft2: rgba(0, 174, 239, 0.45);
-  --wl-violet:       #A78BFA;
-  --wl-violet-soft:  rgba(167, 139, 250, 0.13);
-  --wl-violet-soft2: rgba(167, 139, 250, 0.36);
-  --wl-shadow:       0 26px 60px -34px rgba(0, 0, 0, 0.8);
-}
-
-/* ─── Control center ───────────────────────────────────────
-   Built from a supplied design handoff, then re-banded by request:
-   **the section runs on the operating system section's dark background
-   in both themes** (`#05070D`, the same value as `--os-bg`), so there is
-   no `.dark .ed-cc` block; there is nothing to switch.
-
-   Accent is remapped from the handoff's blues to the EZee family.
-   `--cc-accent` is the CTA fill under white text, so it is #0077A8;
-   #00AEEF is 2.53:1 under white and fails. `--cc-accent-ink` is the
-   headline's second line, where #00AEEF clears on the dark band.
-
-   `--cc-glyph` is the icon colour: a mid-tone that reads as ink.
-   **Icons are never accent-coloured.** */
-.ed-cc {
-  --cc-band:          #05070D;
-  --cc-text:          #EEF2F8;
-  --cc-muted:         #A3AEC0;
-  --cc-border:        rgba(238, 242, 248, 0.1);
-  --cc-border-strong: rgba(238, 242, 248, 0.2);
-  --cc-accent:        #0077A8;
-  --cc-accent-ink:    #00AEEF;
-  --cc-glyph:         #B6C0D0;
 }
 
 /* Card entrance inside the band viewport. Replayed on every step by

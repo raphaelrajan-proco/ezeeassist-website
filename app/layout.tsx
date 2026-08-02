@@ -89,32 +89,32 @@ const organizationSchema = {
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "EZee Assist — AI-Powered Operational Support for Franchise Brands",
+    default: "EZee Assist - Franchise AI Operating System",
     template: "%s | EZee Assist",
   },
   description:
-    "EZee Assist is an AI-powered operational support platform built for franchise and multi-location brands. Reduce support volume, answer franchisee questions instantly, and surface insights — all in one platform.",
+    "The AI operating system for franchise and multi-location brands. Answers, agents, reporting, and compliance running at every location, inside the guardrails HQ sets.",
   openGraph: {
     type: "website",
     siteName: "EZee Assist",
     url: BASE_URL,
-    title: "EZee Assist — AI-Powered Operational Support for Franchise Brands",
+    title: "EZee Assist - Franchise AI Operating System",
     description:
-      "Reduce support volume, answer franchisee questions instantly, and surface insights — all in one platform.",
+      "The AI operating system for franchise and multi-location brands. Answers, agents, reporting, and compliance running at every location, inside the guardrails HQ sets.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "EZee Assist — AI-Powered Operational Support",
+        alt: "EZee Assist - Franchise AI Operating System",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "EZee Assist — AI-Powered Operational Support for Franchise Brands",
+    title: "EZee Assist - Franchise AI Operating System",
     description:
-      "Reduce support volume, answer franchisee questions instantly, and surface insights — all in one platform.",
+      "The AI operating system for franchise and multi-location brands. Answers, agents, reporting, and compliance running at every location, inside the guardrails HQ sets.",
     images: ["/og-image.png"],
   },
   robots: {
