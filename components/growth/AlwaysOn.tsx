@@ -116,58 +116,12 @@ const TONE: Record<Tone, { bg: string; border: string; meta: string; shadow?: st
   violet:  { bg: "var(--wl-violet-soft)", border: "var(--wl-violet-soft2)", meta: "var(--wl-violet)" },
 };
 
-/* TODO: wire to the real count of yesterday's moments. This is the one
-   fabricated figure on the page, and the drift makes it look live. Fetch
-   on mount and keep the drift as the visual layer, or drop the drift. */
-const COUNT_TARGET = 1847;
-
-/* ── Counter ───────────────────────────────────────────────
-   Counts up on 40% visibility, then drifts indefinitely. Reduced motion
-   lands on the final value with no count and no drift. */
-
-function useCounter(target: number) {
-  const [value, setValue] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce || !("IntersectionObserver" in window)) { setValue(target); return; }
-
-    const el = ref.current;
-    if (!el) return;
-    let tick: ReturnType<typeof setInterval>, drift: ReturnType<typeof setTimeout>, started = false;
-
-    const scheduleDrift = () => {
-      drift = setTimeout(() => {
-        setValue((v) => v + (Math.random() < 0.72 ? 1 : 2));
-        scheduleDrift();
-      }, 900 + Math.random() * 9000);
-    };
-
-    /* setInterval, not requestAnimationFrame. rAF is paused outright in a
-       background tab, which strands the count part-way; an interval is
-       only throttled. Progress is read from the clock either way, so the
-       easing is correct whatever the callback rate turns out to be. */
-    const run = () => {
-      const t0 = performance.now();
-      tick = setInterval(() => {
-        const p = Math.min(1, (performance.now() - t0) / 1300);
-        setValue(Math.round(target * (1 - Math.pow(1 - p, 3))));
-        if (p >= 1) { clearInterval(tick); scheduleDrift(); }
-      }, 32);
-    };
-
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting && !started) { started = true; io.disconnect(); run(); } });
-    }, { threshold: 0.4 });
-    io.observe(el);
-
-    return () => { io.disconnect(); clearInterval(tick); clearTimeout(drift); };
-  }, [target]);
-
-  return { value, ref };
-}
+/* Static by request: the animated count-up plus drift depended on an
+   IntersectionObserver that missed its element when the layout swapped
+   from stacked to pinned on mount, so it sat at 0. One honest number
+   until the real count is wired.
+   TODO: wire to the real count of the last 24 hours. */
+const COUNT = 1834;
 
 /* ── Step control ──────────────────────────────────────────
    The section pins for the length of its scroll track and the page's own
@@ -306,7 +260,7 @@ function Legend() {
   );
 }
 
-function Counter({ value, innerRef }: { value: number; innerRef: React.RefObject<HTMLDivElement | null> }) {
+function Counter({ innerRef }: { innerRef?: React.RefObject<HTMLDivElement | null> }) {
   return (
     <div
       ref={innerRef}
@@ -321,10 +275,10 @@ function Counter({ value, innerRef }: { value: number; innerRef: React.RefObject
             fontVariantNumeric: "tabular-nums", color: "var(--wl-text)",
           }}
         >
-          {value.toLocaleString()}
+          {COUNT.toLocaleString()}
         </div>
         <div className="text-[13.5px]" style={{ color: "var(--wl-muted)" }}>
-          more moments across the network yesterday
+          more moments across the network in the last 24 hours
         </div>
       </div>
       <div
@@ -343,7 +297,6 @@ function Counter({ value, innerRef }: { value: number; innerRef: React.RefObject
 export default function AlwaysOn() {
   const isDesktop = useIsDesktop();
   const { sectionRef, index, goTo } = useStepper(BANDS.length, isDesktop);
-  const { value, ref: counterRef } = useCounter(COUNT_TARGET);
   const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
@@ -384,7 +337,7 @@ export default function AlwaysOn() {
   /* ── Below lg: no pin, every band stacked ── */
   if (!isDesktop) {
     return (
-      <section id="always-on" className="ed-wall w-full scroll-mt-24 ed-bg-alt">
+      <section id="always-on" className="ed-wall w-full scroll-mt-24" style={{ backgroundColor: "var(--wl-bg)" }}>
         <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-16 flex flex-col gap-9">
           {header}
           {BANDS.map((b) => (
@@ -395,7 +348,7 @@ export default function AlwaysOn() {
               </div>
             </div>
           ))}
-          <Counter value={value} innerRef={counterRef} />
+          <Counter />
         </div>
       </section>
     );
@@ -409,8 +362,8 @@ export default function AlwaysOn() {
     <section
       id="always-on"
       ref={sectionRef}
-      className="ed-wall w-full scroll-mt-24 ed-bg-alt relative"
-      style={{ height: `calc(100vh + ${(BANDS.length - 1) * STEP_VH}vh)` }}
+      className="ed-wall w-full scroll-mt-24 relative"
+      style={{ backgroundColor: "var(--wl-bg)", height: `calc(100vh + ${(BANDS.length - 1) * STEP_VH}vh)` }}
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="mx-auto max-w-7xl h-full px-6 md:px-12 lg:px-16 py-6 flex flex-col justify-center gap-5">
@@ -474,7 +427,7 @@ export default function AlwaysOn() {
             </button>
           </div>
 
-          <Counter value={value} innerRef={counterRef} />
+          <Counter />
         </div>
       </div>
     </section>

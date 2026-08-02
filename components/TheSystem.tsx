@@ -351,7 +351,12 @@ function OsCanvas() {
   }, []);
 
   return (
-    <div ref={wrapRef} className="hidden min-[1200px]:block w-full" style={{ height: CANVAS_H * scale }}>
+    /* The wrapper reserves the canvas's *visible* height, not its full
+       660: the drawn content ends around y=594 and the remainder is empty
+       canvas, which pushed the payoff line ~80px below the visual. The
+       canvas box overflows the wrapper harmlessly; everything it draws
+       sits above the cut. */
+    <div ref={wrapRef} className="hidden min-[1200px]:block w-full" style={{ height: (CANVAS_H - 66) * scale }}>
       <div
         ref={canvasRef}
         role="img"
@@ -496,7 +501,7 @@ const PAYOFF = ["Your coaches multiplied.", "Your standards held.", "Your number
 export default function TheSystem() {
   return (
     <section id="the-system" className="ed-os w-full scroll-mt-24" style={{ backgroundColor: "var(--os-bg)" }}>
-      <div className="mx-auto max-w-[1480px] px-6 md:px-10 pt-12 md:pt-16 pb-10 flex flex-col gap-7">
+      <div className="mx-auto max-w-[1480px] px-6 md:px-10 pt-12 md:pt-16 pb-9 flex flex-col gap-7">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -544,7 +549,7 @@ export default function TheSystem() {
             centred lockup. On a full-width three-column grid they spread
             to the far edges and read as left-justified rather than as a
             group. */}
-        <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-x-12 gap-y-3 -mt-2">
+        <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-x-12 gap-y-3">
           {PAYOFF.map((line) => (
             <div
               key={line}

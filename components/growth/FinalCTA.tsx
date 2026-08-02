@@ -1,9 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
 
 /**
  * The closing ask, and the top of the closing band. This section carries
@@ -71,18 +69,31 @@ export default function FinalCTA() {
           <span className="block">We&rsquo;ll show you how EZee runs it.</span>
         </h2>
 
-        <div className="mt-10">
-          {/* Identical to the hero CTA. */}
-          <Link
-            href="/contact"
-            className="ed-btn ed-btn-arrow inline-flex"
-            style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
-          >
-            Speak to an expert
-            <span className="ed-btn-arrow-badge" aria-hidden="true">
-              <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
-            </span>
-          </Link>
+        {/* HubSpot meetings embed lands here, replacing the old
+            Speak-to-an-expert button. TODO: swap the placeholder body for
+            the real embed snippet when it is supplied. The container is
+            sized to the meetings widget's usual footprint so the section
+            does not reflow when the embed drops in. */}
+        <div
+          id="book-a-time"
+          className="mt-10 w-full max-w-[760px] rounded-2xl flex items-center justify-center"
+          style={{
+            minHeight: 480,
+            backgroundColor: "rgba(255,255,255,0.06)",
+            border: "1.5px dashed rgba(255,255,255,0.35)",
+          }}
+        >
+          <div className="text-center px-8 py-12">
+            <p
+              className="text-white text-lg"
+              style={{ fontFamily: "var(--font-editorial)", fontWeight: 600 }}
+            >
+              Calendar embed placeholder
+            </p>
+            <p className="mt-2 text-sm" style={{ color: "rgba(245,237,224,0.75)" }}>
+              The HubSpot meetings widget replaces this block.
+            </p>
+          </div>
         </div>
       </motion.div>
     </section>

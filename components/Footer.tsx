@@ -107,7 +107,7 @@ const editorialFooterColumns: { heading: string; links: { label: string; href: s
  * Launch gate. The AEO block is built and kept, but stays off until
  * after publish. Flip to true to restore it.
  */
-const SHOW_AEO_BLOCK = false;
+const SHOW_AEO_BLOCK = true;
 
 /* Both marks share viewBox 0 0 583.2 151.2. */
 const FOOTER_LOGO_H = 64;
@@ -251,8 +251,10 @@ function FooterEditorial() {
         {/* One line at every width; nowrap plus a clamp rather than a
             wrapping paragraph. */}
         <p
-          className="ed-fg-muted mt-8 whitespace-nowrap"
+          className="mt-8 whitespace-nowrap"
           style={{
+            /* Brighter than the muted cream: near-white by request. */
+            color: "#FFFFFF",
             lineHeight: 1.5,
             fontWeight: 400,
             fontSize: "clamp(0.8125rem, 0.36rem + 1.86vw, 1.25rem)",

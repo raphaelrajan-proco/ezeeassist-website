@@ -23,7 +23,7 @@ export default function Objections() {
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         className="max-w-3xl mb-8 md:mb-10"
       >
-        <SectionHeadline>Seven questions worth asking.</SectionHeadline>
+        <SectionHeadline>Questions worth asking.</SectionHeadline>
       </motion.div>
 
       <div

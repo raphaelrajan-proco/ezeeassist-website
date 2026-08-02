@@ -40,8 +40,4 @@ export const objections: Objection[] = [
     q: "Is our data used to train AI models?",
     a: "No. Each customer runs on dedicated infrastructure, data is encrypted in transit and at rest, and your content is never used to train a third-party model. EZee is model-agnostic, so you can change the underlying model without rebuilding your workflows.",
   },
-  {
-    q: "How is it priced?",
-    a: "Per location, per month, with volume discounts as your network grows. Every rollout includes unlimited users at each location, corporate access, guided onboarding, and integration setup. We will walk through the numbers on a call.",
-  },
 ];

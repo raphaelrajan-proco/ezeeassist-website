@@ -45,7 +45,7 @@ const GUARANTEES = [
   },
   {
     Icon: IconSecurity,
-    title: "Security posture",
+    title: "Security",
     body: "SSO, encryption in transit and at rest, regional data handling, and no training on your data. Ever.",
   },
 ];

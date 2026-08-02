@@ -412,7 +412,7 @@ export default function Capabilities() {
        section reach the page edge while its neighbours did not, which
        read as a break in the page rather than as a wider section. The
        stage gives up width for it; the rail is narrowed to compensate. */
-    <section id="capabilities" className="w-full scroll-mt-24 ed-bg-alt">
+    <section id="capabilities" className="ed-showcase w-full scroll-mt-24" style={{ backgroundColor: "var(--sc-bg)" }}>
       <div className="ed-showcase mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20 flex flex-col gap-8 lg:gap-10">
         <div className="flex flex-col gap-3">
           <div

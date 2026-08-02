@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { SectionHeadline, SectionShell } from "./shared";
+import { SectionShell } from "./shared";
 
 /**
  * Proof, built from the quotes-scroll design handoff. Four customer
@@ -53,7 +53,7 @@ const STORIES: Story[] = [
     statLead: "94%", statRest: "AI deflection on the Mindbody migration",
     cta: "View DekaLash's case study", href: "/case-studies/dekalash",
     quote: "AI is now an expectation in franchisee support. Our owners get accurate, brand-specific answers 24/7, not generic internet advice, while our team focuses on bigger initiatives. It's become part of daily operations, with franchisees telling each other, 'Use Alpha!'",
-    photo: "/photos/troy-mccullen.jpeg", name: "Troy McCullen", role: "Vice President of Operations, DekaLash",
+    photo: "/photos/troy-mccullen-cut.png", name: "Troy McCullen", role: "Vice President of Operations, DekaLash",
     top: 24,
   },
   {
@@ -65,7 +65,7 @@ const STORIES: Story[] = [
     statLead: "67%", statRest: "ticket reduction in 30 days",
     cta: "View WSI's case study", href: "/case-studies/wsi",
     quote: "EZee Assist is much more than just a chatbot. It truly made universal search possible at WSI, levelling the playing field for our franchisees across geographies and languages. With a hands-on and effective implementation process, the EZee team have enabled strong adoption from the system, making the virtual AI agent a game-changer.",
-    photo: "/photos/jeffrey-grant.jpeg", name: "Jeffrey Grant", role: "Systems Manager, WSI World",
+    photo: "/photos/jeffrey-grant-cut.png", name: "Jeffrey Grant", role: "Systems Manager, WSI World",
     top: 42,
   },
   {
@@ -77,7 +77,7 @@ const STORIES: Story[] = [
     statLead: "650+", statRest: "support hours saved in six months",
     cta: "View DivaDance's case study", href: "/case-studies/divadance",
     quote: "Since we implemented EZee Assist, my owners not only get faster answers to their questions and a shorter path to the resources we have for them, but my human-power has been reallocated to coaching, relationship building, and innovation. The impact of that has led to increased owner retention, more topline revenue, and happier employees at my HQ!",
-    photo: "/photos/jami-stigliano.jpg", name: "Jami Stigliano", role: "Founder & CEO, DivaDance",
+    photo: "/photos/jami-stigliano-cut.png", name: "Jami Stigliano", role: "Founder & CEO, DivaDance",
     top: 60,
   },
   {
@@ -90,21 +90,16 @@ const STORIES: Story[] = [
     statLead: "Expanding", statRest: "use across the network",
     cta: "View EverLine's story", href: "/case-studies",
     quote: "EZee Assist's solution and desire to solve problems has made them a key partner for EverLine. I am proud to say that our franchisees have embraced this technology and we are looking forward to expanding its use in the future.",
-    photo: "/photos/john-evans.png", name: "John Evans", role: "Founder & CEO, EverLine Coatings & Services",
+    photo: "/photos/john-evans-cut.png", name: "John Evans", role: "Founder & CEO, EverLine Coatings & Services",
     top: 78,
   },
 ];
 
-/* Existing four plus the four requested additions. */
 const PARTNERS = [
   "IFA Supplier Forum",
   "CFA Member",
   "FSN Verified Member",
   "WSI Partner",
-  "AC Inc",
-  "Franchise SideKick",
-  "Emmerscale",
-  "Lumina Advisory",
 ];
 
 function StoryCard({ s }: { s: Story }) {
@@ -127,7 +122,7 @@ function StoryCard({ s }: { s: Story }) {
             The logo panel gives up the width. Two steps, because at 1024 a
             360px rail would leave the middle column too narrow to hold a
             headline line. */}
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(180px,240px)_minmax(0,1fr)_minmax(280px,340px)] lg:min-h-[364px]">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(180px,240px)_minmax(0,1fr)_minmax(280px,340px)] lg:h-[420px]">
           {/* Logo panel, hazy brand tint */}
           <div className="relative overflow-hidden flex items-center justify-center p-10 min-h-[200px]">
             <div
@@ -207,7 +202,7 @@ function StoryCard({ s }: { s: Story }) {
               width={64}
               height={64}
               className="flex-none"
-              style={{ width: 64, height: 64, borderRadius: 14, objectFit: "cover", objectPosition: "top" }}
+              style={{ width: 64, height: 64, objectFit: "contain", objectPosition: "left bottom" }}
             />
             <blockquote className="ed-fg text-[13.5px]" style={{ lineHeight: 1.6 }}>
               {s.quote}
@@ -228,44 +223,48 @@ function StoryCard({ s }: { s: Story }) {
 export default function CustomerProof() {
   return (
     <SectionShell id="proof">
-      <motion.div
+      <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        className="max-w-3xl mb-12 md:mb-14"
+        className="ed-fg leading-[1.05] tracking-[-0.03em] mb-12 md:mb-14"
+        style={{
+          fontFamily: JAKARTA,
+          fontWeight: 700,
+          /* One line at every width; clamp fitted to the measured wrap
+             point rather than a width ratio. */
+          fontSize: "clamp(1.375rem, 0.02rem + 4.4vw, 3rem)",
+        }}
       >
-        <SectionHeadline>Making an impact with franchise leaders</SectionHeadline>
-      </motion.div>
+        Making an impact with franchise leaders.
+      </motion.h2>
 
-      {STORIES.map((s) => (
-        <StoryCard key={s.brand} s={s} />
-      ))}
+      {/* The deck gets its own wrapper so the cards' sticky containing
+          block ends at the last card. When it ran to the section end, the
+          extra runway pushed the cards past each other on exit and the
+          taller third card's pink logo panel emerged above the fourth. */}
+      <div>
+        {STORIES.map((s) => (
+          <StoryCard key={s.brand} s={s} />
+        ))}
+      </div>
 
-      {/* Room for the last card to pin before the section ends. Shorter than
-          the handoff's 35vh, since the cards are now 364px rather than 520. */}
-      <div className="h-[18vh]" aria-hidden="true" />
-
-      {/* Partner memberships.
+      {/* Partner memberships: a compartment pinned to the viewport bottom
+          for the length of the section, with a solid background so cards
+          scrolling beneath it disappear under it rather than covering it.
           TODO: real partner badge images to replace text pills before publish. */}
-      <motion.div
-        initial={{ opacity: 0, y: 14 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-        className="mt-12 md:mt-16"
+      <div
+        className="sticky bottom-0 mt-10 pt-5 pb-2"
+        style={{ zIndex: 3, backgroundColor: "var(--ed-bg)" }}
       >
         <p
-          className="ed-fg-muted text-sm uppercase tracking-[0.2em] mb-6"
+          className="ed-fg-muted text-sm uppercase tracking-[0.2em] mb-4"
           style={{ fontWeight: 600 }}
         >
           Collaborating with trusted partners
         </p>
-        {/* All eight on one line. Sized so they fit without scrolling from
-            1024 up, where the row has 896px and needs 842. Below that the
-            row scrolls rather than wrapping, since eight pills cannot fit a
-            phone at a readable size. */}
-        <div className="ed-partner-row flex flex-nowrap gap-1.5 overflow-x-auto">
+        <div className="flex flex-wrap gap-2">
           {PARTNERS.map((p) => (
             <span
               key={p}
@@ -275,15 +274,15 @@ export default function CustomerProof() {
                 border: "1px solid var(--ed-rule)",
                 color: "var(--ed-fg)",
                 fontWeight: 500,
-                padding: "0.5rem 0.75rem",
-                fontSize: "clamp(0.6875rem, 0.42rem + 0.36vw, 0.8125rem)",
+                padding: "0.5rem 0.875rem",
+                fontSize: "0.8125rem",
               }}
             >
               {p}
             </span>
           ))}
         </div>
-      </motion.div>
+      </div>
     </SectionShell>
   );
 }

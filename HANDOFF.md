@@ -340,6 +340,11 @@ still renders an `<img>` box, so check `naturalWidth > 0`, not just presence.
 three-column grid. On a full-width grid the three lines spread to the far
 edges and read as left-justified rather than as a group.
 
+**The canvas wrapper reserves `(CANVAS_H - 66) * scale`, not the full 660**:
+the drawn content ends around y=594 and the remainder is empty canvas, which
+pushed the payoff line ~80px below the visual. Measured 36px above the line
+and 36px below it at 1205. The canvas box overflows the wrapper harmlessly.
+
 **The canvas is a fixed 1400x660 that gets scaled.** The wire paths and the
 pulse `offset-path` values are absolute coordinates in that space, so they
 cannot be made responsive without redrawing every curve. A `ResizeObserver`
@@ -522,9 +527,11 @@ cards do not fit one screen anyway.
 
 ### Two figures that are not real yet
 
-- **The counter is fabricated.** 1,847 with a live drift is the one invented
-  number rendered on this page, and the drift makes it look like a feed. There
-  is a `TODO` on `COUNT_TARGET`. Wire it to a real count or drop the drift.
+- **The counter is static at 1,834** ("in the last 24 hours"), by request.
+  The animated count-up died in production: its IntersectionObserver observed
+  the stacked layout's element, which unmounts when the desktop pin swaps in
+  on mount, so it sat at 0. The hook was removed with it. `COUNT` carries the
+  TODO to wire the real number.
 - **All fifteen moments are placeholder-real.** The handoff is explicit that
   invented moments read as invented to a franchisor, and that **the timestamps
   matter most**: 9:14am is credible where 9:00am is not.
@@ -572,10 +579,10 @@ which Proof directly above and the FAQ directly below both use. Measured at
 1205, all three now sit at **64 to 1141**. The handoff's literal numbers would
 have put this section at 27 to 1179 and jogged against both neighbours.
 
-**The band is a shade off the page background**, not a hard panel: darker than
-the page in light mode, lighter in dark. That is what makes it read as a quiet
-inset rather than another card. Changing the band shade means re-checking
-muted contrast.
+**The section is permanently dark by request**, on the operating system
+section's `#05070D` in both themes, so `.ed-cc` has no `.dark` block. The
+fifth column is titled "Security", not the handoff's "Security posture".
+The original light/dark band pair is gone with the re-band.
 
 ### The icons
 
@@ -626,6 +633,28 @@ stays legible on the band. It also ships only the white logo, since the band
 is dark in both themes.
 
 ## Proof: the sticky story stack
+
+Revised after the deck shipped; the current rules:
+
+- **All four cards are a fixed `lg:h-[420px]`.** The deck collapse only
+  behaves if every card's pinned bottom is in DOM order, and the natural
+  heights measured 380/418/418/380: the taller third card's pink logo panel
+  slid out above the fourth on exit. Measured stable across 1024-1440.
+- **The deck has its own wrapper div** so the cards' sticky containing block
+  ends at the last card, not at the section end. The old 18vh spacer is gone
+  with it.
+- **The partner bar is a bottom-sticky compartment** (`sticky bottom-0`,
+  `z-index: 3`, solid `--ed-bg` background): it pins to the viewport bottom
+  for the length of the section and cards scroll away beneath it. Four pills
+  only: IFA Supplier Forum, CFA Member, FSN Verified Member, WSI Partner.
+- The headline is "Making an impact with franchise leaders." with the period,
+  one line from ~640 up (18.51px of width per 1px of font size; clamp tops at
+  48). It wraps on phones, where one line would need 18px type.
+- **The headshots are transparent cutouts** (`/photos/*-cut.png`), produced
+  from the originals with Apple's Vision subject-lift
+  (`VNGenerateForegroundInstanceMaskRequest`) via a throwaway Swift CLI in the
+  session scratchpad. Regenerate the same way if the source photos change; the
+  originals stay in `/public/photos/`.
 
 Built from the quotes-scroll handoff. Four cards, each `position: sticky` at a
 staggered top (24 / 42 / 60 / 78px, 18px apart). That stagger is the whole

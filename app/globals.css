@@ -931,6 +931,10 @@ input[type="range"]::-moz-range-thumb {
   --sc-text:    #0B1220;
   --sc-muted:   #5C6675;
   --sc-border:  rgba(12,20,36,.09);
+  /* Section wash: a light blue in the hero's family, the lighter of the
+     two blue bands (always on is the darker). In dark mode the difference
+     plays the other way: this one stays closest to the page black. */
+  --sc-bg:      #F1F7FC;
   --sc-accent:  #00AEEF;
   --sc-accent-ink: #0077A8;
   --sc-accent-soft: rgba(0,174,239,.07);
@@ -954,6 +958,7 @@ input[type="range"]::-moz-range-thumb {
   --sc-text:    #EEF2F8;
   --sc-muted:   #93A0B5;
   --sc-border:  rgba(238,242,248,.09);
+  --sc-bg:      #0D131C;
   --sc-accent:  #00AEEF;
   --sc-accent-ink: #00AEEF;
   --sc-accent-soft: rgba(0,174,239,.1);
@@ -980,6 +985,9 @@ input[type="range"]::-moz-range-thumb {
    12px mono on their own soft card background, so they carry the 4.5:1
    bar; the light values below are the least darkening that clears it. */
 .ed-wall {
+  /* Section wash: a step darker and bluer than the showcase above it, so
+     the two bands read as related but distinct. */
+  --wl-bg:           #E4EEF7;
   --wl-panel:        #FFFFFF;
   --wl-panel-2:      #F8FAFD;
   --wl-text:         #0B1220;
@@ -996,6 +1004,7 @@ input[type="range"]::-moz-range-thumb {
   --wl-mono: ui-monospace, "SF Mono", Menlo, monospace;
 }
 .dark .ed-wall {
+  --wl-bg:           #111B29;
   --wl-panel:        #0B101C;
   --wl-panel-2:      #0E1524;
   --wl-text:         #EEF2F8;
@@ -1012,36 +1021,25 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* ─── Control center ───────────────────────────────────────
-   Built from a supplied design handoff. Scoped to `.ed-cc`.
+   Built from a supplied design handoff, then re-banded by request:
+   **the section runs on the operating system section's dark background
+   in both themes** (`#05070D`, the same value as `--os-bg`), so there is
+   no `.dark .ed-cc` block; there is nothing to switch.
 
-   The band is a shade off the page background, not a hard panel: darker
-   than the page in light mode, lighter in dark. That is what makes the
-   section read as a quiet inset rather than another card. Adjusting the
-   band shade means re-checking muted contrast.
-
-   Accent is remapped from the handoff's #1B55E9 / #5B8CFF to the EZee
-   family, matching the other sections. `--cc-accent` is the CTA fill
-   under white text, so it is #0077A8 in both modes; #00AEEF is 2.53:1
-   and fails. `--cc-accent-ink` is the headline's second line.
+   Accent is remapped from the handoff's blues to the EZee family.
+   `--cc-accent` is the CTA fill under white text, so it is #0077A8;
+   #00AEEF is 2.53:1 under white and fails. `--cc-accent-ink` is the
+   headline's second line, where #00AEEF clears on the dark band.
 
    `--cc-glyph` is the icon colour: a mid-tone that reads as ink.
    **Icons are never accent-coloured.** */
 .ed-cc {
-  --cc-band:          #EBEEF4;
-  --cc-text:          #0B1220;
-  --cc-muted:         #4E5766;
-  --cc-border:        rgba(12, 20, 36, 0.1);
-  --cc-border-strong: rgba(12, 20, 36, 0.18);
-  --cc-accent:        #0077A8;
-  --cc-accent-ink:    #0077A8;
-  --cc-glyph:         #5C6675;
-}
-.dark .ed-cc {
-  --cc-band:          #141924;
+  --cc-band:          #05070D;
   --cc-text:          #EEF2F8;
   --cc-muted:         #A3AEC0;
   --cc-border:        rgba(238, 242, 248, 0.1);
   --cc-border-strong: rgba(238, 242, 248, 0.2);
+  --cc-accent:        #0077A8;
   --cc-accent-ink:    #00AEEF;
   --cc-glyph:         #B6C0D0;
 }
