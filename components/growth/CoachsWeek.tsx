@@ -344,7 +344,7 @@ const PILLARS = [
   {
     swatch: "var(--pb-admin-1)",
     title: "Repetitive questions",
-    body: "Multiple repeat questions arrive from several locations before 9am, each one needing a personal reply.",
+    body: "Multiple repeat questions arrive from several locations, each one needing a personal reply.",
     card: <QuestionsCard />,
   },
   {
