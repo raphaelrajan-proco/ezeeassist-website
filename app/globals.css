@@ -1011,19 +1011,16 @@ input[type="range"]::-moz-range-thumb {
   --wl-shadow:       0 26px 60px -34px rgba(0, 0, 0, 0.8);
 }
 
-@keyframes ed-wl-thread-draw { from { stroke-dashoffset: 3000 } to { stroke-dashoffset: 0 } }
-@keyframes ed-wl-thread-run {
-  0%   { offset-distance: 0%;   opacity: 0 }
-  10%  { opacity: 1 }
-  88%  { opacity: 1 }
-  100% { offset-distance: 100%; opacity: 0 }
-}
-/* Reduced motion: bands render revealed and the counter lands on its
-   final value (both handled in the component), the thread draws with no
-   animation, and the travelling dot is removed entirely. */
+/* Card entrance inside the band viewport. Replayed on every step by
+   remounting the grid, so the stagger reads on each band rather than
+   only the first. */
+@keyframes ed-wl-rise { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } }
+
+/* Reduced motion: the counter lands on its final value and the cards
+   skip the entrance, both handled in the component. This is the backstop
+   for anything that still carries the animation. */
 @media (prefers-reduced-motion: reduce) {
-  .ed-wl-thread { animation: none !important; stroke-dashoffset: 0 !important }
-  .ed-wl-dot    { display: none !important }
+  .ed-wall [style*="ed-wl-rise"] { animation: none !important; opacity: 1 !important; transform: none !important }
 }
 
 /* Scene entrances. The ordering of the delays is the design: on scene 1

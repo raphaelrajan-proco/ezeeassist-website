@@ -27,7 +27,7 @@ before picking the work back up in a fresh session.
 | 2 | The problem (bar, 3 pillars, capacity block, closing) | `components/growth/CoachsWeek.tsx` | `#the-week` |
 | 3 | The reveal (operating system diagram) | `components/TheSystem.tsx` | `#the-system` |
 | 4 | On demand (3-tile showcase) | `components/growth/Capabilities.tsx` | `#capabilities` |
-| 5 | Always on wall (15 moments, 4 bands) | `components/growth/AlwaysOn.tsx` | `#always-on` |
+| 5 | Always on (pinned 4-band stepper) | `components/growth/AlwaysOn.tsx` | `#always-on` |
 | 6 | Proof (sticky story stack) | `components/growth/CustomerProof.tsx` | `#proof` |
 | 7 | Trust and control (6 tabs) | `components/growth/TrustAndControl.tsx` | `#trust` |
 | 8 | FAQ | `components/growth/Objections.tsx` + `lib/data/objections.ts` | `#objections` |
@@ -450,84 +450,95 @@ for three images. Swap for owned photography before launch.
 CDN does not serve Slack or Teams. If brand assets land, commit local SVGs and
 check dark mode.
 
-## Always on wall (section 5)
+## Always on (section 5)
 
-Built from a supplied handoff. Fifteen moments from one day in four bands
-(3 / 3 / 6 / 3), then a counter. Fifteen cards say "here are examples"; the
-counter says "this is the floor, not the ceiling."
+Fifteen moments from one day in four time bands, then a counter.
 
-**The colour is the argument, not decoration.** Do not tint more cards than
-this: neutral means the system detected and handled it, accent means an
-automated play drawing on what the network learned (exactly six cards), violet
-marks the single franchisee-authored moment. Violet is what keeps the
-two-audience story alive without a dedicated section. Verified 8 / 6 / 1.
+**Structurally this is not the handoff's wall.** The handoff specified a
+normal-flow wall with all four bands stacked and an accent thread drawn
+between the two Store #331 cards. On request it was rebuilt as **one pinned
+container that steps through the bands**: the header, the key and the ticker
+stay put on screen and only the middle band viewport changes. The thread was
+dropped with that change, since it spanned bands that are no longer visible at
+the same time. The #331 pairing now survives in copy alone: the 6:50pm card
+reads "The 6:00am draft".
 
-**The two Store #331 cards are one thread twelve hours apart**, joined by a
-drawn connector rather than a unique colour. Quietest thing on the wall and
-probably the most persuasive, because it proves the moments connect rather
-than fire independently.
+Everything else from the handoff still holds, in particular:
+
+**The colour is the argument, not decoration.** Neutral means the system
+detected and handled it, accent means an automated play drawing on what the
+network learned (exactly six cards), violet marks the single
+franchisee-authored moment. Verified 8 / 6 / 1. Do not tint more.
 
 The 3:45pm #214 closing audit is the same one the on demand section shows
 being built. **Deliberate continuity across sections, not duplication.**
+
+### How the stepping works
+
+The section is `100vh + (n-1) * STEP_VH` tall and its child is `sticky top-0
+h-screen`. **The page's own scroll position picks the active band**, so
+nothing hijacks the wheel: scrolling behaves normally and the container simply
+holds still while it happens. The arrow and the dots call `goTo`, which scrolls
+to that band's offset, so **click and scroll drive one shared piece of state**
+rather than two that can disagree. The arrow wraps from the last band back to
+the first.
+
+At 1205x793: section 2339, scroll track 1546, steps land at 0 / 515 / 1031 /
+1546.
+
+**`STEP_VH` (65) is the scroll distance per band.** Lower feels twitchy,
+higher makes the section feel stuck.
+
+### The height budget is the whole constraint
+
+Header, band viewport, step control and ticker all share one screen once the
+section pins. At 793 they measure 204 / 340 / 34 / 124 with `py-6` and
+`gap-5`, summing to exactly 793 with no overflow. **Anything added here has to
+come out of something else.** This is why the h2 tops out at 32px rather than
+the handoff's 44, and why the counter numeral is 52px rather than 62.
+
+**The band viewport is a fixed 340px and its grid is `content-center`.** Fixed
+so the header and ticker never shift between a three-card band and the
+six-card one, verified identical at every step; centred so a three-card band
+sits in the middle rather than leaving a hole under one row. A fixed two-row
+grid was tried first and left that hole.
+
+**Below lg there is no pin and no stepper**: every band stacks in normal flow,
+which is the old wall layout. Pinning a phone viewport is a bad trade and 15
+cards do not fit one screen anyway.
 
 ### Two figures that are not real yet
 
 - **The counter is fabricated.** 1,847 with a live drift is the one invented
   number rendered on this page, and the drift makes it look like a feed. There
-  is a `TODO` on `COUNT_TARGET`. Wire it to a real count or drop the drift
-  before launch.
+  is a `TODO` on `COUNT_TARGET`. Wire it to a real count or drop the drift.
 - **All fifteen moments are placeholder-real.** The handoff is explicit that
   invented moments read as invented to a franchisor, and that **the timestamps
-  matter most**: 9:14am is credible where 9:00am is not. Keep the bands and
-  the mix of trigger types, swap the specifics for real log entries.
+  matter most**: 9:14am is credible where 9:00am is not.
 
-### Things that will bite
-
-**Reveal is tracked with functional `setState`.** Bands crossing the threshold
-in separate observer callbacks before a commit would clobber each other, and
-because an observer never re-fires for an element that already intersected,
-those cards would stay invisible forever. Never read state at callback time.
-
-**Card opacity and transform are set directly, not via
-`animation-play-state: inherit`.** That property is not inherited by default,
-so the prototype's approach needs the explicit keyword on every level between
-the state holder and the animated element.
-
-**Thread measurement is deliberately not gated on the band observers.** It
-runs on rAF after mount, on resize, and on a 900ms interval for the first 6s,
-because fonts and images shift layout after paint. Gating it on reveal would
-leave the thread wrong for anyone landing mid-section.
-
-**Stacking:** every card and the counter block are `position: relative;
-z-index: 2` so the thread passes behind them. Without the counter's z-index
-the overflowing SVG paints over it, since positioned elements beat static ones.
+### Other things that will bite
 
 **The counter uses `setInterval`, not `requestAnimationFrame`.** rAF is paused
 outright in a background tab, which strands the count part-way; an interval is
 only throttled. Progress is read from the clock either way. Verified reaching
 1,847 and drifting to 1,848.
 
-**The thread is dropped entirely below 1024**, not redrawn vertically, via a
-`matchMedia` gate. Note the preview pane does not fire `matchMedia` change on
-its own resize, so the thread only appears after a fresh load at a desktop
-width there. That is a pane artifact, not a bug.
+**Card entrances replay by remounting the grid** (`key={band.title}`), not by
+toggling a class, so the 70ms stagger reads on every step rather than only the
+first.
 
-### Open decision
-
-**Fifteen stacked cards is 3252px of scroll at 390.** The handoff says to
-decide before launch: show all fifteen, or collapse to the first eight behind
-a "Show the rest of the day" control. Currently **all fifteen show**. Note
-that a naive first-eight collapse would hide both the violet owner card
-(11th) and the second #331 card (12th), which is exactly the colour story, so
-a collapse needs a hand-picked eight rather than a slice.
+**Verifying this in the preview pane needs care.** `goTo` calls
+`window.scrollTo`, which fights the `translateY` framing trick, and the pane
+pins `scrollY` at 0. Neutralise `window.scrollTo` and set the sticky child to
+`position: static` before framing a screenshot, or the shot comes back blank.
 
 ### Colours
 
-Tokens live on `.ed-wall`. Accent is remapped from `#1B55E9` / `#5B8CFF` to
-the EZee family, matching the other three sections. The accent and violet meta
-rows are 12px mono on their own soft card background, so they carry 4.5:1, not
-the 3:1 large-text allowance. Measured light 4.55 / 4.69, dark 5.94 / 5.60;
-neutral meta and card body 5.81 light, 7.18 dark.
+Tokens live on `.ed-wall`. Accent is remapped to the EZee family, matching the
+other three sections. The accent and violet meta rows are 12px mono on their
+own soft card background, so they carry 4.5:1, not the 3:1 large-text
+allowance. Measured light 4.55 / 4.69, dark 5.94 / 5.60; neutral meta and card
+body 5.81 light, 7.18 dark.
 
 ## The closing band
 

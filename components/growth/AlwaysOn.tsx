@@ -121,39 +121,6 @@ const TONE: Record<Tone, { bg: string; border: string; meta: string; shadow?: st
    on mount and keep the drift as the visual layer, or drop the drift. */
 const COUNT_TARGET = 1847;
 
-/* ── Reveal ────────────────────────────────────────────────
-   One observer, unobserving each band on first intersection. Reveal is
-   tracked with functional setState: bands crossing in separate callbacks
-   before a commit would otherwise clobber each other, and since the
-   observer never re-fires for an element that already intersected, those
-   cards would stay invisible forever. */
-
-function useBandReveal(count: number) {
-  const [revealed, setRevealed] = useState<boolean[]>(() => Array(count).fill(false));
-  const refs = useRef<(HTMLDivElement | null)[]>([]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
-      setRevealed(Array(count).fill(true));
-      return;
-    }
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => {
-        if (!e.isIntersecting) return;
-        const i = refs.current.indexOf(e.target as HTMLDivElement);
-        if (i < 0) return;
-        io.unobserve(e.target);
-        setRevealed((prev) => (prev[i] ? prev : prev.map((v, j) => (j === i ? true : v))));
-      });
-    }, { threshold: 0.18 });
-    refs.current.forEach((el) => el && io.observe(el));
-    return () => io.disconnect();
-  }, [count]);
-
-  return { revealed, refs };
-}
-
 /* ── Counter ───────────────────────────────────────────────
    Counts up on 40% visibility, then drifts indefinitely. Reduced motion
    lands on the final value with no count and no drift. */
@@ -202,59 +169,68 @@ function useCounter(target: number) {
   return { value, ref };
 }
 
-/* ── The #331 thread ───────────────────────────────────────
-   Two segments measured from the live DOM: anchor A down to anchor B,
-   then B down to the counter, so the thread carries through the last
-   band and terminates at the volume statement.
+/* ── Step control ──────────────────────────────────────────
+   The section pins for the length of its scroll track and the page's own
+   scroll position picks the active band, so nothing hijacks the wheel:
+   scrolling behaves exactly as it does everywhere else on the page, and
+   the container simply holds still while it happens. The arrow jumps to
+   the next band's scroll offset, so clicking and scrolling drive one
+   shared piece of state rather than two.
 
-   Measurement runs on rAF after mount, on resize, and on a short
-   repeating timer for the first ~6s, because fonts and images shift
-   layout after paint. It is deliberately not gated on the band
-   observers: a thread that only measures once the bands fire would be
-   wrong for anyone who lands mid-section. */
+   STEP_VH is the scroll distance per band. Lower feels twitchy, higher
+   makes the section feel stuck. */
+const STEP_VH = 65;
 
-function useThread(enabled: boolean) {
-  const wallRef = useRef<HTMLDivElement>(null);
-  const aRef = useRef<HTMLDivElement>(null);
-  const bRef = useRef<HTMLDivElement>(null);
-  const counterRef = useRef<HTMLDivElement>(null);
-  const [d, setD] = useState<string | null>(null);
+function useStepper(count: number, enabled: boolean) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [index, setIndex] = useState(0);
 
-  const measure = useCallback(() => {
-    const wall = wallRef.current, a = aRef.current, b = bRef.current, c = counterRef.current;
-    if (!wall || !a || !b) return;
-    const w = wall.getBoundingClientRect(), ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect();
-    const x1 = ra.left - w.left + ra.width / 2, y1 = ra.bottom - w.top;
-    const x2 = rb.left - w.left + rb.width / 2, y2 = rb.top - w.top;
-    const midY = (y1 + y2) / 2;
-    let next = `M${x1} ${y1} C ${x1} ${midY + 40}, ${x2} ${midY - 40}, ${x2} ${y2}`;
-    if (c) {
-      const rc = c.getBoundingClientRect();
-      const y3 = rb.bottom - w.top;
-      const y4 = rc.top - w.top - 12;
-      const x4 = rc.left - w.left + rc.width * 0.16;
-      const midY2 = (y3 + y4) / 2;
-      next += ` M${x2} ${y3} C ${x2} ${midY2 + 60}, ${x4} ${midY2 - 20}, ${x4} ${y4}`;
-    }
-    setD((prev) => (prev === next ? prev : next));
-  }, []);
+  /* Scroll offset that puts band `i` on screen. Also what the arrow
+     scrolls to, which is what keeps click and scroll in agreement. */
+  const offsetFor = useCallback((i: number) => {
+    const el = sectionRef.current;
+    if (!el) return 0;
+    const top = el.getBoundingClientRect().top + window.scrollY;
+    const track = el.offsetHeight - window.innerHeight;
+    if (track <= 0 || count < 2) return top;
+    return top + (track * i) / (count - 1);
+  }, [count]);
 
   useEffect(() => {
-    if (!enabled) { setD(null); return; }
-    const raf = requestAnimationFrame(measure);
-    window.addEventListener("resize", measure);
-    const iv = setInterval(measure, 900);
-    const stop = setTimeout(() => clearInterval(iv), 6000);
-    return () => {
-      cancelAnimationFrame(raf); window.removeEventListener("resize", measure);
-      clearInterval(iv); clearTimeout(stop);
+    if (!enabled) { setIndex(0); return; }
+    const el = sectionRef.current;
+    if (!el) return;
+    let raf = 0;
+    const read = () => {
+      raf = 0;
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      const track = el.offsetHeight - window.innerHeight;
+      if (track <= 0) return;
+      const p = (window.scrollY - top) / track;
+      const next = Math.max(0, Math.min(count - 1, Math.round(p * (count - 1))));
+      setIndex((cur) => (cur === next ? cur : next));
     };
-  }, [enabled, measure]);
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(read); };
+    read();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [count, enabled]);
 
-  return { wallRef, aRef, bRef, counterRef, d };
+  const goTo = useCallback((i: number) => {
+    const target = Math.max(0, Math.min(count - 1, i));
+    setIndex(target);
+    window.scrollTo({ top: offsetFor(target), behavior: "smooth" });
+  }, [count, offsetFor]);
+
+  return { sectionRef, index, goTo };
 }
 
-/** The thread is dropped below lg rather than redrawn vertically. */
+/** Pinning and stepping are desktop only. Below lg the bands stack. */
 function useIsDesktop() {
   const [is, setIs] = useState(false);
   useEffect(() => {
@@ -267,179 +243,238 @@ function useIsDesktop() {
   return is;
 }
 
+/* ── Pieces ────────────────────────────────────────────── */
+
+function MomentCard({ card, i, animate }: { card: Card; i: number; animate: boolean }) {
+  const t = TONE[card.tone];
+  return (
+    <div
+      className="flex flex-col gap-[9px] p-5"
+      style={{
+        background: t.bg,
+        border: `1px solid ${t.border}`,
+        borderRadius: 16,
+        boxShadow: t.shadow,
+        animation: animate ? `ed-wl-rise .5s ${EASE_OUT} both ${i * 70}ms` : undefined,
+      }}
+    >
+      <div className="flex items-center gap-[9px]" style={{ color: t.meta }}>
+        <Icon name={card.icon} />
+        <span style={{ fontFamily: MONO, fontSize: 12 }}>{card.meta}</span>
+      </div>
+      <div style={{ fontFamily: JAKARTA, fontSize: 17, fontWeight: 700, letterSpacing: "-0.015em", color: "var(--wl-text)" }}>
+        {card.title}
+      </div>
+      <div className="text-[14px]" style={{ lineHeight: 1.5, color: "var(--wl-muted)" }}>
+        {card.body}
+      </div>
+    </div>
+  );
+}
+
+function BandHeading({ band }: { band: (typeof BANDS)[number] }) {
+  return (
+    <div className="flex items-center gap-4 pb-[18px]">
+      <span style={{ fontFamily: JAKARTA, fontSize: 19, fontWeight: 700, letterSpacing: "-0.018em", color: "var(--wl-text)" }}>
+        {band.title}
+      </span>
+      {band.note && (
+        <span className="text-[13.5px] hidden sm:inline" style={{ color: "var(--wl-muted)" }}>{band.note}</span>
+      )}
+      <span aria-hidden="true" style={{ flex: 1, height: 1, background: "var(--wl-rule)" }} />
+    </div>
+  );
+}
+
+function Legend() {
+  return (
+    <div className="flex flex-wrap gap-x-[22px] gap-y-1.5">
+      {[
+        { label: "Detected in your data", dot: "var(--wl-muted)", dim: true },
+        { label: "Automated play, drawing on your network", dot: "var(--wl-accent)" },
+        { label: "Built by an owner", dot: "var(--wl-violet)" },
+      ].map((l) => (
+        <span key={l.label} className="flex items-center gap-2 text-[13px]" style={{ color: "var(--wl-muted)" }}>
+          <span
+            aria-hidden="true"
+            style={{ width: 9, height: 9, borderRadius: "50%", background: l.dot, opacity: l.dim ? 0.6 : 1, flex: "none" }}
+          />
+          {l.label}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function Counter({ value, innerRef }: { value: number; innerRef: React.RefObject<HTMLDivElement | null> }) {
+  return (
+    <div
+      ref={innerRef}
+      className="grid grid-cols-1 md:grid-cols-[minmax(0,340px)_1fr] gap-5 md:gap-10 items-center px-6 py-5 md:px-8 md:py-6"
+      style={{ background: "var(--wl-panel-2)", border: "1px solid var(--wl-border)", borderRadius: 20 }}
+    >
+      <div className="flex flex-col gap-0.5">
+        <div
+          className="text-[38px] md:text-[52px]"
+          style={{
+            fontFamily: JAKARTA, fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1,
+            fontVariantNumeric: "tabular-nums", color: "var(--wl-text)",
+          }}
+        >
+          {value.toLocaleString()}
+        </div>
+        <div className="text-[13.5px]" style={{ color: "var(--wl-muted)" }}>
+          more moments across the network yesterday
+        </div>
+      </div>
+      <div
+        className="text-[14px] md:text-[15.5px] md:border-l md:pl-10 max-w-[660px]"
+        style={{ lineHeight: 1.55, color: "var(--wl-text)", borderColor: "var(--wl-border)", textWrap: "pretty" }}
+      >
+        None needed a coach to be awake. And what any one location learns,
+        every location gets, anonymized, aggregated, and approved by you.
+      </div>
+    </div>
+  );
+}
+
 /* ── Section ───────────────────────────────────────────── */
 
 export default function AlwaysOn() {
-  const { revealed, refs } = useBandReveal(BANDS.length);
   const isDesktop = useIsDesktop();
-  const { wallRef, aRef, bRef, counterRef, d } = useThread(isDesktop);
-  const { value, ref: counterVisRef } = useCounter(COUNT_TARGET);
+  const { sectionRef, index, goTo } = useStepper(BANDS.length, isDesktop);
+  const { value, ref: counterRef } = useCounter(COUNT_TARGET);
+  const [reduceMotion, setReduceMotion] = useState(false);
 
-  return (
-    <section id="always-on" className="ed-wall w-full scroll-mt-24 ed-bg-alt">
-      <div className="mx-auto max-w-[1480px] px-6 md:px-10 py-16 md:py-24 flex flex-col gap-10 md:gap-11">
-        {/* Header */}
-        <div className="flex flex-col gap-3.5 max-w-[900px]">
-          <div
-            className="uppercase"
-            style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, letterSpacing: ".18em", color: "var(--wl-muted)" }}
-          >
-            Always on
-          </div>
-          <h2
-            style={{
-              fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.1,
-              color: "var(--wl-text)",
-              /* Two lines from lg, wrapping naturally below. Tops out at
-                 the spec's 44px. */
-              fontSize: "clamp(1.5rem, 0.6rem + 2.8vw, 2.75rem)",
-            }}
-          >
-            Your best coach, at every location, at the hour it matters.
-          </h2>
-          <p className="text-[15px] md:text-[16.5px] max-w-[760px]" style={{ lineHeight: 1.6, color: "var(--wl-muted)" }}>
-            Nobody pulled any of this. Each one started as a play built once,
-            and some of them draw on what the rest of your network already
-            learned.
-          </p>
-          <div className="flex flex-wrap gap-x-[22px] gap-y-2 pt-1">
-            {[
-              { label: "Detected in your data", dot: "var(--wl-muted)", dim: true },
-              { label: "Automated play, drawing on your network", dot: "var(--wl-accent)" },
-              { label: "Built by an owner", dot: "var(--wl-violet)" },
-            ].map((l) => (
-              <span key={l.label} className="flex items-center gap-2 text-[13px]" style={{ color: "var(--wl-muted)" }}>
-                <span
-                  aria-hidden="true"
-                  style={{ width: 9, height: 9, borderRadius: "50%", background: l.dot, opacity: l.dim ? 0.6 : 1, flex: "none" }}
-                />
-                {l.label}
-              </span>
-            ))}
-          </div>
-        </div>
+  useEffect(() => {
+    setReduceMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }, []);
 
-        {/* Wall */}
-        <div ref={wallRef} className="relative flex flex-col gap-10">
-          {/* The thread passes behind every card and the counter, both of
-              which are z-index 2. Without the counter's z-index the
-              overflowing SVG paints over it. */}
-          {d && (
-            <>
-              <svg
-                aria-hidden="true"
-                className="absolute inset-0 w-full h-full pointer-events-none"
-                style={{ overflow: "visible", zIndex: 1 }}
-              >
-                <path
-                  className="ed-wl-thread"
-                  d={d} fill="none" stroke="var(--wl-accent-soft2)" strokeWidth="1.6" strokeLinecap="round"
-                  strokeDasharray="3000"
-                  style={{ animation: "ed-wl-thread-draw 1.3s cubic-bezier(.3,.8,.3,1) both" }}
-                />
-              </svg>
-              <span
-                aria-hidden="true"
-                className="ed-wl-dot"
-                style={{
-                  position: "absolute", top: 0, left: 0, width: 8, height: 8, borderRadius: "50%",
-                  background: "var(--wl-accent)", boxShadow: "0 0 14px 3px var(--wl-accent-soft2)", zIndex: 1,
-                  offsetPath: `path('${d}')`,
-                  animation: "ed-wl-thread-run 6.4s linear infinite .9s",
-                }}
-              />
-            </>
-          )}
+  const band = BANDS[index];
+  const atEnd = index === BANDS.length - 1;
 
-          {BANDS.map((band, bi) => (
-            <div
-              key={band.title}
-              ref={(el) => { refs.current[bi] = el; }}
-              className="relative"
-            >
-              <div className="flex items-center gap-4 pb-[18px]">
-                <span style={{ fontFamily: JAKARTA, fontSize: 19, fontWeight: 700, letterSpacing: "-0.018em", color: "var(--wl-text)" }}>
-                  {band.title}
-                </span>
-                {band.note && (
-                  <span className="text-[13.5px] hidden sm:inline" style={{ color: "var(--wl-muted)" }}>{band.note}</span>
-                )}
-                <span aria-hidden="true" style={{ flex: 1, height: 1, background: "var(--wl-rule)" }} />
-              </div>
+  const header = (
+    <div className="flex flex-col gap-3 max-w-[900px]">
+      <div
+        className="uppercase"
+        style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, letterSpacing: ".18em", color: "var(--wl-muted)" }}
+      >
+        Always on
+      </div>
+      <h2
+        style={{
+          fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.1,
+          color: "var(--wl-text)",
+          /* Smaller than the handoff's flat 44px: the header, the band
+             viewport and the counter all have to share one screen once
+             the section pins. */
+          fontSize: "clamp(1.375rem, 0.62rem + 2.1vw, 2rem)",
+        }}
+      >
+        Your best coach, at every location, at the hour it matters.
+      </h2>
+      <p className="text-[14.5px] md:text-[15.5px] max-w-[780px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
+        Nobody pulled any of this. Each one started as a play built once, and
+        some of them draw on what the rest of your network already learned.
+      </p>
+      <Legend />
+    </div>
+  );
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {band.cards.map((c, ci) => {
-                  const t = TONE[c.tone];
-                  return (
-                    <div
-                      key={c.title}
-                      ref={c.thread === "a" ? aRef : c.thread === "b" ? bRef : undefined}
-                      className="relative flex flex-col gap-[9px] p-5"
-                      style={{
-                        zIndex: 2,
-                        background: t.bg,
-                        border: `1px solid ${t.border}`,
-                        borderRadius: 16,
-                        boxShadow: t.shadow,
-                        /* Set directly rather than gated with
-                           `animation-play-state: inherit`, which is not
-                           inherited by default and needs the explicit
-                           keyword on every level in between. */
-                        opacity: revealed[bi] ? 1 : 0,
-                        transform: revealed[bi] ? "translateY(0)" : "translateY(16px)",
-                        transition: `opacity .5s ${EASE_OUT} ${ci * 70}ms, transform .5s ${EASE_OUT} ${ci * 70}ms`,
-                      }}
-                    >
-                      <div className="flex items-center gap-[9px]" style={{ color: t.meta }}>
-                        <Icon name={c.icon} />
-                        <span style={{ fontFamily: MONO, fontSize: 12 }}>{c.meta}</span>
-                      </div>
-                      <div style={{ fontFamily: JAKARTA, fontSize: 17, fontWeight: 700, letterSpacing: "-0.015em", color: "var(--wl-text)" }}>
-                        {c.title}
-                      </div>
-                      <div className="text-[14px]" style={{ lineHeight: 1.5, color: "var(--wl-muted)" }}>
-                        {c.body}
-                      </div>
-                    </div>
-                  );
-                })}
+  /* ── Below lg: no pin, every band stacked ── */
+  if (!isDesktop) {
+    return (
+      <section id="always-on" className="ed-wall w-full scroll-mt-24 ed-bg-alt">
+        <div className="mx-auto max-w-[1480px] px-6 py-16 flex flex-col gap-9">
+          {header}
+          {BANDS.map((b) => (
+            <div key={b.title}>
+              <BandHeading band={b} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {b.cards.map((c, i) => <MomentCard key={c.title} card={c} i={i} animate={false} />)}
               </div>
             </div>
           ))}
+          <Counter value={value} innerRef={counterRef} />
         </div>
+      </section>
+    );
+  }
 
-        {/* Counter */}
-        <div
-          ref={(el) => { counterRef.current = el; counterVisRef.current = el; }}
-          className="relative grid grid-cols-1 md:grid-cols-[minmax(0,380px)_1fr] gap-8 md:gap-11 items-center p-7 md:px-[38px] md:py-[34px]"
-          style={{
-            zIndex: 2,
-            background: "var(--wl-panel-2)",
-            border: "1px solid var(--wl-border)",
-            borderRadius: 20,
-          }}
-        >
-          <div className="flex flex-col gap-1.5">
+  /* ── lg and up: one pinned container, bands step inside it ──
+     The scroll track below the pin is what the page scrolls through; the
+     pinned child never moves, so the header, the key and the ticker stay
+     put and only the band viewport changes. */
+  return (
+    <section
+      id="always-on"
+      ref={sectionRef}
+      className="ed-wall w-full scroll-mt-24 ed-bg-alt relative"
+      style={{ height: `calc(100vh + ${(BANDS.length - 1) * STEP_VH}vh)` }}
+    >
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <div className="mx-auto max-w-[1480px] h-full px-6 md:px-10 py-6 flex flex-col justify-center gap-5">
+          {header}
+
+          {/* The viewport is a fixed height whatever the band holds, so
+              the header, the key and the ticker never shift between
+              steps. Rows centre inside it, so a three-card band sits in
+              the middle rather than leaving a hole under one row. */}
+          <div className="flex flex-col flex-none" style={{ height: 340 }}>
+            <BandHeading band={band} />
+            {/* key remounts on every step, which is what replays the
+                stagger rather than showing the next band already settled */}
             <div
-              className="text-[44px] md:text-[62px]"
+              key={band.title}
+              className="grid grid-cols-3 gap-5 flex-1 min-h-0 content-center"
+            >
+              {band.cards.map((c, i) => (
+                <MomentCard key={c.title} card={c} i={i} animate={!reduceMotion} />
+              ))}
+            </div>
+          </div>
+
+          {/* Step control, centred under the band viewport */}
+          <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center gap-2" role="tablist" aria-label="Time of day">
+              {BANDS.map((b, i) => (
+                <button
+                  key={b.title}
+                  role="tab"
+                  aria-selected={i === index}
+                  aria-label={b.title}
+                  onClick={() => goTo(i)}
+                  className="rounded-full transition-all"
+                  style={{
+                    width: i === index ? 22 : 8, height: 8,
+                    background: i === index ? "var(--wl-accent)" : "var(--wl-border)",
+                    border: "none", cursor: "pointer", padding: 0,
+                  }}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => goTo(atEnd ? 0 : index + 1)}
+              aria-label={atEnd ? "Back to Overnight" : `Next: ${BANDS[index + 1].title}`}
+              className="flex items-center justify-center rounded-full transition-colors"
               style={{
-                fontFamily: JAKARTA, fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1,
-                fontVariantNumeric: "tabular-nums", color: "var(--wl-text)",
+                width: 34, height: 34, flex: "none", cursor: "pointer",
+                background: "var(--wl-panel)", border: "1px solid var(--wl-border)",
+                color: "var(--wl-text)", boxShadow: "var(--wl-shadow)",
               }}
             >
-              {value.toLocaleString()}
-            </div>
-            <div className="text-[14.5px]" style={{ color: "var(--wl-muted)" }}>
-              more moments across the network yesterday
-            </div>
+              <svg
+                width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+                style={{ transform: atEnd ? "rotate(180deg)" : undefined }}
+              >
+                <path d="M12 5v14M6 13l6 6 6-6" />
+              </svg>
+            </button>
           </div>
-          <div
-            className="text-[15px] md:text-[17px] md:border-l md:pl-11 max-w-[660px]"
-            style={{ lineHeight: 1.6, color: "var(--wl-text)", borderColor: "var(--wl-border)", textWrap: "pretty" }}
-          >
-            None needed a coach to be awake. And what any one location learns,
-            every location gets, anonymized, aggregated, and approved by you.
-          </div>
+
+          <Counter value={value} innerRef={counterRef} />
         </div>
       </div>
     </section>
