@@ -5,12 +5,16 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 /**
  * The primary solution section, built from the operating-system diagram
- * handoff. Three HQ input cards feed a central core; eleven wires carry
- * two-way colour-coded pulses; the right column of live stores grows
- * horizontally into a field of locations on scroll.
+ * handoff. Three HQ input cards feed a central core, eleven wires carry
+ * two-way pulses, and the right column names locations and then tickers
+ * past a hundred.
  *
- * The geometry is absolute coordinates in a fixed 1400x660 canvas, so the
+ * The geometry is absolute coordinates in a fixed 1210x660 canvas, so the
  * canvas keeps that size and is scaled to whatever width it is handed.
+ * It was 1400 while the right side held a field of growth tiles; with
+ * those gone the block only needs its chips, and the narrower canvas is
+ * what lets the section sit in the site's shared container without
+ * scaling the type down to nothing.
  * Below 1200 it is unreadable at that scale, which is where the handoff
  * says to reflow, so a stacked version renders instead.
  *
@@ -19,7 +23,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const CANVAS_W = 1400;
+const CANVAS_W = 1210;
 const CANVAS_H = 660;
 
 const MONO = "var(--os-mono)";
@@ -203,10 +207,6 @@ function SystemsCard() {
           ))}
         </div>
       </div>
-
-      <div style={{ fontSize: 11.5, color: "var(--os-muted)", lineHeight: 1.45 }}>
-        POS · scheduling · CRM · accounting · connected at the source, always current.
-      </div>
     </div>
   );
 }
@@ -274,20 +274,26 @@ function FlowLegend() {
   );
 }
 
+/* The ticker chip inverts: light fill and dark ink, so it separates from
+   the seven dark chips above it rather than getting lost among them. */
 function StoreChip({ label, live = false }: { label: string; live?: boolean }) {
   return (
     <span
       style={{
-        height: 46, boxSizing: "border-box", borderRadius: 10, background: "var(--os-panel)",
-        border: `1px solid ${live ? "var(--os-accent-soft2)" : "var(--os-border)"}`,
-        display: "flex", alignItems: "center", gap: 8,
-        paddingLeft: 14, fontFamily: MONO, fontSize: 11.5,
-        color: live ? "var(--os-accent-ink)" : "var(--os-text)",
+        height: 46, boxSizing: "border-box", borderRadius: 10,
+        background: live ? "#E3EFF7" : "var(--os-panel)",
+        border: `1px solid ${live ? "#E3EFF7" : "var(--os-border)"}`,
+        display: "flex", alignItems: "center",
+        paddingLeft: 14, paddingRight: 12,
+        fontFamily: MONO,
+        fontSize: live ? 13 : 11.5,
+        fontWeight: live ? 700 : 400,
+        color: live ? "#0A1626" : "var(--os-text)",
         /* Tabular figures so the ticker does not jitter as it climbs. */
         fontVariantNumeric: "tabular-nums",
       }}
     >
-      Store {label}
+      {label}
     </span>
   );
 }
@@ -333,15 +339,17 @@ function usePulses(): Pulse[] {
    `setInterval`, not `requestAnimationFrame`: rAF is paused outright in a
    background tab, which would strand the count part-way. Progress is read
    from the clock, so the easing is right whatever the callback rate is. */
-const TICKER_MS = 2200;
+const TICKER_MS = 4200;
+/** What the chip reads once the count is done. */
+const TICKER_END_LABEL = "100s of locations more";
 
 function useLocationTicker(ref: React.RefObject<HTMLDivElement | null>) {
-  const [value, setValue] = useState(TICKER_FROM);
+  const [value, setValue] = useState<number | null>(TICKER_FROM);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
-      setValue(TICKER_TO);
+      setValue(null);
       return;
     }
     const el = ref.current;
@@ -356,7 +364,10 @@ function useLocationTicker(ref: React.RefObject<HTMLDivElement | null>) {
            off, so the curve has to be fastest at the end. */
         const eased = p * p * p;
         setValue(Math.round(TICKER_FROM + (TICKER_TO - TICKER_FROM) * eased));
-        if (p >= 1) clearInterval(tick);
+        /* Lands on the phrase, not the last figure: a specific number
+           here would be a claim, and the point is only that it keeps
+           going. */
+        if (p >= 1) { clearInterval(tick); setValue(null); }
       }, 40);
     };
 
@@ -415,10 +426,12 @@ function OsCanvas() {
           transform: `scale(${scale})`, transformOrigin: "top left",
         }}
       >
-        <div style={{ position: "absolute", left: 0, top: 0, fontFamily: MONO, fontSize: 10.5, letterSpacing: ".14em", color: "var(--os-muted)" }}>
-          FRANCHISOR HQ
+        {/* Sat at y=0, a 60px gap above the cards. Dropped to 38 so each
+            label reads as a heading for the column under it. */}
+        <div style={{ position: "absolute", left: 0, top: 38, fontFamily: MONO, fontSize: 10.5, letterSpacing: ".14em", color: "var(--os-muted)" }}>
+          HQ
         </div>
-        <div style={{ position: "absolute", left: 1000, top: 0, fontFamily: MONO, fontSize: 10.5, letterSpacing: ".14em", color: "var(--os-muted)" }}>
+        <div style={{ position: "absolute", left: 1000, top: 38, fontFamily: MONO, fontSize: 10.5, letterSpacing: ".14em", color: "var(--os-muted)" }}>
           EVERY LOCATION
         </div>
 
@@ -471,11 +484,11 @@ function OsCanvas() {
 
         {/* One chip per out-wire, so the column and the wires stay in
             step. The last one is the ticker. */}
-        <div style={{ position: "absolute", left: 1000, top: 60, width: 400, display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ position: "absolute", left: 1000, top: 70, width: 210, display: "flex", flexDirection: "column", gap: 10 }}>
           {Array.from({ length: NAMED_STORES }, (_, i) => (
-            <StoreChip key={i} label={`#${i + 1}`} />
+            <StoreChip key={i} label={`Store #${i + 1}`} />
           ))}
-          <StoreChip label={`#${liveCount}`} live />
+          <StoreChip label={liveCount === null ? TICKER_END_LABEL : `Store #${liveCount}`} live />
         </div>
       </div>
     </div>
@@ -510,9 +523,9 @@ function StackedDiagram() {
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         {Array.from({ length: NAMED_STORES }, (_, i) => (
-          <StoreChip key={i} label={`#${i + 1}`} />
+          <StoreChip key={i} label={`Store #${i + 1}`} />
         ))}
-        <StoreChip label={`#${TICKER_TO}`} live />
+        <StoreChip label={TICKER_END_LABEL} live />
       </div>
     </div>
   );
@@ -525,7 +538,7 @@ function StackedDiagram() {
 export default function TheSystem() {
   return (
     <section id="the-system" className="ed-os w-full scroll-mt-24" style={{ backgroundColor: "var(--os-bg)" }}>
-      <div className="mx-auto max-w-[1480px] px-6 md:px-10 pt-12 md:pt-16 pb-9 flex flex-col gap-7">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-12 md:pt-16 pb-9 flex flex-col gap-7">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -344,11 +344,15 @@ stacked version below 1200 follows the same order.
 against the headline's 700: it is the consequence of the headline, not a
 second one. It used to close the section as three columns.
 
-**The right column is eight named chips, one per out-wire.** Seven are static
-and the eighth is a ticker that counts from 8 up past a hundred on an
-accelerating cubic when the canvas reaches 35% visibility. The scroll-revealed
-field of tiles and the caption under it are gone. `setInterval`, not rAF,
-which is paused outright in a background tab and would strand the count.
+**The right column is eight 200px chips, one per out-wire.** Seven are static
+and the eighth is a ticker: it counts from 8 past a hundred over 4.2s on an
+accelerating cubic once the canvas is 35% visible, then **lands on the phrase
+"100s of locations more" rather than a figure** (a specific number there would
+be a claim; the point is only that it keeps going). That chip inverts to a
+light fill with dark bold 13px ink so it separates from the seven above it.
+The end label measures 164px against 174px of inner width, so it fits without
+truncating. `setInterval`, not rAF, which is paused outright in a background
+tab and would strand the count.
 
 **The systems card names types, not vendors**, with the brand names rotating
 in a marquee beneath. The track holds two identical copies and shifts by
@@ -364,7 +368,13 @@ the drawn content ends around y=594 and the remainder is empty canvas, which
 pushed the payoff line ~80px below the visual. Measured 36px above the line
 and 36px below it at 1205. The canvas box overflows the wrapper harmlessly.
 
-**The canvas is a fixed 1400x660 that gets scaled.** The wire paths and the
+**The canvas is a fixed 1210x660 that gets scaled.** It was 1400 while the
+right side held the scroll-revealed tile field; with that gone the block only
+needs its chips, and the narrower canvas is what lets this section sit in the
+site's shared `max-w-7xl` container without scaling the type into
+illegibility. Scale is 0.952 at 1440, against 0.823 had the canvas stayed
+1400. **The section no longer runs wider than its neighbours**: all seven
+measure 144 to 1296 at 1440. The wire paths and the
 pulse `offset-path` values are absolute coordinates in that space, so they
 cannot be made responsive without redrawing every curve. A `ResizeObserver`
 sets `transform: scale(w/1400)`.
