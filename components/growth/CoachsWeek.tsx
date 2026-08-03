@@ -86,7 +86,7 @@ function TimeBar({
         aria-label={ariaLabel}
         className="flex w-full overflow-hidden"
         style={{
-          height: "60px",
+          height: "48px",
           borderRadius: "12px",
           border: "1px solid var(--pb-border)",
           transformOrigin: "left",
@@ -175,7 +175,7 @@ function DetailCard({ header, mono = false, children, footer }: {
       >
         {header}
       </div>
-      {children}
+      <div className="flex-1 min-h-0">{children}</div>
       {footer && (
         <div className="text-[12.5px]" style={{ color: "var(--pb-muted)" }}>
           {footer}
@@ -199,13 +199,16 @@ const INBOX_THREADS = [
 function QuestionsCard() {
   return (
     <DetailCard header="Monday, 8:41 to 9:06 am">
-      <div className="flex flex-col gap-2.5">
+      {/* This card is the tallest of the three, so its chip metrics set
+          the whole row's height. Tightened from py-2.5 / gap-2.5, which
+          drove the row to 401px. */}
+      <div className="flex h-full flex-col justify-between gap-2">
         {INBOX_THREADS.map((t, i) => {
           const Icon = t.icon;
           return (
             <div
               key={`${t.store}-${i}`}
-              className="px-3 py-2.5"
+              className="px-3 py-[7px]"
               style={{ backgroundColor: "var(--pb-chip)", borderRadius: "10px" }}
             >
               <div className="flex items-center gap-1.5">
@@ -217,7 +220,7 @@ function QuestionsCard() {
                   {t.store} · {t.channel}
                 </span>
               </div>
-              <div className="text-[13px] mt-[3px]" style={{ color: "var(--pb-text)" }}>
+              <div className="text-[12.5px] mt-[2px]" style={{ color: "var(--pb-text)", lineHeight: 1.3 }}>
                 {t.q}
               </div>
             </div>
@@ -229,20 +232,22 @@ function QuestionsCard() {
 }
 
 /* 02 Compliance chasing: separate deadlines, one person tracking them. */
+/* The one clear location sits mid-list rather than last: parked at the
+   end it read as a summary row, which is the opposite of the point. */
 const CHASE_ROWS = [
   { store: "Store #331", note: "Insurance expires in 14 days", overdue: true },
   { store: "Store #118", note: "2 training modules outstanding", overdue: true },
   { store: "Store #402", note: "Audit docs not uploaded", overdue: true },
+  { store: "Store #214", note: "All current", overdue: false },
   { store: "Store #087", note: "P&L not submitted", overdue: true },
   { store: "Store #263", note: "Food safety cert lapsed", overdue: true },
   { store: "Store #519", note: "Background checks pending", overdue: true },
-  { store: "Store #214", note: "All current", overdue: false },
 ];
 
 function ComplianceCard() {
   return (
     <DetailCard header="Compliance · West territory" mono footer="Every deadline runs on its own clock.">
-      <div className="flex flex-col gap-[9px]">
+      <div className="flex h-full flex-col justify-between gap-[9px]">
         {CHASE_ROWS.map((r) => (
           <div key={r.store} className="flex items-center justify-between gap-2.5">
             <span className="text-[12.5px]" style={{ fontFamily: "var(--pb-mono)", color: "var(--pb-text)" }}>
@@ -285,18 +290,18 @@ const REPORT_SCRAPS: { icon: React.ElementType; tint: string; title: string }[] 
 /* Tilt and offset per index rather than at random, so the scatter is
    stable across renders and identical on the server and the client. */
 const SCATTER = [
-  { rot: -2.4, dx: -2, dy: 0 },
-  { rot: 1.8,  dx: 3,  dy: 2 },
-  { rot: 2.6,  dx: -4, dy: -1 },
-  { rot: -1.6, dx: 2,  dy: 3 },
-  { rot: 1.2,  dx: -3, dy: -2 },
-  { rot: -2.8, dx: 4,  dy: 1 },
-  { rot: 2.2,  dx: -1, dy: -3 },
-  { rot: -1.2, dx: 3,  dy: 2 },
-  { rot: 2.8,  dx: -4, dy: 0 },
-  { rot: -2.0, dx: 1,  dy: -2 },
-  { rot: 1.4,  dx: -2, dy: 3 },
-  { rot: -2.6, dx: 2,  dy: -1 },
+  { rot: -3.4, dx: -3, dy: 2 },
+  { rot: 2.6,  dx: 6,  dy: -4 },
+  { rot: 3.2,  dx: -6, dy: 5 },
+  { rot: -2.2, dx: 4,  dy: -3 },
+  { rot: 1.8,  dx: -5, dy: 4 },
+  { rot: -3.8, dx: 7,  dy: -2 },
+  { rot: 3.0,  dx: -2, dy: -5 },
+  { rot: -1.8, dx: 5,  dy: 3 },
+  { rot: 3.6,  dx: -7, dy: -3 },
+  { rot: -2.8, dx: 2,  dy: 4 },
+  { rot: 2.0,  dx: -4, dy: -4 },
+  { rot: -3.2, dx: 6,  dy: 2 },
 ];
 
 function ReportsCard() {
@@ -306,7 +311,7 @@ function ReportsCard() {
           order, and a tidy grid argues the opposite. Each scrap tilts and
           nudges by its index, and the row overlaps slightly through the
           negative margin, so it reads as a heap on a desk. */}
-      <div className="flex flex-wrap gap-x-1.5 gap-y-1 pt-0.5" aria-hidden="true">
+      <div className="flex h-full flex-wrap content-between gap-x-1.5 gap-y-1 py-0.5" aria-hidden="true">
         {REPORT_SCRAPS.map((sc, i) => {
           const Icon = sc.icon;
           const t = SCATTER[i % SCATTER.length];
@@ -461,14 +466,10 @@ function CapacityBlock() {
             color: "var(--pb-text)",
           }}
         >
-          Coach headcount scales linearly. The coaching each owner gets
-          does not.
+          Coach headcount scales linearly.
+          <br />
+          The coaching each owner gets does not.
         </h3>
-        <p className="text-[15px] md:text-[16px] max-w-[620px]" style={{ color: "var(--pb-muted)", lineHeight: 1.6 }}>
-          Every thirty owners needs another coach, so the team grows in step
-          with the network. What any one franchisee actually receives, and how
-          much of it is real coaching, stays exactly where it was.
-        </p>
       </div>
 
       <div className="flex flex-col gap-3.5">
@@ -476,8 +477,8 @@ function CapacityBlock() {
           <span className="text-[13.5px]" style={{ fontWeight: 600, color: "var(--pb-text)" }}>
             As the network grows
           </span>
-          <span className="text-[12.5px]" style={{ color: "var(--pb-muted)" }}>
-            Same load on every coach. Same support for every owner.
+          <span className="text-[13.5px]" style={{ fontWeight: 600, color: "var(--pb-text)" }}>
+            Thirty owners each, at every size.
           </span>
         </div>
 
@@ -485,9 +486,6 @@ function CapacityBlock() {
             box, so it reads as a single story rather than three separate
             facts; the remaining third states what the story means. */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
-          {/* The invariant is stated once beneath the row rather than
-              repeated under each step, where three identical labels read
-              as a glitch rather than as the point. */}
           <div
             className="lg:col-span-2 flex flex-col gap-4 p-5"
             style={{
@@ -512,12 +510,6 @@ function CapacityBlock() {
               </Fragment>
             ))}
             </div>
-            <div
-              className="text-[12px] pt-3"
-              style={{ color: "var(--pb-muted)", borderTop: "1px solid var(--pb-border)" }}
-            >
-              Thirty owners each, at every size.
-            </div>
           </div>
 
           <div
@@ -528,21 +520,22 @@ function CapacityBlock() {
               border: "1px solid var(--pb-accent-soft2)",
             }}
           >
+            {/* One line per sentence. The column is 276px at 1205 and the
+                longer sentence needs 16px to hold it; 17 takes three
+                lines and 18 takes four. */}
             <p
-              className="text-[17px] md:text-[18px]"
+              className="text-[16px]"
               style={{
                 fontFamily: "var(--font-editorial)",
                 fontWeight: 700,
                 letterSpacing: "-0.02em",
-                lineHeight: 1.25,
+                lineHeight: 1.35,
                 color: "var(--pb-text)",
               }}
             >
-              A coach&rsquo;s reach ends where their week does.
-            </p>
-            <p className="text-[12.5px]" style={{ color: "var(--pb-muted)", lineHeight: 1.5 }}>
-              Hiring changes how many owners are covered. It does not change
-              how much of any one of them a coach can reach.
+              The team scales with the network.
+              <br />
+              What each franchisee gets doesn&rsquo;t.
             </p>
           </div>
         </div>
@@ -583,7 +576,7 @@ export default function CoachsWeek() {
         {/* The two bars sit together, the claim and its correction, with
             no card around them: the comparison is the point and a box
             between them broke it. */}
-        <div className="flex flex-col gap-9">
+        <div className="flex flex-col gap-6">
           <TimeBar
             title="Four days in five go to admin work, not growth"
             eyebrow="A coach's week, today"
@@ -621,12 +614,12 @@ export default function CoachsWeek() {
                   says 104px; the longest description runs to three lines
                   from 1024 up and measures 105.4, so the floor is 106. */}
               <div className="flex flex-col gap-2 lg:min-h-[106px]">
-                {/* The title is underlined in its bar segment's tone, which
-                    is what ties the pillar to the bar above without
-                    labelling the bar itself. Inline-block so the rule is
-                    only as wide as the words. */}
+                {/* Dot and underline both, in the bar segment's tone. A
+                    3px rule alone was too thin to match against the bar by
+                    eye; the solid dot gives the colour enough area to
+                    compare, and the rule keeps the tie to the words. */}
                 <h3
-                  className="text-[18px] md:text-[20px]"
+                  className="flex items-center gap-2.5 text-[18px] md:text-[20px]"
                   style={{
                     fontFamily: "var(--font-editorial)",
                     fontWeight: 700,
@@ -634,6 +627,11 @@ export default function CoachsWeek() {
                     color: "var(--pb-text)",
                   }}
                 >
+                  <span
+                    aria-hidden="true"
+                    className="block flex-shrink-0"
+                    style={{ width: 12, height: 12, borderRadius: 3, backgroundColor: p.rule }}
+                  />
                   <span
                     className="inline-block"
                     style={{ borderBottom: `3px solid ${p.rule}`, paddingBottom: 3 }}

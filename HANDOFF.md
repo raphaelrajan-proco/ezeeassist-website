@@ -942,9 +942,17 @@ fit is usually 1024 rather than the smallest screen.
 - **Both bars carry three greys, one per pillar below.** A fourth, lightest tone was
   dropped and its share redistributed proportionally; `--pb-admin-4` went with
   it. Today is 31/26/23 + 20, the corrected bar is 8/7/5 + 80.
-- **The pillar titles are underlined in their bar segment's tone**, not
-prefixed with a swatch square. Tone and segment have to stay in step, since
-that pairing is what lets the bar go unlabelled.
+- **The pillar titles carry both a swatch dot and an underline** in their bar
+segment's tone. The 3px rule alone was too thin to match against the bar by
+eye; the dot gives the colour enough area to compare. Tone and segment have to
+stay in step, since that pairing is what lets the bar go unlabelled.
+
+**Bars are 48px tall and the detail cards run 342px.** The Questions card sets
+the row: it is the tallest of the three, so its chip metrics (py-[7px],
+gap-2, 12.5px question) are what the row height follows. `DetailCard` gives
+its body `flex-1` so the footer sits at the bottom and the spare height is
+absorbed inside the content rather than pooling as white space under it; each
+card measures 1px of slack.
 
 **The report scraps are scattered, not gridded.** Each tilts and nudges by
 its index from a fixed `SCATTER` table rather than at random, so the layout
