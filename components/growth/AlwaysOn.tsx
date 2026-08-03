@@ -304,6 +304,12 @@ export default function AlwaysOn() {
      peek even on very tall viewports and in full-page captures, which
      expand 100vh. */
   const [vpH, setVpH] = useState(560);
+  /* The pinned box's own height: its content, not 100vh. On viewports
+     taller than the content, a full-screen sticky left its unused
+     bottom as a dead white band between this section and the next; a
+     content-fitted box ends where the compartment ends, so the next
+     section shows beneath it instead. */
+  const [stickyH, setStickyH] = useState(0);
 
   useEffect(() => {
     if (!isDesktop) return;
@@ -344,6 +350,7 @@ export default function AlwaysOn() {
       const r = Math.max(1, stack.scrollHeight - vh, lastTop - PAD);
       rangeRef.current = r;
       setVpH(vh);
+      setStickyH(Math.round(padTop + headH + 8 + vh + 12));
       setRange(r);
       schedule();
     };
@@ -414,8 +421,15 @@ export default function AlwaysOn() {
      is the cue that there is more. */
   return (
     <section id="always-on" className="ed-wall w-full scroll-mt-24" style={{ backgroundColor: "var(--wl-bg)" }}>
-      <div ref={trackRef} className="relative" style={{ height: `calc(100vh + ${range}px)` }}>
-        <div className="sticky top-0 h-screen overflow-hidden">
+      <div
+        ref={trackRef}
+        className="relative"
+        style={{ height: stickyH ? stickyH + range : `calc(100vh + ${range}px)` }}
+      >
+        <div
+          className="sticky top-0 overflow-hidden"
+          style={{ height: stickyH || "100vh" }}
+        >
           <div
             ref={gridRef}
             className="mx-auto grid h-full max-w-7xl gap-10 px-6 md:px-12 lg:px-16 pb-3 xl:gap-14"
@@ -444,9 +458,11 @@ export default function AlwaysOn() {
                   /* EZee blue, via the token so the light band gets the
                      darker pass-rated value and dark gets the brand hue. */
                   color: "var(--wl-accent)",
-                  /* Larger than the old single-column header: the left
-                     half is this text's whole job now. */
-                  fontSize: "clamp(1.5rem, 0.9rem + 1.7vw, 2.3rem)",
+                  /* Sized so the two sentences hold three lines total:
+                     the second sentence needs one line, and its ceiling
+                     is the 333px column at 1024, measured at 15.1px of
+                     width per 1px of font. */
+                  fontSize: "clamp(1.3rem, 0.6rem + 1.1vw, 1.625rem)",
                 }}
               >
                 <span className="block">Coaching amplified across every location.</span>

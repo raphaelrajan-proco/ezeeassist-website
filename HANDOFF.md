@@ -573,12 +573,20 @@ scroller**: the range is the larger of the stack overflow and the
 translate that rests "On a longer clock" just under the top fade,
 because on tall viewports the natural overflow released the pin while
 that band was still mid-screen and the key scrolled away early.
+**The pinned box is content-fitted, not 100vh** (`stickyH` = nav pad +
+key + scroller + padding, measured): a full-screen sticky left its
+unused bottom as a dead white band between this section and the next on
+tall viewports; a fitted box ends where the compartment ends and the
+impact band shows beneath it instead.
 
 The old accent thread between the two Store #331 cards survives in copy
 alone: the 6:50pm card reads "The 6:00am draft".
 
-**The left thesis is EZee blue and two lines** ("Coaching amplified
-across every location." / "At the hours it matters most."), coloured with
+**The left thesis is EZee blue, three lines max** ("Coaching amplified
+across every location." / "At the hours it matters most.", the first
+sentence wrapping to two lines; the clamp tops at 26px because the
+second sentence must hold one line in the 333px column at 1024),
+coloured with
 `--wl-accent` so the light band gets the darker pass-rated value
 (#0071A0, 4.7:1 on the band) and dark gets the brand hue. The paragraph
 under it is 19px, 1.25x its launch size. Both changes apply to the
@@ -702,8 +710,10 @@ body 5.81 light, 7.18 dark.
 
 ## Impact stats (section 6)
 
-Four KPI cards under one centred line ("Boost your coaching with proven
-AI that scales your system's growth.", white on the hero's hazy blue:
+Four KPI cards under one centred two-line lead ("Boost your coaching
+with proven AI" / "that scales your system's growth.", forced block
+breaks, "proven AI" in the hero's #9FE0F8 accent, white on the hero's
+hazy blue:
 the band carries the hero photograph with a rgba(4,32,54,.42) scrim,
 dark in both themes, so it stands out between the white wall and the
 control center), deliberately half a section. Rebuilt from a supplied handoff: **the bars

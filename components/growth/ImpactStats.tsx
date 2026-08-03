@@ -119,7 +119,12 @@ export default function ImpactStats() {
             color: "#FFFFFF",
           }}
         >
-          Boost your coaching with proven AI that scales your system&rsquo;s growth.
+          {/* Two lines exactly, per request; the highlight is the hero's
+              accent, the shade tuned for this same scrimmed backdrop. */}
+          <span className="block">
+            Boost your coaching with <span style={{ color: "#9FE0F8" }}>proven AI</span>
+          </span>
+          <span className="block">that scales your system&rsquo;s growth.</span>
         </motion.h2>
 
         <div ref={gridRef} className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
