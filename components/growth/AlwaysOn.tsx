@@ -275,17 +275,30 @@ export default function AlwaysOn() {
   const isDesktop = useIsDesktop();
 
   const trackRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const headRowRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const stackRef = useRef<HTMLDivElement>(null);
   const bandRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const [range, setRange] = useState(DEFAULT_RANGE);
+  /* The scroller's height in px, set explicitly rather than derived from
+     the flex/grid chain. The first build sized it `flex-1` inside an
+     auto-sized grid row: Chrome resolved the percentage chain, Safari
+     treated it as auto, the viewport grew to the full stack height,
+     `range` collapsed to 1 and the section never pinned. It rendered as
+     one long static wall. A measured pixel height cannot be lost to that
+     ambiguity. The cap keeps the container to roughly one band plus the
+     peek even on very tall viewports and in full-page captures, which
+     expand 100vh. */
+  const [vpH, setVpH] = useState(560);
   const [active, setActive] = useState(0);
 
   useEffect(() => {
     if (!isDesktop) return;
-    const track = trackRef.current, viewport = viewportRef.current, stack = stackRef.current;
-    if (!track || !viewport || !stack) return;
+    const track = trackRef.current, grid = gridRef.current, headRow = headRowRef.current,
+      viewport = viewportRef.current, stack = stackRef.current;
+    if (!track || !grid || !headRow || !viewport || !stack) return;
 
     let raf = 0;
     const read = () => {
@@ -294,12 +307,13 @@ export default function AlwaysOn() {
       const top = track.getBoundingClientRect().top + window.scrollY;
       const y = Math.max(0, Math.min(r, window.scrollY - top));
       stack.style.transform = `translate3d(0, ${-y}px, 0)`;
-      /* Active tag: the band under a probe just above the viewport's
-         middle. Flips as the incoming band crosses the centre. The rects
-         are read after the transform above, so the offsets already carry
-         the translate; comparing against the viewport is enough. */
+      /* Active tag: the band under a probe in the viewport's upper half.
+         Flips as the incoming band crosses it. The rects are read after
+         the transform above, so the offsets already carry the translate;
+         comparing against the viewport is enough. The cap keeps the
+         probe honest if the viewport ever renders unclipped. */
       const vpTop = viewport.getBoundingClientRect().top;
-      const probe = viewport.clientHeight * 0.45;
+      const probe = Math.min(viewport.clientHeight * 0.45, 320);
       let idx = 0;
       bandRefs.current.forEach((b, i) => {
         if (b && b.getBoundingClientRect().top - vpTop <= probe) idx = i;
@@ -308,14 +322,22 @@ export default function AlwaysOn() {
     };
     const schedule = () => { if (!raf) raf = requestAnimationFrame(read); };
     const measure = () => {
-      setRange(Math.max(1, stack.scrollHeight - viewport.clientHeight));
+      /* Every fixed cost above the scroller, in resolved pixels: the
+         grid's own top padding (nav clearance), the tag row and key with
+         their padding, and the grid's 24px bottom padding. None of these
+         depend on the scroller's height, so there is no feedback loop. */
+      const padTop = parseFloat(getComputedStyle(grid).paddingTop) || 98;
+      const headH = headRow.getBoundingClientRect().height;
+      const vh = Math.round(Math.min(720, Math.max(320, window.innerHeight - padTop - headH - 24)));
+      setVpH(vh);
+      setRange(Math.max(1, stack.scrollHeight - vh));
       schedule();
     };
 
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(stack);
-    ro.observe(viewport);
+    ro.observe(headRow);
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", measure);
     return () => {
@@ -395,9 +417,14 @@ export default function AlwaysOn() {
       <div ref={trackRef} className="relative" style={{ height: `calc(100vh + ${range}px)` }}>
         <div className="sticky top-0 h-screen overflow-hidden">
           <div
+            ref={gridRef}
             className="mx-auto grid h-full max-w-7xl gap-10 px-6 md:px-12 lg:px-16 pb-6 xl:gap-14"
             style={{
               gridTemplateColumns: "minmax(0, 7fr) minmax(0, 11fr)",
+              /* One definite row. An auto row can grow past the 100vh
+                 container and takes percentage heights down with it;
+                 minmax(0, 1fr) pins the row to the container. */
+              gridTemplateRows: "minmax(0, 1fr)",
               /* The floating nav pill overlays the top of the pinned
                  screen; without this the tag row sits behind it. */
               paddingTop: "calc(var(--nav-block) + 10px)",
@@ -428,9 +455,11 @@ export default function AlwaysOn() {
               </p>
             </div>
 
-            {/* Right: fixed tags and key, then the scrolling day */}
-            <div className="flex h-full min-h-0 flex-col">
-              <div className="flex flex-col gap-2.5 pb-3.5">
+            {/* Right: fixed tags and key, then the scrolling day. Centred
+                so the capped scroller sits balanced on tall viewports;
+                on ordinary ones the column is full and this is a no-op. */}
+            <div className="flex h-full min-h-0 flex-col justify-center">
+              <div ref={headRowRef} className="flex flex-col gap-2.5 pb-3.5">
                 <div className="flex flex-wrap gap-2" role="tablist" aria-label="Time of day">
                   {BANDS.map((b, i) => (
                     <button
@@ -455,11 +484,13 @@ export default function AlwaysOn() {
               </div>
 
               {/* The scroller. The mask dims whatever crosses the top or
-                  bottom PAD, which is the faded glimpse of the next band. */}
+                  bottom PAD, which is the faded glimpse of the next band.
+                  The height is the measured pixel value, never a
+                  percentage: see the note on vpH. */}
               <div
                 ref={viewportRef}
-                className="relative min-h-0 flex-1 overflow-hidden"
-                style={{ WebkitMaskImage: FADE, maskImage: FADE }}
+                className="relative overflow-hidden"
+                style={{ height: vpH, flex: "none", WebkitMaskImage: FADE, maskImage: FADE }}
               >
                 <div
                   ref={stackRef}

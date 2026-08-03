@@ -549,11 +549,25 @@ being built. **Deliberate continuity across sections, not duplication.**
 ### How the scroller works
 
 The track wrapper is `100vh + range` tall, where **`range` is the measured
-stack overflow** (`stack.scrollHeight - viewport.clientHeight`, kept fresh by
-a ResizeObserver; `DEFAULT_RANGE` 1400 is only the SSR fallback). The sticky
+stack overflow** (`DEFAULT_RANGE` 1400 is only the SSR fallback). The sticky
 child pins for that distance and the page's scroll maps **one to one** onto
 the stack's translate: a notch of page scroll moves the cards a notch, so
 nothing hijacks the wheel. At 1205x793: stack 1939, viewport 598, range 1341.
+
+**The scroller's height is a measured pixel value, never a percentage.**
+The first build sized it `flex-1` inside an auto-sized grid row. Chrome
+resolved that chain; Safari treated the percentages as auto, the viewport
+grew to the full stack height, `range` collapsed to 1 and the section
+rendered as one long unpinned wall, which the user caught from a full-page
+screenshot (the tell: "During the day" active without any scrolling, and no
+fades). `measure()` now sums the resolved fixed costs above the scroller
+(grid `paddingTop`, tag-row height, bottom padding) and sets the height
+inline, capped at 720 so the container stays roughly one band plus the peek
+even on very tall viewports and in full-page captures, which expand 100vh.
+The grid row is also pinned with `grid-template-rows: minmax(0, 1fr)`.
+Verified at 1205x793 (598, range 1341) and at 1205x2200 (capped 720, range
+1219, Overnight active at rest). Do not reintroduce a percentage height
+anywhere in this chain.
 
 **The transform is written straight to the DOM in a rAF, not through React
 state.** Re-rendering a 26-card tree at scroll rate is the failure mode this
