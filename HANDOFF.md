@@ -554,9 +554,13 @@ one continuous column.** The band titles are dividers INSIDE the scroller
 (title + rule, the same `BandHeading` the stacked mobile layout uses); at
 rest the next divider peeks through the bottom fade, which is the cue that
 there is more to scroll. The key sits alone just above the scroller
-(`pb-2`), and the grid clears the nav pill by only 4px: the old tag row
-and its padding read as a hole at the top and were removed with the tags
-themselves. **The counter block (1,834) was removed entirely on request**;
+(`pb-2`) on its own grey chip (`rgba(var(--wl-band-ink), 0.1)`, rounded,
+inline-flex) so it does not float loose on the white band; its swatches
+are filled rounded squares, not the cards' corner shape, because at key
+size a solid fill reads faster. The grid clears the nav pill by only
+4px, and the right column is top-aligned, not centred: centring pushed
+the whole compartment down on tall viewports and read as a hole above
+the key. **The counter block (1,834) was removed entirely on request**;
 when the last band is spent the section simply hands off to the impact
 band.
 

@@ -245,19 +245,34 @@ function BandHeading({ band }: { band: (typeof BANDS)[number] }) {
   );
 }
 
+/** The key, on its own grey chip so it does not float loose on the
+    white band. Its swatches are filled rounded squares rather than the
+    cards' corner shape, by request: at key size a solid fill reads
+    faster than a hairline corner. */
 function Legend() {
   return (
-    <div className="flex flex-wrap gap-x-[18px] gap-y-1.5">
+    <div
+      className="inline-flex flex-wrap items-center gap-x-[18px] gap-y-1.5 self-start rounded-xl px-4 py-2.5"
+      style={{
+        background: "rgba(var(--wl-band-ink), 0.1)",
+        border: "1px solid rgba(var(--wl-band-ink), 0.06)",
+      }}
+    >
       {[
         { tone: "neutral" as Tone, label: "Detected and flagged for you" },
         { tone: "accent" as Tone,  label: "Automated play, work done for you" },
         { tone: "violet" as Tone,  label: "Built by an owner" },
       ].map((l) => (
         <span key={l.label} className="flex items-center gap-2 text-[12.5px]" style={{ color: "var(--wl-muted)" }}>
-          {/* The same corner shape the cards wear, so the key reads. */}
-          <span className="relative block flex-none" style={{ width: 11, height: 11 }} aria-hidden="true">
-            <CornerMark tone={l.tone} size={11} />
-          </span>
+          <span
+            aria-hidden="true"
+            className="block flex-none"
+            style={{
+              width: 10, height: 10, borderRadius: 3,
+              background: TONE[l.tone].corner,
+              opacity: TONE[l.tone].dim ? 0.65 : 1,
+            }}
+          />
           {l.label}
         </span>
       ))}
@@ -430,10 +445,10 @@ export default function AlwaysOn() {
               </p>
             </div>
 
-            {/* Right: the key, tight above the scrolling day. Centred so
-                the capped scroller sits balanced on tall viewports; on
-                ordinary ones the column is full and this is a no-op. */}
-            <div className="flex h-full min-h-0 flex-col justify-center">
+            {/* Right: the key, tight above the scrolling day. Top-aligned
+                on purpose: centring pushed the whole compartment down on
+                tall viewports and read as a hole above the key. */}
+            <div className="flex h-full min-h-0 flex-col">
               <div ref={headRowRef} className="pb-2">
                 <Legend />
               </div>
