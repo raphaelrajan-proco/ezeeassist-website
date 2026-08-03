@@ -34,6 +34,13 @@ before picking the work back up in a fresh session.
 | 9 | FAQ | `components/growth/Objections.tsx` + `lib/data/objections.ts` | `#objections` |
 | 10 | Final CTA (button only, calendar moved to `/speak-to-an-expert`) | `components/growth/FinalCTA.tsx` | `#book` |
 
+**The logo marquee's roster order is deliberate** (customer-logos.ts):
+five openers pulled from the back of the roster, then the featured run
+from position six (UPS Store, Sport Clips, Fastest Labs, Aqua-Tots,
+DivaDance, Deka+, Horse Power, Oasis Senior Advisors, EverLine, CEFA,
+QC Kinetix), then the rest. Oasis Senior Advisors and QC Kinetix have
+no SVGs yet and render as text pills until the files land.
+
 The showcase pills expose anchors: `#answers`, `#reporting`, `#ai-apps`, and
 the section opens the matching scene from `location.hash`. `#agents` and
 `#compliance` went away when the rail dropped from five pills to three.
@@ -614,10 +621,16 @@ impact band shows beneath it instead.
 The old accent thread between the two Store #331 cards survives in copy
 alone: the 6:50pm card reads "The 6:00am draft".
 
-**The thesis is EZee blue, one continuous wrapped line** ("Coaching
-amplified across every location. At the hours it matters most."),
-running horizontally in the on-demand headline clamp
-(`clamp(1.25rem, 3.18vw, 2.625rem)`), wrapping naturally. Coloured with
+**The thesis is EZee blue and holds ONE line at desktop widths**
+("Coaching amplified across every location. At the hours it matters
+most.", `clamp(1.25rem, 0.25rem + 2vw, 2rem)`; the 71-char string
+measures ~0.494px per char per 1px of font, ceilings 25.5 / 30.7 /
+32.8 at 1024 / 1205 / capped-1152, re-derive if the copy changes). The
+supporting line is exactly 0.75x of it via `calc()`, regular weight:
+"Nobody pulled any of this. Each play orchestrated by a coach once, and
+some plays built directly from what the rest of your network already
+learned." The key sits `mt-2` below it and `pb-1.5` above the
+compartment, with `PAD` trimmed to 40. Coloured with
 `--wl-accent` so the light band gets the darker pass-rated value
 (#0071A0, 4.7:1 on the band) and dark gets the brand hue. The paragraph
 under it is 19px, 1.25x its launch size. Both changes apply to the

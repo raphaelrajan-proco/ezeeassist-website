@@ -166,7 +166,8 @@ function CornerMark({ tone, size = 22 }: { tone: Tone; size?: number }) {
    PAD is the stack's own vertical padding and the depth of the fade mask
    at each end of the viewport: at either extreme the resting band sits
    clear of the fade, and anything beyond it shows through dimmed. */
-const PAD = 48;
+/* Trimmed from 48 when the key moved tight against the compartment. */
+const PAD = 40;
 /* Shallower at the bottom, so the last band does not sit in a deep dead
    zone before the section hands off. */
 const PAD_BOTTOM = 28;
@@ -380,14 +381,14 @@ export default function AlwaysOn() {
                 /* EZee blue, via the token so the light band gets the
                    darker pass-rated value and dark gets the brand hue. */
                 color: "var(--wl-accent)",
-                fontSize: "clamp(1.25rem, 3.18vw, 2.625rem)",
+                fontSize: "clamp(1.25rem, 0.25rem + 2vw, 2rem)",
               }}
             >
               Coaching amplified across every location. At the hours it matters most.
             </h2>
-            <p className="text-[15px] md:text-[16px] max-w-[780px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
-              Nobody pulled any of this. Each one started as a play built once, and
-              some of them draw on what the rest of your network already learned.
+            <p className="max-w-[780px]" style={{ lineHeight: 1.5, color: "var(--wl-muted)", fontWeight: 400, fontSize: "calc(0.75 * clamp(1.25rem, 0.25rem + 2vw, 2rem))" }}>
+              Nobody pulled any of this. Each play orchestrated by a coach once, and
+              some plays built directly from what the rest of your network already learned.
             </p>
             <Legend />
           </div>
@@ -434,7 +435,7 @@ export default function AlwaysOn() {
                 mono eyebrow over a full-width headline, the headline in
                 EZee blue as before, then the thesis line. Everything
                 above the viewport is measured as one block. */}
-            <div ref={headRowRef} className="flex flex-col gap-3 pb-3">
+            <div ref={headRowRef} className="flex flex-col gap-3 pb-1.5">
               <div
                 className="uppercase"
                 style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, letterSpacing: ".18em", color: "var(--wl-muted)" }}
@@ -447,18 +448,26 @@ export default function AlwaysOn() {
                   /* EZee blue, via the token so the light band gets the
                      darker pass-rated value and dark gets the brand hue. */
                   color: "var(--wl-accent)",
-                  /* The on-demand headline's clamp, so the two sections
-                     read as one family. Wraps naturally. */
-                  fontSize: "clamp(1.25rem, 3.18vw, 2.625rem)",
+                  /* One line at ordinary desktop widths: the 71-char
+                     string measures ~0.494px per char per 1px of font,
+                     so the one-line ceilings are 25.5 at 1024, 30.7 at
+                     1205 and 32.8 in the capped 1152 container. This
+                     sits under each; re-derive if the copy changes. */
+                  fontSize: "clamp(1.25rem, 0.25rem + 2vw, 2rem)",
                 }}
               >
                 Coaching amplified across every location. At the hours it matters most.
               </h2>
-              <p className="text-[15px] md:text-[16px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
-                Nobody pulled any of this. Each one started as a play built once, and
-                some of them draw on what the rest of your network already learned.
+              {/* 0.75x the lead line, regular weight, by request. */}
+              <p style={{ lineHeight: 1.5, color: "var(--wl-muted)", fontWeight: 400, fontSize: "calc(0.75 * clamp(1.25rem, 0.25rem + 2vw, 2rem))" }}>
+                Nobody pulled any of this. Each play orchestrated by a coach once, and
+                some plays built directly from what the rest of your network already learned.
               </p>
-              <Legend />
+              {/* Breathing room above the key, and the key hugging the
+                  compartment below it, by request. */}
+              <div className="mt-2">
+                <Legend />
+              </div>
             </div>
 
             {/* The scroller, full width. The mask dims whatever crosses
