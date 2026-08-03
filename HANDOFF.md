@@ -582,11 +582,11 @@ impact band shows beneath it instead.
 The old accent thread between the two Store #331 cards survives in copy
 alone: the 6:50pm card reads "The 6:00am draft".
 
-**The left thesis is EZee blue, three lines max** ("Coaching amplified
-across every location." / "At the hours it matters most.", the first
-sentence wrapping to two lines; the clamp tops at 26px because the
-second sentence must hold one line in the 333px column at 1024),
-coloured with
+**The left thesis is EZee blue, one continuous wrapped line, three
+lines max** ("Coaching amplified across every location. At the hours it
+matters most."). No forced break between the sentences: it wraps
+naturally, and the clamp tops at 26px so it holds three lines in the
+333px column at 1024. Coloured with
 `--wl-accent` so the light band gets the darker pass-rated value
 (#0071A0, 4.7:1 on the band) and dark gets the brand hue. The paragraph
 under it is 19px, 1.25x its launch size. Both changes apply to the

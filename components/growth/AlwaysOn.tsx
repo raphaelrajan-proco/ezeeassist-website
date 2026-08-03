@@ -391,8 +391,7 @@ export default function AlwaysOn() {
                 fontSize: "clamp(1.375rem, 0.62rem + 2.1vw, 2rem)",
               }}
             >
-              <span className="block">Coaching amplified across every location.</span>
-              <span className="block">At the hours it matters most.</span>
+              Coaching amplified across every location. At the hours it matters most.
             </h2>
             <p className="text-[18px] md:text-[19px] max-w-[780px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
               Nobody pulled any of this. Each one started as a play built once, and
@@ -465,8 +464,7 @@ export default function AlwaysOn() {
                   fontSize: "clamp(1.3rem, 0.6rem + 1.1vw, 1.625rem)",
                 }}
               >
-                <span className="block">Coaching amplified across every location.</span>
-                <span className="block">At the hours it matters most.</span>
+                Coaching amplified across every location. At the hours it matters most.
               </h2>
               {/* 1.25x the 15 it launched at, by request. */}
               <p className="text-[19px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)", maxWidth: 440 }}>
