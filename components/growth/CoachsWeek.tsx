@@ -372,38 +372,46 @@ const PILLARS = [
 ];
 
 /* ── Coaching capacity ─────────────────────────────────────
-   An animated chart, built from a supplied handoff: locations count
-   smoothly to 1,000, coaches step to 50 (one per twenty locations), and
-   the impact-per-location line draws dead flat the whole way, dropping a
-   hollow marker at every hire. The flat line against two climbing
-   numbers is the argument. Illustrative ratio, not a measured figure.
+   A two-scenario animated chart, rebuilt from the two-line handoff.
+   Grey is Today: one coach per twenty locations, fifty by the end, and
+   the impact line never rises. Blue is What it should be: one coach per
+   forty locations, twenty-five by the end, impact rising linearly at
+   exactly 10 degrees. Both draw concurrently; the divergence is the
+   argument. Illustrative ratios, not measured figures.
 
-   The handoff's timing and behaviour are followed; its fonts and colours
-   are replaced with the section's own tokens by request. */
+   Kept against the handoff, all prior explicit rules: the 5600ms draw
+   (1.25x speed-up), replay on every full exit and re-entry, the arrowed
+   y-axis, "A small fraction of one coach", and the compact sub-section
+   type scale. Do not steepen the blue line past 10 degrees or make it
+   exponential, and never let the grey line move vertically. */
 
-const CH_MIN = 20, CH_MAX = 1000, CH_RATIO = 20;
-/* A shallow strip, not the handoff's 600x150: the line never moves
-   vertically, so height bought nothing, and the sub-section reads at
-   half the size by request. The y-axis was then raised to 1.5x (50 to
-   75 tall) with an arrowhead at its top mirroring the x-axis, so both
-   rules read as axes; the line keeps its distance above the x-rule. */
-const CH_X0 = 6, CH_X1 = 576, CH_Y = 57;
-const CH_AXIS_Y = 83;
-const CH_YAXIS_TOP = 8;
+const CH_MIN = 20, CH_MAX = 1000;
+/* Grey and blue coach ratios: locations per coach. */
+const CH_RA = 20, CH_RB = 40;
+const CH_X0 = 6, CH_X1 = 576;
+/* Both lines start on this baseline; the blue one climbs off it. */
+const CH_YBASE = 142;
+const CH_RISE = Math.tan((10 * Math.PI) / 180) * (CH_X1 - CH_X0);
+const CH_AXIS_Y = 176;
+const CH_YAXIS_TOP = 24;
 /* 1.25x the handoff's 7000, by request. */
 const CH_DUR = 5600;
-const CH_VIEW_W = 600, CH_VIEW_H = 91;
+const CH_VIEW_W = 600, CH_VIEW_H = 190;
 
 const chX = (loc: number) => CH_X0 + (CH_X1 - CH_X0) * ((loc - CH_MIN) / (CH_MAX - CH_MIN));
+const chYBlue = (x: number) => CH_YBASE - ((x - CH_X0) / (CH_X1 - CH_X0)) * CH_RISE;
 
 /** Stat label, styled like the section's other mono eyebrows. */
-function ChartStatLabel({ children, accent = false }: { children: React.ReactNode; accent?: boolean }) {
+function ChartStatLabel({ children, accent = false, dim = false }: {
+  children: React.ReactNode; accent?: boolean; dim?: boolean;
+}) {
   return (
     <div
       className="text-[10.5px] uppercase"
       style={{
         fontFamily: "var(--pb-mono)", letterSpacing: "0.12em", lineHeight: 1.35,
         color: accent ? "var(--pb-accent-ink)" : "var(--pb-muted)",
+        opacity: dim ? 0.85 : 1,
       }}
     >
       {children}
@@ -411,68 +419,108 @@ function ChartStatLabel({ children, accent = false }: { children: React.ReactNod
   );
 }
 
+/** The dash swatch beside each scenario label; these replace a legend. */
+function ScenarioLabel({ color, children }: { color: string; children: React.ReactNode }) {
+  return (
+    <div className="flex items-center gap-2">
+      <span aria-hidden="true" style={{ width: 16, height: 3, borderRadius: 2, background: color, flex: "none" }} />
+      <span style={{ fontSize: 13, fontWeight: 500, color: "var(--pb-text)" }}>{children}</span>
+    </div>
+  );
+}
+
+const CH_STAT_NUM: React.CSSProperties = {
+  fontFamily: "var(--font-editorial)", fontWeight: 800,
+  letterSpacing: "-0.03em", lineHeight: 1,
+  fontVariantNumeric: "tabular-nums",
+};
+
 function CapacityBlock() {
   const reduceMotion = Boolean(useReducedMotion());
   const rootRef = useRef<HTMLDivElement>(null);
-  const locRef = useRef<HTMLSpanElement>(null);
-  const coachRef = useRef<HTMLSpanElement>(null);
-  const lineRef = useRef<SVGLineElement>(null);
-  const headRef = useRef<SVGCircleElement>(null);
-  const markersRef = useRef<SVGGElement>(null);
+  const locARef = useRef<HTMLSpanElement>(null);
+  const locBRef = useRef<HTMLSpanElement>(null);
+  const coachARef = useRef<HTMLSpanElement>(null);
+  const coachBRef = useRef<HTMLSpanElement>(null);
+  const lineARef = useRef<SVGLineElement>(null);
+  const headARef = useRef<SVGCircleElement>(null);
+  const markersARef = useRef<SVGGElement>(null);
+  const lineBRef = useRef<SVGLineElement>(null);
+  const headBRef = useRef<SVGCircleElement>(null);
+  const markersBRef = useRef<SVGGElement>(null);
 
   /* The whole run is imperative against refs, per the handoff: driving
-     fifty markers and a per-frame counter through state would re-render
-     the section at animation rate for no benefit. React owns the static
-     chrome; this effect owns the numbers, the line, and the markers. */
+     seventy-five markers and two per-frame counters through state would
+     re-render the section at animation rate for no benefit. React owns
+     the static chrome; this effect owns the numbers, lines, markers. */
   useEffect(() => {
-    const root = rootRef.current, locEl = locRef.current, coachEl = coachRef.current,
-      lineEl = lineRef.current, headEl = headRef.current, markersEl = markersRef.current;
-    if (!root || !locEl || !coachEl || !lineEl || !headEl || !markersEl) return;
+    const root = rootRef.current,
+      locA = locARef.current, locB = locBRef.current,
+      coachA = coachARef.current, coachB = coachBRef.current,
+      lineA = lineARef.current, headA = headARef.current, markersA = markersARef.current,
+      lineB = lineBRef.current, headB = headBRef.current, markersB = markersBRef.current;
+    if (!root || !locA || !locB || !coachA || !coachB || !lineA || !headA || !markersA || !lineB || !headB || !markersB) return;
 
-    const addMarker = (x: number) => {
+    const mark = (group: SVGGElement, x: number, y: number, stroke: string) => {
       const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
       c.setAttribute("cx", String(x));
-      c.setAttribute("cy", String(CH_Y));
+      c.setAttribute("cy", String(y));
       c.setAttribute("r", "3.5");
       c.setAttribute("fill", "var(--pb-panel)");
-      c.setAttribute("stroke", "var(--pb-accent-ink)");
-      c.setAttribute("stroke-width", "1.75");
-      markersEl.appendChild(c);
+      c.setAttribute("stroke", stroke);
+      c.setAttribute("stroke-width", "1.6");
+      group.appendChild(c);
     };
 
-    const paint = (loc: number, coaches: number, lastCoaches: number) => {
+    /* Draw both lines to `loc` and drop any markers newly earned. */
+    const paint = (loc: number, lastA: number, lastB: number): [number, number] => {
       const x = chX(loc);
-      lineEl.setAttribute("x2", String(x));
-      headEl.setAttribute("cx", String(x));
-      locEl.textContent = loc.toLocaleString("en-US");
-      if (coaches !== lastCoaches) {
-        coachEl.textContent = String(coaches);
-        for (let c = lastCoaches + 1; c <= coaches; c++) addMarker(chX(c * CH_RATIO));
+      const ca = Math.ceil(loc / CH_RA);
+      const cb = Math.ceil(loc / CH_RB);
+      lineA.setAttribute("x2", String(x));
+      headA.setAttribute("cx", String(x));
+      lineB.setAttribute("x2", String(x));
+      lineB.setAttribute("y2", String(chYBlue(x)));
+      headB.setAttribute("cx", String(x));
+      headB.setAttribute("cy", String(chYBlue(x)));
+      const locText = loc.toLocaleString("en-US");
+      locA.textContent = locText;
+      locB.textContent = locText;
+      if (ca !== lastA) {
+        coachA.textContent = String(ca);
+        for (let c = lastA + 1; c <= ca; c++) mark(markersA, chX(c * CH_RA), CH_YBASE, "var(--pb-muted)");
       }
-      return coaches;
+      if (cb !== lastB) {
+        coachB.textContent = String(cb);
+        for (let c = lastB + 1; c <= cb; c++) {
+          const mx = chX(c * CH_RB);
+          mark(markersB, mx, chYBlue(mx), "var(--pb-accent-ink)");
+        }
+      }
+      return [ca, cb];
     };
 
     /* Reduced motion paints the completed state and never animates. */
     if (reduceMotion) {
-      paint(CH_MAX, CH_MAX / CH_RATIO, 0);
+      paint(CH_MAX, 0, 0);
       return;
     }
 
-    let raf = 0, start: number | null = null, lastCoaches = 0, flashTimer: ReturnType<typeof setTimeout>;
+    let raf = 0, start: number | null = null, lastA = 0, lastB = 0, flashTimer: ReturnType<typeof setTimeout>;
 
     const frame = (ts: number) => {
       if (start === null) start = ts;
       const p = Math.min((ts - start) / CH_DUR, 1);
       const loc = Math.round(CH_MIN + (CH_MAX - CH_MIN) * p);
-      const coaches = Math.ceil(loc / CH_RATIO);
-      if (coaches !== lastCoaches) {
-        /* The flash is what makes the discrete hire visible against the
-           smooth location count. */
-        coachEl.style.color = "var(--pb-accent-ink)";
+      const ca = Math.ceil(loc / CH_RA);
+      if (ca !== lastA) {
+        /* Only the grey number flashes: one flashing element is enough,
+           and the grey hires are the ones the flat line indicts. */
+        coachA.style.color = "var(--pb-accent-ink)";
         clearTimeout(flashTimer);
-        flashTimer = setTimeout(() => { coachEl.style.color = ""; }, 220);
+        flashTimer = setTimeout(() => { coachA.style.color = ""; }, 200);
       }
-      lastCoaches = paint(loc, coaches, lastCoaches);
+      [lastA, lastB] = paint(loc, lastA, lastB);
       /* Holds at the end state; nothing schedules after p reaches 1. A
          permanently looping chart beside body copy competes with
          reading, so the only way it moves again is leaving and coming
@@ -484,8 +532,10 @@ function CapacityBlock() {
     const restart = () => {
       cancelAnimationFrame(raf);
       start = null;
-      lastCoaches = 0;
-      while (markersEl.firstChild) markersEl.removeChild(markersEl.firstChild);
+      lastA = 0;
+      lastB = 0;
+      while (markersA.firstChild) markersA.removeChild(markersA.firstChild);
+      while (markersB.firstChild) markersB.removeChild(markersB.firstChild);
       raf = requestAnimationFrame(frame);
     };
 
@@ -556,50 +606,77 @@ function CapacityBlock() {
       {/* The animated numbers would be noise frame by frame to a screen
           reader; the description below carries the meaning instead. */}
       <p className="sr-only">
-        As a network grows to one thousand locations and fifty coaches are
-        hired, the impact each location receives stays flat.
+        Two scenarios compared. Today, each location gets a small fraction
+        of one coach and impact per location holds flat as coaches are
+        added. What it should be: coaching multiplied past one coach&rsquo;s
+        bandwidth, rising with half the headcount.
       </p>
 
-      <div aria-hidden="true" className="flex flex-col gap-3.5">
-        {/* Stat row, baselined so the numbers sit together. */}
-        <div className="flex flex-wrap items-end gap-x-7 gap-y-3">
-          <div className="flex flex-col gap-1.5">
-            <ChartStatLabel>Locations</ChartStatLabel>
-            <span
-              className="text-[22px] md:text-[25px]"
-              style={{
-                fontFamily: "var(--font-editorial)", fontWeight: 800,
-                letterSpacing: "-0.03em", lineHeight: 1, color: "var(--pb-text)",
-                fontVariantNumeric: "tabular-nums",
-              }}
-            >
-              <span ref={locRef}>20</span>
-            </span>
+      <div aria-hidden="true" className="flex flex-col gap-4">
+        {/* Scenario one: Today. The dash swatches stand in for a legend;
+            the labels sitting on their own stat rows is also what keeps
+            the two lines distinguishable without colour. */}
+        <div className="flex flex-col gap-2.5">
+          <ScenarioLabel color="var(--pb-muted)">Today</ScenarioLabel>
+          <div className="flex flex-wrap items-end gap-x-7 gap-y-3">
+            <div className="flex flex-col gap-1.5">
+              <ChartStatLabel>Locations</ChartStatLabel>
+              <span className="text-[22px] md:text-[25px]" style={{ ...CH_STAT_NUM, color: "var(--pb-text)" }}>
+                <span ref={locARef}>20</span>
+              </span>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <ChartStatLabel>Coaches</ChartStatLabel>
+              <span className="text-[22px] md:text-[25px]" style={{ ...CH_STAT_NUM, transition: "color .15s", color: "var(--pb-text)" }}>
+                <span ref={coachARef}>1</span>
+              </span>
+            </div>
+            <div className="flex flex-col gap-1.5 flex-1 min-w-[240px]">
+              <ChartStatLabel>What each location gets</ChartStatLabel>
+              <span
+                className="text-[16px] md:text-[18px]"
+                style={{
+                  fontFamily: "var(--font-editorial)", fontWeight: 700,
+                  letterSpacing: "-0.02em", lineHeight: 1.15, color: "var(--pb-text)",
+                }}
+              >
+                A small fraction of one coach
+              </span>
+            </div>
           </div>
-          <div className="flex flex-col gap-1.5">
-            <ChartStatLabel>Coaches</ChartStatLabel>
-            <span
-              className="text-[22px] md:text-[25px]"
-              style={{
-                fontFamily: "var(--font-editorial)", fontWeight: 800,
-                letterSpacing: "-0.03em", lineHeight: 1, color: "var(--pb-text)",
-                fontVariantNumeric: "tabular-nums", transition: "color .15s",
-              }}
-            >
-              <span ref={coachRef}>1</span>
-            </span>
-          </div>
-          <div className="flex flex-col gap-1.5 flex-1 min-w-[210px]">
-            <ChartStatLabel accent>What each location gets</ChartStatLabel>
-            <span
-              className="text-[17px] md:text-[20px]"
-              style={{
-                fontFamily: "var(--font-editorial)", fontWeight: 700,
-                letterSpacing: "-0.025em", lineHeight: 1.1, color: "var(--pb-accent-ink)",
-              }}
-            >
-              A small fraction of one coach
-            </span>
+        </div>
+
+        <div aria-hidden="true" style={{ height: 1, background: "var(--pb-border)" }} />
+
+        {/* Scenario two: What it should be. All accent. */}
+        <div className="flex flex-col gap-2.5">
+          <ScenarioLabel color="var(--pb-accent-ink)">What it should be</ScenarioLabel>
+          <div className="flex flex-wrap items-end gap-x-7 gap-y-3">
+            <div className="flex flex-col gap-1.5">
+              <ChartStatLabel accent dim>Locations</ChartStatLabel>
+              <span className="text-[22px] md:text-[25px]" style={{ ...CH_STAT_NUM, color: "var(--pb-accent-ink)" }}>
+                <span ref={locBRef}>20</span>
+              </span>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <ChartStatLabel accent dim>Coaches</ChartStatLabel>
+              <span className="text-[22px] md:text-[25px]" style={{ ...CH_STAT_NUM, color: "var(--pb-accent-ink)" }}>
+                <span ref={coachBRef}>1</span>
+              </span>
+            </div>
+            <div className="flex flex-col gap-1.5 flex-1 min-w-[240px]">
+              <ChartStatLabel accent dim>What each location gets</ChartStatLabel>
+              <span
+                className="text-[16px] md:text-[18px]"
+                style={{
+                  fontFamily: "var(--font-editorial)", fontWeight: 700,
+                  letterSpacing: "-0.02em", lineHeight: 1.15, color: "var(--pb-accent-ink)",
+                  textWrap: "pretty",
+                }}
+              >
+                Coaching multiplied past one coach&rsquo;s bandwidth
+              </span>
+            </div>
           </div>
         </div>
 
@@ -623,15 +700,20 @@ function CapacityBlock() {
                 <path d="M0.5 0.5 L7.5 4 L0.5 7.5" fill="none" stroke="var(--pb-accent-soft2)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
               </marker>
             </defs>
-            {/* Y rule: no ticks, no values, per the handoff. Drawn from
-                the axis upward so the arrowhead marker points up. */}
+            {/* Y rule: no ticks, no values. Drawn from the axis upward so
+                the arrowhead marker points up. */}
             <line x1={CH_X0} y1={CH_AXIS_Y} x2={CH_X0} y2={CH_YAXIS_TOP} stroke="var(--pb-accent-soft2)" strokeWidth="1" markerEnd="url(#pb-chart-arrow)" />
             {/* X rule with the arrowhead. */}
             <line x1={CH_X0} y1={CH_AXIS_Y} x2={CH_X1 + 16} y2={CH_AXIS_Y} stroke="var(--pb-accent-soft2)" strokeWidth="1" markerEnd="url(#pb-chart-arrow)" />
-            {/* The flat line. Never rises, never curves: that is the point. */}
-            <line ref={lineRef} x1={CH_X0} y1={CH_Y} x2={CH_X0} y2={CH_Y} stroke="var(--pb-accent-ink)" strokeWidth="2" strokeLinecap="round" />
-            <g ref={markersRef} />
-            <circle ref={headRef} cx={CH_X0} cy={CH_Y} r="4.5" fill="var(--pb-accent-ink)" />
+            {/* Grey first, blue second, so blue sits on top where the
+                two converge at the left edge. The grey line never moves
+                vertically; the blue rises at exactly 10 degrees. */}
+            <line ref={lineARef} x1={CH_X0} y1={CH_YBASE} x2={CH_X0} y2={CH_YBASE} stroke="var(--pb-muted)" strokeWidth="2" strokeLinecap="round" />
+            <g ref={markersARef} />
+            <circle ref={headARef} cx={CH_X0} cy={CH_YBASE} r="4.5" fill="var(--pb-muted)" />
+            <line ref={lineBRef} x1={CH_X0} y1={CH_YBASE} x2={CH_X0} y2={CH_YBASE} stroke="var(--pb-accent-ink)" strokeWidth="2" strokeLinecap="round" />
+            <g ref={markersBRef} />
+            <circle ref={headBRef} cx={CH_X0} cy={CH_YBASE} r="4.5" fill="var(--pb-accent-ink)" />
           </svg>
           {/* Tight under the axis: the old panel left this floating far
               below the rule. */}
@@ -646,6 +728,7 @@ function CapacityBlock() {
     </div>
   );
 }
+
 
 /* ── Section ───────────────────────────────────────────── */
 

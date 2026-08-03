@@ -1200,12 +1200,15 @@ its index from a fixed `SCATTER` table rather than at random, so the layout
 is stable across renders and identical on server and client. A tidy grid
 argued the opposite of the point.
 
-**The capacity block is an animated impact-per-location chart**, rebuilt
-from a supplied handoff (the fonts and colours are the section's own
-tokens by request, not the handoff's). Locations count 20 to 1,000 over
-7s, coaches step 1 to 50 (`Math.ceil(loc / 20)`) with a 220ms accent
-flash per hire, and a dead-flat line draws across the tinted panel
-dropping a hollow marker at every hire, fifty by the end. The run is
+**The capacity block is a two-scenario animated chart**, rebuilt from
+the two-line handoff. Grey is Today (one coach per 20 locations, 50 by
+the end, the impact line dead flat); blue is What it should be (one per
+40, 25 by the end, rising linearly at exactly 10 degrees, about 100px
+over the run). Both draw concurrently; hollow markers drop per hire (50
+grey + 25 blue); only the grey Coaches number flashes. Grey renders
+first so blue sits on top where they converge. The dash-swatch scenario
+labels replace a legend; a hairline splits the two stat rows. Do not
+steepen the blue line or let the grey one move vertically. The run is
 imperative against refs (rAF sets the SVG line's `x2`, the head's `cx`,
 and appends markers via `createElementNS`), so nothing re-renders at
 animation rate. The stat row and SVG are `aria-hidden`; an sr-only
@@ -1217,12 +1220,12 @@ orphans on phones.
 from the left, but only after the block has fully left the viewport
 since the last one (`threshold: [0, 0.4]` and an `away` latch), so
 partial scrolls cannot retrigger it mid-read. Reduced motion still
-paints the completed state once. The draw is 5600ms, 1.25x the
-handoff's 7000, by request. The chart is a shallow strip (viewBox
-600x91, line at y=57, x-axis at 83) with the y-axis at 75 tall, 1.5x
-its first compacted height, carrying the same arrowhead as the x-axis
-at its top (drawn bottom-to-top so the marker points up). The card was
-compacted to sub-section scale by request.
+paints the completed state once. Kept against the two-line handoff, all
+prior explicit rules: the 5600ms draw (1.25x its 7000), the replay (it
+says run once), "A small fraction of one coach" (it says "A fraction"),
+the compact type scale, and the arrowed y-axis. Geometry: viewBox
+600x190, baseline y=142, x-axis at 176, y-axis 24 to 176, both axes
+arrowed.
 
 **The coaching segment's padding lives on an inner row, not on the flex item
   itself.** `flex-basis: 0%` cannot shrink a box below its own padding, so
