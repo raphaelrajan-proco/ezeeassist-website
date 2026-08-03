@@ -348,11 +348,10 @@ function usePulses(): Pulse[] {
    `setInterval`, not `requestAnimationFrame`: rAF is paused outright in a
    background tab, which would strand the count part-way. Progress is read
    from the clock, so the easing is right whatever the callback rate is. */
-/* Two beats: a 2s hold on the first figure, then a linear climb at the
-   rate the old accelerating curve only reached near its end (about ten
-   stores a second). The cubic ease was rejected: it sat nearly still
-   for the first two thirds of a 21s run. */
-const TICKER_HOLD = 2000;
+/* A linear climb at about ten stores a second, starting the moment the
+   canvas is visible: an opening hold was tried and read as the counter
+   being stuck, and the original cubic ease sat nearly still for the
+   first two thirds of its run. */
 const TICKER_MS = 9000;
 /** What the chip reads once the count is done. Short enough to hold one
     line at the ticker's larger type in the 210px column. */
@@ -370,27 +369,40 @@ function useLocationTicker(ref: React.RefObject<HTMLDivElement | null>) {
     const el = ref.current;
     if (!el) return;
 
-    let tick: ReturnType<typeof setInterval>, started = false;
+    let tick: ReturnType<typeof setInterval> | null = null;
+    const stop = () => { if (tick) clearInterval(tick); tick = null; };
     const run = () => {
+      stop();
+      setValue(TICKER_FROM);
       const t0 = performance.now();
       tick = setInterval(() => {
-        const held = performance.now() - t0 - TICKER_HOLD;
-        if (held < 0) return;
-        const p = Math.min(1, held / TICKER_MS);
+        const p = Math.min(1, (performance.now() - t0) / TICKER_MS);
         setValue(Math.round(TICKER_FROM + (TICKER_TO - TICKER_FROM) * p));
         /* Lands on the phrase, not the last figure: a specific number
            here would be a claim, and the point is only that it keeps
            going. */
-        if (p >= 1) { clearInterval(tick); setValue(null); }
+        if (p >= 1) { stop(); setValue(null); }
       }, 40);
     };
 
+    /* Replays on every re-entry, matching the coaching chart: fully
+       leaving the section re-arms it, and coming back restarts the
+       climb from the first figure. */
+    let away = true;
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting && !started) { started = true; io.disconnect(); run(); } });
-    }, { threshold: 0.35 });
+      entries.forEach((e) => {
+        if (e.intersectionRatio >= 0.35 && away) {
+          away = false;
+          run();
+        } else if (!e.isIntersecting) {
+          away = true;
+          stop();
+        }
+      });
+    }, { threshold: [0, 0.35] });
     io.observe(el);
 
-    return () => { io.disconnect(); clearInterval(tick); };
+    return () => { io.disconnect(); stop(); };
   }, [ref]);
 
   return value;

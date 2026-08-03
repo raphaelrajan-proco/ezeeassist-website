@@ -91,7 +91,9 @@ The `h1` deliberately sits on the eyebrow line, styled small, so the page's
 primary statement still matches the title tag and the JSON-LD. Moving it to
 the visually dominant lead is a one-line swap if that is ever preferred.
 
-The trust line ("Trusted by 70+ brands…") sits below the visual, directly
+The trust line ("Trusted by leading franchise and multi-location brands.
+Live across thousands of locations.", reworded from the 70+/5,000+ figures
+by request; `NETWORK_SCALE` still feeds the metadata) sits below the visual, directly
 above the logo marquee, rendered by `TrustStrip.tsx` rather than the hero. See
 the flag note below for how to put it back.
 
@@ -361,9 +363,12 @@ second one. Its ink is `rgba(238,242,248,0.92)`, brightened from `--os-muted`
 by request but held under the headline's pure near-white.
 
 **The right column is eight 200px chips, one per out-wire.** Seven are static
-and the eighth is a ticker: once the canvas is 35% visible it holds on 8
-for 2s, then climbs linearly to 99 over 9s (about ten stores a second; the
-accelerating cubic was rejected as sitting still too long),
+and the eighth is a ticker: it climbs linearly from 8 to 99 over 9s
+(about ten stores a second) the moment the canvas is 35% visible. An
+opening hold was tried and read as the counter being stuck, and the
+original accelerating cubic sat still too long. **It replays on
+re-entry** like the coaching chart: fully leaving the section re-arms
+it via a [0, 0.35] threshold pair and an away latch,
 then **lands on the phrase "100s of locations" rather than a figure** (a
 specific number there would be a claim; the point is only that it keeps
 going, and the phrase is what carries the count past two digits). The chip
@@ -555,7 +560,8 @@ one continuous column.** The band titles are dividers INSIDE the scroller
 rest the next divider peeks through the bottom fade, which is the cue that
 there is more to scroll. The key sits alone just above the scroller
 (`pb-2`) on its own grey chip (`rgba(var(--wl-band-ink), 0.1)`, rounded,
-inline-flex) so it does not float loose on the white band; its swatches
+full width to match the scroller under it) so it does not float loose on
+the white band; its swatches
 are filled rounded squares, not the cards' corner shape, because at key
 size a solid fill reads faster. The grid clears the nav pill by only
 4px, and the right column is top-aligned, not centred: centring pushed
@@ -693,12 +699,20 @@ body 5.81 light, 7.18 dark.
 ## Impact stats (section 6)
 
 Four KPI cards under one centred line ("Impact you can measure."),
-deliberately half a section. **Every figure is published elsewhere on this
-site**: 67% (WSI case study), 94% (DekaLash), 650+ (DivaDance), 5,000+
-locations across 70+ brands (hero trust strip). Each card's left bar wears
-the proof-deck edge colour of its source story. Do not invent a figure
-here. Tokens on `.ed-impact` (soft blue `#EFF5FB`, dark `#0D1522`), cards
-on `--imp-card` with `--ed-rule` borders.
+deliberately half a section. Rebuilt from a supplied handoff: **the bars
+are one brand-blue ramp** (`--imp-s1..s4`; the handoff's #1B55E9 royals
+remapped to the EZee family, light to deep in light mode, inverted deep
+to bright in dark so the brightest step sits on the biggest number),
+each bar **fused to its card** (9px, radiused left, card loses its left
+border and radius). Cards rise in staggered 90ms, bars draw down
+scaleY, numerals count 0 to final over 1.2s+100ms/card via rAF
+`textContent` with `toLocaleString` (5,000 keeps its comma mid-count).
+Reveal gates on an IntersectionObserver at 0.35 plus a 2.5s failsafe so
+the stats can never stay invisible; reduced motion renders the final
+state. The handoff's theme toggle is a preview affordance, not shipped.
+**Every figure is published elsewhere on this site**: 67% (WSI), 94%
+(DekaLash), 650+ (DivaDance), the locations line (hero trust strip). Do
+not invent a figure here.
 
 ## Control center (section 7)
 
@@ -1149,11 +1163,12 @@ orphans on phones.
 from the left, but only after the block has fully left the viewport
 since the last one (`threshold: [0, 0.4]` and an `away` latch), so
 partial scrolls cannot retrigger it mid-read. Reduced motion still
-paints the completed state once. The chart is a shallow strip (viewBox
-600x66, line at y=32, axis at 58), half the handoff's 150-high plot:
-the line never moves vertically, so the height bought nothing, and the
-whole card was compacted to sub-section scale (~448px at 1205) by
-request.
+paints the completed state once. The draw is 5600ms, 1.25x the
+handoff's 7000, by request. The chart is a shallow strip (viewBox
+600x91, line at y=57, x-axis at 83) with the y-axis at 75 tall, 1.5x
+its first compacted height, carrying the same arrowhead as the x-axis
+at its top (drawn bottom-to-top so the marker points up). The card was
+compacted to sub-section scale by request.
 
 **The coaching segment's padding lives on an inner row, not on the flex item
   itself.** `flex-basis: 0%` cannot shrink a box below its own padding, so

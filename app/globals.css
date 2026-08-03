@@ -1046,17 +1046,39 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* ─── Impact stats ─────────────────────────────────────────
-   The short KPI band between the always-on wall and the control center.
-   Its own soft blue so it separates from the white wall above it; the
-   four bar colours are the proof deck's edge colours, one per source
-   story, and live in the component. */
+   The short KPI band between the always-on wall and the control center,
+   rebuilt from a supplied handoff. Its own soft blue so it separates
+   from the white wall above it.
+
+   The bars are one brand-blue ramp, four steps, replacing the earlier
+   per-story rainbow by the handoff's instruction. The handoff's ramp is
+   the #1B55E9 royal family; it is remapped to the EZee family here, the
+   same swap every other section makes. Light runs light to deep so the
+   deepest step sits on the biggest number; dark inverts to deep to
+   bright for the same reason. Decorative fills only, no text on them. */
 .ed-impact {
   --imp-bg:   #EFF5FB;
   --imp-card: #FFFFFF;
+  --imp-shadow: 0 12px 30px -20px rgba(12, 20, 36, 0.2);
+  --imp-s1:   #9ADDF9;
+  --imp-s2:   #4FC3F4;
+  --imp-s3:   #00AEEF;
+  --imp-s4:   #0077A8;
 }
 .dark .ed-impact {
   --imp-bg:   #0D1522;
   --imp-card: #0B101C;
+  --imp-shadow: 0 16px 38px -24px rgba(0, 0, 0, 0.65);
+  --imp-s1:   #155A7E;
+  --imp-s2:   #1F7FAD;
+  --imp-s3:   #00AEEF;
+  --imp-s4:   #7DD6FA;
+}
+
+/* Card entrance for the stat band; bars and numerals are driven inline. */
+@keyframes ed-imp-in {
+  from { opacity: 0; transform: translateY(14px) }
+  to   { opacity: 1; transform: translateY(0) }
 }
 
 /* ─── Control center ───────────────────────────────────────

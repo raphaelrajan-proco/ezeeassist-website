@@ -246,13 +246,14 @@ function BandHeading({ band }: { band: (typeof BANDS)[number] }) {
 }
 
 /** The key, on its own grey chip so it does not float loose on the
-    white band. Its swatches are filled rounded squares rather than the
-    cards' corner shape, by request: at key size a solid fill reads
-    faster than a hairline corner. */
+    white band. Full width, matching the scroller under it, by request.
+    Its swatches are filled rounded squares rather than the cards'
+    corner shape: at key size a solid fill reads faster than a hairline
+    corner. */
 function Legend() {
   return (
     <div
-      className="inline-flex flex-wrap items-center gap-x-[18px] gap-y-1.5 self-start rounded-xl px-4 py-2.5"
+      className="flex w-full flex-wrap items-center gap-x-[18px] gap-y-1.5 rounded-xl px-4 py-2.5"
       style={{
         background: "rgba(var(--wl-band-ink), 0.1)",
         border: "1px solid rgba(var(--wl-band-ink), 0.06)",

@@ -1,7 +1,6 @@
 "use client";
 
 import LogoMarquee from "@/components/sections/LogoMarquee";
-import { NETWORK_SCALE } from "@/lib/data/network-scale";
 
 /** The shared logo marquee, rendered inside the hero section so the
  *  band crops at the fold.
@@ -31,7 +30,7 @@ export default function GrowthTrustStrip({ showTrustLine = false }: { showTrustL
               color: "#9FE0F8",
             }}
           >
-            Trusted by {NETWORK_SCALE.brands} brands across {NETWORK_SCALE.locations} locations
+            Trusted by leading franchise and multi-location brands. Live across thousands of locations.
           </p>
         )}
         <LogoMarquee />

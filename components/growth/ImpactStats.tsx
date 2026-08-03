@@ -1,84 +1,167 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 /**
- * The short KPI band between the always-on wall and the control center.
- * Deliberately half a section: one headline, four cards, nothing else.
+ * The short KPI band between the always-on wall and the control center,
+ * rebuilt from a supplied handoff: four stats on a single brand-blue
+ * ramp, each bar fused to its card (ada-style, not floating beside it),
+ * cards rising in, bars drawing down, numerals counting up on first
+ * scroll into view. Deliberately half a section: one headline, four
+ * cards, nothing else. The handoff's theme-toggle button is a preview
+ * affordance and is not shipped.
  *
  * Every figure is already published elsewhere on this site: 67% is WSI's
  * case study, 94% is DekaLash's, 650+ is DivaDance's, and the locations
- * line is the hero trust strip's claim. Each card's bar wears the edge
- * colour of the proof-deck story it comes from, which quietly ties this
- * band to the deck below. Do not invent a figure here; if a new KPI is
- * wanted, source it from a case study first.
+ * line is the hero trust strip's claim. Do not invent a figure here; if
+ * a new KPI is wanted, source it from a case study first.
  *
- * Tokens live on `.ed-impact` in globals.css.
+ * Tokens, the blue ramp, and the entrance keyframe live on `.ed-impact`
+ * in globals.css.
  */
 
 const JAKARTA = "var(--font-editorial)";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-const STATS: { value: string; label: string; bar: string }[] = [
-  { value: "67%",    label: "ticket reduction in 30 days",        bar: "#00AEEF" },
-  { value: "94%",    label: "AI deflection during a systems migration", bar: "oklch(0.55 0.16 350)" },
-  { value: "650+",   label: "support hours saved in six months",  bar: "oklch(0.5 0.16 300)" },
-  { value: "5,000+", label: "locations across 70+ brands",        bar: "oklch(0.55 0.13 145)" },
+/* Copy is exact per the handoff; do not reword. */
+const STATS: { end: number; suffix: string; label: string }[] = [
+  { end: 67,   suffix: "%", label: "ticket reduction in 30 days" },
+  { end: 94,   suffix: "%", label: "AI deflection during a systems migration" },
+  { end: 650,  suffix: "+", label: "support hours saved in six months" },
+  { end: 5000, suffix: "+", label: "locations across 70+ brands" },
 ];
 
 export default function ImpactStats() {
+  const gridRef = useRef<HTMLDivElement>(null);
+  const numRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const [revealed, setRevealed] = useState(false);
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) setReduced(true);
+
+    let fired = false;
+    const reveal = () => {
+      if (fired) return;
+      fired = true;
+      setRevealed(true);
+      if (prefersReduced) return;
+      /* Count up from 0, cubic ease-out, textContent through refs so
+         nothing re-renders at animation rate. toLocaleString keeps
+         5,000's comma mid-count; tabular numerals stop the jitter. */
+      STATS.forEach((s, i) => {
+        const el = numRefs.current[i];
+        if (!el) return;
+        const t0 = performance.now(), dur = 1200 + i * 100;
+        const tick = (t: number) => {
+          const p = Math.min(1, (t - t0) / dur);
+          const e = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(s.end * e).toLocaleString("en-US");
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    };
+
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { io.disconnect(); reveal(); }
+    }, { threshold: 0.35 });
+    io.observe(grid);
+    /* Failsafe from the handoff: the stats must never stay invisible if
+       the observer never fires. */
+    const failsafe = setTimeout(reveal, 2500);
+
+    return () => { io.disconnect(); clearTimeout(failsafe); };
+  }, []);
+
+  /* Reduced motion renders everything revealed at final values. */
+  const shown = revealed || reduced;
+
   return (
     <section id="impact" className="ed-impact w-full scroll-mt-24" style={{ backgroundColor: "var(--imp-bg)" }}>
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-12 md:py-16 flex flex-col items-center gap-9 md:gap-11">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-12 md:py-16 flex flex-col items-center gap-9 md:gap-12">
         <motion.h2
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: EASE }}
-          className="ed-fg text-center leading-[1.1] tracking-[-0.028em]"
+          className="ed-fg text-center leading-[1.12] tracking-[-0.028em] max-w-[760px]"
           style={{
             fontFamily: JAKARTA,
             fontWeight: 700,
-            fontSize: "clamp(1.375rem, 0.7rem + 2.2vw, 2.25rem)",
+            fontSize: "clamp(1.375rem, 0.66rem + 2.4vw, 2.875rem)",
+            textWrap: "pretty",
           }}
         >
           Impact you can measure.
         </motion.h2>
 
-        <div className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
+        <div ref={gridRef} className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {STATS.map((s, i) => (
-            <motion.div
-              key={s.value}
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.55, ease: EASE, delay: i * 0.08 }}
-              className="relative flex flex-col justify-between gap-8 overflow-hidden p-6 pl-7 min-h-[168px]"
+            /* The unit is two fused pieces: the bar is part of the box. */
+            <div
+              key={s.label}
+              className="flex items-stretch"
               style={{
-                backgroundColor: "var(--imp-card)",
-                border: "1px solid var(--ed-rule)",
-                borderRadius: 16,
-                boxShadow: "0 18px 44px -30px rgba(12, 20, 36, 0.25)",
+                opacity: shown ? 1 : 0,
+                animation: shown && !reduced ? `ed-imp-in .6s cubic-bezier(.2,.8,.2,1) both ${i * 0.09}s` : "none",
               }}
             >
               <span
                 aria-hidden="true"
-                className="absolute bottom-0 left-0 top-0"
-                style={{ width: 6, background: s.bar }}
+                className="flex-none"
+                style={{
+                  width: 9,
+                  borderRadius: "6px 0 0 6px",
+                  background: `var(--imp-s${i + 1})`,
+                  transformOrigin: "top",
+                  transform: shown ? "scaleY(1)" : "scaleY(0)",
+                  transition: reduced ? "none" : `transform .8s cubic-bezier(.2,.8,.2,1) ${0.25 + i * 0.09}s`,
+                }}
               />
               <div
-                className="text-[34px] md:text-[38px]"
+                className="flex min-h-[195px] flex-1 flex-col justify-between"
                 style={{
-                  fontFamily: JAKARTA, fontWeight: 800, letterSpacing: "-0.035em",
-                  lineHeight: 1, color: "var(--ed-fg)", fontVariantNumeric: "tabular-nums",
+                  padding: "26px 22px 24px",
+                  backgroundColor: "var(--imp-card)",
+                  border: "1px solid var(--ed-rule)",
+                  borderLeft: "none",
+                  borderRadius: "0 14px 14px 0",
+                  boxShadow: "var(--imp-shadow)",
                 }}
               >
-                {s.value}
+                <div className="ed-fg flex items-baseline whitespace-nowrap">
+                  {/* Suffix matches the digits exactly: same size, same
+                      weight, inherited colour, not superscript. */}
+                  <span
+                    ref={(el) => { numRefs.current[i] = el; }}
+                    style={{
+                      fontFamily: JAKARTA, fontSize: 48, fontWeight: 700,
+                      letterSpacing: "-0.04em", lineHeight: 1,
+                      fontVariantNumeric: "tabular-nums",
+                    }}
+                  >
+                    {s.end.toLocaleString("en-US")}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: JAKARTA, fontSize: 48, fontWeight: 700,
+                      letterSpacing: "-0.04em", lineHeight: 1,
+                    }}
+                  >
+                    {s.suffix}
+                  </span>
+                </div>
+                <div className="ed-fg-muted max-w-[200px] text-[14.5px]" style={{ lineHeight: 1.55, textWrap: "pretty" }}>
+                  {s.label}
+                </div>
               </div>
-              <div className="ed-fg-muted text-[14px]" style={{ lineHeight: 1.45 }}>
-                {s.label}
-              </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

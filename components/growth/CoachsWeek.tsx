@@ -384,12 +384,15 @@ const PILLARS = [
 const CH_MIN = 20, CH_MAX = 1000, CH_RATIO = 20;
 /* A shallow strip, not the handoff's 600x150: the line never moves
    vertically, so height bought nothing, and the sub-section reads at
-   half the size by request. The line sits just off-centre with the axis
-   close beneath it. */
-const CH_X0 = 6, CH_X1 = 576, CH_Y = 32;
-const CH_AXIS_Y = 58;
-const CH_DUR = 7000;
-const CH_VIEW_W = 600, CH_VIEW_H = 66;
+   half the size by request. The y-axis was then raised to 1.5x (50 to
+   75 tall) with an arrowhead at its top mirroring the x-axis, so both
+   rules read as axes; the line keeps its distance above the x-rule. */
+const CH_X0 = 6, CH_X1 = 576, CH_Y = 57;
+const CH_AXIS_Y = 83;
+const CH_YAXIS_TOP = 8;
+/* 1.25x the handoff's 7000, by request. */
+const CH_DUR = 5600;
+const CH_VIEW_W = 600, CH_VIEW_H = 91;
 
 const chX = (loc: number) => CH_X0 + (CH_X1 - CH_X0) * ((loc - CH_MIN) / (CH_MAX - CH_MIN));
 
@@ -620,8 +623,9 @@ function CapacityBlock() {
                 <path d="M0.5 0.5 L7.5 4 L0.5 7.5" fill="none" stroke="var(--pb-accent-soft2)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
               </marker>
             </defs>
-            {/* Y rule: no ticks, no values, per the handoff. */}
-            <line x1={CH_X0} y1={8} x2={CH_X0} y2={CH_AXIS_Y} stroke="var(--pb-accent-soft2)" strokeWidth="1" />
+            {/* Y rule: no ticks, no values, per the handoff. Drawn from
+                the axis upward so the arrowhead marker points up. */}
+            <line x1={CH_X0} y1={CH_AXIS_Y} x2={CH_X0} y2={CH_YAXIS_TOP} stroke="var(--pb-accent-soft2)" strokeWidth="1" markerEnd="url(#pb-chart-arrow)" />
             {/* X rule with the arrowhead. */}
             <line x1={CH_X0} y1={CH_AXIS_Y} x2={CH_X1 + 16} y2={CH_AXIS_Y} stroke="var(--pb-accent-soft2)" strokeWidth="1" markerEnd="url(#pb-chart-arrow)" />
             {/* The flat line. Never rises, never curves: that is the point. */}

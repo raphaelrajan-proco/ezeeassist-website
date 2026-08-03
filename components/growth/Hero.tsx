@@ -6,7 +6,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, TrendingDown, TrendingUp } from "lucide-react";
 import GrowthTrustStrip from "./TrustStrip";
-import { NETWORK_SCALE } from "@/lib/data/network-scale";
 
 /**
  * Ada-style hero. Left: fluid-type lockup. Right: one fixed-size
@@ -543,7 +542,7 @@ export default function GrowthHero() {
                   color: "var(--ed-accent-text)",
                 }}
               >
-                Trusted by {NETWORK_SCALE.brands} brands across {NETWORK_SCALE.locations} locations
+                Trusted by leading franchise and multi-location brands. Live across thousands of locations.
               </motion.p>
             )}
 
