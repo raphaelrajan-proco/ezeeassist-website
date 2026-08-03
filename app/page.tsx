@@ -8,6 +8,7 @@ import CoachsWeek from "@/components/growth/CoachsWeek";
 import TheSystem from "@/components/TheSystem";
 import Capabilities from "@/components/growth/Capabilities";
 import AlwaysOn from "@/components/growth/AlwaysOn";
+import ImpactStats from "@/components/growth/ImpactStats";
 import CustomerProof from "@/components/growth/CustomerProof";
 import TrustAndControl from "@/components/growth/TrustAndControl";
 import Objections from "@/components/growth/Objections";
@@ -113,10 +114,11 @@ export default function Home() {
         {/* 3 */} <TheSystem />
         {/* 4 */} <Capabilities />
         {/* 5 */} <AlwaysOn />
-        {/* 6 */} <TrustAndControl />
-        {/* 7 */} <CustomerProof />
-        {/* 8 */} <Objections />
-        {/* 9 */} <FinalCTA />
+        {/* 6 */} <ImpactStats />
+        {/* 7 */} <TrustAndControl />
+        {/* 8 */} <CustomerProof />
+        {/* 9 */} <Objections />
+        {/* 10 */} <FinalCTA />
       </main>
       {/* 16 */}
       <Footer />

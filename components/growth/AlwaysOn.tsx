@@ -1,17 +1,17 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * The always-on wall. Twenty-six moments from one day across the network
  * in four time bands. From lg up the section pins as a split screen: the
  * thesis holds still on the left while the page's own scroll drives the
  * card column on the right, one to one, like a page inside the page. The
- * band tags and the key sit fixed above the card column; a fade at the
- * column's top and bottom lets the neighbouring band show through
- * dimmed, which is the cue that there is more to scroll. The counter
- * waits in flow below the pinned screen, so it arrives under both halves
- * once the last band is spent, and the section moves on.
+ * band titles are dividers inside the scroller, the key sits fixed just
+ * above it, and a fade at the column's top and bottom lets the incoming
+ * divider show through dimmed, which is the cue that there is more to
+ * scroll. Card tones are corner marks, not fills. When the last band is
+ * spent the section simply hands off; the old counter block is gone.
  *
  * Tokens live on `.ed-wall` in globals.css, not here.
  */
@@ -137,18 +137,34 @@ const BANDS: { title: string; note?: string; cards: Card[] }[] = [
   },
 ];
 
-const TONE: Record<Tone, { bg: string; border: string; meta: string; shadow?: string }> = {
-  neutral: { bg: "var(--wl-panel)",       border: "var(--wl-border)",       meta: "var(--wl-muted)",  shadow: "var(--wl-shadow)" },
-  accent:  { bg: "var(--wl-accent-soft)", border: "var(--wl-accent-soft2)", meta: "var(--wl-accent)" },
-  violet:  { bg: "var(--wl-violet-soft)", border: "var(--wl-violet-soft2)", meta: "var(--wl-violet)" },
+/* The tone is carried by a corner mark, not a fill, by request: every
+   card shares the same white surface and only the top-left corner border
+   states the category. The meta row repeats the colour as a secondary
+   cue. The legend draws the same corner shape, which is what makes the
+   mark decodable. */
+const TONE: Record<Tone, { corner: string; meta: string; dim?: boolean }> = {
+  neutral: { corner: "var(--wl-muted)",  meta: "var(--wl-muted)", dim: true },
+  accent:  { corner: "var(--wl-accent)", meta: "var(--wl-accent)" },
+  violet:  { corner: "var(--wl-violet)", meta: "var(--wl-violet)" },
 };
 
-/* Static by request: the animated count-up plus drift depended on an
-   IntersectionObserver that missed its element when the layout swapped
-   from stacked to pinned on mount, so it sat at 0. One honest number
-   until the real count is wired.
-   TODO: wire to the real count of the last 24 hours. */
-const COUNT = 1834;
+/** The top-left corner border that states a card's tone. Shared with the
+    legend so the key shows the exact mark the cards wear. */
+function CornerMark({ tone, size = 22 }: { tone: Tone; size?: number }) {
+  const t = TONE[tone];
+  const stroke = size < 16 ? 2.5 : 3;
+  return (
+    <span
+      aria-hidden="true"
+      style={{
+        position: "absolute", top: -1, left: -1, width: size, height: size,
+        borderTop: `${stroke}px solid ${t.corner}`, borderLeft: `${stroke}px solid ${t.corner}`,
+        borderTopLeftRadius: Math.min(14, Math.round(size * 0.55)),
+        opacity: t.dim ? 0.55 : 1, pointerEvents: "none",
+      }}
+    />
+  );
+}
 
 /* ── Scroll plumbing ───────────────────────────────────────
    The section pins for the length of its scroll track and the page's own
@@ -162,9 +178,8 @@ const COUNT = 1834;
    at each end of the viewport: at either extreme the resting band sits
    clear of the fade, and anything beyond it shows through dimmed. */
 const PAD = 48;
-/* Shallower at the bottom: the deep exit fade plus the grid's padding
-   plus the counter's own top margin stacked into a dead zone between the
-   last band and the counter. */
+/* Shallower at the bottom, so the last band does not sit in a deep dead
+   zone before the section hands off. */
 const PAD_BOTTOM = 28;
 const FADE = `linear-gradient(to bottom, transparent 0px, black ${PAD}px, black calc(100% - ${PAD_BOTTOM}px), transparent 100%)`;
 /* Server-render fallback for the track height; replaced by the measured
@@ -190,14 +205,15 @@ function MomentCard({ card }: { card: Card }) {
   const t = TONE[card.tone];
   return (
     <div
-      className="flex flex-col gap-[7px] p-4"
+      className="relative flex flex-col gap-[7px] p-4"
       style={{
-        background: t.bg,
-        border: `1px solid ${t.border}`,
+        background: "var(--wl-panel)",
+        border: "1px solid var(--wl-border)",
         borderRadius: 14,
-        boxShadow: t.shadow,
+        boxShadow: "var(--wl-shadow)",
       }}
     >
+      <CornerMark tone={card.tone} />
       <div className="flex items-center gap-2" style={{ color: t.meta }}>
         <Icon name={card.icon} />
         <span style={{ fontFamily: MONO, fontSize: 11.5 }}>{card.meta}</span>
@@ -212,8 +228,9 @@ function MomentCard({ card }: { card: Card }) {
   );
 }
 
-/** Mobile only: the stacked layout keeps per-band headings because it has
-    no fixed tag row telling the reader where they are. */
+/** The divider that names each time band, inside the scroller itself:
+    the incoming band's title peeking through the bottom fade is the cue
+    that there is more to scroll. */
 function BandHeading({ band }: { band: (typeof BANDS)[number] }) {
   return (
     <div className="flex items-center gap-4 pb-[18px]">
@@ -232,50 +249,18 @@ function Legend() {
   return (
     <div className="flex flex-wrap gap-x-[18px] gap-y-1.5">
       {[
-        { label: "Detected and flagged for you", dot: "var(--wl-muted)", dim: true },
-        { label: "Automated play, work done for you", dot: "var(--wl-accent)" },
-        { label: "Built by an owner", dot: "var(--wl-violet)" },
+        { tone: "neutral" as Tone, label: "Detected and flagged for you" },
+        { tone: "accent" as Tone,  label: "Automated play, work done for you" },
+        { tone: "violet" as Tone,  label: "Built by an owner" },
       ].map((l) => (
         <span key={l.label} className="flex items-center gap-2 text-[12.5px]" style={{ color: "var(--wl-muted)" }}>
-          <span
-            aria-hidden="true"
-            style={{ width: 8, height: 8, borderRadius: "50%", background: l.dot, opacity: l.dim ? 0.6 : 1, flex: "none" }}
-          />
+          {/* The same corner shape the cards wear, so the key reads. */}
+          <span className="relative block flex-none" style={{ width: 11, height: 11 }} aria-hidden="true">
+            <CornerMark tone={l.tone} size={11} />
+          </span>
           {l.label}
         </span>
       ))}
-    </div>
-  );
-}
-
-function Counter() {
-  return (
-    <div
-      className="grid grid-cols-1 md:grid-cols-[minmax(0,340px)_1fr] gap-5 md:gap-10 items-center px-6 py-5 md:px-8 md:py-6"
-      style={{ background: "var(--wl-panel-2)", border: "1px solid var(--wl-border)", borderRadius: 20 }}
-    >
-      <div className="flex flex-col gap-0.5">
-        <div
-          className="text-[38px] md:text-[52px]"
-          style={{
-            fontFamily: JAKARTA, fontWeight: 800, letterSpacing: "-0.04em", lineHeight: 1,
-            fontVariantNumeric: "tabular-nums", color: "var(--wl-text)",
-          }}
-        >
-          {COUNT.toLocaleString()}
-        </div>
-        <div className="text-[13.5px]" style={{ color: "var(--wl-muted)" }}>
-          outcomes across the network in the last 24 hours
-        </div>
-      </div>
-      <div
-        className="text-[14px] md:text-[15.5px] md:border-l md:pl-10 max-w-[660px]"
-        style={{ lineHeight: 1.55, color: "var(--wl-text)", borderColor: "var(--wl-border)", textWrap: "pretty" }}
-      >
-        None of these outcomes needed a coach to be awake. And what any one
-        location learns, every location gets, anonymized, aggregated, and
-        approved by you.
-      </div>
     </div>
   );
 }
@@ -303,7 +288,6 @@ export default function AlwaysOn() {
      peek even on very tall viewports and in full-page captures, which
      expand 100vh. */
   const [vpH, setVpH] = useState(560);
-  const [active, setActive] = useState(0);
 
   useEffect(() => {
     if (!isDesktop) return;
@@ -318,28 +302,16 @@ export default function AlwaysOn() {
       const top = track.getBoundingClientRect().top + window.scrollY;
       const y = Math.max(0, Math.min(r, window.scrollY - top));
       stack.style.transform = `translate3d(0, ${-y}px, 0)`;
-      /* Active tag: the band under a probe in the viewport's upper half.
-         Flips as the incoming band crosses it. The rects are read after
-         the transform above, so the offsets already carry the translate;
-         comparing against the viewport is enough. The cap keeps the
-         probe honest if the viewport ever renders unclipped. */
-      const vpTop = viewport.getBoundingClientRect().top;
-      const probe = Math.min(viewport.clientHeight * 0.45, 320);
-      let idx = 0;
-      bandRefs.current.forEach((b, i) => {
-        if (b && b.getBoundingClientRect().top - vpTop <= probe) idx = i;
-      });
-      setActive((cur) => (cur === idx ? cur : idx));
     };
     const schedule = () => { if (!raf) raf = requestAnimationFrame(read); };
     const measure = () => {
       /* Every fixed cost above the scroller, in resolved pixels: the
-         grid's own top padding (nav clearance), the tag row and key with
-         their padding, and the grid's 24px bottom padding. None of these
-         depend on the scroller's height, so there is no feedback loop. */
-      const padTop = parseFloat(getComputedStyle(grid).paddingTop) || 98;
+         grid's own top padding (nav clearance), the key with its
+         padding, and the grid's bottom padding. None of these depend on
+         the scroller's height, so there is no feedback loop. */
+      const padTop = parseFloat(getComputedStyle(grid).paddingTop) || 92;
       const headH = headRow.getBoundingClientRect().height;
-      const vh = Math.round(Math.min(720, Math.max(320, window.innerHeight - padTop - headH - 24)));
+      const vh = Math.round(Math.min(720, Math.max(320, window.innerHeight - padTop - headH - 12)));
       setVpH(vh);
       setRange(Math.max(1, stack.scrollHeight - vh));
       schedule();
@@ -359,22 +331,6 @@ export default function AlwaysOn() {
       stack.style.transform = "";
     };
   }, [isDesktop]);
-
-  /* Tag click: scroll the page to where that band rests just under the
-     top fade. Same shared state as scrolling, nothing hijacked. */
-  const goTo = useCallback((i: number) => {
-    const track = trackRef.current, viewport = viewportRef.current, stack = stackRef.current;
-    const band = bandRefs.current[i];
-    if (!track || !viewport || !stack || !band) return;
-    const r = Math.max(1, stack.scrollHeight - viewport.clientHeight);
-    /* Both rects carry the same translate, so the difference is the
-       band's static offset within the stack. */
-    const bandTop = band.getBoundingClientRect().top - stack.getBoundingClientRect().top;
-    const target = Math.max(0, Math.min(r, bandTop - PAD));
-    const top = track.getBoundingClientRect().top + window.scrollY;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({ top: top + target, behavior: reduce ? "auto" : "smooth" });
-  }, []);
 
   /* ── Below lg: no pin, every band stacked ── */
   if (!isDesktop) {
@@ -415,7 +371,6 @@ export default function AlwaysOn() {
               </div>
             </div>
           ))}
-          <Counter />
         </div>
       </section>
     );
@@ -424,9 +379,9 @@ export default function AlwaysOn() {
   /* ── lg and up: pinned split screen ──
      Left holds the thesis, right scrolls the day. The track wrapper's
      extra height is exactly the stack's overflow, so page scroll and
-     card scroll run one to one. The counter sits in flow after the
-     track: it enters from the bottom, under both halves, as the pin
-     releases. */
+     card scroll run one to one. The band titles are dividers inside the
+     scroller: at rest the next one peeks through the bottom fade, which
+     is the cue that there is more. */
   return (
     <section id="always-on" className="ed-wall w-full scroll-mt-24" style={{ backgroundColor: "var(--wl-bg)" }}>
       <div ref={trackRef} className="relative" style={{ height: `calc(100vh + ${range}px)` }}>
@@ -440,9 +395,9 @@ export default function AlwaysOn() {
                  container and takes percentage heights down with it;
                  minmax(0, 1fr) pins the row to the container. */
               gridTemplateRows: "minmax(0, 1fr)",
-              /* The floating nav pill overlays the top of the pinned
-                 screen; without this the tag row sits behind it. */
-              paddingTop: "calc(var(--nav-block) + 10px)",
+              /* Just clear of the floating nav pill, no more: the old
+                 +10px plus the tag row read as a hole at the top. */
+              paddingTop: "calc(var(--nav-block) + 4px)",
             }}
           >
             {/* Left: the fixed half */}
@@ -475,31 +430,11 @@ export default function AlwaysOn() {
               </p>
             </div>
 
-            {/* Right: fixed tags and key, then the scrolling day. Centred
-                so the capped scroller sits balanced on tall viewports;
-                on ordinary ones the column is full and this is a no-op. */}
+            {/* Right: the key, tight above the scrolling day. Centred so
+                the capped scroller sits balanced on tall viewports; on
+                ordinary ones the column is full and this is a no-op. */}
             <div className="flex h-full min-h-0 flex-col justify-center">
-              <div ref={headRowRef} className="flex flex-col gap-2.5 pb-3.5">
-                <div className="flex flex-wrap gap-2" role="tablist" aria-label="Time of day">
-                  {BANDS.map((b, i) => (
-                    <button
-                      key={b.title}
-                      role="tab"
-                      aria-selected={i === active}
-                      onClick={() => goTo(i)}
-                      className="rounded-full transition-colors"
-                      style={{
-                        fontSize: 12.5, fontWeight: 600, letterSpacing: "-0.005em",
-                        padding: "5px 12px", cursor: "pointer",
-                        background: i === active ? "var(--wl-text)" : "transparent",
-                        color: i === active ? "var(--wl-bg)" : "var(--wl-muted)",
-                        border: `1px solid ${i === active ? "var(--wl-text)" : "var(--wl-border)"}`,
-                      }}
-                    >
-                      {b.title}
-                    </button>
-                  ))}
-                </div>
+              <div ref={headRowRef} className="pb-2">
                 <Legend />
               </div>
 
@@ -514,21 +449,21 @@ export default function AlwaysOn() {
               >
                 <div
                   ref={stackRef}
-                  className="flex flex-col gap-9"
+                  className="flex flex-col gap-7"
                   style={{ padding: `${PAD}px 0 ${PAD_BOTTOM}px`, willChange: "transform" }}
                 >
                   {BANDS.map((b, bi) => (
-                    /* Each band sits on its own plate, and the plates
-                       deepen through the day: the progression itself
-                       shows a new time-frame arriving as they scroll by.
-                       The tint lives behind the boxes only, per request. */
-                    <div
-                      key={b.title}
-                      ref={(el) => { bandRefs.current[bi] = el; }}
-                      className="grid grid-cols-2 gap-3 rounded-2xl p-3.5"
-                      style={{ background: `rgba(var(--wl-band-ink), ${(0.025 + bi * 0.02).toFixed(3)})` }}
-                    >
-                      {b.cards.map((c) => <MomentCard key={c.title} card={c} />)}
+                    /* Divider then plate: the title inside the scroller
+                       is what names each time frame, and the plates
+                       still deepen through the day. */
+                    <div key={b.title} ref={(el) => { bandRefs.current[bi] = el; }}>
+                      <BandHeading band={b} />
+                      <div
+                        className="grid grid-cols-2 gap-3 rounded-2xl p-3.5"
+                        style={{ background: `rgba(var(--wl-band-ink), ${(0.05 + bi * 0.02).toFixed(3)})` }}
+                      >
+                        {b.cards.map((c) => <MomentCard key={c.title} card={c} />)}
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -538,12 +473,6 @@ export default function AlwaysOn() {
         </div>
       </div>
 
-      {/* Arrives under both halves once the last band is spent. No top
-          padding: the scroller's exit fade above already reads as the
-          gap, and adding more left a dead zone between the two. */}
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pb-16">
-        <Counter />
-      </div>
     </section>
   );
 }

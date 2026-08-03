@@ -949,7 +949,9 @@ input[type="range"]::-moz-range-thumb {
   /* Section wash: a light blue in the hero's family, the lighter of the
      two blue bands (always on is the darker). In dark mode the difference
      plays the other way: this one stays closest to the page black. */
-  --sc-bg:      #F1F7FC;
+  /* Deepened from #F1F7FC when the always-on wall went white, so the
+     two neighbours stay visibly different bands. */
+  --sc-bg:      #EAF2FA;
   --sc-accent:  #00AEEF;
   --sc-accent-ink: #0077A8;
   --sc-accent-soft: rgba(0,174,239,.07);
@@ -997,15 +999,15 @@ input[type="range"]::-moz-range-thumb {
 
    Accent is remapped from the handoff's #1B55E9 / #5B8CFF to the EZee
    family, matching the other three. The accent and violet meta rows are
-   12px mono on their own soft card background, so they carry the 4.5:1
-   bar; the light values below are the least darkening that clears it.
+   12px mono on a white card, so they carry the 4.5:1 bar; the light
+   values below are the least darkening that clears it.
 
-   **The band stays light.** A deep blue was tried and reverted: the card
-   tints are alpha, so on a dark band every card collapses toward the same
-   value and the neutral / accent / violet distinction, which is the whole
-   argument of this section, stops reading. */
+   **The band stays light** (now white). A deep blue was tried and
+   reverted long before that: alpha tints collapse on a dark band. The
+   tone system lives in each card's corner mark, not in fills. */
 .ed-wall {
-  --wl-bg:           #E4EEF7;
+  /* White by request; the per-band plates carry the separation now. */
+  --wl-bg:           #FFFFFF;
   --wl-panel:        #FFFFFF;
   --wl-panel-2:      #F8FAFD;
   --wl-text:         #0B1220;
@@ -1041,6 +1043,20 @@ input[type="range"]::-moz-range-thumb {
   --wl-violet-soft2: rgba(167, 139, 250, 0.36);
   --wl-shadow:       0 26px 60px -34px rgba(0, 0, 0, 0.8);
   --wl-band-ink:     238, 242, 248;
+}
+
+/* ─── Impact stats ─────────────────────────────────────────
+   The short KPI band between the always-on wall and the control center.
+   Its own soft blue so it separates from the white wall above it; the
+   four bar colours are the proof deck's edge colours, one per source
+   story, and live in the component. */
+.ed-impact {
+  --imp-bg:   #EFF5FB;
+  --imp-card: #FFFFFF;
+}
+.dark .ed-impact {
+  --imp-bg:   #0D1522;
+  --imp-card: #0B101C;
 }
 
 /* ─── Control center ───────────────────────────────────────

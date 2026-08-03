@@ -348,9 +348,12 @@ function usePulses(): Pulse[] {
    `setInterval`, not `requestAnimationFrame`: rAF is paused outright in a
    background tab, which would strand the count part-way. Progress is read
    from the clock, so the easing is right whatever the callback rate is. */
-/* 5x the original 4200 by request: the climb is the point, so it gets
-   time to be watched rather than glimpsed. */
-const TICKER_MS = 21000;
+/* Two beats: a 2s hold on the first figure, then a linear climb at the
+   rate the old accelerating curve only reached near its end (about ten
+   stores a second). The cubic ease was rejected: it sat nearly still
+   for the first two thirds of a 21s run. */
+const TICKER_HOLD = 2000;
+const TICKER_MS = 9000;
 /** What the chip reads once the count is done. Short enough to hold one
     line at the ticker's larger type in the 210px column. */
 const TICKER_END_LABEL = "100s of locations";
@@ -371,11 +374,10 @@ function useLocationTicker(ref: React.RefObject<HTMLDivElement | null>) {
     const run = () => {
       const t0 = performance.now();
       tick = setInterval(() => {
-        const p = Math.min(1, (performance.now() - t0) / TICKER_MS);
-        /* Accelerating rather than easing out: the point is that it takes
-           off, so the curve has to be fastest at the end. */
-        const eased = p * p * p;
-        setValue(Math.round(TICKER_FROM + (TICKER_TO - TICKER_FROM) * eased));
+        const held = performance.now() - t0 - TICKER_HOLD;
+        if (held < 0) return;
+        const p = Math.min(1, held / TICKER_MS);
+        setValue(Math.round(TICKER_FROM + (TICKER_TO - TICKER_FROM) * p));
         /* Lands on the phrase, not the last figure: a specific number
            here would be a claim, and the point is only that it keeps
            going. */

@@ -28,10 +28,11 @@ before picking the work back up in a fresh session.
 | 3 | The reveal (operating system diagram) | `components/TheSystem.tsx` | `#the-system` |
 | 4 | On demand (3-tile showcase) | `components/growth/Capabilities.tsx` | `#capabilities` |
 | 5 | Always on (pinned split screen, scrolling day) | `components/growth/AlwaysOn.tsx` | `#always-on` |
-| 6 | Control center (5 guarantees, static) | `components/growth/TrustAndControl.tsx` + `ControlCenterIcons.tsx` | `#trust` |
-| 7 | Proof (sticky story stack, pinned headline) | `components/growth/CustomerProof.tsx` | `#proof` |
-| 8 | FAQ | `components/growth/Objections.tsx` + `lib/data/objections.ts` | `#objections` |
-| 9 | Final CTA (button only, calendar moved to `/speak-to-an-expert`) | `components/growth/FinalCTA.tsx` | `#book` |
+| 6 | Impact stats (short KPI band) | `components/growth/ImpactStats.tsx` | `#impact` |
+| 7 | Control center (5 guarantees, static) | `components/growth/TrustAndControl.tsx` + `ControlCenterIcons.tsx` | `#trust` |
+| 8 | Proof (sticky story stack, pinned headline) | `components/growth/CustomerProof.tsx` | `#proof` |
+| 9 | FAQ | `components/growth/Objections.tsx` + `lib/data/objections.ts` | `#objections` |
+| 10 | Final CTA (button only, calendar moved to `/speak-to-an-expert`) | `components/growth/FinalCTA.tsx` | `#book` |
 
 The showcase pills expose anchors: `#answers`, `#reporting`, `#ai-apps`, and
 the section opens the matching scene from `location.hash`. `#agents` and
@@ -360,8 +361,9 @@ second one. Its ink is `rgba(238,242,248,0.92)`, brightened from `--os-muted`
 by request but held under the headline's pure near-white.
 
 **The right column is eight 200px chips, one per out-wire.** Seven are static
-and the eighth is a ticker: it counts from 8 to 99 over 21s (5x the original
-4.2s, by request) on an accelerating cubic once the canvas is 35% visible,
+and the eighth is a ticker: once the canvas is 35% visible it holds on 8
+for 2s, then climbs linearly to 99 over 9s (about ten stores a second; the
+accelerating cubic was rejected as sitting still too long),
 then **lands on the phrase "100s of locations" rather than a figure** (a
 specific number there would be a claim; the point is only that it keeps
 going, and the phrase is what carries the count past two digits). The chip
@@ -546,15 +548,17 @@ check dark mode.
 
 Twenty-six moments from one day in four time bands, then a counter.
 
-**Structurally this is a pinned split screen**, the third layout this section
-has had. The handoff specified a normal-flow wall; that became a pinned
-stepper; on request it is now: **left ~39% holds the thesis and never moves,
-right ~61% scrolls the whole day as one continuous column.** The band tags
-and the key sit fixed above the card column, outside the scroller. A fade
-mask at the column's top and bottom lets the neighbouring band show through
-dimmed, which is the deliberate cue that there is more to scroll. The
-counter sits in flow after the pinned track, so it arrives under both halves
-once the last band is spent, and then the section scrolls away.
+**Structurally this is a pinned split screen** on a white band: **left
+~39% holds the thesis and never moves, right ~61% scrolls the whole day as
+one continuous column.** The band titles are dividers INSIDE the scroller
+(title + rule, the same `BandHeading` the stacked mobile layout uses); at
+rest the next divider peeks through the bottom fade, which is the cue that
+there is more to scroll. The key sits alone just above the scroller
+(`pb-2`), and the grid clears the nav pill by only 4px: the old tag row
+and its padding read as a hole at the top and were removed with the tags
+themselves. **The counter block (1,834) was removed entirely on request**;
+when the last band is spent the section simply hands off to the impact
+band.
 
 The old accent thread between the two Store #331 cards survives in copy
 alone: the 6:50pm card reads "The 6:00am draft".
@@ -567,10 +571,17 @@ under it is 19px, 1.25x its launch size. Both changes apply to the
 stacked mobile header too.
 
 **Each band sits on a plate that deepens through the day**: the
-component composes `rgba(var(--wl-band-ink), 0.025 + i * 0.02)` per band
+component composes `rgba(var(--wl-band-ink), 0.05 + i * 0.02)` per band
 (the ink triplet is per theme in globals.css), `rounded-2xl p-3.5`,
-right column only. Measured 0.024 / 0.043 / 0.067 / 0.086. Cards inside
-a plate sit at `gap-3`.
+right column only. Darkened from the 0.025 base when the band went
+white. Cards inside a plate sit at `gap-3`.
+
+**Tones are corner marks, not fills**, by request: every card is the
+same white panel and a `CornerMark` (top-left L, 3px, radius-matched)
+states the category in grey, accent, or violet, with the meta row
+repeating the colour. The legend draws the same corner shape at 11px,
+which is what makes the mark decodable. Do not reintroduce tinted card
+backgrounds; that was explicitly removed.
 
 **The bottom exit is deliberately tighter than the top entry**:
 `PAD_BOTTOM` (28) against `PAD` (48), the pinned grid ends at `pb-3`,
@@ -674,6 +685,16 @@ other three sections. The accent and violet meta rows are 12px mono on their
 own soft card background, so they carry 4.5:1, not the 3:1 large-text
 allowance. Measured light 4.55 / 4.69, dark 5.94 / 5.60; neutral meta and card
 body 5.81 light, 7.18 dark.
+
+## Impact stats (section 6)
+
+Four KPI cards under one centred line ("Impact you can measure."),
+deliberately half a section. **Every figure is published elsewhere on this
+site**: 67% (WSI case study), 94% (DekaLash), 650+ (DivaDance), 5,000+
+locations across 70+ brands (hero trust strip). Each card's left bar wears
+the proof-deck edge colour of its source story. Do not invent a figure
+here. Tokens on `.ed-impact` (soft blue `#EFF5FB`, dark `#0D1522`), cards
+on `--imp-card` with `--ed-rule` borders.
 
 ## Control center (section 7)
 
@@ -869,6 +890,16 @@ Revised after the deck shipped; the current rules:
   resolves at rest when the card unpins. **Do not shrink the cards to avoid
   it**: a height clamp was tried and permanently clipped the WSI and
   DivaDance attributions, which is worse than a passing occlusion.
+- **The deck exits as one unit.** With a flat card list the shared sticky
+  containing block released the deepest card first and the green card slid
+  over the others' bars on the way out. The cards are now NESTED, each
+  wrapper extending its card's containing block with a spacer (real
+  content, not padding: the sticky constraint rectangle is the content
+  box, and a padding version stopped the cards pinning at all) that a
+  negative margin cancels from the flow. The step is cardH + gap - stagger
+  = 422 per level at lg (spacers 422/844/1266); verified gaps hold
+  [18,18,18] through the whole exit. Re-derive if card height, gap, or
+  stagger change; below lg there is no correction.
 - The headline is "Making an impact with franchise leaders." with the period,
   one line from ~640 up (18.51px of width per 1px of font size; clamp tops at
   48). It wraps on phones, where one line would need 18px type.

@@ -290,9 +290,35 @@ export default function CustomerProof() {
           </motion.h2>
         </div>
 
-        {STORIES.map((s) => (
-          <StoryCard key={s.brand} s={s} />
-        ))}
+        {/* Nested, not flat, so the deck EXITS as one unit. With a flat
+            list every card shares the deck as its sticky containing
+            block, and the constraint (a card cannot leave its block)
+            releases the deepest card first: the green card slid up over
+            the others' edge bars on the way out. Each wrapper below
+            extends its card's containing block with a spacer that a
+            negative margin cancels out of the flow, sized so all four
+            release at the same scroll position and the 18px staircase
+            rides off intact. The extension must be real content, not
+            padding: the sticky constraint rectangle is the containing
+            block's CONTENT box, and a padding version left the cards
+            with no room to stick at all. The step is cardH (436 at lg)
+            + the 4px gap - the 18px stagger = 422 per level; lg only,
+            since below lg the cards are auto-height and the deck reads
+            single-file anyway. Re-derive if the card height, gap, or
+            stagger change. */}
+        <div className="lg:-mb-[422px]">
+          <div className="lg:-mb-[844px]">
+            <div className="lg:-mb-[1266px]">
+              <StoryCard s={STORIES[0]} />
+              <div aria-hidden="true" className="hidden lg:block" style={{ height: 1266 }} />
+            </div>
+            <StoryCard s={STORIES[1]} />
+            <div aria-hidden="true" className="hidden lg:block" style={{ height: 844 }} />
+          </div>
+          <StoryCard s={STORIES[2]} />
+          <div aria-hidden="true" className="hidden lg:block" style={{ height: 422 }} />
+        </div>
+        <StoryCard s={STORIES[3]} />
       </div>
 
       {/* Partner memberships: a compartment pinned to the viewport bottom
