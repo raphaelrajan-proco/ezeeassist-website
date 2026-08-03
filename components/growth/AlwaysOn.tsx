@@ -70,17 +70,17 @@ function Icon({ name }: { name: IconName }) {
    specifics.
 
    `tone` is assigned from what each card's own text says the system DID,
-   reclassified on request against this rule:
-     neutral  the payoff is a flag, alert, reminder, or hold: the system
-              watched and told a human (alert sent, flagged for the
-              owner, reminders queued, chased until filed)
+   rebalanced on request to roughly even detected and automated:
+     neutral  the payoff is a flag, alert, hold, or surfaced intel: the
+              system watched and told a human (alert sent, flagged for
+              the owner, held for owner, "here is what the network did")
      accent   the payoff is finished work: something was drafted,
-              assembled, answered, started, merged, sent, or filed
-     violet   the only franchisee-authored moment on the wall
-   Four of the accents additionally cite the network in their body copy
-   (top-quartile script, 4 locations quoted, 6 locations faced, fastest
-   10 openings); that story lives in the card text and the left thesis,
-   not in a colour of its own. */
+              assembled, answered, started, merged, or sent
+     violet   franchisee-authored: an owner built it (three on the wall,
+              one during the day and two on the longer clock)
+   The split is 11 / 12 / 3. Surfacing network intel counts as detected,
+   not automated: the system found something and reported it, even when
+   what it found came from other locations. */
 
 type Tone = "neutral" | "accent" | "violet";
 type Card = { icon: IconName; meta: string; title: string; body: string; tone: Tone; thread?: "a" | "b" };
@@ -102,9 +102,9 @@ const BANDS: { title: string; note?: string; cards: Card[] }[] = [
     title: "Before the doors open",
     cards: [
       { icon: "message",   meta: "5:45am · all locations", title: "Overnight questions cleared", body: "14 answered from the manual, 2 held for HQ", tone: "accent" },
-      { icon: "sunrise",   meta: "6:00am · Store #331", title: "Soft week detected",    body: "62% booked · reactivation draft ready", tone: "accent", thread: "a" },
+      { icon: "sunrise",   meta: "6:00am · Store #331", title: "Soft week detected",    body: "62% booked · reactivation draft ready", tone: "neutral", thread: "a" },
       { icon: "truck",     meta: "6:15am · Store #519", title: "Delivery came in short", body: "Credit request drafted against the invoice", tone: "accent" },
-      { icon: "people",    meta: "6:30am · Store #052", title: "Attach rate slipping",  body: "Top-quartile locations run a 30 second add-on script. Here it is.", tone: "accent" },
+      { icon: "people",    meta: "6:30am · Store #052", title: "Attach rate slipping",  body: "Top-quartile locations run a 30 second add-on script. Here it is.", tone: "neutral" },
       { icon: "personAdd", meta: "7:00am · Store #402", title: "New hire starts today", body: "Day-one sequence started", tone: "accent" },
       { icon: "document",  meta: "7:40am · Store #144", title: "Morning huddle brief ready", body: "Yesterday's numbers and today's bookings, one card", tone: "accent" },
     ],
@@ -114,10 +114,10 @@ const BANDS: { title: string; note?: string; cards: Card[] }[] = [
     cards: [
       { icon: "message",    meta: "9:14am · Store #118",  title: "Promo question answered",          body: "Cited from the promo guide in 6 seconds", tone: "accent" },
       { icon: "document",   meta: "10:05am · Store #214", title: "Started a national retail proposal", body: "4 locations have quoted this. Range, terms, and win rate attached.", tone: "accent" },
-      { icon: "star",       meta: "11:40am · Store #263", title: "One-star review posted",           body: "Response drafted, held for owner", tone: "accent" },
-      { icon: "storefront", meta: "12:30pm · Store #087", title: "Competitor opened nearby",         body: "6 locations faced this. What held revenue, and what didn't.", tone: "accent" },
+      { icon: "star",       meta: "11:40am · Store #263", title: "One-star review posted",           body: "Response drafted, held for owner", tone: "neutral" },
+      { icon: "storefront", meta: "12:30pm · Store #087", title: "Competitor opened nearby",         body: "6 locations faced this. What held revenue, and what didn't.", tone: "neutral" },
       { icon: "megaphone",  meta: "1:20pm · Store #052",  title: "Local campaign assembled",         body: "Hours and offer merged into the brand template", tone: "accent" },
-      { icon: "shield",     meta: "2:35pm · Store #402",  title: "Refund edge case resolved",        body: "Policy cited, approval routed to the owner", tone: "accent" },
+      { icon: "shield",     meta: "2:35pm · Store #402",  title: "Refund edge case resolved",        body: "Policy cited, approval routed to the owner", tone: "neutral" },
       /* The same closing audit the on demand section shows being built.
          Deliberate continuity across sections, not duplication. */
       { icon: "tools",      meta: "3:45pm · Store #214",  title: "An owner built a closing audit",   body: "Photo checklist per station. Live in twenty minutes, no developer.", tone: "violet" },
@@ -130,8 +130,8 @@ const BANDS: { title: string; note?: string; cards: Card[] }[] = [
       { icon: "calendar", meta: "14 days out · Store #263",  title: "Insurance lapsing", body: "Owner notified, task opened", tone: "neutral" },
       { icon: "document", meta: "30 days out · Store #144",  title: "Lease renewal window opens", body: "Terms summary drafted for the owner", tone: "accent" },
       { icon: "trend",    meta: "Week 6 · Store #402",       title: "Ramp behind cohort", body: "What the fastest 10 openings did in week 6, in order", tone: "accent" },
-      { icon: "receipt",  meta: "Month end · all locations", title: "Royalty reports assembled", body: "Filed to HQ, no chasing", tone: "accent" },
-      { icon: "people",   meta: "Quarter start · West territory", title: "Business reviews drafted", body: "Twelve decks, one per location, numbers filled", tone: "accent" },
+      { icon: "receipt",  meta: "First Monday · Store #144", title: "An owner built a P&L digest", body: "Emailed to their managers, numbers filled in", tone: "violet" },
+      { icon: "tools",    meta: "Every October · Store #519", title: "An owner built a winter prep checklist", body: "Site-by-site steps, scheduled each fall", tone: "violet" },
       { icon: "folder",   meta: "Quarter close · 5 stores",  title: "Audit docs missing", body: "Chased nightly until filed", tone: "neutral" },
     ],
   },
@@ -162,7 +162,11 @@ const COUNT = 1834;
    at each end of the viewport: at either extreme the resting band sits
    clear of the fade, and anything beyond it shows through dimmed. */
 const PAD = 48;
-const FADE = `linear-gradient(to bottom, transparent 0px, black ${PAD}px, black calc(100% - ${PAD}px), transparent 100%)`;
+/* Shallower at the bottom: the deep exit fade plus the grid's padding
+   plus the counter's own top margin stacked into a dead zone between the
+   last band and the counter. */
+const PAD_BOTTOM = 28;
+const FADE = `linear-gradient(to bottom, transparent 0px, black ${PAD}px, black calc(100% - ${PAD_BOTTOM}px), transparent 100%)`;
 /* Server-render fallback for the track height; replaced by the measured
    stack overflow on mount. */
 const DEFAULT_RANGE = 1400;
@@ -406,7 +410,7 @@ export default function AlwaysOn() {
           {BANDS.map((b) => (
             <div key={b.title}>
               <BandHeading band={b} />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {b.cards.map((c) => <MomentCard key={c.title} card={c} />)}
               </div>
             </div>
@@ -429,7 +433,7 @@ export default function AlwaysOn() {
         <div className="sticky top-0 h-screen overflow-hidden">
           <div
             ref={gridRef}
-            className="mx-auto grid h-full max-w-7xl gap-10 px-6 md:px-12 lg:px-16 pb-6 xl:gap-14"
+            className="mx-auto grid h-full max-w-7xl gap-10 px-6 md:px-12 lg:px-16 pb-3 xl:gap-14"
             style={{
               gridTemplateColumns: "minmax(0, 7fr) minmax(0, 11fr)",
               /* One definite row. An auto row can grow past the 100vh
@@ -511,17 +515,18 @@ export default function AlwaysOn() {
                 <div
                   ref={stackRef}
                   className="flex flex-col gap-9"
-                  style={{ padding: `${PAD}px 0`, willChange: "transform" }}
+                  style={{ padding: `${PAD}px 0 ${PAD_BOTTOM}px`, willChange: "transform" }}
                 >
                   {BANDS.map((b, bi) => (
-                    /* Each band sits on its own faint plate, so the four
-                       time-frames read as distinct as they scroll by. The
-                       tint lives behind the boxes only, per request. */
+                    /* Each band sits on its own plate, and the plates
+                       deepen through the day: the progression itself
+                       shows a new time-frame arriving as they scroll by.
+                       The tint lives behind the boxes only, per request. */
                     <div
                       key={b.title}
                       ref={(el) => { bandRefs.current[bi] = el; }}
-                      className="grid grid-cols-2 gap-4 rounded-2xl p-3.5"
-                      style={{ background: "var(--wl-band-tint)" }}
+                      className="grid grid-cols-2 gap-3 rounded-2xl p-3.5"
+                      style={{ background: `rgba(var(--wl-band-ink), ${(0.025 + bi * 0.02).toFixed(3)})` }}
                     >
                       {b.cards.map((c) => <MomentCard key={c.title} card={c} />)}
                     </div>
@@ -533,8 +538,10 @@ export default function AlwaysOn() {
         </div>
       </div>
 
-      {/* Arrives under both halves once the last band is spent. */}
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-4 pb-16">
+      {/* Arrives under both halves once the last band is spent. No top
+          padding: the scroller's exit fade above already reads as the
+          gap, and adding more left a dead zone between the two. */}
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pb-16">
         <Counter />
       </div>
     </section>

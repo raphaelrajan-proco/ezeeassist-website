@@ -566,21 +566,30 @@ alone: the 6:50pm card reads "The 6:00am draft".
 under it is 19px, 1.25x its launch size. Both changes apply to the
 stacked mobile header too.
 
-**Each band sits on a faint plate** (`--wl-band-tint`, defined per theme
-in globals.css) with `rounded-2xl p-3.5`, right column only: the gaps
-between plates are what mark the four time-frames as they scroll by.
+**Each band sits on a plate that deepens through the day**: the
+component composes `rgba(var(--wl-band-ink), 0.025 + i * 0.02)` per band
+(the ink triplet is per theme in globals.css), `rounded-2xl p-3.5`,
+right column only. Measured 0.024 / 0.043 / 0.067 / 0.086. Cards inside
+a plate sit at `gap-3`.
+
+**The bottom exit is deliberately tighter than the top entry**:
+`PAD_BOTTOM` (28) against `PAD` (48), the pinned grid ends at `pb-3`,
+and the counter wrapper has no top padding. The symmetric version
+stacked the deep exit fade, the grid padding, and the counter's own
+margin into a dead zone between the last band and the counter.
 
 **The colour follows what each card's text says the system did**,
 reclassified on request from the old network-reading: neutral means the
 payoff is a flag, alert, reminder, or hold (the system watched and told a
 human), accent means the payoff is finished work (drafted, assembled,
 answered, started, sent, filed), violet marks the single
-franchisee-authored moment. The split is 6 / 19 / 1, so accent now
-dominates and "Before the doors open" is all accent. The four cards whose
-bodies cite the network (top-quartile script, 4 locations quoted, 6
-locations faced, fastest 10 openings) carry that story in their text; it
-no longer has a colour of its own, and the legend's middle entry reads
-"Automated play, work done for you" accordingly.
+franchisee-authored moments (three: the closing audit during the day,
+plus a P&L digest and a winter prep checklist on the longer clock, which
+replaced the royalty and business-review cards). Rebalanced on request to
+11 / 12 / 3. Surfaced network intel counts as detected, not automated:
+the system found something and reported it, even when what it found came
+from other locations. The legend's middle entry reads "Automated play,
+work done for you".
 
 The 3:45pm #214 closing audit is the same one the on demand section shows
 being built. **Deliberate continuity across sections, not duplication.**
