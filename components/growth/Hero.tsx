@@ -542,7 +542,7 @@ export default function GrowthHero() {
                   color: "var(--ed-accent-text)",
                 }}
               >
-                Trusted by leading franchise and multi-location brands. Live across thousands of locations.
+                Trusted by leading franchise and multi-location brands.
               </motion.p>
             )}
 

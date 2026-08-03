@@ -312,11 +312,18 @@ export default function AlwaysOn() {
     if (!track || !grid || !headRow || !viewport || !stack) return;
 
     let raf = 0;
+    /* The pin holds until the LAST divider reaches the top of the
+       scroller, not merely until the stack bottom meets the viewport
+       bottom: on tall viewports the final band fit with its title only
+       part-way up, so the key and the whole compartment scrolled away
+       while "On a longer clock" was still mid-screen. The range is the
+       larger of the natural overflow and the translate that rests the
+       last band's title just under the top fade. */
+    const rangeRef = { current: 1 };
     const read = () => {
       raf = 0;
-      const r = Math.max(1, stack.scrollHeight - viewport.clientHeight);
       const top = track.getBoundingClientRect().top + window.scrollY;
-      const y = Math.max(0, Math.min(r, window.scrollY - top));
+      const y = Math.max(0, Math.min(rangeRef.current, window.scrollY - top));
       stack.style.transform = `translate3d(0, ${-y}px, 0)`;
     };
     const schedule = () => { if (!raf) raf = requestAnimationFrame(read); };
@@ -328,8 +335,16 @@ export default function AlwaysOn() {
       const padTop = parseFloat(getComputedStyle(grid).paddingTop) || 92;
       const headH = headRow.getBoundingClientRect().height;
       const vh = Math.round(Math.min(720, Math.max(320, window.innerHeight - padTop - headH - 12)));
+      const bands = bandRefs.current.filter(Boolean) as HTMLDivElement[];
+      const last = bands[bands.length - 1];
+      /* Both rects carry the same translate, so this is static. */
+      const lastTop = last
+        ? Math.round(last.getBoundingClientRect().top - stack.getBoundingClientRect().top)
+        : 0;
+      const r = Math.max(1, stack.scrollHeight - vh, lastTop - PAD);
+      rangeRef.current = r;
       setVpH(vh);
-      setRange(Math.max(1, stack.scrollHeight - vh));
+      setRange(r);
       schedule();
     };
 
@@ -369,9 +384,8 @@ export default function AlwaysOn() {
                 fontSize: "clamp(1.375rem, 0.62rem + 2.1vw, 2rem)",
               }}
             >
-              <span className="block">Your best coach.</span>
-              <span className="block">At every location.</span>
-              <span className="block">At the hour it matters.</span>
+              <span className="block">Coaching amplified across every location.</span>
+              <span className="block">At the hours it matters most.</span>
             </h2>
             <p className="text-[18px] md:text-[19px] max-w-[780px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
               Nobody pulled any of this. Each one started as a play built once, and
@@ -435,9 +449,8 @@ export default function AlwaysOn() {
                   fontSize: "clamp(1.5rem, 0.9rem + 1.7vw, 2.3rem)",
                 }}
               >
-                <span className="block">Your best coach.</span>
-                <span className="block">At every location.</span>
-                <span className="block">At the hour it matters.</span>
+                <span className="block">Coaching amplified across every location.</span>
+                <span className="block">At the hours it matters most.</span>
               </h2>
               {/* 1.25x the 15 it launched at, by request. */}
               <p className="text-[19px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)", maxWidth: 440 }}>

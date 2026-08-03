@@ -91,9 +91,9 @@ The `h1` deliberately sits on the eyebrow line, styled small, so the page's
 primary statement still matches the title tag and the JSON-LD. Moving it to
 the visually dominant lead is a one-line swap if that is ever preferred.
 
-The trust line ("Trusted by leading franchise and multi-location brands.
-Live across thousands of locations.", reworded from the 70+/5,000+ figures
-by request; `NETWORK_SCALE` still feeds the metadata) sits below the visual, directly
+The trust line ("Trusted by leading franchise and multi-location brands.",
+reworded from the 70+/5,000+ figures by request; `NETWORK_SCALE` still
+feeds the metadata) sits below the visual, directly
 above the logo marquee, rendered by `TrustStrip.tsx` rather than the hero. See
 the flag note below for how to put it back.
 
@@ -568,13 +568,17 @@ size a solid fill reads faster. The grid clears the nav pill by only
 the whole compartment down on tall viewports and read as a hole above
 the key. **The counter block (1,834) was removed entirely on request**;
 when the last band is spent the section simply hands off to the impact
-band.
+band. **The pin holds until the last divider reaches the top of the
+scroller**: the range is the larger of the stack overflow and the
+translate that rests "On a longer clock" just under the top fade,
+because on tall viewports the natural overflow released the pin while
+that band was still mid-screen and the key scrolled away early.
 
 The old accent thread between the two Store #331 cards survives in copy
 alone: the 6:50pm card reads "The 6:00am draft".
 
-**The left thesis is EZee blue and three lines** ("Your best coach." /
-"At every location." / "At the hour it matters."), coloured with
+**The left thesis is EZee blue and two lines** ("Coaching amplified
+across every location." / "At the hours it matters most."), coloured with
 `--wl-accent` so the light band gets the darker pass-rated value
 (#0071A0, 4.7:1 on the band) and dark gets the brand hue. The paragraph
 under it is 19px, 1.25x its launch size. Both changes apply to the
@@ -698,8 +702,11 @@ body 5.81 light, 7.18 dark.
 
 ## Impact stats (section 6)
 
-Four KPI cards under one centred line ("Impact you can measure."),
-deliberately half a section. Rebuilt from a supplied handoff: **the bars
+Four KPI cards under one centred line ("Boost your coaching with proven
+AI that scales your system's growth.", white on the hero's hazy blue:
+the band carries the hero photograph with a rgba(4,32,54,.42) scrim,
+dark in both themes, so it stands out between the white wall and the
+control center), deliberately half a section. Rebuilt from a supplied handoff: **the bars
 are one brand-blue ramp** (`--imp-s1..s4`; the handoff's #1B55E9 royals
 remapped to the EZee family, light to deep in light mode, inverted deep
 to bright in dark so the brightest step sits on the biggest number),

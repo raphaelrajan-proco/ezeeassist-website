@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 /**
@@ -83,22 +84,42 @@ export default function ImpactStats() {
   const shown = revealed || reduced;
 
   return (
-    <section id="impact" className="ed-impact w-full scroll-mt-24" style={{ backgroundColor: "var(--imp-bg)" }}>
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-12 md:py-16 flex flex-col items-center gap-9 md:gap-12">
+    /* The hero's hazy blue, brought back by request so the band stands
+       out: the same photograph and scrim treatment the closing section
+       uses, dark in both themes, with the cards keeping their own
+       per-theme surfaces on top of it. */
+    <section
+      id="impact"
+      className="ed-impact relative w-full scroll-mt-24 overflow-hidden"
+      style={{ backgroundColor: "#0B2C48" }}
+    >
+      <div className="absolute inset-0" aria-hidden="true">
+        <Image
+          src="/hero-bg.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+          className="object-cover"
+          style={{ objectPosition: "left center" }}
+        />
+        <div className="absolute inset-0" style={{ backgroundColor: "rgba(4, 32, 54, 0.42)" }} />
+      </div>
+      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-12 md:py-16 flex flex-col items-center gap-9 md:gap-12">
         <motion.h2
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: EASE }}
-          className="ed-fg text-center leading-[1.12] tracking-[-0.028em] max-w-[760px]"
+          className="text-center leading-[1.12] tracking-[-0.028em] max-w-[860px]"
           style={{
             fontFamily: JAKARTA,
             fontWeight: 700,
             fontSize: "clamp(1.375rem, 0.66rem + 2.4vw, 2.875rem)",
             textWrap: "pretty",
+            color: "#FFFFFF",
           }}
         >
-          Impact you can measure.
+          Boost your coaching with proven AI that scales your system&rsquo;s growth.
         </motion.h2>
 
         <div ref={gridRef} className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -30,7 +30,7 @@ export default function GrowthTrustStrip({ showTrustLine = false }: { showTrustL
               color: "#9FE0F8",
             }}
           >
-            Trusted by leading franchise and multi-location brands. Live across thousands of locations.
+            Trusted by leading franchise and multi-location brands.
           </p>
         )}
         <LogoMarquee />
