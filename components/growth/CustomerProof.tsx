@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
@@ -105,8 +106,10 @@ const PARTNERS = [
 function StoryCard({ s }: { s: Story }) {
   return (
     /* Almost flush: 4px between cards rather than 48. The deck effect comes
-       from the staggered sticky tops, not from the gap. */
-    <div className="sticky mb-1" style={{ top: s.top }}>
+       from the staggered sticky tops, not from the gap. --pf-offset clears
+       the pinned headline above, which the cards run underneath, and is
+       zero below lg where the headline does not pin. */
+    <div className="sticky mb-1" style={{ top: `calc(var(--pf-offset) + ${s.top}px)` }}>
       <div
         className="rounded-2xl overflow-hidden"
         style={{
@@ -121,7 +124,13 @@ function StoryCard({ s }: { s: Story }) {
             runs fewer lines, which is what lets the card come down to 364px.
             The logo panel gives up the width. Two steps, because at 1024 a
             360px rail would leave the middle column too narrow to hold a
-            headline line. */}
+            headline line.
+
+            The height stays fixed on short viewports even though the
+            pinned headline above plus the partner bar below need 790px to
+            show a whole card: shrinking the card instead was tried and
+            clipped the WSI and DivaDance attributions, a permanent cut.
+            Sliding under the bar is transient and resolves at rest. */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(180px,240px)_minmax(0,1fr)_minmax(280px,340px)] lg:h-[420px]">
           {/* Logo panel, hazy brand tint */}
           <div className="relative overflow-hidden flex items-center justify-center p-10 min-h-[200px]">
@@ -221,30 +230,66 @@ function StoryCard({ s }: { s: Story }) {
 }
 
 export default function CustomerProof() {
+  /* The headline pins above the deck from lg up, so every card's sticky
+     top has to clear it. The height is measured rather than assumed: the
+     type is fluid, so the block runs from 71px at 390 to 70px at 1440,
+     and the padding steps at two breakpoints in between. It is published
+     as --pf-head, which globals.css folds into --pf-offset. */
+  const headRef = useRef<HTMLDivElement>(null);
+  const [headH, setHeadH] = useState(0);
+
+  useEffect(() => {
+    const el = headRef.current;
+    if (!el) return;
+    const read = () => setHeadH(el.getBoundingClientRect().height);
+    read();
+    const ro = new ResizeObserver(read);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   return (
     <SectionShell id="proof">
-      <motion.h2
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        className="ed-fg leading-[1.05] tracking-[-0.03em] mb-12 md:mb-14"
-        style={{
-          fontFamily: JAKARTA,
-          fontWeight: 700,
-          /* One line at every width; clamp fitted to the measured wrap
-             point rather than a width ratio. */
-          fontSize: "clamp(1.375rem, 0.02rem + 4.4vw, 3rem)",
-        }}
+      {/* Headline and deck share a wrapper, which is what bounds both
+          sticky ranges. The cards' containing block still ends at the last
+          card: when it ran to the section end, the extra runway pushed the
+          cards past each other on exit and the taller third card's pink
+          logo panel emerged above the fourth. The headline unpins at the
+          same edge, so it leaves exactly as the partner bar arrives. */}
+      <div
+        className="ed-proof-deck"
+        style={{ ["--pf-head" as string]: `${headH}px` }}
       >
-        Making an impact with franchise leaders.
-      </motion.h2>
+        <div
+          ref={headRef}
+          className="static lg:sticky pb-12 md:pb-14 lg:pb-5"
+          style={{
+            /* Below the floating nav pill, which is sticky too. Painted
+               above the cards so they disappear under it rather than
+               through it, and above the partner bar's 3. */
+            top: "var(--nav-block)",
+            zIndex: 4,
+            backgroundColor: "var(--ed-bg)",
+          }}
+        >
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
+            className="ed-fg leading-[1.05] tracking-[-0.03em]"
+            style={{
+              fontFamily: JAKARTA,
+              fontWeight: 700,
+              /* One line at every width; clamp fitted to the measured wrap
+                 point rather than a width ratio. */
+              fontSize: "clamp(1.375rem, 0.02rem + 4.4vw, 3rem)",
+            }}
+          >
+            Making an impact with franchise leaders.
+          </motion.h2>
+        </div>
 
-      {/* The deck gets its own wrapper so the cards' sticky containing
-          block ends at the last card. When it ran to the section end, the
-          extra runway pushed the cards past each other on exit and the
-          taller third card's pink logo panel emerged above the fourth. */}
-      <div>
         {STORIES.map((s) => (
           <StoryCard key={s.brand} s={s} />
         ))}

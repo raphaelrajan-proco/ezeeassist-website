@@ -40,6 +40,7 @@ const routes: Route[] = [
   { url: "/case-studies/divadance",                         priority: 0.80, changeFrequency: "monthly" },
 
   // ── Tier 2: High-intent conversion pages ─────────────────
+  { url: "/speak-to-an-expert",                             priority: 0.90, changeFrequency: "monthly" },
   { url: "/contact",                                        priority: 0.90, changeFrequency: "monthly" },
   { url: "/roi-calculator",                                 priority: 0.80, changeFrequency: "monthly" },
   { url: "/why-ezeeassist",                                 priority: 0.80, changeFrequency: "monthly" },

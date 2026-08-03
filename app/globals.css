@@ -1068,6 +1068,22 @@ input[type="range"]::-moz-range-thumb {
   --cc-glyph:         #B6C0D0;
 }
 
+/* ─── Proof deck ───────────────────────────────────────────
+   The headline pins above the card stack from lg up, so every card's
+   sticky top has to clear the nav pill plus the headline. --pf-head is
+   the headline block's measured height, set inline by the component
+   because the type is fluid.
+
+   Below lg the pin is off and the offset is zero: the cards there run
+   single-column at around 790px, taller than a phone viewport, so a
+   pinned headline and the pinned partner bar together would leave less
+   than half a card visible. */
+.ed-proof-deck { --pf-offset: 0px }
+
+@media (min-width: 1024px) {
+  .ed-proof-deck { --pf-offset: calc(var(--nav-block) + var(--pf-head, 0px)) }
+}
+
 /* Card entrance inside the band viewport. Replayed on every step by
    remounting the grid, so the stagger reads on each band rather than
    only the first. */

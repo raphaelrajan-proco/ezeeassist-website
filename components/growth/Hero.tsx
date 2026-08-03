@@ -626,7 +626,7 @@ export default function GrowthHero() {
                   against the scrimmed background, so the button barely
                   separated from it, and its white label was 2.53:1. */}
               <Link
-                href="/contact"
+                href="/speak-to-an-expert"
                 className="ed-btn ed-btn-arrow inline-flex"
                 style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
               >

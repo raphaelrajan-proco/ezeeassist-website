@@ -1,8 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { useEffect } from "react";
+import Link from "next/link";
+import { CLOSING_BASE } from "./closing-band";
 
 /**
  * The closing ask, and the top of the closing band. This section carries
@@ -10,63 +12,16 @@ import { useEffect } from "react";
  * bottom fade lands on solid CLOSING_BASE, which the footer continues.
  * Change one and change the other, or a seam appears between them.
  *
+ * The calendar itself lives on /speak-to-an-expert, which repeats this
+ * headline. The homepage closes on the button rather than on an 800px
+ * embed that pushes the footer off the bottom of the world.
+ *
  * TODO: the secondary CTA, "Build a workflow yourself", is held back
  * until the interactive generator exists. It is deliberately not
  * wired to /demo, which is an empty noindex stub, because shipping a
  * button to a blank page costs more than shipping one button.
  */
 
-/** Shared with the footer. The bottom fade resolves to exactly this. */
-export const CLOSING_BASE = "#042036";
-
-const MEETING_URL =
-  "https://meetings-na2.hubspot.com/raphael-rajan/raphael-rajan-ezee-assist";
-const MEETINGS_SCRIPT =
-  "https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js";
-
-/**
- * The HubSpot meetings widget. The embed script scans the DOM for
- * `.meetings-iframe-container` when it executes, so it is injected in an
- * effect on every mount rather than through next/script: next/script
- * dedupes by src and never re-runs, which leaves the container empty
- * whenever the page is returned to through client-side navigation. The
- * cleanup removes the tag so the next mount injects and re-runs it.
- */
-function MeetingsEmbed() {
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = MEETINGS_SCRIPT;
-    script.async = true;
-    document.body.appendChild(script);
-    return () => {
-      script.remove();
-    };
-  }, []);
-
-  return (
-    <div
-      id="book-a-time"
-      className="mt-10 w-full max-w-[900px] rounded-2xl overflow-hidden"
-      style={{
-        /* The widget manages its own height (~756px desktop) via the
-           script; the min height stops the section collapsing while it
-           loads, and the fallback link covers the script being blocked. */
-        minHeight: 640,
-        backgroundColor: "rgba(255,255,255,0.04)",
-      }}
-    >
-      <div
-        className="meetings-iframe-container w-full"
-        data-src={`${MEETING_URL}?embed=true`}
-      />
-      <noscript>
-        <a href={MEETING_URL} style={{ color: "#FFFFFF", textDecoration: "underline" }}>
-          Book a time
-        </a>
-      </noscript>
-    </div>
-  );
-}
 
 export default function FinalCTA() {
   return (
@@ -119,7 +74,18 @@ export default function FinalCTA() {
           <span className="block">We&rsquo;ll show you how EZee runs it.</span>
         </h2>
 
-        <MeetingsEmbed />
+        {/* White fill, matching the hero. A blue fill measures 2.07:1 on
+            this backdrop and its white label 2.53:1, so both fail. */}
+        <Link
+          href="/speak-to-an-expert"
+          className="ed-btn ed-btn-arrow inline-flex mt-9"
+          style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
+        >
+          Speak to an expert
+          <span className="ed-btn-arrow-badge" aria-hidden="true">
+            <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
+          </span>
+        </Link>
       </motion.div>
     </section>
   );

@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Globe, Share2, Link2, ArrowRight } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { CLOSING_BASE } from "@/components/growth/FinalCTA";
+import { CLOSING_BASE } from "@/components/growth/closing-band";
 
 const footerLinks = {
   Platform: [
@@ -125,11 +125,15 @@ const socialLinks = [
   { label: "Facebook",   href: "https://facebook.com/ezeeassist",         icon: Globe  },
 ];
 
+/* Routes whose last section fades to CLOSING_BASE, so they need the
+   editorial footer to continue that band. Anything else gets the light
+   footer, which would meet the fade as a hard seam. */
+const EDITORIAL_FOOTER = new Set(["/", "/speak-to-an-expert"]);
+
 export default function Footer() {
   const pathname = usePathname();
-  const isEditorial = pathname === "/";
 
-  if (isEditorial) {
+  if (EDITORIAL_FOOTER.has(pathname)) {
     return <FooterEditorial />;
   }
 

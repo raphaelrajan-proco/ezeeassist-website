@@ -28,10 +28,10 @@ before picking the work back up in a fresh session.
 | 3 | The reveal (operating system diagram) | `components/TheSystem.tsx` | `#the-system` |
 | 4 | On demand (3-tile showcase) | `components/growth/Capabilities.tsx` | `#capabilities` |
 | 5 | Always on (pinned 4-band stepper) | `components/growth/AlwaysOn.tsx` | `#always-on` |
-| 6 | Proof (sticky story stack) | `components/growth/CustomerProof.tsx` | `#proof` |
-| 7 | Control center (5 guarantees, static) | `components/growth/TrustAndControl.tsx` + `ControlCenterIcons.tsx` | `#trust` |
+| 6 | Control center (5 guarantees, static) | `components/growth/TrustAndControl.tsx` + `ControlCenterIcons.tsx` | `#trust` |
+| 7 | Proof (sticky story stack, pinned headline) | `components/growth/CustomerProof.tsx` | `#proof` |
 | 8 | FAQ | `components/growth/Objections.tsx` + `lib/data/objections.ts` | `#objections` |
-| 9 | Final CTA | `components/growth/FinalCTA.tsx` | `#book` |
+| 9 | Final CTA (button only, calendar moved to `/speak-to-an-expert`) | `components/growth/FinalCTA.tsx` | `#book` |
 
 The showcase pills expose anchors: `#answers`, `#reporting`, `#ai-apps`, and
 the section opens the matching scene from `location.hash`. `#agents` and
@@ -262,8 +262,9 @@ light/dark split (`#0077A8` / `#00AEEF`). Measured: coaching fill 5.0:1 in
 both themes, dark eyebrow 7.51:1, dark closing line 7.28:1.
 
 **The admin ramp is deliberately dark** so white would pass on tones 1–3. Do
-not lighten it. The four grey segments carry no labels; the pillar swatches
-below identify them, so **swatch tone and segment tone have to stay in step**.
+not lighten it. The four grey segments carry no labels; the pillar underlines
+below identify them, so **underline tone and segment tone have to stay in
+step**.
 
 Two places where the build departs from the prototype, both forced:
 
@@ -734,32 +735,43 @@ matching the blog's subscribe strip, which is also a no-op. **Neither collects
 anything.** Wire both to the real list before launch; there is a `TODO` on the
 form.
 
-## The closing band
+## The closing band and the booking page
 
-**The closing section embeds the HubSpot meetings widget** in place of the
-old Speak-to-an-expert button. The booking page is
+**The homepage closes on the Speak-to-an-expert button again; the HubSpot
+calendar lives on `/speak-to-an-expert`** (`app/speak-to-an-expert/page.tsx`),
+which repeats the "Bring us one franchise workflow" headline over the same
+hero background. **Every Speak-to-an-expert button routes there**: the navbar
+(desktop and mobile sheet), the hero, and the closing section. `/contact`
+still exists with the form; nothing links to it from those CTAs any more.
+**The navbar is shared by every route, so its CTA now lands on the booking
+page site-wide**, per the prompt that created the page.
+
+The widget itself is `components/MeetingsEmbed.tsx`. The booking URL is
 `meetings-na2.hubspot.com/raphael-rajan/raphael-rajan-ezee-assist`, and the
-container id is `book-a-time`.
-
-The embed script (`MeetingsEmbedCode.js`) scans the DOM for
-`.meetings-iframe-container` once, when it executes. It is therefore injected
-in a `useEffect` on every mount and removed on unmount, **not** through
-`next/script`: next/script dedupes by src and never re-runs, which leaves the
-container empty whenever the page is returned to through client-side
-navigation. The widget manages its own iframe height (756px measured);
-`minHeight: 640` on the container stops the section collapsing while it
-loads, and a `<noscript>` link to the booking page is the fallback.
+container id is `book-a-time`. The embed script (`MeetingsEmbedCode.js`)
+scans the DOM for `.meetings-iframe-container` once, when it executes. It is
+therefore injected in a `useEffect` on every mount and removed on unmount,
+**not** through `next/script`: next/script dedupes by src and never re-runs,
+which leaves the container empty whenever the page is returned to through
+client-side navigation. The widget manages its own iframe height (756px
+measured); `minHeight: 640` on the container stops the page collapsing while
+it loads, and a `<noscript>` link to the booking page is the fallback.
 
 Verified: iframe created at 900px wide at desktop and 342px at 390 with no
-overflow, and the frame's `load` event fires. **The pane screenshots
-cross-origin iframes as blank**; that is compositing, not a failure.
+overflow. **The pane screenshots cross-origin iframes as blank**; that is
+compositing, not a failure.
 
-
-`FinalCTA` and the editorial footer are one continuous blue band. The CTA
-carries the hero's background image and scrims; its bottom fade resolves to
-**solid `CLOSING_BASE` (`#042036`)**, which the footer sets as its background.
-`CLOSING_BASE` is exported from `FinalCTA.tsx` and imported by `Footer.tsx`
-precisely so the two cannot drift; change it in one place. The footer has no
+`FinalCTA`, the booking page and the editorial footer are one continuous
+blue band. The CTA carries the hero's background image and scrims; its
+bottom fade resolves to **solid `CLOSING_BASE` (`#042036`)**, which the
+footer sets as its background. `CLOSING_BASE` lives in
+`components/growth/closing-band.ts`, a plain module, **not** in
+`FinalCTA.tsx`: the booking page is a server component, and importing a
+constant from a `"use client"` module hands a server component a client
+reference instead of the string, which silently computes the gradient to
+none. `Footer.tsx` picks the editorial footer for the routes in its
+`EDITORIAL_FOOTER` set (`/` and `/speak-to-an-expert`); any other route gets
+the light footer, which would meet the fade as a hard seam. The footer has no
 top border, and `ed-on-dark` pins the dark token set so its light-mode text
 stays legible on the band. It also ships only the white logo, since the band
 is dark in both themes.
@@ -779,6 +791,22 @@ Revised after the deck shipped; the current rules:
   `z-index: 3`, solid `--ed-bg` background): it pins to the viewport bottom
   for the length of the section and cards scroll away beneath it. Four pills
   only: IFA Supplier Forum, CFA Member, FSN Verified Member, WSI Partner.
+- **The headline pins above the deck from lg up** (`sticky`, `top:
+  var(--nav-block)`, `z-index: 4`, solid `--ed-bg`): cards ride up and
+  disappear under it, and it unpins with the last card, exactly as the
+  partner bar arrives, because it shares the deck wrapper as its containing
+  block. Every card's sticky top is `calc(var(--pf-offset) + stagger)`;
+  `--pf-offset` is defined in `globals.css` as nav-block plus `--pf-head`,
+  the headline block's measured height, which the component publishes from a
+  ResizeObserver because the type is fluid. **Below lg the pin is off and
+  `--pf-offset` is 0**: single-column cards run ~790px, taller than a phone
+  viewport, so pinning the headline too would leave less than half a card
+  visible between the two pinned compartments.
+- On viewports shorter than ~790px the last pinned card's bottom passes
+  under the partner bar while pinned (54px at 720). That is transient and
+  resolves at rest when the card unpins. **Do not shrink the cards to avoid
+  it**: a height clamp was tried and permanently clipped the WSI and
+  DivaDance attributions, which is worse than a passing occlusion.
 - The headline is "Making an impact with franchise leaders." with the period,
   one line from ~640 up (18.51px of width per 1px of font size; clamp tops at
   48). It wraps on phones, where one line would need 18px type.
@@ -990,10 +1018,10 @@ fit is usually 1024 rather than the smallest screen.
 - **Both bars carry three greys, one per pillar below.** A fourth, lightest tone was
   dropped and its share redistributed proportionally; `--pb-admin-4` went with
   it. Today is 31/26/23 + 20, the corrected bar is 8/7/5 + 80.
-- **The pillar titles carry both a swatch dot and an underline** in their bar
-segment's tone. The 3px rule alone was too thin to match against the bar by
-eye; the dot gives the colour enough area to compare. Tone and segment have to
-stay in step, since that pairing is what lets the bar go unlabelled.
+- **The pillar titles carry an underline only** in their bar segment's tone.
+A 12px swatch dot sat beside it for a while and was removed by request; the
+underline alone now ties title to segment. Tone and segment have to stay in
+step, since that pairing is what lets the bar go unlabelled.
 
 **Bars are 48px tall and the detail cards run 342px.** The Questions card sets
 the row: it is the tallest of the three, so its chip metrics (py-[7px],

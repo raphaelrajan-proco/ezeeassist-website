@@ -605,12 +605,11 @@ export default function CoachsWeek() {
                   says 104px; the longest description runs to three lines
                   from 1024 up and measures 105.4, so the floor is 106. */}
               <div className="flex flex-col gap-2 lg:min-h-[106px]">
-                {/* Dot and underline both, in the bar segment's tone. A
-                    3px rule alone was too thin to match against the bar by
-                    eye; the solid dot gives the colour enough area to
-                    compare, and the rule keeps the tie to the words. */}
+                {/* The underline alone carries the tie back to the bar
+                    segment. A solid dot sat beside it for a while and read
+                    as decoration once the rule was the same tone. */}
                 <h3
-                  className="flex items-center gap-2.5 text-[18px] md:text-[20px]"
+                  className="text-[18px] md:text-[20px]"
                   style={{
                     fontFamily: "var(--font-editorial)",
                     fontWeight: 700,
@@ -618,11 +617,6 @@ export default function CoachsWeek() {
                     color: "var(--pb-text)",
                   }}
                 >
-                  <span
-                    aria-hidden="true"
-                    className="block flex-shrink-0"
-                    style={{ width: 12, height: 12, borderRadius: 3, backgroundColor: p.rule }}
-                  />
                   <span
                     className="inline-block"
                     style={{ borderBottom: `3px solid ${p.rule}`, paddingBottom: 3 }}

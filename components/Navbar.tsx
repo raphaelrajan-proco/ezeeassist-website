@@ -326,7 +326,7 @@ export default function Navbar() {
   const mobileCta = (
     <div className="mt-4 flex items-center gap-3">
       <ThemeToggle />
-      <Link href="/contact" className="flex-1" onClick={closeMobile}>
+      <Link href="/speak-to-an-expert" className="flex-1" onClick={closeMobile}>
         <Button size="sm" className="w-full ed-btn-arrow gap-2" style={{ paddingRight: "0.25rem", paddingLeft: "1.125rem" }}>
           Speak to an expert
           <span className="ed-btn-arrow-badge ed-btn-arrow-badge-sm" aria-hidden="true">
@@ -437,7 +437,7 @@ export default function Navbar() {
       {/* Desktop CTA */}
       <div className="hidden md:flex items-center gap-3">
         <ThemeToggle />
-        <Link href="/contact">
+        <Link href="/speak-to-an-expert">
           <Button size="sm" className="ed-btn-arrow gap-2" style={{ paddingRight: "0.25rem", paddingLeft: "1.125rem" }}>
             Speak to an expert
             <span className="ed-btn-arrow-badge ed-btn-arrow-badge-sm" aria-hidden="true">

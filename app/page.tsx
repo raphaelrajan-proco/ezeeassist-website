@@ -113,8 +113,8 @@ export default function Home() {
         {/* 3 */} <TheSystem />
         {/* 4 */} <Capabilities />
         {/* 5 */} <AlwaysOn />
-        {/* 6 */} <CustomerProof />
-        {/* 7 */} <TrustAndControl />
+        {/* 6 */} <TrustAndControl />
+        {/* 7 */} <CustomerProof />
         {/* 8 */} <Objections />
         {/* 9 */} <FinalCTA />
       </main>
