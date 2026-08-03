@@ -582,9 +582,12 @@ check dark mode.
 
 Twenty-six moments from one day in four time bands, then a counter.
 
-**Structurally this is a pinned split screen** on a white band: **left
-~39% holds the thesis and never moves, right ~61% scrolls the whole day as
-one continuous column.** The band titles are dividers INSIDE the scroller
+**Structurally this is a pinned full-width scroller** on a white band:
+the header runs horizontally across the top in the on-demand section's
+format (mono eyebrow, the headline in the on-demand clamp but EZee blue,
+thesis line under it), the key chip sits full width beneath it, and the
+compartment spans the section with **four tiles across per band** (the
+split-screen left column retired on request).** The band titles are dividers INSIDE the scroller
 (title + rule, the same `BandHeading` the stacked mobile layout uses); at
 rest the next divider peeks through the bottom fade, which is the cue that
 there is more to scroll. The key sits alone just above the scroller
@@ -611,11 +614,10 @@ impact band shows beneath it instead.
 The old accent thread between the two Store #331 cards survives in copy
 alone: the 6:50pm card reads "The 6:00am draft".
 
-**The left thesis is EZee blue, one continuous wrapped line, three
-lines max** ("Coaching amplified across every location. At the hours it
-matters most."). No forced break between the sentences: it wraps
-naturally, and the clamp tops at 26px so it holds three lines in the
-333px column at 1024. Coloured with
+**The thesis is EZee blue, one continuous wrapped line** ("Coaching
+amplified across every location. At the hours it matters most."),
+running horizontally in the on-demand headline clamp
+(`clamp(1.25rem, 3.18vw, 2.625rem)`), wrapping naturally. Coloured with
 `--wl-accent` so the light band gets the darker pass-rated value
 (#0071A0, 4.7:1 on the band) and dark gets the brand hue. The paragraph
 under it is 19px, 1.25x its launch size. Both changes apply to the
@@ -626,6 +628,12 @@ component composes `rgba(var(--wl-band-ink), 0.05 + i * 0.02)` per band
 (the ink triplet is per theme in globals.css), `rounded-2xl p-3.5`,
 right column only. Darkened from the 0.025 base when the band went
 white. Cards inside a plate sit at `gap-3`.
+
+**The meta rows carry committed integration logos, not glyphs**: cards
+that logically draw on a system show 1-2 marks (15px, right-aligned in
+the meta row) from `/public/logos/integrations`; detection-only moments
+carry none. Never reference a logo CDN. The old inline glyph set is
+gone.
 
 **Tones are corner marks, not fills**, by request: every card is the
 same white panel and a `CornerMark` (top-left L, 3px, radius-matched)

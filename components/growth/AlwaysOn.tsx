@@ -19,46 +19,35 @@ import { useEffect, useRef, useState } from "react";
 const MONO = "var(--wl-mono)";
 const JAKARTA = "var(--font-editorial)";
 
-/* ── Icons ─────────────────────────────────────────────────
-   The icons carry trigger type at a glance. Someone scanning without
-   reading should see several different *kinds* of thing happening, which
-   is what stops the wall reading as a monitoring dashboard. Do not
-   collapse them to one generic bullet. */
+/* ── Stack logos ───────────────────────────────────────────
+   Small integration marks in each card's meta row, replacing the old
+   glyph set: the point is that the moments run on the systems the
+   network already uses. Only cards that logically draw on a system
+   carry logos; detection-only moments (a cooler alert, a competitor
+   opening) carry none. Every file is committed under
+   /public/logos/integrations; never reference a CDN from production. */
 
-const ICONS = {
-  moon:      <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" />,
-  package:   <><path d="M21 8.5 12 4 3 8.5v7L12 20l9-4.5z" /><path d="M3 8.5 12 13l9-4.5M12 13v7" /></>,
-  clipboard: <><rect x="5" y="4" width="14" height="17" rx="2.5" /><path d="M9 4.5h6a1 1 0 0 1 1 1V7H8V5.5a1 1 0 0 1 1-1zM9 12h6M9 16h4" /></>,
-  sunrise:   <path d="M4 18h16M6.5 18a5.5 5.5 0 0 1 11 0M12 4v3M5.6 7.6l2 2M18.4 7.6l-2 2M2.5 14h2M19.5 14h2" />,
-  people:    <><circle cx="9" cy="8" r="3" /><path d="M3.5 19a5.5 5.5 0 0 1 11 0" /><circle cx="17" cy="9.5" r="2.2" /><path d="M15.4 15.2A4.4 4.4 0 0 1 21 19" /></>,
-  personAdd: <><circle cx="10" cy="8" r="3.2" /><path d="M4 19a6 6 0 0 1 12 0M18 8v6M21 11h-6" /></>,
-  message:   <path d="M21 12a8 8 0 0 1-11.5 7.2L4 21l1.8-5.5A8 8 0 1 1 21 12z" />,
-  document:  <><path d="M14 3.5H7.5A2.5 2.5 0 0 0 5 6v12a2.5 2.5 0 0 0 2.5 2.5h9A2.5 2.5 0 0 0 19 18V8.5z" /><path d="M14 3.5V8h5M8.5 13h7M8.5 16.5h4" /></>,
-  star:      <path d="m12 3.8 2.6 5.2 5.8.8-4.2 4 1 5.7-5.2-2.7-5.2 2.7 1-5.7-4.2-4 5.8-.8z" />,
-  storefront:<path d="M4 9.5 5.5 5h13L20 9.5M4 9.5h16M4 9.5V20h16V9.5M4 9.5a2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0 2.5 2.5 0 0 0 5 0" />,
-  tools:     <path d="M15.5 4.5a4.5 4.5 0 0 0-6 5.9L4 15.9V20h4.1l5.5-5.5a4.5 4.5 0 0 0 5.9-6l-2.9 2.9-2.1-2.1z" />,
-  check:     <path d="m4.5 12.5 5 5 10-11" />,
-  calendar:  <><rect x="3.5" y="5" width="17" height="15" rx="2.5" /><path d="M3.5 10h17M8 3.5v3M16 3.5v3" /></>,
-  trend:     <><path d="M4 16.5 9.5 11l3.5 3.5L20 7.5" /><path d="M15.5 7.5H20V12" /></>,
-  folder:    <path d="M3.5 7.5A2 2 0 0 1 5.5 5.5h3.2l2 2.5h7.8a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2z" />,
-  bell:      <><path d="M18.5 16h-13l1.6-2.6V9.7a4.9 4.9 0 0 1 9.8 0v3.7z" /><path d="M10 19a2 2 0 0 0 4 0" /></>,
-  receipt:   <><path d="M6.5 3.5h11V20l-1.8-1.3-1.9 1.3-1.8-1.3-1.9 1.3-1.8-1.3L6.5 20z" /><path d="M9.5 8.5h5M9.5 12h5M9.5 15.5h3" /></>,
-  shield:    <><path d="M12 3.5 5.5 6v5.4c0 4.2 2.7 7.3 6.5 8.6 3.8-1.3 6.5-4.4 6.5-8.6V6z" /><path d="m9.2 11.6 2.1 2.1 3.6-4" /></>,
-  truck:     <><path d="M3.5 6.5h10V16h-10zM13.5 9.5h4l2.5 3V16h-6.5" /><circle cx="7.2" cy="17.6" r="1.7" /><circle cx="16.4" cy="17.6" r="1.7" /></>,
-  megaphone: <><path d="M4.5 10.5v3.4l2.5.4V10zM7 10l12.5-4.8v13.6L7 14.3z" /><path d="m9.3 15 1 4 2.6-.7-.9-3.2" /></>,
-} as const;
+const STACK_LOGO: Record<string, string> = {
+  stripe:      "/logos/integrations/stripe.svg",
+  quickbooks:  "/logos/integrations/quickbooks.svg",
+  xero:        "/logos/integrations/xero.svg",
+  hubspot:     "/logos/integrations/hubspot.svg",
+  mailchimp:   "/logos/integrations/mailchimp.svg",
+  notion:      "/logos/integrations/notion.svg",
+  airtable:    "/logos/integrations/airtable.svg",
+  googledrive: "/logos/integrations/googledrive.svg",
+  dropbox:     "/logos/integrations/dropbox.svg",
+};
 
-type IconName = keyof typeof ICONS;
-
-function Icon({ name }: { name: IconName }) {
+function StackLogos({ names }: { names?: string[] }) {
+  if (!names?.length) return null;
   return (
-    <svg
-      width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"
-      aria-hidden="true" style={{ flex: "none" }}
-    >
-      {ICONS[name]}
-    </svg>
+    <span className="flex items-center gap-1.5" aria-hidden="true" style={{ flex: "none" }}>
+      {names.map((n) => (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img key={n} src={STACK_LOGO[n]} alt="" width={15} height={15} style={{ display: "block" }} />
+      ))}
+    </span>
   );
 }
 
@@ -83,56 +72,56 @@ function Icon({ name }: { name: IconName }) {
    what it found came from other locations. */
 
 type Tone = "neutral" | "accent" | "violet";
-type Card = { icon: IconName; meta: string; title: string; body: string; tone: Tone; thread?: "a" | "b" };
+type Card = { meta: string; title: string; body: string; tone: Tone; stack?: string[]; thread?: "a" | "b" };
 
 const BANDS: { title: string; note?: string; cards: Card[] }[] = [
   {
     title: "Overnight",
     note: "while nobody is awake",
     cards: [
-      { icon: "bell",      meta: "1:12am · Store #263",    title: "Walk-in cooler drifted",  body: "Alert sent, service ticket opened", tone: "neutral" },
-      { icon: "moon",      meta: "2:04am · all locations", title: "Closing photos scored",   body: "9 stations flagged, tasks opened", tone: "neutral" },
-      { icon: "receipt",   meta: "2:47am · Store #118",    title: "Registers reconciled",    body: "One deposit off, flagged for the owner", tone: "neutral" },
-      { icon: "shield",    meta: "3:15am · all locations", title: "Expiring certifications pulled", body: "Six due in 30 days, reminders queued", tone: "neutral" },
-      { icon: "package",   meta: "3:40am · Store #519",    title: "Inventory hit critical",  body: "Reorder drafted at approved pricing", tone: "accent" },
-      { icon: "clipboard", meta: "4:00am · West territory", title: "Coach brief assembled",  body: "12 locations, ranked by need", tone: "accent" },
+      { meta: "1:12am · Store #263",    title: "Walk-in cooler drifted",  body: "Alert sent, service ticket opened", tone: "neutral" },
+      { meta: "2:04am · all locations", title: "Closing photos scored",   body: "9 stations flagged, tasks opened", tone: "neutral" },
+      { meta: "2:47am · Store #118",    title: "Registers reconciled",    body: "One deposit off, flagged for the owner", stack: ["stripe", "quickbooks"], tone: "neutral" },
+      { meta: "3:15am · all locations", title: "Expiring certifications pulled", body: "Six due in 30 days, reminders queued", stack: ["airtable"], tone: "neutral" },
+      { meta: "3:40am · Store #519",    title: "Inventory hit critical",  body: "Reorder drafted at approved pricing", stack: ["quickbooks"], tone: "accent" },
+      { meta: "4:00am · West territory", title: "Coach brief assembled",  body: "12 locations, ranked by need", stack: ["hubspot"], tone: "accent" },
     ],
   },
   {
     title: "Before the doors open",
     cards: [
-      { icon: "message",   meta: "5:45am · all locations", title: "Overnight questions cleared", body: "14 answered from the manual, 2 held for HQ", tone: "accent" },
-      { icon: "sunrise",   meta: "6:00am · Store #331", title: "Soft week detected",    body: "62% booked · reactivation draft ready", tone: "neutral", thread: "a" },
-      { icon: "truck",     meta: "6:15am · Store #519", title: "Delivery came in short", body: "Credit request drafted against the invoice", tone: "accent" },
-      { icon: "people",    meta: "6:30am · Store #052", title: "Attach rate slipping",  body: "Top-quartile locations run a 30 second add-on script. Here it is.", tone: "neutral" },
-      { icon: "personAdd", meta: "7:00am · Store #402", title: "New hire starts today", body: "Day-one sequence started", tone: "accent" },
-      { icon: "document",  meta: "7:40am · Store #144", title: "Morning huddle brief ready", body: "Yesterday's numbers and today's bookings, one card", tone: "accent" },
+      { meta: "5:45am · all locations", title: "Overnight questions cleared", body: "14 answered from the manual, 2 held for HQ", stack: ["notion"], tone: "accent" },
+      { meta: "6:00am · Store #331", title: "Soft week detected",    body: "62% booked · reactivation draft ready", stack: ["hubspot", "mailchimp"], tone: "neutral", thread: "a" },
+      { meta: "6:15am · Store #519", title: "Delivery came in short", body: "Credit request drafted against the invoice", stack: ["xero"], tone: "accent" },
+      { meta: "6:30am · Store #052", title: "Attach rate slipping",  body: "Top-quartile locations run a 30 second add-on script. Here it is.", stack: ["stripe"], tone: "neutral" },
+      { meta: "7:00am · Store #402", title: "New hire starts today", body: "Day-one sequence started", tone: "accent" },
+      { meta: "7:40am · Store #144", title: "Morning huddle brief ready", body: "Yesterday's numbers and today's bookings, one card", stack: ["googledrive"], tone: "accent" },
     ],
   },
   {
     title: "During the day",
     cards: [
-      { icon: "message",    meta: "9:14am · Store #118",  title: "Promo question answered",          body: "Cited from the promo guide in 6 seconds", tone: "accent" },
-      { icon: "document",   meta: "10:05am · Store #214", title: "Started a national retail proposal", body: "4 locations have quoted this. Range, terms, and win rate attached.", tone: "accent" },
-      { icon: "star",       meta: "11:40am · Store #263", title: "One-star review posted",           body: "Response drafted, held for owner", tone: "neutral" },
-      { icon: "storefront", meta: "12:30pm · Store #087", title: "Competitor opened nearby",         body: "6 locations faced this. What held revenue, and what didn't.", tone: "neutral" },
-      { icon: "megaphone",  meta: "1:20pm · Store #052",  title: "Local campaign assembled",         body: "Hours and offer merged into the brand template", tone: "accent" },
-      { icon: "shield",     meta: "2:35pm · Store #402",  title: "Refund edge case resolved",        body: "Policy cited, approval routed to the owner", tone: "neutral" },
+      { meta: "9:14am · Store #118",  title: "Promo question answered",          body: "Cited from the promo guide in 6 seconds", stack: ["notion"], tone: "accent" },
+      { meta: "10:05am · Store #214", title: "Started a national retail proposal", body: "4 locations have quoted this. Range, terms, and win rate attached.", stack: ["googledrive", "hubspot"], tone: "accent" },
+      { meta: "11:40am · Store #263", title: "One-star review posted",           body: "Response drafted, held for owner", tone: "neutral" },
+      { meta: "12:30pm · Store #087", title: "Competitor opened nearby",         body: "6 locations faced this. What held revenue, and what didn't.", tone: "neutral" },
+      { meta: "1:20pm · Store #052",  title: "Local campaign assembled",         body: "Hours and offer merged into the brand template", stack: ["mailchimp"], tone: "accent" },
+      { meta: "2:35pm · Store #402",  title: "Refund edge case resolved",        body: "Policy cited, approval routed to the owner", stack: ["stripe"], tone: "neutral" },
       /* The same closing audit the on demand section shows being built.
          Deliberate continuity across sections, not duplication. */
-      { icon: "tools",      meta: "3:45pm · Store #214",  title: "An owner built a closing audit",   body: "Photo checklist per station. Live in twenty minutes, no developer.", tone: "violet" },
-      { icon: "check",      meta: "6:50pm · Store #331",  title: "Offer approved by owner",          body: "The 6:00am draft · sent to 340 lapsed clients", tone: "accent", thread: "b" },
+      { meta: "3:45pm · Store #214",  title: "An owner built a closing audit",   body: "Photo checklist per station. Live in twenty minutes, no developer.", tone: "violet" },
+      { meta: "6:50pm · Store #331",  title: "Offer approved by owner",          body: "The 6:00am draft · sent to 340 lapsed clients", stack: ["mailchimp"], tone: "accent", thread: "b" },
     ],
   },
   {
     title: "On a longer clock",
     cards: [
-      { icon: "calendar", meta: "14 days out · Store #263",  title: "Insurance lapsing", body: "Owner notified, task opened", tone: "neutral" },
-      { icon: "document", meta: "30 days out · Store #144",  title: "Lease renewal window opens", body: "Terms summary drafted for the owner", tone: "accent" },
-      { icon: "trend",    meta: "Week 6 · Store #402",       title: "Ramp behind cohort", body: "What the fastest 10 openings did in week 6, in order", tone: "accent" },
-      { icon: "receipt",  meta: "First Monday · Store #144", title: "An owner built a P&L digest", body: "Emailed to their managers, numbers filled in", tone: "violet" },
-      { icon: "tools",    meta: "Every October · Store #519", title: "An owner built a winter prep checklist", body: "Site-by-site steps, scheduled each fall", tone: "violet" },
-      { icon: "folder",   meta: "Quarter close · 5 stores",  title: "Audit docs missing", body: "Chased nightly until filed", tone: "neutral" },
+      { meta: "14 days out · Store #263",  title: "Insurance lapsing", body: "Owner notified, task opened", tone: "neutral" },
+      { meta: "30 days out · Store #144",  title: "Lease renewal window opens", body: "Terms summary drafted for the owner", stack: ["dropbox"], tone: "accent" },
+      { meta: "Week 6 · Store #402",       title: "Ramp behind cohort", body: "What the fastest 10 openings did in week 6, in order", tone: "accent" },
+      { meta: "First Monday · Store #144", title: "An owner built a P&L digest", body: "Emailed to their managers, numbers filled in", stack: ["quickbooks"], tone: "violet" },
+      { meta: "Every October · Store #519", title: "An owner built a winter prep checklist", body: "Site-by-site steps, scheduled each fall", tone: "violet" },
+      { meta: "Quarter close · 5 stores",  title: "Audit docs missing", body: "Chased nightly until filed", stack: ["dropbox"], tone: "neutral" },
     ],
   },
 ];
@@ -214,9 +203,12 @@ function MomentCard({ card }: { card: Card }) {
       }}
     >
       <CornerMark tone={card.tone} />
-      <div className="flex items-center gap-2" style={{ color: t.meta }}>
-        <Icon name={card.icon} />
+      {/* Meta row: the moment's timestamp, with the systems it draws on
+          as small committed logo marks. justify-between parks the logos
+          on the right so they read as provenance, not decoration. */}
+      <div className="flex items-center justify-between gap-2" style={{ color: t.meta }}>
         <span style={{ fontFamily: MONO, fontSize: 11.5 }}>{card.meta}</span>
+        <StackLogos names={card.stack} />
       </div>
       <div style={{ fontFamily: JAKARTA, fontSize: 16, fontWeight: 700, letterSpacing: "-0.015em", color: "var(--wl-text)" }}>
         {card.title}
@@ -350,7 +342,7 @@ export default function AlwaysOn() {
       const r = Math.max(1, stack.scrollHeight - vh, lastTop - PAD);
       rangeRef.current = r;
       setVpH(vh);
-      setStickyH(Math.round(padTop + headH + 8 + vh + 12));
+      setStickyH(Math.round(padTop + headH + vh + 12));
       setRange(r);
       schedule();
     };
@@ -384,16 +376,16 @@ export default function AlwaysOn() {
             </div>
             <h2
               style={{
-                fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.16,
+                fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.1,
                 /* EZee blue, via the token so the light band gets the
                    darker pass-rated value and dark gets the brand hue. */
                 color: "var(--wl-accent)",
-                fontSize: "clamp(1.375rem, 0.62rem + 2.1vw, 2rem)",
+                fontSize: "clamp(1.25rem, 3.18vw, 2.625rem)",
               }}
             >
               Coaching amplified across every location. At the hours it matters most.
             </h2>
-            <p className="text-[18px] md:text-[19px] max-w-[780px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
+            <p className="text-[15px] md:text-[16px] max-w-[780px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
               Nobody pulled any of this. Each one started as a play built once, and
               some of them draw on what the rest of your network already learned.
             </p>
@@ -431,20 +423,18 @@ export default function AlwaysOn() {
         >
           <div
             ref={gridRef}
-            className="mx-auto grid h-full max-w-7xl gap-10 px-6 md:px-12 lg:px-16 pb-3 xl:gap-14"
+            className="mx-auto flex h-full max-w-7xl flex-col px-6 md:px-12 lg:px-16 pb-3"
             style={{
-              gridTemplateColumns: "minmax(0, 7fr) minmax(0, 11fr)",
-              /* One definite row. An auto row can grow past the 100vh
-                 container and takes percentage heights down with it;
-                 minmax(0, 1fr) pins the row to the container. */
-              gridTemplateRows: "minmax(0, 1fr)",
-              /* Just clear of the floating nav pill, no more: the old
-                 +10px plus the tag row read as a hole at the top. */
+              /* Just clear of the floating nav pill, no more: extra
+                 padding here read as a hole at the top. */
               paddingTop: "calc(var(--nav-block) + 4px)",
             }}
           >
-            {/* Left: the fixed half */}
-            <div className="flex flex-col justify-center gap-4">
+            {/* Header across the whole section, the on-demand format:
+                mono eyebrow over a full-width headline, the headline in
+                EZee blue as before, then the thesis line. Everything
+                above the viewport is measured as one block. */}
+            <div ref={headRowRef} className="flex flex-col gap-3 pb-3">
               <div
                 className="uppercase"
                 style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, letterSpacing: ".18em", color: "var(--wl-muted)" }}
@@ -453,63 +443,53 @@ export default function AlwaysOn() {
               </div>
               <h2
                 style={{
-                  fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.16,
+                  fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.1,
                   /* EZee blue, via the token so the light band gets the
                      darker pass-rated value and dark gets the brand hue. */
                   color: "var(--wl-accent)",
-                  /* Sized so the two sentences hold three lines total:
-                     the second sentence needs one line, and its ceiling
-                     is the 333px column at 1024, measured at 15.1px of
-                     width per 1px of font. */
-                  fontSize: "clamp(1.3rem, 0.6rem + 1.1vw, 1.625rem)",
+                  /* The on-demand headline's clamp, so the two sections
+                     read as one family. Wraps naturally. */
+                  fontSize: "clamp(1.25rem, 3.18vw, 2.625rem)",
                 }}
               >
                 Coaching amplified across every location. At the hours it matters most.
               </h2>
-              {/* 1.25x the 15 it launched at, by request. */}
-              <p className="text-[19px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)", maxWidth: 440 }}>
+              <p className="text-[15px] md:text-[16px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
                 Nobody pulled any of this. Each one started as a play built once, and
                 some of them draw on what the rest of your network already learned.
               </p>
+              <Legend />
             </div>
 
-            {/* Right: the key, tight above the scrolling day. Top-aligned
-                on purpose: centring pushed the whole compartment down on
-                tall viewports and read as a hole above the key. */}
-            <div className="flex h-full min-h-0 flex-col">
-              <div ref={headRowRef} className="pb-2">
-                <Legend />
-              </div>
-
-              {/* The scroller. The mask dims whatever crosses the top or
-                  bottom PAD, which is the faded glimpse of the next band.
-                  The height is the measured pixel value, never a
-                  percentage: see the note on vpH. */}
+            {/* The scroller, full width. The mask dims whatever crosses
+                the top or bottom PAD, which is the faded glimpse of the
+                next band. The height is the measured pixel value, never
+                a percentage: see the note on vpH. */}
+            <div
+              ref={viewportRef}
+              className="relative overflow-hidden"
+              style={{ height: vpH, flex: "none", WebkitMaskImage: FADE, maskImage: FADE }}
+            >
               <div
-                ref={viewportRef}
-                className="relative overflow-hidden"
-                style={{ height: vpH, flex: "none", WebkitMaskImage: FADE, maskImage: FADE }}
+                ref={stackRef}
+                className="flex flex-col gap-7"
+                style={{ padding: `${PAD}px 0 ${PAD_BOTTOM}px`, willChange: "transform" }}
               >
-                <div
-                  ref={stackRef}
-                  className="flex flex-col gap-7"
-                  style={{ padding: `${PAD}px 0 ${PAD_BOTTOM}px`, willChange: "transform" }}
-                >
-                  {BANDS.map((b, bi) => (
-                    /* Divider then plate: the title inside the scroller
-                       is what names each time frame, and the plates
-                       still deepen through the day. */
-                    <div key={b.title} ref={(el) => { bandRefs.current[bi] = el; }}>
-                      <BandHeading band={b} />
-                      <div
-                        className="grid grid-cols-2 gap-3 rounded-2xl p-3.5"
-                        style={{ background: `rgba(var(--wl-band-ink), ${(0.05 + bi * 0.02).toFixed(3)})` }}
-                      >
-                        {b.cards.map((c) => <MomentCard key={c.title} card={c} />)}
-                      </div>
+                {BANDS.map((b, bi) => (
+                  /* Divider then plate: the title inside the scroller
+                     is what names each time frame, and the plates
+                     still deepen through the day. Four tiles across,
+                     now that the compartment spans the section. */
+                  <div key={b.title} ref={(el) => { bandRefs.current[bi] = el; }}>
+                    <BandHeading band={b} />
+                    <div
+                      className="grid grid-cols-4 gap-3 rounded-2xl p-3.5"
+                      style={{ background: `rgba(var(--wl-band-ink), ${(0.05 + bi * 0.02).toFixed(3)})` }}
+                    >
+                      {b.cards.map((c) => <MomentCard key={c.title} card={c} />)}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
