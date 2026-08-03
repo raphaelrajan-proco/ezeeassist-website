@@ -303,22 +303,22 @@ At 390 the 20 percent segment is 68px wide and cannot hold both the word and
 the figure, so `Coaching` is hidden below `sm` on that bar only and the
 figure centres. The 80 percent bar keeps both at every width.
 
-The capacity ratio (one coach per twenty locations, 20 to 1,000) is
-illustrative, not measured data. The point is that both numbers climb and
-impact per location does not. **Keep it on the coach's side**: nothing here
-mentions salary, cost, or headcount spend.
+**The time bars are 48px tall and stop at 70% of the row** (the 70%
+was horizontal, not vertical; a 34px misread was reverted). After the
+three pillars the section runs a second beat: a lead in the section
+lead's own size ("Even with the time freed up, one coach's expertise
+only reaches so far.", two lines are fine), then **the uncapped third
+bar** ("What it could be" · "The same coach, multiplied"): all-accent,
+48px, full width, a 2px dashed threshold overhanging at exactly 70%
+(the line the two bars above stop at), and a mask fade on the last
+stretch so the bar reads as leaving the page rather than filling it
+(mask, not gradient, so it follows the accent token in dark mode). An
+18.5px semibold muted caption closes the beat and the section: the
+hours cap is what limits coverage and grows headcount.
 
-**The time bars are 34px tall** (70% of the 48 they launched at, by
-request), and after the three pillars the section runs a second beat:
-a one-line lead ("Even with the time freed up, one coach's expertise
-only reaches so far.", clamp fitted to hold one line from lg up), then
-**the uncapped third bar** ("What it could be" · "The same coach,
-multiplied"): all-accent, full width, a 2px dashed threshold overhanging
-at exactly 70%, and a mask fade on the last stretch so the bar reads as
-leaving the page rather than filling it (mask, not gradient, so it
-follows the accent token in dark mode). A two-line muted caption closes
-the beat: the hours cap is what limits coverage and grows headcount.
-Then the As-locations-scale chart card.
+**The As-locations-scale chart card was deleted entirely** on request
+(the two-scenario animated chart and all its constants). Recover from
+tag `could-be-bar-pre` if it is ever wanted back.
 
 **Headless screenshot caveat**: the scaleX(0) initial state makes the
 bars zero-area, and headless Chrome's IntersectionObserver never
@@ -1168,117 +1168,3 @@ fit is usually 1024 rather than the smallest screen.
   deliberately absent until it exists — do not wire it to `/demo`, which is an
   empty noindex stub.
 
-## Known deviations from spec
-
-- The hero lead flows as one wrapped paragraph across four lines, not the
-  originally specified single-line-per-sentence version: the copy column
-  physically cannot hold it. Sizes are constraint-derived.
-- The problem section's payoff line is accent blue (`--ed-accent-text`), not
-  raw `#00AEEF`. Brand blue on that section's light background measures about
-  2.4:1, which fails at any size. The token gives 4.54:1 light and 7.28:1 dark.
-- The hero lead's second sentence is raw `#00AEEF` on request, and measures
-  about 2.4:1 on the hero background. It is display type at 26–40px, so it
-  reads, but it does not meet WCAG AA. `--ed-accent-text` is the accessible
-  swap if that ever matters more than the exact brand blue.
-- The coach's-week chart draws Coaching in the same `#00AEEF` in both bars.
-  The Today bar used to tint it to 55%; the contrast the chart makes is width,
-  not shade, and the tint weakened it.
-- The control center H2 holds two lines from 768 up and takes four at 390,
-  where each sentence wraps. The break between the sentences is hard.
-- The territory-coverage grid (71% / 98% / 101% tiles and the "next 4%" caption)
-  was retired from the problem section: the numbers read as unexplained and the
-  visual did not support the beat it sat under. It is recoverable from tag
-  `v3-step12-pre` if the argument is ever restated.
-- The problem section's payoff line names the layer directly ("one unified
-  execution layer that connects all people, playbooks, and tools") rather than
-  describing its effect on the week. It carries the "people, playbooks, and
-  tools" phrasing that used to sit in a caption under `OrderedPanel`.
-- The problem section's beats go three-across only from **1024**, not 768. At
-  768 the three-column grid left each card 208px, which wrapped every question
-  and compliance badge and overran the shared card height. Below 1024 they
-  stack full width.
-- The beat cards **stretch to the row** rather than taking a fixed height. A
-  fixed height had to cover the worst case (1024) and so left dead space at
-  every wider viewport. The grid stretches, the card is `flex-1` over a
-  `CARD_MIN_H` floor, and the beat body reserves three lines (`min-h-[3.75rem]`)
-  so all three cards still start on the same line. Result at 1205: cards are
-  279px with 1–22px of slack, against 336px with ~59px before.
-- The `4/5` figure restates the Today bar (20% coaching leaves four days in
-  five). It is not a new claim, and it moves if the chart data moves.
-- The closing line ("Reclaiming coaching time needs HQ…") carries **no
-  entrance animation** by request; it is a plain `<p>`.
-- **The two bars sit together**, the claim and its correction, with no card
-  around them. The comparison is the point and a box between them broke it.
-  Each bar's title is one uniform run rather than a bold figure plus a muted
-  tail, and neither carries a lede or a caption.
-- **Both bars carry three greys, one per pillar below.** A fourth, lightest tone was
-  dropped and its share redistributed proportionally; `--pb-admin-4` went with
-  it. Today is 31/26/23 + 20, the corrected bar is 8/7/5 + 80.
-- **The pillar titles carry an underline only** in their bar segment's tone.
-A 12px swatch dot sat beside it for a while and was removed by request; the
-underline alone now ties title to segment. Tone and segment have to stay in
-step, since that pairing is what lets the bar go unlabelled.
-
-**Bars are 48px tall and the detail cards run 342px.** The Questions card sets
-the row: it is the tallest of the three, so its chip metrics (py-[7px],
-gap-2, 12.5px question) are what the row height follows. `DetailCard` gives
-its body `flex-1` so the footer sits at the bottom and the spare height is
-absorbed inside the content rather than pooling as white space under it; each
-card measures 1px of slack.
-
-**The report scraps are scattered, not gridded.** Each tilts and nudges by
-its index from a fixed `SCATTER` table rather than at random, so the layout
-is stable across renders and identical on server and client. A tidy grid
-argued the opposite of the point.
-
-**The capacity block is a two-scenario animated chart**, rebuilt from
-the two-line handoff. Grey is Today (one coach per 20 locations, 50 by
-the end, the impact line dead flat); blue is What it should be (one per
-40, 25 by the end, rising linearly at exactly 10 degrees, about 100px
-over the run). Both draw concurrently; hollow markers drop per hire (50
-grey + 25 blue); only the grey Coaches number flashes. Grey renders
-first so blue sits on top where they converge. The dash-swatch scenario
-labels replace a legend; a hairline splits the two stat rows. Do not
-steepen the blue line or let the grey one move vertically. The run is
-imperative against refs (rAF sets the SVG line's `x2`, the head's `cx`,
-and appends markers via `createElementNS`), so nothing re-renders at
-animation rate. The stat row and SVG are `aria-hidden`; an sr-only
-sentence carries the meaning. Stat 3 reads "A small fraction of one
-coach". The heading's line break is desktop-only, or the second line
-orphans on phones.
-
-**It replays on re-entry**: crossing 40% visibility starts a fresh run
-from the left, but only after the block has fully left the viewport
-since the last one (`threshold: [0, 0.4]` and an `away` latch), so
-partial scrolls cannot retrigger it mid-read. Reduced motion still
-paints the completed state once. Kept against the two-line handoff, all
-prior explicit rules: the 5600ms draw (1.25x its 7000), the replay (it
-says run once), "A small fraction of one coach" (it says "A fraction"),
-the compact type scale, and the arrowed y-axis. **The viewBox is
-900-wide** (plot 6 to 876), not the handoff's 600: rendered height is
-width times H/W and the blue rise is fixed on screen by its angle, so
-widening the box is what shortens the panel; the card now fits a
-standard Mac viewport whole. Markers are r=4.5 (heads 5.5, lines 2.5)
-to compensate for the wider units. Baseline and axis derive from
-CH_RISE; the angle stays exactly 10 degrees.
-
-**The coaching segment's padding lives on an inner row, not on the flex item
-  itself.** `flex-basis: 0%` cannot shrink a box below its own padding, so
-  padding on the item sits *on top of* its share: the Today bar's coaching
-  segment drew 22.6% while its label read 20%. The greys have no padding, so
-  only that one was affected. Verified 31/26/23/20 and 8/7/5/80 exactly.
-- **`components/growth/artifact-panels.tsx` is now entirely unused.** Its two
-  exports both lost their last caller: `ScatteredPanel` when report building
-  was rebuilt as `REPORT_SCRAPS`, and `OrderedPanel` when the problem section
-  dropped its closing visual for a connector sentence. The `.ed-tile-fluid`
-  rule in globals.css is dead with it. Nothing else imports either. Kept
-  rather than deleted, since it was not asked for; recoverable from any
-  commit before this one.
-- The problem section now ends on a connector sentence rather than a visual.
-  It has to hand off to `TheSystem`, whose first line is "EZee Assist is that
-  system", so it must land on a noun that "that system" can refer back to.
-- The problem section's three beats are named for the hero descriptor
-  (Repetitive questions / Compliance chasing / Report building) on purpose. If
-  the hero descriptor changes, change these with it.
-- `--ed-bg-alt` is the section alternation grey (#F4F4F5 light). It was lifted
-  from #FAFAFA so the problem section separates visibly from the white hero.
