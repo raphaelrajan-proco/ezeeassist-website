@@ -1133,15 +1133,23 @@ from a supplied handoff (the fonts and colours are the section's own
 tokens by request, not the handoff's). Locations count 20 to 1,000 over
 7s, coaches step 1 to 50 (`Math.ceil(loc / 20)`) with a 220ms accent
 flash per hire, and a dead-flat line draws across the tinted panel
-dropping a hollow marker at every hire, fifty by the end. It arms on an
-IntersectionObserver at 0.4, runs **once** and holds; reduced motion
-paints the completed state. The run is imperative against refs (rAF sets
-the SVG line's `x2`, the head's `cx`, and appends markers via
-`createElementNS`), so nothing re-renders at animation rate. The stat
-row and SVG are `aria-hidden`; an sr-only sentence carries the meaning.
-Stat 3 reads "A small fraction of one coach" (edited from the handoff's
-"A fraction of one coach"). The heading's line break is desktop-only, or
-the second line orphans on phones.
+dropping a hollow marker at every hire, fifty by the end. The run is
+imperative against refs (rAF sets the SVG line's `x2`, the head's `cx`,
+and appends markers via `createElementNS`), so nothing re-renders at
+animation rate. The stat row and SVG are `aria-hidden`; an sr-only
+sentence carries the meaning. Stat 3 reads "A small fraction of one
+coach". The heading's line break is desktop-only, or the second line
+orphans on phones.
+
+**It replays on re-entry**: crossing 40% visibility starts a fresh run
+from the left, but only after the block has fully left the viewport
+since the last one (`threshold: [0, 0.4]` and an `away` latch), so
+partial scrolls cannot retrigger it mid-read. Reduced motion still
+paints the completed state once. The chart is a shallow strip (viewBox
+600x66, line at y=32, axis at 58), half the handoff's 150-high plot:
+the line never moves vertically, so the height bought nothing, and the
+whole card was compacted to sub-section scale (~448px at 1205) by
+request.
 
 **The coaching segment's padding lives on an inner row, not on the flex item
   itself.** `flex-basis: 0%` cannot shrink a box below its own padding, so

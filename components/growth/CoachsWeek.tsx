@@ -382,9 +382,14 @@ const PILLARS = [
    are replaced with the section's own tokens by request. */
 
 const CH_MIN = 20, CH_MAX = 1000, CH_RATIO = 20;
-const CH_X0 = 6, CH_X1 = 576, CH_Y = 62;
+/* A shallow strip, not the handoff's 600x150: the line never moves
+   vertically, so height bought nothing, and the sub-section reads at
+   half the size by request. The line sits just off-centre with the axis
+   close beneath it. */
+const CH_X0 = 6, CH_X1 = 576, CH_Y = 32;
+const CH_AXIS_Y = 58;
 const CH_DUR = 7000;
-const CH_VIEW_W = 600, CH_VIEW_H = 150;
+const CH_VIEW_W = 600, CH_VIEW_H = 66;
 
 const chX = (loc: number) => CH_X0 + (CH_X1 - CH_X0) * ((loc - CH_MIN) / (CH_MAX - CH_MIN));
 
@@ -465,20 +470,38 @@ function CapacityBlock() {
         flashTimer = setTimeout(() => { coachEl.style.color = ""; }, 220);
       }
       lastCoaches = paint(loc, coaches, lastCoaches);
-      /* Runs once and holds: nothing schedules after p reaches 1, and
-         the drawn state simply stays. A permanently looping chart beside
-         body copy competes with reading. */
+      /* Holds at the end state; nothing schedules after p reaches 1. A
+         permanently looping chart beside body copy competes with
+         reading, so the only way it moves again is leaving and coming
+         back. */
       if (p < 1) raf = requestAnimationFrame(frame);
     };
 
+    /* Wipe and run from the left edge. */
+    const restart = () => {
+      cancelAnimationFrame(raf);
+      start = null;
+      lastCoaches = 0;
+      while (markersEl.firstChild) markersEl.removeChild(markersEl.firstChild);
+      raf = requestAnimationFrame(frame);
+    };
+
+    /* Replays on every re-entry, by request: crossing 40% visibility
+       starts a fresh run, but only after the section has fully left the
+       viewport since the last one, so partial scrolls and the pinned
+       neighbours above cannot retrigger it mid-read. */
+    let away = true;
     const io = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
-        if (e.isIntersecting) {
-          io.disconnect();
-          raf = requestAnimationFrame(frame);
+        if (e.intersectionRatio >= 0.4 && away) {
+          away = false;
+          restart();
+        } else if (!e.isIntersecting) {
+          away = true;
+          cancelAnimationFrame(raf);
         }
       });
-    }, { threshold: 0.4 });
+    }, { threshold: [0, 0.4] });
     io.observe(root);
 
     return () => {
@@ -491,7 +514,7 @@ function CapacityBlock() {
   return (
     <div
       ref={rootRef}
-      className="flex flex-col gap-8 p-7 md:p-10 lg:px-11 lg:py-10"
+      className="flex flex-col gap-5 p-6 md:p-7 lg:px-8 lg:py-7"
       style={{
         backgroundColor: "var(--pb-panel)",
         border: "1px solid var(--pb-border)",
@@ -507,7 +530,7 @@ function CapacityBlock() {
           And the coaching that is left never gets deeper
         </div>
         <h3
-          className="text-[24px] md:text-[28px] lg:text-[32px]"
+          className="text-[20px] md:text-[22px] lg:text-[24px]"
           style={{
             fontFamily: "var(--font-editorial)",
             fontWeight: 700,
@@ -522,7 +545,7 @@ function CapacityBlock() {
           <br className="hidden md:inline" />{" "}
           But impact per location holds flat.
         </h3>
-        <p className="text-[14.5px] md:text-[16px]" style={{ color: "var(--pb-muted)", lineHeight: 1.55 }}>
+        <p className="text-[13.5px] md:text-[14.5px]" style={{ color: "var(--pb-muted)", lineHeight: 1.5 }}>
           You can hire more coaches. You can&rsquo;t hire more hours in their day.
         </p>
       </div>
@@ -534,13 +557,13 @@ function CapacityBlock() {
         hired, the impact each location receives stays flat.
       </p>
 
-      <div aria-hidden="true" className="flex flex-col gap-6">
+      <div aria-hidden="true" className="flex flex-col gap-3.5">
         {/* Stat row, baselined so the numbers sit together. */}
-        <div className="flex flex-wrap items-end gap-x-7 gap-y-4">
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-wrap items-end gap-x-7 gap-y-3">
+          <div className="flex flex-col gap-1.5">
             <ChartStatLabel>Locations</ChartStatLabel>
             <span
-              className="text-[26px] md:text-[30px]"
+              className="text-[22px] md:text-[25px]"
               style={{
                 fontFamily: "var(--font-editorial)", fontWeight: 800,
                 letterSpacing: "-0.03em", lineHeight: 1, color: "var(--pb-text)",
@@ -550,10 +573,10 @@ function CapacityBlock() {
               <span ref={locRef}>20</span>
             </span>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1.5">
             <ChartStatLabel>Coaches</ChartStatLabel>
             <span
-              className="text-[26px] md:text-[30px]"
+              className="text-[22px] md:text-[25px]"
               style={{
                 fontFamily: "var(--font-editorial)", fontWeight: 800,
                 letterSpacing: "-0.03em", lineHeight: 1, color: "var(--pb-text)",
@@ -563,10 +586,10 @@ function CapacityBlock() {
               <span ref={coachRef}>1</span>
             </span>
           </div>
-          <div className="flex flex-col gap-2 flex-1 min-w-[210px]">
+          <div className="flex flex-col gap-1.5 flex-1 min-w-[210px]">
             <ChartStatLabel accent>What each location gets</ChartStatLabel>
             <span
-              className="text-[20px] md:text-[24px]"
+              className="text-[17px] md:text-[20px]"
               style={{
                 fontFamily: "var(--font-editorial)", fontWeight: 700,
                 letterSpacing: "-0.025em", lineHeight: 1.1, color: "var(--pb-accent-ink)",
@@ -580,7 +603,7 @@ function CapacityBlock() {
         {/* Chart panel: the statement card's tint, since this panel now
             makes that card's argument. */}
         <div
-          className="flex flex-col gap-4 p-5"
+          className="flex flex-col gap-1.5 p-4"
           style={{
             borderRadius: "14px",
             backgroundColor: "var(--pb-accent-soft)",
@@ -598,17 +621,19 @@ function CapacityBlock() {
               </marker>
             </defs>
             {/* Y rule: no ticks, no values, per the handoff. */}
-            <line x1={CH_X0} y1={16} x2={CH_X0} y2={128} stroke="var(--pb-accent-soft2)" strokeWidth="1" />
+            <line x1={CH_X0} y1={8} x2={CH_X0} y2={CH_AXIS_Y} stroke="var(--pb-accent-soft2)" strokeWidth="1" />
             {/* X rule with the arrowhead. */}
-            <line x1={CH_X0} y1={128} x2={CH_X1 + 16} y2={128} stroke="var(--pb-accent-soft2)" strokeWidth="1" markerEnd="url(#pb-chart-arrow)" />
+            <line x1={CH_X0} y1={CH_AXIS_Y} x2={CH_X1 + 16} y2={CH_AXIS_Y} stroke="var(--pb-accent-soft2)" strokeWidth="1" markerEnd="url(#pb-chart-arrow)" />
             {/* The flat line. Never rises, never curves: that is the point. */}
             <line ref={lineRef} x1={CH_X0} y1={CH_Y} x2={CH_X0} y2={CH_Y} stroke="var(--pb-accent-ink)" strokeWidth="2" strokeLinecap="round" />
             <g ref={markersRef} />
             <circle ref={headRef} cx={CH_X0} cy={CH_Y} r="4.5" fill="var(--pb-accent-ink)" />
           </svg>
+          {/* Tight under the axis: the old panel left this floating far
+              below the rule. */}
           <div
-            className="text-center text-[12.5px]"
-            style={{ color: "var(--pb-accent-ink)" }}
+            className="text-center text-[12px]"
+            style={{ color: "var(--pb-accent-ink)", marginTop: 2 }}
           >
             Increasing locations and coaches
           </div>
