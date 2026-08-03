@@ -340,9 +340,24 @@ still renders an `<img>` box, so check `naturalWidth > 0`, not just presence.
 order. Both keep the handoff's two y slots (394 and 440), exchanged. The
 stacked version below 1200 follows the same order.
 
-**The payoff line carries no rule above it and is a centred lockup**, not a
-three-column grid. On a full-width grid the three lines spread to the far
-edges and read as left-justified rather than as a group.
+**The payoff line sits under the lead line as one sentence**, at weight 500
+against the headline's 700: it is the consequence of the headline, not a
+second one. It used to close the section as three columns.
+
+**The right column is eight named chips, one per out-wire.** Seven are static
+and the eighth is a ticker that counts from 8 up past a hundred on an
+accelerating cubic when the canvas reaches 35% visibility. The scroll-revealed
+field of tiles and the caption under it are gone. `setInterval`, not rAF,
+which is paused outright in a background tab and would strand the count.
+
+**The systems card names types, not vendors**, with the brand names rotating
+in a marquee beneath. The track holds two identical copies and shifts by
+exactly half, which is what makes the loop seamless. The integration SVGs
+under `/public/logos/integrations/` are no longer referenced by this page.
+
+**The flows are one blue family** (`#5CC8F5` / `#00AEEF` / `#2E8FC0`), not
+blue / amber / violet, and **the pulse dots are white on every wire** at
+7 to 11s. Measured on the legend: 8.54 / 6.74 / 4.62.
 
 **The canvas wrapper reserves `(CANVAS_H - 66) * scale`, not the full 660**:
 the drawn content ends around y=594 and the remainder is empty canvas, which

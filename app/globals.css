@@ -840,15 +840,29 @@ input[type="range"]::-moz-range-thumb {
      the handoff's own dark values. All three are 11.5px/600 on their own
      soft background, so they carry the 4.5:1 bar, not the 3:1 large-text
      one. Measured 6.74 / 8.82 / 6.27. */
-  --os-answers:      #00AEEF;
-  --os-answers-soft: rgba(0, 174, 239, 0.14);
-  --os-actions:      #F5B33C;
-  --os-actions-soft: rgba(245, 179, 60, 0.14);
-  --os-agents:       #A78BFA;
-  --os-agents-soft:  rgba(167, 139, 250, 0.14);
+  /* One blue family rather than blue / amber / violet. The three-colour
+     set read as three unrelated systems; these are the same hue at
+     descending lightness, which still separates them on the legend while
+     the section reads as one thing. */
+  --os-answers:      #5CC8F5;
+  --os-answers-soft: rgba(92, 200, 245, 0.14);
+  --os-actions:      #00AEEF;
+  --os-actions-soft: rgba(0, 174, 239, 0.14);
+  --os-agents:       #2E8FC0;
+  --os-agents-soft:  rgba(46, 143, 192, 0.18);
+
+  /* Pulse dots are white on every wire: colour-coding them made eleven
+     wires read as eleven separate things. */
+  --os-pulse:        #FFFFFF;
+  --os-pulse-glow:   rgba(255, 255, 255, 0.55);
 
   --os-mono: ui-monospace, "SF Mono", Menlo, monospace;
 }
+
+/* The brand marquee. The track holds two identical copies, so shifting
+   by exactly half returns to the start and the loop is seamless. */
+@keyframes ed-os-marquee-run { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+.ed-os-marquee-track { animation: ed-os-marquee-run 38s linear infinite }
 
 /* Pulses ride the same path strings as the SVG wires. */
 @keyframes ed-os-travel {
@@ -866,6 +880,7 @@ input[type="range"]::-moz-range-thumb {
 @media (prefers-reduced-motion: reduce) {
   .ed-os-pulse { animation: none !important; opacity: 0.9 !important }
   .ed-os-core  { animation: none !important }
+  .ed-os-marquee-track { animation: none !important }
   .ed-os-col   { transition: none !important }
 }
 

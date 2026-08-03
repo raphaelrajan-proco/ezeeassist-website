@@ -35,23 +35,37 @@ const PLAYBOOKS = [
   { text: "Policy · compliance rules", solid: false },
 ];
 
-/* Local files under /public/logos/integrations/, never a CDN. Notion's
-   mark is near-black and disappears on the dark chip, so its file is the
-   grey variant rather than the brand black. */
-const SYSTEMS = [
-  { src: "/logos/integrations/mailchimp.svg",   alt: "Mailchimp" },
-  { src: "/logos/integrations/hubspot.svg",     alt: "HubSpot" },
-  { src: "/logos/integrations/airtable.svg",    alt: "Airtable" },
-  { src: "/logos/integrations/quickbooks.svg",  alt: "QuickBooks" },
-  { src: "/logos/integrations/xero.svg",        alt: "Xero" },
-  { src: "/logos/integrations/stripe.svg",      alt: "Stripe" },
-  { src: "/logos/integrations/notion.svg",      alt: "Notion" },
-  { src: "/logos/integrations/googledrive.svg", alt: "Google Drive" },
-  { src: "/logos/integrations/dropbox.svg",     alt: "Dropbox" },
+/* NOTE: the integration SVGs under /public/logos/integrations/ are no
+   longer referenced here; the systems card now names types and rotates
+   brand names as text. The files are kept, since other routes may want
+   them, but nothing on this page loads them. */
+
+/* Seven named locations plus a ticker in the eighth slot, one per
+   out-wire. The ticker starts where the named list stops and runs up, so
+   the column reads as a network that keeps going rather than a fixed
+   eight. */
+const NAMED_STORES = 7;
+const TICKER_FROM = NAMED_STORES + 1;
+const TICKER_TO = 148;
+
+/* What the systems are, rather than whose they are. The brand names live
+   in the marquee below, where they can rotate. */
+const SYSTEM_TYPES = [
+  "Knowledge base", "Intranet", "LMS", "CRM", "ERP",
+  "BI", "POS", "Scheduling", "Accounting", "Ticketing",
 ];
 
-const STORES = ["#052", "#118", "#214", "#263", "#331", "#402", "#519", "#604"];
+const SYSTEM_BRANDS = [
+  "HubSpot", "ServiceTitan", "Mindbody", "Zenoti", "FranConnect",
+  "SharePoint", "Trainual", "Dropbox", "ServiceMinder", "Salesforce",
+  "Slack", "QuickBooks", "Xero", "NetSuite", "Toast",
+  "Square", "Zendesk", "Notion", "Airtable", "Google Drive",
+  "Microsoft Teams", "Power BI", "Tableau", "Gusto", "Shopify",
+];
 
+/* All three sit in the EZee blue family rather than blue / amber /
+   violet: the three-colour version read as three unrelated systems. The
+   pulse dots are white regardless, so the wires stay calm. */
 const FLOWS = [
   { label: "Answers", color: "var(--os-answers)", soft: "var(--os-answers-soft)" },
   { label: "Actions", color: "var(--os-actions)", soft: "var(--os-actions-soft)" },
@@ -142,31 +156,54 @@ function SystemsCard() {
           NOTHING MIGRATES
         </div>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 8 }}>
-        {SYSTEMS.map((s) => (
+
+      {/* Types, not logos: the category is what a franchisor recognises,
+          and a logo grid dates the moment a vendor rebrands. */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        {SYSTEM_TYPES.map((t) => (
           <span
-            key={s.alt}
+            key={t}
             style={{
-              height: 36, borderRadius: 9, background: "var(--os-chip)", border: "1px solid var(--os-border)",
-              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 10.5, fontWeight: 600, padding: "4px 9px", borderRadius: 999,
+              background: "var(--os-chip)", border: "1px solid var(--os-border)", color: "var(--os-muted)",
+              whiteSpace: "nowrap",
             }}
           >
-            {/* Plain img, not next/image: these are tiny local SVGs and the
-                optimizer has nothing to do with them. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={s.src} alt={s.alt} width={18} height={18} style={{ width: 18, height: 18 }} />
+            {t}
           </span>
         ))}
-        <span
-          style={{
-            height: 36, borderRadius: 9, background: "var(--os-accent)", color: "#FFFFFF",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            fontFamily: JAKARTA, fontSize: 10.5, fontWeight: 800,
-          }}
-        >
-          +250
-        </span>
       </div>
+
+      {/* The brands rotate past instead of being listed, so the set can be
+          long without taking the height. The track is rendered twice and
+          shifted by exactly half, which is what makes the loop seamless;
+          `aria-hidden` because it is the same information as the types
+          above, in motion. */}
+      <div
+        aria-hidden="true"
+        className="ed-os-marquee"
+        style={{
+          position: "relative", overflow: "hidden",
+          maskImage: "linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)",
+          WebkitMaskImage: "linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)",
+        }}
+      >
+        <div className="ed-os-marquee-track" style={{ display: "flex", width: "max-content", gap: 0 }}>
+          {[0, 1].map((copy) => (
+            <div key={copy} style={{ display: "flex", gap: 18, paddingRight: 18 }}>
+              {SYSTEM_BRANDS.map((brand) => (
+                <span
+                  key={`${copy}-${brand}`}
+                  style={{ fontSize: 10, color: "var(--os-muted)", whiteSpace: "nowrap", opacity: 0.85 }}
+                >
+                  {brand}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+
       <div style={{ fontSize: 11.5, color: "var(--os-muted)", lineHeight: 1.45 }}>
         POS · scheduling · CRM · accounting · connected at the source, always current.
       </div>
@@ -237,13 +274,17 @@ function FlowLegend() {
   );
 }
 
-function StoreChip({ label }: { label: string }) {
+function StoreChip({ label, live = false }: { label: string; live?: boolean }) {
   return (
     <span
       style={{
         height: 46, boxSizing: "border-box", borderRadius: 10, background: "var(--os-panel)",
-        border: "1px solid var(--os-border)", display: "flex", alignItems: "center",
-        paddingLeft: 14, fontFamily: MONO, fontSize: 11.5, color: "var(--os-text)",
+        border: `1px solid ${live ? "var(--os-accent-soft2)" : "var(--os-border)"}`,
+        display: "flex", alignItems: "center", gap: 8,
+        paddingLeft: 14, fontFamily: MONO, fontSize: 11.5,
+        color: live ? "var(--os-accent-ink)" : "var(--os-text)",
+        /* Tabular figures so the ticker does not jitter as it climbs. */
+        fontVariantNumeric: "tabular-nums",
       }}
     >
       Store {label}
@@ -266,10 +307,12 @@ function usePulses(): Pulse[] {
     PATHS.forEach((d, i) => {
       const n = 2 + (i % 2);
       for (let j = 0; j < n; j++) {
-        const dur = rand(3.4, 5.4);
+        /* Slower than the handoff's 3.4-5.4s, and white rather than per
+           flow: eleven coloured dots at speed made the diagram busy. */
+        const dur = rand(7, 11);
         next.push({
           d,
-          color: FLOWS[Math.floor(Math.random() * FLOWS.length)].color,
+          color: "var(--os-pulse)",
           dur,
           delay: -rand(0, dur),
           reverse: Math.random() < 0.5,
@@ -281,45 +324,51 @@ function usePulses(): Pulse[] {
   return pulses;
 }
 
-/* ── Scroll reveal ─────────────────────────────────────────
-   The scroll guard matters: without it the reveal fires on load in tall
-   viewports and the moment is lost. */
+/* ── Location ticker ───────────────────────────────────────
+   Replaces the scroll-revealed field of tiles. The last chip counts from
+   where the named list stops up past a hundred, accelerating, so the
+   column reads as a network that keeps extending rather than a fixed
+   eight.
 
-function useNetworkReveal(ref: React.RefObject<HTMLDivElement | null>) {
-  const [expanded, setExpanded] = useState(false);
+   `setInterval`, not `requestAnimationFrame`: rAF is paused outright in a
+   background tab, which would strand the count part-way. Progress is read
+   from the clock, so the easing is right whatever the callback rate is. */
+const TICKER_MS = 2200;
+
+function useLocationTicker(ref: React.RefObject<HTMLDivElement | null>) {
+  const [value, setValue] = useState(TICKER_FROM);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setExpanded(true);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      setValue(TICKER_TO);
       return;
     }
     const el = ref.current;
     if (!el) return;
 
-    let done = false;
-    const check = () => {
-      if (done) return;
-      const scrolled = (window.scrollY || document.documentElement.scrollTop || 0) > 80;
-      if (scrolled && el.getBoundingClientRect().bottom < window.innerHeight * 0.92) {
-        done = true;
-        setExpanded(true);
-      }
+    let tick: ReturnType<typeof setInterval>, started = false;
+    const run = () => {
+      const t0 = performance.now();
+      tick = setInterval(() => {
+        const p = Math.min(1, (performance.now() - t0) / TICKER_MS);
+        /* Accelerating rather than easing out: the point is that it takes
+           off, so the curve has to be fastest at the end. */
+        const eased = p * p * p;
+        setValue(Math.round(TICKER_FROM + (TICKER_TO - TICKER_FROM) * eased));
+        if (p >= 1) clearInterval(tick);
+      }, 40);
     };
 
-    /* The observer is the trigger; the scroll listener is the fallback for
-       browsers where it does not re-fire. */
-    const io = "IntersectionObserver" in window
-      ? new IntersectionObserver(check, { threshold: [0, 0.1, 0.25, 0.5, 0.75, 0.9, 1] })
-      : null;
-    io?.observe(el);
-    window.addEventListener("scroll", check, { passive: true });
-    check();
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting && !started) { started = true; io.disconnect(); run(); } });
+    }, { threshold: 0.35 });
+    io.observe(el);
 
-    return () => { io?.disconnect(); window.removeEventListener("scroll", check); };
+    return () => { io.disconnect(); clearInterval(tick); };
   }, [ref]);
 
-  return expanded;
+  return value;
 }
 
 /* ── Full canvas, lg and up ────────────────────────────── */
@@ -329,7 +378,7 @@ function OsCanvas() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
   const pulses = usePulses();
-  const expanded = useNetworkReveal(wrapRef);
+  const liveCount = useLocationTicker(wrapRef);
 
   useLayoutEffect(() => {
     const el = wrapRef.current;
@@ -395,7 +444,7 @@ function OsCanvas() {
             className="ed-os-pulse"
             style={{
               position: "absolute", top: 0, left: 0, width: 7, height: 7, borderRadius: "50%",
-              background: p.color, boxShadow: `0 0 12px 2px ${p.color}`, opacity: 0,
+              background: p.color, boxShadow: "0 0 10px 2px var(--os-pulse-glow)", opacity: 0,
               offsetPath: `path('${p.d}')`,
               animation: `ed-os-travel ${p.dur.toFixed(2)}s linear infinite ${p.delay.toFixed(2)}s`,
               animationDirection: p.reverse ? "reverse" : "normal",
@@ -420,42 +469,13 @@ function OsCanvas() {
           <GovernedPill width={164} />
         </div>
 
-        {/* 120 + 10 + (5 x 46) + (4 x 10) = 400 exactly. box-sizing on the
-            tiles is load-bearing: without it the 1px borders make them 48px
-            and every row drifts out of alignment. */}
-        <div style={{ position: "absolute", left: 1000, top: 60, width: 400, display: "flex", gap: 10, alignItems: "flex-start" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, width: 120, flex: "none" }}>
-            {STORES.map((s) => <StoreChip key={s} label={s} />)}
-          </div>
-          {Array.from({ length: 5 }, (_, i) => (
-            <div
-              key={i}
-              aria-hidden="true"
-              className="ed-os-col"
-              style={{
-                display: "flex", flexDirection: "column", gap: 10, flex: "0 0 46px", width: 46,
-                opacity: expanded ? 1 : 0,
-                transform: expanded ? "translateX(0)" : "translateX(-14px)",
-                transition: `opacity .55s ease ${i * 140}ms, transform .55s cubic-bezier(.2,.85,.3,1) ${i * 140}ms`,
-              }}
-            >
-              {Array.from({ length: 8 }, (_, j) => (
-                <span
-                  key={j}
-                  style={{
-                    height: 46, boxSizing: "border-box", borderRadius: 10,
-                    background: "var(--os-tile)", border: "1px solid var(--os-tile-border)",
-                  }}
-                />
-              ))}
-            </div>
+        {/* One chip per out-wire, so the column and the wires stay in
+            step. The last one is the ticker. */}
+        <div style={{ position: "absolute", left: 1000, top: 60, width: 400, display: "flex", flexDirection: "column", gap: 10 }}>
+          {Array.from({ length: NAMED_STORES }, (_, i) => (
+            <StoreChip key={i} label={`#${i + 1}`} />
           ))}
-        </div>
-
-        <div style={{ position: "absolute", left: 1000, top: 520, width: 400, fontSize: 12.5, color: "var(--os-muted)", lineHeight: 1.5 }}>
-          {expanded
-            ? "And every location you open next, connected the day it opens."
-            : "Keep scrolling. The network keeps going."}
+          <StoreChip label={`#${liveCount}`} live />
         </div>
       </div>
     </div>
@@ -489,18 +509,18 @@ function StackedDiagram() {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-        {STORES.map((s) => <StoreChip key={s} label={s} />)}
+        {Array.from({ length: NAMED_STORES }, (_, i) => (
+          <StoreChip key={i} label={`#${i + 1}`} />
+        ))}
+        <StoreChip label={`#${TICKER_TO}`} live />
       </div>
-      <p className="mt-4 text-[12.5px]" style={{ color: "var(--os-muted)", lineHeight: 1.5 }}>
-        And every location you open next, connected the day it opens.
-      </p>
     </div>
   );
 }
 
 /* ── Section ───────────────────────────────────────────── */
 
-const PAYOFF = ["Your coaches multiplied.", "Your standards held.", "Your numbers growing."];
+
 
 export default function TheSystem() {
   return (
@@ -532,6 +552,23 @@ export default function TheSystem() {
           <span style={{ color: "var(--os-accent-ink)" }}>AI Operating System</span>
         </motion.h2>
 
+        {/* Sits under the lead line as one sentence, at a lighter weight
+            than it: it is the consequence of the headline, not a second
+            headline. It used to close the section as three columns. */}
+        <motion.p
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
+          className="-mt-3 text-[15px] md:text-[19px]"
+          style={{
+            fontFamily: JAKARTA, fontWeight: 500, letterSpacing: "-0.015em",
+            color: "var(--os-muted)", whiteSpace: "nowrap",
+          }}
+        >
+          Your coaches multiplied. Your standards held. Your numbers growing.
+        </motion.p>
+
         <p className="sr-only">
           Operating system diagram. Three inputs feed one layer: your people
           (HQ, field coaches, support, marketing, ops, real estate), your
@@ -553,21 +590,6 @@ export default function TheSystem() {
           <StackedDiagram />
         </motion.div>
 
-        {/* No rule above this and no grid: the three lines sit as one
-            centred lockup. On a full-width three-column grid they spread
-            to the far edges and read as left-justified rather than as a
-            group. */}
-        <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-x-12 gap-y-3">
-          {PAYOFF.map((line) => (
-            <div
-              key={line}
-              className="text-[18px] md:text-[22px] text-center"
-              style={{ fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.02em", color: "var(--os-text)" }}
-            >
-              {line}
-            </div>
-          ))}
-        </div>
       </div>
     </section>
   );

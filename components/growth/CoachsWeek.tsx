@@ -472,16 +472,7 @@ function CapacityBlock() {
         </h3>
       </div>
 
-      <div className="flex flex-col gap-3.5">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-1">
-          <span className="text-[13.5px]" style={{ fontWeight: 600, color: "var(--pb-text)" }}>
-            As the network grows
-          </span>
-          <span className="text-[13.5px]" style={{ fontWeight: 600, color: "var(--pb-text)" }}>
-            Thirty owners each, at every size.
-          </span>
-        </div>
-
+      <div className="flex flex-col">
         {/* Two thirds carries the whole 1 to 4 to 10 progression in one
             box, so it reads as a single story rather than three separate
             facts; the remaining third states what the story means. */}
@@ -520,22 +511,22 @@ function CapacityBlock() {
               border: "1px solid var(--pb-accent-soft2)",
             }}
           >
-            {/* One line per sentence. The column is 276px at 1205 and the
-                longer sentence needs 16px to hold it; 17 takes three
-                lines and 18 takes four. */}
+            {/* Deliberately allowed to wrap. It used to be pinned at 16px
+                to hold one line per sentence; size matters more than the
+                line count here, so the break is soft. */}
             <p
-              className="text-[16px]"
+              className="text-[19px] md:text-[22px]"
               style={{
                 fontFamily: "var(--font-editorial)",
                 fontWeight: 700,
-                letterSpacing: "-0.02em",
-                lineHeight: 1.35,
+                letterSpacing: "-0.025em",
+                lineHeight: 1.25,
+                textWrap: "pretty",
                 color: "var(--pb-text)",
               }}
             >
-              The team scales with the network.
-              <br />
-              What each franchisee gets doesn&rsquo;t.
+              The team scales with the network. What each franchisee gets
+              doesn&rsquo;t.
             </p>
           </div>
         </div>
