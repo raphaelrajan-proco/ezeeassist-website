@@ -293,10 +293,10 @@ At 390 the 20 percent segment is 68px wide and cannot hold both the word and
 the figure, so `Coaching` is hidden below `sm` on that bar only and the
 figure centres. The 80 percent bar keeps both at every width.
 
-The capacity figures (30/1, 120/4, 300/10) are an illustrative ratio, not
-measured data. The point is that the coach count grows and owners-per-coach
-does not. **Keep it on the coach's side**: nothing here mentions salary,
-cost, or headcount spend.
+The capacity ratio (one coach per twenty locations, 20 to 1,000) is
+illustrative, not measured data. The point is that both numbers climb and
+impact per location does not. **Keep it on the coach's side**: nothing here
+mentions salary, cost, or headcount spend.
 
 Motion is `whileInView` throughout, matching the rest of the file. The bar
 animates as one `scaleX` from `transform-origin: left` rather than per
@@ -1097,11 +1097,20 @@ its index from a fixed `SCATTER` table rather than at random, so the layout
 is stable across renders and identical on server and client. A tidy grid
 argued the opposite of the point.
 
-**The capacity progression is one two-thirds-width box**, carrying 1 to 4 to
-10 as a single story, with the statement card in the last third. The steps
-stack below `sm`: three abreast leaves each 57px at 390 and "franchisees"
-alone needs 79. The invariant is stated once beneath the row, not repeated
-under each step where three identical labels read as a glitch.
+**The capacity block is an animated impact-per-location chart**, rebuilt
+from a supplied handoff (the fonts and colours are the section's own
+tokens by request, not the handoff's). Locations count 20 to 1,000 over
+7s, coaches step 1 to 50 (`Math.ceil(loc / 20)`) with a 220ms accent
+flash per hire, and a dead-flat line draws across the tinted panel
+dropping a hollow marker at every hire, fifty by the end. It arms on an
+IntersectionObserver at 0.4, runs **once** and holds; reduced motion
+paints the completed state. The run is imperative against refs (rAF sets
+the SVG line's `x2`, the head's `cx`, and appends markers via
+`createElementNS`), so nothing re-renders at animation rate. The stat
+row and SVG are `aria-hidden`; an sr-only sentence carries the meaning.
+Stat 3 reads "A small fraction of one coach" (edited from the handoff's
+"A fraction of one coach"). The heading's line break is desktop-only, or
+the second line orphans on phones.
 
 **The coaching segment's padding lives on an inner row, not on the flex item
   itself.** `flex-basis: 0%` cannot shrink a box below its own padding, so

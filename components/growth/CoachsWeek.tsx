@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment } from "react";
+import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Hash, Mail, MessageSquare,
@@ -372,74 +372,125 @@ const PILLARS = [
 ];
 
 /* ── Coaching capacity ─────────────────────────────────────
-   Illustrative ratios, not measured figures: the point is that the coach
-   count grows and the owners-per-coach number does not. On the coach's
-   side throughout, so nothing here mentions cost or headcount spend. */
+   An animated chart, built from a supplied handoff: locations count
+   smoothly to 1,000, coaches step to 50 (one per twenty locations), and
+   the impact-per-location line draws dead flat the whole way, dropping a
+   hollow marker at every hire. The flat line against two climbing
+   numbers is the argument. Illustrative ratio, not a measured figure.
 
-const CAPACITY = [
-  { franchisees: 30,  coaches: 1  },
-  { franchisees: 120, coaches: 4  },
-  { franchisees: 300, coaches: 10 },
-];
+   The handoff's timing and behaviour are followed; its fonts and colours
+   are replaced with the section's own tokens by request. */
 
-/** One step of the progression: owners, coach count, and the squares. */
-function CapacityStep({ item, reduceMotion, baseDelay }: {
-  item: (typeof CAPACITY)[number]; reduceMotion: boolean; baseDelay: number;
-}) {
+const CH_MIN = 20, CH_MAX = 1000, CH_RATIO = 20;
+const CH_X0 = 6, CH_X1 = 576, CH_Y = 62;
+const CH_DUR = 7000;
+const CH_VIEW_W = 600, CH_VIEW_H = 150;
+
+const chX = (loc: number) => CH_X0 + (CH_X1 - CH_X0) * ((loc - CH_MIN) / (CH_MAX - CH_MIN));
+
+/** Stat label, styled like the section's other mono eyebrows. */
+function ChartStatLabel({ children, accent = false }: { children: React.ReactNode; accent?: boolean }) {
   return (
-    <div className="flex flex-col gap-2.5 min-w-0">
-      {/* Wraps rather than truncates: three steps share one row, and at
-          390 that leaves about 95px each while this label needs 105. */}
-      <div
-        className="text-[10px] uppercase"
-        style={{ fontFamily: "var(--pb-mono)", letterSpacing: "0.12em", color: "var(--pb-muted)", lineHeight: 1.35 }}
-      >
-        {item.franchisees} franchisees
-      </div>
-
-      <div className="flex items-baseline gap-1.5">
-        <span
-          style={{
-            fontFamily: "var(--font-editorial)",
-            fontWeight: 800,
-            fontSize: "30px",
-            letterSpacing: "-0.03em",
-            lineHeight: 1,
-            color: "var(--pb-text)",
-          }}
-        >
-          {item.coaches}
-        </span>
-        <span className="text-[12.5px]" style={{ color: "var(--pb-muted)" }}>
-          {item.coaches === 1 ? "coach" : "coaches"}
-        </span>
-      </div>
-
-      {/* The multiplying squares are the argument: the count grows, the
-          ratio behind it never does. */}
-      <div className="flex flex-wrap gap-1 content-start" style={{ minHeight: "30px" }} aria-hidden="true">
-        {Array.from({ length: item.coaches }, (_, i) => (
-          <motion.span
-            key={i}
-            className="block"
-            style={{ width: "12px", height: "12px", borderRadius: "4px", backgroundColor: "var(--pb-admin-2)" }}
-            initial={reduceMotion ? false : { opacity: 0, y: 4 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.3, ease: EASE, delay: reduceMotion ? 0 : baseDelay + i * 0.03 }}
-          />
-        ))}
-      </div>
-
+    <div
+      className="text-[10.5px] uppercase"
+      style={{
+        fontFamily: "var(--pb-mono)", letterSpacing: "0.12em", lineHeight: 1.35,
+        color: accent ? "var(--pb-accent-ink)" : "var(--pb-muted)",
+      }}
+    >
+      {children}
     </div>
   );
 }
 
 function CapacityBlock() {
   const reduceMotion = Boolean(useReducedMotion());
+  const rootRef = useRef<HTMLDivElement>(null);
+  const locRef = useRef<HTMLSpanElement>(null);
+  const coachRef = useRef<HTMLSpanElement>(null);
+  const lineRef = useRef<SVGLineElement>(null);
+  const headRef = useRef<SVGCircleElement>(null);
+  const markersRef = useRef<SVGGElement>(null);
+
+  /* The whole run is imperative against refs, per the handoff: driving
+     fifty markers and a per-frame counter through state would re-render
+     the section at animation rate for no benefit. React owns the static
+     chrome; this effect owns the numbers, the line, and the markers. */
+  useEffect(() => {
+    const root = rootRef.current, locEl = locRef.current, coachEl = coachRef.current,
+      lineEl = lineRef.current, headEl = headRef.current, markersEl = markersRef.current;
+    if (!root || !locEl || !coachEl || !lineEl || !headEl || !markersEl) return;
+
+    const addMarker = (x: number) => {
+      const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      c.setAttribute("cx", String(x));
+      c.setAttribute("cy", String(CH_Y));
+      c.setAttribute("r", "3.5");
+      c.setAttribute("fill", "var(--pb-panel)");
+      c.setAttribute("stroke", "var(--pb-accent-ink)");
+      c.setAttribute("stroke-width", "1.75");
+      markersEl.appendChild(c);
+    };
+
+    const paint = (loc: number, coaches: number, lastCoaches: number) => {
+      const x = chX(loc);
+      lineEl.setAttribute("x2", String(x));
+      headEl.setAttribute("cx", String(x));
+      locEl.textContent = loc.toLocaleString("en-US");
+      if (coaches !== lastCoaches) {
+        coachEl.textContent = String(coaches);
+        for (let c = lastCoaches + 1; c <= coaches; c++) addMarker(chX(c * CH_RATIO));
+      }
+      return coaches;
+    };
+
+    /* Reduced motion paints the completed state and never animates. */
+    if (reduceMotion) {
+      paint(CH_MAX, CH_MAX / CH_RATIO, 0);
+      return;
+    }
+
+    let raf = 0, start: number | null = null, lastCoaches = 0, flashTimer: ReturnType<typeof setTimeout>;
+
+    const frame = (ts: number) => {
+      if (start === null) start = ts;
+      const p = Math.min((ts - start) / CH_DUR, 1);
+      const loc = Math.round(CH_MIN + (CH_MAX - CH_MIN) * p);
+      const coaches = Math.ceil(loc / CH_RATIO);
+      if (coaches !== lastCoaches) {
+        /* The flash is what makes the discrete hire visible against the
+           smooth location count. */
+        coachEl.style.color = "var(--pb-accent-ink)";
+        clearTimeout(flashTimer);
+        flashTimer = setTimeout(() => { coachEl.style.color = ""; }, 220);
+      }
+      lastCoaches = paint(loc, coaches, lastCoaches);
+      /* Runs once and holds: nothing schedules after p reaches 1, and
+         the drawn state simply stays. A permanently looping chart beside
+         body copy competes with reading. */
+      if (p < 1) raf = requestAnimationFrame(frame);
+    };
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          io.disconnect();
+          raf = requestAnimationFrame(frame);
+        }
+      });
+    }, { threshold: 0.4 });
+    io.observe(root);
+
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(raf);
+      clearTimeout(flashTimer);
+    };
+  }, [reduceMotion]);
 
   return (
     <div
+      ref={rootRef}
       className="flex flex-col gap-8 p-7 md:p-10 lg:px-11 lg:py-10"
       style={{
         backgroundColor: "var(--pb-panel)",
@@ -466,68 +517,100 @@ function CapacityBlock() {
             color: "var(--pb-text)",
           }}
         >
-          Coach headcount scales linearly.
-          <br />
-          The coaching each owner gets does not.
+          As locations scale, so does headcount.
+          {/* Desktop only: forcing it on mobile orphans the second line. */}
+          <br className="hidden md:inline" />{" "}
+          But impact per location holds flat.
         </h3>
+        <p className="text-[14.5px] md:text-[16px]" style={{ color: "var(--pb-muted)", lineHeight: 1.55 }}>
+          You can hire more coaches. You can&rsquo;t hire more hours in their day.
+        </p>
       </div>
 
-      <div className="flex flex-col">
-        {/* Two thirds carries the whole 1 to 4 to 10 progression in one
-            box, so it reads as a single story rather than three separate
-            facts; the remaining third states what the story means. */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
-          <div
-            className="lg:col-span-2 flex flex-col gap-4 p-5"
-            style={{
-              borderRadius: "14px",
-              backgroundColor: "var(--pb-panel-2)",
-              border: "1px solid var(--pb-border)",
-            }}
-          >
-            {/* Stacked below sm: three abreast leaves each step 57px at
-                390, and "franchisees" alone needs 79. */}
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-5">
-            {CAPACITY.map((c, i) => (
-              <Fragment key={c.franchisees}>
-                {i > 0 && (
-                  <span
-                    aria-hidden="true"
-                    className="hidden sm:block self-center flex-none"
-                    style={{ width: 1, height: 46, background: "var(--pb-border)" }}
-                  />
-                )}
-                <CapacityStep item={c} reduceMotion={reduceMotion} baseDelay={i * 0.12} />
-              </Fragment>
-            ))}
-            </div>
-          </div>
+      {/* The animated numbers would be noise frame by frame to a screen
+          reader; the description below carries the meaning instead. */}
+      <p className="sr-only">
+        As a network grows to one thousand locations and fifty coaches are
+        hired, the impact each location receives stays flat.
+      </p>
 
-          <div
-            className="flex flex-col justify-center gap-2 p-5"
-            style={{
-              borderRadius: "14px",
-              backgroundColor: "var(--pb-accent-soft)",
-              border: "1px solid var(--pb-accent-soft2)",
-            }}
-          >
-            {/* Deliberately allowed to wrap. It used to be pinned at 16px
-                to hold one line per sentence; size matters more than the
-                line count here, so the break is soft. */}
-            <p
-              className="text-[19px] md:text-[22px]"
+      <div aria-hidden="true" className="flex flex-col gap-6">
+        {/* Stat row, baselined so the numbers sit together. */}
+        <div className="flex flex-wrap items-end gap-x-7 gap-y-4">
+          <div className="flex flex-col gap-2">
+            <ChartStatLabel>Locations</ChartStatLabel>
+            <span
+              className="text-[26px] md:text-[30px]"
               style={{
-                fontFamily: "var(--font-editorial)",
-                fontWeight: 700,
-                letterSpacing: "-0.025em",
-                lineHeight: 1.25,
-                textWrap: "pretty",
-                color: "var(--pb-text)",
+                fontFamily: "var(--font-editorial)", fontWeight: 800,
+                letterSpacing: "-0.03em", lineHeight: 1, color: "var(--pb-text)",
+                fontVariantNumeric: "tabular-nums",
               }}
             >
-              The team scales with the network. What each franchisee gets
-              doesn&rsquo;t.
-            </p>
+              <span ref={locRef}>20</span>
+            </span>
+          </div>
+          <div className="flex flex-col gap-2">
+            <ChartStatLabel>Coaches</ChartStatLabel>
+            <span
+              className="text-[26px] md:text-[30px]"
+              style={{
+                fontFamily: "var(--font-editorial)", fontWeight: 800,
+                letterSpacing: "-0.03em", lineHeight: 1, color: "var(--pb-text)",
+                fontVariantNumeric: "tabular-nums", transition: "color .15s",
+              }}
+            >
+              <span ref={coachRef}>1</span>
+            </span>
+          </div>
+          <div className="flex flex-col gap-2 flex-1 min-w-[210px]">
+            <ChartStatLabel accent>What each location gets</ChartStatLabel>
+            <span
+              className="text-[20px] md:text-[24px]"
+              style={{
+                fontFamily: "var(--font-editorial)", fontWeight: 700,
+                letterSpacing: "-0.025em", lineHeight: 1.1, color: "var(--pb-accent-ink)",
+              }}
+            >
+              A small fraction of one coach
+            </span>
+          </div>
+        </div>
+
+        {/* Chart panel: the statement card's tint, since this panel now
+            makes that card's argument. */}
+        <div
+          className="flex flex-col gap-4 p-5"
+          style={{
+            borderRadius: "14px",
+            backgroundColor: "var(--pb-accent-soft)",
+            border: "1px solid var(--pb-accent-soft2)",
+          }}
+        >
+          <ChartStatLabel accent>Impact per location</ChartStatLabel>
+          <svg
+            viewBox={`0 0 ${CH_VIEW_W} ${CH_VIEW_H}`}
+            style={{ width: "100%", height: "auto", display: "block" }}
+          >
+            <defs>
+              <marker id="pb-chart-arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+                <path d="M0.5 0.5 L7.5 4 L0.5 7.5" fill="none" stroke="var(--pb-accent-soft2)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+              </marker>
+            </defs>
+            {/* Y rule: no ticks, no values, per the handoff. */}
+            <line x1={CH_X0} y1={16} x2={CH_X0} y2={128} stroke="var(--pb-accent-soft2)" strokeWidth="1" />
+            {/* X rule with the arrowhead. */}
+            <line x1={CH_X0} y1={128} x2={CH_X1 + 16} y2={128} stroke="var(--pb-accent-soft2)" strokeWidth="1" markerEnd="url(#pb-chart-arrow)" />
+            {/* The flat line. Never rises, never curves: that is the point. */}
+            <line ref={lineRef} x1={CH_X0} y1={CH_Y} x2={CH_X0} y2={CH_Y} stroke="var(--pb-accent-ink)" strokeWidth="2" strokeLinecap="round" />
+            <g ref={markersRef} />
+            <circle ref={headRef} cx={CH_X0} cy={CH_Y} r="4.5" fill="var(--pb-accent-ink)" />
+          </svg>
+          <div
+            className="text-center text-[12.5px]"
+            style={{ color: "var(--pb-accent-ink)" }}
+          >
+            Increasing locations and coaches
           </div>
         </div>
       </div>
