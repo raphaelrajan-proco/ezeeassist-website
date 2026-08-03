@@ -559,10 +559,28 @@ once the last band is spent, and then the section scrolls away.
 The old accent thread between the two Store #331 cards survives in copy
 alone: the 6:50pm card reads "The 6:00am draft".
 
-**The colour is the argument, not decoration.** Neutral means the system
-detected and handled it, accent means an automated play drawing on what the
-network learned (exactly six cards), violet marks the single
-franchisee-authored moment. Now 19 / 6 / 1. Do not tint more.
+**The left thesis is EZee blue and three lines** ("Your best coach." /
+"At every location." / "At the hour it matters."), coloured with
+`--wl-accent` so the light band gets the darker pass-rated value
+(#0071A0, 4.7:1 on the band) and dark gets the brand hue. The paragraph
+under it is 19px, 1.25x its launch size. Both changes apply to the
+stacked mobile header too.
+
+**Each band sits on a faint plate** (`--wl-band-tint`, defined per theme
+in globals.css) with `rounded-2xl p-3.5`, right column only: the gaps
+between plates are what mark the four time-frames as they scroll by.
+
+**The colour follows what each card's text says the system did**,
+reclassified on request from the old network-reading: neutral means the
+payoff is a flag, alert, reminder, or hold (the system watched and told a
+human), accent means the payoff is finished work (drafted, assembled,
+answered, started, sent, filed), violet marks the single
+franchisee-authored moment. The split is 6 / 19 / 1, so accent now
+dominates and "Before the doors open" is all accent. The four cards whose
+bodies cite the network (top-quartile script, 4 locations quoted, 6
+locations faced, fastest 10 openings) carry that story in their text; it
+no longer has a colour of its own, and the legend's middle entry reads
+"Automated play, work done for you" accordingly.
 
 The 3:45pm #214 closing audit is the same one the on demand section shows
 being built. **Deliberate continuity across sections, not duplication.**

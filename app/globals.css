@@ -1019,6 +1019,8 @@ input[type="range"]::-moz-range-thumb {
   --wl-violet-soft:  rgba(109, 79, 208, 0.1);
   --wl-violet-soft2: rgba(109, 79, 208, 0.3);
   --wl-shadow:       0 20px 46px -30px rgba(12, 20, 36, 0.3);
+  /* The faint plate behind each time band in the split-screen scroller. */
+  --wl-band-tint:    rgba(12, 20, 36, 0.035);
   --wl-mono: ui-monospace, "SF Mono", Menlo, monospace;
 }
 .dark .ed-wall {
@@ -1036,6 +1038,7 @@ input[type="range"]::-moz-range-thumb {
   --wl-violet-soft:  rgba(167, 139, 250, 0.13);
   --wl-violet-soft2: rgba(167, 139, 250, 0.36);
   --wl-shadow:       0 26px 60px -34px rgba(0, 0, 0, 0.8);
+  --wl-band-tint:    rgba(238, 242, 248, 0.045);
 }
 
 /* ─── Control center ───────────────────────────────────────

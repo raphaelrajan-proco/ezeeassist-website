@@ -69,11 +69,18 @@ function Icon({ name }: { name: IconName }) {
    not. Keep the four bands and the mix of trigger types, swap the
    specifics.
 
-   `tone` is not decoration, it is the argument:
-     neutral  the system detected something and handled it
-     accent   an automated play drawing on what the network learned
+   `tone` is assigned from what each card's own text says the system DID,
+   reclassified on request against this rule:
+     neutral  the payoff is a flag, alert, reminder, or hold: the system
+              watched and told a human (alert sent, flagged for the
+              owner, reminders queued, chased until filed)
+     accent   the payoff is finished work: something was drafted,
+              assembled, answered, started, merged, sent, or filed
      violet   the only franchisee-authored moment on the wall
-   Do not tint more cards than this. */
+   Four of the accents additionally cite the network in their body copy
+   (top-quartile script, 4 locations quoted, 6 locations faced, fastest
+   10 openings); that story lives in the card text and the left thesis,
+   not in a colour of its own. */
 
 type Tone = "neutral" | "accent" | "violet";
 type Card = { icon: IconName; meta: string; title: string; body: string; tone: Tone; thread?: "a" | "b" };
@@ -87,30 +94,30 @@ const BANDS: { title: string; note?: string; cards: Card[] }[] = [
       { icon: "moon",      meta: "2:04am · all locations", title: "Closing photos scored",   body: "9 stations flagged, tasks opened", tone: "neutral" },
       { icon: "receipt",   meta: "2:47am · Store #118",    title: "Registers reconciled",    body: "One deposit off, flagged for the owner", tone: "neutral" },
       { icon: "shield",    meta: "3:15am · all locations", title: "Expiring certifications pulled", body: "Six due in 30 days, reminders queued", tone: "neutral" },
-      { icon: "package",   meta: "3:40am · Store #519",    title: "Inventory hit critical",  body: "Reorder drafted at approved pricing", tone: "neutral" },
-      { icon: "clipboard", meta: "4:00am · West territory", title: "Coach brief assembled",  body: "12 locations, ranked by need", tone: "neutral" },
+      { icon: "package",   meta: "3:40am · Store #519",    title: "Inventory hit critical",  body: "Reorder drafted at approved pricing", tone: "accent" },
+      { icon: "clipboard", meta: "4:00am · West territory", title: "Coach brief assembled",  body: "12 locations, ranked by need", tone: "accent" },
     ],
   },
   {
     title: "Before the doors open",
     cards: [
-      { icon: "message",   meta: "5:45am · all locations", title: "Overnight questions cleared", body: "14 answered from the manual, 2 held for HQ", tone: "neutral" },
+      { icon: "message",   meta: "5:45am · all locations", title: "Overnight questions cleared", body: "14 answered from the manual, 2 held for HQ", tone: "accent" },
       { icon: "sunrise",   meta: "6:00am · Store #331", title: "Soft week detected",    body: "62% booked · reactivation draft ready", tone: "accent", thread: "a" },
-      { icon: "truck",     meta: "6:15am · Store #519", title: "Delivery came in short", body: "Credit request drafted against the invoice", tone: "neutral" },
+      { icon: "truck",     meta: "6:15am · Store #519", title: "Delivery came in short", body: "Credit request drafted against the invoice", tone: "accent" },
       { icon: "people",    meta: "6:30am · Store #052", title: "Attach rate slipping",  body: "Top-quartile locations run a 30 second add-on script. Here it is.", tone: "accent" },
-      { icon: "personAdd", meta: "7:00am · Store #402", title: "New hire starts today", body: "Day-one sequence started", tone: "neutral" },
-      { icon: "document",  meta: "7:40am · Store #144", title: "Morning huddle brief ready", body: "Yesterday's numbers and today's bookings, one card", tone: "neutral" },
+      { icon: "personAdd", meta: "7:00am · Store #402", title: "New hire starts today", body: "Day-one sequence started", tone: "accent" },
+      { icon: "document",  meta: "7:40am · Store #144", title: "Morning huddle brief ready", body: "Yesterday's numbers and today's bookings, one card", tone: "accent" },
     ],
   },
   {
     title: "During the day",
     cards: [
-      { icon: "message",    meta: "9:14am · Store #118",  title: "Promo question answered",          body: "Cited from the promo guide in 6 seconds", tone: "neutral" },
+      { icon: "message",    meta: "9:14am · Store #118",  title: "Promo question answered",          body: "Cited from the promo guide in 6 seconds", tone: "accent" },
       { icon: "document",   meta: "10:05am · Store #214", title: "Started a national retail proposal", body: "4 locations have quoted this. Range, terms, and win rate attached.", tone: "accent" },
-      { icon: "star",       meta: "11:40am · Store #263", title: "One-star review posted",           body: "Response drafted, held for owner", tone: "neutral" },
+      { icon: "star",       meta: "11:40am · Store #263", title: "One-star review posted",           body: "Response drafted, held for owner", tone: "accent" },
       { icon: "storefront", meta: "12:30pm · Store #087", title: "Competitor opened nearby",         body: "6 locations faced this. What held revenue, and what didn't.", tone: "accent" },
-      { icon: "megaphone",  meta: "1:20pm · Store #052",  title: "Local campaign assembled",         body: "Hours and offer merged into the brand template", tone: "neutral" },
-      { icon: "shield",     meta: "2:35pm · Store #402",  title: "Refund edge case resolved",        body: "Policy cited, approval routed to the owner", tone: "neutral" },
+      { icon: "megaphone",  meta: "1:20pm · Store #052",  title: "Local campaign assembled",         body: "Hours and offer merged into the brand template", tone: "accent" },
+      { icon: "shield",     meta: "2:35pm · Store #402",  title: "Refund edge case resolved",        body: "Policy cited, approval routed to the owner", tone: "accent" },
       /* The same closing audit the on demand section shows being built.
          Deliberate continuity across sections, not duplication. */
       { icon: "tools",      meta: "3:45pm · Store #214",  title: "An owner built a closing audit",   body: "Photo checklist per station. Live in twenty minutes, no developer.", tone: "violet" },
@@ -121,10 +128,10 @@ const BANDS: { title: string; note?: string; cards: Card[] }[] = [
     title: "On a longer clock",
     cards: [
       { icon: "calendar", meta: "14 days out · Store #263",  title: "Insurance lapsing", body: "Owner notified, task opened", tone: "neutral" },
-      { icon: "document", meta: "30 days out · Store #144",  title: "Lease renewal window opens", body: "Terms summary drafted for the owner", tone: "neutral" },
+      { icon: "document", meta: "30 days out · Store #144",  title: "Lease renewal window opens", body: "Terms summary drafted for the owner", tone: "accent" },
       { icon: "trend",    meta: "Week 6 · Store #402",       title: "Ramp behind cohort", body: "What the fastest 10 openings did in week 6, in order", tone: "accent" },
-      { icon: "receipt",  meta: "Month end · all locations", title: "Royalty reports assembled", body: "Filed to HQ, no chasing", tone: "neutral" },
-      { icon: "people",   meta: "Quarter start · West territory", title: "Business reviews drafted", body: "Twelve decks, one per location, numbers filled", tone: "neutral" },
+      { icon: "receipt",  meta: "Month end · all locations", title: "Royalty reports assembled", body: "Filed to HQ, no chasing", tone: "accent" },
+      { icon: "people",   meta: "Quarter start · West territory", title: "Business reviews drafted", body: "Twelve decks, one per location, numbers filled", tone: "accent" },
       { icon: "folder",   meta: "Quarter close · 5 stores",  title: "Audit docs missing", body: "Chased nightly until filed", tone: "neutral" },
     ],
   },
@@ -221,8 +228,8 @@ function Legend() {
   return (
     <div className="flex flex-wrap gap-x-[18px] gap-y-1.5">
       {[
-        { label: "Detected in your data", dot: "var(--wl-muted)", dim: true },
-        { label: "Automated play, drawing on your network", dot: "var(--wl-accent)" },
+        { label: "Detected and flagged for you", dot: "var(--wl-muted)", dim: true },
+        { label: "Automated play, work done for you", dot: "var(--wl-accent)" },
         { label: "Built by an owner", dot: "var(--wl-violet)" },
       ].map((l) => (
         <span key={l.label} className="flex items-center gap-2 text-[12.5px]" style={{ color: "var(--wl-muted)" }}>
@@ -379,14 +386,18 @@ export default function AlwaysOn() {
             </div>
             <h2
               style={{
-                fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.1,
-                color: "var(--wl-text)",
+                fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.16,
+                /* EZee blue, via the token so the light band gets the
+                   darker pass-rated value and dark gets the brand hue. */
+                color: "var(--wl-accent)",
                 fontSize: "clamp(1.375rem, 0.62rem + 2.1vw, 2rem)",
               }}
             >
-              Your best coach, at every location, at the hour it matters.
+              <span className="block">Your best coach.</span>
+              <span className="block">At every location.</span>
+              <span className="block">At the hour it matters.</span>
             </h2>
-            <p className="text-[14.5px] md:text-[15.5px] max-w-[780px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
+            <p className="text-[18px] md:text-[19px] max-w-[780px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
               Nobody pulled any of this. Each one started as a play built once, and
               some of them draw on what the rest of your network already learned.
             </p>
@@ -440,16 +451,21 @@ export default function AlwaysOn() {
               </div>
               <h2
                 style={{
-                  fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.12,
-                  color: "var(--wl-text)",
+                  fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.16,
+                  /* EZee blue, via the token so the light band gets the
+                     darker pass-rated value and dark gets the brand hue. */
+                  color: "var(--wl-accent)",
                   /* Larger than the old single-column header: the left
                      half is this text's whole job now. */
                   fontSize: "clamp(1.5rem, 0.9rem + 1.7vw, 2.3rem)",
                 }}
               >
-                Your best coach, at every location, at the hour it matters.
+                <span className="block">Your best coach.</span>
+                <span className="block">At every location.</span>
+                <span className="block">At the hour it matters.</span>
               </h2>
-              <p className="text-[15px]" style={{ lineHeight: 1.6, color: "var(--wl-muted)", maxWidth: 420 }}>
+              {/* 1.25x the 15 it launched at, by request. */}
+              <p className="text-[19px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)", maxWidth: 440 }}>
                 Nobody pulled any of this. Each one started as a play built once, and
                 some of them draw on what the rest of your network already learned.
               </p>
@@ -498,10 +514,14 @@ export default function AlwaysOn() {
                   style={{ padding: `${PAD}px 0`, willChange: "transform" }}
                 >
                   {BANDS.map((b, bi) => (
+                    /* Each band sits on its own faint plate, so the four
+                       time-frames read as distinct as they scroll by. The
+                       tint lives behind the boxes only, per request. */
                     <div
                       key={b.title}
                       ref={(el) => { bandRefs.current[bi] = el; }}
-                      className="grid grid-cols-2 gap-4"
+                      className="grid grid-cols-2 gap-4 rounded-2xl p-3.5"
+                      style={{ background: "var(--wl-band-tint)" }}
                     >
                       {b.cards.map((c) => <MomentCard key={c.title} card={c} />)}
                     </div>
