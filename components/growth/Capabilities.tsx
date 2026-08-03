@@ -4,7 +4,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * On demand, built from the showcase design handoff. A rail of three
- * capability pills beside a photo stage that auto-advances every 9.5s.
+ * capability pills beside a photo stage that auto-advances per the
+ * dwell constants below; the third tab's owner-built tools render as
+ * white-label product mocks from the app-mocks handoff.
  * Each scene is a demo that proves its tile's claim rather than
  * illustrating it, which is why the dwell is longer than the five-tile
  * version it replaces.
@@ -18,9 +20,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * Colours come from `.ed-showcase` in globals.css.
  */
 
-/* Tabs 1 and 2 hold 11s. Tab 3 holds 30s because it rotates three app
-   examples at 10s each inside itself, and its progress bar fills over the
-   whole 30 rather than per example. */
+/* Tabs 1 and 2 hold 7s. Tab 3 holds 21s because it rotates three app
+   examples at 7s each inside itself, and its progress bar fills over the
+   whole 21 rather than per example. */
 const DWELL = 7_000;
 const APP_DWELL = 7_000;
 const APPS_COUNT = 3;
@@ -300,7 +302,6 @@ function SceneData() {
    first is the same 3:45pm Store #214 moment that appears on the
    always-on wall; that continuity is deliberate, so do not renumber it. */
 
-type AppRow = { label: string; tone: "done" | "warn" | "open" };
 type AppExample = {
   id: string;
   photo: string;
@@ -308,10 +309,12 @@ type AppExample = {
   scrim: string;
   meta: string;
   request: string;
-  toolName: string;
   live: string;
-  rows: AppRow[];
   caption: string;
+  /* lg-only top inset inside the 580px stage, from the mocks handoff:
+     the three devices are different heights, so each scene starts at
+     its own line. */
+  box: string;
 };
 
 const APP_SCRIM = "linear-gradient(105deg, rgba(5,7,13,.64), rgba(5,7,13,.2))";
@@ -323,16 +326,10 @@ const APPS: AppExample[] = [
     alt: "Tablet in use at the counter",
     scrim: APP_SCRIM,
     meta: "STORE #214 · OWNER · 3:45PM",
-    request: "“Build a daily closing audit. Photo checklist per station, auto-score it, flag fails to my coach.”",
-    toolName: "Daily closing audit",
+    request: "\u201cBuild a daily closing audit. Photo checklist per station, auto-score it, flag fails to my coach.\u201d",
     live: "live · 20 min later",
-    rows: [
-      { label: "Front desk", tone: "done" },
-      { label: "Treatment rooms", tone: "done" },
-      { label: "Retail floor", tone: "done" },
-      { label: "Back of house", tone: "open" },
-    ],
     caption: "Built by an owner, not a developer. HQ reviewed it and published it to all 214 locations the same evening.",
+    box: "lg:top-[82px]",
   },
   {
     id: "lesson-booker",
@@ -340,16 +337,10 @@ const APPS: AppExample[] = [
     alt: "Swim school pool lanes",
     scrim: APP_SCRIM,
     meta: "SCHOOL #036 · OWNER · 11:20AM",
-    request: "“Build a make-up lesson booker. Parents pick an open slot, cap four per class, notify the instructor.”",
-    toolName: "Make-up lesson booker",
+    request: "\u201cBuild a make-up lesson booker. Parents pick an open slot, cap four per class, notify the instructor.\u201d",
     live: "live · 25 min later",
-    rows: [
-      { label: "Tue 4:00pm · Level 2 · full", tone: "done" },
-      { label: "Thu 5:30pm · Level 2 · full", tone: "done" },
-      { label: "Sat 9:00am · Level 3 · 3 spots", tone: "open" },
-      { label: "Sat 10:30am · Level 1 · 2 spots", tone: "open" },
-    ],
     caption: "Built between classes. Parents book themselves in, the instructor just sees the roster.",
+    box: "lg:top-[44px]",
   },
   {
     id: "hiring-pipeline",
@@ -357,25 +348,288 @@ const APPS: AppExample[] = [
     alt: "Caregiver with a senior client",
     scrim: APP_SCRIM,
     meta: "BRANCH #052 · OWNER · 2:10PM",
-    request: "“Build a caregiver application tracker. Flag missing certifications and chase references, so I only see interview-ready applicants.”",
-    toolName: "Caregiver hiring pipeline",
+    request: "\u201cBuild a caregiver application tracker. Flag missing certifications and chase references, so I only see interview-ready applicants.\u201d",
     live: "live · 20 min later",
-    rows: [
-      { label: "M. Alvarez · interview-ready", tone: "done" },
-      { label: "J. Chen · interview-ready", tone: "done" },
-      { label: "R. Patel · CPR cert expired", tone: "warn" },
-      { label: "D. Brooks · references pending", tone: "open" },
-    ],
     caption: "The system chases the paperwork. The owner just interviews.",
+    box: "lg:top-[96px]",
   },
 ];
 
-const ROW_DELAYS = [0.8, 0.92, 1.04, 1.16];
+/* ── The three white-label mocks ───────────────────────────
+   Rebuilt from the app-mocks handoff: each owner-built tool renders as a
+   realistic product on real hardware, in a fictional brand palette that
+   is deliberately NOT the site's. The mismatch is the point: an owner
+   built their own branded tool, so the usual accent-remap convention
+   does not apply inside these frames. No real company names; a glyph
+   plus a functional title instead. The web app mock stays light in both
+   themes, because it is a third-party product, not site chrome. Sizes
+   are the handoff's, rendered at natural size with no transform scaling,
+   which is what keeps the type crisp. */
+
+/** The violet chip that floats over every device's top-right corner.
+    Theme-independent by design. */
+function LivePill({ label, right }: { label: string; right: number }) {
+  return (
+    <span
+      style={{
+        position: "absolute", top: -13, right, zIndex: 2,
+        fontSize: 11.5, fontWeight: 700, padding: "5px 12px", borderRadius: 999,
+        background: "#0B101C", border: "1px solid rgba(167,139,250,.5)", color: "#A78BFA",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {label}
+    </span>
+  );
+}
+
+/* Mock 1: the closing audit on an iPad at the POS. Teal brand, warm
+   cream screen. */
+function AuditRow({ label, count, delay }: { label: string; count: string; delay: number }) {
+  return (
+    <div
+      className="ed-sc-anim flex items-center justify-between"
+      style={{
+        background: "#FFFFFF", border: "1px solid #ECE7DD", borderRadius: 13,
+        padding: "12px 14px", ...enter("ed-sc-slide", delay, 0.4),
+      }}
+    >
+      <span className="flex items-center gap-[11px]" style={{ fontSize: 14, fontWeight: 600 }}>
+        <span
+          aria-hidden="true"
+          className="flex items-center justify-center"
+          style={{ width: 20, height: 20, borderRadius: 7, background: "#0E8074", color: "#fff", fontSize: 11 }}
+        >
+          ✓
+        </span>
+        {label}
+      </span>
+      <span style={{ fontSize: 12, color: "#8A8272" }}>{count}</span>
+    </div>
+  );
+}
+
+function TabletMock({ live }: { live: string }) {
+  return (
+    <div className="relative" style={enter("ed-sc-rise", 0.55)}>
+      <LivePill label={live} right={16} />
+      <div style={{ background: "#15181F", borderRadius: 28, padding: 13, boxShadow: "var(--sc-shadow)" }}>
+        <div style={{ background: "#FBF9F5", borderRadius: 17, overflow: "hidden", color: "#26221B" }}>
+          <div
+            className="flex items-center justify-between"
+            style={{ background: "linear-gradient(135deg, #0E8074, #0A6B60)", color: "#fff", padding: "15px 20px" }}
+          >
+            <span className="flex items-center gap-[11px]">
+              <span
+                className="flex items-center justify-center"
+                style={{ width: 28, height: 28, borderRadius: 9, background: "rgba(255,255,255,.18)" }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M12 4c1.8 2.4 1.8 5.6 0 8-1.8-2.4-1.8-5.6 0-8z" />
+                  <path d="M6.5 8.5c2.6.6 4.6 2.8 5.5 5.5-2.9.4-5.7-1-7-3.5z" />
+                  <path d="M17.5 8.5c-2.6.6-4.6 2.8-5.5 5.5 2.9.4 5.7-1 7-3.5z" />
+                  <path d="M5.5 16.5c1.9 2.4 4 3.5 6.5 3.5s4.6-1.1 6.5-3.5" />
+                </svg>
+              </span>
+              <span style={{ fontFamily: JAKARTA, fontSize: 15, fontWeight: 700, letterSpacing: "-0.01em" }}>
+                Closing Audit
+              </span>
+            </span>
+            <span style={{ fontSize: 12, opacity: 0.85 }}>Store #214 · Tonight</span>
+          </div>
+          <div
+            className="ed-sc-anim flex items-center justify-between"
+            style={{ padding: "16px 20px 8px", ...enter("ed-sc-rise", 0.85, 0.4) }}
+          >
+            <span style={{ fontSize: 13, color: "#8A8272" }}>Auto-score</span>
+            <span className="flex items-baseline gap-1.5">
+              <span style={{ fontFamily: JAKARTA, fontSize: 27, fontWeight: 800, letterSpacing: "-0.03em", color: "#0E8074" }}>92</span>
+              <span style={{ fontSize: 12, color: "#8A8272" }}>/ 100</span>
+            </span>
+          </div>
+          <div className="flex flex-col gap-[9px]" style={{ padding: "10px 20px 16px" }}>
+            <AuditRow label="Front desk" count="4 photos" delay={0.95} />
+            <AuditRow label="Treatment rooms" count="6 photos" delay={1.05} />
+            <AuditRow label="Retail floor" count="3 photos" delay={1.15} />
+            {/* The exception row: amber, unchecked, the reason the tool exists. */}
+            <div
+              className="ed-sc-anim flex items-center justify-between"
+              style={{
+                background: "#FBF4E2", border: "1px solid #EBDCB2", borderRadius: 13,
+                padding: "12px 14px", ...enter("ed-sc-slide", 1.25, 0.4),
+              }}
+            >
+              <span className="flex items-center gap-[11px]" style={{ fontSize: 14, fontWeight: 600, color: "#8A6A1F" }}>
+                <span aria-hidden="true" style={{ width: 20, height: 20, borderRadius: 7, border: "1.5px solid #C9A94F", boxSizing: "border-box" }} />
+                Back of house
+              </span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: "#8A6A1F" }}>2 photos needed</span>
+            </div>
+            <div style={{ fontSize: 12, color: "#8A8272", paddingTop: 3 }}>Fails flag to your coach automatically</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Mock 2: the make-up lesson booker as a parent-facing phone app. Aqua
+   brand, coral CTA. Fixed 296 wide so it reads as a real phone. */
+function SlotRow({ left, right, state, delay }: { left: string; right: string; state: "full" | "selected" | "open"; delay: number }) {
+  const base: React.CSSProperties = {
+    borderRadius: 14, padding: "12px 15px", fontSize: 13.5,
+    ...enter("ed-sc-slide", delay, 0.4),
+  };
+  const styles: Record<string, React.CSSProperties> = {
+    full: { ...base, border: "1px solid #D5E8F2", background: "#fff", color: "#8FA9B8" },
+    selected: {
+      ...base, border: "1.5px solid #0E7FC1", background: "#0E7FC1", color: "#fff",
+      fontWeight: 600, boxShadow: "0 6px 16px -8px rgba(14,127,193,.55)",
+    },
+    open: { ...base, border: "1px solid #D5E8F2", background: "#fff" },
+  };
+  return (
+    <div className="ed-sc-anim flex items-center justify-between" style={styles[state]}>
+      <span>{left}</span>
+      <span style={{ fontSize: 10.5, fontWeight: 700, ...(state === "selected" ? { opacity: 0.9 } : state === "open" ? { color: "#5D7A8C" } : {}) }}>
+        {right}
+      </span>
+    </div>
+  );
+}
+
+function PhoneMock({ live }: { live: string }) {
+  return (
+    <div className="relative flex justify-center" style={enter("ed-sc-rise", 0.55)}>
+      <LivePill label={live} right={44} />
+      <div style={{ width: 296, background: "#10141C", borderRadius: 44, padding: 11, boxShadow: "var(--sc-shadow)" }}>
+        <div className="flex flex-col overflow-hidden" style={{ background: "#F4FAFD", borderRadius: 34, color: "#0A3550" }}>
+          <div className="flex items-center justify-between" style={{ padding: "11px 22px 2px", fontSize: 11, fontWeight: 600 }}>
+            <span>9:41</span>
+            <span aria-hidden="true" style={{ width: 15, height: 8, border: "1px solid #0A3550", borderRadius: 2.5, opacity: 0.7 }} />
+          </div>
+          <div className="flex items-center gap-2.5" style={{ padding: "12px 20px 4px" }}>
+            <span className="flex items-center justify-center" style={{ width: 30, height: 30, borderRadius: 10, background: "linear-gradient(135deg, #0E7FC1, #0A649B)" }}>
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <path d="M3 9c3-3.5 6-3.5 9 0s6 3.5 9 0" />
+                <path d="M3 15.5c3-3.5 6-3.5 9 0s6 3.5 9 0" />
+              </svg>
+            </span>
+            <span style={{ fontFamily: JAKARTA, fontSize: 14, fontWeight: 700 }}>Make-up Lessons</span>
+          </div>
+          <div style={{ padding: "10px 20px 2px" }}>
+            <div style={{ fontFamily: JAKARTA, fontSize: 17.5, fontWeight: 700, letterSpacing: "-0.015em" }}>
+              Emma&rsquo;s make-up lesson
+            </div>
+            <div style={{ fontSize: 12, color: "#5D7A8C", marginTop: 3 }}>Level 3 · missed Tue, Apr 14</div>
+          </div>
+          <div className="flex flex-col gap-2" style={{ padding: "12px 16px 4px" }}>
+            <SlotRow left="Tue 4:00pm" right="FULL" state="full" delay={0.85} />
+            <SlotRow left="Thu 5:30pm" right="FULL" state="full" delay={0.95} />
+            <SlotRow left="Sat 9:00am" right="3 SPOTS" state="selected" delay={1.05} />
+            <SlotRow left="Sat 10:30am" right="2 SPOTS" state="open" delay={1.15} />
+          </div>
+          <div
+            className="ed-sc-anim text-center"
+            style={{
+              margin: "12px 16px 7px", background: "#FF6B4A", color: "#fff", borderRadius: 999,
+              padding: "13px 0", fontFamily: JAKARTA, fontSize: 13.5, fontWeight: 700,
+              boxShadow: "0 8px 18px -8px rgba(255,107,74,.6)", ...enter("ed-sc-rise", 1.3, 0.4),
+            }}
+          >
+            Book Sat 9:00am
+          </div>
+          <div className="ed-sc-anim text-center" style={{ fontSize: 11, color: "#5D7A8C", paddingBottom: 7, ...enter("ed-sc-rise", 1.45, 0.4) }}>
+            Coach Kim sees the updated roster
+          </div>
+          <div aria-hidden="true" style={{ width: 76, height: 5, borderRadius: 999, background: "#0A3550", opacity: 0.2, margin: "2px auto 9px" }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Mock 3: the hiring pipeline as a desktop web app in a browser window.
+   Navy brand, sage logo. Always light, whatever the site theme. */
+const PIPE_GRID: React.CSSProperties = { display: "grid", gridTemplateColumns: "1.3fr 1fr .95fr", alignItems: "center", columnGap: 8 };
+
+function PipeRow({ name, certs, certsColor, stage, stageBg, stageColor, delay }: {
+  name: string; certs: string; certsColor: string; stage: string; stageBg: string; stageColor: string; delay: number;
+}) {
+  return (
+    <div className="ed-sc-anim" style={{ ...PIPE_GRID, padding: "11px 18px", borderTop: "1px solid #EDF0F4", fontSize: 13, ...enter("ed-sc-slide", delay, 0.4) }}>
+      <span style={{ fontWeight: 600 }}>{name}</span>
+      <span style={{ color: certsColor, fontSize: 11.5 }}>{certs}</span>
+      <span>
+        <span style={{ background: stageBg, color: stageColor, fontSize: 10.5, fontWeight: 700, padding: "4px 10px", borderRadius: 999, whiteSpace: "nowrap" }}>
+          {stage}
+        </span>
+      </span>
+    </div>
+  );
+}
+
+function BrowserMock({ live }: { live: string }) {
+  return (
+    <div className="relative" style={enter("ed-sc-rise", 0.55)}>
+      <LivePill label={live} right={16} />
+      <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "var(--sc-shadow)", border: "1px solid rgba(12,20,36,.12)", color: "#1E2733" }}>
+        <div className="flex items-center gap-3" style={{ background: "#EEF1F5", padding: "10px 16px" }}>
+          <span className="flex gap-1.5" aria-hidden="true">
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#F6635A" }} />
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#F5BD4F" }} />
+            <span style={{ width: 10, height: 10, borderRadius: "50%", background: "#62C554" }} />
+          </span>
+          <span className="flex-1" style={{ background: "#fff", borderRadius: 8, padding: "5px 12px", fontFamily: MONO, fontSize: 11.5, color: "#5A6472" }}>
+            app.careteam.io/hiring
+          </span>
+        </div>
+        <div className="flex items-center justify-between" style={{ background: "linear-gradient(135deg, #233C5B, #1B2F49)", color: "#fff", padding: "13px 18px" }}>
+          <span className="flex items-center gap-2.5">
+            <span className="flex items-center justify-center" style={{ width: 26, height: 26, borderRadius: 8, background: "#7FB069" }}>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#17301B" strokeWidth="2" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 11l8-7 8 7v9H4z" />
+                <path d="M12 16.5c-1.8-1.2-2.8-2.3-2.8-3.4 0-.9.7-1.6 1.5-1.6.5 0 1 .3 1.3.8.3-.5.8-.8 1.3-.8.8 0 1.5.7 1.5 1.6 0 1.1-1 2.2-2.8 3.4z" fill="#17301B" stroke="none" />
+              </svg>
+            </span>
+            <span style={{ fontFamily: JAKARTA, fontSize: 14, fontWeight: 700 }}>Hiring Pipeline</span>
+          </span>
+          <span style={{ fontSize: 11, fontWeight: 700, background: "rgba(255,255,255,.16)", padding: "5px 12px", borderRadius: 999, whiteSpace: "nowrap" }}>
+            4 interview-ready
+          </span>
+        </div>
+        <div className="flex flex-wrap" style={{ padding: "10px 18px", gap: 16, fontSize: 12, color: "#5A6472", borderBottom: "1px solid #EDF0F4" }}>
+          <span><b style={{ color: "#1E2733" }}>12</b> applicants</span>
+          <span>Auto-chase references: on</span>
+          <span>Certs checked nightly</span>
+        </div>
+        {/* Tracking tighter than the handoff's .12em: our column is
+            ~370px against its ~490, and CERTIFICATIONS collided with
+            STAGE at the wider setting. */}
+        <div style={{ ...PIPE_GRID, padding: "8px 18px", fontFamily: MONO, fontSize: 9, letterSpacing: ".07em", color: "#8A93A3" }}>
+          <span>APPLICANT</span><span>CERTIFICATIONS</span><span>STAGE</span>
+        </div>
+        <PipeRow name="M. Alvarez" certs="All current" certsColor="#3E7A4E" stage="Interview-ready" stageBg="#E4F2E6" stageColor="#3E7A4E" delay={0.85} />
+        <PipeRow name="J. Chen" certs="All current" certsColor="#3E7A4E" stage="Interview-ready" stageBg="#E4F2E6" stageColor="#3E7A4E" delay={0.97} />
+        <PipeRow name="R. Patel" certs="CPR expired · renewal sent" certsColor="#9A6B15" stage="On hold" stageBg="#FBF0D8" stageColor="#9A6B15" delay={1.09} />
+        <PipeRow name="D. Brooks" certs="All current" certsColor="#5A6472" stage="References pending" stageBg="#EDF0F4" stageColor="#5A6472" delay={1.21} />
+      </div>
+    </div>
+  );
+}
+
+const APP_MOCKS: Record<string, (live: string) => React.ReactNode> = {
+  "closing-audit": (live) => <TabletMock live={live} />,
+  "lesson-booker": (live) => <PhoneMock live={live} />,
+  "hiring-pipeline": (live) => <BrowserMock live={live} />,
+};
 
 function SceneApps({ app }: { app: AppExample }) {
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
+      {/* Centred, not stretched: the devices are different heights and
+          the request card floats beside the middle of each. */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-center">
         <div className="ed-sc-anim flex flex-col gap-3.5 p-5 lg:p-6" style={{ ...card, ...enter("ed-sc-rise", 0.08) }}>
           <div style={monoLabel}>{app.meta}</div>
           <div style={{ fontSize: 16.5, lineHeight: 1.5, fontWeight: 500, color: "var(--sc-text)" }}>
@@ -384,51 +638,7 @@ function SceneApps({ app }: { app: AppExample }) {
         </div>
 
         {/* The delay against the panel above is the twenty minutes. */}
-        <div
-          className="ed-sc-anim flex flex-col gap-3.5 p-5 lg:p-6"
-          style={{ ...card, border: "1px solid var(--sc-accent-soft2)", ...enter("ed-sc-rise", 0.55) }}
-        >
-          <div className="flex items-center justify-between gap-3">
-            <span style={{ fontFamily: JAKARTA, fontSize: 16, fontWeight: 700, color: "var(--sc-text)" }}>
-              {app.toolName}
-            </span>
-            <span
-              style={{
-                fontSize: 11.5, fontWeight: 700, padding: "5px 10px", borderRadius: 999,
-                background: "var(--sc-violet-soft)", color: "var(--sc-violet)", whiteSpace: "nowrap",
-              }}
-            >
-              {app.live}
-            </span>
-          </div>
-          <div className="flex flex-col gap-2.5">
-            {app.rows.map((r, i) => (
-              <div
-                key={r.label}
-                className="ed-sc-anim flex items-center gap-2.5"
-                style={{
-                  fontSize: 14,
-                  color: r.tone === "warn" ? "var(--sc-warn)"
-                    : r.tone === "done" ? "var(--sc-text)" : "var(--sc-muted)",
-                  fontWeight: r.tone === "warn" ? 600 : 400,
-                  ...enter("ed-sc-slide", ROW_DELAYS[i] ?? 1.16, 0.45),
-                }}
-              >
-                <span
-                  aria-hidden="true"
-                  style={{
-                    fontWeight: 700,
-                    color: r.tone === "done" ? "var(--sc-ok)"
-                      : r.tone === "warn" ? "var(--sc-warn)" : "inherit",
-                  }}
-                >
-                  {r.tone === "done" ? "✓" : r.tone === "warn" ? "!" : "◻"}
-                </span>
-                {r.label}
-              </div>
-            ))}
-          </div>
-        </div>
+        {APP_MOCKS[app.id](app.live)}
       </div>
 
       <div className="ed-sc-anim" style={{ ...caption, ...enter("ed-sc-scene-in", 1.35, 0.5) }}>
@@ -439,12 +649,13 @@ function SceneApps({ app }: { app: AppExample }) {
 }
 
 /* Content insets per scene, from the handoff. Scene 1 is a 600px column
-   at the top left; the other two span the stage. Only applied from lg,
-   where the stage is its full 580px tall. */
+   at the top left; scene 2 spans the stage. Scene 3's inset is per app
+   (each device is a different height) and comes from APPS[n].box. Only
+   applied from lg, where the stage is its full 580px tall. */
 const SCENE_BOX = [
   "lg:left-12 lg:top-12 lg:w-[600px]",
   "lg:left-12 lg:right-12 lg:top-[88px]",
-  "lg:left-12 lg:right-12 lg:top-[120px]",
+  "lg:left-12 lg:right-12",
 ];
 
 /* ── Section ───────────────────────────────────────────── */
@@ -453,17 +664,27 @@ export default function Capabilities() {
   const [tab, setTab] = useState(0);
   const [app, setApp] = useState(0);
   const [paused, setPaused] = useState(false);
-  /* The rotation does not start on mount. It arms the first time the
-     section scrolls into view, so nobody arrives mid-cycle on tab 3;
-     everyone starts on "Ask for anything". One arm is enough, scrolling
-     away and back does not reset it. */
+  /* The rotation never runs off-screen. It arms when the section is 30%
+     visible and DISARMS when it fully leaves, resetting to the first
+     tab, so every fresh entry starts on "Ask for anything" and replays.
+     Running while off-screen was the old "it always starts on the
+     second tab" bug: a hash deep link (or the arm-once behaviour plus a
+     back navigation) started timers before the section was ever seen,
+     so the user scrolled in mid-cycle. Nothing starts until visible. */
   const [armed, setArmed] = useState(false);
+  /* Nonce bumped by every go(): keys the progress bar so it restarts in
+     lockstep with the timers, including dot jumps within tab 3. */
+  const [cycle, setCycle] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   const tabTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const appTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   /* Where the rotation is, readable without being a dependency: the
      resume effect continues from here rather than resetting to 0. */
   const tabRef = useRef(0);
+  const appRef = useRef(0);
+  /* A hash deep link applies once, on the FIRST entry only; later
+     re-entries restart at tab 0 like everyone else's. */
+  const deepLinkRef = useRef<number | null>(null);
 
   const stopTimers = useCallback(() => {
     if (tabTimer.current) clearTimeout(tabTimer.current);
@@ -472,15 +693,23 @@ export default function Capabilities() {
     appTimer.current = null;
   }, []);
 
-  /** Enter a tab: reset its app rotation and schedule the next tab. */
-  const go = useCallback((i: number) => {
+  /** Enter a tab (optionally at a given app example) and schedule on. */
+  const go = useCallback((i: number, startApp = 0) => {
     stopTimers();
     tabRef.current = i;
+    appRef.current = startApp;
     setTab(i);
-    setApp(0);
+    setApp(startApp);
+    setCycle((c) => c + 1);
     if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     if (i === 2) {
-      appTimer.current = setInterval(() => setApp((a) => (a + 1) % APPS_COUNT), APP_DWELL);
+      appTimer.current = setInterval(() => {
+        setApp((a) => {
+          const n = (a + 1) % APPS_COUNT;
+          appRef.current = n;
+          return n;
+        });
+      }, APP_DWELL);
     }
     tabTimer.current = setTimeout(() => go((i + 1) % TABS.length), TAB_DWELL(i));
   }, [stopTimers]);
@@ -490,8 +719,23 @@ export default function Capabilities() {
     const el = sectionRef.current;
     if (!el || !("IntersectionObserver" in window)) { setArmed(true); return; }
     const io = new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { io.disconnect(); setArmed(true); } });
-    }, { threshold: 0.3 });
+      entries.forEach((e) => {
+        if (e.intersectionRatio >= 0.3) {
+          if (deepLinkRef.current !== null) {
+            tabRef.current = deepLinkRef.current;
+            appRef.current = 0;
+            deepLinkRef.current = null;
+          }
+          setArmed(true);
+        } else if (!e.isIntersecting) {
+          /* Fully gone: stop and reset, so the next entry replays from
+             the first tab. */
+          tabRef.current = 0;
+          appRef.current = 0;
+          setArmed(false);
+        }
+      });
+    }, { threshold: [0, 0.3] });
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -499,20 +743,22 @@ export default function Capabilities() {
   useEffect(() => {
     if (!armed || paused) { stopTimers(); return; }
     /* Resume from wherever the rotation is, not from 0: resetting on
-       every unpause was what made a click on a pill feel dead, because
-       leaving the section afterwards snapped it back to the first tab. */
-    go(tabRef.current);
+       every unpause was what made a click on a pill feel dead. Fresh
+       entries still start at 0 because the observer resets the refs on
+       a full exit. */
+    go(tabRef.current, tabRef.current === 2 ? appRef.current : 0);
     return stopTimers;
     /* `go` is stable and re-running this on every tab change would restart
        the cycle forever, so the tab state is deliberately not a dep. */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [armed, paused]);
 
-  /* Deep links land on their scene: the footer points at three of these. */
+  /* Deep links land on their scene when the section is reached: the
+     footer points at three of these. Recorded, not acted on, so timers
+     never run before the section is visible. */
   useEffect(() => {
     const i = TABS.findIndex((t) => `#${t.id}` === window.location.hash);
-    if (i >= 0) { setArmed(true); go(i); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (i >= 0) deepLinkRef.current = i;
   }, []);
 
   /* A click restarts the rotation at that tab, running. Clearing the
@@ -520,6 +766,11 @@ export default function Capabilities() {
      clicks, and a rotation that stays frozen until the mouse leaves
      reads as broken. */
   const select = (i: number) => { setPaused(false); go(i); };
+
+  /* A dot click jumps to that app example and restarts the per-app
+     timer from it; rotation keeps running, next advance a full
+     interval later. */
+  const selectApp = (i: number) => { setPaused(false); go(2, i); };
 
   const activeTab = TABS[tab];
   const activeApp = APPS[app];
@@ -599,7 +850,7 @@ export default function Capabilities() {
                          would land part-way through the real first dwell.
                          `armed` is in the key so it restarts on entry. */
                       <span
-                        key={`${tab}-${paused}-${armed}`}
+                        key={`${tab}-${paused}-${armed}-${cycle}`}
                         className="ed-sc-bar"
                         style={{
                           position: "absolute", left: 0, bottom: 0, height: 3,
@@ -636,14 +887,21 @@ export default function Capabilities() {
             className="relative flex-1 min-w-0 rounded-3xl overflow-hidden lg:h-[580px]"
             style={{ border: "1px solid var(--sc-border)", background: "var(--sc-stage)" }}
           >
-            {/* Position dots for the app rotation, tab 3 only. */}
+            {/* Position dots for the app rotation, tab 3 only. Buttons,
+                per the mocks handoff: a click jumps to that example and
+                the timed rotation carries on from it. */}
             {tab === 2 && (
-              <div className="absolute right-6 top-6 z-[3] flex gap-2" aria-hidden="true">
+              <div className="absolute right-6 top-6 z-[3] flex gap-2">
                 {APPS.map((a, i) => (
-                  <span
+                  <button
                     key={a.id}
+                    type="button"
+                    aria-label={`Show example ${i + 1}`}
+                    aria-pressed={i === app}
+                    onClick={() => selectApp(i)}
                     style={{
-                      width: 8, height: 8, borderRadius: "50%",
+                      width: 10, height: 10, borderRadius: "50%", padding: 0,
+                      border: "none", cursor: "pointer",
                       background: i === app ? "#FFFFFF" : "rgba(255,255,255,.4)",
                       transition: "background .3s",
                     }}
@@ -668,7 +926,7 @@ export default function Capabilities() {
               />
               <div className="absolute inset-0" style={{ background: tab === 2 ? activeApp.scrim : activeTab.scrim }} />
 
-              <div className={`relative lg:absolute p-5 sm:p-8 lg:p-0 flex flex-col gap-4 lg:gap-[18px] ${SCENE_BOX[tab]}`}>
+              <div className={`relative lg:absolute p-5 sm:p-8 lg:p-0 flex flex-col gap-4 lg:gap-[18px] ${SCENE_BOX[tab]} ${tab === 2 ? activeApp.box : ""}`}>
                 {tab === 0 && <SceneAnswers />}
                 {tab === 1 && <SceneData />}
                 {tab === 2 && <SceneApps app={activeApp} />}

@@ -469,6 +469,35 @@ dead. A click clears the pause and restarts the rotation at that pill.
 `prefers-reduced-motion` stops the auto-advance and every entrance while
 leaving the pills clickable.
 
+**The rotation never runs off-screen, and a full exit resets it.** The
+observer watches thresholds [0, 0.3]: 30% visible arms it (fresh entries
+start on tab 0 and replay), fully gone disarms and resets the refs. This
+also fixed the reported "it always starts on the second tab": a
+`#reporting` hash deep link used to arm the rotation at page load, so by
+the time the user scrolled down it was mid-cycle on some other tab, and
+the arm-once behaviour meant a back-navigation kept stale state. Deep
+links are now recorded in a ref and applied on the FIRST entry only;
+later re-entries start at 0. It was never a caching problem.
+
+**The build-tab dots are buttons** (10px, active solid white, inactive
+40% white, `aria-label="Show example N"`): a click jumps to that app
+example via `go(2, i)` and the timed rotation carries on from it, next
+advance a full interval later. Every `go()` bumps a `cycle` nonce that
+keys the progress bar, so the bar restarts in lockstep with the timers
+even when the tab itself does not change.
+
+**The three owner-built tools render as white-label device mocks** (the
+app-mocks handoff): the closing audit on a teal iPad POS, the make-up
+booker as an aqua parent-facing phone (296px fixed, coral CTA), the
+hiring pipeline as a navy desktop web app in a browser window. The
+fictional palettes are deliberately NOT the site's and the usual accent
+remap does not apply inside the frames; the web mock stays light in both
+themes. Mocks render at natural size, no transform scaling. Each app
+carries its own lg top inset (`APPS[n].box`: 82/44/96) because the
+devices are different heights. One deviation: the pipeline table headers
+run 9px at .07em, not the handoff's 9.5/.12em, because CERTIFICATIONS
+collided with STAGE in our ~370px column against its ~490.
+
 Each scene proves its tile's claim rather than illustrating it. **Keep that
 intent** if the copy is revisited:
 
