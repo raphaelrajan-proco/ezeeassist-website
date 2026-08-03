@@ -559,7 +559,8 @@ export default function GrowthHero() {
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="uppercase mb-4"
               style={{
-                fontSize: "clamp(0.75rem, 0.09rem + 1.23vw, 0.9375rem)",
+                /* 0.7x the previous run by request: 8.4px at 390 up to 10.5px. */
+              fontSize: "clamp(0.525rem, 0.063rem + 0.861vw, 0.65625rem)",
                 fontWeight: 600,
                 letterSpacing: "0.16em",
                 color: HERO_EYEBROW,

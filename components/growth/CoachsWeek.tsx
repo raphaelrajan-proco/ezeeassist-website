@@ -1,5 +1,6 @@
 "use client";
 
+import { Fragment } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   Hash, Mail, MessageSquare,
@@ -42,48 +43,37 @@ const SHOULD_SEGMENTS: Segment[] = [
 ];
 
 function TimeBar({
-  title, lede, eyebrow, eyebrowAccent = false,
-  segments, coachingFlex, pct, pctSize, caption, ariaLabel,
+  title, eyebrow, segments, coachingFlex, pct, pctSize, ariaLabel,
 }: {
   title: string;
-  lede: string;
   eyebrow: string;
-  eyebrowAccent?: boolean;
   segments: Segment[];
   coachingFlex: number;
   pct: string;
   pctSize: number;
-  caption?: string;
   ariaLabel: string;
 }) {
   const reduceMotion = Boolean(useReducedMotion());
 
   return (
     <div className="flex flex-col gap-3.5">
+      {/* One uniform run rather than a bold figure plus a muted tail: the
+          whole line is the claim. */}
       <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-        <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
-          <span
-            className="text-[19px] md:text-[22px]"
-            style={{
-              fontFamily: "var(--font-editorial)",
-              fontWeight: 700,
-              letterSpacing: "-0.02em",
-              color: "var(--pb-text)",
-            }}
-          >
-            {title}
-          </span>
-          <span className="text-[14px] md:text-[15px]" style={{ color: "var(--pb-muted)" }}>
-            {lede}
-          </span>
-        </div>
+        <span
+          className="text-[19px] md:text-[22px]"
+          style={{
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+            color: "var(--pb-text)",
+          }}
+        >
+          {title}
+        </span>
         <span
           className="text-[10.5px] uppercase"
-          style={{
-            fontFamily: "var(--pb-mono)",
-            letterSpacing: "0.14em",
-            color: eyebrowAccent ? "var(--pb-accent-ink)" : "var(--pb-muted)",
-          }}
+          style={{ fontFamily: "var(--pb-mono)", letterSpacing: "0.14em", color: "var(--pb-muted)" }}
         >
           {eyebrow}
         </span>
@@ -149,11 +139,6 @@ function TimeBar({
         </div>
       </motion.div>
 
-      {caption && (
-        <p className="text-[13px]" style={{ color: "var(--pb-muted)" }}>
-          {caption}
-        </p>
-      )}
     </div>
   );
 }
@@ -297,32 +282,51 @@ const REPORT_SCRAPS: { icon: React.ElementType; tint: string; title: string }[] 
   { icon: MessageSquare,   tint: "#15803D", title: "sending mine over" },
 ];
 
+/* Tilt and offset per index rather than at random, so the scatter is
+   stable across renders and identical on the server and the client. */
+const SCATTER = [
+  { rot: -2.4, dx: -2, dy: 0 },
+  { rot: 1.8,  dx: 3,  dy: 2 },
+  { rot: 2.6,  dx: -4, dy: -1 },
+  { rot: -1.6, dx: 2,  dy: 3 },
+  { rot: 1.2,  dx: -3, dy: -2 },
+  { rot: -2.8, dx: 4,  dy: 1 },
+  { rot: 2.2,  dx: -1, dy: -3 },
+  { rot: -1.2, dx: 3,  dy: 2 },
+  { rot: 2.8,  dx: -4, dy: 0 },
+  { rot: -2.0, dx: 1,  dy: -2 },
+  { rot: 1.4,  dx: -2, dy: 3 },
+  { rot: -2.6, dx: 2,  dy: -1 },
+];
+
 function ReportsCard() {
   return (
     <DetailCard header="This week's numbers, by hand">
-      <div className="grid grid-cols-2 gap-2" aria-hidden="true">
-        {REPORT_SCRAPS.map((s, i) => {
-          const Icon = s.icon;
+      {/* Scattered rather than gridded: the point is that this pile has no
+          order, and a tidy grid argues the opposite. Each scrap tilts and
+          nudges by its index, and the row overlaps slightly through the
+          negative margin, so it reads as a heap on a desk. */}
+      <div className="flex flex-wrap gap-x-1.5 gap-y-1 pt-0.5" aria-hidden="true">
+        {REPORT_SCRAPS.map((sc, i) => {
+          const Icon = sc.icon;
+          const t = SCATTER[i % SCATTER.length];
           return (
-            /* The chips wrap rather than truncate. The handoff's 12px label
-               assumes no icon; restoring the icons, which the handoff asks
-               for, costs 18px of the chip and the longest filenames no
-               longer fit on one line at 1205. Wrapping keeps every label
-               readable and the grid rows stay aligned to each other. */
             <span
               key={i}
-              className="flex items-start gap-1.5 min-w-0 px-[11px] py-[9px]"
+              className="flex items-center gap-1.5 min-w-0 px-2 py-[7px]"
               style={{
-                fontSize: "12px",
-                lineHeight: 1.3,
-                borderRadius: "9px",
-                backgroundColor: "var(--pb-panel-2)",
+                fontSize: "11px",
+                lineHeight: 1.25,
+                borderRadius: "8px",
+                backgroundColor: "var(--pb-panel)",
                 border: "1px solid var(--pb-border)",
+                boxShadow: "0 4px 12px -6px rgba(12,20,36,.35)",
                 color: "var(--pb-text)",
+                transform: `translate(${t.dx}px, ${t.dy}px) rotate(${t.rot}deg)`,
               }}
             >
-              <Icon aria-hidden="true" className="h-3 w-3 flex-shrink-0 mt-[2px]" strokeWidth={2} style={{ color: s.tint }} />
-              <span className="min-w-0">{s.title}</span>
+              <Icon aria-hidden="true" className="h-3 w-3 flex-shrink-0" strokeWidth={2} style={{ color: sc.tint }} />
+              <span className="whitespace-nowrap">{sc.title}</span>
             </span>
           );
         })}
@@ -337,24 +341,25 @@ function ReportsCard() {
 }
 
 /* ── The three kinds of work ───────────────────────────────
-   Swatch tone matches the bar segment it stands for, which is what lets
-   the bar itself go unlabelled. */
+   Each title is underlined in the tone of the bar segment it stands for,
+   which is what lets the bar itself go unlabelled. Tone and segment have
+   to stay in step. */
 
 const PILLARS = [
   {
-    swatch: "var(--pb-admin-1)",
+    rule: "var(--pb-admin-1)",
     title: "Repetitive questions",
     body: "Multiple repeat questions arrive from several locations, each one needing a personal reply.",
     card: <QuestionsCard />,
   },
   {
-    swatch: "var(--pb-admin-2)",
+    rule: "var(--pb-admin-2)",
     title: "Compliance chasing",
     body: "Insurance, P&L, training, and audit deadlines all run separately, and someone has to chase each one.",
     card: <ComplianceCard />,
   },
   {
-    swatch: "var(--pb-admin-3)",
+    rule: "var(--pb-admin-3)",
     title: "Report building",
     body: "The weekly numbers get rebuilt by hand from five systems, and everyone keeps their own version.",
     card: <ReportsCard />,
@@ -367,72 +372,60 @@ const PILLARS = [
    side throughout, so nothing here mentions cost or headcount spend. */
 
 const CAPACITY = [
-  { franchisees: 30,  coaches: 1,  caption: "One coach. Thirty owners.",      emphasis: false },
-  { franchisees: 120, coaches: 4,  caption: "Four coaches. Still thirty each.", emphasis: false },
-  { franchisees: 300, coaches: 10, caption: "Ten coaches. Still thirty each.",  emphasis: true  },
+  { franchisees: 30,  coaches: 1  },
+  { franchisees: 120, coaches: 4  },
+  { franchisees: 300, coaches: 10 },
 ];
 
-function CapacityCard({ item, reduceMotion }: {
-  item: (typeof CAPACITY)[number]; reduceMotion: boolean;
+/** One step of the progression: owners, coach count, and the squares. */
+function CapacityStep({ item, reduceMotion, baseDelay }: {
+  item: (typeof CAPACITY)[number]; reduceMotion: boolean; baseDelay: number;
 }) {
   return (
-    <div
-      className="flex flex-1 flex-col gap-3 p-5"
-      style={{
-        borderRadius: "14px",
-        backgroundColor: item.emphasis ? "var(--pb-accent-soft)" : "var(--pb-panel-2)",
-        border: `1px solid ${item.emphasis ? "var(--pb-accent-soft2)" : "var(--pb-border)"}`,
-      }}
-    >
+    <div className="flex flex-col gap-2.5 min-w-0">
+      {/* Wraps rather than truncates: three steps share one row, and at
+          390 that leaves about 95px each while this label needs 105. */}
       <div
         className="text-[10px] uppercase"
-        style={{ fontFamily: "var(--pb-mono)", letterSpacing: "0.12em", color: "var(--pb-muted)" }}
+        style={{ fontFamily: "var(--pb-mono)", letterSpacing: "0.12em", color: "var(--pb-muted)", lineHeight: 1.35 }}
       >
         {item.franchisees} franchisees
       </div>
 
-      <div className="flex items-baseline gap-2">
+      <div className="flex items-baseline gap-1.5">
         <span
           style={{
             fontFamily: "var(--font-editorial)",
             fontWeight: 800,
-            fontSize: "34px",
+            fontSize: "30px",
             letterSpacing: "-0.03em",
             lineHeight: 1,
-            color: item.emphasis ? "var(--pb-accent-ink)" : "var(--pb-text)",
+            color: "var(--pb-text)",
           }}
         >
           {item.coaches}
         </span>
-        <span className="text-[13px]" style={{ color: "var(--pb-muted)" }}>
+        <span className="text-[12.5px]" style={{ color: "var(--pb-muted)" }}>
           {item.coaches === 1 ? "coach" : "coaches"}
         </span>
       </div>
 
       {/* The multiplying squares are the argument: the count grows, the
           ratio behind it never does. */}
-      <div className="flex flex-wrap gap-1 content-start" style={{ minHeight: "34px" }} aria-hidden="true">
+      <div className="flex flex-wrap gap-1 content-start" style={{ minHeight: "30px" }} aria-hidden="true">
         {Array.from({ length: item.coaches }, (_, i) => (
           <motion.span
             key={i}
             className="block"
-            style={{
-              width: "13px",
-              height: "13px",
-              borderRadius: "4px",
-              backgroundColor: item.emphasis ? "var(--pb-accent)" : "var(--pb-admin-2)",
-            }}
+            style={{ width: "12px", height: "12px", borderRadius: "4px", backgroundColor: "var(--pb-admin-2)" }}
             initial={reduceMotion ? false : { opacity: 0, y: 4 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.3, ease: EASE, delay: reduceMotion ? 0 : i * 0.03 }}
+            transition={{ duration: 0.3, ease: EASE, delay: reduceMotion ? 0 : baseDelay + i * 0.03 }}
           />
         ))}
       </div>
 
-      <div className="text-[12px]" style={{ color: "var(--pb-muted)", lineHeight: 1.45 }}>
-        {item.caption}
-      </div>
     </div>
   );
 }
@@ -468,12 +461,13 @@ function CapacityBlock() {
             color: "var(--pb-text)",
           }}
         >
-          Growth adds coaches. It does not add coaching.
+          Coach headcount scales linearly. The coaching each owner gets
+          does not.
         </h3>
         <p className="text-[15px] md:text-[16px] max-w-[620px]" style={{ color: "var(--pb-muted)", lineHeight: 1.6 }}>
-          Add thirty more owners, add another coach. The team keeps growing.
-          What any one franchisee actually gets, and how much of it is real
-          coaching, never moves.
+          Every thirty owners needs another coach, so the team grows in step
+          with the network. What any one franchisee actually receives, and how
+          much of it is real coaching, stays exactly where it was.
         </p>
       </div>
 
@@ -486,10 +480,71 @@ function CapacityBlock() {
             Same load on every coach. Same support for every owner.
           </span>
         </div>
-        <div className="flex flex-col sm:flex-row items-stretch gap-4">
-          {CAPACITY.map((c) => (
-            <CapacityCard key={c.franchisees} item={c} reduceMotion={reduceMotion} />
-          ))}
+
+        {/* Two thirds carries the whole 1 to 4 to 10 progression in one
+            box, so it reads as a single story rather than three separate
+            facts; the remaining third states what the story means. */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+          {/* The invariant is stated once beneath the row rather than
+              repeated under each step, where three identical labels read
+              as a glitch rather than as the point. */}
+          <div
+            className="lg:col-span-2 flex flex-col gap-4 p-5"
+            style={{
+              borderRadius: "14px",
+              backgroundColor: "var(--pb-panel-2)",
+              border: "1px solid var(--pb-border)",
+            }}
+          >
+            {/* Stacked below sm: three abreast leaves each step 57px at
+                390, and "franchisees" alone needs 79. */}
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 sm:gap-5">
+            {CAPACITY.map((c, i) => (
+              <Fragment key={c.franchisees}>
+                {i > 0 && (
+                  <span
+                    aria-hidden="true"
+                    className="hidden sm:block self-center flex-none"
+                    style={{ width: 1, height: 46, background: "var(--pb-border)" }}
+                  />
+                )}
+                <CapacityStep item={c} reduceMotion={reduceMotion} baseDelay={i * 0.12} />
+              </Fragment>
+            ))}
+            </div>
+            <div
+              className="text-[12px] pt-3"
+              style={{ color: "var(--pb-muted)", borderTop: "1px solid var(--pb-border)" }}
+            >
+              Thirty owners each, at every size.
+            </div>
+          </div>
+
+          <div
+            className="flex flex-col justify-center gap-2 p-5"
+            style={{
+              borderRadius: "14px",
+              backgroundColor: "var(--pb-accent-soft)",
+              border: "1px solid var(--pb-accent-soft2)",
+            }}
+          >
+            <p
+              className="text-[17px] md:text-[18px]"
+              style={{
+                fontFamily: "var(--font-editorial)",
+                fontWeight: 700,
+                letterSpacing: "-0.02em",
+                lineHeight: 1.25,
+                color: "var(--pb-text)",
+              }}
+            >
+              A coach&rsquo;s reach ends where their week does.
+            </p>
+            <p className="text-[12.5px]" style={{ color: "var(--pb-muted)", lineHeight: 1.5 }}>
+              Hiring changes how many owners are covered. It does not change
+              how much of any one of them a coach can reach.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -522,20 +577,32 @@ export default function CoachsWeek() {
         >
           Coaching is meant to drive growth.
           <br className="hidden md:block" />{" "}
-          But, everything else consumes it.
+          But, the mechanical work consumes it.
         </motion.h2>
 
-        <TimeBar
-          title="4/5 days"
-          lede="go to admin work, not growth."
-          eyebrow="A coach's week, today"
-          segments={TODAY_SEGMENTS}
-          coachingFlex={20}
-          pct="20%"
-          pctSize={17}
-          caption="The three blocks below are what fills the other 80%."
-          ariaLabel="Today: 20 percent coaching, 80 percent admin work."
-        />
+        {/* The two bars sit together, the claim and its correction, with
+            no card around them: the comparison is the point and a box
+            between them broke it. */}
+        <div className="flex flex-col gap-9">
+          <TimeBar
+            title="Four days in five go to admin work, not growth"
+            eyebrow="A coach's week, today"
+            segments={TODAY_SEGMENTS}
+            coachingFlex={20}
+            pct="20%"
+            pctSize={17}
+            ariaLabel="Today: 20 percent coaching, 80 percent admin work."
+          />
+          <TimeBar
+            title="What it should be"
+            eyebrow="The same week"
+            segments={SHOULD_SEGMENTS}
+            coachingFlex={80}
+            pct="80%"
+            pctSize={19}
+            ariaLabel="With EZee Assist: 80 percent coaching, 20 percent admin work."
+          />
+        </div>
 
         {/* Three across from lg. At 768 a three-column grid left each card
             around 208px, which wrapped every question and status pill. */}
@@ -554,23 +621,26 @@ export default function CoachsWeek() {
                   says 104px; the longest description runs to three lines
                   from 1024 up and measures 105.4, so the floor is 106. */}
               <div className="flex flex-col gap-2 lg:min-h-[106px]">
-                <div className="flex items-center gap-2.5">
+                {/* The title is underlined in its bar segment's tone, which
+                    is what ties the pillar to the bar above without
+                    labelling the bar itself. Inline-block so the rule is
+                    only as wide as the words. */}
+                <h3
+                  className="text-[18px] md:text-[20px]"
+                  style={{
+                    fontFamily: "var(--font-editorial)",
+                    fontWeight: 700,
+                    letterSpacing: "-0.015em",
+                    color: "var(--pb-text)",
+                  }}
+                >
                   <span
-                    className="block flex-shrink-0"
-                    style={{ width: "10px", height: "10px", borderRadius: "3px", backgroundColor: p.swatch }}
-                  />
-                  <h3
-                    className="text-[18px] md:text-[20px]"
-                    style={{
-                      fontFamily: "var(--font-editorial)",
-                      fontWeight: 700,
-                      letterSpacing: "-0.015em",
-                      color: "var(--pb-text)",
-                    }}
+                    className="inline-block"
+                    style={{ borderBottom: `3px solid ${p.rule}`, paddingBottom: 3 }}
                   >
                     {p.title}
-                  </h3>
-                </div>
+                  </span>
+                </h3>
                 <p className="text-[14.5px]" style={{ color: "var(--pb-muted)", lineHeight: 1.55 }}>
                   {p.body}
                 </p>
@@ -584,36 +654,6 @@ export default function CoachsWeek() {
           <CapacityBlock />
         </div>
 
-        <TimeBar
-          title="What it should be"
-          lede="the admin workload conducted by the system, not the coach."
-          eyebrow="The same week, with EZee Assist"
-          eyebrowAccent
-          segments={SHOULD_SEGMENTS}
-          coachingFlex={80}
-          pct="80%"
-          pctSize={19}
-          ariaLabel="With EZee Assist: 80 percent coaching, 20 percent admin work."
-        />
-
-        {/* No entrance on this one by request: it sits still rather than
-            rising in. */}
-        <p
-          style={{
-            fontFamily: "var(--font-editorial)",
-            fontWeight: 700,
-            /* 21px at 390 up to the spec's 38px. */
-            fontSize: "clamp(1.3125rem, 0.6rem + 2.92vw, 2.375rem)",
-            letterSpacing: "-0.025em",
-            lineHeight: 1.15,
-            textWrap: "pretty",
-            color: "var(--pb-accent-ink)",
-          }}
-        >
-          Reclaiming coaching time needs HQ
-          <br className="hidden md:block" />{" "}
-          to reclaim the operating system.
-        </p>
       </div>
     </SectionShell>
   );

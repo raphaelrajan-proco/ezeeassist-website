@@ -935,11 +935,29 @@ fit is usually 1024 rather than the smallest screen.
   five). It is not a new claim, and it moves if the chart data moves.
 - The closing line ("Reclaiming coaching time needs HQ…") carries **no
   entrance animation** by request; it is a plain `<p>`.
-- **Both bars carry three greys, one per pillar below**, so the bar and the
-  caption ("the three blocks below") agree. A fourth, lightest tone was
+- **The two bars sit together**, the claim and its correction, with no card
+  around them. The comparison is the point and a box between them broke it.
+  Each bar's title is one uniform run rather than a bold figure plus a muted
+  tail, and neither carries a lede or a caption.
+- **Both bars carry three greys, one per pillar below.** A fourth, lightest tone was
   dropped and its share redistributed proportionally; `--pb-admin-4` went with
   it. Today is 31/26/23 + 20, the corrected bar is 8/7/5 + 80.
-- **The coaching segment's padding lives on an inner row, not on the flex item
+- **The pillar titles are underlined in their bar segment's tone**, not
+prefixed with a swatch square. Tone and segment have to stay in step, since
+that pairing is what lets the bar go unlabelled.
+
+**The report scraps are scattered, not gridded.** Each tilts and nudges by
+its index from a fixed `SCATTER` table rather than at random, so the layout
+is stable across renders and identical on server and client. A tidy grid
+argued the opposite of the point.
+
+**The capacity progression is one two-thirds-width box**, carrying 1 to 4 to
+10 as a single story, with the statement card in the last third. The steps
+stack below `sm`: three abreast leaves each 57px at 390 and "franchisees"
+alone needs 79. The invariant is stated once beneath the row, not repeated
+under each step where three identical labels read as a glitch.
+
+**The coaching segment's padding lives on an inner row, not on the flex item
   itself.** `flex-basis: 0%` cannot shrink a box below its own padding, so
   padding on the item sits *on top of* its share: the Today bar's coaching
   segment drew 22.6% while its label read 20%. The greys have no padding, so
