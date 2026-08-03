@@ -308,6 +308,24 @@ illustrative, not measured data. The point is that both numbers climb and
 impact per location does not. **Keep it on the coach's side**: nothing here
 mentions salary, cost, or headcount spend.
 
+**The time bars are 34px tall** (70% of the 48 they launched at, by
+request), and after the three pillars the section runs a second beat:
+a one-line lead ("Even with the time freed up, one coach's expertise
+only reaches so far.", clamp fitted to hold one line from lg up), then
+**the uncapped third bar** ("What it could be" · "The same coach,
+multiplied"): all-accent, full width, a 2px dashed threshold overhanging
+at exactly 70%, and a mask fade on the last stretch so the bar reads as
+leaving the page rather than filling it (mask, not gradient, so it
+follows the accent token in dark mode). A two-line muted caption closes
+the beat: the hours cap is what limits coverage and grows headcount.
+Then the As-locations-scale chart card.
+
+**Headless screenshot caveat**: the scaleX(0) initial state makes the
+bars zero-area, and headless Chrome's IntersectionObserver never
+intersects a zero-area element, so `whileInView` looks broken in CDP
+captures. Real browsers fire it; verify by forcing `transform: none`
+in the probe, not by "fixing" the component.
+
 Motion is `whileInView` throughout, matching the rest of the file. The bar
 animates as one `scaleX` from `transform-origin: left` rather than per
 segment, which keeps the proportions exact and never re-lays-out the flex row.
@@ -1236,9 +1254,13 @@ partial scrolls cannot retrigger it mid-read. Reduced motion still
 paints the completed state once. Kept against the two-line handoff, all
 prior explicit rules: the 5600ms draw (1.25x its 7000), the replay (it
 says run once), "A small fraction of one coach" (it says "A fraction"),
-the compact type scale, and the arrowed y-axis. Geometry: viewBox
-600x190, baseline y=142, x-axis at 176, y-axis 24 to 176, both axes
-arrowed.
+the compact type scale, and the arrowed y-axis. **The viewBox is
+900-wide** (plot 6 to 876), not the handoff's 600: rendered height is
+width times H/W and the blue rise is fixed on screen by its angle, so
+widening the box is what shortens the panel; the card now fits a
+standard Mac viewport whole. Markers are r=4.5 (heads 5.5, lines 2.5)
+to compensate for the wider units. Baseline and axis derive from
+CH_RISE; the angle stays exactly 10 degrees.
 
 **The coaching segment's padding lives on an inner row, not on the flex item
   itself.** `flex-basis: 0%` cannot shrink a box below its own padding, so

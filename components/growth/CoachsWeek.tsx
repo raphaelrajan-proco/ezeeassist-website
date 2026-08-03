@@ -86,8 +86,9 @@ function TimeBar({
         aria-label={ariaLabel}
         className="flex w-full overflow-hidden"
         style={{
-          height: "48px",
-          borderRadius: "12px",
+          /* 70% of the 48 it launched at, by request. */
+          height: "34px",
+          borderRadius: "10px",
           border: "1px solid var(--pb-border)",
           transformOrigin: "left",
         }}
@@ -139,6 +140,79 @@ function TimeBar({
         </div>
       </motion.div>
 
+    </div>
+  );
+}
+
+/* ── The uncapped bar ──────────────────────────────────────
+   The third bar: all coaching, running past the right edge. The dashed
+   rule at 70% is the threshold it blows through, and the fade on the
+   last stretch is the "keeps going" cue, so the bar reads as headed off
+   the page rather than filling it. Mask, not gradient, so the fade
+   follows the accent token in both themes. */
+
+function CouldBeBar() {
+  const reduceMotion = Boolean(useReducedMotion());
+  const fade = "linear-gradient(to right, black 60%, rgba(0,0,0,.55) 80%, rgba(0,0,0,.18) 92%, transparent 100%)";
+  return (
+    <div className="flex flex-col gap-3.5">
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+        <span
+          className="text-[19px] md:text-[22px]"
+          style={{
+            fontFamily: "var(--font-editorial)",
+            fontWeight: 700,
+            letterSpacing: "-0.02em",
+            color: "var(--pb-text)",
+          }}
+        >
+          What it could be
+        </span>
+        <span
+          className="text-[10.5px] uppercase"
+          style={{ fontFamily: "var(--pb-mono)", letterSpacing: "0.14em", color: "var(--pb-muted)" }}
+        >
+          The same coach, multiplied
+        </span>
+      </div>
+
+      <div className="relative">
+        <motion.div
+          role="img"
+          aria-label="What it could be: coaching runs past the cap instead of filling a fixed week."
+          className="w-full"
+          style={{ height: "34px", transformOrigin: "left" }}
+          initial={reduceMotion ? false : { scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.9, ease: EASE }}
+        >
+          <div
+            className="flex h-full w-full items-center"
+            style={{
+              backgroundColor: "var(--pb-accent)",
+              color: "#FFFFFF",
+              /* Rounded where it starts, open where it leaves. */
+              borderRadius: "10px 0 0 10px",
+              WebkitMaskImage: fade,
+              maskImage: fade,
+            }}
+          >
+            <span className="px-4 md:px-[18px] text-[12.5px] md:text-[13.5px]" style={{ fontWeight: 600 }}>
+              Coaching
+            </span>
+          </div>
+        </motion.div>
+        {/* The threshold the bar blows through, overhanging the bar so
+            it reads as a line crossed rather than a segment divider. */}
+        <span
+          aria-hidden="true"
+          style={{
+            position: "absolute", left: "70%", top: -8, bottom: -8, width: 0,
+            borderLeft: "2px dashed var(--pb-border-strong)",
+          }}
+        />
+      </div>
     </div>
   );
 }
@@ -388,15 +462,23 @@ const PILLARS = [
 const CH_MIN = 20, CH_MAX = 1000;
 /* Grey and blue coach ratios: locations per coach. */
 const CH_RA = 20, CH_RB = 40;
-const CH_X0 = 6, CH_X1 = 576;
-/* Both lines start on this baseline; the blue one climbs off it. */
-const CH_YBASE = 142;
+/* A 900-wide viewBox rather than the handoff's 600: rendered height is
+   width times H/W, and the blue line's on-screen rise is fixed by its
+   10 degree angle whatever the units, so the only way to shorten the
+   chart is to shave the ratio. With the vertical padding stripped to
+   the minimum the plot needs, the panel fits a standard Mac viewport
+   with the whole card in view. Angle preserved: rise and run share
+   units, and the svg scales uniformly. */
+const CH_X0 = 6, CH_X1 = 876;
 const CH_RISE = Math.tan((10 * Math.PI) / 180) * (CH_X1 - CH_X0);
-const CH_AXIS_Y = 176;
-const CH_YAXIS_TOP = 24;
+/* Both lines start on this baseline; the blue one climbs off it and
+   ends 18 units under the viewBox top. */
+const CH_YBASE = Math.round(18 + CH_RISE);
+const CH_AXIS_Y = CH_YBASE + 16;
+const CH_YAXIS_TOP = 10;
 /* 1.25x the handoff's 7000, by request. */
 const CH_DUR = 5600;
-const CH_VIEW_W = 600, CH_VIEW_H = 190;
+const CH_VIEW_W = 900, CH_VIEW_H = CH_AXIS_Y + 6;
 
 const chX = (loc: number) => CH_X0 + (CH_X1 - CH_X0) * ((loc - CH_MIN) / (CH_MAX - CH_MIN));
 const chYBlue = (x: number) => CH_YBASE - ((x - CH_X0) / (CH_X1 - CH_X0)) * CH_RISE;
@@ -465,10 +547,10 @@ function CapacityBlock() {
       const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
       c.setAttribute("cx", String(x));
       c.setAttribute("cy", String(y));
-      c.setAttribute("r", "3.5");
+      c.setAttribute("r", "4.5");
       c.setAttribute("fill", "var(--pb-panel)");
       c.setAttribute("stroke", stroke);
-      c.setAttribute("stroke-width", "1.6");
+      c.setAttribute("stroke-width", "1.9");
       group.appendChild(c);
     };
 
@@ -567,7 +649,7 @@ function CapacityBlock() {
   return (
     <div
       ref={rootRef}
-      className="flex flex-col gap-5 p-6 md:p-7 lg:px-8 lg:py-7"
+      className="flex flex-col gap-4 p-6 md:p-7 lg:px-8 lg:py-6"
       style={{
         backgroundColor: "var(--pb-panel)",
         border: "1px solid var(--pb-border)",
@@ -612,11 +694,11 @@ function CapacityBlock() {
         bandwidth, rising with half the headcount.
       </p>
 
-      <div aria-hidden="true" className="flex flex-col gap-4">
+      <div aria-hidden="true" className="flex flex-col gap-3.5">
         {/* Scenario one: Today. The dash swatches stand in for a legend;
             the labels sitting on their own stat rows is also what keeps
             the two lines distinguishable without colour. */}
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2">
           <ScenarioLabel color="var(--pb-muted)">Today</ScenarioLabel>
           <div className="flex flex-wrap items-end gap-x-7 gap-y-3">
             <div className="flex flex-col gap-1.5">
@@ -649,7 +731,7 @@ function CapacityBlock() {
         <div aria-hidden="true" style={{ height: 1, background: "var(--pb-border)" }} />
 
         {/* Scenario two: What it should be. All accent. */}
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-2">
           <ScenarioLabel color="var(--pb-accent-ink)">What it should be</ScenarioLabel>
           <div className="flex flex-wrap items-end gap-x-7 gap-y-3">
             <div className="flex flex-col gap-1.5">
@@ -683,7 +765,7 @@ function CapacityBlock() {
         {/* Chart panel: the statement card's tint, since this panel now
             makes that card's argument. */}
         <div
-          className="flex flex-col gap-1.5 p-4"
+          className="flex flex-col gap-1 p-3"
           style={{
             borderRadius: "14px",
             backgroundColor: "var(--pb-accent-soft)",
@@ -708,12 +790,12 @@ function CapacityBlock() {
             {/* Grey first, blue second, so blue sits on top where the
                 two converge at the left edge. The grey line never moves
                 vertically; the blue rises at exactly 10 degrees. */}
-            <line ref={lineARef} x1={CH_X0} y1={CH_YBASE} x2={CH_X0} y2={CH_YBASE} stroke="var(--pb-muted)" strokeWidth="2" strokeLinecap="round" />
+            <line ref={lineARef} x1={CH_X0} y1={CH_YBASE} x2={CH_X0} y2={CH_YBASE} stroke="var(--pb-muted)" strokeWidth="2.5" strokeLinecap="round" />
             <g ref={markersARef} />
-            <circle ref={headARef} cx={CH_X0} cy={CH_YBASE} r="4.5" fill="var(--pb-muted)" />
-            <line ref={lineBRef} x1={CH_X0} y1={CH_YBASE} x2={CH_X0} y2={CH_YBASE} stroke="var(--pb-accent-ink)" strokeWidth="2" strokeLinecap="round" />
+            <circle ref={headARef} cx={CH_X0} cy={CH_YBASE} r="5.5" fill="var(--pb-muted)" />
+            <line ref={lineBRef} x1={CH_X0} y1={CH_YBASE} x2={CH_X0} y2={CH_YBASE} stroke="var(--pb-accent-ink)" strokeWidth="2.5" strokeLinecap="round" />
             <g ref={markersBRef} />
-            <circle ref={headBRef} cx={CH_X0} cy={CH_YBASE} r="4.5" fill="var(--pb-accent-ink)" />
+            <circle ref={headBRef} cx={CH_X0} cy={CH_YBASE} r="5.5" fill="var(--pb-accent-ink)" />
           </svg>
           {/* Tight under the axis: the old panel left this floating far
               below the rule. */}
@@ -826,6 +908,41 @@ export default function CoachsWeek() {
               {p.card}
             </motion.div>
           ))}
+        </div>
+
+        {/* The hand-off from time to reach: even a freed-up week is one
+            person's week. Lead-line voice, fitted to hold one line from
+            lg up: the 68-char string measures ~0.494px per char per 1px
+            of font, so the ceilings are 26.6 / 32 / 34.3 at 1024 / 1205
+            / the capped 1152 container. */}
+        <div className="flex flex-col gap-6">
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.85, ease: EASE }}
+            style={{
+              fontFamily: "var(--font-editorial)",
+              fontWeight: 700,
+              fontSize: "clamp(1.375rem, 2.55vw, 2.125rem)",
+              letterSpacing: "-0.028em",
+              lineHeight: 1.1,
+              textWrap: "pretty",
+              color: "var(--pb-text)",
+            }}
+          >
+            Even with the time freed up, one coach&rsquo;s expertise only reaches so far.
+          </motion.h3>
+
+          <CouldBeBar />
+
+          <p
+            className="-mt-1 text-[13.5px] md:text-[14.5px] max-w-[860px]"
+            style={{ color: "var(--pb-muted)", lineHeight: 1.55 }}
+          >
+            A coach&rsquo;s time is capped by the hours in a day. That cap is what
+            limits coverage, and why headcount grows as the system grows.
+          </p>
         </div>
 
         <div className="-mt-4 md:-mt-6">
