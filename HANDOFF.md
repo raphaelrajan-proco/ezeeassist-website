@@ -27,7 +27,7 @@ before picking the work back up in a fresh session.
 | 2 | The problem (bar, 3 pillars, capacity block, closing) | `components/growth/CoachsWeek.tsx` | `#the-week` |
 | 3 | The reveal (operating system diagram) | `components/TheSystem.tsx` | `#the-system` |
 | 4 | On demand (3-tile showcase) | `components/growth/Capabilities.tsx` | `#capabilities` |
-| 5 | Always on (pinned 4-band stepper) | `components/growth/AlwaysOn.tsx` | `#always-on` |
+| 5 | Always on (pinned split screen, scrolling day) | `components/growth/AlwaysOn.tsx` | `#always-on` |
 | 6 | Control center (5 guarantees, static) | `components/growth/TrustAndControl.tsx` + `ControlCenterIcons.tsx` | `#trust` |
 | 7 | Proof (sticky story stack, pinned headline) | `components/growth/CustomerProof.tsx` | `#proof` |
 | 8 | FAQ | `components/growth/Objections.tsx` + `lib/data/objections.ts` | `#objections` |
@@ -523,87 +523,87 @@ check dark mode.
 
 ## Always on (section 5)
 
-Fifteen moments from one day in four time bands, then a counter.
+Twenty-six moments from one day in four time bands, then a counter.
 
-**Structurally this is not the handoff's wall.** The handoff specified a
-normal-flow wall with all four bands stacked and an accent thread drawn
-between the two Store #331 cards. On request it was rebuilt as **one pinned
-container that steps through the bands**: the header, the key and the ticker
-stay put on screen and only the middle band viewport changes. The thread was
-dropped with that change, since it spanned bands that are no longer visible at
-the same time. The #331 pairing now survives in copy alone: the 6:50pm card
-reads "The 6:00am draft".
+**Structurally this is a pinned split screen**, the third layout this section
+has had. The handoff specified a normal-flow wall; that became a pinned
+stepper; on request it is now: **left ~39% holds the thesis and never moves,
+right ~61% scrolls the whole day as one continuous column.** The band tags
+and the key sit fixed above the card column, outside the scroller. A fade
+mask at the column's top and bottom lets the neighbouring band show through
+dimmed, which is the deliberate cue that there is more to scroll. The
+counter sits in flow after the pinned track, so it arrives under both halves
+once the last band is spent, and then the section scrolls away.
 
-Everything else from the handoff still holds, in particular:
+The old accent thread between the two Store #331 cards survives in copy
+alone: the 6:50pm card reads "The 6:00am draft".
 
 **The colour is the argument, not decoration.** Neutral means the system
 detected and handled it, accent means an automated play drawing on what the
 network learned (exactly six cards), violet marks the single
-franchisee-authored moment. Verified 8 / 6 / 1. Do not tint more.
+franchisee-authored moment. Now 19 / 6 / 1. Do not tint more.
 
 The 3:45pm #214 closing audit is the same one the on demand section shows
 being built. **Deliberate continuity across sections, not duplication.**
 
-### How the stepping works
+### How the scroller works
 
-The section is `100vh + (n-1) * STEP_VH` tall and its child is `sticky top-0
-h-screen`. **The page's own scroll position picks the active band**, so
-nothing hijacks the wheel: scrolling behaves normally and the container simply
-holds still while it happens. The arrow and the dots call `goTo`, which scrolls
-to that band's offset, so **click and scroll drive one shared piece of state**
-rather than two that can disagree. The arrow wraps from the last band back to
-the first.
+The track wrapper is `100vh + range` tall, where **`range` is the measured
+stack overflow** (`stack.scrollHeight - viewport.clientHeight`, kept fresh by
+a ResizeObserver; `DEFAULT_RANGE` 1400 is only the SSR fallback). The sticky
+child pins for that distance and the page's scroll maps **one to one** onto
+the stack's translate: a notch of page scroll moves the cards a notch, so
+nothing hijacks the wheel. At 1205x793: stack 1939, viewport 598, range 1341.
 
-At 1205x793: section 2339, scroll track 1546, steps land at 0 / 515 / 1031 /
-1546.
+**The transform is written straight to the DOM in a rAF, not through React
+state.** Re-rendering a 26-card tree at scroll rate is the failure mode this
+avoids; only the active tag index goes through `setState`, and only when it
+changes.
 
-**`STEP_VH` (65) is the scroll distance per band.** Lower feels twitchy,
-higher makes the section feel stuck.
+**The rects already carry the translate.** Band offsets are computed as
+`band.top - stack.top` (both shifted equally, so the difference is static),
+and the active-tag probe compares band tops against the viewport rect. The
+first build added the translate on top of rect reads and the tag never
+flipped; do not reintroduce that.
 
-### The height budget is the whole constraint
+The tag row is the step control: clicking a tag scrolls the page to where
+that band rests just under the top fade, same shared state as scrolling.
+Smooth scroll, `auto` under reduced motion. The old dots and wrap-around
+arrow went away with the stepper.
 
-Header, band viewport, step control and ticker all share one screen once the
-section pins. At 793 they measure 204 / 340 / 34 / 124 with `py-6` and
-`gap-5`, summing to exactly 793 with no overflow. **Anything added here has to
-come out of something else.** This is why the h2 tops out at 32px rather than
-the handoff's 44, and why the counter numeral is 52px rather than 62.
+**`PAD` (48) is both the stack's vertical padding and the fade depth**, so a
+band resting at either extreme sits clear of the fade and everything beyond
+it dims. Change one and change the other.
 
-**The band viewport is a fixed 340px and its grid is `content-center`.** Fixed
-so the header and ticker never shift between a three-card band and the
-six-card one, verified identical at every step; centred so a three-card band
-sits in the middle rather than leaving a hole under one row. A fixed two-row
-grid was tried first and left that hole.
+**The pinned grid's top padding is `calc(var(--nav-block) + 10px)`.** The
+floating nav pill overlays the top of a pinned screen; with plain `py-6` the
+tag row sat behind it. Same lesson as the proof deck's pinned headline.
 
-**Below lg there is no pin and no stepper**: every band stacks in normal flow,
-which is the old wall layout. Pinning a phone viewport is a bad trade and 15
-cards do not fit one screen anyway.
+**Below lg there is no pin and no split**: every band stacks in normal flow
+with per-band headings (the stacked layout has no fixed tag row to say where
+you are), the key in the header, and the counter at the end.
 
-### Two figures that are not real yet
+### Figures that are not real yet
 
-- **The counter is static at 1,834** ("in the last 24 hours"), by request.
-  The animated count-up died in production: its IntersectionObserver observed
-  the stacked layout's element, which unmounts when the desktop pin swaps in
-  on mount, so it sat at 0. The hook was removed with it. `COUNT` carries the
-  TODO to wire the real number.
-- **All fifteen moments are placeholder-real.** The handoff is explicit that
-  invented moments read as invented to a franchisor, and that **the timestamps
-  matter most**: 9:14am is credible where 9:00am is not.
+- **The counter is static at 1,834**, by request. `COUNT` carries the TODO to
+  wire the real number. Its takeaway line reads "None of these outcomes
+  needed a coach to be awake", updated from "None needed" on request.
+- **All twenty-six moments are placeholder-real.** The handoff is explicit
+  that invented moments read as invented to a franchisor, and that **the
+  timestamps matter most**: 9:14am is credible where 9:00am is not. The
+  eleven added in the split-screen pass (cooler drift, register recon,
+  expiring certs, overnight Q&A triage, short delivery, huddle brief, local
+  campaign, refund edge case, lease window, royalty reports, business
+  reviews) follow the same rule.
 
-### Other things that will bite
+### Verifying this needs a real browser
 
-**The counter uses `setInterval`, not `requestAnimationFrame`.** rAF is paused
-outright in a background tab, which strands the count part-way; an interval is
-only throttled. Progress is read from the clock either way. Verified reaching
-1,847 and drifting to 1,848.
-
-**Card entrances replay by remounting the grid** (`key={band.title}`), not by
-toggling a class, so the 70ms stagger reads on every step rather than only the
-first.
-
-**Verifying this in the preview pane needs care.** `goTo` calls
-`window.scrollTo`, which fights the `translateY` framing trick, and the pane
-pins `scrollY` at 0. Neutralise `window.scrollTo` and set the sticky child to
-`position: static` before framing a screenshot, or the shot comes back blank.
+The preview pane pins `scrollY` at 0, which makes a scroll-driven section
+unobservable there. The working loop is headless Chrome over CDP
+(`wall.mjs` in the session scratchpad): drive `window.scrollTo` through
+`Runtime.evaluate`, screenshot per position. The `translateY`-on-`<main>`
+framing trick does not work here either, since the section reads
+`window.scrollY` directly.
 
 ### Colours
 

@@ -3,17 +3,21 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
- * The always-on wall, built from a supplied design handoff. Fifteen
- * moments from one day across the network in four time bands, with a
- * live counter beneath. Fifteen cards say "here are examples"; the
- * counter says "this is the floor, not the ceiling."
+ * The always-on wall. Twenty-six moments from one day across the network
+ * in four time bands. From lg up the section pins as a split screen: the
+ * thesis holds still on the left while the page's own scroll drives the
+ * card column on the right, one to one, like a page inside the page. The
+ * band tags and the key sit fixed above the card column; a fade at the
+ * column's top and bottom lets the neighbouring band show through
+ * dimmed, which is the cue that there is more to scroll. The counter
+ * waits in flow below the pinned screen, so it arrives under both halves
+ * once the last band is spent, and the section moves on.
  *
  * Tokens live on `.ed-wall` in globals.css, not here.
  */
 
 const MONO = "var(--wl-mono)";
 const JAKARTA = "var(--font-editorial)";
-const EASE_OUT = "cubic-bezier(.2,.8,.2,1)";
 
 /* ── Icons ─────────────────────────────────────────────────
    The icons carry trigger type at a glance. Someone scanning without
@@ -37,6 +41,11 @@ const ICONS = {
   calendar:  <><rect x="3.5" y="5" width="17" height="15" rx="2.5" /><path d="M3.5 10h17M8 3.5v3M16 3.5v3" /></>,
   trend:     <><path d="M4 16.5 9.5 11l3.5 3.5L20 7.5" /><path d="M15.5 7.5H20V12" /></>,
   folder:    <path d="M3.5 7.5A2 2 0 0 1 5.5 5.5h3.2l2 2.5h7.8a2 2 0 0 1 2 2v7.5a2 2 0 0 1-2 2H5.5a2 2 0 0 1-2-2z" />,
+  bell:      <><path d="M18.5 16h-13l1.6-2.6V9.7a4.9 4.9 0 0 1 9.8 0v3.7z" /><path d="M10 19a2 2 0 0 0 4 0" /></>,
+  receipt:   <><path d="M6.5 3.5h11V20l-1.8-1.3-1.9 1.3-1.8-1.3-1.9 1.3-1.8-1.3L6.5 20z" /><path d="M9.5 8.5h5M9.5 12h5M9.5 15.5h3" /></>,
+  shield:    <><path d="M12 3.5 5.5 6v5.4c0 4.2 2.7 7.3 6.5 8.6 3.8-1.3 6.5-4.4 6.5-8.6V6z" /><path d="m9.2 11.6 2.1 2.1 3.6-4" /></>,
+  truck:     <><path d="M3.5 6.5h10V16h-10zM13.5 9.5h4l2.5 3V16h-6.5" /><circle cx="7.2" cy="17.6" r="1.7" /><circle cx="16.4" cy="17.6" r="1.7" /></>,
+  megaphone: <><path d="M4.5 10.5v3.4l2.5.4V10zM7 10l12.5-4.8v13.6L7 14.3z" /><path d="m9.3 15 1 4 2.6-.7-.9-3.2" /></>,
 } as const;
 
 type IconName = keyof typeof ICONS;
@@ -44,7 +53,7 @@ type IconName = keyof typeof ICONS;
 function Icon({ name }: { name: IconName }) {
   return (
     <svg
-      width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
       strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"
       aria-hidden="true" style={{ flex: "none" }}
     >
@@ -53,7 +62,7 @@ function Icon({ name }: { name: IconName }) {
   );
 }
 
-/* ── The fifteen moments ───────────────────────────────────
+/* ── The twenty-six moments ────────────────────────────────
    TODO: replace with real log moments before launch. The handoff is
    explicit that invented moments read as invented to a franchisor, and
    that the timestamps matter most: 9:14am is credible where 9:00am is
@@ -74,17 +83,23 @@ const BANDS: { title: string; note?: string; cards: Card[] }[] = [
     title: "Overnight",
     note: "while nobody is awake",
     cards: [
-      { icon: "moon",      meta: "2:04am · all locations", title: "Closing photos scored", body: "9 stations flagged, tasks opened", tone: "neutral" },
-      { icon: "package",   meta: "3:40am · Store #519",    title: "Inventory hit critical", body: "Reorder drafted at approved pricing", tone: "neutral" },
-      { icon: "clipboard", meta: "4:00am · West territory", title: "Coach brief assembled", body: "12 locations, ranked by need", tone: "neutral" },
+      { icon: "bell",      meta: "1:12am · Store #263",    title: "Walk-in cooler drifted",  body: "Alert sent, service ticket opened", tone: "neutral" },
+      { icon: "moon",      meta: "2:04am · all locations", title: "Closing photos scored",   body: "9 stations flagged, tasks opened", tone: "neutral" },
+      { icon: "receipt",   meta: "2:47am · Store #118",    title: "Registers reconciled",    body: "One deposit off, flagged for the owner", tone: "neutral" },
+      { icon: "shield",    meta: "3:15am · all locations", title: "Expiring certifications pulled", body: "Six due in 30 days, reminders queued", tone: "neutral" },
+      { icon: "package",   meta: "3:40am · Store #519",    title: "Inventory hit critical",  body: "Reorder drafted at approved pricing", tone: "neutral" },
+      { icon: "clipboard", meta: "4:00am · West territory", title: "Coach brief assembled",  body: "12 locations, ranked by need", tone: "neutral" },
     ],
   },
   {
     title: "Before the doors open",
     cards: [
+      { icon: "message",   meta: "5:45am · all locations", title: "Overnight questions cleared", body: "14 answered from the manual, 2 held for HQ", tone: "neutral" },
       { icon: "sunrise",   meta: "6:00am · Store #331", title: "Soft week detected",    body: "62% booked · reactivation draft ready", tone: "accent", thread: "a" },
+      { icon: "truck",     meta: "6:15am · Store #519", title: "Delivery came in short", body: "Credit request drafted against the invoice", tone: "neutral" },
       { icon: "people",    meta: "6:30am · Store #052", title: "Attach rate slipping",  body: "Top-quartile locations run a 30 second add-on script. Here it is.", tone: "accent" },
       { icon: "personAdd", meta: "7:00am · Store #402", title: "New hire starts today", body: "Day-one sequence started", tone: "neutral" },
+      { icon: "document",  meta: "7:40am · Store #144", title: "Morning huddle brief ready", body: "Yesterday's numbers and today's bookings, one card", tone: "neutral" },
     ],
   },
   {
@@ -94,6 +109,8 @@ const BANDS: { title: string; note?: string; cards: Card[] }[] = [
       { icon: "document",   meta: "10:05am · Store #214", title: "Started a national retail proposal", body: "4 locations have quoted this. Range, terms, and win rate attached.", tone: "accent" },
       { icon: "star",       meta: "11:40am · Store #263", title: "One-star review posted",           body: "Response drafted, held for owner", tone: "neutral" },
       { icon: "storefront", meta: "12:30pm · Store #087", title: "Competitor opened nearby",         body: "6 locations faced this. What held revenue, and what didn't.", tone: "accent" },
+      { icon: "megaphone",  meta: "1:20pm · Store #052",  title: "Local campaign assembled",         body: "Hours and offer merged into the brand template", tone: "neutral" },
+      { icon: "shield",     meta: "2:35pm · Store #402",  title: "Refund edge case resolved",        body: "Policy cited, approval routed to the owner", tone: "neutral" },
       /* The same closing audit the on demand section shows being built.
          Deliberate continuity across sections, not duplication. */
       { icon: "tools",      meta: "3:45pm · Store #214",  title: "An owner built a closing audit",   body: "Photo checklist per station. Live in twenty minutes, no developer.", tone: "violet" },
@@ -104,7 +121,10 @@ const BANDS: { title: string; note?: string; cards: Card[] }[] = [
     title: "On a longer clock",
     cards: [
       { icon: "calendar", meta: "14 days out · Store #263",  title: "Insurance lapsing", body: "Owner notified, task opened", tone: "neutral" },
+      { icon: "document", meta: "30 days out · Store #144",  title: "Lease renewal window opens", body: "Terms summary drafted for the owner", tone: "neutral" },
       { icon: "trend",    meta: "Week 6 · Store #402",       title: "Ramp behind cohort", body: "What the fastest 10 openings did in week 6, in order", tone: "accent" },
+      { icon: "receipt",  meta: "Month end · all locations", title: "Royalty reports assembled", body: "Filed to HQ, no chasing", tone: "neutral" },
+      { icon: "people",   meta: "Quarter start · West territory", title: "Business reviews drafted", body: "Twelve decks, one per location, numbers filled", tone: "neutral" },
       { icon: "folder",   meta: "Quarter close · 5 stores",  title: "Audit docs missing", body: "Chased nightly until filed", tone: "neutral" },
     ],
   },
@@ -123,68 +143,24 @@ const TONE: Record<Tone, { bg: string; border: string; meta: string; shadow?: st
    TODO: wire to the real count of the last 24 hours. */
 const COUNT = 1834;
 
-/* ── Step control ──────────────────────────────────────────
+/* ── Scroll plumbing ───────────────────────────────────────
    The section pins for the length of its scroll track and the page's own
-   scroll position picks the active band, so nothing hijacks the wheel:
-   scrolling behaves exactly as it does everywhere else on the page, and
-   the container simply holds still while it happens. The arrow jumps to
-   the next band's scroll offset, so clicking and scrolling drive one
-   shared piece of state rather than two.
+   scroll maps one to one onto the card column's translate, so nothing
+   hijacks the wheel: a notch of page scroll moves the cards a notch. The
+   transform is written straight to the DOM in a rAF, not through state,
+   so the 26-card tree does not re-render sixty times a second; only the
+   active tag index goes through React.
 
-   STEP_VH is the scroll distance per band. Lower feels twitchy, higher
-   makes the section feel stuck. */
-const STEP_VH = 65;
+   PAD is the stack's own vertical padding and the depth of the fade mask
+   at each end of the viewport: at either extreme the resting band sits
+   clear of the fade, and anything beyond it shows through dimmed. */
+const PAD = 48;
+const FADE = `linear-gradient(to bottom, transparent 0px, black ${PAD}px, black calc(100% - ${PAD}px), transparent 100%)`;
+/* Server-render fallback for the track height; replaced by the measured
+   stack overflow on mount. */
+const DEFAULT_RANGE = 1400;
 
-function useStepper(count: number, enabled: boolean) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const [index, setIndex] = useState(0);
-
-  /* Scroll offset that puts band `i` on screen. Also what the arrow
-     scrolls to, which is what keeps click and scroll in agreement. */
-  const offsetFor = useCallback((i: number) => {
-    const el = sectionRef.current;
-    if (!el) return 0;
-    const top = el.getBoundingClientRect().top + window.scrollY;
-    const track = el.offsetHeight - window.innerHeight;
-    if (track <= 0 || count < 2) return top;
-    return top + (track * i) / (count - 1);
-  }, [count]);
-
-  useEffect(() => {
-    if (!enabled) { setIndex(0); return; }
-    const el = sectionRef.current;
-    if (!el) return;
-    let raf = 0;
-    const read = () => {
-      raf = 0;
-      const top = el.getBoundingClientRect().top + window.scrollY;
-      const track = el.offsetHeight - window.innerHeight;
-      if (track <= 0) return;
-      const p = (window.scrollY - top) / track;
-      const next = Math.max(0, Math.min(count - 1, Math.round(p * (count - 1))));
-      setIndex((cur) => (cur === next ? cur : next));
-    };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(read); };
-    read();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, [count, enabled]);
-
-  const goTo = useCallback((i: number) => {
-    const target = Math.max(0, Math.min(count - 1, i));
-    setIndex(target);
-    window.scrollTo({ top: offsetFor(target), behavior: "smooth" });
-  }, [count, offsetFor]);
-
-  return { sectionRef, index, goTo };
-}
-
-/** Pinning and stepping are desktop only. Below lg the bands stack. */
+/** Pinning and the split layout are desktop only. Below lg the bands stack. */
 function useIsDesktop() {
   const [is, setIs] = useState(false);
   useEffect(() => {
@@ -199,33 +175,34 @@ function useIsDesktop() {
 
 /* ── Pieces ────────────────────────────────────────────── */
 
-function MomentCard({ card, i, animate }: { card: Card; i: number; animate: boolean }) {
+function MomentCard({ card }: { card: Card }) {
   const t = TONE[card.tone];
   return (
     <div
-      className="flex flex-col gap-[9px] p-5"
+      className="flex flex-col gap-[7px] p-4"
       style={{
         background: t.bg,
         border: `1px solid ${t.border}`,
-        borderRadius: 16,
+        borderRadius: 14,
         boxShadow: t.shadow,
-        animation: animate ? `ed-wl-rise .5s ${EASE_OUT} both ${i * 70}ms` : undefined,
       }}
     >
-      <div className="flex items-center gap-[9px]" style={{ color: t.meta }}>
+      <div className="flex items-center gap-2" style={{ color: t.meta }}>
         <Icon name={card.icon} />
-        <span style={{ fontFamily: MONO, fontSize: 12 }}>{card.meta}</span>
+        <span style={{ fontFamily: MONO, fontSize: 11.5 }}>{card.meta}</span>
       </div>
-      <div style={{ fontFamily: JAKARTA, fontSize: 17, fontWeight: 700, letterSpacing: "-0.015em", color: "var(--wl-text)" }}>
+      <div style={{ fontFamily: JAKARTA, fontSize: 16, fontWeight: 700, letterSpacing: "-0.015em", color: "var(--wl-text)" }}>
         {card.title}
       </div>
-      <div className="text-[14px]" style={{ lineHeight: 1.5, color: "var(--wl-muted)" }}>
+      <div className="text-[13.5px]" style={{ lineHeight: 1.45, color: "var(--wl-muted)" }}>
         {card.body}
       </div>
     </div>
   );
 }
 
+/** Mobile only: the stacked layout keeps per-band headings because it has
+    no fixed tag row telling the reader where they are. */
 function BandHeading({ band }: { band: (typeof BANDS)[number] }) {
   return (
     <div className="flex items-center gap-4 pb-[18px]">
@@ -242,16 +219,16 @@ function BandHeading({ band }: { band: (typeof BANDS)[number] }) {
 
 function Legend() {
   return (
-    <div className="flex flex-wrap gap-x-[22px] gap-y-1.5">
+    <div className="flex flex-wrap gap-x-[18px] gap-y-1.5">
       {[
         { label: "Detected in your data", dot: "var(--wl-muted)", dim: true },
         { label: "Automated play, drawing on your network", dot: "var(--wl-accent)" },
         { label: "Built by an owner", dot: "var(--wl-violet)" },
       ].map((l) => (
-        <span key={l.label} className="flex items-center gap-2 text-[13px]" style={{ color: "var(--wl-muted)" }}>
+        <span key={l.label} className="flex items-center gap-2 text-[12.5px]" style={{ color: "var(--wl-muted)" }}>
           <span
             aria-hidden="true"
-            style={{ width: 9, height: 9, borderRadius: "50%", background: l.dot, opacity: l.dim ? 0.6 : 1, flex: "none" }}
+            style={{ width: 8, height: 8, borderRadius: "50%", background: l.dot, opacity: l.dim ? 0.6 : 1, flex: "none" }}
           />
           {l.label}
         </span>
@@ -260,10 +237,9 @@ function Legend() {
   );
 }
 
-function Counter({ innerRef }: { innerRef?: React.RefObject<HTMLDivElement | null> }) {
+function Counter() {
   return (
     <div
-      ref={innerRef}
       className="grid grid-cols-1 md:grid-cols-[minmax(0,340px)_1fr] gap-5 md:gap-10 items-center px-6 py-5 md:px-8 md:py-6"
       style={{ background: "var(--wl-panel-2)", border: "1px solid var(--wl-border)", borderRadius: 20 }}
     >
@@ -285,8 +261,9 @@ function Counter({ innerRef }: { innerRef?: React.RefObject<HTMLDivElement | nul
         className="text-[14px] md:text-[15.5px] md:border-l md:pl-10 max-w-[660px]"
         style={{ lineHeight: 1.55, color: "var(--wl-text)", borderColor: "var(--wl-border)", textWrap: "pretty" }}
       >
-        None needed a coach to be awake. And what any one location learns,
-        every location gets, anonymized, aggregated, and approved by you.
+        None of these outcomes needed a coach to be awake. And what any one
+        location learns, every location gets, anonymized, aggregated, and
+        approved by you.
       </div>
     </div>
   );
@@ -296,55 +273,108 @@ function Counter({ innerRef }: { innerRef?: React.RefObject<HTMLDivElement | nul
 
 export default function AlwaysOn() {
   const isDesktop = useIsDesktop();
-  const { sectionRef, index, goTo } = useStepper(BANDS.length, isDesktop);
-  const [reduceMotion, setReduceMotion] = useState(false);
+
+  const trackRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const stackRef = useRef<HTMLDivElement>(null);
+  const bandRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  const [range, setRange] = useState(DEFAULT_RANGE);
+  const [active, setActive] = useState(0);
 
   useEffect(() => {
-    setReduceMotion(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    if (!isDesktop) return;
+    const track = trackRef.current, viewport = viewportRef.current, stack = stackRef.current;
+    if (!track || !viewport || !stack) return;
+
+    let raf = 0;
+    const read = () => {
+      raf = 0;
+      const r = Math.max(1, stack.scrollHeight - viewport.clientHeight);
+      const top = track.getBoundingClientRect().top + window.scrollY;
+      const y = Math.max(0, Math.min(r, window.scrollY - top));
+      stack.style.transform = `translate3d(0, ${-y}px, 0)`;
+      /* Active tag: the band under a probe just above the viewport's
+         middle. Flips as the incoming band crosses the centre. The rects
+         are read after the transform above, so the offsets already carry
+         the translate; comparing against the viewport is enough. */
+      const vpTop = viewport.getBoundingClientRect().top;
+      const probe = viewport.clientHeight * 0.45;
+      let idx = 0;
+      bandRefs.current.forEach((b, i) => {
+        if (b && b.getBoundingClientRect().top - vpTop <= probe) idx = i;
+      });
+      setActive((cur) => (cur === idx ? cur : idx));
+    };
+    const schedule = () => { if (!raf) raf = requestAnimationFrame(read); };
+    const measure = () => {
+      setRange(Math.max(1, stack.scrollHeight - viewport.clientHeight));
+      schedule();
+    };
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(stack);
+    ro.observe(viewport);
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", measure);
+      if (raf) cancelAnimationFrame(raf);
+      stack.style.transform = "";
+    };
+  }, [isDesktop]);
+
+  /* Tag click: scroll the page to where that band rests just under the
+     top fade. Same shared state as scrolling, nothing hijacked. */
+  const goTo = useCallback((i: number) => {
+    const track = trackRef.current, viewport = viewportRef.current, stack = stackRef.current;
+    const band = bandRefs.current[i];
+    if (!track || !viewport || !stack || !band) return;
+    const r = Math.max(1, stack.scrollHeight - viewport.clientHeight);
+    /* Both rects carry the same translate, so the difference is the
+       band's static offset within the stack. */
+    const bandTop = band.getBoundingClientRect().top - stack.getBoundingClientRect().top;
+    const target = Math.max(0, Math.min(r, bandTop - PAD));
+    const top = track.getBoundingClientRect().top + window.scrollY;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    window.scrollTo({ top: top + target, behavior: reduce ? "auto" : "smooth" });
   }, []);
-
-  const band = BANDS[index];
-  const atEnd = index === BANDS.length - 1;
-
-  const header = (
-    <div className="flex flex-col gap-3 max-w-[900px]">
-      <div
-        className="uppercase"
-        style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, letterSpacing: ".18em", color: "var(--wl-muted)" }}
-      >
-        Always on
-      </div>
-      <h2
-        style={{
-          fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.1,
-          color: "var(--wl-text)",
-          /* Smaller than the handoff's flat 44px: the header, the band
-             viewport and the counter all have to share one screen once
-             the section pins. */
-          fontSize: "clamp(1.375rem, 0.62rem + 2.1vw, 2rem)",
-        }}
-      >
-        Your best coach, at every location, at the hour it matters.
-      </h2>
-      <p className="text-[14.5px] md:text-[15.5px] max-w-[780px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
-        Nobody pulled any of this. Each one started as a play built once, and
-        some of them draw on what the rest of your network already learned.
-      </p>
-      <Legend />
-    </div>
-  );
 
   /* ── Below lg: no pin, every band stacked ── */
   if (!isDesktop) {
     return (
       <section id="always-on" className="ed-wall w-full scroll-mt-24" style={{ backgroundColor: "var(--wl-bg)" }}>
         <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-16 flex flex-col gap-9">
-          {header}
+          <div className="flex flex-col gap-3 max-w-[900px]">
+            <div
+              className="uppercase"
+              style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, letterSpacing: ".18em", color: "var(--wl-muted)" }}
+            >
+              Always on
+            </div>
+            <h2
+              style={{
+                fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.1,
+                color: "var(--wl-text)",
+                fontSize: "clamp(1.375rem, 0.62rem + 2.1vw, 2rem)",
+              }}
+            >
+              Your best coach, at every location, at the hour it matters.
+            </h2>
+            <p className="text-[14.5px] md:text-[15.5px] max-w-[780px]" style={{ lineHeight: 1.55, color: "var(--wl-muted)" }}>
+              Nobody pulled any of this. Each one started as a play built once, and
+              some of them draw on what the rest of your network already learned.
+            </p>
+            <Legend />
+          </div>
           {BANDS.map((b) => (
             <div key={b.title}>
               <BandHeading band={b} />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {b.cards.map((c, i) => <MomentCard key={c.title} card={c} i={i} animate={false} />)}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {b.cards.map((c) => <MomentCard key={c.title} card={c} />)}
               </div>
             </div>
           ))}
@@ -354,81 +384,107 @@ export default function AlwaysOn() {
     );
   }
 
-  /* ── lg and up: one pinned container, bands step inside it ──
-     The scroll track below the pin is what the page scrolls through; the
-     pinned child never moves, so the header, the key and the ticker stay
-     put and only the band viewport changes. */
+  /* ── lg and up: pinned split screen ──
+     Left holds the thesis, right scrolls the day. The track wrapper's
+     extra height is exactly the stack's overflow, so page scroll and
+     card scroll run one to one. The counter sits in flow after the
+     track: it enters from the bottom, under both halves, as the pin
+     releases. */
   return (
-    <section
-      id="always-on"
-      ref={sectionRef}
-      className="ed-wall w-full scroll-mt-24 relative"
-      style={{ backgroundColor: "var(--wl-bg)", height: `calc(100vh + ${(BANDS.length - 1) * STEP_VH}vh)` }}
-    >
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="mx-auto max-w-7xl h-full px-6 md:px-12 lg:px-16 py-6 flex flex-col justify-center gap-5">
-          {header}
-
-          {/* The viewport is a fixed height whatever the band holds, so
-              the header, the key and the ticker never shift between
-              steps. Rows centre inside it, so a three-card band sits in
-              the middle rather than leaving a hole under one row. */}
-          <div className="flex flex-col flex-none" style={{ height: 340 }}>
-            <BandHeading band={band} />
-            {/* key remounts on every step, which is what replays the
-                stagger rather than showing the next band already settled */}
-            <div
-              key={band.title}
-              className="grid grid-cols-3 gap-5 flex-1 min-h-0 content-center"
-            >
-              {band.cards.map((c, i) => (
-                <MomentCard key={c.title} card={c} i={i} animate={!reduceMotion} />
-              ))}
-            </div>
-          </div>
-
-          {/* Step control, centred under the band viewport */}
-          <div className="flex items-center justify-center gap-4">
-            <div className="flex items-center gap-2" role="tablist" aria-label="Time of day">
-              {BANDS.map((b, i) => (
-                <button
-                  key={b.title}
-                  role="tab"
-                  aria-selected={i === index}
-                  aria-label={b.title}
-                  onClick={() => goTo(i)}
-                  className="rounded-full transition-all"
-                  style={{
-                    width: i === index ? 22 : 8, height: 8,
-                    background: i === index ? "var(--wl-accent)" : "var(--wl-border)",
-                    border: "none", cursor: "pointer", padding: 0,
-                  }}
-                />
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={() => goTo(atEnd ? 0 : index + 1)}
-              aria-label={atEnd ? "Back to Overnight" : `Next: ${BANDS[index + 1].title}`}
-              className="flex items-center justify-center rounded-full transition-colors"
-              style={{
-                width: 34, height: 34, flex: "none", cursor: "pointer",
-                background: "var(--wl-panel)", border: "1px solid var(--wl-border)",
-                color: "var(--wl-text)", boxShadow: "var(--wl-shadow)",
-              }}
-            >
-              <svg
-                width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
-                style={{ transform: atEnd ? "rotate(180deg)" : undefined }}
+    <section id="always-on" className="ed-wall w-full scroll-mt-24" style={{ backgroundColor: "var(--wl-bg)" }}>
+      <div ref={trackRef} className="relative" style={{ height: `calc(100vh + ${range}px)` }}>
+        <div className="sticky top-0 h-screen overflow-hidden">
+          <div
+            className="mx-auto grid h-full max-w-7xl gap-10 px-6 md:px-12 lg:px-16 pb-6 xl:gap-14"
+            style={{
+              gridTemplateColumns: "minmax(0, 7fr) minmax(0, 11fr)",
+              /* The floating nav pill overlays the top of the pinned
+                 screen; without this the tag row sits behind it. */
+              paddingTop: "calc(var(--nav-block) + 10px)",
+            }}
+          >
+            {/* Left: the fixed half */}
+            <div className="flex flex-col justify-center gap-4">
+              <div
+                className="uppercase"
+                style={{ fontFamily: MONO, fontSize: 14, fontWeight: 600, letterSpacing: ".18em", color: "var(--wl-muted)" }}
               >
-                <path d="M12 5v14M6 13l6 6 6-6" />
-              </svg>
-            </button>
-          </div>
+                Always on
+              </div>
+              <h2
+                style={{
+                  fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.12,
+                  color: "var(--wl-text)",
+                  /* Larger than the old single-column header: the left
+                     half is this text's whole job now. */
+                  fontSize: "clamp(1.5rem, 0.9rem + 1.7vw, 2.3rem)",
+                }}
+              >
+                Your best coach, at every location, at the hour it matters.
+              </h2>
+              <p className="text-[15px]" style={{ lineHeight: 1.6, color: "var(--wl-muted)", maxWidth: 420 }}>
+                Nobody pulled any of this. Each one started as a play built once, and
+                some of them draw on what the rest of your network already learned.
+              </p>
+            </div>
 
-          <Counter />
+            {/* Right: fixed tags and key, then the scrolling day */}
+            <div className="flex h-full min-h-0 flex-col">
+              <div className="flex flex-col gap-2.5 pb-3.5">
+                <div className="flex flex-wrap gap-2" role="tablist" aria-label="Time of day">
+                  {BANDS.map((b, i) => (
+                    <button
+                      key={b.title}
+                      role="tab"
+                      aria-selected={i === active}
+                      onClick={() => goTo(i)}
+                      className="rounded-full transition-colors"
+                      style={{
+                        fontSize: 12.5, fontWeight: 600, letterSpacing: "-0.005em",
+                        padding: "5px 12px", cursor: "pointer",
+                        background: i === active ? "var(--wl-text)" : "transparent",
+                        color: i === active ? "var(--wl-bg)" : "var(--wl-muted)",
+                        border: `1px solid ${i === active ? "var(--wl-text)" : "var(--wl-border)"}`,
+                      }}
+                    >
+                      {b.title}
+                    </button>
+                  ))}
+                </div>
+                <Legend />
+              </div>
+
+              {/* The scroller. The mask dims whatever crosses the top or
+                  bottom PAD, which is the faded glimpse of the next band. */}
+              <div
+                ref={viewportRef}
+                className="relative min-h-0 flex-1 overflow-hidden"
+                style={{ WebkitMaskImage: FADE, maskImage: FADE }}
+              >
+                <div
+                  ref={stackRef}
+                  className="flex flex-col gap-9"
+                  style={{ padding: `${PAD}px 0`, willChange: "transform" }}
+                >
+                  {BANDS.map((b, bi) => (
+                    <div
+                      key={b.title}
+                      ref={(el) => { bandRefs.current[bi] = el; }}
+                      className="grid grid-cols-2 gap-4"
+                    >
+                      {b.cards.map((c) => <MomentCard key={c.title} card={c} />)}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      {/* Arrives under both halves once the last band is spent. */}
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-4 pb-16">
+        <Counter />
       </div>
     </section>
   );
