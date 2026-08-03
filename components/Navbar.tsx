@@ -17,24 +17,24 @@ import ThemeToggle from "@/components/ThemeToggle";
 type NavItem = { label: string; href: string; desc: string };
 type NavGroup = { heading: string; items: NavItem[] };
 
+/* TODO: Coaching Agent and Compliance Agent have no dedicated pages yet;
+   they point at the nearest live surface until those exist. */
 const platformGroups: NavGroup[] = [
   {
-    heading: "Capabilities",
+    heading: "Agents",
     items: [
-      { label: "Overview",            href: "/solution",              desc: "The execution layer for franchise networks." },
-      { label: "Unified Answers",     href: "/#capabilities",         desc: "One place operators ask, on the channel they use." },
-      { label: "Compliance at Scale", href: "/#capabilities",         desc: "Locations checked continuously against your standard." },
-      { label: "Workflows",           href: "/solution/agents",       desc: "Recurring work runs on a schedule or a trigger." },
-      { label: "Reporting",           href: "/#capabilities",         desc: "Live performance without a request queue." },
-      { label: "AI Apps",             href: "/#capabilities",         desc: "Describe the tool your network needs." },
+      { label: "Support Agent",    href: "/platform/ai-agent",  desc: "Answers every question, cited from your approved source." },
+      { label: "Ticketing Agent",  href: "/platform/ticketing", desc: "Triages, routes, and resolves what needs a human." },
+      { label: "Coaching Agent",   href: "/platform/insights",  desc: "Briefs your coaches before every call." },
+      { label: "Compliance Agent", href: "/#capabilities",      desc: "Locations checked continuously against your standard." },
     ],
   },
   {
-    heading: "Control",
+    heading: "Platform",
     items: [
-      { label: "Control Plane",  href: "/#trust",                desc: "Set who sees what and what runs without a human." },
-      { label: "Integrations",   href: "/solution/integrations", desc: "250+ native connections. No migration." },
-      { label: "Security",       href: "/security",              desc: "Dedicated infrastructure, encrypted end to end." },
+      { label: "Agentic Workflow Builder", href: "/platform/workflows",    desc: "Recurring work runs on a schedule or a trigger." },
+      { label: "Control Center",           href: "/#trust",                desc: "Set who sees what and what runs without a human." },
+      { label: "Integrations",             href: "/platform/integrations", desc: "250+ native connections. No migration." },
     ],
   },
 ];
@@ -43,34 +43,52 @@ const solutionsGroups: NavGroup[] = [
   {
     heading: "By role",
     items: [
-      { label: "Coaches and FBCs",      href: "/industries/franchising",                           desc: "Walk into every call already prepared." },
-      { label: "Franchisor HQ",         href: "/industries/franchising/franchisors",               desc: "Publish the standard, then watch it hold." },
-      { label: "Franchisees and Teams", href: "/industries/franchising/multi-unit-franchisees",    desc: "Answers and tools at the hour you work." },
+      { label: "HQ team",     href: "/industries/franchising/franchisors",            desc: "Publish the standard, then watch it hold." },
+      { label: "Coaches",     href: "/industries/franchising",                        desc: "Walk into every call already prepared." },
+      { label: "Franchisees", href: "/industries/franchising/multi-unit-franchisees", desc: "Answers and tools at the hour you work." },
+    ],
+  },
+];
+
+/* TODO: per-vertical industry pages do not exist yet; every vertical
+   points at the /industries hub until they do. Universities and the
+   multi-brand entry have real pages. */
+const industriesGroups: NavGroup[] = [
+  {
+    heading: "By industry",
+    items: [
+      { label: "Home Services",          href: "/industries", desc: "Trades and route-based brands with crews in the field." },
+      { label: "Health & Wellness",      href: "/industries", desc: "Studios, gyms, salons, and med-spa networks." },
+      { label: "Senior Care",            href: "/industries", desc: "In-home care and community operators." },
+      { label: "Child-care & Education", href: "/industries", desc: "Early learning, enrichment, and tutoring brands." },
+      { label: "Food & Beverage",        href: "/industries", desc: "QSR, fast casual, and cafe networks." },
     ],
   },
   {
-    heading: "By outcome",
+    heading: "Also serving",
     items: [
-      { label: "Support deflection", href: "/#capabilities", desc: "Repetitive questions stop reaching your inbox." },
-      { label: "Compliance",         href: "/#capabilities", desc: "Certifications and audits tracked nightly." },
-      { label: "Growth coaching",    href: "/#the-week",     desc: "Coaching time back, at every location." },
+      { label: "Real-Estate",              href: "/industries",                desc: "Brokerages and property service networks." },
+      { label: "Universities",             href: "/industries/universities",   desc: "Campus operations and student services." },
+      { label: "Multi-brand and PE-backed", href: "/industries/multi-location", desc: "Platform companies running several concepts." },
+      { label: "All Industries",           href: "/industries",                desc: "Every network we serve, in one place." },
     ],
   },
 ];
 
-/* Customers was folded in here; Case Studies leads the list. */
+/* TODO: no pricing page exists yet; Pricing books the conversation
+   instead of shipping a 404. */
 const resourcesItems: NavItem[] = [
-  { label: "Case Studies",   href: "/case-studies",   desc: "What brands changed, and what it returned." },
-  { label: "Blog",           href: "/blog",           desc: "Franchise operations insights and product news." },
-  { label: "ROI Calculator", href: "/roi-calculator", desc: "See what your network could recover." },
-  { label: "Comparisons",    href: "/why-ezeeassist", desc: "How purpose-built AI differs from a general assistant." },
-  { label: "Changelog",      href: "/changelog",      desc: "New capabilities, fixes, and product updates." },
+  { label: "Case Studies",   href: "/case-studies",       desc: "What brands changed, and what it returned." },
+  { label: "Blog",           href: "/blog",               desc: "Franchise operations insights and product news." },
+  { label: "Pricing",        href: "/speak-to-an-expert", desc: "Talk through plans with the team." },
+  { label: "ROI Calculator", href: "/roi-calculator",     desc: "See what your network could recover." },
+  { label: "Trust Center",   href: "/security",           desc: "Security, privacy, and how your data is handled." },
 ];
 
 const companyItems: NavItem[] = [
-  { label: "About",   href: "/about",   desc: "Who we are and why we build this." },
-  { label: "Careers", href: "/careers", desc: "Open roles across engineering and go to market." },
-  { label: "Contact", href: "/contact", desc: "Talk to our team." },
+  { label: "Why EZee?", href: "/why-ezeeassist", desc: "How purpose-built AI differs from a general assistant." },
+  { label: "Careers",   href: "/careers",        desc: "Open roles across engineering and go to market." },
+  { label: "Contact",   href: "/contact",        desc: "Talk to our team." },
 ];
 
 /* Both marks share viewBox 0 0 583.2 151.2. Sized to the pill: 40px in a
@@ -80,7 +98,7 @@ const companyItems: NavItem[] = [
 const LOGO_H = 48;
 const LOGO_W = Math.round((583.2 / 151.2) * LOGO_H);
 
-type DropdownKey = "platform" | "solutions" | "resources" | "company" | null;
+type DropdownKey = "platform" | "solutions" | "industries" | "resources" | "company" | null;
 
 /* ─── Menu primitives ──────────────────────────────────── */
 
@@ -111,7 +129,12 @@ function GroupHeading({ children }: { children: React.ReactNode }) {
 
 function GroupedPanel({ groups, onClose, width }: { groups: NavGroup[]; onClose: () => void; width: string }) {
   return (
-    <div className={`grid grid-cols-2 gap-8 p-6 ${width}`}>
+    /* One column per group: Solutions carries a single group, the others
+       two, and a hardcoded two-column grid left it half empty. */
+    <div
+      className={`grid gap-8 p-6 ${width}`}
+      style={{ gridTemplateColumns: `repeat(${groups.length}, minmax(0, 1fr))` }}
+    >
       {groups.map((g) => (
         <div key={g.heading}>
           <GroupHeading>{g.heading}</GroupHeading>
@@ -245,16 +268,18 @@ export default function Navbar() {
   const triggerActive = "text-[#00AEEF]";
 
   const dropdowns: { key: Exclude<DropdownKey, null>; label: string; panel: React.ReactNode }[] = [
-    { key: "platform",  label: "Platform",  panel: <GroupedPanel groups={platformGroups}  onClose={closeAll} width="w-[720px]" /> },
-    { key: "solutions", label: "Solutions", panel: <GroupedPanel groups={solutionsGroups} onClose={closeAll} width="w-[680px]" /> },
+    { key: "platform",   label: "Platform",   panel: <GroupedPanel groups={platformGroups}   onClose={closeAll} width="w-[720px]" /> },
+    { key: "solutions",  label: "Solutions",  panel: <GroupedPanel groups={solutionsGroups}  onClose={closeAll} width="w-[360px]" /> },
+    { key: "industries", label: "Industries", panel: <GroupedPanel groups={industriesGroups} onClose={closeAll} width="w-[720px]" /> },
   ];
 
   /* Accordion body shared by the mobile sheet. */
   const mobileAccordions = (
     <ul className="flex flex-col gap-1">
       {[
-        { key: "platform"  as const, label: "Platform",  groups: platformGroups },
-        { key: "solutions" as const, label: "Solutions", groups: solutionsGroups },
+        { key: "platform"   as const, label: "Platform",   groups: platformGroups },
+        { key: "solutions"  as const, label: "Solutions",  groups: solutionsGroups },
+        { key: "industries" as const, label: "Industries", groups: industriesGroups },
       ].map(({ key, label, groups }) => (
         <li key={key}>
           <button

@@ -15,7 +15,9 @@ export default function Objections() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <SectionShell id="objections">
+    /* alt: light grey, so the band reads as its own section against the
+       white proof deck above it. */
+    <SectionShell id="objections" alt>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

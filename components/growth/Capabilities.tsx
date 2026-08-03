@@ -21,8 +21,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 /* Tabs 1 and 2 hold 11s. Tab 3 holds 30s because it rotates three app
    examples at 10s each inside itself, and its progress bar fills over the
    whole 30 rather than per example. */
-const DWELL = 11_000;
-const APP_DWELL = 10_000;
+const DWELL = 7_000;
+const APP_DWELL = 7_000;
 const APPS_COUNT = 3;
 const TAB_DWELL = (i: number) => (i === 2 ? APP_DWELL * APPS_COUNT : DWELL);
 
@@ -461,6 +461,9 @@ export default function Capabilities() {
   const sectionRef = useRef<HTMLElement>(null);
   const tabTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const appTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  /* Where the rotation is, readable without being a dependency: the
+     resume effect continues from here rather than resetting to 0. */
+  const tabRef = useRef(0);
 
   const stopTimers = useCallback(() => {
     if (tabTimer.current) clearTimeout(tabTimer.current);
@@ -472,6 +475,7 @@ export default function Capabilities() {
   /** Enter a tab: reset its app rotation and schedule the next tab. */
   const go = useCallback((i: number) => {
     stopTimers();
+    tabRef.current = i;
     setTab(i);
     setApp(0);
     if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -494,10 +498,13 @@ export default function Capabilities() {
 
   useEffect(() => {
     if (!armed || paused) { stopTimers(); return; }
-    go(0);
+    /* Resume from wherever the rotation is, not from 0: resetting on
+       every unpause was what made a click on a pill feel dead, because
+       leaving the section afterwards snapped it back to the first tab. */
+    go(tabRef.current);
     return stopTimers;
     /* `go` is stable and re-running this on every tab change would restart
-       the cycle from 0 forever, so the tab is deliberately not a dep. */
+       the cycle forever, so the tab state is deliberately not a dep. */
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [armed, paused]);
 
@@ -508,7 +515,11 @@ export default function Capabilities() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const select = (i: number) => go(i);
+  /* A click restarts the rotation at that tab, running. Clearing the
+     pause matters: the pointer is necessarily over the section when it
+     clicks, and a rotation that stays frozen until the mouse leaves
+     reads as broken. */
+  const select = (i: number) => { setPaused(false); go(i); };
 
   const activeTab = TABS[tab];
   const activeApp = APPS[app];
@@ -549,11 +560,10 @@ export default function Capabilities() {
           </h2>
         </div>
 
-        <div
-          className="flex flex-col lg:flex-row gap-6 lg:gap-7 lg:items-stretch"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
+        {/* The hover pause lives on the stage alone, not this wrapper:
+            pausing from the rail too is what made pill clicks feel dead,
+            since the pointer parked there kept the rotation frozen. */}
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-7 lg:items-stretch">
           {/* Rail */}
           <div className="lg:w-[268px] lg:flex-none flex flex-col lg:justify-center gap-3.5">
             <div className="flex flex-row lg:flex-col gap-3.5 overflow-x-auto lg:overflow-visible" role="tablist" aria-label="On demand">
@@ -621,6 +631,8 @@ export default function Capabilities() {
             id="on-demand-stage"
             role="tabpanel"
             aria-label={activeTab.label}
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
             className="relative flex-1 min-w-0 rounded-3xl overflow-hidden lg:h-[580px]"
             style={{ border: "1px solid var(--sc-border)", background: "var(--sc-stage)" }}
           >

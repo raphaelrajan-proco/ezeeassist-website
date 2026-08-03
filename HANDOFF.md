@@ -36,8 +36,8 @@ before picking the work back up in a fresh session.
 The showcase pills expose anchors: `#answers`, `#reporting`, `#ai-apps`, and
 the section opens the matching scene from `location.hash`. `#agents` and
 `#compliance` went away when the rail dropped from five pills to three.
-**`Footer.tsx` still links `/#agents`, which is dead.** See the showcase
-section below.
+The footer and the navbar now share one link set (the nav's five
+buckets), so the old dead `/#agents` link is gone.
 
 **Every section shares one container**: `max-w-7xl px-6 md:px-12 lg:px-16`,
 which is `SectionShell`'s and the hero's. Measured content edges are 64 at
@@ -117,6 +117,17 @@ The eyebrow is bold uppercase at 0.16em, which is wide, so tracking is the
 lever if it ever has to be larger: dropping to 0.10em buys about 1.5px.
 
 ## The floating nav pill
+
+**The menu is five buckets** (Platform, Solutions, Industries, Resources,
+Company), restructured by request around the agent suite. The footer mirrors
+the same five link arrays (exported per bucket in `Footer.tsx`); the
+editorial footer adds Trust, and Compare was dropped. TODOs live on the data:
+Coaching Agent points at `/platform/insights` and Compliance Agent at
+`/#capabilities` until dedicated pages exist, every industry vertical points
+at the `/industries` hub, and Pricing points at `/speak-to-an-expert`
+because no pricing page exists. `GroupedPanel` renders one column per group,
+so the single-group Solutions panel is 360 wide while Platform and
+Industries run two columns at 720.
 
 **Homepage only.** `Navbar.tsx` branches on `floating = pathname === "/"`. Every
 other route keeps the banded header it always had, so the pill is not yet a
@@ -339,24 +350,31 @@ still renders an `<img>` box, so check `naturalWidth > 0`, not just presence.
 
 **The flow legend sits above the governed pill**, swapping the handoff's
 order. Both keep the handoff's two y slots (394 and 440), exchanged. The
-stacked version below 1200 follows the same order.
+stacked version below 1200 follows the same order. The pill is 190 wide
+(was 164, where the text touched the rounded ends), left-shifted to 565 to
+stay centred on the core's 660 axis.
 
 **The payoff line sits under the lead line as one sentence**, at weight 500
 against the headline's 700: it is the consequence of the headline, not a
-second one. It used to close the section as three columns.
+second one. Its ink is `rgba(238,242,248,0.92)`, brightened from `--os-muted`
+by request but held under the headline's pure near-white.
 
 **The right column is eight 200px chips, one per out-wire.** Seven are static
-and the eighth is a ticker: it counts from 8 past a hundred over 4.2s on an
-accelerating cubic once the canvas is 35% visible, then **lands on the phrase
-"100s of locations more" rather than a figure** (a specific number there would
-be a claim; the point is only that it keeps going). That chip inverts to a
-light fill with dark bold 13px ink so it separates from the seven above it.
-The end label measures 164px against 174px of inner width, so it fits without
-truncating. `setInterval`, not rAF, which is paused outright in a background
-tab and would strand the count.
+and the eighth is a ticker: it counts from 8 to 99 over 21s (5x the original
+4.2s, by request) on an accelerating cubic once the canvas is 35% visible,
+then **lands on the phrase "100s of locations" rather than a figure** (a
+specific number there would be a claim; the point is only that it keeps
+going, and the phrase is what carries the count past two digits). The chip
+matches the other panels rather than inverting to a white fill; it stands
+out through a soft accent glow (`--os-accent-soft2` border plus a blue box
+shadow) and bold 14.5px ink, 1.25x the named chips' 11.5. The end label was
+shortened from "100s of locations more" because "more" wrapped it to two
+lines at the larger type. `setInterval`, not rAF, which is paused outright
+in a background tab and would strand the count.
 
 **The systems card names types, not vendors**, with the brand names rotating
-in a marquee beneath. The track holds two identical copies and shifts by
+in a marquee beneath. The card's title and its NOTHING MIGRATES tag stack
+vertically; sharing a row squeezed the title onto two lines. The track holds two identical copies and shifts by
 exactly half, which is what makes the loop seamless. The integration SVGs
 under `/public/logos/integrations/` are no longer referenced by this page.
 
@@ -420,9 +438,9 @@ the same `armed` flag** and carries it in its key: gated on `active` alone it
 filled against a stopped timer and landed part-way through the real first
 dwell.
 
-**Dwell is per tab.** Tabs 1 and 2 hold 11s. Tab 3 holds 30s, because it
-rotates three app examples at 10s each inside itself, and its bar fills over
-the whole 30. Entering any tab resets the app index to 0.
+**Dwell is per tab.** Tabs 1 and 2 hold 7s. Tab 3 holds 21s, because it
+rotates three app examples at 7s each inside itself, and its bar fills over
+the whole 21. Entering any tab resets the app index to 0.
 
 **Tab 3 rotates three industry examples** (spa closing audit, swim school
 make-up booker, senior care hiring pipeline), each with its own photo, scrim
@@ -436,9 +454,13 @@ explicit that only tab 3 changes: do not rewrite their labels, subs, scenes,
 the headline or the eyebrow from any prototype.
 
 Rebuilt from the v2 handoff. Three pills beside a photo stage, auto-advancing
-every **9.5s** (was five pills at 6.5s). Hovering pauses, clicking a pill jumps
-and resets the timer, `prefers-reduced-motion` stops the auto-advance and every
-entrance while leaving the pills clickable.
+per the dwell above. **The hover pause lives on the stage alone, not the
+rail**, and the resume effect continues from the current tab rather than
+resetting to 0: pausing from the rail kept the rotation frozen while the
+pointer parked there, and the reset-to-0 on unpause made pill clicks feel
+dead. A click clears the pause and restarts the rotation at that pill.
+`prefers-reduced-motion` stops the auto-advance and every entrance while
+leaving the pills clickable.
 
 Each scene proves its tile's claim rather than illustrating it. **Keep that
 intent** if the copy is revisited:
@@ -493,10 +515,9 @@ mount. Going from five pills to three **dropped `#agents` and `#compliance`**.
 `#answers`, `#reporting` and `#ai-apps` were kept on the three surviving tiles
 precisely so the footer keeps resolving.
 
-**`components/Footer.tsx` still links `/#agents`, which is now dead.** The
-footer is shared with every other route, so it was left alone rather than
-edited unilaterally. The fix is one line: point it at `/solution/agents`, which
-exists and is what the nav already uses.
+**The dead `/#agents` footer link is gone**: the footer now mirrors the
+navbar's buckets (see the nav section). The showcase's live anchors stay
+`#answers`, `#reporting`, `#ai-apps`.
 
 ### Colours
 

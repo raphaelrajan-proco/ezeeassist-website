@@ -50,7 +50,9 @@ const PLAYBOOKS = [
    eight. */
 const NAMED_STORES = 7;
 const TICKER_FROM = NAMED_STORES + 1;
-const TICKER_TO = 148;
+/* Two digits by design: the chip hands over to the phrase at 99, so the
+   "100s" label is what carries the count past three figures. */
+const TICKER_TO = 99;
 
 /* What the systems are, rather than whose they are. The brand names live
    in the marquee below, where they can rotate. */
@@ -154,9 +156,11 @@ function PlaybooksCard() {
 function SystemsCard() {
   return (
     <div style={{ ...panelStyle, padding: "18px 20px", display: "flex", flexDirection: "column", gap: 12 }}>
-      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: 8 }}>
+      {/* Stacked, not side by side: sharing the row squeezed the title
+          onto two lines. The title holds one line and the tag follows. */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
         <PanelTitle>Your data and systems</PanelTitle>
-        <div style={{ fontFamily: MONO, fontSize: 9, letterSpacing: ".12em", color: "var(--os-accent-ink)", textAlign: "right" }}>
+        <div style={{ fontFamily: MONO, fontSize: 9, letterSpacing: ".12em", color: "var(--os-accent-ink)" }}>
           NOTHING MIGRATES
         </div>
       </div>
@@ -281,14 +285,19 @@ function StoreChip({ label, live = false }: { label: string; live?: boolean }) {
     <span
       style={{
         height: 46, boxSizing: "border-box", borderRadius: 10,
-        background: live ? "#E3EFF7" : "var(--os-panel)",
-        border: `1px solid ${live ? "#E3EFF7" : "var(--os-border)"}`,
+        /* Same panel as the named chips; the ticker stands out through
+           the glow and the type, not a swapped background. The white
+           fill it had before overpowered the column. */
+        background: "var(--os-panel)",
+        border: `1px solid ${live ? "var(--os-accent-soft2)" : "var(--os-border)"}`,
+        boxShadow: live ? "0 0 0 1px rgba(0, 174, 239, 0.18), 0 0 16px rgba(0, 174, 239, 0.28)" : undefined,
         display: "flex", alignItems: "center",
         paddingLeft: 14, paddingRight: 12,
         fontFamily: MONO,
-        fontSize: live ? 13 : 11.5,
+        /* 1.25x the named chips' 11.5. */
+        fontSize: live ? 14.5 : 11.5,
         fontWeight: live ? 700 : 400,
-        color: live ? "#0A1626" : "var(--os-text)",
+        color: "var(--os-text)",
         /* Tabular figures so the ticker does not jitter as it climbs. */
         fontVariantNumeric: "tabular-nums",
       }}
@@ -339,9 +348,12 @@ function usePulses(): Pulse[] {
    `setInterval`, not `requestAnimationFrame`: rAF is paused outright in a
    background tab, which would strand the count part-way. Progress is read
    from the clock, so the easing is right whatever the callback rate is. */
-const TICKER_MS = 4200;
-/** What the chip reads once the count is done. */
-const TICKER_END_LABEL = "100s of locations more";
+/* 5x the original 4200 by request: the climb is the point, so it gets
+   time to be watched rather than glimpsed. */
+const TICKER_MS = 21000;
+/** What the chip reads once the count is done. Short enough to hold one
+    line at the ticker's larger type in the 210px column. */
+const TICKER_END_LABEL = "100s of locations";
 
 function useLocationTicker(ref: React.RefObject<HTMLDivElement | null>) {
   const [value, setValue] = useState<number | null>(TICKER_FROM);
@@ -478,8 +490,10 @@ function OsCanvas() {
         <div style={{ position: "absolute", left: 532, top: 394, width: 256, zIndex: 2 }}>
           <FlowLegend />
         </div>
-        <div style={{ position: "absolute", left: 578, top: 440, zIndex: 2 }}>
-          <GovernedPill width={164} />
+        {/* 190 wide so the text clears the pill's rounded ends; left
+            shifted to keep it centred on the core's 660 axis. */}
+        <div style={{ position: "absolute", left: 565, top: 440, zIndex: 2 }}>
+          <GovernedPill width={190} />
         </div>
 
         {/* One chip per out-wire, so the column and the wires stay in
@@ -576,7 +590,9 @@ export default function TheSystem() {
           className="-mt-3 text-[15px] md:text-[19px]"
           style={{
             fontFamily: JAKARTA, fontWeight: 500, letterSpacing: "-0.015em",
-            color: "var(--os-muted)", whiteSpace: "nowrap",
+            /* Brighter than --os-muted by request, dimmer than the pure
+               white headline so the hierarchy holds. */
+            color: "rgba(238, 242, 248, 0.92)", whiteSpace: "nowrap",
           }}
         >
           Your coaches multiplied. Your standards held. Your numbers growing.

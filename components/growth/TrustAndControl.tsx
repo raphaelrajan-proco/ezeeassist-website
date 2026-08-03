@@ -115,7 +115,9 @@ export default function TrustAndControl() {
               >
                 {title}
               </h3>
-              <p className="text-[14.5px]" style={{ lineHeight: 1.6, color: "var(--cc-muted)" }}>
+              {/* 0.8x of the 14.5 it launched at, by request: the bodies
+                  read as support under the titles, not as a second voice. */}
+              <p className="text-[11.5px]" style={{ lineHeight: 1.6, color: "var(--cc-muted)" }}>
                 {body}
               </p>
             </motion.div>

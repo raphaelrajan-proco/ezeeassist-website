@@ -6,93 +6,72 @@ import { Globe, Share2, Link2, ArrowRight } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { CLOSING_BASE } from "@/components/growth/closing-band";
 
+/* ── Link data ─────────────────────────────────────────────
+   Mirrors the navbar's five buckets. Change the nav and change this, or
+   the two drift. TODOs from the nav apply here too: Coaching and
+   Compliance Agent pages, per-vertical industry pages and a pricing page
+   do not exist yet, so those links point at the nearest live surface.
+   ───────────────────────────────────────────────────────── */
+
+const platformLinks = [
+  { label: "Support Agent",           href: "/platform/ai-agent" },
+  { label: "Ticketing Agent",         href: "/platform/ticketing" },
+  { label: "Coaching Agent",          href: "/platform/insights" },
+  { label: "Compliance Agent",        href: "/#capabilities" },
+  { label: "Agentic Workflow Builder",href: "/platform/workflows" },
+  { label: "Control Center",          href: "/#trust" },
+  { label: "Integrations",            href: "/platform/integrations" },
+];
+
+const solutionsLinks = [
+  { label: "HQ team",     href: "/industries/franchising/franchisors" },
+  { label: "Coaches",     href: "/industries/franchising" },
+  { label: "Franchisees", href: "/industries/franchising/multi-unit-franchisees" },
+];
+
+const industriesLinks = [
+  { label: "Home Services",           href: "/industries" },
+  { label: "Health & Wellness",       href: "/industries" },
+  { label: "Senior Care",             href: "/industries" },
+  { label: "Child-care & Education",  href: "/industries" },
+  { label: "Food & Beverage",         href: "/industries" },
+  { label: "Real-Estate",             href: "/industries" },
+  { label: "Universities",            href: "/industries/universities" },
+  { label: "Multi-brand and PE-backed", href: "/industries/multi-location" },
+  { label: "All Industries",          href: "/industries" },
+];
+
+const resourcesLinks = [
+  { label: "Case Studies",   href: "/case-studies" },
+  { label: "Blog",           href: "/blog" },
+  { label: "Pricing",        href: "/speak-to-an-expert" },
+  { label: "ROI Calculator", href: "/roi-calculator" },
+  { label: "Trust Center",   href: "/security" },
+];
+
+const companyLinks = [
+  { label: "Why EZee?", href: "/why-ezeeassist" },
+  { label: "Careers",   href: "/careers" },
+  { label: "Contact",   href: "/contact" },
+];
+
+/* Banded footer (every route but the homepage): four columns, legal
+   links live in the bottom bar. */
 const footerLinks = {
-  Platform: [
-    { label: "Platform Overview", href: "/solution" },
-    { label: "Answers",           href: "/#answers" },
-    { label: "Agents",            href: "/#agents" },
-    { label: "Reporting",         href: "/#reporting" },
-    { label: "AI Apps",           href: "/#ai-apps" },
-    { label: "Ticketing",         href: "/solution/ticketing" },
-    { label: "Integrations",      href: "/solution/integrations" },
-    { label: "Governance",        href: "/#trust" },
-  ],
-  Industries: [
-    { label: "Franchising",         href: "/industries/franchising" },
-    { label: "Multi-Location",      href: "/industries/multi-location" },
-    { label: "Universities",        href: "/industries/universities" },
-  ],
-  Resources: [
-    { label: "Blog",           href: "/blog" },
-    { label: "Case Studies",   href: "/case-studies" },
-    { label: "Why EZee Assist",href: "/why-ezeeassist" },
-    { label: "ROI Calculator", href: "/roi-calculator" },
-    { label: "Changelog",      href: "/changelog" },
-    { label: "Security",       href: "/security" },
-  ],
-  Company: [
-    { label: "Careers",       href: "/careers" },
-    { label: "Contact",       href: "/contact" },
-    { label: "Privacy Policy",href: "/privacy" },
-    { label: "Accessibility", href: "/accessibility" },
-  ],
+  Platform: platformLinks,
+  Industries: industriesLinks,
+  Resources: resourcesLinks,
+  Company: companyLinks,
 };
 
 /* ── Editorial (homepage) footer: six columns ──────────────
-   TODO: Build the dedicated comparison pages. The Compare column points at
-   /why-ezeeassist for now rather than shipping three empty routes.
-   ───────────────────────────────────────────────────────── */
+   The nav's five buckets plus Trust. Compare was dropped by request. */
 const editorialFooterColumns: { heading: string; links: { label: string; href: string }[] }[] = [
-  {
-    heading: "Platform",
-    links: [
-      { label: "Overview",       href: "/solution" },
-      { label: "Unified Answers",href: "/#capabilities" },
-      { label: "Compliance",     href: "/#capabilities" },
-      { label: "Workflows",      href: "/solution/agents" },
-      { label: "Reporting",      href: "/#capabilities" },
-      { label: "AI Apps",        href: "/#capabilities" },
-      { label: "Control Plane",  href: "/#trust" },
-      { label: "Integrations",   href: "/solution/integrations" },
-    ],
-  },
-  {
-    heading: "Solutions",
-    links: [
-      { label: "Coaches and FBCs",      href: "/industries/franchising" },
-      { label: "Franchisor HQ",         href: "/industries/franchising/franchisors" },
-      { label: "Franchisees and Teams", href: "/industries/franchising/multi-unit-franchisees" },
-      { label: "Support deflection",    href: "/#capabilities" },
-      { label: "Compliance",            href: "/#capabilities" },
-      { label: "Growth coaching",       href: "/#the-week" },
-    ],
-  },
-  {
-    heading: "Industries",
-    links: [
-      { label: "Franchising",    href: "/industries/franchising" },
-      { label: "Multi-Location", href: "/industries/multi-location" },
-      { label: "Universities",   href: "/industries/universities" },
-    ],
-  },
-  {
-    heading: "Compare",
-    links: [
-      { label: "vs generic AI assistants",   href: "/why-ezeeassist" },
-      { label: "vs franchise ops platforms", href: "/why-ezeeassist" },
-      { label: "vs building it yourself",    href: "/why-ezeeassist" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "About",     href: "/about" },
-      { label: "Customers", href: "/case-studies" },
-      { label: "Careers",   href: "/careers" },
-      { label: "Contact",   href: "/contact" },
-      { label: "Blog",      href: "/blog" },
-    ],
-  },
+  { heading: "Platform",   links: platformLinks },
+  { heading: "Solutions",  links: solutionsLinks },
+  { heading: "Industries", links: industriesLinks },
+  { heading: "Resources",  links: resourcesLinks },
+  { heading: "Company",    links: companyLinks },
   {
     heading: "Trust",
     links: [
