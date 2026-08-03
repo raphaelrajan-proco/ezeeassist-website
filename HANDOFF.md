@@ -411,6 +411,29 @@ To test the reveal in the preview pane, which pins `scrollY` at 0:
 
 ## On demand showcase (section 4)
 
+**The rotation is gated on an IntersectionObserver, not on mount.** It arms
+the first time the section is 30% visible, then runs `go(0)`, so every viewer
+starts on "Ask for anything" rather than arriving mid-cycle on tab 3. One arm
+only; scrolling away and back does not reset. **The progress bar is gated on
+the same `armed` flag** and carries it in its key: gated on `active` alone it
+filled against a stopped timer and landed part-way through the real first
+dwell.
+
+**Dwell is per tab.** Tabs 1 and 2 hold 11s. Tab 3 holds 30s, because it
+rotates three app examples at 10s each inside itself, and its bar fills over
+the whole 30. Entering any tab resets the app index to 0.
+
+**Tab 3 rotates three industry examples** (spa closing audit, swim school
+make-up booker, senior care hiring pipeline), each with its own photo, scrim
+and choreography, keyed on the app id so every example replays the entrance
+sequence. Three dots top-right show position, tab 3 only. **The first example
+is the same 3:45pm Store #214 moment that appears on the always-on wall**;
+that continuity is deliberate, so do not renumber it.
+
+**Tabs 1 and 2 carry approved production copy.** The rotation handoff is
+explicit that only tab 3 changes: do not rewrite their labels, subs, scenes,
+the headline or the eyebrow from any prototype.
+
 Rebuilt from the v2 handoff. Three pills beside a photo stage, auto-advancing
 every **9.5s** (was five pills at 6.5s). Hovering pauses, clicking a pill jumps
 and resets the timer, `prefers-reduced-motion` stops the auto-advance and every

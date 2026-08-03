@@ -18,7 +18,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * Colours come from `.ed-showcase` in globals.css.
  */
 
-const DWELL = 9500;
+/* Tabs 1 and 2 hold 11s. Tab 3 holds 30s because it rotates three app
+   examples at 10s each inside itself, and its progress bar fills over the
+   whole 30 rather than per example. */
+const DWELL = 11_000;
+const APP_DWELL = 10_000;
+const APPS_COUNT = 3;
+const TAB_DWELL = (i: number) => (i === 2 ? APP_DWELL * APPS_COUNT : DWELL);
 
 const MONO = "ui-monospace, SFMono-Regular, Menlo, monospace";
 const JAKARTA = "var(--font-editorial)";
@@ -289,24 +295,91 @@ function SceneData() {
   );
 }
 
-/* ── Scene 3: Build the tool that is missing ───────────── */
+/* ── Scene 3: Build the tool that is missing ─────────────
+   Three industry examples on one layout, rotating inside the tab. The
+   first is the same 3:45pm Store #214 moment that appears on the
+   always-on wall; that continuity is deliberate, so do not renumber it. */
 
-const AUDIT_ROWS = [
-  { label: "Front desk", done: true, delay: 0.8 },
-  { label: "Treatment rooms", done: true, delay: 0.92 },
-  { label: "Retail floor", done: true, delay: 1.04 },
-  { label: "Back of house", done: false, delay: 1.16 },
+type AppRow = { label: string; tone: "done" | "warn" | "open" };
+type AppExample = {
+  id: string;
+  photo: string;
+  alt: string;
+  scrim: string;
+  meta: string;
+  request: string;
+  toolName: string;
+  live: string;
+  rows: AppRow[];
+  caption: string;
+};
+
+const APP_SCRIM = "linear-gradient(105deg, rgba(5,7,13,.64), rgba(5,7,13,.2))";
+
+const APPS: AppExample[] = [
+  {
+    id: "closing-audit",
+    photo: PHOTO("photo-1556742049-0cfed4f6a45d"),
+    alt: "Tablet in use at the counter",
+    scrim: APP_SCRIM,
+    meta: "STORE #214 · OWNER · 3:45PM",
+    request: "“Build a daily closing audit. Photo checklist per station, auto-score it, flag fails to my coach.”",
+    toolName: "Daily closing audit",
+    live: "live · 20 min later",
+    rows: [
+      { label: "Front desk", tone: "done" },
+      { label: "Treatment rooms", tone: "done" },
+      { label: "Retail floor", tone: "done" },
+      { label: "Back of house", tone: "open" },
+    ],
+    caption: "Built by an owner, not a developer. HQ reviewed it and published it to all 214 locations the same evening.",
+  },
+  {
+    id: "lesson-booker",
+    photo: PHOTO("photo-1530549387789-4c1017266635"),
+    alt: "Swim school pool lanes",
+    scrim: APP_SCRIM,
+    meta: "SCHOOL #036 · OWNER · 11:20AM",
+    request: "“Build a make-up lesson booker. Parents pick an open slot, cap four per class, notify the instructor.”",
+    toolName: "Make-up lesson booker",
+    live: "live · 25 min later",
+    rows: [
+      { label: "Tue 4:00pm · Level 2 · full", tone: "done" },
+      { label: "Thu 5:30pm · Level 2 · full", tone: "done" },
+      { label: "Sat 9:00am · Level 3 · 3 spots", tone: "open" },
+      { label: "Sat 10:30am · Level 1 · 2 spots", tone: "open" },
+    ],
+    caption: "Built between classes. Parents book themselves in, the instructor just sees the roster.",
+  },
+  {
+    id: "hiring-pipeline",
+    photo: PHOTO("photo-1576765608535-5f04d1e3f289"),
+    alt: "Caregiver with a senior client",
+    scrim: APP_SCRIM,
+    meta: "BRANCH #052 · OWNER · 2:10PM",
+    request: "“Build a caregiver application tracker. Flag missing certifications and chase references, so I only see interview-ready applicants.”",
+    toolName: "Caregiver hiring pipeline",
+    live: "live · 20 min later",
+    rows: [
+      { label: "M. Alvarez · interview-ready", tone: "done" },
+      { label: "J. Chen · interview-ready", tone: "done" },
+      { label: "R. Patel · CPR cert expired", tone: "warn" },
+      { label: "D. Brooks · references pending", tone: "open" },
+    ],
+    caption: "The system chases the paperwork. The owner just interviews.",
+  },
 ];
 
-function SceneApps() {
+const ROW_DELAYS = [0.8, 0.92, 1.04, 1.16];
+
+function SceneApps({ app }: { app: AppExample }) {
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch">
         <div className="ed-sc-anim flex flex-col gap-3.5 p-5 lg:p-6" style={{ ...card, ...enter("ed-sc-rise", 0.08) }}>
-          <div style={monoLabel}>STORE #214 · OWNER · 3:45PM</div>
+          <div style={monoLabel}>{app.meta}</div>
           <div style={{ fontSize: 16.5, lineHeight: 1.5, fontWeight: 500, color: "var(--sc-text)" }}>
-            &ldquo;Build a daily closing audit. Photo checklist per station,
-            auto-score it, flag fails to my coach.&rdquo;
+            {app.request}
           </div>
         </div>
 
@@ -317,7 +390,7 @@ function SceneApps() {
         >
           <div className="flex items-center justify-between gap-3">
             <span style={{ fontFamily: JAKARTA, fontSize: 16, fontWeight: 700, color: "var(--sc-text)" }}>
-              Daily closing audit
+              {app.toolName}
             </span>
             <span
               style={{
@@ -325,22 +398,31 @@ function SceneApps() {
                 background: "var(--sc-violet-soft)", color: "var(--sc-violet)", whiteSpace: "nowrap",
               }}
             >
-              live · 20 min later
+              {app.live}
             </span>
           </div>
           <div className="flex flex-col gap-2.5">
-            {AUDIT_ROWS.map((r) => (
+            {app.rows.map((r, i) => (
               <div
                 key={r.label}
                 className="ed-sc-anim flex items-center gap-2.5"
                 style={{
                   fontSize: 14,
-                  color: r.done ? "var(--sc-text)" : "var(--sc-muted)",
-                  ...enter("ed-sc-slide", r.delay, 0.45),
+                  color: r.tone === "warn" ? "var(--sc-warn)"
+                    : r.tone === "done" ? "var(--sc-text)" : "var(--sc-muted)",
+                  fontWeight: r.tone === "warn" ? 600 : 400,
+                  ...enter("ed-sc-slide", ROW_DELAYS[i] ?? 1.16, 0.45),
                 }}
               >
-                <span aria-hidden="true" style={{ fontWeight: 700, color: r.done ? "var(--sc-ok)" : "inherit" }}>
-                  {r.done ? "✓" : "◻"}
+                <span
+                  aria-hidden="true"
+                  style={{
+                    fontWeight: 700,
+                    color: r.tone === "done" ? "var(--sc-ok)"
+                      : r.tone === "warn" ? "var(--sc-warn)" : "inherit",
+                  }}
+                >
+                  {r.tone === "done" ? "✓" : r.tone === "warn" ? "!" : "◻"}
                 </span>
                 {r.label}
               </div>
@@ -350,8 +432,7 @@ function SceneApps() {
       </div>
 
       <div className="ed-sc-anim" style={{ ...caption, ...enter("ed-sc-scene-in", 1.35, 0.5) }}>
-        Built by an owner, not a developer. HQ reviewed it and published it to
-        all 214 locations the same evening.
+        {app.caption}
       </div>
     </>
   );
@@ -360,49 +441,77 @@ function SceneApps() {
 /* Content insets per scene, from the handoff. Scene 1 is a 600px column
    at the top left; the other two span the stage. Only applied from lg,
    where the stage is its full 580px tall. */
-const SCENES = [
-  { render: SceneAnswers, box: "lg:left-12 lg:top-12 lg:w-[600px]" },
-  { render: SceneData,    box: "lg:left-12 lg:right-12 lg:top-[88px]" },
-  { render: SceneApps,    box: "lg:left-12 lg:right-12 lg:top-[120px]" },
+const SCENE_BOX = [
+  "lg:left-12 lg:top-12 lg:w-[600px]",
+  "lg:left-12 lg:right-12 lg:top-[88px]",
+  "lg:left-12 lg:right-12 lg:top-[120px]",
 ];
 
 /* ── Section ───────────────────────────────────────────── */
 
 export default function Capabilities() {
   const [tab, setTab] = useState(0);
+  const [app, setApp] = useState(0);
   const [paused, setPaused] = useState(false);
-  const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+  /* The rotation does not start on mount. It arms the first time the
+     section scrolls into view, so nobody arrives mid-cycle on tab 3;
+     everyone starts on "Ask for anything". One arm is enough, scrolling
+     away and back does not reset it. */
+  const [armed, setArmed] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const tabTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const appTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const stopTimer = useCallback(() => {
-    if (timer.current) clearInterval(timer.current);
-    timer.current = null;
+  const stopTimers = useCallback(() => {
+    if (tabTimer.current) clearTimeout(tabTimer.current);
+    if (appTimer.current) clearInterval(appTimer.current);
+    tabTimer.current = null;
+    appTimer.current = null;
   }, []);
 
-  const startTimer = useCallback(() => {
-    stopTimer();
+  /** Enter a tab: reset its app rotation and schedule the next tab. */
+  const go = useCallback((i: number) => {
+    stopTimers();
+    setTab(i);
+    setApp(0);
     if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    timer.current = setInterval(() => setTab((t) => (t + 1) % TABS.length), DWELL);
-  }, [stopTimer]);
+    if (i === 2) {
+      appTimer.current = setInterval(() => setApp((a) => (a + 1) % APPS_COUNT), APP_DWELL);
+    }
+    tabTimer.current = setTimeout(() => go((i + 1) % TABS.length), TAB_DWELL(i));
+  }, [stopTimers]);
 
   useEffect(() => {
-    if (paused) stopTimer();
-    else startTimer();
-    return stopTimer;
-  }, [paused, startTimer, stopTimer]);
+    if (typeof window === "undefined") return;
+    const el = sectionRef.current;
+    if (!el || !("IntersectionObserver" in window)) { setArmed(true); return; }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { io.disconnect(); setArmed(true); } });
+    }, { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!armed || paused) { stopTimers(); return; }
+    go(0);
+    return stopTimers;
+    /* `go` is stable and re-running this on every tab change would restart
+       the cycle from 0 forever, so the tab is deliberately not a dep. */
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [armed, paused]);
 
   /* Deep links land on their scene: the footer points at three of these. */
   useEffect(() => {
     const i = TABS.findIndex((t) => `#${t.id}` === window.location.hash);
-    if (i >= 0) setTab(i);
+    if (i >= 0) { setArmed(true); go(i); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const select = (i: number) => {
-    setTab(i);
-    startTimer();
-  };
+  const select = (i: number) => go(i);
 
-  const Active = SCENES[tab].render;
   const activeTab = TABS[tab];
+  const activeApp = APPS[app];
 
   return (
     /* Container matches the hero and the problem section (SectionShell's
@@ -410,7 +519,7 @@ export default function Capabilities() {
        section reach the page edge while its neighbours did not, which
        read as a break in the page rather than as a wider section. The
        stage gives up width for it; the rail is narrowed to compensate. */
-    <section id="capabilities" className="ed-showcase w-full scroll-mt-24" style={{ backgroundColor: "var(--sc-bg)" }}>
+    <section ref={sectionRef} id="capabilities" className="ed-showcase w-full scroll-mt-24" style={{ backgroundColor: "var(--sc-bg)" }}>
       <div className="ed-showcase mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20 flex flex-col gap-8 lg:gap-10">
         <div className="flex flex-col gap-3">
           <div
@@ -474,15 +583,19 @@ export default function Capabilities() {
                       {t.sub}
                     </div>
                     {active && (
-                      /* key restarts the fill on every tab change */
+                      /* The fill is gated on `armed`, not just `active`:
+                         before the section scrolls into view no timer is
+                         running, and a bar filling against a stopped timer
+                         would land part-way through the real first dwell.
+                         `armed` is in the key so it restarts on entry. */
                       <span
-                        key={`${tab}-${paused}`}
+                        key={`${tab}-${paused}-${armed}`}
                         className="ed-sc-bar"
                         style={{
                           position: "absolute", left: 0, bottom: 0, height: 3,
                           background: "var(--sc-accent-ink)",
-                          animation: paused ? undefined : `ed-sc-tab-fill ${DWELL}ms linear forwards`,
-                          width: paused ? "100%" : undefined,
+                          animation: armed && !paused ? `ed-sc-tab-fill ${TAB_DWELL(i)}ms linear forwards` : undefined,
+                          width: paused ? "100%" : 0,
                         }}
                       />
                     )}
@@ -511,18 +624,42 @@ export default function Capabilities() {
             className="relative flex-1 min-w-0 rounded-3xl overflow-hidden lg:h-[580px]"
             style={{ border: "1px solid var(--sc-border)", background: "var(--sc-stage)" }}
           >
-            {/* key remounts the scene, which is what replays the sequence */}
-            <div key={activeTab.id} className="ed-sc-anim relative w-full h-full" style={enter("ed-sc-scene-in", 0, 0.5)}>
+            {/* Position dots for the app rotation, tab 3 only. */}
+            {tab === 2 && (
+              <div className="absolute right-6 top-6 z-[3] flex gap-2" aria-hidden="true">
+                {APPS.map((a, i) => (
+                  <span
+                    key={a.id}
+                    style={{
+                      width: 8, height: 8, borderRadius: "50%",
+                      background: i === app ? "#FFFFFF" : "rgba(255,255,255,.4)",
+                      transition: "background .3s",
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* The key remounts the scene, which is what replays the
+                sequence. On tab 3 it keys on the app too, so every example
+                re-runs the same choreography. */}
+            <div
+              key={tab === 2 ? `apps-${activeApp.id}` : activeTab.id}
+              className="ed-sc-anim relative w-full h-full"
+              style={enter("ed-sc-scene-in", 0, 0.5)}
+            >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={activeTab.photo}
-                alt={activeTab.alt}
+                src={tab === 2 ? activeApp.photo : activeTab.photo}
+                alt={tab === 2 ? activeApp.alt : activeTab.alt}
                 className="absolute inset-0 w-full h-full object-cover"
               />
-              <div className="absolute inset-0" style={{ background: activeTab.scrim }} />
+              <div className="absolute inset-0" style={{ background: tab === 2 ? activeApp.scrim : activeTab.scrim }} />
 
-              <div className={`relative lg:absolute p-5 sm:p-8 lg:p-0 flex flex-col gap-4 lg:gap-[18px] ${SCENES[tab].box}`}>
-                <Active />
+              <div className={`relative lg:absolute p-5 sm:p-8 lg:p-0 flex flex-col gap-4 lg:gap-[18px] ${SCENE_BOX[tab]}`}>
+                {tab === 0 && <SceneAnswers />}
+                {tab === 1 && <SceneData />}
+                {tab === 2 && <SceneApps app={activeApp} />}
               </div>
             </div>
           </div>
