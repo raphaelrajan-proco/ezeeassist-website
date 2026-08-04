@@ -1308,6 +1308,75 @@ emphasis on dark where the 5% tint nearly vanishes; the hero CTA scrolls to
 `enableSystem={false}`, so emulating `prefers-color-scheme` does nothing. Set
 `localStorage.theme = 'dark'` and reload instead.
 
+## Platform pages (branch `platform-pages`)
+
+**Nav Platform regroups by when the work happens**, not by what the
+software is called: On Demand (Answers, Reporting and BI, Apps), Always
+On (Workflows, Automations), Foundation (Integrations, Control Center,
+Trust Center). Footer mirrors the same order. Keep the two in step.
+
+**The whole `/platform` tree was redirected into `/solution`**, so those
+pages were unreachable. Two are real again: `/platform/ai-agent` now
+301s to `/platform/answers`, and `/solution/integrations` points forward
+to `/platform/integrations` rather than the reverse. Its dead page and
+the old `IntegrationsContent.tsx` are deleted. **Before adding a
+`/platform` nav item, check `next.config.ts` — anything still listed
+there is redirected away and its page will never render.**
+
+Stubs, all `noindex`, all using `components/platform/ComingSoon.tsx`:
+`/platform/reporting`, `/platform/automations`,
+`/platform/integrations/directory`. Apps and Control Center point at
+`/#capabilities` and `/#trust`, the same fallback the old Compliance
+Agent item used. Delete a stub route when its real page lands.
+
+`components/platform/shared.tsx` is the props-driven layer both pages
+run on: `Band`, `SectionHead`, `Eyebrow`, `Meta`, `Reveal`, `TextChip`,
+`SourceChip`, `GovernanceBand`, `CARD`. The homepage's own sections are
+content-hardcoded singletons and cannot be reused; this is what carries
+their look forward.
+
+### /platform/answers
+
+Twelve sections. Two rules are load-bearing and easy to undo:
+
+1. **No accuracy percentage anywhere.** Unverifiable, and it invites a
+   demo built to disprove it. The brief's own §6 row carried "96%
+   first-pass"; it is dropped, also because that figure is published
+   nowhere on this site. The only percentages on the page are 94% and
+   67%, both from the case studies they link to.
+2. **Ticketing is linked four times** (step 04, the won't-do list, the
+   handoff, Related). One link makes not-answering read as a footnote
+   rather than a designed path.
+
+§4 is the page: same question, same 9:14am timestamp, the district
+manager's card visibly longer with a third source chip. **Never
+equalise the heights or normalise the chip counts** — the asymmetry is
+the argument. §5 is a source ledger rather than the specified pair of
+bullet lists: the brief's category lines verbatim, each hanging a real
+artifact, its system and its version, so "every answer names its
+document" is visible instead of asserted. §7's two after-hours
+timestamps stay out of business hours.
+
+### /platform/integrations
+
+Ten sections. **Every system name is a text chip, not a logo.** Only
+nine integration SVGs are committed and none are the franchise-native
+systems the page leads with, so mixing would put generic SaaS in colour
+and FranConnect, ServiceTitan, Mindbody, Zenoti and ServiceMinder in
+grey, inverting the page's whole emphasis. Never reference a CDN.
+**Order is fixed in §3 and §5 — franchise-native first. Do not
+alphabetise.**
+
+§2 shows each refusal as the migration step a competitor asks for,
+struck through, above what happens instead; the argument is a refusal,
+which needs the thing refused on screen. The hero carries a slow
+marquee and §5 a static grid so the two logo moments differ in form.
+The marquee pauses on hover and holds still under reduced motion.
+
+Three `{{TBD:...}}` tokens: `integration-count` twice (§5 eyebrow and
+the "showing 12 of" line) and `custom-integration-timeline` in §6.
+Marketing owns the count, engineering the timeline.
+
 ## Standing rules
 
 **Scope.** Homepage only unless a prompt grants an explicit exception. If a
