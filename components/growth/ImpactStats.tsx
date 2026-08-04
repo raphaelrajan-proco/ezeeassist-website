@@ -13,11 +13,6 @@ import { motion } from "framer-motion";
  * cards, nothing else. The handoff's theme-toggle button is a preview
  * affordance and is not shipped.
  *
- * Every figure is already published elsewhere on this site: 67% is WSI's
- * case study, 94% is DekaLash's, 650+ is DivaDance's, and the locations
- * line is the hero trust strip's claim. Do not invent a figure here; if
- * a new KPI is wanted, source it from a case study first.
- *
  * Tokens, the blue ramp, and the entrance keyframe live on `.ed-impact`
  * in globals.css.
  */
@@ -25,12 +20,29 @@ import { motion } from "framer-motion";
 const JAKARTA = "var(--font-editorial)";
 const EASE = [0.22, 1, 0.36, 1] as const;
 
-/* Copy is exact per the handoff; do not reword. */
+/**
+ * TODO: source these four publicly before launch.
+ *
+ * This band previously carried only figures already published elsewhere
+ * on the site — 67% from WSI's case study, 94% from DekaLash's, 650+
+ * from DivaDance's, and the locations line from the hero trust strip —
+ * and this comment said so, precisely so nobody swapped in an unsourced
+ * number by accident. The four below were supplied directly and are not
+ * published anywhere on this site yet.
+ *
+ * They sit under a headline that reads "proven AI", which is the part
+ * that makes sourcing them matter: a prospect who asks "proven where?"
+ * needs somewhere to land. Each one needs either a case study, a named
+ * methodology (what a base case is measured against, over what period,
+ * across how many networks), or a footnote.
+ *
+ * Do not add a fifth figure without a source.
+ */
 const STATS: { end: number; suffix: string; label: string }[] = [
-  { end: 67,   suffix: "%", label: "ticket reduction in 30 days" },
-  { end: 94,   suffix: "%", label: "AI deflection during a systems migration" },
-  { end: 650,  suffix: "+", label: "support hours saved in six months" },
-  { end: 5000, suffix: "+", label: "locations across 70+ brands" },
+  { end: 10,  suffix: "X",  label: "increased productivity" },
+  { end: 350, suffix: "%+", label: "base-case ROI on AI investment" },
+  { end: 150, suffix: "%+", label: "increase in CSAT scores" },
+  { end: 75,  suffix: "%+", label: "AI-automated resolutions" },
 ];
 
 export default function ImpactStats() {
