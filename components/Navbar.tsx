@@ -21,23 +21,29 @@ type NavGroup = { heading: string; items: NavItem[] };
    called: what a person asks for in the moment, what runs without being
    asked, and what everything else stands on.
 
-   TODO: Apps, Automations and Control Center have no real pages yet.
-   Automations is a stub; Apps and Control Center point at the homepage
-   sections that already cover them, the same fallback the old Compliance
+   TODO: Automations is a stub. Control Center points at the homepage
+   section that already covers it, the same fallback the old Compliance
    Agent item used.
 
    Note Control Center is inconsistent right now: this entry points at
-   `/#trust`, while the Reporting page links to `/platform/control-center`,
-   a stub created for it. The reporting brief authorised the stub but
-   explicitly forbade restructuring the nav, so the two were left
-   disagreeing. Repoint this entry when that page is real. */
+   `/#trust`, while the Reporting and Apps pages link to
+   `/platform/control-center`, a stub created for them. Those briefs
+   authorised the stub but forbade restructuring the nav, so the two were
+   left disagreeing. Repoint this entry when that page is real.
+
+   TODO: **Workflows is shadowed.** `app/platform/workflows` is a real
+   page, but `next.config.ts` still 308s `/platform/workflows` to
+   `/solution/agents`, so this item, the footer, and the Related cards on
+   the Reporting and Apps pages all land on the legacy Agents page
+   instead. The fix is deleting that one redirect line; left alone here
+   because it is a site-wide routing change. */
 const platformGroups: NavGroup[] = [
   {
     heading: "On Demand",
     items: [
       { label: "Answers",          href: "/platform/answers",   desc: "Every question answered from your own material, scoped to who asks." },
       { label: "Reporting", href: "/platform/reporting", desc: "Any number, rendered however you ask." },
-      { label: "Apps",             href: "/#capabilities",      desc: "Purpose-built tools your locations open on a phone." },
+      { label: "Apps",             href: "/platform/apps",      desc: "Purpose-built tools your locations open on a phone." },
     ],
   },
   {

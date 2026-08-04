@@ -1337,6 +1337,69 @@ emphasis on dark where the 5% tint nearly vanishes; the hero CTA scrolls to
 `enableSystem={false}`, so emulating `prefers-color-scheme` does nothing. Set
 `localStorage.theme = 'dark'` and reload instead.
 
+## /platform/apps
+
+Nine sections. **This page is capability, not governance.** An earlier
+draft of its brief led with permissions tables and a wall of "no app
+can", which read as a page apologising for itself. Governance is stated
+exactly twice, one line each: step 4 of §3 ("Already inside the rules
+you set. Nothing to configure.") and the 13px line beneath that
+timeline. There is deliberately no permissions section, no can/can't
+table, no publishing-rights matrix, no guardrails band. **If the page
+looks like it is missing a governance section, that is the design.**
+Measured on the built page: "permission" appears once, "approval" once,
+"guardrail" not at all.
+
+Band sequence, part of the spec: dark, light, light, light, light, dark,
+light, light, dark. The four light sections alternate `ed-bg` and
+`ed-bg-alt` so neighbours still separate (DESIGN.md §4.1), and no two
+adjacent sections share a device: request log, timeline, gallery grid,
+three bare facts.
+
+**No builder UI anywhere**, including as decoration. No nodes, no
+canvas, no drag handles. A sentence typed in plain language is the whole
+claim; a reader who infers an interface to learn has read the opposite.
+That is why `DescribePanel`'s left side is a bare bordered box.
+
+Details that carry an argument and must not be tidied:
+
+- **§2's dates are the artifact.** A request from March 2023 still
+  marked Open is the point. Do not convert them to relative labels.
+- **§3's timestamps are irregular** — 3:45, 3:47, 3:52, 3:58, 4:05.
+  Even five-minute intervals read as a diagram rather than as twenty
+  real minutes.
+- **§4's scopes vary on purpose** (214 locations, All locations, 68,
+  140, Northern region, West territory). Normalising them would argue
+  these are features rather than things a particular brand needed.
+- **§6's return arc is the section.** Four stages in a row is a
+  pipeline, and a pipeline happens once. Stage 2 must stay: HQ is
+  publishing something with two weeks of evidence. "Store #214 is still
+  the author" must stay: it is what makes an operator build a second
+  one. The closing line's order is fixed, upside before control;
+  reversed it reads as risk management.
+
+The closing-audit sentence in §1, the twenty minutes in §3 and Store
+#214 in §6 are one story, and the same one the homepage's on-demand
+section already tells at 3:45pm. **Deliberate callback, not repetition**
+(DESIGN.md §1.4). Do not renumber the store or reword the ask in one
+place only.
+
+`{{TBD:}}` tokens, four, all §7: `apps-proof-brand`, `-metric`,
+`-quote`, `-attribution`. **Do not substitute a deflection or support
+metric** — those argue for the Answers page.
+
+**TODO: the §9 CTA subline promises a live build on a sales call**
+("We'll build it on the call"). The brief flagged it for confirmation
+that it is deliverable. If it is not, it needs a softer replacement
+before launch.
+
+**The homepage tile link is not what the brief assumed.** Item 3 said to
+repoint the third on-demand tile's link at `/platform/apps`. Those tiles
+are `role="tab"` buttons that swap the stage and have never had a link,
+so there was nothing to repoint; a "How apps get built" link was added
+beneath the rail, shown only on that tab. The tile's own copy is
+untouched, and that is the only homepage change in this work.
+
 ## /platform/reporting
 
 Twelve sections, built from the reporting brief. Two things are
@@ -1411,6 +1474,15 @@ software is called: On Demand (Answers, Reporting, Apps), Always On
 (Workflows, Automations), Foundation (Integrations, Control Center,
 Trust Center). Footer mirrors the same order. Keep the two in step.
 "Reporting and BI" was renamed to "Reporting" when that page shipped.
+
+**`/platform/workflows` is shadowed by a stale redirect.** The page is
+real and builds, but `next.config.ts` still 308s that path to
+`/solution/agents`, so the nav item, the footer link, and the Related
+cards on the Reporting and Apps pages all land on the legacy Agents page
+instead. Verified with curl against the built app. The fix is deleting
+one redirect line; left alone because it is a site-wide routing change
+nobody has asked for yet. **This is exactly the trap the paragraph below
+warns about, and it has already caught two pages.**
 
 **The whole `/platform` tree was redirected into `/solution`**, so those
 pages were unreachable. Two are real again: `/platform/ai-agent` now

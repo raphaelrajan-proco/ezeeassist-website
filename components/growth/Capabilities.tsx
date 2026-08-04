@@ -1,6 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 /**
  * On demand, built from the showcase design handoff. A rail of three
@@ -864,14 +866,32 @@ export default function Capabilities() {
                 );
               })}
             </div>
-            {/* Signals "and more" without listing more. */}
-            <div
-              aria-hidden="true"
-              className="hidden lg:block text-right pr-2"
-              style={{ fontFamily: JAKARTA, fontSize: 15, fontWeight: 600, letterSpacing: ".22em", color: "var(--sc-muted)", opacity: 0.75 }}
-            >
-              +++
-            </div>
+            {/* The Apps brief asked for "the third tile's link" to be
+                repointed at /platform/apps. The tiles are `role="tab"`
+                buttons that swap the stage; none of them has ever had a
+                link, so there was nothing to repoint and this was added
+                instead. It shows only on that tab, so the other two scenes
+                are unchanged, and the tile's own copy is untouched. The
+                "+++" holds the slot the rest of the time. */}
+            {tab === 2 ? (
+              <Link
+                href="/platform/apps"
+                className="group hidden lg:inline-flex items-center justify-end gap-1.5 pr-2 text-right"
+                style={{ fontFamily: JAKARTA, fontSize: 13.5, fontWeight: 600, color: "var(--sc-accent-ink)" }}
+              >
+                How apps get built
+                <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2} aria-hidden="true" />
+              </Link>
+            ) : (
+              /* Signals "and more" without listing more. */
+              <div
+                aria-hidden="true"
+                className="hidden lg:block text-right pr-2"
+                style={{ fontFamily: JAKARTA, fontSize: 15, fontWeight: 600, letterSpacing: ".22em", color: "var(--sc-muted)", opacity: 0.75 }}
+              >
+                +++
+              </div>
+            )}
           </div>
 
           {/* Stage. Fixed 580 tall from lg so the handoff's vertical
