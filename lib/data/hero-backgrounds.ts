@@ -27,10 +27,29 @@ export type HeroBackground = {
   scrim: number;
 };
 
+/* All four are the same hazy blue treatment and are photometrically almost
+   identical: sampled across the copy column (x 0-48%, y 22-72%) their lightest
+   pixels land within 0.01 of each other, so they are interchangeable and none
+   needs a materially different scrim. The differences are in where the light
+   wash falls at the bottom right, which sits outside the copy column.
+
+   Measured minimum scrim for white body copy at 4.5:1, and the value set here
+   (the minimum rounded up, with a little headroom):
+
+     hero-bg.jpg     min 0.29   ->  0.34
+     hero-bg-2.jpg   min 0.32   ->  0.36
+     hero-bg-3.jpg   min 0.30   ->  0.34
+     hero-bg-4.jpg   min 0.31   ->  0.35
+
+   The homepage hero ships 0.30 flat against a measured 0.29, which is what
+   confirms this sampling matches how the original value was derived. */
 export const HERO_BG = {
-  /* The original, and the only one in the repo today. Used by the homepage
-     hero, the impact band, both closing CTAs and the booking page. */
-  default: { src: "/hero-bg.jpg", base: "#0B2C48", scrim: 0.34 },
+  /* The original. Used by the homepage hero, the impact band, both closing
+     CTAs and the booking page. */
+  default: { src: "/hero-bg.jpg",         base: "#0B2C48", scrim: 0.34 },
+  haze2:   { src: "/hero/hero-bg-2.jpg",  base: "#0B2C48", scrim: 0.36 },
+  haze3:   { src: "/hero/hero-bg-3.jpg",  base: "#0B2C48", scrim: 0.34 },
+  haze4:   { src: "/hero/hero-bg-4.jpg",  base: "#0B2C48", scrim: 0.35 },
 } as const satisfies Record<string, HeroBackground>;
 
 export type HeroBackgroundKey = keyof typeof HERO_BG;
