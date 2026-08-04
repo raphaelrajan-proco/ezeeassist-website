@@ -21,22 +21,19 @@ type NavGroup = { heading: string; items: NavItem[] };
    called: what a person asks for in the moment, what runs without being
    asked, and what everything else stands on.
 
-   TODO: Automations is a stub. Control Center points at the homepage
-   section that already covers it, the same fallback the old Compliance
-   Agent item used.
+   TODO: Control Center points at the homepage section that already
+   covers it, the same fallback the old Compliance Agent item used.
+
+   Automations was removed when the Workflows page shipped: its triggers
+   section absorbed it and /platform/automations now 301s to
+   /platform/workflows. Always On is a one-item group until Compliance is
+   a real page rather than the stub the Workflows page links to.
 
    Note Control Center is inconsistent right now: this entry points at
    `/#trust`, while the Reporting and Apps pages link to
    `/platform/control-center`, a stub created for them. Those briefs
    authorised the stub but forbade restructuring the nav, so the two were
-   left disagreeing. Repoint this entry when that page is real.
-
-   TODO: **Workflows is shadowed.** `app/platform/workflows` is a real
-   page, but `next.config.ts` still 308s `/platform/workflows` to
-   `/solution/agents`, so this item, the footer, and the Related cards on
-   the Reporting and Apps pages all land on the legacy Agents page
-   instead. The fix is deleting that one redirect line; left alone here
-   because it is a site-wide routing change. */
+   left disagreeing. Repoint this entry when that page is real. */
 const platformGroups: NavGroup[] = [
   {
     heading: "On Demand",
@@ -49,8 +46,7 @@ const platformGroups: NavGroup[] = [
   {
     heading: "Always On",
     items: [
-      { label: "Workflows",   href: "/platform/workflows",   desc: "Recurring work runs on a schedule or a trigger." },
-      { label: "Automations", href: "/platform/automations", desc: "Plays that fire the moment something changes." },
+      { label: "Workflows",   href: "/platform/workflows",   desc: "Coach it once. It runs everywhere, in every location's context." },
     ],
   },
   {

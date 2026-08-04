@@ -20,7 +20,6 @@ const platformLinks = [
   { label: "Reporting",        href: "/platform/reporting" },
   { label: "Apps",             href: "/platform/apps" },
   { label: "Workflows",        href: "/platform/workflows" },
-  { label: "Automations",      href: "/platform/automations" },
   { label: "Integrations",     href: "/platform/integrations" },
   { label: "Control Center",   href: "/#trust" },
   { label: "Trust Center",     href: "/security" },

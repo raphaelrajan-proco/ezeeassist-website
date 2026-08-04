@@ -1337,6 +1337,95 @@ emphasis on dark where the 5% tint nearly vanishes; the hero CTA scrolls to
 `enableSystem={false}`, so emulating `prefers-color-scheme` does nothing. Set
 `localStorage.theme = 'dark'` and reload instead.
 
+## /platform/workflows
+
+Ten sections. **Vocabulary is the first thing to get right here.** The
+route and the nav item stay "Workflows" because that is what a
+franchisor searches for. The page's own word is **play**. One line after
+the hero does the handoff, and after it the body copy says play
+consistently: "Most tools call these workflows. A coach calls them
+plays, and that difference is the point." Do not alternate, do not write
+"workflow (play)". Measured on the built page: `workflow` appears once
+in the body, in that line. The other four hits are the
+`{{TBD:workflows-proof-*}}` token names and go when real proof lands.
+`play` appears 17 times.
+
+**What the page has to prove: a play is not a broadcast.** The same play
+reaches forty locations and behaves differently at each because it reads
+each location's numbers first. §5 is where that is proven and it carries
+the strongest treatment on the page.
+
+**The divergence is the argument, in two places.** §1's four chips and
+§5's four rows each show one act, one decline, one adapt, one escalate.
+Make them uniform and the product becomes mass email. **§5's rows 2 and
+4 must not be cut for length** — a play that declines because a region
+set its own threshold, and one that escalates rather than acting because
+the owner is six weeks in, are what prove judgment rather than logic.
+
+Band sequence, part of the spec: dark, light, light, light, dark, light,
+light, light, light, dark. Light sections alternate `ed-bg`/`ed-bg-alt`,
+and no two adjacent share a device: prose, split panels, trigger grid,
+divergence rows, two-column comparison, accumulation timeline.
+
+**No builder UI anywhere.** No canvas, no node graph, no if-then blocks,
+no drag handles, not even as decoration. §3's right panel is a summary
+of what the system understood, **not an editor**: no fields, no toggles,
+no edit affordances. The `canvas` / `node` / `if-then` strings that do
+appear are all denials in the brief's own copy.
+
+Details that carry an argument:
+
+- **§4 lists Schedule first and then dismisses it.** Every tool a
+  franchisor has already evaluated is schedule-based, so leading with it
+  and demoting it in the closing line is the positioning move. **Drift
+  carries the accent** because it is the differentiated trigger: a
+  threshold needs someone to know what to watch, drift does not.
+- **No per-location examples in §4.** That is §5, and putting one there
+  collapses the section the page rests on.
+- **§3's AUTHOR row stays.** A play having a named author is what makes
+  a coach willing to write a second one.
+- **§6 is two columns and one line.** Control Center carries governance
+  depth; this page is capability. Do not grow it into a permissions
+  matrix.
+- **§7's counts are illustrative** and labelled as such.
+
+### Routing changed here, and it mattered
+
+`/platform/workflows` was **unreachable** before this: `next.config.ts`
+308'd it to `/solution/agents` while a real page sat behind it, so the
+nav, the footer and the Reporting and Apps Related cards all landed on
+the legacy Agents page. That redirect is gone.
+
+- `/platform/automations` now 301s here; its route and its ComingSoon
+  stub are deleted, and §4's trigger grid is what absorbed it.
+- `/solution/agents` was a second mount of the same legacy
+  `WorkflowsContent` and went with it. It and `/solution/workflows` now
+  both point forward at `/platform/workflows` rather than at each other.
+- **The sitemap was listing four redirected URLs** (`/platform`,
+  `/platform/ai-agent`, `/platform/ticketing`, `/platform/insights`)
+  plus `/solution/agents`, and was missing every page built since. It
+  now lists only routes that render. Check `next.config.ts` before
+  adding another.
+
+Nav: Automations is gone, so **Always On is a one-item group**. The
+brief allows adding Compliance "if it exists" — it does not, and the
+stub created here for §9's card is a ComingSoon page. A stub in the nav
+is what the Automations entry was already doing wrong.
+
+Stub created: `/platform/compliance`, `noindex`, deliberately not in the
+nav.
+
+`{{TBD:}}` tokens, four, all §8: `workflows-proof-brand`, `-metric`,
+`-quote`, `-attribution`. **This page needs an outcome, not an
+efficiency stat** — a play count proves activity, a play count plus what
+changed proves the growth claim. Not a deflection metric; that argues
+for Answers.
+
+**TODO: the §10 CTA subline promises two things on a sales call** —
+writing the play live, and showing what it would have done at four of
+the prospect's own locations. Confirm both are deliverable or soften it
+before launch.
+
 ## /platform/apps
 
 Nine sections. **This page is capability, not governance.** An earlier
@@ -1474,15 +1563,6 @@ software is called: On Demand (Answers, Reporting, Apps), Always On
 (Workflows, Automations), Foundation (Integrations, Control Center,
 Trust Center). Footer mirrors the same order. Keep the two in step.
 "Reporting and BI" was renamed to "Reporting" when that page shipped.
-
-**`/platform/workflows` is shadowed by a stale redirect.** The page is
-real and builds, but `next.config.ts` still 308s that path to
-`/solution/agents`, so the nav item, the footer link, and the Related
-cards on the Reporting and Apps pages all land on the legacy Agents page
-instead. Verified with curl against the built app. The fix is deleting
-one redirect line; left alone because it is a site-wide routing change
-nobody has asked for yet. **This is exactly the trap the paragraph below
-warns about, and it has already caught two pages.**
 
 **The whole `/platform` tree was redirected into `/solution`**, so those
 pages were unreachable. Two are real again: `/platform/ai-agent` now
