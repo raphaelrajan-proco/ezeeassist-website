@@ -2,17 +2,30 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import Footer from "@/components/Footer";
-import ComingSoon from "@/components/platform/ComingSoon";
+import ReportingContent from "@/components/platform/reporting/ReportingContent";
 
-/* Stub. The Platform nav's "Reporting and BI" item and the Answers
-   page's content-insights link both point here. Replace with the real
-   page; do not let this rank in the meantime. */
+/* Replaces the ComingSoon stub. The og/twitter blocks are written out
+   rather than inherited: the homepage's are stale and would describe the
+   wrong page. */
+const TITLE = "Reporting — EZee Assist";
+const DESCRIPTION =
+  "Every number your network has, however you want to see it. Ask in plain language, get it rendered the way the question demands, and stop rebuilding the weekly report.";
+
 export const metadata: Metadata = {
-  title: "Reporting and BI — EZee Assist",
-  description:
-    "The numbers your network runs on, pulled and compared without anyone rebuilding a rollup.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: "/platform/reporting" },
-  robots: { index: false, follow: true },
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "/platform/reporting",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 };
 
 export default function ReportingPage() {
@@ -21,11 +34,7 @@ export default function ReportingPage() {
       <AnnouncementBar />
       <Navbar />
       <main className="flex flex-1 flex-col">
-        <ComingSoon
-          eyebrow="Reporting and BI"
-          title="The numbers, without anyone rebuilding a rollup."
-          body="This page is being written. In the meantime, we can walk you through what your network's reporting would look like on a call."
-        />
+        <ReportingContent />
       </main>
       <Footer />
     </div>
