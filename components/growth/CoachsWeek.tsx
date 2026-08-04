@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import {
   Hash, Mail, MessageSquare,
   FileSpreadsheet, BarChart3, Sparkles, LayoutDashboard,
@@ -150,74 +151,231 @@ function TimeBar({
   );
 }
 
-/* ── The uncapped bar ──────────────────────────────────────
-   The third bar: all coaching, running past the right edge. The dashed
-   rule at 70% is the threshold it blows through, and the fade on the
-   last stretch is the "keeps going" cue, so the bar reads as headed off
-   the page rather than filling it. Mask, not gradient, so the fade
-   follows the accent token in both themes. */
+/* ── The coverage hexagon ──────────────────────────────────
+   Six axes of personalised coaching, with a shape that stretches and
+   contracts unevenly and never fills the ring. It replaced a single wide
+   bar, which could only argue about volume; a radar can argue about
+   *shape*, which is the actual point: a coach redistributes attention,
+   they do not manufacture more of it.
 
-function CouldBeBar() {
-  const reduceMotion = Boolean(useReducedMotion());
-  const fade = "linear-gradient(to right, black 60%, rgba(0,0,0,.55) 80%, rgba(0,0,0,.18) 92%, transparent 100%)";
+   Three constraints carry the argument, and breaking any of them
+   inverts it:
+
+     1. Total area is constant across all twelve states. The shape
+        redistributes, it never shrinks. A shrinking shape reads as a
+        coach getting worse.
+     2. No axis ever reaches the outer ring. The cap is 85%.
+     3. Two or three axes are elevated at once, never one and never all
+        six. Uneven is the whole idea.
+
+   The values below are verified against all three (constant area to
+   within 0.01%, peak exactly 85%). The handoff's own values missed two
+   of its own rules: they peaked at 90% on "local market insight" and
+   swung 62% in area. These are those values renormalised, so each
+   state keeps its dominant axis and its character.
+
+   Timing is deliberately irregular. Evenly spaced keyTimes read as
+   mechanical; do not tidy them.
+
+   SMIL rather than CSS, because `points` is not reliably animatable as
+   a CSS property. SolutionBento already ships `animateMotion`, so there
+   is no project policy against it. */
+
+const HEX_AXES = [
+  "Just-in-time guidance",
+  "Tailored training",
+  "Individual onboarding",
+  "Local market insight",
+  /* Positions 5 and 6 are the growth-driving pair and must stay
+     adjacent, so they contract together when the shape spikes
+     elsewhere. Do not reorder these. */
+  "Custom performance review",
+  "Situational coaching",
+];
+
+/* x, y and text-anchor per axis, at a label radius of ~112. */
+const HEX_LABELS: { x: number; y: number; anchor: "middle" | "start" | "end" }[] = [
+  { x: 280, y: 84,  anchor: "middle" },
+  { x: 377, y: 144, anchor: "start" },
+  { x: 377, y: 256, anchor: "start" },
+  { x: 280, y: 324, anchor: "middle" },
+  { x: 183, y: 256, anchor: "end" },
+  { x: 183, y: 144, anchor: "end" },
+];
+
+const HEX_RINGS = [
+  "280,177.5 299.5,188.75 299.5,211.25 280,222.5 260.5,211.25 260.5,188.75",
+  "280,155 319,177.5 319,222.5 280,245 241,222.5 241,177.5",
+  "280,132.5 338.5,166.25 338.5,233.75 280,267.5 221.5,233.75 221.5,166.25",
+  "280,110 357.9,155 357.9,245 280,290 202.1,245 202.1,155",
+];
+
+/* Paths, not polygon points.
+   The handoff specified `<animate attributeName="points">` on a polygon.
+   Blink does not implement SMIL animation of `points` at all: a raw,
+   hand-written SVG doing exactly that sits frozen in Chrome 150, with
+   no error and the document timeline running normally. Shipping it as
+   written would have given every Chrome user a static chart.
+   Animating `d` on a path is the same shape, is supported, and keeps
+   the whole approach inside SMIL as the handoff asked. Every value has
+   an identical command sequence, which spline interpolation requires. */
+const HEX_STATES = [
+  "M 280.0,127.4 L 330.3,171.0 L 300.6,211.9 L 280.0,236.3 L 252.5,215.9 L 260.4,188.7 Z",
+  "M 280.0,136.6 L 340.8,164.9 L 294.9,208.6 L 280.0,223.2 L 256.4,213.6 L 248.4,181.8 Z",
+  "M 280.0,167.5 L 343.7,163.2 L 319.0,222.5 L 280.0,232.5 L 256.5,213.6 L 251.8,183.7 Z",
+  "M 280.0,181.1 L 308.6,183.5 L 342.0,235.8 L 280.0,249.2 L 248.8,218.0 L 252.9,184.4 Z",
+  "M 280.0,170.5 L 301.9,187.3 L 334.0,231.2 L 280.0,259.1 L 246.8,219.2 L 258.1,187.3 Z",
+  "M 280.0,166.9 L 297.9,189.7 L 308.8,216.6 L 280.0,274.4 L 239.5,223.4 L 251.2,183.4 Z",
+  "M 280.0,177.9 L 306.8,184.5 L 303.0,213.3 L 280.0,253.1 L 222.5,233.2 L 245.2,179.9 Z",
+  "M 280.0,172.2 L 309.7,182.9 L 300.1,211.6 L 280.0,227.8 L 213.7,238.3 L 234.6,173.8 Z",
+  "M 280.0,159.1 L 303.6,186.4 L 307.6,215.9 L 280.0,218.2 L 229.3,229.3 L 224.6,168.0 Z",
+  "M 280.0,149.7 L 309.1,183.2 L 298.2,210.5 L 280.0,229.4 L 250.8,216.9 L 218.3,164.4 Z",
+  "M 280.0,137.9 L 319.7,177.1 L 301.5,212.4 L 280.0,221.2 L 254.9,214.5 L 233.8,173.3 Z",
+  /* Identical to the first, so the loop wraps with no visible jump. */
+  "M 280.0,127.4 L 330.3,171.0 L 300.6,211.9 L 280.0,236.3 L 252.5,215.9 L 260.4,188.7 Z",
+];
+
+const HEX_KEYTIMES = "0;0.09;0.16;0.27;0.34;0.44;0.52;0.63;0.70;0.81;0.88;1";
+const HEX_KEYSPLINES = Array(HEX_STATES.length - 1).fill("0.4 0 0.5 1").join(";");
+
+function CoverageHexagon() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const animRef = useRef<SVGAnimateElement>(null);
+  /* Undefined until the effect runs, so the server and the first client
+     render agree and the static first state is what ships in the HTML. */
+  const [animated, setAnimated] = useState(false);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    setAnimated(true);
+
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          /* begin="indefinite" means nothing runs until this fires, so
+             the chart is still on its first state above the fold. */
+          animRef.current?.beginElement();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <div className="flex flex-col gap-3.5">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-        <span
-          className="text-[19px] md:text-[22px]"
-          style={{
-            fontFamily: "var(--font-editorial)",
-            fontWeight: 700,
-            letterSpacing: "-0.02em",
-            color: "var(--pb-text)",
-          }}
-        >
-          What it could be
-        </span>
-        <span
-          className="text-[9.5px] uppercase"
-          style={{ fontFamily: "var(--pb-mono)", letterSpacing: "0.14em", color: "var(--pb-muted)" }}
-        >
-          The same coach, multiplied
-        </span>
-      </div>
+    <div ref={wrapRef} className="w-full max-w-[560px]">
+      <svg
+        /* The handoff specified `0 0 560 400`, but the drawing only spans
+           y 72..327, so that canvas carried ~75px of dead space above and
+           below and swallowed the 24px it also asked for between the
+           heading and the chart. Cropping the canvas moves nothing: the
+           centre, the radius, the rings and every label coordinate are
+           exactly as specified. Bounds are measured with the larger phone
+           labels, which reach highest. */
+        viewBox="0 64 560 272"
+        className="pb-hex block h-auto w-full"
+        role="img"
+        aria-labelledby="pb-hex-title pb-hex-desc"
+      >
+        <title id="pb-hex-title">
+          Radar chart of personalized coaching coverage across six areas
+        </title>
+        <desc id="pb-hex-desc">
+          Coverage stretches and contracts unevenly across just-in-time guidance,
+          tailored training, individual onboarding, local market insight, custom
+          performance review, and situational coaching, but never fills all six at
+          once.
+        </desc>
 
-      <div className="relative">
-        <motion.div
-          role="img"
-          aria-label="What it could be: coaching runs past the cap instead of filling a fixed week."
-          className="w-full"
-          style={{ height: "48px", transformOrigin: "left" }}
-          initial={reduceMotion ? false : { scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.9, ease: EASE }}
+        <g aria-hidden="true">
+          {HEX_RINGS.map((points) => (
+            <polygon
+              key={points}
+              points={points}
+              fill="none"
+              stroke="var(--pb-border)"
+              strokeWidth={1}
+            />
+          ))}
+          {HEX_RINGS[HEX_RINGS.length - 1]
+            .split(" ")
+            .map((vertex) => (
+              <line
+                key={vertex}
+                x1={280}
+                y1={200}
+                x2={Number(vertex.split(",")[0])}
+                y2={Number(vertex.split(",")[1])}
+                stroke="var(--pb-border)"
+                strokeWidth={1}
+              />
+            ))}
+        </g>
+
+        <path
+          d={HEX_STATES[0]}
+          fill="var(--pb-muted)"
+          fillOpacity={0.28}
+          stroke="var(--pb-text)"
+          strokeOpacity={0.55}
+          strokeWidth={2.5}
+          strokeLinejoin="round"
         >
-          <div
-            className="flex h-full w-full items-center"
-            style={{
-              backgroundColor: "var(--pb-accent)",
-              color: "#FFFFFF",
-              /* Rounded where it starts, open where it leaves. */
-              borderRadius: "12px 0 0 12px",
-              WebkitMaskImage: fade,
-              maskImage: fade,
-            }}
+          {animated && (
+            <animate
+              ref={animRef}
+              attributeName="d"
+              dur="27s"
+              begin="indefinite"
+              calcMode="spline"
+              keyTimes={HEX_KEYTIMES}
+              keySplines={HEX_KEYSPLINES}
+              values={HEX_STATES.join(";")}
+              repeatCount="indefinite"
+            />
+          )}
+        </path>
+
+        <g aria-hidden="true" fill="var(--pb-muted)">
+          {HEX_AXES.map((axis, i) => {
+            /* The longest label is the only one that runs out of room at
+               phone widths; it swaps to a short form there. The other
+               five stay as written. */
+            const isLongest = i === 4;
+            return (
+              <text
+                key={axis}
+                x={HEX_LABELS[i].x}
+                y={HEX_LABELS[i].y}
+                textAnchor={HEX_LABELS[i].anchor}
+                className={isLongest ? "pb-hex-label pb-hex-label-long" : "pb-hex-label"}
+              >
+                {axis}
+              </text>
+            );
+          })}
+          <text
+            x={HEX_LABELS[4].x}
+            y={HEX_LABELS[4].y}
+            textAnchor={HEX_LABELS[4].anchor}
+            className="pb-hex-label pb-hex-label-short"
           >
-            <span className="px-4 md:px-[18px] text-[12.5px] md:text-[13.5px]" style={{ fontWeight: 600 }}>
-              Coaching
-            </span>
-          </div>
-        </motion.div>
-        {/* The threshold the bar blows through, overhanging the bar so
-            it reads as a line crossed rather than a segment divider. */}
+            Performance review
+          </text>
+        </g>
+      </svg>
+
+      <div style={{ borderTop: "1px solid var(--pb-border-strong)" }} className="mt-1 pt-3">
         <span
-          aria-hidden="true"
-          style={{
-            position: "absolute", left: "70%", top: -8, bottom: -8, width: 0,
-            borderLeft: "2px dashed var(--pb-border-strong)",
-          }}
-        />
+          className="text-[15px]"
+          style={{ fontWeight: 600, color: "var(--pb-text)" }}
+        >
+          Today
+        </span>
       </div>
     </div>
   );
@@ -552,7 +710,9 @@ export default function CoachsWeek() {
         {/* The hand-off from time to reach: even a freed-up week is one
             person's week. The section lead's own voice and size, wrapping
             to two lines where it must. */}
-        <div className="flex flex-col gap-8">
+        {/* 24px to the chart, 26px from the chart to the closing line
+            (24 plus the paragraph's own 2). */}
+        <div className="flex flex-col gap-6">
           <motion.h3
             className="max-w-[900px]"
             initial={{ opacity: 0, y: 20 }}
@@ -572,10 +732,10 @@ export default function CoachsWeek() {
             Even with the time freed up, one coach&rsquo;s expertise only reaches so far.
           </motion.h3>
 
-          <CouldBeBar />
+          <CoverageHexagon />
 
           <p
-            className="-mt-2 text-[21px] md:text-[22px]"
+            className="mt-0.5 text-[21px] md:text-[22px]"
             style={{ color: "var(--pb-muted)", lineHeight: 1.45, fontWeight: 400 }}
           >
             A coach&rsquo;s time is capped by the hours in a day. That cap is what

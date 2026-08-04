@@ -309,15 +309,64 @@ header rows span the bar, not the section, from md up, so the 9.5px
 eyebrows sit over each bar's right end rather than out at the margin. After the
 three pillars the section runs a second beat: a lead in the section
 lead's own size ("Even with the time freed up, one coach's expertise
-only reaches so far.", two lines are fine), then **the uncapped third
-bar** ("What it could be" · "The same coach, multiplied"): all-accent,
-48px, full width, a 2px dashed threshold overhanging at exactly 70%
-(the line the two bars above stop at), and a mask fade on the last
-stretch so the bar reads as leaving the page rather than filling it
-(mask, not gradient, so it follows the accent token in dark mode). A
-21/22px regular-weight muted caption closes the beat and the section,
-split after "limits coverage," from md up: the hours cap is what limits
-coverage and grows headcount.
+only reaches so far.", two lines are fine), then **the coverage
+hexagon**, then a 21/22px regular-weight muted caption that closes the
+beat and the section, split after "limits coverage," from md up: the
+hours cap is what limits coverage and grows headcount.
+
+### The coverage hexagon
+
+Replaced the uncapped third bar ("What it could be" · "The same coach,
+multiplied"), which is gone along with its dashed 70% threshold and
+mask fade. Recover from tag `coverage-hexagon-pre` if ever wanted back.
+
+A six-axis radar on a 560px canvas, left-aligned, with a thin rule and
+a `Today` label under it. Axes clockwise from top: just-in-time
+guidance, tailored training, individual onboarding, local market
+insight, custom performance review, situational coaching. **Positions 5
+and 6 are the growth-driving pair and must stay adjacent** so they
+contract together when the shape spikes elsewhere; do not reorder.
+
+Three constraints carry the argument, and breaking any inverts it:
+constant area across all twelve states (it redistributes, it never
+shrinks, because a shrinking shape reads as a coach getting worse); no
+axis ever reaches the ring, capped at 85%; two or three axes elevated
+at once, never one and never all six. The shipped values are verified
+against all three — constant area to within 0.01%, peak exactly 85%.
+
+**Two things in the handoff were wrong and were corrected:**
+
+1. *Its own values broke two of its own rules.* They peaked at 90% on
+   "local market insight" and swung 62% in area. The shipped values are
+   those renormalised to constant area with the peak clamped to 85%,
+   so every state keeps its dominant axis and its character.
+2. *`<animate attributeName="points">` does not work.* Blink does not
+   implement SMIL animation of `points` at all: a raw hand-written SVG
+   doing exactly that sits frozen in Chrome 150, no error, document
+   timeline running normally. The shape is therefore a `<path>` with
+   `attributeName="d"`, which Blink does support, including
+   `begin="indefinite"` plus `beginElement()`. Same geometry, same
+   timing, still SMIL. **If you ever port this back to a polygon, it
+   will silently stop animating in Chrome.**
+
+The `viewBox` is `0 64 560 272`, not the specified `0 0 560 400`. The
+drawing only spans y 72..327, so the original canvas carried ~75px of
+dead space top and bottom and swallowed the 24px the handoff also asked
+for between the heading and the chart. Cropping moves nothing: centre,
+radius, rings and every label coordinate are exactly as specified.
+
+Timing is deliberately irregular (`keyTimes` 0;0.09;0.16;0.27;…). Evenly
+spaced values read as mechanical; do not tidy them. Animation begins on
+scroll into view via IntersectionObserver at 0.35, not on load.
+`prefers-reduced-motion` renders the first state with no `<animate>`
+element emitted at all.
+
+Axis labels are 12 SVG user units on desktop and **16 on phones, which
+is larger, not smaller**. Sizes are in user units so they scale with the
+viewBox: at 375px the chart renders ~327px, so a unit is ~0.58px and 12
+units would be an unreadable 7px. At 16 units the longest label runs off
+the left edge, so `Custom performance review` alone swaps to
+`Performance review` under 480px. The other five never change.
 
 **The As-locations-scale chart card was deleted entirely** on request
 (the two-scenario animated chart and all its constants). Recover from

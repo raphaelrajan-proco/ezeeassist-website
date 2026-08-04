@@ -804,6 +804,34 @@ input[type="range"]::-moz-range-thumb {
   --pb-admin-3: #454E62;
 }
 
+/* Coverage hexagon axis labels.
+
+   Sizes are in SVG user units, so they scale with the viewBox rather
+   than with the viewport: the chart is 560 units wide, and at a 375px
+   phone it renders around 327px, so a unit is roughly 0.58 of a pixel.
+   12 units is a comfortable 12px on desktop and an unreadable 7px
+   there, which is why the phone size goes *up* rather than down. At 16
+   units the longest label would run off the left edge, so that one
+   label alone swaps to a short form. */
+.ed-problem .pb-hex-label {
+  font-size: 12px;
+  font-weight: 500;
+}
+.ed-problem .pb-hex-label-short {
+  display: none;
+}
+@media (max-width: 480px) {
+  .ed-problem .pb-hex-label {
+    font-size: 16px;
+  }
+  .ed-problem .pb-hex-label-long {
+    display: none;
+  }
+  .ed-problem .pb-hex-label-short {
+    display: inline;
+  }
+}
+
 /* ─── Operating system diagram ─────────────────────────────
    Built from a supplied design handoff. Scoped to `.ed-os`, the same
    arrangement `.ed-problem` and `.ed-showcase` use.
