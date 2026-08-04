@@ -28,7 +28,7 @@ const nextConfig: NextConfig = {
       { source: "/platform/ai-agent",      destination: "/platform/answers",       permanent: true },
       { source: "/platform/insights",      destination: "/solution",               permanent: true },
       { source: "/solution/integrations",  destination: "/platform/integrations",  permanent: true },
-      { source: "/platform/ticketing",     destination: "/solution/ticketing",     permanent: true },
+      { source: "/solution/ticketing",     destination: "/platform/ticketing",     permanent: true },
       { source: "/platform/automations",   destination: "/platform/workflows",     permanent: true },
       /* /solution/agents was a second mount of the legacy workflows
          content and went with it. Both legacy twins now point forward at

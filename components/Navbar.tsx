@@ -53,6 +53,7 @@ const platformGroups: NavGroup[] = [
   {
     heading: "Foundation",
     items: [
+      { label: "Ticketing",      href: "/platform/ticketing",    desc: "Every request, routed to the team that owns it." },
       { label: "Integrations",   href: "/platform/integrations", desc: "Connect what you already run. Nothing migrates." },
       { label: "Control Center", href: "/#trust",                desc: "Set who sees what and what runs without a human." },
       { label: "Trust Center",   href: "/security",              desc: "How your data is handled, stored, and kept yours." },

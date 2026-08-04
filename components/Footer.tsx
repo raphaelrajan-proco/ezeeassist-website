@@ -21,6 +21,7 @@ const platformLinks = [
   { label: "Apps",             href: "/platform/apps" },
   { label: "Workflows",        href: "/platform/workflows" },
   { label: "Compliance",       href: "/platform/compliance" },
+  { label: "Ticketing",        href: "/platform/ticketing" },
   { label: "Integrations",     href: "/platform/integrations" },
   { label: "Control Center",   href: "/#trust" },
   { label: "Trust Center",     href: "/security" },

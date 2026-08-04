@@ -67,7 +67,7 @@ const pillars = [
       "SLA tracking and response-time reporting",
     ],
     accent: "#00AEEF",
-    link: { label: "Learn about ticketing →", href: "/solution/ticketing" },
+    link: { label: "Learn about ticketing →", href: "/platform/ticketing" },
   },
   {
     icon: MessageCircle,
