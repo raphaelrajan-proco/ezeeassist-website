@@ -1046,6 +1046,60 @@ The partner pills are a single non-wrapping row of eight. They fit without
 scrolling from 1024 up (896px available, 842 needed); below that the row
 scrolls sideways, because eight pills cannot fit a phone at a readable size.
 
+## Workflow Generator (in progress)
+
+A lead-gen tool: four steps (contact, tech stack, scale, focus), then an
+Anthropic-generated shortlist of workflows selected from a curated library,
+persisted to Postgres and HubSpot and emailed via Resend. One self-contained
+component, two routes (`/workflow-generator` with site chrome,
+`/embed/workflow-generator` bare and iframeable), `?source=` flows through to
+HubSpot. Model: `claude-sonnet-5`. The model selects and tailors from
+`lib/workflow-library.json` only — it never invents workflows.
+
+**Built so far (step 1 of 8):**
+- Deps: `@anthropic-ai/sdk`, `zod` (v4 — use `z.email()`), `resend`,
+  `@vercel/postgres`. No PDF library: the emailed one-pager is a static PDF
+  the owner supplies. No in-memory rate limiter: rate limiting counts recent
+  rows per IP in Postgres, because in-memory state does not survive Vercel
+  serverless invocations.
+- `lib/workflow-generator/db.ts` — lazy `CREATE TABLE IF NOT EXISTS
+  workflow_submissions` (UUID id via `gen_random_uuid()`, consent boolean,
+  ip, status partial/complete/error, jsonb payload columns) plus an
+  `(ip, created_at)` index and `countRecentGenerationsByIp` for the future
+  generate route.
+- `lib/workflow-generator/hubspot.ts` — fetch-based CRM v3 upsert (PATCH by
+  email idProperty, POST on 404). Free-mail domains are accepted but flagged
+  via `wfg_free_email`. Missing token degrades to a warn log; HubSpot failure
+  never fails the request — Postgres is the system of record.
+- `app/api/workflow-generator/lead/route.ts` — fires on step-1 continue to
+  capture partials. Requires `consent: true` (z.literal). Friendly error
+  strings only, details go to server logs.
+- `scripts/setup-hubspot.mjs` — one-time creation of the `wfg_*` contact
+  properties. Re-runnable; 409 means exists.
+- `.env.example` — server-side block: `ANTHROPIC_API_KEY`,
+  `HUBSPOT_ACCESS_TOKEN`, `RESEND_API_KEY`, `POSTGRES_URL`,
+  `INTERNAL_NOTIFY_EMAIL`.
+
+**Order corrections from the owner (binding):** the workflow-library Excel
+arrives before tech-stack.json or the department list is drafted — the Excel
+defines both vocabularies, and `lib/data/integrations.ts` must NOT be used as
+the category schema (it was built for a visual). Run the tech-stack ↔
+tool-type alignment check up front and surface mismatches before building
+steps 2 and 4. Resend sends from a subdomain (e.g. `send.ezeeassist.com`).
+`frame-ancestors *` on the embed route for now. Structured-output API
+(`messages.parse` / `zodOutputFormat`) must be verified against current SDK
+docs before the generate route is designed around it; fallback is
+prompt-for-JSON + `zod.parse` with one retry.
+
+**Consent note:** no existing form on the site carries consent language (the
+contact form has none), so a standard line linking to `/privacy` was drafted
+for the step-2 UI and needs owner review.
+
+**Still needed from the owner:** HubSpot private app token, Vercel Postgres
+attached to the project, the workflow-library Excel, `lib/ezee-context.md`
+content, Anthropic key, Resend key + verified subdomain, the static one-pager
+PDF, and copy decisions (scale subtitles, CTA text).
+
 ## Standing rules
 
 **Scope.** Homepage only unless a prompt grants an explicit exception. If a
