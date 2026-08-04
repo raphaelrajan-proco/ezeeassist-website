@@ -13,14 +13,17 @@ import { CLOSING_BASE } from "@/components/growth/closing-band";
    do not exist yet, so those links point at the nearest live surface.
    ───────────────────────────────────────────────────────── */
 
+/* Mirrors the nav's three Platform groups in order: On Demand, then
+   Always On, then Foundation. Keep the two in step. */
 const platformLinks = [
-  { label: "Support Agent",           href: "/platform/ai-agent" },
-  { label: "Ticketing Agent",         href: "/platform/ticketing" },
-  { label: "Coaching Agent",          href: "/platform/insights" },
-  { label: "Compliance Agent",        href: "/#capabilities" },
-  { label: "Agentic Workflow Builder",href: "/platform/workflows" },
-  { label: "Control Center",          href: "/#trust" },
-  { label: "Integrations",            href: "/platform/integrations" },
+  { label: "Answers",          href: "/platform/answers" },
+  { label: "Reporting and BI", href: "/platform/reporting" },
+  { label: "Apps",             href: "/#capabilities" },
+  { label: "Workflows",        href: "/platform/workflows" },
+  { label: "Automations",      href: "/platform/automations" },
+  { label: "Integrations",     href: "/platform/integrations" },
+  { label: "Control Center",   href: "/#trust" },
+  { label: "Trust Center",     href: "/security" },
 ];
 
 const solutionsLinks = [

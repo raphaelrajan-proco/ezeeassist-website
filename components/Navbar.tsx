@@ -17,24 +17,36 @@ import ThemeToggle from "@/components/ThemeToggle";
 type NavItem = { label: string; href: string; desc: string };
 type NavGroup = { heading: string; items: NavItem[] };
 
-/* TODO: Coaching Agent and Compliance Agent have no dedicated pages yet;
-   they point at the nearest live surface until those exist. */
+/* Three groups by *when the work happens*, not by what the software is
+   called: what a person asks for in the moment, what runs without being
+   asked, and what everything else stands on.
+
+   TODO: Reporting and BI, Apps, Automations and Control Center have no
+   pages of their own yet. Reporting and Automations are stubs; Apps and
+   Control Center point at the homepage sections that already cover
+   them, the same fallback the old Compliance Agent item used. */
 const platformGroups: NavGroup[] = [
   {
-    heading: "Agents",
+    heading: "On Demand",
     items: [
-      { label: "Support Agent",    href: "/platform/ai-agent",  desc: "Answers every question, cited from your approved source." },
-      { label: "Ticketing Agent",  href: "/platform/ticketing", desc: "Triages, routes, and resolves what needs a human." },
-      { label: "Coaching Agent",   href: "/platform/insights",  desc: "Briefs your coaches before every call." },
-      { label: "Compliance Agent", href: "/#capabilities",      desc: "Locations checked continuously against your standard." },
+      { label: "Answers",          href: "/platform/answers",   desc: "Every question answered from your own material, scoped to who asks." },
+      { label: "Reporting and BI", href: "/platform/reporting", desc: "The numbers, pulled and compared without a rebuild." },
+      { label: "Apps",             href: "/#capabilities",      desc: "Purpose-built tools your locations open on a phone." },
     ],
   },
   {
-    heading: "Platform",
+    heading: "Always On",
     items: [
-      { label: "Agentic Workflow Builder", href: "/platform/workflows",    desc: "Recurring work runs on a schedule or a trigger." },
-      { label: "Control Center",           href: "/#trust",                desc: "Set who sees what and what runs without a human." },
-      { label: "Integrations",             href: "/platform/integrations", desc: "250+ native connections. No migration." },
+      { label: "Workflows",   href: "/platform/workflows",   desc: "Recurring work runs on a schedule or a trigger." },
+      { label: "Automations", href: "/platform/automations", desc: "Plays that fire the moment something changes." },
+    ],
+  },
+  {
+    heading: "Foundation",
+    items: [
+      { label: "Integrations",   href: "/platform/integrations", desc: "Connect what you already run. Nothing migrates." },
+      { label: "Control Center", href: "/#trust",                desc: "Set who sees what and what runs without a human." },
+      { label: "Trust Center",   href: "/security",              desc: "How your data is handled, stored, and kept yours." },
     ],
   },
 ];

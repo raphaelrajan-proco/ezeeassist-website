@@ -12,10 +12,16 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      /* The /platform tree was retired wholesale into /solution. Two of
+         those routes are coming back as real pages, so their redirects
+         are gone and the legacy /solution twins now point at them
+         instead. Everything still pointing into /solution is a page
+         that has not been rebuilt yet; do not add a /platform nav item
+         without checking whether it is redirected away from here. */
       { source: "/platform",               destination: "/solution",               permanent: true },
-      { source: "/platform/ai-agent",      destination: "/solution",               permanent: true },
+      { source: "/platform/ai-agent",      destination: "/platform/answers",       permanent: true },
       { source: "/platform/insights",      destination: "/solution",               permanent: true },
-      { source: "/platform/integrations",  destination: "/solution/integrations",  permanent: true },
+      { source: "/solution/integrations",  destination: "/platform/integrations",  permanent: true },
       { source: "/platform/ticketing",     destination: "/solution/ticketing",     permanent: true },
       { source: "/platform/workflows",     destination: "/solution/agents",        permanent: true },
       { source: "/solution/workflows",     destination: "/solution/agents",        permanent: true },
