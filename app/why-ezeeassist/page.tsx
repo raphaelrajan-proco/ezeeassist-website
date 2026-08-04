@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import Footer from "@/components/Footer";
 import WhyEZeeAssistContent from "./WhyEZeeAssistContent";
 
@@ -11,12 +12,13 @@ export const metadata: Metadata = {
 
 export default function WhyEZeeAssistPage() {
   return (
-    <>
+    <div className="theme-editorial">
+      <AnnouncementBar />
       <Navbar />
       <main className="flex flex-1 flex-col">
         <WhyEZeeAssistContent />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
