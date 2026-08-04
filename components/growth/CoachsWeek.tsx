@@ -58,7 +58,11 @@ function TimeBar({
     <div className="flex flex-col gap-3.5">
       {/* One uniform run rather than a bold figure plus a muted tail: the
           whole line is the claim. */}
-      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+      {/* The header row spans the bar, not the section, so the eyebrow
+          sits over the bar's right end rather than out at the margin.
+          Below md the bar-width row would crush the title, so the row
+          goes full width there. */}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 md:w-[70%]">
         <span
           className="text-[19px] md:text-[22px]"
           style={{
@@ -71,7 +75,7 @@ function TimeBar({
           {title}
         </span>
         <span
-          className="text-[10.5px] uppercase"
+          className="text-[9.5px] uppercase"
           style={{ fontFamily: "var(--pb-mono)", letterSpacing: "0.14em", color: "var(--pb-muted)" }}
         >
           {eyebrow}
@@ -171,7 +175,7 @@ function CouldBeBar() {
           What it could be
         </span>
         <span
-          className="text-[10.5px] uppercase"
+          className="text-[9.5px] uppercase"
           style={{ fontFamily: "var(--pb-mono)", letterSpacing: "0.14em", color: "var(--pb-muted)" }}
         >
           The same coach, multiplied
@@ -571,11 +575,14 @@ export default function CoachsWeek() {
           <CouldBeBar />
 
           <p
-            className="-mt-2 text-[17.5px] md:text-[18.5px] max-w-[900px]"
-            style={{ color: "var(--pb-muted)", lineHeight: 1.5, fontWeight: 600 }}
+            className="-mt-2 text-[21px] md:text-[22px]"
+            style={{ color: "var(--pb-muted)", lineHeight: 1.45, fontWeight: 400 }}
           >
             A coach&rsquo;s time is capped by the hours in a day. That cap is what
-            limits coverage, and why headcount grows as the system grows.
+            limits coverage,
+            {/* Desktop only, or the second line orphans on phones. */}
+            <br className="hidden md:block" />{" "}
+            and why headcount grows as the system grows.
           </p>
         </div>
 

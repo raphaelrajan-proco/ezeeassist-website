@@ -304,7 +304,9 @@ the figure, so `Coaching` is hidden below `sm` on that bar only and the
 figure centres. The 80 percent bar keeps both at every width.
 
 **The time bars are 48px tall and stop at 70% of the row** (the 70%
-was horizontal, not vertical; a 34px misread was reverted). After the
+was horizontal, not vertical; a 34px misread was reverted). Their
+header rows span the bar, not the section, from md up, so the 9.5px
+eyebrows sit over each bar's right end rather than out at the margin. After the
 three pillars the section runs a second beat: a lead in the section
 lead's own size ("Even with the time freed up, one coach's expertise
 only reaches so far.", two lines are fine), then **the uncapped third
@@ -312,9 +314,10 @@ bar** ("What it could be" · "The same coach, multiplied"): all-accent,
 48px, full width, a 2px dashed threshold overhanging at exactly 70%
 (the line the two bars above stop at), and a mask fade on the last
 stretch so the bar reads as leaving the page rather than filling it
-(mask, not gradient, so it follows the accent token in dark mode). An
-18.5px semibold muted caption closes the beat and the section: the
-hours cap is what limits coverage and grows headcount.
+(mask, not gradient, so it follows the accent token in dark mode). A
+21/22px regular-weight muted caption closes the beat and the section,
+split after "limits coverage," from md up: the hours cap is what limits
+coverage and grows headcount.
 
 **The As-locations-scale chart card was deleted entirely** on request
 (the two-scenario animated chart and all its constants). Recover from
