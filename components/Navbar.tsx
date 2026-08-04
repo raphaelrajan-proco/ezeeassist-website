@@ -21,16 +21,22 @@ type NavGroup = { heading: string; items: NavItem[] };
    called: what a person asks for in the moment, what runs without being
    asked, and what everything else stands on.
 
-   TODO: Reporting and BI, Apps, Automations and Control Center have no
-   pages of their own yet. Reporting and Automations are stubs; Apps and
-   Control Center point at the homepage sections that already cover
-   them, the same fallback the old Compliance Agent item used. */
+   TODO: Apps, Automations and Control Center have no real pages yet.
+   Automations is a stub; Apps and Control Center point at the homepage
+   sections that already cover them, the same fallback the old Compliance
+   Agent item used.
+
+   Note Control Center is inconsistent right now: this entry points at
+   `/#trust`, while the Reporting page links to `/platform/control-center`,
+   a stub created for it. The reporting brief authorised the stub but
+   explicitly forbade restructuring the nav, so the two were left
+   disagreeing. Repoint this entry when that page is real. */
 const platformGroups: NavGroup[] = [
   {
     heading: "On Demand",
     items: [
       { label: "Answers",          href: "/platform/answers",   desc: "Every question answered from your own material, scoped to who asks." },
-      { label: "Reporting and BI", href: "/platform/reporting", desc: "The numbers, pulled and compared without a rebuild." },
+      { label: "Reporting", href: "/platform/reporting", desc: "Any number, rendered however you ask." },
       { label: "Apps",             href: "/#capabilities",      desc: "Purpose-built tools your locations open on a phone." },
     ],
   },

@@ -1337,12 +1337,80 @@ emphasis on dark where the 5% tint nearly vanishes; the hero CTA scrolls to
 `enableSystem={false}`, so emulating `prefers-color-scheme` does nothing. Set
 `localStorage.theme = 'dark'` and reload instead.
 
+## /platform/reporting
+
+Twelve sections, built from the reporting brief. Two things are
+load-bearing and must survive a copy pass.
+
+**The band sequence is the spec, not styling:** dark, dark, light, light,
+dark, light, light, light, light, light, light, dark. The other Platform
+pages run white card grid into white card grid and read as monotonous;
+this one alternates deliberately. **§3, §6 and §7 use no cards at all** —
+a spectrum bar and plain text, a timeline spine, and four nested
+containers. Convert any of them to a card grid and the rhythm is gone.
+Verified on the built page in that exact order.
+
+**No two adjacent sections share a layout device.** §4 is one card
+holding four sub-cards, not four cards, because its header says "one
+dataset" and four separate cards would argue four datasets.
+
+Three deliberate deviations, all noted at the top of `ReportingContent.tsx`:
+
+1. **The hero is photographic on `HERO_BG.haze2`**, not the flat gradient
+   the brief describes. Requested directly. Scrim is `SCRIM.heroSubPage`
+   (0.45), not the variant's own 0.36: that baseline was measured for
+   white body copy alone and this band also carries a mono query bar and
+   a 10.5px caption.
+2. **§9 is light.** The brief contradicts itself — its rhythm table and
+   its verify step both say LIGHT, its section body says reuse the
+   governance band, which is dark. The rhythm table wins because the
+   brief names it as the spec twice. The four-column label/value *form*
+   is kept per DESIGN.md §1.1; only the surface changed, so
+   `GovernanceBand` is untouched.
+3. **Three dark moments where DESIGN.md §4.1 allows two**, and the first
+   two adjacent. That is the brief's rhythm. §2 carries no photograph and
+   no second scrim, so the opening reads as one extended dark region
+   rather than two bands.
+
+**`OverlapChart`'s widths are the argument and must not be normalised.**
+Most locations have capacity, most have a lapsed list, only a few have
+both. The "Both" bar arriving visibly shorter than the two above it is
+the whole section. Measured on the built page: 107 vs 243/180, 73 vs
+222/152, 59 vs 201/163, 28 vs 146/125. Card 4 is amber because it is the
+one diagnostic question among three opportunities.
+
+**`LiveQueryBar` holds the previous answer while the next question
+types.** The brief's beat is "clear, next state", which read literally
+leaves a 168px box empty for ~2.5s of every ~5.5s cycle — half the loop
+showing nothing, which reads as broken. The outgoing render stays at 34%
+opacity instead. First paint is state 1 complete, which also gives the
+reduced-motion case for free: with the effect disabled, what is on
+screen is already the static state the brief asks for.
+
+The three renders are a discriminated union, not one chart with a data
+prop, **because the shapes must differ** — bars, then a line, then
+exception rows. Three bar charts would prove nothing.
+
+`{{TBD:}}` tokens, four, all in §10 and all needing a real customer:
+`reporting-proof-brand`, `-metric`, `-quote`, `-attribution`. **Do not
+substitute a deflection metric** — deflection is a support number and
+argues for the Answers page. The brand token deliberately does not use
+`<Meta>`, which force-uppercases and would render the token as
+`{{TBD:REPORTING-PROOF-BRAND}}`.
+
+Stub created: `/platform/control-center`, `noindex`, `ComingSoon`. §7,
+§9 and the related block all link to it. **The nav still points Control
+Center at `/#trust`** — the brief authorised the stub but forbade
+restructuring the nav, so the two disagree on purpose. Repoint the nav
+when that page is real.
+
 ## Platform pages (branch `platform-pages`)
 
 **Nav Platform regroups by when the work happens**, not by what the
-software is called: On Demand (Answers, Reporting and BI, Apps), Always
-On (Workflows, Automations), Foundation (Integrations, Control Center,
+software is called: On Demand (Answers, Reporting, Apps), Always On
+(Workflows, Automations), Foundation (Integrations, Control Center,
 Trust Center). Footer mirrors the same order. Keep the two in step.
+"Reporting and BI" was renamed to "Reporting" when that page shipped.
 
 **The whole `/platform` tree was redirected into `/solution`**, so those
 pages were unreachable. Two are real again: `/platform/ai-agent` now

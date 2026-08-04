@@ -17,7 +17,7 @@ import { CLOSING_BASE } from "@/components/growth/closing-band";
    Always On, then Foundation. Keep the two in step. */
 const platformLinks = [
   { label: "Answers",          href: "/platform/answers" },
-  { label: "Reporting and BI", href: "/platform/reporting" },
+  { label: "Reporting",        href: "/platform/reporting" },
   { label: "Apps",             href: "/#capabilities" },
   { label: "Workflows",        href: "/platform/workflows" },
   { label: "Automations",      href: "/platform/automations" },
