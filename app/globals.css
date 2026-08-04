@@ -1189,3 +1189,22 @@ input[type="range"]::-moz-range-thumb {
   .ed-sc-anim { animation: none !important; opacity: 1 !important; transform: none !important }
   .ed-sc-draw { animation: none !important; stroke-dashoffset: 0 !important }
 }
+
+/* ── Integrations hero strip ───────────────────────────────
+   A slow marquee under the hero copy, deliberately a different form
+   from §5's static grid so the page does not show the same wall of
+   system names twice. Two identical runs translate by exactly half the
+   track, which is one full run, so the loop has no seam. */
+.ig-strip-run {
+  animation: ig-strip-scroll 48s linear infinite;
+}
+@keyframes ig-strip-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(-100% - 0.625rem)); }
+}
+.ig-strip:hover .ig-strip-run {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ig-strip-run { animation: none; }
+}
