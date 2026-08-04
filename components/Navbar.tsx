@@ -14,8 +14,31 @@ import ThemeToggle from "@/components/ThemeToggle";
    Menu items are name + one-line description, no icons.
    ───────────────────────────────────────────────────────── */
 
-type NavItem = { label: string; href: string; desc: string };
+type NavItem = { label: string; href: string; desc: string; hidden?: boolean };
 type NavGroup = { heading: string; items: NavItem[] };
+
+/* ── Temporarily hidden ────────────────────────────────────
+   A requested cut-down of the nav while several sections are reworked.
+   **Nothing is deleted.** Every link below is still here in its original
+   order, and restoring one is removing its `hidden: true` — or, for the
+   two whole dropdowns, flipping the flag beside it.
+
+   The pages themselves stay live and stay in the sitemap. Hiding a nav
+   link does not deindex anything; if a hidden section should also leave
+   search, that is a `noindex` on the page, not a change here. Note some
+   of these keep inbound links from elsewhere on the site (Control
+   Center's §7 links the Franchisees page and the ROI calculator), so
+   they are not orphaned by this. */
+const SHOW_INDUSTRIES = false;
+const SHOW_COMPANY = false;
+
+/** Drops hidden entries at render, so the data above stays intact. */
+const visible = (items: NavItem[]) => items.filter((i) => !i.hidden);
+/** Same, for grouped panels; a group with nothing left is dropped too. */
+const visibleGroups = (groups: NavGroup[]) =>
+  groups
+    .map((g) => ({ ...g, items: visible(g.items) }))
+    .filter((g) => g.items.length > 0);
 
 /* Three groups by *when the work happens*, not by what the software is
    called: what a person asks for in the moment, what runs without being
@@ -56,7 +79,7 @@ const platformGroups: NavGroup[] = [
       { label: "Ticketing",      href: "/platform/ticketing",    desc: "Every request, routed to the team that owns it." },
       { label: "Integrations",   href: "/platform/integrations", desc: "Connect what you already run. Nothing migrates." },
       { label: "Control Center", href: "/platform/control-center", desc: "Set who sees what and what runs without a human." },
-      { label: "Trust Center",   href: "/security",              desc: "How your data is handled, stored, and kept yours." },
+      { label: "Trust Center",   href: "/security",              desc: "How your data is handled, stored, and kept yours.", hidden: true },
     ],
   },
 ];
@@ -67,7 +90,7 @@ const solutionsGroups: NavGroup[] = [
     items: [
       { label: "HQ team",     href: "/industries/franchising/franchisors",            desc: "Publish the standard, then watch it hold." },
       { label: "Coaches",     href: "/solutions/coaches",                             desc: "Walk into every call already prepared." },
-      { label: "Franchisees", href: "/industries/franchising/multi-unit-franchisees", desc: "Answers and tools at the hour you work." },
+      { label: "Franchisees", href: "/industries/franchising/multi-unit-franchisees", desc: "Answers and tools at the hour you work.", hidden: true },
     ],
   },
 ];
@@ -101,14 +124,18 @@ const industriesGroups: NavGroup[] = [
    instead of shipping a 404. */
 const resourcesItems: NavItem[] = [
   { label: "Case Studies",   href: "/case-studies",       desc: "What brands changed, and what it returned." },
-  { label: "Blog",           href: "/blog",               desc: "Franchise operations insights and product news." },
-  { label: "Pricing",        href: "/speak-to-an-expert", desc: "Talk through plans with the team." },
-  { label: "ROI Calculator", href: "/roi-calculator",     desc: "See what your network could recover." },
+  { label: "Blog",           href: "/blog",               desc: "Franchise operations insights and product news.", hidden: true },
+  { label: "Pricing",        href: "/speak-to-an-expert", desc: "Talk through plans with the team.", hidden: true },
+  { label: "ROI Calculator", href: "/roi-calculator",     desc: "See what your network could recover.", hidden: true },
   { label: "Trust Center",   href: "/security",           desc: "Security, privacy, and how your data is handled." },
 ];
 
+/* Why EZee? was pulled out of Company and promoted to its own top-level
+   link, so it survives Company being hidden. It is a plain Link rather
+   than a dropdown trigger: no panel, no chevron. */
+const WHY_EZEE = { label: "Why EZee?", href: "/why-ezeeassist" };
+
 const companyItems: NavItem[] = [
-  { label: "Why EZee?", href: "/why-ezeeassist", desc: "How purpose-built AI differs from a general assistant." },
   { label: "Careers",   href: "/careers",        desc: "Open roles across engineering and go to market." },
   { label: "Contact",   href: "/contact",        desc: "Talk to our team." },
 ];
@@ -157,7 +184,7 @@ function GroupedPanel({ groups, onClose, width }: { groups: NavGroup[]; onClose:
       className={`grid gap-8 p-6 ${width}`}
       style={{ gridTemplateColumns: `repeat(${groups.length}, minmax(0, 1fr))` }}
     >
-      {groups.map((g) => (
+      {visibleGroups(groups).map((g) => (
         <div key={g.heading}>
           <GroupHeading>{g.heading}</GroupHeading>
           <div className="flex flex-col gap-0.5">
@@ -174,7 +201,7 @@ function GroupedPanel({ groups, onClose, width }: { groups: NavGroup[]; onClose:
 function ListPanel({ items, onClose }: { items: NavItem[]; onClose: () => void }) {
   return (
     <div className="flex flex-col gap-0.5 p-6 w-[340px]">
-      {items.map((item) => (
+      {visible(items).map((item) => (
         <MenuLink key={item.label} item={item} onClose={onClose} />
       ))}
     </div>
@@ -292,7 +319,9 @@ export default function Navbar() {
   const dropdowns: { key: Exclude<DropdownKey, null>; label: string; panel: React.ReactNode }[] = [
     { key: "platform",   label: "Platform",   panel: <GroupedPanel groups={platformGroups}   onClose={closeAll} width="w-[720px]" /> },
     { key: "solutions",  label: "Solutions",  panel: <GroupedPanel groups={solutionsGroups}  onClose={closeAll} width="w-[360px]" /> },
-    { key: "industries", label: "Industries", panel: <GroupedPanel groups={industriesGroups} onClose={closeAll} width="w-[720px]" /> },
+    ...(SHOW_INDUSTRIES
+      ? [{ key: "industries" as const, label: "Industries", panel: <GroupedPanel groups={industriesGroups} onClose={closeAll} width="w-[720px]" /> }]
+      : []),
   ];
 
   /* Accordion body shared by the mobile sheet. */
@@ -301,7 +330,7 @@ export default function Navbar() {
       {[
         { key: "platform"   as const, label: "Platform",   groups: platformGroups },
         { key: "solutions"  as const, label: "Solutions",  groups: solutionsGroups },
-        { key: "industries" as const, label: "Industries", groups: industriesGroups },
+        ...(SHOW_INDUSTRIES ? [{ key: "industries" as const, label: "Industries", groups: industriesGroups }] : []),
       ].map(({ key, label, groups }) => (
         <li key={key}>
           <button
@@ -315,7 +344,7 @@ export default function Navbar() {
           </button>
           {mobileSection === key && (
             <div className="mt-1 ml-3 flex flex-col gap-2 border-l-2 border-[#00AEEF]/20 pl-4 pb-2">
-              {groups.map((g) => (
+              {visibleGroups(groups).map((g) => (
                 <div key={g.heading}>
                   <p className="text-[10px] uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 mb-1" style={{ fontWeight: 600 }}>
                     {g.heading}
@@ -339,7 +368,7 @@ export default function Navbar() {
 
       {[
         { key: "resources" as const, label: "Resources", items: resourcesItems },
-        { key: "company"   as const, label: "Company",   items: companyItems },
+        ...(SHOW_COMPANY ? [{ key: "company" as const, label: "Company", items: companyItems }] : []),
       ].map(({ key, label, items }) => (
         <li key={key}>
           <button
@@ -353,7 +382,7 @@ export default function Navbar() {
           </button>
           {mobileSection === key && (
             <div className="mt-1 ml-3 flex flex-col gap-0.5 border-l-2 border-[#00AEEF]/20 pl-4 pb-2">
-              {items.map((item) => (
+              {visible(items).map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
@@ -367,6 +396,18 @@ export default function Navbar() {
           )}
         </li>
       ))}
+
+      {/* Standalone, matching the desktop bar: a link, not an accordion. */}
+      <li>
+        <Link
+          href={WHY_EZEE.href}
+          onClick={closeMobile}
+          className="block rounded-xl px-3 py-2.5 text-sm text-gray-700 dark:text-gray-300"
+          style={{ fontWeight: 500 }}
+        >
+          {WHY_EZEE.label}
+        </Link>
+      </li>
     </ul>
   );
 
@@ -461,23 +502,34 @@ export default function Navbar() {
         </li>
 
         {/* Company */}
-        <li
-          className="relative"
-          onMouseEnter={() => setActiveDropdown("company")}
-          onMouseLeave={() => setActiveDropdown(null)}
-        >
-          <button
-            ref={(el) => { triggerRefs.current.company = el; }}
-            className={`${triggerBase} ${activeDropdown === "company" ? triggerActive : triggerIdle}`}
-            onClick={() => setActiveDropdown(activeDropdown === "company" ? null : "company")}
-            aria-expanded={activeDropdown === "company"}
+        {SHOW_COMPANY && (
+          <li
+            className="relative"
+            onMouseEnter={() => setActiveDropdown("company")}
+            onMouseLeave={() => setActiveDropdown(null)}
           >
-            Company
-            <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "company" ? "rotate-180" : ""}`} />
-          </button>
-          <DropdownWrapper keyName="company">
-            <ListPanel items={companyItems} onClose={closeAll} />
-          </DropdownWrapper>
+            <button
+              ref={(el) => { triggerRefs.current.company = el; }}
+              className={`${triggerBase} ${activeDropdown === "company" ? triggerActive : triggerIdle}`}
+              onClick={() => setActiveDropdown(activeDropdown === "company" ? null : "company")}
+              aria-expanded={activeDropdown === "company"}
+            >
+              Company
+              <ChevronDown size={13} strokeWidth={2.5} className={`transition-transform duration-200 ${activeDropdown === "company" ? "rotate-180" : ""}`} />
+            </button>
+            <DropdownWrapper keyName="company">
+              <ListPanel items={companyItems} onClose={closeAll} />
+            </DropdownWrapper>
+          </li>
+        )}
+
+        {/* Standalone. No panel, so no chevron and no hover handlers; the
+            trigger styling is shared so it sits on the same baseline as
+            the dropdown labels beside it. */}
+        <li className="relative">
+          <Link href={WHY_EZEE.href} className={`${triggerBase} ${triggerIdle}`}>
+            {WHY_EZEE.label}
+          </Link>
         </li>
       </ul>
 

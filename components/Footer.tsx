@@ -13,6 +13,43 @@ import { CLOSING_BASE } from "@/components/growth/closing-band";
    do not exist yet, so those links point at the nearest live surface.
    ───────────────────────────────────────────────────────── */
 
+/* ── Temporarily hidden ────────────────────────────────────
+   Mirrors the nav's cut-down. **Nothing is deleted**: every link is still
+   here in order, and restoring one is removing it from HIDDEN or, for a
+   whole column, from HIDDEN_COLUMNS. Keep this in step with the matching
+   block in Navbar.tsx.
+
+   Trust Center leaves the Platform column only; it stays under Resources,
+   which is where it now lives. Why EZee? was promoted out of Company to a
+   standalone nav link, and lands in the footer's Resources column since a
+   one-item column would read as a mistake. */
+const HIDDEN = new Set<string>([
+  "Platform:Trust Center",
+  "Solutions:Franchisees",
+  "Resources:Blog",
+  "Resources:Pricing",
+  "Resources:ROI Calculator",
+]);
+const HIDDEN_COLUMNS = new Set<string>(["Industries", "Company"]);
+
+const shown = (heading: string, links: { label: string; href: string }[]) =>
+  links.filter((l) => !HIDDEN.has(`${heading}:${l.label}`));
+const notHidden = (heading: string) => !HIDDEN_COLUMNS.has(heading);
+
+/* Track counts follow the visible columns. Hardcoding them left empty
+   slots and a dead right half once Industries and Company were hidden.
+   Literal classes rather than a template string, because Tailwind only
+   generates what it can see in the source. */
+const BANDED_GRID: Record<number, string> = {
+  1: "lg:grid-cols-[1.6fr_repeat(1,_1fr)]",
+  2: "lg:grid-cols-[1.6fr_repeat(2,_1fr)]",
+  3: "lg:grid-cols-[1.6fr_repeat(3,_1fr)]",
+  4: "lg:grid-cols-[1.6fr_repeat(4,_1fr)]",
+};
+const EDITORIAL_GRID: Record<number, string> = {
+  3: "lg:grid-cols-3", 4: "lg:grid-cols-4", 5: "lg:grid-cols-5", 6: "lg:grid-cols-6",
+};
+
 /* Mirrors the nav's three Platform groups in order: On Demand, then
    Always On, then Foundation. Keep the two in step. */
 const platformLinks = [
@@ -47,6 +84,7 @@ const industriesLinks = [
 
 const resourcesLinks = [
   { label: "Case Studies",   href: "/case-studies" },
+  { label: "Why EZee?",      href: "/why-ezeeassist" },
   { label: "Blog",           href: "/blog" },
   { label: "Pricing",        href: "/speak-to-an-expert" },
   { label: "ROI Calculator", href: "/roi-calculator" },
@@ -54,7 +92,6 @@ const resourcesLinks = [
 ];
 
 const companyLinks = [
-  { label: "Why EZee?", href: "/why-ezeeassist" },
   { label: "Careers",   href: "/careers" },
   { label: "Contact",   href: "/contact" },
 ];
@@ -113,6 +150,12 @@ const socialLinks = [
    footer, which would meet the fade as a hard seam. */
 const EDITORIAL_FOOTER = new Set(["/", "/speak-to-an-expert"]);
 
+/** The banded footer's visible link columns, used for both the grid
+    template and the render, so they cannot drift apart. */
+const bandedColumns = Object.entries(footerLinks).filter(([h]) => notHidden(h));
+/** Same, for the editorial footer's six-column block. */
+const editorialColumns = editorialFooterColumns.filter((c) => notHidden(c.heading));
+
 export default function Footer() {
   const pathname = usePathname();
 
@@ -125,7 +168,10 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-6 pt-16 pb-10 lg:px-8">
 
         {/* Top grid */}
-        <div className="grid grid-cols-2 gap-10 lg:grid-cols-[1.6fr_repeat(4,_1fr)]">
+        {/* Track count follows the visible columns. Hardcoding four left
+            two empty slots and a dead right half once Industries and
+            Company were hidden. */}
+        <div className={`grid grid-cols-2 gap-10 ${BANDED_GRID[bandedColumns.length] ?? BANDED_GRID[4]}`}>
 
           {/* Brand column */}
           <div className="col-span-2 lg:col-span-1">
@@ -170,13 +216,13 @@ export default function Footer() {
           </div>
 
           {/* Nav columns */}
-          {Object.entries(footerLinks).map(([heading, links]) => (
+          {bandedColumns.map(([heading, links]) => (
             <div key={heading}>
               <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
                 {heading}
               </h3>
               <ul className="mt-4 flex flex-col gap-3">
-                {links.map((link) => (
+                {shown(heading, links).map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
@@ -330,8 +376,8 @@ function FooterEditorial() {
         )}
 
         {/* Six columns */}
-        <div className="mt-14 md:mt-16 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 md:gap-8">
-          {editorialFooterColumns.map((col) => (
+        <div className={`mt-14 md:mt-16 grid grid-cols-2 md:grid-cols-3 gap-10 md:gap-8 ${EDITORIAL_GRID[editorialColumns.length] ?? EDITORIAL_GRID[6]}`}>
+          {editorialColumns.map((col) => (
             <div key={col.heading}>
               <p
                 className="ed-fg-muted text-[10px] mb-5"
@@ -344,7 +390,7 @@ function FooterEditorial() {
                 {col.heading}
               </p>
               <ul className="flex flex-col gap-2.5">
-                {col.links.map((link) => (
+                {shown(col.heading, col.links).map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
