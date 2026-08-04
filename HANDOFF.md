@@ -1337,6 +1337,134 @@ emphasis on dark where the 5% tint nearly vanishes; the hero CTA scrolls to
 `enableSystem={false}`, so emulating `prefers-color-scheme` does nothing. Set
 `localStorage.theme = 'dark'` and reload instead.
 
+## /platform/control-center
+
+Ten sections, replacing the ComingSoon stub Reporting created.
+
+**The split with Trust Center is the most important rule on this page.**
+Control Center is *what HQ configures* — policies, permissions, approval
+gates, the activity log, model choice. `/security` is *what EZee
+guarantees* — SOC 2, encryption, subprocessors, DPA, incident response,
+residency. **No certification, encryption or subprocessor content belongs
+here**, one pointer only. Verified on the built page: SOC, ISO,
+subprocessor, encryption and GDPR are all zero hits, and "Trust Center"
+appears once.
+
+**The argument is consolidation, not deficiency, and the tone rule is
+load-bearing.** Nothing may imply the franchisor lacks IT capability,
+control, or failed at governance. Fragmentation is an architectural
+condition. §2's rows are neutral and only the HQ row is tinted, and even
+that names the situation rather than blaming anyone. **This page's whole
+job is being forwarded**, and a page that reads as an accusation does not
+get forwarded.
+
+**Governance is a reason to buy, not reassurance.** It reads as
+capability, not as a compliance appendix.
+
+One new component, `RoleAnswers` (§4). **Four responses, not two** — the
+climb from one store to 214 locations is what makes the model legible.
+**The HQ answer keeps the analytical insight the others do not get** (the
+top-decile add-on script): scoping governs analysis, not just data
+access. **The third point must not be softened** — an owner's numbers
+being contractually theirs is what a franchisee-facing rollout depends
+on, and if it reads as a configurable setting the claim fails.
+
+- **§1's policy surface is five ON and one OFF**, and the OFF one is
+  model training on their content. All-ON reads as marketing; one switch
+  off reads as a real settings screen. Do not "fix" it.
+- **§3 is a settings surface, not a capability list**, with filled/hollow
+  markers and screen-reader labels so it reads in greyscale. Deliberately
+  not interactive.
+- **§5's log includes named humans** (Maria S. approving, Priya N.
+  publishing). A log of only system actions does not demonstrate the trail
+  a dispute would need. The closing line is aimed at legal.
+- **No model vendor is named.** The list dates fast and the claim is
+  swappability.
+- **§7 leads with IT and Security** (where enterprise deals stall) and
+  **keeps the Franchisees row** — including the governed party signals the
+  rollout survives contact with owners.
+
+Inbound links: seven pointed at the homepage's `#trust` anchor and were
+retargeted, href-only, no copy touched — nav, footer, Answers (related
+card + governance band), Integrations (related card + access link), and
+Coaches' PlayGrid. Zero `/#trust` links remain.
+
+`{{TBD:}}` tokens, four, all §8.
+
+**Five claims flagged for confirmation:** every §3 policy row being
+genuinely configurable (the most checkable section on the page, and a row
+that cannot be toggled is expensive in a demo); per-brand and per-region
+policy (multi-brand buyers ask first); §4's four-role scoping including
+HQ's analytical insight; log retention being customer-configurable; and
+model swapping genuinely requiring no reconfiguration of policies,
+permissions, plays or logs.
+
+## /platform/ticketing
+
+Ten sections replacing the legacy page. **This is not franchisee support,
+it is the whole HQ request system.** A franchisee raises a ticket by
+asking, in whatever channel they already use, and it is classified, given
+the location's context, and routed to whichever of nine departments owns
+it. The pain removed is that today they have to know the franchisor's org
+chart before they can ask for help.
+
+**Three copy rules, all verified on the built page:**
+
+1. **No competitor is named anywhere** (Zendesk, Freshdesk, Zoho,
+   Intercom, HubSpot all zero). §7 says "a helpdesk" and lets the reader
+   supply the name; naming one invites a rebuttal we do not control and
+   dates the page.
+2. **It never claims to replace external customer support.** §7 concedes
+   it, and the concession is what makes the internal claim credible.
+3. **No form, portal or category picker appears anywhere.** The entire
+   intake claim is that none of those exist.
+
+No section leads with agent productivity, which is where every helpdesk
+vendor's page leads.
+
+One new component, `DepartmentMap`: one intake point fanning to nine
+departments with **twenty-seven example requests**. Those examples are
+the section — nine labels prove nothing, and a franchisee reading
+"partner terms · lease review · trademark use" recognises their own week.
+Do not abbreviate to one each.
+
+- **§6's three panels use three different devices** — a table, a ranked
+  list, a two-column prescription. All three as tables makes it one long
+  report. **Panel 3 is the differentiated one and is visually dominant**:
+  nobody else turns a support queue into a content roadmap.
+- **§6 panel 1 is never performance management.** The Legal line reframes
+  the outlier as a capacity finding, which is safer and more often true.
+  Do not cut it.
+- **§5 keeps the precedent row** ("two similar partner promos approved in
+  the last year") and **shows the SLA breach**. A perfect board is less
+  credible than one with a problem on it.
+- **§1's two-department routing stays.** Marketing *and* a legal check
+  shows classification doing real work rather than keyword-matching.
+- **§6's payoff keeps "2 raised because the terms were unusual."** Not
+  every request disappears.
+
+§6's performance table **stacks below `sm` rather than scrolling**: it
+needs 560px, 375 gives it 327, and forcing the scroll grew the document
+to 565px. DESIGN.md §8 prefers stacking on a narrative section anyway.
+
+Routing: this route was **unreachable** before now, the same shadowing
+that hid `/platform/workflows` — `next.config.ts` 308'd it to
+`/solution/ticketing`. Reversed, and the legacy twin now points forward.
+`app/solution/ticketing` is deleted; it was a second mount of the same
+content.
+
+Nav and footer: the brief said to update a Ticketing descriptor. **Neither
+entry existed**, so both are adds, into Foundation.
+
+`{{TBD:}}` tokens, four, all §8.
+
+**Five claims flagged:** the nine departments and twenty-seven examples
+matching what customers actually send; multi-department routing with one
+named owner; §5's precedent attachment; §6 panel 3's prevention estimate
+(if the product surfaces recurrence but not the estimate, drop the
+PREVENTS column rather than approximating it); and §6 panel 1's per
+department first-response, time-to-close and SLA tracking.
+
 ## /platform/compliance
 
 Ten sections, replacing the ComingSoon stub the Workflows page created.
