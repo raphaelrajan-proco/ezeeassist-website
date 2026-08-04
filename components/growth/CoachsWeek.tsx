@@ -305,9 +305,12 @@ function HexFrame({ id, title, desc, children }: {
 }
 
 /** Thin rule and caption under each chart. */
-function HexCaption({ children }: { children: React.ReactNode }) {
+/** Chart label. Sits above its chart, aligned to the left edge, so each
+    shape is named before it is read rather than after. No rule: the two
+    charts are already separated by the gap between them. */
+function HexLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ borderTop: "1px solid var(--pb-border-strong)" }} className="mt-1 pt-3">
+    <div className="mb-2">
       <span className="text-[15px]" style={{ fontWeight: 600, color: "var(--pb-text)" }}>
         {children}
       </span>
@@ -354,8 +357,9 @@ function CoverageHexagon() {
        is the argument, so they sit side by side from lg up and stack
        below it, where a half-width chart would render its labels too
        small to read. */
-    <div ref={wrapRef} className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-6">
+    <div ref={wrapRef} className="mt-4 grid w-full grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-6">
       <div className="w-full max-w-[560px]">
+        <HexLabel>Today</HexLabel>
         <HexFrame
           id="pb-hex-today"
           title="Radar chart of personalized coaching coverage today, across six areas"
@@ -385,10 +389,10 @@ function CoverageHexagon() {
             )}
           </path>
         </HexFrame>
-        <HexCaption>Today</HexCaption>
       </div>
 
       <div className="w-full max-w-[560px]">
+        <HexLabel>What it could be</HexLabel>
         <HexFrame
           id="pb-hex-could"
           title="Radar chart of personalized coaching coverage with EZee Assist, across six areas"
@@ -415,7 +419,6 @@ function CoverageHexagon() {
             }}
           />
         </HexFrame>
-        <HexCaption>What it could be</HexCaption>
       </div>
     </div>
   );

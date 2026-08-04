@@ -324,13 +324,21 @@ Replaced the uncapped third bar ("What it could be" · "The same coach,
 multiplied"), which is gone along with its dashed 70% threshold and
 mask fade. Recover from tag `coverage-hexagon-pre` if ever wanted back.
 
-**Two six-axis radars side by side**, each on a 560px canvas with a thin
-rule and a caption under it: the grey `Today` shape on the left and the
-blue `What it could be` shape on the right. They stack below `lg`, where
-a half-width chart renders its labels too small to read. Axes clockwise
-from top: just-in-time guidance, tailored training, individual
-onboarding, local market insight, performance reviews, situational
-coaching.
+**Two six-axis radars side by side**, each on a 560px canvas: the grey
+`Today` shape on the left and the blue `What it could be` shape on the
+right. They stack below `lg`, where a half-width chart renders its
+labels too small to read. Axes clockwise from top: just-in-time
+guidance, tailored training, individual onboarding, local market
+insight, performance reviews, situational coaching.
+
+Each chart is **named above it, not captioned below it**, flush with the
+left edge of its own column at 15px semibold (`HexLabel`). The earlier
+version put the name under the chart over a full-width rule; both the
+rule and the below-placement went on request. There is no rule now: the
+gap between the two columns already separates them, and a rule under a
+chart that has just ended reads as a section break rather than a label.
+A 16px gap holds the name off its chart and `mt-4` on the grid holds the
+pair off the lead line above.
 
 **The second chart is an explicit override of the handoff, not a gap in
 it.** That file forbids one in three separate places: "Do not add a
@@ -738,9 +746,12 @@ Store #331 card no longer has a payoff card on this wall.
 "See more workflows" (no fill, `--wl-accent` text and a 1.5px inset
 shadow) and "Generate your own" (filled `#0077A8`, white text). Both are
 sized to the nav's "Speak to an expert" (`text-sm`, 40px tall).
-"Generate your own" carries the nav's arrow badge too: a near-black disc
-with a white arrow, which stays legible on the blue fill where a bare
-white glyph would not. Three details are load-bearing:
+"Generate your own" carries an arrow badge too, **inverted against the
+nav's**: a white disc with a near-black arrow. It shipped near-black
+first, matching the nav, and was flipped on request. The inversion is
+applied inline on that one element rather than by editing
+`.ed-btn-arrow-badge`, which the nav and both hero CTAs share and which
+must stay near-black. Four details are load-bearing:
 - The fill is `#0077A8` and not the nav's `#00AEEF`, which was the
   requested "slightly darker" differentiation and is also the only one
   of the two that may carry white text (2.53:1 vs 4.99:1). Fixed in

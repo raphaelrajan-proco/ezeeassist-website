@@ -274,10 +274,15 @@ function BandCtas({ innerRef, className = "" }: {
         style={{ backgroundColor: "#0077A8", color: "#FFFFFF" }}
       >
         Generate your own
-        {/* The nav's badge exactly: a near-black disc carrying a white
-            arrow. The disc keeps the arrow legible on the blue fill,
-            which a bare white glyph would not do as cleanly. */}
-        <span className="ed-btn-arrow-badge ed-btn-arrow-badge-sm" aria-hidden="true">
+        {/* Inverted against the nav's badge, by request: a white disc
+            carrying a black arrow. Overridden inline rather than by
+            editing `.ed-btn-arrow-badge`, which the nav and both hero
+            CTAs share and which should stay near-black. */}
+        <span
+          className="ed-btn-arrow-badge ed-btn-arrow-badge-sm"
+          style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
+          aria-hidden="true"
+        >
           <ArrowRight className="h-3 w-3" strokeWidth={2.25} />
         </span>
       </Link>
