@@ -18,11 +18,16 @@ const routes: Route[] = [
   { url: "/",                                               priority: 1.0,  changeFrequency: "weekly"  },
 
   // ── Tier 2: Core product & high-intent pages ──────────────
-  { url: "/platform",                                       priority: 0.9,  changeFrequency: "monthly" },
-  { url: "/platform/ai-agent",                              priority: 0.85, changeFrequency: "monthly" },
-  { url: "/platform/ticketing",                             priority: 0.85, changeFrequency: "monthly" },
-  { url: "/platform/insights",                              priority: 0.85, changeFrequency: "monthly" },
-  { url: "/solution/agents",                                priority: 0.80, changeFrequency: "monthly" },
+  /* Only routes that actually render belong here. `/platform`,
+     `/platform/ai-agent`, `/platform/ticketing` and `/platform/insights`
+     were listed while next.config.ts redirected all four away, and
+     `/solution/agents` was a second mount of the legacy workflows content
+     that no longer exists. Every URL below is a real page; check
+     next.config.ts before adding another. */
+  { url: "/platform/answers",                               priority: 0.85, changeFrequency: "monthly" },
+  { url: "/platform/reporting",                             priority: 0.85, changeFrequency: "monthly" },
+  { url: "/platform/apps",                                  priority: 0.85, changeFrequency: "monthly" },
+  { url: "/platform/workflows",                             priority: 0.85, changeFrequency: "monthly" },
   { url: "/platform/integrations",                          priority: 0.85, changeFrequency: "monthly" },
 
   // ── Tier 2: Industries ────────────────────────────────────
