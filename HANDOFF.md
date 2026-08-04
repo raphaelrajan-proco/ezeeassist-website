@@ -303,10 +303,14 @@ At 390 the 20 percent segment is 68px wide and cannot hold both the word and
 the figure, so `Coaching` is hidden below `sm` on that bar only and the
 figure centres. The 80 percent bar keeps both at every width.
 
-**The time bars are 48px tall and stop at 70% of the row** (the 70%
-was horizontal, not vertical; a 34px misread was reverted). Their
-header rows span the bar, not the section, from md up, so the 9.5px
-eyebrows sit over each bar's right end rather than out at the margin. After the
+**The time bars are 48px tall and run the full row** to the margin.
+They stopped at 70% while the deleted uncapped bar existed, to mark the
+line that bar blew through; with the bar gone there was nothing left for
+a short bar to point at, so they were restored to 100% on request. (The
+70% was always horizontal, not vertical; a 34px thickness misread was
+reverted at the time.) Their header rows span the bar, so the 9.5px
+eyebrows sit at each bar's right end, which is now the margin. The row
+wraps below md, where the eyebrow drops under a long title. After the
 three pillars the section runs a second beat: a lead in the section
 lead's own size ("Even with the time freed up, one coach's expertise
 only reaches so far.", two lines are fine), then **the coverage
@@ -314,16 +318,34 @@ hexagon**, then a 21/22px regular-weight muted caption that closes the
 beat and the section, split after "limits coverage," from md up: the
 hours cap is what limits coverage and grows headcount.
 
-### The coverage hexagon
+### The coverage hexagons
 
 Replaced the uncapped third bar ("What it could be" · "The same coach,
 multiplied"), which is gone along with its dashed 70% threshold and
 mask fade. Recover from tag `coverage-hexagon-pre` if ever wanted back.
 
-A six-axis radar on a 560px canvas, left-aligned, with a thin rule and
-a `Today` label under it. Axes clockwise from top: just-in-time
-guidance, tailored training, individual onboarding, local market
-insight, custom performance review, situational coaching. **Positions 5
+**Two six-axis radars side by side**, each on a 560px canvas with a thin
+rule and a caption under it: the grey `Today` shape on the left and the
+blue `What it could be` shape on the right. They stack below `lg`, where
+a half-width chart renders its labels too small to read. Axes clockwise
+from top: just-in-time guidance, tailored training, individual
+onboarding, local market insight, performance reviews, situational
+coaching.
+
+**The second chart is an explicit override of the handoff, not a gap in
+it.** That file forbids one in three separate places: "Do not add a
+second hexagon, a comparison shape, an 'after' state, or a target
+overlay", the same line again under Do Not, and "No 'what it should
+be'" under the caption spec. It was added on direct request afterwards.
+If you re-read the MD looking for it, it is not there and never was.
+
+The blue shape sits at 97% on every axis, not 100%, so the outer ring
+stays visible just outside it and reads as a frame the blue fills rather
+than a ring the blue replaces. **It does not morph.** The grey shape's
+whole argument is that attention redistributes without growing; a blue
+shape that also fluctuated would argue the opposite. It gets one
+entrance, scaling from the centre when the pair scrolls into view, and
+then holds. **Positions 5
 and 6 are the growth-driving pair and must stay adjacent** so they
 contract together when the shape spikes elsewhere; do not reorder.
 
@@ -361,12 +383,20 @@ scroll into view via IntersectionObserver at 0.35, not on load.
 `prefers-reduced-motion` renders the first state with no `<animate>`
 element emitted at all.
 
-Axis labels are 12 SVG user units on desktop and **16 on phones, which
-is larger, not smaller**. Sizes are in user units so they scale with the
-viewBox: at 375px the chart renders ~327px, so a unit is ~0.58px and 12
-units would be an unreadable 7px. At 16 units the longest label runs off
-the left edge, so `Custom performance review` alone swaps to
-`Performance review` under 480px. The other five never change.
+Axis labels are sized in SVG user units, so the rendered pixel size is
+the unit value times the chart's own scale, and that scale changes with
+the stack/side-by-side switch. Three rules cover it: **17 units under
+480px, 14 up to 1279, 12 from 1280**, where both charts sit at a full
+560. Everything lands between roughly 10.5px and 14px rendered. Note the
+phone value goes *up*, not down: at 12 units a 375px screen would render
+these at 7px. 17 is the ceiling there and not a round number, because at
+18 the right-hand "Individual onboarding" reaches x=563 and clips the
+560-wide canvas.
+
+`Custom performance review` was shortened to **`Performance reviews`**
+on both charts by request. That retired the mobile long/short label
+swap: the shorter string fits at every size, so there is one `<text>`
+per axis again.
 
 **The As-locations-scale chart card was deleted entirely** on request
 (the two-scenario animated chart and all its constants). Recover from
@@ -707,8 +737,10 @@ Store #331 card no longer has a payoff card on this wall.
 **Two CTAs close the compartment**, bottom right, after the last band:
 "See more workflows" (no fill, `--wl-accent` text and a 1.5px inset
 shadow) and "Generate your own" (filled `#0077A8`, white text). Both are
-sized to the nav's "Speak to an expert" (`px-5 py-2 text-sm`, 36px
-tall). Two details are load-bearing:
+sized to the nav's "Speak to an expert" (`text-sm`, 40px tall).
+"Generate your own" carries the nav's arrow badge too: a near-black disc
+with a white arrow, which stays legible on the blue fill where a bare
+white glyph would not. Three details are load-bearing:
 - The fill is `#0077A8` and not the nav's `#00AEEF`, which was the
   requested "slightly darker" differentiation and is also the only one
   of the two that may carry white text (2.53:1 vs 4.99:1). Fixed in
@@ -716,6 +748,12 @@ tall). Two details are load-bearing:
 - The outline uses an **inset box-shadow, not a border**. A real border
   adds 3px to the box and left that button 2px taller than the one
   beside it.
+- Height is pinned with `min-h-[40px]` rather than left to `py`, because
+  only one of the two carries the 24px badge. On padding alone that
+  button ends up 4px taller than its neighbour.
+- `ed-btn-arrow` on the filled link buys only the badge's hover nudge.
+  The padding rule that class also drives is `.ed-btn.ed-btn-arrow`, and
+  this is not an `.ed-btn`, so it does not apply.
 
 They sit in the pinned grid *below* the scroller, not inside it, so the
 fade mask cannot dim them and they are clickable throughout the pin.
@@ -735,7 +773,8 @@ workflow generator ships at `/workflow-generator`. Repoint it then.
 most.", `clamp(1.25rem, 0.25rem + 2vw, 2rem)`; the 71-char string
 measures ~0.494px per char per 1px of font, ceilings 25.5 / 30.7 /
 32.8 at 1024 / 1205 / capped-1152, re-derive if the copy changes). The
-supporting line is exactly 0.75x of it via `calc()`, regular weight:
+supporting line is exactly 0.6x of it via `calc()` (0.8 of the 0.75 it
+was, on request), regular weight:
 "Nobody pulled any of this. Each play orchestrated by a coach once, and
 some plays built directly from what the rest of your network already
 learned." The key sits `mt-2` below it and `pb-1.5` above the

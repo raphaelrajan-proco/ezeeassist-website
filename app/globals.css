@@ -807,28 +807,32 @@ input[type="range"]::-moz-range-thumb {
 /* Coverage hexagon axis labels.
 
    Sizes are in SVG user units, so they scale with the viewBox rather
-   than with the viewport: the chart is 560 units wide, and at a 375px
-   phone it renders around 327px, so a unit is roughly 0.58 of a pixel.
-   12 units is a comfortable 12px on desktop and an unreadable 7px
-   there, which is why the phone size goes *up* rather than down. At 16
-   units the longest label would run off the left edge, so that one
-   label alone swaps to a short form. */
+   than with the viewport, and the rendered pixel size is the unit value
+   times the chart's own scale. The two charts sit side by side from lg
+   and stack below it, so that scale changes three times and the label
+   size has to move against it to stay readable:
+
+     under 480px   stacked, chart ~327px wide, scale ~0.58  -> 17 units
+     480 to 1279   stacked at 560, or 2-up from lg at 436..560 -> 14
+     1280 and up   2-up with both charts at a full 560, scale 1 -> 12
+
+   Every combination lands between roughly 10.5px and 14px rendered.
+   Note the phone value goes *up*, not down: at 12 units a 375px screen
+   would render these at 7px. 17 is the ceiling there, not a round
+   number: at 18 the right-hand "Individual onboarding" runs to x=563
+   and clips the 560-wide canvas. */
 .ed-problem .pb-hex-label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
-}
-.ed-problem .pb-hex-label-short {
-  display: none;
 }
 @media (max-width: 480px) {
   .ed-problem .pb-hex-label {
-    font-size: 16px;
+    font-size: 17px;
   }
-  .ed-problem .pb-hex-label-long {
-    display: none;
-  }
-  .ed-problem .pb-hex-label-short {
-    display: inline;
+}
+@media (min-width: 1280px) {
+  .ed-problem .pb-hex-label {
+    font-size: 12px;
   }
 }
 

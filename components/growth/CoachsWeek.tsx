@@ -59,11 +59,10 @@ function TimeBar({
     <div className="flex flex-col gap-3.5">
       {/* One uniform run rather than a bold figure plus a muted tail: the
           whole line is the claim. */}
-      {/* The header row spans the bar, not the section, so the eyebrow
-          sits over the bar's right end rather than out at the margin.
-          Below md the bar-width row would crush the title, so the row
-          goes full width there. */}
-      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 md:w-[70%]">
+      {/* The header row spans the bar, so the eyebrow sits over the bar's
+          right end. Now that the bar runs the full row, that is the
+          margin, which is where it should be. */}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
         <span
           className="text-[19px] md:text-[22px]"
           style={{
@@ -90,10 +89,11 @@ function TimeBar({
         aria-label={ariaLabel}
         className="flex overflow-hidden"
         style={{
-          /* Full 48 thickness, stopping at 70% of the row: the uncapped
-             bar below runs to 100%, and its dashed threshold marks the
-             line these two stop at. */
-          width: "70%",
+          /* Full 48 thickness, running the whole row to the margin. The
+             earlier 70% stop existed to mark the line the deleted
+             uncapped bar blew through; with that bar gone there is
+             nothing left for a short bar to point at. */
+          width: "100%",
           height: "48px",
           borderRadius: "12px",
           border: "1px solid var(--pb-border)",
@@ -189,7 +189,7 @@ const HEX_AXES = [
   /* Positions 5 and 6 are the growth-driving pair and must stay
      adjacent, so they contract together when the shape spikes
      elsewhere. Do not reorder these. */
-  "Custom performance review",
+  "Performance reviews",
   "Situational coaching",
 ];
 
@@ -235,18 +235,100 @@ const HEX_STATES = [
   "M 280.0,127.4 L 330.3,171.0 L 300.6,211.9 L 280.0,236.3 L 252.5,215.9 L 260.4,188.7 Z",
 ];
 
+/* Full coverage: every axis at 97%. Not 100%, so the outer ring stays
+   visible just outside the shape and reads as a frame the blue fills
+   rather than a ring the blue replaces. */
+const HEX_FULL =
+  "M 280.0,112.7 L 355.6,156.4 L 355.6,243.6 L 280.0,287.3 L 204.4,243.6 L 204.4,156.4 Z";
+
 const HEX_KEYTIMES = "0;0.09;0.16;0.27;0.34;0.44;0.52;0.63;0.70;0.81;0.88;1";
 const HEX_KEYSPLINES = Array(HEX_STATES.length - 1).fill("0.4 0 0.5 1").join(";");
+
+/** Rings, spokes and axis labels: identical under both shapes. */
+function HexFrame({ id, title, desc, children }: {
+  id: string;
+  title: string;
+  desc: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <svg
+      /* The handoff specified `0 0 560 400`, but the drawing only spans
+         y 72..327, so that canvas carried ~75px of dead space above and
+         below and swallowed the 24px it also asked for between the
+         heading and the chart. Cropping the canvas moves nothing: the
+         centre, the radius, the rings and every label coordinate are
+         exactly as specified. Bounds are measured with the larger phone
+         labels, which reach highest. */
+      viewBox="0 64 560 272"
+      className="pb-hex block h-auto w-full"
+      role="img"
+      aria-labelledby={`${id}-title ${id}-desc`}
+    >
+      <title id={`${id}-title`}>{title}</title>
+      <desc id={`${id}-desc`}>{desc}</desc>
+
+      <g aria-hidden="true">
+        {HEX_RINGS.map((points) => (
+          <polygon key={points} points={points} fill="none" stroke="var(--pb-border)" strokeWidth={1} />
+        ))}
+        {HEX_RINGS[HEX_RINGS.length - 1].split(" ").map((vertex) => (
+          <line
+            key={vertex}
+            x1={280}
+            y1={200}
+            x2={Number(vertex.split(",")[0])}
+            y2={Number(vertex.split(",")[1])}
+            stroke="var(--pb-border)"
+            strokeWidth={1}
+          />
+        ))}
+      </g>
+
+      {children}
+
+      <g aria-hidden="true" fill="var(--pb-muted)">
+        {HEX_AXES.map((axis, i) => (
+          <text
+            key={axis}
+            x={HEX_LABELS[i].x}
+            y={HEX_LABELS[i].y}
+            textAnchor={HEX_LABELS[i].anchor}
+            className="pb-hex-label"
+          >
+            {axis}
+          </text>
+        ))}
+      </g>
+    </svg>
+  );
+}
+
+/** Thin rule and caption under each chart. */
+function HexCaption({ children }: { children: React.ReactNode }) {
+  return (
+    <div style={{ borderTop: "1px solid var(--pb-border-strong)" }} className="mt-1 pt-3">
+      <span className="text-[15px]" style={{ fontWeight: 600, color: "var(--pb-text)" }}>
+        {children}
+      </span>
+    </div>
+  );
+}
 
 function CoverageHexagon() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const animRef = useRef<SVGAnimateElement>(null);
-  /* Undefined until the effect runs, so the server and the first client
+  /* False until the effect runs, so the server and the first client
      render agree and the static first state is what ships in the HTML. */
   const [animated, setAnimated] = useState(false);
+  /* Drives the blue shape's one-time entrance, and stays true under
+     reduced motion so the final state is what renders. */
+  const [shown, setShown] = useState(false);
+  const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) { setReduced(true); setShown(true); return; }
     setAnimated(true);
 
     const el = wrapRef.current;
@@ -258,6 +340,7 @@ function CoverageHexagon() {
           /* begin="indefinite" means nothing runs until this fires, so
              the chart is still on its first state above the fold. */
           animRef.current?.beginElement();
+          setShown(true);
         }
       },
       { threshold: 0.35 },
@@ -267,115 +350,72 @@ function CoverageHexagon() {
   }, []);
 
   return (
-    <div ref={wrapRef} className="w-full max-w-[560px]">
-      <svg
-        /* The handoff specified `0 0 560 400`, but the drawing only spans
-           y 72..327, so that canvas carried ~75px of dead space above and
-           below and swallowed the 24px it also asked for between the
-           heading and the chart. Cropping the canvas moves nothing: the
-           centre, the radius, the rings and every label coordinate are
-           exactly as specified. Bounds are measured with the larger phone
-           labels, which reach highest. */
-        viewBox="0 64 560 272"
-        className="pb-hex block h-auto w-full"
-        role="img"
-        aria-labelledby="pb-hex-title pb-hex-desc"
-      >
-        <title id="pb-hex-title">
-          Radar chart of personalized coaching coverage across six areas
-        </title>
-        <desc id="pb-hex-desc">
-          Coverage stretches and contracts unevenly across just-in-time guidance,
-          tailored training, individual onboarding, local market insight, custom
-          performance review, and situational coaching, but never fills all six at
-          once.
-        </desc>
-
-        <g aria-hidden="true">
-          {HEX_RINGS.map((points) => (
-            <polygon
-              key={points}
-              points={points}
-              fill="none"
-              stroke="var(--pb-border)"
-              strokeWidth={1}
-            />
-          ))}
-          {HEX_RINGS[HEX_RINGS.length - 1]
-            .split(" ")
-            .map((vertex) => (
-              <line
-                key={vertex}
-                x1={280}
-                y1={200}
-                x2={Number(vertex.split(",")[0])}
-                y2={Number(vertex.split(",")[1])}
-                stroke="var(--pb-border)"
-                strokeWidth={1}
-              />
-            ))}
-        </g>
-
-        <path
-          d={HEX_STATES[0]}
-          fill="var(--pb-muted)"
-          fillOpacity={0.28}
-          stroke="var(--pb-text)"
-          strokeOpacity={0.55}
-          strokeWidth={2.5}
-          strokeLinejoin="round"
+    /* Two charts, the restless one and the settled one. The comparison
+       is the argument, so they sit side by side from lg up and stack
+       below it, where a half-width chart would render its labels too
+       small to read. */
+    <div ref={wrapRef} className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-6">
+      <div className="w-full max-w-[560px]">
+        <HexFrame
+          id="pb-hex-today"
+          title="Radar chart of personalized coaching coverage today, across six areas"
+          desc="Coverage stretches and contracts unevenly across just-in-time guidance, tailored training, individual onboarding, local market insight, performance reviews, and situational coaching, but never fills all six at once."
         >
-          {animated && (
-            <animate
-              ref={animRef}
-              attributeName="d"
-              dur="27s"
-              begin="indefinite"
-              calcMode="spline"
-              keyTimes={HEX_KEYTIMES}
-              keySplines={HEX_KEYSPLINES}
-              values={HEX_STATES.join(";")}
-              repeatCount="indefinite"
-            />
-          )}
-        </path>
-
-        <g aria-hidden="true" fill="var(--pb-muted)">
-          {HEX_AXES.map((axis, i) => {
-            /* The longest label is the only one that runs out of room at
-               phone widths; it swaps to a short form there. The other
-               five stay as written. */
-            const isLongest = i === 4;
-            return (
-              <text
-                key={axis}
-                x={HEX_LABELS[i].x}
-                y={HEX_LABELS[i].y}
-                textAnchor={HEX_LABELS[i].anchor}
-                className={isLongest ? "pb-hex-label pb-hex-label-long" : "pb-hex-label"}
-              >
-                {axis}
-              </text>
-            );
-          })}
-          <text
-            x={HEX_LABELS[4].x}
-            y={HEX_LABELS[4].y}
-            textAnchor={HEX_LABELS[4].anchor}
-            className="pb-hex-label pb-hex-label-short"
+          <path
+            d={HEX_STATES[0]}
+            fill="var(--pb-muted)"
+            fillOpacity={0.28}
+            stroke="var(--pb-text)"
+            strokeOpacity={0.55}
+            strokeWidth={2.5}
+            strokeLinejoin="round"
           >
-            Performance review
-          </text>
-        </g>
-      </svg>
+            {animated && (
+              <animate
+                ref={animRef}
+                attributeName="d"
+                dur="27s"
+                begin="indefinite"
+                calcMode="spline"
+                keyTimes={HEX_KEYTIMES}
+                keySplines={HEX_KEYSPLINES}
+                values={HEX_STATES.join(";")}
+                repeatCount="indefinite"
+              />
+            )}
+          </path>
+        </HexFrame>
+        <HexCaption>Today</HexCaption>
+      </div>
 
-      <div style={{ borderTop: "1px solid var(--pb-border-strong)" }} className="mt-1 pt-3">
-        <span
-          className="text-[15px]"
-          style={{ fontWeight: 600, color: "var(--pb-text)" }}
+      <div className="w-full max-w-[560px]">
+        <HexFrame
+          id="pb-hex-could"
+          title="Radar chart of personalized coaching coverage with EZee Assist, across six areas"
+          desc="Coverage reaches every area at once: just-in-time guidance, tailored training, individual onboarding, local market insight, performance reviews, and situational coaching."
         >
-          Today
-        </span>
+          {/* Steady and full, against the restless shape beside it. It
+              does not morph: coverage that fluctuated would argue the
+              opposite of the point. One entrance, then it holds. */}
+          <path
+            d={HEX_FULL}
+            fill="var(--pb-accent)"
+            fillOpacity={0.25}
+            stroke="var(--pb-accent)"
+            strokeWidth={2.5}
+            strokeLinejoin="round"
+            style={{
+              transformBox: "view-box",
+              transformOrigin: "280px 200px",
+              transform: shown ? "scale(1)" : "scale(0.35)",
+              opacity: shown ? 1 : 0,
+              transition: reduced
+                ? "none"
+                : "transform .95s cubic-bezier(.22,1,.36,1), opacity .6s ease",
+            }}
+          />
+        </HexFrame>
+        <HexCaption>What it could be</HexCaption>
       </div>
     </div>
   );

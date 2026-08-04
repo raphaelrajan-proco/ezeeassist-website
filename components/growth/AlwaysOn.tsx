@@ -2,9 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 /**
- * The always-on wall. Twenty-six moments from one day across the network
+ * The always-on wall. Sixteen moments from one day across the network
  * in four time bands. From lg up the section pins as a split screen: the
  * thesis holds still on the left while the page's own scroll drives the
  * card column on the right, one to one, like a page inside the page. The
@@ -52,7 +53,9 @@ function StackLogos({ names }: { names?: string[] }) {
   );
 }
 
-/* ── The twenty-six moments ────────────────────────────────
+/* ── The sixteen moments ──────────────────────────────────
+   Four per band, so each band is a single row of the grid.
+
    TODO: replace with real log moments before launch. The handoff is
    explicit that invented moments read as invented to a franchisor, and
    that the timestamps matter most: 9:14am is credible where 9:00am is
@@ -235,8 +238,12 @@ function MomentCard({ card }: { card: Card }) {
    Shipping a button to a route that does not exist yet costs more than
    shipping one that lands somewhere useful. */
 
+/* Height is pinned rather than derived from padding, because only one of
+   the two carries the 24px arrow badge. Left to `py`, the badge would
+   make that button 4px taller than its neighbour. 40px is the nav
+   button's own height, which both are sized to. */
 const CTA_BASE =
-  "inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00AEEF]";
+  "inline-flex min-h-[40px] items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00AEEF]";
 
 function BandCtas({ innerRef, className = "" }: {
   innerRef?: React.Ref<HTMLDivElement>;
@@ -246,7 +253,7 @@ function BandCtas({ innerRef, className = "" }: {
     <div ref={innerRef} className={`flex flex-wrap items-center justify-end gap-3 ${className}`}>
       <Link
         href="/platform/workflows"
-        className={`${CTA_BASE} hover:opacity-80`}
+        className={`${CTA_BASE} px-5 hover:opacity-80`}
         style={{
           /* Inset shadow rather than a border: a real border adds 3px to
              the box and left this button 2px taller than the filled one
@@ -258,12 +265,21 @@ function BandCtas({ innerRef, className = "" }: {
       >
         See more workflows
       </Link>
+      {/* `ed-btn-arrow` here is only for the badge's hover nudge: the
+          padding rule it also drives is `.ed-btn.ed-btn-arrow`, and this
+          is not an `.ed-btn`. */}
       <Link
         href="/speak-to-an-expert"
-        className={`${CTA_BASE} hover:brightness-110`}
+        className={`${CTA_BASE} ed-btn-arrow gap-2 pl-[1.125rem] pr-1 hover:brightness-110`}
         style={{ backgroundColor: "#0077A8", color: "#FFFFFF" }}
       >
         Generate your own
+        {/* The nav's badge exactly: a near-black disc carrying a white
+            arrow. The disc keeps the arrow legible on the blue fill,
+            which a bare white glyph would not do as cleanly. */}
+        <span className="ed-btn-arrow-badge ed-btn-arrow-badge-sm" aria-hidden="true">
+          <ArrowRight className="h-3 w-3" strokeWidth={2.25} />
+        </span>
       </Link>
     </div>
   );
@@ -442,7 +458,7 @@ export default function AlwaysOn() {
             >
               Coaching amplified across every location. At the hours it matters most.
             </h2>
-            <p className="max-w-[780px]" style={{ lineHeight: 1.5, color: "var(--wl-muted)", fontWeight: 400, fontSize: "calc(0.75 * clamp(1.25rem, 0.25rem + 2vw, 2rem))" }}>
+            <p className="max-w-[780px]" style={{ lineHeight: 1.5, color: "var(--wl-muted)", fontWeight: 400, fontSize: "calc(0.6 * clamp(1.25rem, 0.25rem + 2vw, 2rem))" }}>
               Nobody pulled any of this. Each play orchestrated by a coach once, and
               some plays built directly from what the rest of your network already learned.
             </p>
@@ -522,8 +538,9 @@ export default function AlwaysOn() {
               >
                 Coaching amplified across every location. At the hours it matters most.
               </h2>
-              {/* 0.75x the lead line, regular weight, by request. */}
-              <p style={{ lineHeight: 1.5, color: "var(--wl-muted)", fontWeight: 400, fontSize: "calc(0.75 * clamp(1.25rem, 0.25rem + 2vw, 2rem))" }}>
+              {/* 0.6x the lead line, regular weight: 0.8 of the 0.75 it
+                  was, by request. */}
+              <p style={{ lineHeight: 1.5, color: "var(--wl-muted)", fontWeight: 400, fontSize: "calc(0.6 * clamp(1.25rem, 0.25rem + 2vw, 2rem))" }}>
                 Nobody pulled any of this. Each play orchestrated by a coach once, and
                 some plays built directly from what the rest of your network already learned.
               </p>
