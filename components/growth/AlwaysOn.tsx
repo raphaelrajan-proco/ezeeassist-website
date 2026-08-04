@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 
 /**
  * The always-on wall. Twenty-six moments from one day across the network
@@ -72,56 +73,50 @@ function StackLogos({ names }: { names?: string[] }) {
    what it found came from other locations. */
 
 type Tone = "neutral" | "accent" | "violet";
-type Card = { meta: string; title: string; body: string; tone: Tone; stack?: string[]; thread?: "a" | "b" };
+type Card = { meta: string; title: string; body: string; tone: Tone; stack?: string[] };
 
 const BANDS: { title: string; note?: string; cards: Card[] }[] = [
   {
     title: "Overnight",
     note: "while nobody is awake",
     cards: [
-      { meta: "1:12am · Store #263",    title: "Walk-in cooler drifted",  body: "Alert sent, service ticket opened", tone: "neutral" },
-      { meta: "2:04am · all locations", title: "Closing photos scored",   body: "9 stations flagged, tasks opened", tone: "neutral" },
-      { meta: "2:47am · Store #118",    title: "Registers reconciled",    body: "One deposit off, flagged for the owner", stack: ["stripe", "quickbooks"], tone: "neutral" },
       { meta: "3:15am · all locations", title: "Expiring certifications pulled", body: "Six due in 30 days, reminders queued", stack: ["airtable"], tone: "neutral" },
       { meta: "3:40am · Store #519",    title: "Inventory hit critical",  body: "Reorder drafted at approved pricing", stack: ["quickbooks"], tone: "accent" },
       { meta: "4:00am · West territory", title: "Coach brief assembled",  body: "12 locations, ranked by need", stack: ["hubspot"], tone: "accent" },
+      /* Moved up from "Before the doors open" by request. Its timestamp
+         moved with it: the bands are a chronology, and a 7:00am card
+         sitting in Overnight read as a bug next to a band that opens at
+         5:45am. The prep genuinely runs before anyone arrives. */
+      { meta: "4:30am · Store #402",    title: "New hire starts today",   body: "Day-one sequence started", tone: "accent" },
     ],
   },
   {
     title: "Before the doors open",
     cards: [
       { meta: "5:45am · all locations", title: "Overnight questions cleared", body: "14 answered from the manual, 2 held for HQ", stack: ["notion"], tone: "accent" },
-      { meta: "6:00am · Store #331", title: "Soft week detected",    body: "62% booked · reactivation draft ready", stack: ["hubspot", "mailchimp"], tone: "neutral", thread: "a" },
-      { meta: "6:15am · Store #519", title: "Delivery came in short", body: "Credit request drafted against the invoice", stack: ["xero"], tone: "accent" },
+      { meta: "6:00am · Store #331", title: "Soft week detected",    body: "62% booked · reactivation draft ready", stack: ["hubspot", "mailchimp"], tone: "neutral" },
       { meta: "6:30am · Store #052", title: "Attach rate slipping",  body: "Top-quartile locations run a 30 second add-on script. Here it is.", stack: ["stripe"], tone: "neutral" },
-      { meta: "7:00am · Store #402", title: "New hire starts today", body: "Day-one sequence started", tone: "accent" },
       { meta: "7:40am · Store #144", title: "Morning huddle brief ready", body: "Yesterday's numbers and today's bookings, one card", stack: ["googledrive"], tone: "accent" },
     ],
   },
   {
     title: "During the day",
     cards: [
-      { meta: "9:14am · Store #118",  title: "Promo question answered",          body: "Cited from the promo guide in 6 seconds", stack: ["notion"], tone: "accent" },
       { meta: "10:05am · Store #214", title: "Started a national retail proposal", body: "4 locations have quoted this. Range, terms, and win rate attached.", stack: ["googledrive", "hubspot"], tone: "accent" },
       { meta: "11:40am · Store #263", title: "One-star review posted",           body: "Response drafted, held for owner", tone: "neutral" },
-      { meta: "12:30pm · Store #087", title: "Competitor opened nearby",         body: "6 locations faced this. What held revenue, and what didn't.", tone: "neutral" },
       { meta: "1:20pm · Store #052",  title: "Local campaign assembled",         body: "Hours and offer merged into the brand template", stack: ["mailchimp"], tone: "accent" },
-      { meta: "2:35pm · Store #402",  title: "Refund edge case resolved",        body: "Policy cited, approval routed to the owner", stack: ["stripe"], tone: "neutral" },
       /* The same closing audit the on demand section shows being built.
          Deliberate continuity across sections, not duplication. */
       { meta: "3:45pm · Store #214",  title: "An owner built a closing audit",   body: "Photo checklist per station. Live in twenty minutes, no developer.", tone: "violet" },
-      { meta: "6:50pm · Store #331",  title: "Offer approved by owner",          body: "The 6:00am draft · sent to 340 lapsed clients", stack: ["mailchimp"], tone: "accent", thread: "b" },
     ],
   },
   {
     title: "On a longer clock",
     cards: [
       { meta: "14 days out · Store #263",  title: "Insurance lapsing", body: "Owner notified, task opened", tone: "neutral" },
-      { meta: "30 days out · Store #144",  title: "Lease renewal window opens", body: "Terms summary drafted for the owner", stack: ["dropbox"], tone: "accent" },
       { meta: "Week 6 · Store #402",       title: "Ramp behind cohort", body: "What the fastest 10 openings did in week 6, in order", tone: "accent" },
       { meta: "First Monday · Store #144", title: "An owner built a P&L digest", body: "Emailed to their managers, numbers filled in", stack: ["quickbooks"], tone: "violet" },
       { meta: "Every October · Store #519", title: "An owner built a winter prep checklist", body: "Site-by-site steps, scheduled each fall", tone: "violet" },
-      { meta: "Quarter close · 5 stores",  title: "Audit docs missing", body: "Chased nightly until filed", stack: ["dropbox"], tone: "neutral" },
     ],
   },
 ];
@@ -224,6 +219,56 @@ function MomentCard({ card }: { card: Card }) {
 /** The divider that names each time band, inside the scroller itself:
     the incoming band's title peeking through the bottom fade is the cue
     that there is more to scroll. */
+/* ── Closing CTAs ──────────────────────────────────────────
+   Two buttons at the bottom right of the compartment, after the last
+   band. Sized to the nav's "Speak to an expert" (Button size="sm":
+   px-5 py-2, text-sm, semibold, pill), so the three read as one family.
+
+   The filled one is #0077A8, a step darker than the nav's #00AEEF as
+   asked. That is also the only value of the two that may legally carry
+   white text: #00AEEF under white measures 2.53:1 and fails, #0077A8 is
+   4.99:1. It stays fixed in both themes, since white-on-fill contrast
+   does not care what surrounds it. See DESIGN.md.
+
+   TODO: "Generate your own" points at /speak-to-an-expert until the
+   workflow generator ships at /workflow-generator, then repoint it.
+   Shipping a button to a route that does not exist yet costs more than
+   shipping one that lands somewhere useful. */
+
+const CTA_BASE =
+  "inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00AEEF]";
+
+function BandCtas({ innerRef, className = "" }: {
+  innerRef?: React.Ref<HTMLDivElement>;
+  className?: string;
+}) {
+  return (
+    <div ref={innerRef} className={`flex flex-wrap items-center justify-end gap-3 ${className}`}>
+      <Link
+        href="/platform/workflows"
+        className={`${CTA_BASE} hover:opacity-80`}
+        style={{
+          /* Inset shadow rather than a border: a real border adds 3px to
+             the box and left this button 2px taller than the filled one
+             beside it and than the nav button both are sized to. */
+          boxShadow: "inset 0 0 0 1.5px var(--wl-accent)",
+          color: "var(--wl-accent)",
+          backgroundColor: "transparent",
+        }}
+      >
+        See more workflows
+      </Link>
+      <Link
+        href="/speak-to-an-expert"
+        className={`${CTA_BASE} hover:brightness-110`}
+        style={{ backgroundColor: "#0077A8", color: "#FFFFFF" }}
+      >
+        Generate your own
+      </Link>
+    </div>
+  );
+}
+
 function BandHeading({ band }: { band: (typeof BANDS)[number] }) {
   return (
     <div className="flex items-center gap-4 pb-[18px]">
@@ -284,6 +329,7 @@ export default function AlwaysOn() {
   const headRowRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const stackRef = useRef<HTMLDivElement>(null);
+  const ctaRowRef = useRef<HTMLDivElement>(null);
   const bandRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const [range, setRange] = useState(DEFAULT_RANGE);
@@ -332,8 +378,15 @@ export default function AlwaysOn() {
          padding, and the grid's bottom padding. None of these depend on
          the scroller's height, so there is no feedback loop. */
       const padTop = parseFloat(getComputedStyle(grid).paddingTop) || 92;
+      /* Matched to padTop in the markup, so the gap below the buttons
+         equals the gap above the "Always on" label. Read rather than
+         hardcoded, so the two cannot drift apart. */
+      const padBottom = parseFloat(getComputedStyle(grid).paddingBottom) || padTop;
       const headH = headRow.getBoundingClientRect().height;
-      const vh = Math.round(Math.min(720, Math.max(320, window.innerHeight - padTop - headH - 12)));
+      const ctaH = ctaRowRef.current?.getBoundingClientRect().height ?? 0;
+      const vh = Math.round(
+        Math.min(720, Math.max(320, window.innerHeight - padTop - headH - ctaH - padBottom)),
+      );
       const bands = bandRefs.current.filter(Boolean) as HTMLDivElement[];
       const last = bands[bands.length - 1];
       /* Both rects carry the same translate, so this is static. */
@@ -343,7 +396,7 @@ export default function AlwaysOn() {
       const r = Math.max(1, stack.scrollHeight - vh, lastTop - PAD);
       rangeRef.current = r;
       setVpH(vh);
-      setStickyH(Math.round(padTop + headH + vh + 12));
+      setStickyH(Math.round(padTop + headH + vh + ctaH + padBottom));
       setRange(r);
       schedule();
     };
@@ -352,6 +405,9 @@ export default function AlwaysOn() {
     const ro = new ResizeObserver(measure);
     ro.observe(stack);
     ro.observe(headRow);
+    /* The buttons wrap to a second line on narrow desktop widths, which
+       changes the pinned box's height. */
+    if (ctaRowRef.current) ro.observe(ctaRowRef.current);
     window.addEventListener("scroll", schedule, { passive: true });
     window.addEventListener("resize", measure);
     return () => {
@@ -400,6 +456,9 @@ export default function AlwaysOn() {
               </div>
             </div>
           ))}
+          {/* The section's py-16 already makes the bottom margin match
+              the top, so nothing extra is needed here. */}
+          <BandCtas />
         </div>
       </section>
     );
@@ -424,11 +483,16 @@ export default function AlwaysOn() {
         >
           <div
             ref={gridRef}
-            className="mx-auto flex h-full max-w-7xl flex-col px-6 md:px-12 lg:px-16 pb-3"
+            className="mx-auto flex h-full max-w-7xl flex-col px-6 md:px-12 lg:px-16"
             style={{
               /* Just clear of the floating nav pill, no more: extra
                  padding here read as a hole at the top. */
               paddingTop: "calc(var(--nav-block) + 4px)",
+              /* Matched to the top by request, so the gap under the
+                 buttons equals the gap above the "Always on" label.
+                 The measure() below reads both, so changing one here
+                 keeps the pinned box the right height on its own. */
+              paddingBottom: "calc(var(--nav-block) + 4px)",
             }}
           >
             {/* Header across the whole section, the on-demand format:
@@ -501,6 +565,12 @@ export default function AlwaysOn() {
                 ))}
               </div>
             </div>
+
+            {/* After the last band, pinned to the bottom right of the
+                compartment rather than riding inside the scroller,
+                where the fade mask would dim them and they would only
+                be clickable at the very end of the scroll. */}
+            <BandCtas innerRef={ctaRowRef} className="pt-5" />
           </div>
         </div>
       </div>

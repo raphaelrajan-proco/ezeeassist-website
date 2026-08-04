@@ -657,7 +657,8 @@ check dark mode.
 
 ## Always on (section 5)
 
-Twenty-six moments from one day in four time bands, then a counter.
+Sixteen moments from one day in four time bands, four tiles each,
+then two closing CTAs.
 
 **Structurally this is a pinned full-width scroller** on a white band:
 the header runs horizontally across the top in the on-demand section's
@@ -688,8 +689,46 @@ unused bottom as a dead white band between this section and the next on
 tall viewports; a fitted box ends where the compartment ends and the
 impact band shows beneath it instead.
 
-The old accent thread between the two Store #331 cards survives in copy
-alone: the 6:50pm card reads "The 6:00am draft".
+**Every band holds exactly four tiles, so each is a single row** of the
+`grid-cols-4` plate. Trimmed to four on request: Overnight dropped the
+walk-in cooler, closing photos and registers cards; Before the doors
+dropped the delivery card; During the day dropped the promo question,
+competitor, offer-approved and refund-edge cards; On a longer clock
+dropped lease renewal and audit docs. **"New hire starts today" moved up
+from Before the doors into Overnight, and its timestamp moved with it,
+7:00am to 4:30am** — the bands are a chronology, and a 7:00am card
+sitting in Overnight read as a bug next to a band that opens at 5:45am.
+
+The `thread` field on `Card` is gone. It was declared and set on two
+cards but never read by any renderer, and removing the 6:50pm
+"Offer approved by owner" card left its partner dangling. The 6:00am
+Store #331 card no longer has a payoff card on this wall.
+
+**Two CTAs close the compartment**, bottom right, after the last band:
+"See more workflows" (no fill, `--wl-accent` text and a 1.5px inset
+shadow) and "Generate your own" (filled `#0077A8`, white text). Both are
+sized to the nav's "Speak to an expert" (`px-5 py-2 text-sm`, 36px
+tall). Two details are load-bearing:
+- The fill is `#0077A8` and not the nav's `#00AEEF`, which was the
+  requested "slightly darker" differentiation and is also the only one
+  of the two that may carry white text (2.53:1 vs 4.99:1). Fixed in
+  both themes, since white-on-fill does not care what surrounds it.
+- The outline uses an **inset box-shadow, not a border**. A real border
+  adds 3px to the box and left that button 2px taller than the one
+  beside it.
+
+They sit in the pinned grid *below* the scroller, not inside it, so the
+fade mask cannot dim them and they are clickable throughout the pin.
+**The grid's `paddingBottom` now matches its `paddingTop`**
+(`calc(var(--nav-block) + 4px)`, measured 92px top / 93px bottom) so the
+gap under the buttons equals the gap above the "Always on" label, as
+requested. `measure()` reads both paddings and the CTA row's height, and
+the ResizeObserver watches the CTA row, because the buttons wrap at
+narrow desktop widths and that changes the pinned box's height. If you
+change one padding in the markup, the height follows on its own.
+
+TODO: "Generate your own" points at `/speak-to-an-expert` until the
+workflow generator ships at `/workflow-generator`. Repoint it then.
 
 **The thesis is EZee blue and holds ONE line at desktop widths**
 ("Coaching amplified across every location. At the hours it matters
