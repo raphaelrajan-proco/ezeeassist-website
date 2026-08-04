@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
+import AnnouncementBar from "@/components/AnnouncementBar";
 import Footer from "@/components/Footer";
 import SecurityContent from "./SecurityContent";
 
@@ -19,12 +20,13 @@ export const metadata: Metadata = {
 
 export default function SecurityPage() {
   return (
-    <>
+    <div className="theme-editorial">
+      <AnnouncementBar />
       <Navbar />
       <main className="flex flex-1 flex-col">
         <SecurityContent />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
