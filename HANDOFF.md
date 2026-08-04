@@ -1367,6 +1367,25 @@ grey, inverting the page's whole emphasis. Never reference a CDN.
 **Order is fixed in §3 and §5 — franchise-native first. Do not
 alphabetise.**
 
+**Three changes after the build, all from the DESIGN.md §1.4 variety
+check.** §5 was a grid of twelve system names; §3 already lists roughly
+fifty by category, so the second wall added only a number. It is now
+the count as one figure, moved above Permissions so the arc runs
+inventory, scale, then control. §6 was a pair of link cards two screens
+from Related's three; the directory card folded into the count section
+and what is left is the custom/API statement alone. Permissions became
+the page's one artifact: one question, three role columns, sees and
+doesn't. Everything else here is cards and chips, and a page arguing
+that connections inherit real permissions has to show a response rather
+than describe one. It is deliberately a matrix and not the Answers
+page's chat cards; the two pages should not look like the same page.
+
+**The count degrades on purpose.** `COUNT` at the top of the file
+carries the `{{TBD:}}` token and `COUNT_PENDING` switches the display
+treatment off while it does, because a placeholder set at 112px wraps
+over four lines and swallows the section. Replace `COUNT` with the real
+figure and the display size turns itself on.
+
 §2 shows each refusal as the migration step a competitor asks for,
 struck through, above what happens instead; the argument is a refusal,
 which needs the thing refused on screen. The hero carries a slow

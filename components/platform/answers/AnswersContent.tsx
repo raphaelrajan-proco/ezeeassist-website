@@ -34,14 +34,36 @@ import {
  * card visibly longer with an extra source. Never equalise them.
  */
 
-/* ── §2 ─────────────────────────────────────────────────── */
-const INBOX: { store: string; channel: string; q: string }[] = [
-  { store: "#052", channel: "SMS",   q: "Refund policy on a cancelled booking?" },
-  { store: "#118", channel: "Slack", q: "whats the refund rule for cancellations" },
-  { store: "#331", channel: "Email", q: "Which report shows deposits?" },
-  { store: "#402", channel: "Teams", q: "New hire Monday, what do I send?" },
-  { store: "#214", channel: "SMS",   q: "Approval needed for a local promo?" },
+/* ── §2 ─────────────────────────────────────────────────
+   Scattered, not tabulated. The copy says five questions arrive in five
+   places and the answers drift; a sorted table would show that problem
+   already solved. Offsets, widths and a fraction of a degree of
+   rotation vary per message so the group reads as a pile someone has to
+   work through. The offsets are desktop-only classes written out in
+   full, because Tailwind scans source text and would not see them
+   assembled at runtime. */
+const INBOX: {
+  time: string; store: string; channel: string; q: string;
+  offset: string; width: string; rot: number; gap: string;
+}[] = [
+  { time: "8:41am", store: "#052", channel: "SMS",   q: "Refund policy on a cancelled booking?",
+    offset: "md:ml-[1%]",  width: "md:max-w-[430px]", rot: -0.5, gap: "mt-0" },
+  { time: "8:47am", store: "#118", channel: "Slack", q: "whats the refund rule for cancellations",
+    offset: "md:ml-[19%]", width: "md:max-w-[405px]", rot: 0.6,  gap: "mt-2.5" },
+  { time: "8:53am", store: "#331", channel: "Email", q: "Which report shows deposits?",
+    offset: "md:ml-[6%]",  width: "md:max-w-[360px]", rot: -0.3, gap: "mt-1.5" },
+  { time: "9:01am", store: "#402", channel: "Teams", q: "New hire Monday, what do I send?",
+    offset: "md:ml-[27%]", width: "md:max-w-[390px]", rot: 0.7,  gap: "mt-3" },
+  { time: "9:06am", store: "#214", channel: "SMS",   q: "Approval needed for a local promo?",
+    offset: "md:ml-[11%]", width: "md:max-w-[420px]", rot: -0.45, gap: "mt-2" },
 ];
+
+/* One hue per channel, so five arrivals read as five places rather than
+   one list. Carried by a dot and the channel name, never by colour
+   alone. */
+const CHANNEL_HUE: Record<string, string> = {
+  SMS: "#0E9F6E", Slack: "#7C3AED", Email: "#B45309", Teams: "#0077A8",
+};
 
 /* ── §3 ─────────────────────────────────────────────────── */
 const STEPS: { n: string; title: string; body: string; difference?: boolean }[] = [
@@ -236,29 +258,35 @@ export default function AnswersContent() {
           title="The same five questions. Five channels. One inbox."
         />
 
-        <Reveal className="mt-9">
-          <div style={CARD} className="overflow-hidden">
-            <div
-              className="flex items-center justify-between px-5 py-3"
-              style={{ borderBottom: "1px solid var(--ed-rule)", backgroundColor: "var(--ed-card-alt)" }}
-            >
-              <Meta>Monday, 8:41 to 9:06 am</Meta>
-              <Meta>5 questions · 1 person answering</Meta>
-            </div>
-            {INBOX.map((m, i) => (
+        <div className="mt-8 flex items-baseline justify-between gap-4 md:mt-9">
+          <Meta>Monday, 8:41 to 9:06 am</Meta>
+          <Meta>5 questions · 1 person answering</Meta>
+        </div>
+
+        <div className="mt-5">
+          {INBOX.map((m, i) => (
+            <Reveal key={m.q} delay={i * 0.07} className={`${m.gap} ${m.offset} ${m.width}`}>
               <div
-                key={m.q}
-                className="flex flex-col gap-1 px-5 py-3.5 md:flex-row md:items-baseline md:gap-5"
-                style={i > 0 ? { borderTop: "1px solid var(--ed-rule)" } : undefined}
+                className="px-4 py-3.5 md:px-5"
+                style={{
+                  ...CARD,
+                  transform: `rotate(${m.rot}deg)`,
+                  boxShadow: "0 1px 2px rgba(0,0,0,0.03), 0 8px 24px -16px rgba(0,0,0,0.18)",
+                }}
               >
-                <span className="flex-none md:w-[168px]">
-                  <Meta>Store {m.store} · {m.channel}</Meta>
-                </span>
-                <span className="ed-fg text-[15px] leading-snug">{m.q}</span>
+                <div className="flex items-center gap-2">
+                  <span
+                    aria-hidden="true"
+                    className="inline-block flex-none"
+                    style={{ width: 6, height: 6, borderRadius: 999, backgroundColor: CHANNEL_HUE[m.channel] }}
+                  />
+                  <Meta>{m.time} · Store {m.store} · {m.channel}</Meta>
+                </div>
+                <p className="ed-fg mt-2 text-[15px] leading-snug">{m.q}</p>
               </div>
-            ))}
-          </div>
-        </Reveal>
+            </Reveal>
+          ))}
+        </div>
 
         <Reveal className="mt-7" delay={0.1}>
           <div className="max-w-[620px]">
@@ -351,8 +379,49 @@ export default function AnswersContent() {
         </div>
       </Band>
 
-      {/* ── 4. Scoping ────────────────────────────────── */}
-      <Band alt id="scoping">
+      {/* ── 4. Channels ─────────────────────────────────
+          Sits directly under How it works on purpose: step 01 names the
+          channels, and this elaborates that same fact. Seven sections
+          apart they read as two separate enumerations of one list. */}
+      <Band alt>
+        <SectionHead eyebrow="Channels" title="Nobody logs in to ask a question." />
+
+        <Reveal className="mt-8">
+          <div className="flex flex-wrap gap-2">
+            {CHANNELS.map((c) => <TextChip key={c} tone="accent">{c}</TextChip>)}
+          </div>
+        </Reveal>
+
+        {/* Deliberately light chrome: the page already carries three
+            card-heavy question layouts, so these are rules and text. */}
+        <Reveal className="mt-9" delay={0.08}>
+          <div style={{ borderTop: "1px solid var(--ed-rule)" }}>
+            {OFF_HOURS.map((o) => (
+              <div
+                key={o.q}
+                className="flex flex-col gap-1 py-4 md:flex-row md:items-baseline md:gap-6"
+                style={{ borderBottom: "1px solid var(--ed-rule)" }}
+              >
+                <span className="flex-none md:w-[150px]">
+                  <Meta>{o.when} · {o.channel}</Meta>
+                </span>
+                <span className="ed-fg text-[15px] md:text-base leading-snug">
+                  &ldquo;{o.q}&rdquo;
+                </span>
+              </div>
+            ))}
+          </div>
+        </Reveal>
+
+        <Reveal className="mt-7" delay={0.12}>
+          <p className="ed-fg max-w-[620px] text-[17px] leading-relaxed" style={{ fontWeight: 500 }}>
+            The portal was never the problem. Nobody opens it during a shift.
+          </p>
+        </Reveal>
+      </Band>
+
+      {/* ── 5. Scoping ────────────────────────────────── */}
+      <Band id="scoping">
         <SectionHead
           eyebrow="Scoping"
           accentEyebrow
@@ -394,8 +463,8 @@ export default function AnswersContent() {
         </Reveal>
       </Band>
 
-      {/* ── 5. Sources ────────────────────────────────── */}
-      <Band>
+      {/* ── 6. Sources ────────────────────────────────── */}
+      <Band alt>
         <SectionHead
           eyebrow="Sources"
           title="It answers from your material. Nothing else."
@@ -494,8 +563,8 @@ export default function AnswersContent() {
         </Reveal>
       </Band>
 
-      {/* ── 6. Content insights ───────────────────────── */}
-      <Band alt id="content-insights">
+      {/* ── 7. Content insights ───────────────────────── */}
+      <Band id="content-insights">
         <SectionHead
           eyebrow="Content insights"
           title="Every question is a signal about your material."
@@ -550,44 +619,6 @@ export default function AnswersContent() {
           <Link href="/platform/reporting" className="ed-link mt-5 inline-block text-sm" style={{ fontWeight: 500 }}>
             See the full picture &rarr;
           </Link>
-        </Reveal>
-      </Band>
-
-      {/* ── 7. Channels ───────────────────────────────── */}
-      <Band>
-        <SectionHead eyebrow="Channels" title="Nobody logs in to ask a question." />
-
-        <Reveal className="mt-8">
-          <div className="flex flex-wrap gap-2">
-            {CHANNELS.map((c) => <TextChip key={c} tone="accent">{c}</TextChip>)}
-          </div>
-        </Reveal>
-
-        {/* Deliberately light chrome: the page already carries three
-            card-heavy question layouts, so these are rules and text. */}
-        <Reveal className="mt-9" delay={0.08}>
-          <div style={{ borderTop: "1px solid var(--ed-rule)" }}>
-            {OFF_HOURS.map((o) => (
-              <div
-                key={o.q}
-                className="flex flex-col gap-1 py-4 md:flex-row md:items-baseline md:gap-6"
-                style={{ borderBottom: "1px solid var(--ed-rule)" }}
-              >
-                <span className="flex-none md:w-[150px]">
-                  <Meta>{o.when} · {o.channel}</Meta>
-                </span>
-                <span className="ed-fg text-[15px] md:text-base leading-snug">
-                  &ldquo;{o.q}&rdquo;
-                </span>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-
-        <Reveal className="mt-7" delay={0.12}>
-          <p className="ed-fg max-w-[620px] text-[17px] leading-relaxed" style={{ fontWeight: 500 }}>
-            The portal was never the problem. Nobody opens it during a shift.
-          </p>
         </Reveal>
       </Band>
 

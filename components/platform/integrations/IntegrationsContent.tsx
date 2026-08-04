@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 import { CLOSING_BASE } from "@/components/growth/closing-band";
 import {
   ACCENT, ACCENT_TINT, CARD, EASE, JAKARTA, MONO,
@@ -26,12 +26,12 @@ import {
  *
  * Order is fixed everywhere franchise-native systems appear. They lead
  * because they prove domain fit before a generic logo shows up. Do not
- * alphabetise §3 or §5.
+ * alphabetise §3 or the hero strip.
  */
 
 /* ── §1 hero strip ───────────────────────────────────────
-   A thin moving band, deliberately different in form from §5's static
-   grid so the page does not show the same logo wall twice. */
+   A thin moving band. It is the page's only run of system names now
+   that §4 is a count rather than a second grid. */
 const STRIP = [
   "FranConnect", "ServiceTitan", "Mindbody", "Zenoti", "ServiceMinder", "Thryv",
   "Toast", "Square", "QuickBooks", "Xero", "SharePoint", "Google Drive",
@@ -95,11 +95,32 @@ const CATEGORIES: { name: string; line: string; systems: string[]; more?: boolea
   { name: "Marketing", line: "Campaigns and brand assets, drafted on brand and held for approval.", systems: ["Mailchimp", "ActiveCampaign", "Constant Contact", "Canva", "MediaValet"] },
 ];
 
-/* ── §4 ─────────────────────────────────────────────────── */
-const ROLES: { role: string; sees: string; doesnt: string }[] = [
-  { role: "Shift lead, Store #118",  sees: "The policy, and their own location's schedule", doesnt: "Margin, labor cost, or any other location" },
-  { role: "Owner, Store #118",       sees: "Everything above, plus their P&L and their team's hours", doesnt: "Any other location's numbers" },
-  { role: "District manager, West",  sees: "All twelve locations in their territory, compared", doesnt: "Territories they don't manage" },
+/* ── §5 ─────────────────────────────────────────────────
+   The page's one artifact. Everything else here is cards and chips, and
+   a page arguing that connections inherit real permissions needs to show
+   a real response rather than describe one.
+
+   Three columns under one shared question, so the divergence is read
+   across rather than down a list. Deliberately not the chat cards the
+   Answers page uses for its scoping section: this is a permission
+   matrix, denser and more system-like, and the two pages should not
+   look like the same page. */
+const ROLES: { role: string; scope: string; sees: string; doesnt: string }[] = [
+  {
+    role: "Shift lead", scope: "Store #118",
+    sees: "The policy, and their own location's schedule",
+    doesnt: "Margin, labor cost, or any other location",
+  },
+  {
+    role: "Owner", scope: "Store #118",
+    sees: "Everything above, plus their P&L and their team's hours",
+    doesnt: "Any other location's numbers",
+  },
+  {
+    role: "District manager", scope: "West territory",
+    sees: "All twelve locations in their territory, compared",
+    doesnt: "Territories they don't manage",
+  },
 ];
 
 const ACCESS_CARDS = [
@@ -108,12 +129,19 @@ const ACCESS_CARDS = [
   { title: "Logged with the answer", body: "Who asked, what they could see, and which sources were used." },
 ];
 
-/* ── §5 ─────────────────────────────────────────────────
-   Twelve, franchise-native first. Fixed order; do not alphabetise. */
-const GRID = [
-  "FranConnect", "ServiceTitan", "Mindbody", "Zenoti", "ServiceMinder", "Toast",
-  "Square", "QuickBooks", "SharePoint", "Trainual", "Salesforce", "Microsoft Teams",
-];
+/* §5 used to be a grid of twelve system names. It is a count now: §3
+   already lists roughly fifty of them by category, so a second wall of
+   the same names added nothing but a number, and the number is the only
+   part that was new. Showing scale as one oversized figure is also the
+   page's lightest section, which it needed between the eight-card grid
+   above and the artifact below. */
+
+/* Swap this for the real figure ("250+") and the display treatment in §4
+   turns itself on. Left as a token it renders small and obviously
+   provisional, because a placeholder set at 112px wraps across four
+   lines and swallows the section. Marketing owns this number. */
+const COUNT = "{{TBD:integration-count}}";
+const COUNT_PENDING = COUNT.startsWith("{{TBD:");
 
 const RELATED = [
   { eyebrow: "Answers", title: "What it does with your knowledge", href: "/platform/answers" },
@@ -282,8 +310,71 @@ export default function IntegrationsContent() {
         </Reveal>
       </Band>
 
-      {/* ── 4. Permissions ────────────────────────────── */}
+      {/* ── 4. Scale ──────────────────────────────────── */}
       <Band alt>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,420px)_1fr] lg:items-end lg:gap-16">
+          <Reveal>
+            {COUNT_PENDING ? (
+              <span
+                className="inline-block rounded-lg px-3 py-2"
+                style={{
+                  fontFamily: MONO,
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: "var(--ed-fg-muted)",
+                  border: "1px dashed var(--ed-border)",
+                  wordBreak: "break-word",
+                }}
+              >
+                {COUNT}
+              </span>
+            ) : (
+              <span
+                className="block leading-[0.9] tracking-[-0.04em]"
+                style={{
+                  fontFamily: JAKARTA,
+                  fontWeight: 700,
+                  fontSize: "clamp(3.5rem, 1.5rem + 7vw, 7rem)",
+                  color: "var(--ed-accent-text)",
+                }}
+              >
+                {COUNT}
+              </span>
+            )}
+            <span className="ed-fg mt-3 block text-[17px]" style={{ fontWeight: 600 }}>
+              supported systems
+            </span>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <h2
+              className="ed-fg leading-[1.08] tracking-[-0.03em]"
+              style={{
+                fontFamily: JAKARTA,
+                fontWeight: 700,
+                fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)",
+                textWrap: "pretty",
+              }}
+            >
+              Your stack, already connected.
+            </h2>
+            <p className="ed-fg-muted mt-4 max-w-[520px] text-base md:text-lg leading-relaxed">
+              From POS to P&amp;L, LMS to CRM. If your locations run it, it probably
+              connects.
+            </p>
+            <Link
+              href="/platform/integrations/directory"
+              className="ed-link mt-6 inline-block text-sm"
+              style={{ fontWeight: 500 }}
+            >
+              Browse the full directory &rarr;
+            </Link>
+          </Reveal>
+        </div>
+      </Band>
+
+      {/* ── 5. Permissions ────────────────────────────── */}
+      <Band>
         <SectionHead
           eyebrow="Access"
           title="It can't show someone what their own system wouldn't."
@@ -292,32 +383,65 @@ export default function IntegrationsContent() {
 
         <Reveal className="mt-9">
           <div style={CARD} className="overflow-hidden">
+            {/* One question at the top, three answers across. The
+                question is asked once so the columns are visibly the
+                same request resolving differently, not three features. */}
             <div
-              className="px-5 py-3"
+              className="px-5 py-4 md:px-6"
               style={{ borderBottom: "1px solid var(--ed-rule)", backgroundColor: "var(--ed-card-alt)" }}
             >
-              <Meta>The same question · three people · one connection</Meta>
+              <Meta>One connection · asked by three people · 11:20am</Meta>
+              <p className="ed-fg mt-2.5 text-[15px] md:text-base" style={{ fontWeight: 600 }}>
+                &ldquo;How did last week close against target?&rdquo;
+              </p>
             </div>
-            {ROLES.map((r, i) => (
-              <div
-                key={r.role}
-                className="px-5 py-5"
-                style={i > 0 ? { borderTop: "1px solid var(--ed-rule)" } : undefined}
-              >
-                <p className="ed-fg text-[15px]" style={{ fontWeight: 600 }}>{r.role}</p>
-                <div className="mt-3 flex flex-col gap-2">
-                  <div className="grid grid-cols-1 gap-1 md:grid-cols-[92px_1fr] md:gap-5">
-                    <span className="pt-0.5"><Meta color={ACCENT}>Sees</Meta></span>
-                    <span className="ed-fg text-[14.5px] leading-snug">{r.sees}</span>
+
+            <div className="grid grid-cols-1 md:grid-cols-3">
+              {ROLES.map((r, i) => (
+                <div
+                  key={r.role}
+                  className="flex flex-col gap-4 p-5 md:p-6"
+                  style={{
+                    /* Rules run between columns on desktop and between
+                       rows once they stack. */
+                    borderTop: i > 0 ? "1px solid var(--ed-rule)" : undefined,
+                    borderLeft: i > 0 ? "1px solid var(--ed-rule)" : undefined,
+                  }}
+                >
+                  <div>
+                    <p className="ed-fg text-[15px]" style={{ fontWeight: 600 }}>{r.role}</p>
+                    <span className="mt-1 block"><Meta>{r.scope}</Meta></span>
                   </div>
-                  <div className="grid grid-cols-1 gap-1 md:grid-cols-[92px_1fr] md:gap-5">
-                    <span className="pt-0.5"><Meta>Doesn&rsquo;t</Meta></span>
-                    <span className="ed-fg-muted text-[14.5px] leading-snug">{r.doesnt}</span>
+
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <Check className="h-3.5 w-3.5 flex-none" strokeWidth={2.5} style={{ color: ACCENT }} aria-hidden="true" />
+                      <Meta color={ACCENT}>Sees</Meta>
+                    </div>
+                    <p className="ed-fg mt-2 text-[14.5px] leading-snug">{r.sees}</p>
+                  </div>
+
+                  <div
+                    className="pt-4"
+                    style={{ borderTop: "1px dashed var(--ed-border)" }}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <X className="h-3.5 w-3.5 flex-none" strokeWidth={2.5} style={{ color: "var(--ed-fg-muted)" }} aria-hidden="true" />
+                      <Meta>Doesn&rsquo;t</Meta>
+                    </div>
+                    <p className="ed-fg-muted mt-2 text-[14.5px] leading-snug">{r.doesnt}</p>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+        </Reveal>
+
+        <Reveal className="mt-4" delay={0.06}>
+          <p className="ed-fg-muted text-xs">
+            Illustrative. The scopes shown are the shape of a real response, not a
+            customer&rsquo;s data.
+          </p>
         </Reveal>
 
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -340,68 +464,51 @@ export default function IntegrationsContent() {
         </Reveal>
       </Band>
 
-      {/* ── 5. The grid ───────────────────────────────── */}
-      <Band>
-        <SectionHead
-          eyebrow="{{TBD:integration-count}} integrations"
-          title="Your stack, already connected."
-          sub="From POS to P&L, LMS to CRM. If your locations run it, it probably connects."
-        />
-
-        <Reveal className="mt-9">
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-            {GRID.map((g) => (
-              <div
-                key={g}
-                className="flex items-center justify-center px-3 py-6 text-center"
-                style={CARD}
-              >
-                <span className="ed-fg text-[14px]" style={{ fontWeight: 600, lineHeight: 1.25 }}>
-                  {g}
-                </span>
-              </div>
-            ))}
-          </div>
-        </Reveal>
-
-        <Reveal className="mt-5 flex flex-wrap items-center justify-between gap-3" delay={0.08}>
-          <span className="ed-fg-muted text-sm">
-            Showing 12 of {"{{TBD:integration-count}}"} supported systems
-          </span>
-          <Link href="/platform/integrations/directory" className="ed-link text-sm" style={{ fontWeight: 500 }}>
-            View all &rarr;
-          </Link>
-        </Reveal>
-      </Band>
-
-      {/* ── 6. Custom and API ─────────────────────────── */}
+      {/* ── 6. Custom and API ───────────────────────────
+          Was a pair of link cards, which put two rows of arrow cards
+          within a couple of screens of Related. The directory card
+          moved up into §4, where the count already sends people there,
+          and what is left is the one thing this section actually says. */}
       <Band alt>
-        <SectionHead
-          eyebrow="Anything else"
-          title="Don't see your system?"
-          sub="Proprietary platforms, internal databases, and one-off systems connect through our API and custom pipelines."
-        />
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_minmax(0,380px)] lg:items-end lg:gap-16">
+          <Reveal>
+            <Eyebrow>Anything else</Eyebrow>
+            <h2
+              className="ed-fg mt-4 leading-[1.08] tracking-[-0.03em]"
+              style={{
+                fontFamily: JAKARTA,
+                fontWeight: 700,
+                fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)",
+                textWrap: "pretty",
+              }}
+            >
+              Don&rsquo;t see your system?
+            </h2>
+            <p className="ed-fg-muted mt-4 max-w-[600px] text-base md:text-lg leading-relaxed">
+              Proprietary platforms, internal databases, and one-off systems connect
+              through our API and custom pipelines.
+            </p>
+          </Reveal>
 
-        <div className="mt-9 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {[
-            { title: "Browse the full directory", body: "Every system we connect to, by category.", href: "/platform/integrations/directory", cta: "Open the directory" },
-            { title: "Custom integrations", body: <>Proprietary or internal systems, connected through our API. Typical build time: {"{{TBD:custom-integration-timeline}}"}</>, href: "/contact", cta: "Talk to us" },
-          ].map((c, i) => (
-            <Reveal key={c.title} delay={i * 0.08}>
-              <Link href={c.href} className="group flex h-full flex-col justify-between gap-8 p-6" style={CARD}>
-                <div>
-                  <p className="ed-fg text-[18px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 600 }}>
-                    {c.title}
-                  </p>
-                  <p className="ed-fg-muted mt-2.5 text-[14.5px] leading-relaxed">{c.body}</p>
-                </div>
-                <span className="flex items-center gap-2 text-sm" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
-                  {c.cta}
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={2} aria-hidden="true" />
-                </span>
+          <Reveal delay={0.1}>
+            <div className="p-5 md:p-6" style={CARD}>
+              <Meta>Typical build time</Meta>
+              <p
+                className="ed-fg mt-2.5"
+                style={{ fontFamily: MONO, fontSize: 15, fontWeight: 600, wordBreak: "break-word" }}
+              >
+                {"{{TBD:custom-integration-timeline}}"}
+              </p>
+              <Link
+                href="/contact"
+                className="mt-5 inline-flex items-center gap-2 text-sm"
+                style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}
+              >
+                Talk to us about a custom connection
+                <ArrowRight className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
               </Link>
-            </Reveal>
-          ))}
+            </div>
+          </Reveal>
         </div>
       </Band>
 
