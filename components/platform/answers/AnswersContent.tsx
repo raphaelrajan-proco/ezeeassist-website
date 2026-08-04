@@ -142,7 +142,7 @@ const PROOF = [
 const RELATED = [
   { eyebrow: "Ticketing", title: "What happens when it stops, and how it gets to the right person", href: "/platform/ticketing" },
   { eyebrow: "Reporting", title: "When the question is about numbers", href: "/platform/reporting" },
-  { eyebrow: "Control Center", title: "How scoping and permissions are set", href: "/#trust" },
+  { eyebrow: "Control Center", title: "How scoping and permissions are set", href: "/platform/control-center" },
 ];
 
 /* ── Chat card, the page's signature artifact ─────────── */
@@ -713,7 +713,7 @@ export default function AnswersContent() {
 
       {/* ── 9. Governance ─────────────────────────────── */}
       <GovernanceBand
-        href="/#trust"
+        href="/platform/control-center"
         cta="How Control Center works →"
         items={[
           { label: "Set at HQ",  body: "What can be answered without a human, and by whom" },

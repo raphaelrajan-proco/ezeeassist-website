@@ -30,6 +30,7 @@ const routes: Route[] = [
   { url: "/platform/workflows",                             priority: 0.85, changeFrequency: "monthly" },
   { url: "/platform/compliance",                            priority: 0.85, changeFrequency: "monthly" },
   { url: "/platform/ticketing",                             priority: 0.85, changeFrequency: "monthly" },
+  { url: "/platform/control-center",                        priority: 0.85, changeFrequency: "monthly" },
   { url: "/platform/integrations",                          priority: 0.85, changeFrequency: "monthly" },
 
   // ── Tier 2: Industries ────────────────────────────────────

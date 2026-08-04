@@ -23,7 +23,7 @@ const platformLinks = [
   { label: "Compliance",       href: "/platform/compliance" },
   { label: "Ticketing",        href: "/platform/ticketing" },
   { label: "Integrations",     href: "/platform/integrations" },
-  { label: "Control Center",   href: "/#trust" },
+  { label: "Control Center",   href: "/platform/control-center" },
   { label: "Trust Center",     href: "/security" },
 ];
 

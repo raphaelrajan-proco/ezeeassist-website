@@ -167,7 +167,7 @@ export default function PlayGrid() {
         </p>
         <p className="ed-fg-muted mt-5 text-sm">
           HQ approves what publishes network-wide.{" "}
-          <Link href="/#trust" className="ed-link" style={{ fontWeight: 500 }}>
+          <Link href="/platform/control-center" className="ed-link" style={{ fontWeight: 500 }}>
             Control Center
           </Link>
         </p>

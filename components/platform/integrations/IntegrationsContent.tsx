@@ -146,7 +146,7 @@ const COUNT_PENDING = COUNT.startsWith("{{TBD:");
 const RELATED = [
   { eyebrow: "Answers", title: "What it does with your knowledge", href: "/platform/answers" },
   { eyebrow: "Reporting", title: "What it does with your data", href: "/platform/reporting" },
-  { eyebrow: "Control Center", title: "How access is set", href: "/#trust" },
+  { eyebrow: "Control Center", title: "How access is set", href: "/platform/control-center" },
 ];
 
 export default function IntegrationsContent() {
@@ -458,7 +458,7 @@ export default function IntegrationsContent() {
         </div>
 
         <Reveal className="mt-7" delay={0.1}>
-          <Link href="/#trust" className="ed-link inline-block text-sm" style={{ fontWeight: 500 }}>
+          <Link href="/platform/control-center" className="ed-link inline-block text-sm" style={{ fontWeight: 500 }}>
             How permissions are set &rarr;
           </Link>
         </Reveal>
