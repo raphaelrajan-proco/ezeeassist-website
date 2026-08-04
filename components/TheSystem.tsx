@@ -241,17 +241,20 @@ function Core({ w, h }: { w: number; h: number }) {
   );
 }
 
-function GovernedPill({ width }: { width?: number }) {
+/** Sizes to its own label. It used to take an explicit `width` with no
+    side padding, which broke the moment the type floor raised the label
+    from 9px to 12px: the text is wider than the box and `nowrap` pushed
+    it straight out through the rounded ends. Padding and an inline box
+    cannot do that whatever the font size becomes. */
+function GovernedPill() {
   return (
     <div
       style={{
-        width, textAlign: "center", fontFamily: MONO, fontSize: 9, letterSpacing: ".13em",
+        display: "inline-block", whiteSpace: "nowrap", textAlign: "center",
+        fontFamily: MONO, fontSize: 9, letterSpacing: ".13em",
         color: "var(--os-accent-ink)", border: "1px solid var(--os-accent-soft2)",
         background: "var(--os-accent-soft)", borderRadius: 999,
-        /* The fixed-width pill takes no side padding, per the spec; the
-           stacked one has no width so it needs some. Both hold one line. */
-        padding: width ? "6px 0" : "6px 16px",
-        whiteSpace: "nowrap",
+        padding: "6px 18px",
       }}
     >
       GOVERNED · HUMAN-GATED
@@ -491,9 +494,22 @@ function OsCanvas() {
           />
         ))}
 
-        <div style={{ position: "absolute", left: 0, top: 70, width: 300 }}><PeopleCard /></div>
-        <div style={{ position: "absolute", left: 0, top: 200, width: 300 }}><PlaybooksCard /></div>
-        <div style={{ position: "absolute", left: 0, top: 344, width: 300 }}><SystemsCard /></div>
+        {/* One column, not three hardcoded tops. The old values (70, 200,
+            344) were derived from the type sizes this diagram had before
+            the editorial type floor raised every 9-11.5px label in it, and
+            the cards grew until Playbooks overlapped People. Stacking them
+            means the group cannot collide again whatever the type does;
+            only the top of the stack is pinned. */}
+        <div
+          style={{
+            position: "absolute", left: 0, top: 70, width: 300,
+            display: "flex", flexDirection: "column", gap: 14,
+          }}
+        >
+          <PeopleCard />
+          <PlaybooksCard />
+          <SystemsCard />
+        </div>
 
         <div style={{ position: "absolute", left: 556, top: 250, zIndex: 2 }}>
           <Core w={208} h={130} />
@@ -504,10 +520,12 @@ function OsCanvas() {
         <div style={{ position: "absolute", left: 532, top: 394, width: 256, zIndex: 2 }}>
           <FlowLegend />
         </div>
-        {/* 190 wide so the text clears the pill's rounded ends; left
-            shifted to keep it centred on the core's 660 axis. */}
-        <div style={{ position: "absolute", left: 565, top: 440, zIndex: 2 }}>
-          <GovernedPill width={190} />
+        {/* Centred on the core's 660 axis and sized to its own text. A
+            fixed width was set against the label at 9px; the type floor
+            takes it to 12px, which is 193px of text in a 188px box, so the
+            words sat outside the pill. Nothing here is width-bound now. */}
+        <div style={{ position: "absolute", left: 660, top: 440, zIndex: 2, transform: "translateX(-50%)" }}>
+          <GovernedPill />
         </div>
 
         {/* One chip per out-wire, so the column and the wires stay in

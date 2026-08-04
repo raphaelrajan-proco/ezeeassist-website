@@ -237,9 +237,36 @@ const HEX_STATES = [
 
 /* Full coverage: every axis at 97%. Not 100%, so the outer ring stays
    visible just outside the shape and reads as a frame the blue fills
-   rather than a ring the blue replaces. */
+   rather than a ring the blue replaces. Now the reduced-motion state
+   only: with motion the blue shape travels instead. */
 const HEX_FULL =
   "M 280.0,112.7 L 355.6,156.4 L 355.6,243.6 L 280.0,287.3 L 204.4,243.6 L 204.4,156.4 Z";
+
+/* The blue shape's travelling wave, by request.
+   It rests one ring in from the edge (ring 3, radius 67.5) and sends a
+   bulge around the six axes in turn, each peak landing exactly on the
+   97% vertex the static shape used. Over one cycle every axis is
+   touched, which is the claim; between peaks nothing drops back to the
+   grey chart's territory, because the resting radius is still well
+   outside anything the grey shape reaches.
+
+   Generated rather than hand-written: peak 87.3, then 77.0, 69.5 and
+   67.5 by angular distance from the peak, so the bulge eases off in
+   both directions and reads as one wave rather than a spike. Every
+   value has the same command sequence, which spline interpolation
+   requires. */
+const HEX_WAVE = [
+  "M 280.0,112.7 L 346.7,161.5 L 340.2,234.7 L 280.0,267.5 L 219.8,234.7 L 213.3,161.5 Z",
+  "M 280.0,123.0 L 355.6,156.4 L 346.7,238.5 L 280.0,269.5 L 221.5,233.7 L 219.8,165.3 Z",
+  "M 280.0,130.5 L 346.7,161.5 L 355.6,243.6 L 280.0,277.0 L 219.8,234.7 L 221.5,166.3 Z",
+  "M 280.0,132.5 L 340.2,165.3 L 346.7,238.5 L 280.0,287.3 L 213.3,238.5 L 219.8,165.3 Z",
+  "M 280.0,130.5 L 338.5,166.3 L 340.2,234.7 L 280.0,277.0 L 204.4,243.6 L 213.3,161.5 Z",
+  "M 280.0,123.0 L 340.2,165.3 L 338.5,233.7 L 280.0,269.5 L 213.3,238.5 L 204.4,156.4 Z",
+  /* Wraps to the first, so the loop has no seam. */
+  "M 280.0,112.7 L 346.7,161.5 L 340.2,234.7 L 280.0,267.5 L 219.8,234.7 L 213.3,161.5 Z",
+];
+const HEX_WAVE_KEYTIMES = "0;0.1667;0.3333;0.5;0.6667;0.8333;1";
+const HEX_WAVE_KEYSPLINES = Array(HEX_WAVE.length - 1).fill("0.4 0 0.5 1").join(";");
 
 const HEX_KEYTIMES = "0;0.09;0.16;0.27;0.34;0.44;0.52;0.63;0.70;0.81;0.88;1";
 const HEX_KEYSPLINES = Array(HEX_STATES.length - 1).fill("0.4 0 0.5 1").join(";");
@@ -321,6 +348,7 @@ function HexLabel({ children }: { children: React.ReactNode }) {
 function CoverageHexagon() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const animRef = useRef<SVGAnimateElement>(null);
+  const waveRef = useRef<SVGAnimateElement>(null);
   /* False until the effect runs, so the server and the first client
      render agree and the static first state is what ships in the HTML. */
   const [animated, setAnimated] = useState(false);
@@ -343,6 +371,7 @@ function CoverageHexagon() {
           /* begin="indefinite" means nothing runs until this fires, so
              the chart is still on its first state above the fold. */
           animRef.current?.beginElement();
+          waveRef.current?.beginElement();
           setShown(true);
         }
       },
@@ -398,11 +427,17 @@ function CoverageHexagon() {
           title="Radar chart of personalized coaching coverage with EZee Assist, across six areas"
           desc="Coverage reaches every area at once: just-in-time guidance, tailored training, individual onboarding, local market insight, performance reviews, and situational coaching."
         >
-          {/* Steady and full, against the restless shape beside it. It
-              does not morph: coverage that fluctuated would argue the
-              opposite of the point. One entrance, then it holds. */}
+          {/* A wave travelling the six axes, by request. It rests one
+              ring in from the edge and touches each axis in turn, so over
+              a cycle every area is reached. This is a change of argument
+              from the static version: that one said "full, and it holds",
+              this one says "it gets to all of them". The resting radius
+              is deliberately still outside anything the grey shape
+              reaches, so the comparison beside it never inverts.
+              Reduced motion keeps the full shape, since that is the claim
+              stated without movement. */}
           <path
-            d={HEX_FULL}
+            d={reduced || !animated ? HEX_FULL : HEX_WAVE[0]}
             fill="var(--pb-accent)"
             fillOpacity={0.25}
             stroke="var(--pb-accent)"
@@ -417,7 +452,21 @@ function CoverageHexagon() {
                 ? "none"
                 : "transform .95s cubic-bezier(.22,1,.36,1), opacity .6s ease",
             }}
-          />
+          >
+            {animated && (
+              <animate
+                ref={waveRef}
+                attributeName="d"
+                dur="16s"
+                begin="indefinite"
+                calcMode="spline"
+                keyTimes={HEX_WAVE_KEYTIMES}
+                keySplines={HEX_WAVE_KEYSPLINES}
+                values={HEX_WAVE.join(";")}
+                repeatCount="indefinite"
+              />
+            )}
+          </path>
         </HexFrame>
       </div>
     </div>
