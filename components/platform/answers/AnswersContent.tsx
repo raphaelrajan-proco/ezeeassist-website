@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check, X } from "lucide-react";
 import { CLOSING_BASE } from "@/components/growth/closing-band";
+import { HERO_BG, SCRIM } from "@/lib/data/hero-backgrounds";
 import {
   ACCENT, ACCENT_TINT, ACCENT_TINT_STRONG, CARD, DANGER, EASE, JAKARTA, MONO, WARN,
   Band, Eyebrow, GovernanceBand, Meta, Reveal, SectionHead, SourceChip, TextChip,
@@ -187,22 +188,39 @@ function ChatCard({ meta, question, answer, extra, sources, timing, accent = fal
   );
 }
 
+/* Photographic hero, matching the treatment the newer Platform pages use.
+   `haze3` by request, so Answers, Integrations and Reporting each carry a
+   different frame from the same hazy-blue family. The scrim is the
+   sub-page value rather than the variant's own baseline: this band holds
+   an eyebrow, an H1, a subhead, two CTAs and a product card. */
+const HERO = HERO_BG.haze3;
+const ON_DARK_ACCENT = "#9FE0F8";
+const ON_IMAGE = "rgba(245,237,224,0.92)";
+
 export default function AnswersContent() {
   return (
     <>
       {/* ── 1. Hero ───────────────────────────────────── */}
-      <section className="ed-bg w-full">
-        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-16 pb-14 md:pt-20 md:pb-16">
+      <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
+        <div className="absolute inset-0" aria-hidden="true">
+          <Image src={HERO.src} alt="" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.heroSubPage})` }} />
+          <div className="absolute inset-0" style={{ background: "radial-gradient(58% 52% at 82% 12%, rgba(159,224,248,0.16) 0%, rgba(159,224,248,0) 70%)" }} />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-20 pb-16 md:pt-24 md:pb-20">
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[1.05fr_minmax(0,480px)] lg:gap-14 lg:items-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: EASE }}
             >
-              <Eyebrow accent>Answers</Eyebrow>
+              <p className="uppercase" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_ACCENT }}>
+                Answers
+              </p>
               <h1
-                className="ed-fg mt-5 leading-[1.06] tracking-[-0.03em]"
+                className="mt-5 leading-[1.06] tracking-[-0.03em]"
                 style={{
+                  color: "#FFFFFF",
                   fontFamily: JAKARTA,
                   fontWeight: 700,
                   /* Two clauses, one line each from lg. Capped so the
@@ -212,15 +230,15 @@ export default function AnswersContent() {
                 }}
               >
                 Every question answered from your own material.{" "}
-                <span className="lg:block">Scoped to the person asking.</span>
+                <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>Scoped to the person asking.</span>
               </h1>
-              <p className="ed-fg-muted mt-6 max-w-[560px] text-base md:text-lg leading-relaxed">
+              <p className="mt-6 max-w-[560px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
                 Your franchisees ask in the app they&rsquo;re already in. The answer comes
                 back in seconds, from the document your brand approved, with the source
                 attached.
               </p>
               <div className="mt-9 flex flex-wrap items-center gap-3">
-                <Link href="/speak-to-an-expert" className="ed-btn ed-btn-primary ed-btn-arrow inline-flex">
+                <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
                   Speak to an expert
                   <span className="ed-btn-arrow-badge" aria-hidden="true">
                     <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
@@ -228,7 +246,7 @@ export default function AnswersContent() {
                 </Link>
                 {/* In-page anchor, not an external link: §4 is what this
                     reader wants to see. */}
-                <a href="#scoping" className="ed-btn ed-btn-secondary inline-flex">
+                <a href="#scoping" className="ed-btn ed-btn-secondary-dark inline-flex">
                   See how scoping works
                 </a>
               </div>
@@ -252,7 +270,7 @@ export default function AnswersContent() {
       </section>
 
       {/* ── 2. What it replaces ───────────────────────── */}
-      <Band alt>
+      <Band>
         <SectionHead
           eyebrow="The problem"
           title="The same five questions. Five channels. One inbox."
@@ -304,7 +322,7 @@ export default function AnswersContent() {
       </Band>
 
       {/* ── 3. How it works ───────────────────────────── */}
-      <Band>
+      <Band alt>
         <SectionHead
           eyebrow="How it works"
           title={<>Five steps, and two of them are the reason it&rsquo;s different.</>}
@@ -383,7 +401,7 @@ export default function AnswersContent() {
           Sits directly under How it works on purpose: step 01 names the
           channels, and this elaborates that same fact. Seven sections
           apart they read as two separate enumerations of one list. */}
-      <Band alt>
+      <Band>
         <SectionHead eyebrow="Channels" title="Nobody logs in to ask a question." />
 
         <Reveal className="mt-8">
@@ -421,7 +439,7 @@ export default function AnswersContent() {
       </Band>
 
       {/* ── 5. Scoping ────────────────────────────────── */}
-      <Band id="scoping">
+      <Band alt id="scoping">
         <SectionHead
           eyebrow="Scoping"
           accentEyebrow
@@ -464,7 +482,7 @@ export default function AnswersContent() {
       </Band>
 
       {/* ── 6. Sources ────────────────────────────────── */}
-      <Band alt>
+      <Band>
         <SectionHead
           eyebrow="Sources"
           title="It answers from your material. Nothing else."
@@ -564,7 +582,7 @@ export default function AnswersContent() {
       </Band>
 
       {/* ── 7. Content insights ───────────────────────── */}
-      <Band id="content-insights">
+      <Band alt id="content-insights">
         <SectionHead
           eyebrow="Content insights"
           title="Every question is a signal about your material."
@@ -623,7 +641,7 @@ export default function AnswersContent() {
       </Band>
 
       {/* ── 8. The handoff ────────────────────────────── */}
-      <Band alt>
+      <Band>
         <SectionHead
           eyebrow="The handoff · powered by Ticketing"
           accentEyebrow
@@ -724,7 +742,7 @@ export default function AnswersContent() {
       />
 
       {/* ── 10. Proof ─────────────────────────────────── */}
-      <Band>
+      <Band alt>
         <SectionHead title="What it did in someone else's network." />
 
         <div className="mt-9 grid grid-cols-1 gap-5 lg:grid-cols-2">
@@ -770,7 +788,7 @@ export default function AnswersContent() {
       </Band>
 
       {/* ── 11. Related ───────────────────────────────── */}
-      <Band alt>
+      <Band>
         {/* Ticketing first, deliberately: the fork out of this page
             matters more than the two adjacent capabilities. */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -803,10 +821,10 @@ export default function AnswersContent() {
       </Band>
 
       {/* ── 12. CTA ───────────────────────────────────── */}
-      <section className="relative w-full overflow-hidden" style={{ backgroundColor: "#0B2C48" }}>
+      <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
-          <Image src="/hero-bg.jpg" alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: "rgba(4,32,54,0.34)" }} />
+          <Image src={HERO.src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.closing})` }} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 45%, ${CLOSING_BASE} 100%)` }} />
         </div>
 

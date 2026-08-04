@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check, X } from "lucide-react";
 import { CLOSING_BASE } from "@/components/growth/closing-band";
+import { HERO_BG, SCRIM } from "@/lib/data/hero-backgrounds";
 import {
   ACCENT, ACCENT_TINT, CARD, EASE, JAKARTA, MONO,
   Band, Eyebrow, GovernanceBand, Meta, Reveal, SectionHead, TextChip,
@@ -149,22 +150,58 @@ const RELATED = [
   { eyebrow: "Control Center", title: "How access is set", href: "/platform/control-center" },
 ];
 
+/* Photographic hero, matching the treatment the newer Platform pages use.
+   `haze4` by request, so Answers, Integrations and Reporting each carry a
+   different frame from the same hazy-blue family. Scrim is the sub-page
+   value rather than the variant's own baseline, because this band holds
+   an eyebrow, an H1, a subhead, two CTAs and the marquee strip. */
+const HERO = HERO_BG.haze4;
+const ON_DARK_ACCENT = "#9FE0F8";
+const ON_IMAGE = "rgba(245,237,224,0.92)";
+const ON_DARK_DIM = "rgba(245,237,224,0.55)";
+
+/** The hero strip's chip. `TextChip` is the light-surface version and is
+    shared with §5, so this is a local on-image variant rather than a prop
+    on the shared one. */
+function HeroChip({ children }: { children: React.ReactNode }) {
+  return (
+    <span
+      className="inline-flex flex-none items-center rounded-md px-2.5 py-1"
+      style={{
+        fontSize: 12.5, fontWeight: 500, lineHeight: 1.3, color: ON_IMAGE,
+        backgroundColor: "rgba(245,237,224,0.08)",
+        border: "1px solid rgba(245,237,224,0.18)",
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
 export default function IntegrationsContent() {
   return (
     <>
       {/* ── 1. Hero ───────────────────────────────────── */}
-      <section className="ed-bg w-full overflow-hidden">
-        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-16 pb-10 md:pt-20">
+      <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
+        <div className="absolute inset-0" aria-hidden="true">
+          <Image src={HERO.src} alt="" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.heroSubPage})` }} />
+          <div className="absolute inset-0" style={{ background: "radial-gradient(58% 52% at 82% 12%, rgba(159,224,248,0.16) 0%, rgba(159,224,248,0) 70%)" }} />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-20 pb-10 md:pt-24">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: EASE }}
             className="max-w-[820px]"
           >
-            <Eyebrow accent>Integrations</Eyebrow>
+            <p className="uppercase" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_ACCENT }}>
+              Integrations
+            </p>
             <h1
-              className="ed-fg mt-5 leading-[1.06] tracking-[-0.03em]"
+              className="mt-5 leading-[1.06] tracking-[-0.03em]"
               style={{
+                color: "#FFFFFF",
                 fontFamily: JAKARTA,
                 fontWeight: 700,
                 fontSize: "clamp(1.75rem, 0.6rem + 2.6vw, 2.75rem)",
@@ -173,21 +210,21 @@ export default function IntegrationsContent() {
             >
               Connect what you already run.{" "}
               {/* Hard break from lg only; below that it wraps naturally. */}
-              <span className="lg:block">Nothing migrates.</span>
+              <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>Nothing migrates.</span>
             </h1>
-            <p className="ed-fg-muted mt-6 max-w-[620px] text-base md:text-lg leading-relaxed">
+            <p className="mt-6 max-w-[620px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
               Your knowledge, your performance data, and the channels your locations work
               in, connected at the source with the permissions they already have. No
               copying, no cleanup, no new system to learn.
             </p>
             <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Link href="/speak-to-an-expert" className="ed-btn ed-btn-primary ed-btn-arrow inline-flex">
+              <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
                 Speak to an expert
                 <span className="ed-btn-arrow-badge" aria-hidden="true">
                   <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
                 </span>
               </Link>
-              <Link href="/platform/integrations/directory" className="ed-btn ed-btn-secondary inline-flex">
+              <Link href="/platform/integrations/directory" className="ed-btn ed-btn-secondary-dark inline-flex">
                 Browse all integrations
               </Link>
             </div>
@@ -197,7 +234,7 @@ export default function IntegrationsContent() {
         {/* The strip runs edge to edge under the copy as texture. §5
             carries the real grid; two static walls would read as one
             section shown twice. Paused under reduced motion. */}
-        <div className="pb-14 md:pb-16">
+        <div className="relative pb-14 md:pb-16">
           <div
             className="ig-strip relative flex gap-2.5 overflow-hidden py-1"
             style={{
@@ -208,7 +245,7 @@ export default function IntegrationsContent() {
           >
             {[0, 1].map((copy) => (
               <div key={copy} className="ig-strip-run flex flex-none gap-2.5">
-                {STRIP.map((s) => <TextChip key={`${copy}-${s}`}>{s}</TextChip>)}
+                {STRIP.map((s) => <HeroChip key={`${copy}-${s}`}>{s}</HeroChip>)}
               </div>
             ))}
           </div>
@@ -216,7 +253,7 @@ export default function IntegrationsContent() {
       </section>
 
       {/* ── 2. Nothing migrates ───────────────────────── */}
-      <Band alt>
+      <Band>
         <SectionHead
           eyebrow="Connected at the source"
           title="Your content stays where it is. So do your systems."
@@ -265,7 +302,7 @@ export default function IntegrationsContent() {
       </Band>
 
       {/* ── 3. Eight kinds of connection ──────────────── */}
-      <Band>
+      <Band alt>
         <SectionHead
           eyebrow="What connects"
           title="Knowledge, data, channels, and the systems where work gets done."
@@ -311,7 +348,7 @@ export default function IntegrationsContent() {
       </Band>
 
       {/* ── 4. Scale ──────────────────────────────────── */}
-      <Band alt>
+      <Band>
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,420px)_1fr] lg:items-end lg:gap-16">
           <Reveal>
             {COUNT_PENDING ? (
@@ -374,7 +411,7 @@ export default function IntegrationsContent() {
       </Band>
 
       {/* ── 5. Permissions ────────────────────────────── */}
-      <Band>
+      <Band alt>
         <SectionHead
           eyebrow="Access"
           title="It can't show someone what their own system wouldn't."
@@ -469,7 +506,7 @@ export default function IntegrationsContent() {
           within a couple of screens of Related. The directory card
           moved up into §4, where the count already sends people there,
           and what is left is the one thing this section actually says. */}
-      <Band alt>
+      <Band>
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_minmax(0,380px)] lg:items-end lg:gap-16">
           <Reveal>
             <Eyebrow>Anything else</Eyebrow>
@@ -528,7 +565,7 @@ export default function IntegrationsContent() {
       />
 
       {/* ── 8. Proof ──────────────────────────────────── */}
-      <Band>
+      <Band alt>
         <SectionHead title="Connected in a live network." />
 
         <Reveal className="mt-9">
@@ -582,7 +619,7 @@ export default function IntegrationsContent() {
       </Band>
 
       {/* ── 9. Related ────────────────────────────────── */}
-      <Band alt>
+      <Band>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {RELATED.map((r, i) => (
             <Reveal key={r.href} delay={i * 0.08}>
@@ -601,10 +638,10 @@ export default function IntegrationsContent() {
       </Band>
 
       {/* ── 10. CTA ───────────────────────────────────── */}
-      <section className="relative w-full overflow-hidden" style={{ backgroundColor: "#0B2C48" }}>
+      <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
-          <Image src="/hero-bg.jpg" alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: "rgba(4,32,54,0.34)" }} />
+          <Image src={HERO.src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.closing})` }} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 45%, ${CLOSING_BASE} 100%)` }} />
         </div>
 
