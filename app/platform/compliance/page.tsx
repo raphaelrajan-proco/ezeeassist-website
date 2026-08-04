@@ -2,19 +2,21 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import AnnouncementBar from "@/components/AnnouncementBar";
 import Footer from "@/components/Footer";
-import ComingSoon from "@/components/platform/ComingSoon";
+import ComplianceContent from "@/components/platform/compliance/ComplianceContent";
 
-/* Stub. Created for the Workflows page, whose §9 calls compliance the
-   flagship play. `noindex` on purpose: a thin page that ranks is worse
-   than no page. Deliberately NOT added to the nav — a stub in the nav is
-   what the retired Automations entry was already doing wrong. Delete the
-   route when the real page lands and add it to Navbar.tsx then. */
+/* Replaces the ComingSoon stub created for the Workflows page's related
+   card. og/twitter are written out rather than inherited: the homepage's
+   are stale. */
+const TITLE = "Compliance — EZee Assist";
+const DESCRIPTION =
+  "Know where every location stands without anyone having to ask. Certifications, insurance, training, and audits checked continuously, chased until they close, and evidenced.";
+
 export const metadata: Metadata = {
-  title: "Compliance — EZee Assist",
-  description:
-    "The flagship play: checks that run on their own, evidence collected as they go, and escalation when something fails.",
+  title: TITLE,
+  description: DESCRIPTION,
   alternates: { canonical: "/platform/compliance" },
-  robots: { index: false, follow: true },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/platform/compliance", type: "website" },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
 };
 
 export default function CompliancePage() {
@@ -23,11 +25,7 @@ export default function CompliancePage() {
       <AnnouncementBar />
       <Navbar />
       <main className="flex flex-1 flex-col">
-        <ComingSoon
-          eyebrow="Compliance"
-          title="The play that runs the checks, collects the evidence, and escalates."
-          body="This page is being written. In the meantime, we can walk you through what compliance looks like when nobody has to chase it."
-        />
+        <ComplianceContent />
       </main>
       <Footer />
     </div>
