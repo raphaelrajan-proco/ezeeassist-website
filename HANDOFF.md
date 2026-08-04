@@ -1427,6 +1427,18 @@ Marketing owns the count, engineering the timeline.
 
 ## Standing rules
 
+**Branches.** `rebuild` is the trunk and holds everything: the homepage, the
+sub-pages, the design system, the mobile pass. It is a single linear chain off
+`main` with no merge commits. **The other branch names are not parallel work** —
+`design-editorial-pass`, `platform-narrative-pass`, `solutions-coaches`,
+`coverage-hexagon`, `platform-pages`, `growth-*` are all ancestors of `rebuild`,
+bookmarks left along the same line, functionally tags. Nothing needs merging
+back from them. Read them freely (`git show <branch>:<path>`), but never commit
+while checked out on one: that forks the line and creates the parallel-branch
+situation that does not currently exist. Launch is one PR, `rebuild` → `main`.
+(`rebuild` was called `mobile-pass` until the name stopped describing what it
+held; same commits, renamed 2026-08-04.)
+
 **Scope.** Homepage only unless a prompt grants an explicit exception. If a
 component is shared with another route, stop and pass copy via props or defer.
 
