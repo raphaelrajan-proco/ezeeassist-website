@@ -536,7 +536,8 @@ export default function GrowthHero() {
                 transition={{ duration: 0.7, ease: "easeOut" }}
                 className="uppercase mb-4"
                 style={{
-                  fontSize: "clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem)",
+                  /* Same declaration as TrustStrip's line, same floor. */
+                  fontSize: "max(var(--ed-type-floor, 12px), clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem))",
                   fontWeight: 600,
                   letterSpacing: "0.16em",
                   color: "var(--ed-accent-text)",
@@ -558,8 +559,14 @@ export default function GrowthHero() {
               transition={{ duration: 0.7, ease: "easeOut" }}
               className="uppercase mb-4"
               style={{
-                /* 0.7x the previous run by request: 8.4px at 390 up to 10.5px. */
-              fontSize: "clamp(0.525rem, 0.063rem + 0.861vw, 0.65625rem)",
+                /* Was 0.7x the run above by request, which measured 8.4px at
+                   390 and was the smallest text on the page. The type floor
+                   now binds it: the clamp tops out at 10.5px, under the 13px
+                   eyebrow floor, so this is a flat 13px at every width and
+                   wraps to two lines below ~430. Raising the floor is what
+                   moves it; the clamp is kept so it takes over again if the
+                   token ever drops back under 10.5px. */
+                fontSize: "max(var(--ed-type-floor-eyebrow, 13px), clamp(0.525rem, 0.063rem + 0.861vw, 0.65625rem))",
                 fontWeight: 600,
                 letterSpacing: "0.16em",
                 color: HERO_EYEBROW,
@@ -604,8 +611,10 @@ export default function GrowthHero() {
                 /* Three lines at every width. This copy is 168 characters, so
                    the ceiling is tight: 12.25px at 390, 15.25px at 1024,
                    18.5px at 1205, 19.25px at 1440. Mobile is the cost of the
-                   three-line cap; allowing four lines there would buy 16.25px. */
-                fontSize: "clamp(0.734rem, 0.3125rem + 0.9375vw, 1.15625rem)",
+                   three-line cap; allowing four lines there would buy 16.25px.
+                   The floor only binds below ~406px, where the clamp dips
+                   under 12px; everywhere else the clamp still governs. */
+                fontSize: "max(var(--ed-type-floor, 12px), clamp(0.734rem, 0.3125rem + 0.9375vw, 1.15625rem))",
                 fontWeight: 400,
                 lineHeight: 1.4,
                 color: HERO_FG_SOFT,

@@ -403,7 +403,7 @@ export default function Navbar() {
       </Link>
 
       {/* Desktop nav */}
-      <ul className="hidden md:flex items-center gap-1">
+      <ul className="hidden nav:flex items-center gap-1">
         {dropdowns.map(({ key, label, panel }) => (
           <li
             key={key}
@@ -472,7 +472,7 @@ export default function Navbar() {
       </ul>
 
       {/* Desktop CTA */}
-      <div className="hidden md:flex items-center gap-3">
+      <div className="hidden nav:flex items-center gap-3">
         <ThemeToggle />
         <Link href="/speak-to-an-expert">
           <Button size="sm" className="ed-btn-arrow gap-2" style={{ paddingRight: "0.25rem", paddingLeft: "1.125rem" }}>
@@ -484,10 +484,14 @@ export default function Navbar() {
         </Link>
       </div>
 
-      {/* Mobile hamburger */}
+      {/* Mobile hamburger. `nav:` (1120px), not `md:` — see the breakpoint
+          comment in globals.css. It now carries the whole 768–1119 range,
+          which is why it is a full 44px box: `p-2` around a 22px icon
+          measured 38x38, under both the 44px iOS guideline and the 24px
+          WCAG 2.2 floor. Box only; the icon is unchanged. */}
       <button
         ref={burgerRef}
-        className="md:hidden p-2 rounded-lg text-[#0A0A0A] dark:text-gray-300 transition-colors"
+        className="nav:hidden flex h-11 w-11 items-center justify-center rounded-lg text-[#0A0A0A] dark:text-gray-300 transition-colors"
         onClick={() => setMobileOpen(!mobileOpen)}
         aria-label={mobileOpen ? "Close menu" : "Open menu"}
         aria-expanded={mobileOpen}
@@ -524,7 +528,7 @@ export default function Navbar() {
 
         {/* Mobile sheet overlay */}
         {mobileOpen && (
-          <div className="md:hidden ed-nav-sheet">
+          <div className="nav:hidden ed-nav-sheet">
             <button
               className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[2px]"
               onClick={closeMobile}
@@ -567,7 +571,7 @@ export default function Navbar() {
       </nav>
 
       {mobileOpen && (
-        <div className="md:hidden border-t border-[#E5E7EB] dark:border-white/[0.06] bg-white/95 dark:bg-[#0B0F19]/95 backdrop-blur-md px-6 pb-6">
+        <div className="nav:hidden border-t border-[#E5E7EB] dark:border-white/[0.06] bg-white/95 dark:bg-[#0B0F19]/95 backdrop-blur-md px-6 pb-6">
           <div className="pt-4">{mobileAccordions}</div>
           {mobileCta}
         </div>

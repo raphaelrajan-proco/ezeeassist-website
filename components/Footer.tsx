@@ -262,6 +262,10 @@ function FooterEditorial() {
                   Ask your assistant what EZee Assist does and how franchise
                   networks use it.
                 </p>
+                {/* Chips measured 34px tall and are now 44, from min-height
+                    rather than py, so the label keeps its 13px. Same for the
+                    subscribe button below and the two link groups further
+                    down: box only, no type changes. */}
                 <div className="flex flex-wrap gap-2 max-w-none">
                   {aeoLinks.map(({ label, href }) => (
                     <a
@@ -269,7 +273,7 @@ function FooterEditorial() {
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center rounded-full px-3.5 py-1.5 text-[13px] transition-opacity hover:opacity-70"
+                      className="inline-flex min-h-[44px] items-center rounded-full px-3.5 text-[13px] transition-opacity hover:opacity-70"
                       style={{
                         backgroundColor: "var(--ed-card)",
                         border: "1px solid var(--ed-rule)",
@@ -315,7 +319,7 @@ function FooterEditorial() {
                   type="submit"
                   aria-label="Subscribe"
                   className="absolute right-1.5 top-1/2 -translate-y-1/2 flex items-center justify-center rounded-full transition-opacity hover:opacity-80"
-                  style={{ width: 34, height: 34, backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
+                  style={{ width: 44, height: 44, backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
                 >
                   <ArrowRight className="h-4 w-4" strokeWidth={2.25} />
                 </button>
@@ -343,7 +347,7 @@ function FooterEditorial() {
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="ed-fg text-sm transition-opacity hover:opacity-60"
+                      className="ed-fg inline-flex min-h-[24px] items-center text-sm transition-opacity hover:opacity-60"
                       style={{ fontWeight: 400 }}
                     >
                       {link.label}
@@ -392,9 +396,9 @@ function FooterEditorial() {
             &copy; {new Date().getFullYear()} EZee Assist. All rights reserved.
           </p>
           <div className="flex flex-wrap gap-6 text-sm">
-            <Link href="/privacy"       className="ed-fg-muted hover:opacity-60 transition-opacity">Privacy Policy</Link>
-            <Link href="/terms"         className="ed-fg-muted hover:opacity-60 transition-opacity">Terms of Use</Link>
-            <Link href="/accessibility" className="ed-fg-muted hover:opacity-60 transition-opacity">Accessibility</Link>
+            <Link href="/privacy"       className="ed-fg-muted inline-flex min-h-[24px] items-center hover:opacity-60 transition-opacity">Privacy Policy</Link>
+            <Link href="/terms"         className="ed-fg-muted inline-flex min-h-[24px] items-center hover:opacity-60 transition-opacity">Terms of Use</Link>
+            <Link href="/accessibility" className="ed-fg-muted inline-flex min-h-[24px] items-center hover:opacity-60 transition-opacity">Accessibility</Link>
           </div>
         </div>
       </div>

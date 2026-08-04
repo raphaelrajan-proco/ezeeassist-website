@@ -1,5 +1,11 @@
 # Homepage mobile and tablet audit
 
+> **Status.** The foundation pass has landed: nav breakpoint, type floor,
+> tap targets and the regression guard. See "Foundation pass" at the
+> bottom for what moved, what the overflow sweep found, and what is
+> still open. The section-by-section verdicts below are unchanged and
+> none of the sections have been re-rendered yet.
+
 Captured with `npm run shots` against the production build at 390, 430, 768,
 1024, 1205 and 1440. Raw data in `screenshots/audit.json`, images in
 `screenshots/<width>/`. Both are gitignored; re-run the harness to reproduce.
@@ -120,9 +126,187 @@ below what holds up on a phone in daylight.
 ## Suggested order
 
 1. **Nav.** It is the only finding that costs conversions outright, and it
-   affects every page on the site, not just the homepage.
+   affects every page on the site, not just the homepage. — **done**
 2. **On demand** and **The system**, the two that lose content.
 3. **Always on**, the largest piece of work and the one that needs a design
    decision before code.
 4. **Footer tap targets** and the page-wide type floor, both mechanical.
+   — **done**
 5. **Impact**, **proof**, **hero**, cosmetic.
+
+---
+
+# Foundation pass
+
+One commit. No section re-renders. Nav and type tokens are site-wide by
+nature; everything else is homepage-scoped.
+
+## 1. Nav breakpoint
+
+A custom Tailwind breakpoint, `--breakpoint-nav: 1120px`, now drives the
+mobile-sheet / desktop-row switch. It sorts between `lg` and `xl`, so
+both keep their meanings. `xl` was rejected because 1205 is the review
+viewport and must show the desktop nav. Only the five structural classes
+moved; the pill's own padding, radius and logo height stay on `md:`,
+which is what keeps the pill and the sheet the same width through the
+new range.
+
+| Width | Before | After |
+|---|---|---|
+| 768 | desktop row, CTA right edge 916px in a 768px viewport (**+148 past, unclickable**), "Company" clipped mid-chevron, CTA 76px tall | sheet, burger 44×44 |
+| 900 | desktop row, CTA 916px (**+16 past**), 76px tall | sheet, burger 44×44 |
+| 1024 | desktop row fits but CTA wraps to two lines, 56px against a 40px design | sheet, burger 44×44 |
+| 1100 | desktop row, CTA 1051px, 40px — first clean width | sheet, burger 44×44 |
+| 1119 | desktop row, 40px | sheet, burger 44×44 |
+| 1120 | desktop row, 40px | desktop row, CTA 1071px, 40px |
+| 1205 | desktop row, CTA 1156px, 40px | unchanged |
+| 1440 | desktop row, CTA 1295px, 40px | unchanged |
+
+Note 1100–1119 traded a working desktop row for the sheet. That is the
+cost of the 20px of headroom in the 1120 figure; the row's first clean
+width is 1100 with zero slack.
+
+## 2. Type floor
+
+**There was no type token to change.** Every small size on the site is
+either a Tailwind arbitrary utility (`text-[10px]`, 161 occurrences
+across 30 files) or a React inline `fontSize` (47 declarations across 14
+files). The 177 figure in the original audit was an undercount: a
+stricter walk finds **289 sub-14px nodes at 390**, though only ~200
+distinct source declarations — the rendered count is dominated by
+`.map()`, with 100 of them coming from a single `fontSize: 10` in
+TheSystem.
+
+So the floor is enforced in one place, `app/globals.css`, over the
+declarations that already exist. Two tokens:
+`--ed-type-floor: 12px` and `--ed-type-floor-eyebrow: 13px`.
+
+| Mechanism | Covers | Nodes fixed at 390 | Nodes fixed at 1205 |
+|---|---|---|---|
+| Utility override, plain specificity (0,2,0 vs Tailwind's 0,1,0), 8 sizes from `text-[8px]` to `text-[11.5px]` | 161 source occurrences, 30 files | 26 | 27 |
+| Inline attribute match + `!important`, 6 values from `9px` to `11.5px`, both spellings | 47 source declarations, 14 files | 195 | 195 |
+| `max(var(--ed-type-floor-eyebrow), …)` at the call site | Hero eyebrow | 1 (8.4px → 13px) | 1 (10.5px → 13px) |
+| `max(var(--ed-type-floor), …)` at the call site | Hero sub-lead, TrustStrip line, Hero trusted-by line | 3 | 1 |
+| **Total** | | **225** | **224** |
+
+The 1205 column is smaller only because the hero sub-lead's clamp has
+already grown past 12px by then; the floor binds it below ~406px.
+
+Measured after: **0 nodes under 12px at 390, 1205 or 1440.**
+
+Three details worth knowing before touching this:
+
+- **Utilities are beaten by specificity, inline styles need
+  `!important`.** Nothing outranks a style attribute. The match includes
+  the `px` unit so `font-size:11px` cannot catch `font-size:11.5px`.
+- **Both spellings of each value are listed.** The style attribute is
+  not serialised consistently: Always On's pinned scroller emits
+  `font-size: 11.5px` with a space where every other call site emits it
+  without. Matching only the unspaced form left 16 nodes at 11.5px above
+  `lg` — caught on the verification pass, not the first write.
+- **SVG is excluded.** Font sizes inside a viewBox are user units, not
+  pixels; clamping them resizes artwork rather than text.
+
+The utility override is safe only because no sub-12px utility on the
+site has a responsive step-up — the sole responsive size variant under
+14px is `md:text-[13.5px]`, already above the floor. Adding
+`text-[10px] md:text-[14px]` later would silently lose the `md:` step.
+
+**Visible consequences, both intended:** the hero eyebrow's clamp tops
+out at 10.5px, under the 13px floor, so it is now a flat 13px at every
+width and wraps to two lines below ~430. The TrustStrip line does the
+same at 12px. Both were previously the smallest text on the page (8.4px
+and 9.7px at 390).
+
+## 3. Tap targets
+
+Padding and line-height only; no type changed.
+
+| Element | Before | After |
+|---|---|---|
+| Nav menu button | 38×38 | 44×44 |
+| Footer "Ask ChatGPT / Claude / Perplexity" | 34px tall | 44px |
+| Footer subscribe button | 34×34 | 44×44 |
+| Footer column links (30 of them) | 17px tall | 24px |
+| Footer legal links | 20px tall | 24px |
+| Phone, social links | 24px | unchanged, already at the floor |
+
+Measured after: **0 interactive targets under 24px** at 390 or 1205.
+Still under 44px and deliberately left alone: nav dropdown triggers
+(36px), the theme toggle (36px), the two Always On CTAs (40px), the
+header CTA (40px). All clear the 24px AA floor.
+
+## 4. Overflow sweep
+
+Run with `.theme-editorial { overflow-x: visible }`, all six widths,
+then reverted to `clip`. Tool kept at `scripts/overflow-sweep.mjs`.
+
+Two classes of false positive were removed first: `sr-only` paragraphs,
+which are 1×1 clipped boxes whose `scrollWidth` is the whole paragraph
+(this is what the original audit's "`#the-system` reports 500px" line
+partly measured — the 500px figure is real, but the first sweep found it
+for the wrong reason), and anything under a CSS mask.
+
+| Section | Element | 390 | 430 | 768 | 1024 | 1205 | 1440 |
+|---|---|---|---|---|---|---|---|
+| `#capabilities` | tab rail, own scroll | +1361 | +1321 | +1031 | — | — | — |
+| `#capabilities` | tab card 1 past right edge | +293 | +253 | — | — | — | — |
+| `#capabilities` | tab card 2 | +851 | +811 | +497 | — | — | — |
+| `#capabilities` | tab card 3 | +1337 | +1297 | +983 | — | — | — |
+| `#capabilities` | showcase panel | — | — | — | +50 | — | — |
+| `#the-system` | section content vs viewport | +110 | +70 | — | — | — | — |
+| `#the-system` | subhead in its column | +134 | +94 | — | — | — | — |
+| `#proof` | deck card grid, both edges | ±43 | ±51 | ±85 | — | — | — |
+| `#proof` | inner card grid ×4 | +68 | +76 | +134 | +48 | +48 | +48 |
+| nav | closed mega-menu panels | — | — | — | — | — | +40…+626 |
+
+Reading it:
+
+- **`#capabilities` is the biggest leak by an order of magnitude** and
+  the only one where content is unreachable rather than just cropped.
+  Confirms the Replace verdict.
+- **`#the-system` is a real leak**, 500px of content in a 390px box,
+  gone by 768. Confirms Re-render.
+- **`#proof`'s ±43/51/85 is decorative** — the deck grid is centred and
+  overhangs both edges symmetrically, which is the haze the original
+  audit flagged. Cheap to clamp.
+- **`#proof`'s inner +48 persists at every width including 1440**, so it
+  is not a mobile issue at all. It sits inside a
+  `rounded-2xl overflow-hidden` ancestor, so it is clipped by its own
+  card rather than by the theme, and is the one finding here that is new
+  rather than a confirmation.
+- **The nav panels are why `overflow-x: clip` exists.** They are closed
+  mega-menus measured in place. Not a leak.
+
+Everything else on the page is clean at all six widths.
+
+## 5. Regression guard
+
+`npm run shots` now exits non-zero on three hard rules, on top of the
+advisory findings it already reported:
+
+- no `main section` whose `scrollWidth` exceeds the viewport
+- no interactive target under 24px in either dimension
+- no rendered text under 12px
+
+The tap-target rule is 24, not the 44 used by the advisory check: 44 is
+the iOS guideline and plenty of legitimate controls sit under it, 24 is
+the WCAG 2.2 AA floor and nothing should. The known masked marquees are
+excluded by class; SVG text is exempt from the type rule.
+
+Verified in both directions: exit 0 on the current tree, exit 1 with a
+seeded failure. `SHOTS_NO_FAIL=1` captures images without the exit.
+
+**One allowlist entry**, in `KNOWN` at the bottom of `scripts/shots.mjs`:
+`section#the-system` overflow at 390 and 430, already triaged as
+Re-render and deliberately untouched by this pass. It is still printed
+on every run. **Delete the entry when that section lands** — an
+allowlist that outlives its fix turns the guard back into decoration.
+
+## Still open
+
+- On demand (Replace), The system (Re-render), Always on (Re-render) —
+  the three that need design decisions.
+- `#proof`'s +48 inner grid at every width, and its decorative
+  ±43/51/85 haze overhang.
+- Hero mock frame height at 768, Impact `min-h-[195px]` at 390.

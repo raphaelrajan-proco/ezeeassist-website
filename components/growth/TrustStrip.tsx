@@ -24,7 +24,10 @@ export default function GrowthTrustStrip({ showTrustLine = false }: { showTrustL
           <p
             className="uppercase text-center mb-4"
             style={{
-              fontSize: "clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem)",
+              /* Measured 9.7px at 390 and 10.7px at 1205, both under the
+                 type floor. The clamp tops out at 11.25px, so the floor
+                 governs at every width and this is a flat 12px. */
+              fontSize: "max(var(--ed-type-floor, 12px), clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem))",
               fontWeight: 600,
               letterSpacing: "0.16em",
               color: "#9FE0F8",

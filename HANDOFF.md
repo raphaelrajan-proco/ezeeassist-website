@@ -143,6 +143,24 @@ Industries run two columns at 720.
 other route keeps the banded header it always had, so the pill is not yet a
 site-wide pattern. Rolling it out means dropping that branch, not rewriting.
 
+**The mobile/desktop switch is `nav:` (1120px), not `md:`.** The custom
+breakpoint is declared in `globals.css`. The desktop row does not
+physically fit until ~1100: at 768 the CTA's right edge measured 916px
+in a 768px viewport, 148px past it and unclickable, with "Company"
+clipped mid-chevron; at 1024 the row fitted but the CTA wrapped to two
+lines at 56px against a 40px design. 1100 was the first clean width, and
+1120 is that plus headroom. `xl` (1280) was rejected because 1205 is the
+review viewport and must show the desktop row.
+
+Five classes carry the switch — the links `ul`, the CTA group, the
+hamburger, and both mobile sheets. **The pill's own cosmetics stay on
+`md:`** (`px-4 md:px-6`, `md:rounded-full`, logo `h-10 md:h-12`) and
+that is load-bearing: the sheet positions off `--nav-inset`, which also
+steps at 768, so pill and sheet come out the same width through the
+whole 768–1119 range. At 1119 both measure 1071px. Move the cosmetics to
+`nav:` and they stop matching. The trade is that 1100–1119 now shows the
+sheet where the desktop row did fit; that is the cost of the headroom.
+
 How it overlays without pushing the hero down:
 
 - The header is **sticky, not fixed**, so an announcement bar above it still
@@ -1448,6 +1466,56 @@ Copy column widths, measured: 342 at 390, 608 at 768, **425 at 1024**, 517 at
 1205, 539 from 1440 up. The sequence is not monotonic, because 1024 switches
 the hero to two columns. A `vw` clamp only sees the viewport, so the tightest
 fit is usually 1024 rather than the smallest screen.
+
+### The screenshot harness and the regression guard
+
+`npm run shots` builds nothing — run `npm run build` first — then serves
+the production build itself and photographs the homepage at 390, 430,
+768, 1024, 1205 and 1440: one full page plus one per section, into the
+gitignored `screenshots/`. Alongside the images it writes `audit.json`
+and `audit.md`.
+
+**It also exits non-zero on three hard rules**, so a regression cannot
+land quietly: no `main section` wider than the viewport, no interactive
+target under 24px, no text under 12px. The 24 is the WCAG 2.2 AA floor,
+deliberately not the 44px iOS guideline the advisory check uses — plenty
+of legitimate controls sit under 44 and nothing should sit under 24. SVG
+text is exempt from the type rule because its font-size is in viewBox
+user units. `SHOTS_NO_FAIL=1` captures images without the exit.
+
+`KNOWN` at the bottom of the script allowlists issues already triaged,
+so the guard starts green and reddens only on something new. **There is
+one entry** — `#the-system` overflowing at 390 and 430 — and it must be
+deleted when that section is re-rendered. An allowlist that outlives its
+fix turns the guard back into decoration. Known entries still print on
+every run.
+
+`scripts/overflow-sweep.mjs` is the exploratory companion and is
+deliberately not wired to a npm script: it only works after you flip
+`.theme-editorial { overflow-x: clip }` to `visible` and rebuild. That
+flip is the point. **`overflow-x: clip` does not prevent overflow, it
+hides it** — an element 500px wide in a 390px viewport reports a correct
+bounding rect and silently drops its right-hand content, so a plain
+"does the document scroll sideways" check reports clean. This is what
+made the first audit's overflow row read "none, but that reading is
+misleading". Findings and the current leak table live in
+`MOBILE-AUDIT.md`.
+
+### The type floor
+
+`--ed-type-floor: 12px` and `--ed-type-floor-eyebrow: 13px` on
+`.theme-editorial`, enforced by one block in `globals.css`. **There is
+no type token system underneath it** — every small size on this site is
+a Tailwind arbitrary utility or a React inline `fontSize`, so the floor
+is enforced over those declarations rather than by changing a scale.
+Read the comment above the block before touching it; the two traps are
+that inline styles need `!important` (nothing else outranks a style
+attribute) and that the style attribute is not serialised consistently,
+so both `font-size:11.5px` and `font-size: 11.5px` have to be listed.
+
+Consequence to expect: the hero eyebrow and the TrustStrip line were
+both below the floor at every width, so their clamps no longer govern
+and both are flat. The eyebrow wraps to two lines below ~430.
 
 ## Environment gotchas (these cost hours to rediscover)
 

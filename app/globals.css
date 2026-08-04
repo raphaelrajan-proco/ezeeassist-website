@@ -22,6 +22,22 @@
   --radius-card: 16px;
 }
 
+/* ─── Custom breakpoint: the nav switch ───────────────────
+   The desktop nav row does not physically fit until ~1100px. Measured
+   on the built page, the header CTA's right edge sits at 916px in a
+   768px viewport (148px past it, unclickable) and the row only stops
+   wrapping at 1100. `nav:` is the mobile-sheet / desktop-row switch and
+   is held back to 1120 so it clears that with margin.
+
+   Deliberately NOT `xl` (1280): the review viewport is 1205 and must
+   show the desktop nav. Sorted between lg and xl, so `lg:` and `xl:`
+   keep their meanings. Structural nav classes only — the pill's own
+   cosmetics (padding, radius, logo height) stay on `md:`, which is what
+   keeps the pill and the sheet the same width through the new range. */
+@theme {
+  --breakpoint-nav: 1120px;
+}
+
 /* ─────────────────────────────────────────────────────────
    Editorial theme (Studio Morfar-inspired)
    Activated by adding `.theme-editorial` to a wrapper.
@@ -50,6 +66,12 @@
   --nav-inset:   16px;
   --nav-pill-h:  56px;
   --nav-block:   calc(var(--nav-inset) + var(--nav-pill-h));
+
+  /* Type floor. Read the block below `.ed-type-floor` before changing
+     either number: they are enforced across the whole editorial system,
+     not per component. */
+  --ed-type-floor:         12px;
+  --ed-type-floor-eyebrow: 13px;
 }
 @media (min-width: 768px) {
   .theme-editorial {
@@ -126,6 +148,71 @@
 }
 .theme-editorial .ed-link:hover {
   text-decoration-thickness: 2px;
+}
+
+/* ─── Type floor ──────────────────────────────────────────
+   Nothing in the editorial system renders below 12px at any viewport,
+   and the hero eyebrow no lower than 13px.
+
+   There was no type token to change. Every small size on the site is
+   either a Tailwind arbitrary utility (`text-[10px]`, 161 occurrences
+   across 30 files) or a React inline `fontSize` (47 declarations across
+   14 files), so the sizes are per component by construction. Measured
+   on the built homepage that is 289 sub-14px nodes at 390 — but only
+   ~200 distinct source declarations, and the rendered count is
+   dominated by `.map()`: 100 of them are one `fontSize: 10` in
+   TheSystem. Fixing that at the call sites is 200 edits and leaves the
+   next component free to reintroduce a 9px. So the floor is enforced
+   here instead, in one place, over the declarations that already exist.
+
+   Two mechanisms, because inline styles cannot be beaten by a class:
+
+   1. Utilities — plain specificity. `.theme-editorial .text-\[10px\]`
+      is (0,2,0) against Tailwind's (0,1,0), so no `!important`. Only
+      sub-floor sizes are listed; `text-[12px]` and up are untouched.
+      This is safe *because* no sub-12px utility on the site has a
+      responsive step-up (checked: the only responsive size variant
+      under 14px is `md:text-[13.5px]`, already above the floor). If you
+      ever add `text-[10px] md:text-[14px]`, this block would win at
+      both widths and the md: step would silently do nothing — use an
+      inline style or a new token instead.
+
+   2. Inline styles — attribute substring match plus `!important`,
+      which is the only thing that outranks a style attribute. The
+      match includes the `px` unit, so `font-size:11px` cannot catch
+      `font-size:11.5px` and `font-size:10px` cannot catch
+      `font-size:110px`. Both spellings of each value are listed
+      because the style attribute is not serialised consistently:
+      Always On's pinned scroller emits `font-size: 11.5px` with a
+      space where every other call site emits it without, and matching
+      only the unspaced form left 16 nodes at 11.5px above lg.
+      SVG is excluded: font sizes inside a viewBox
+      are user units, not pixels, and clamping them would resize
+      artwork rather than text. Nothing in SVG matches today (verified)
+      — the exclusion is there so it stays that way.
+
+   The three clamps that fell under the floor are not handled here.
+   Each is a single unique declaration naming a distinct type role, so
+   they read the tokens directly at their call site (Hero, TrustStrip)
+   via max(), which keeps them growing with the viewport above the
+   floor instead of pinning them flat. */
+.theme-editorial :is(
+  .text-\[8px\],   .text-\[8\.5px\],
+  .text-\[9px\],   .text-\[9\.5px\],
+  .text-\[10px\],  .text-\[10\.5px\],
+  .text-\[11px\],  .text-\[11\.5px\]
+) {
+  font-size: var(--ed-type-floor);
+}
+.theme-editorial :not(svg):not(svg *):is(
+  [style*="font-size:9px"],    [style*="font-size: 9px"],
+  [style*="font-size:9.5px"],  [style*="font-size: 9.5px"],
+  [style*="font-size:10px"],   [style*="font-size: 10px"],
+  [style*="font-size:10.5px"], [style*="font-size: 10.5px"],
+  [style*="font-size:11px"],   [style*="font-size: 11px"],
+  [style*="font-size:11.5px"], [style*="font-size: 11.5px"]
+) {
+  font-size: var(--ed-type-floor) !important;
 }
 
 /* Editorial buttons (additive — used only inside theme-editorial scope) */

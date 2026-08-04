@@ -10,11 +10,22 @@
  * under 44px, fixed-width elements, SVGs without a viewBox, and text
  * under 14px.
  *
+ * Those are advisory. On top of them sit three hard rules that exit the
+ * run non-zero, so a regression cannot land quietly:
+ *
+ *   - no `main section` whose scrollWidth exceeds the viewport
+ *   - no interactive target under 24px in either dimension
+ *   - no rendered text under 12px
+ *
+ * The known masked marquees are excluded by class; SVG text is exempt
+ * from the type rule because its font-size is in viewBox user units.
+ *
  * Environment:
  *   BASE_URL   point at an already-running server instead of spawning
  *              one, e.g. BASE_URL=https://staging.example.com npm run shots
  *   WIDTHS     comma-separated override, e.g. WIDTHS=390,1440
  *   OUT        output directory, default ./screenshots
+ *   SHOTS_NO_FAIL  capture images without the non-zero exit
  *
  * With no BASE_URL the script serves the production build itself, so
  * what you photograph is what ships. Run `npm run build` first; a dev
@@ -66,7 +77,7 @@ const SEED_STORAGE = `
    Runs in the page. Everything here is a fact a screenshot cannot give
    you: computed sizes, hit-box areas, and attributes. */
 const AUDIT = `(() => {
-  const out = { overflow: null, smallTargets: [], fixedWidths: [], svgNoViewBox: [], smallText: [] };
+  const out = { overflow: null, smallTargets: [], fixedWidths: [], svgNoViewBox: [], smallText: [], failures: [] };
   const label = (el) => {
     const id = el.id ? '#' + el.id : '';
     const cls = typeof el.className === 'string' && el.className
@@ -145,6 +156,60 @@ const AUDIT = `(() => {
     seen.add(key);
     out.smallText.push({ el: label(el), size: +size.toFixed(1), section: section(el) });
   }
+
+  // ── 6. Regression guard ──────────────────────────────────
+  // The four checks above are advisory: they list things worth a look.
+  // These three are hard failures, and \`npm run shots\` exits non-zero
+  // when any of them fires. Thresholds are the floors agreed for the
+  // mobile pass, not the aspirational numbers: 12px type, 24px targets
+  // (WCAG 2.2 AA), and no section wider than the viewport.
+  //
+  // Note the tap-target guard is 24, not the 44 used by check 2 above.
+  // 44 is the iOS guideline and plenty of legitimate controls sit under
+  // it; 24 is the accessibility conformance floor and nothing should.
+  const KNOWN_WIDE = /ed-logo-marquee|animate-marquee|ed-conn-track|ed-os-marquee-track/;
+  const inKnownWide = (el) => {
+    for (let n = el; n && n !== document.body; n = n.parentElement) {
+      if (KNOWN_WIDE.test(String(n.className && n.className.baseVal || n.className || ''))) return true;
+    }
+    return false;
+  };
+
+  // 6a. A section may not be wider than the viewport. Measured on
+  //     scrollWidth, not the painted box: \`.theme-editorial\` clips x, so
+  //     an overflowing section reports a correct rect and hides the
+  //     content instead. That is the failure mode this exists to catch.
+  for (const sec of document.querySelectorAll('main section')) {
+    if (inKnownWide(sec)) continue;
+    const over = sec.scrollWidth - vw;
+    if (over > 1) {
+      out.failures.push({
+        rule: 'section-overflow',
+        detail: label(sec) + ' content is ' + sec.scrollWidth + 'px in a ' + vw + 'px viewport (+' + over + ')',
+      });
+    }
+  }
+
+  // 6b. No interactive target under 24px in either dimension.
+  for (const t of out.smallTargets) {
+    if (Math.min(t.w, t.h) >= 24) continue;
+    out.failures.push({ rule: 'tap-target-under-24', detail: t.el + ' is ' + t.w + '×' + t.h + ' — ' + t.section });
+  }
+
+  // 6c. No rendered text under 12px. SVG is exempt: font-size inside a
+  //     viewBox is user units and scales with the artwork.
+  for (const el of document.querySelectorAll('body *')) {
+    if (el.children.length > 0) continue;
+    if (el.closest('svg')) continue;
+    const txt = (el.textContent || '').trim();
+    if (!txt) continue;
+    const cs = getComputedStyle(el);
+    if (cs.visibility === 'hidden' || cs.display === 'none') continue;
+    const size = parseFloat(cs.fontSize);
+    if (size >= 12) continue;
+    out.failures.push({ rule: 'text-under-12', detail: size.toFixed(1) + 'px ' + label(el) + ' — ' + section(el) });
+  }
+
   return JSON.stringify(out);
 })()`;
 
@@ -296,7 +361,67 @@ for (const width of WIDTHS) {
   group("Author-set fixed widths ≥200px", f.fixedWidths, (r) => `\`${r.el}\` ${r.width}px — ${r.section}`);
   group("SVGs without viewBox", f.svgNoViewBox, (r) => `\`${r.el}\` ${r.w}×${r.h} — ${r.section}`);
   group("Text under 14px", f.smallText, (r) => `${r.size}px \`${r.el}\` — ${r.section}`);
+
+  const fails = f.failures ?? [];
+  lines.push(`**Guard failures:** ${fails.length}`, "");
+  for (const r of fails) lines.push(`- \`${r.rule}\` — ${r.detail}`);
+  lines.push("");
 }
 await writeFile(path.join(OUT, "audit.md"), lines.join("\n"));
 
 console.log(`\nWrote images, audit.json and audit.md to ${OUT}\n`);
+
+/* ── Regression guard ────────────────────────────────────
+   Advisory findings are written to the report and the run passes. The
+   three guard rules are hard: any hit and the run exits 1, so this can
+   be wired to CI or a pre-push hook without further glue. Set
+   SHOTS_NO_FAIL=1 to capture images from a known-broken state without
+   the non-zero exit.
+
+   KNOWN carries issues that are already triaged and scheduled, so the
+   guard starts green and goes red only on something new. Each entry
+   must name the section and its audit verdict, and must be deleted the
+   moment that work lands — an entry that outlives its fix turns the
+   guard back into decoration. They are still printed on every run. */
+const KNOWN = [
+  {
+    rule: "section-overflow",
+    match: /section#the-system/,
+    why: "MOBILE-AUDIT.md verdict: Re-render. 1210px internal diagram, cannot reflow by CSS. Not touched by the foundation pass.",
+  },
+];
+
+const all = WIDTHS.flatMap((w) => (findings[w].failures ?? []).map((r) => ({ ...r, width: w })));
+const isKnown = (r) => KNOWN.find((k) => k.rule === r.rule && k.match.test(r.detail));
+const known = all.filter(isKnown);
+const failed = all.filter((r) => !isKnown(r));
+
+const report = (rows, label, log) => {
+  const byRule = {};
+  for (const r of rows) (byRule[r.rule] ??= []).push(r);
+  for (const [rule, rs] of Object.entries(byRule)) {
+    log(`  ${rule} — ${rs.length}`);
+    /* One line per distinct detail; the same element failing at six
+       widths is one problem, not six. */
+    const uniq = [...new Set(rs.map((r) => r.detail))];
+    for (const d of uniq.slice(0, 12)) {
+      const at = rs.filter((r) => r.detail === d).map((r) => r.width).join(",");
+      log(`    [${at}] ${d}`);
+    }
+    if (uniq.length > 12) log(`    …and ${uniq.length - 12} more`);
+    log("");
+  }
+};
+
+if (known.length) {
+  console.log(`Regression guard: ${known.length} known, allowed\n`);
+  report(known, "known", console.log);
+  for (const k of KNOWN) console.log(`  ${k.rule} ${k.match} — ${k.why}\n`);
+}
+if (failed.length) {
+  console.error(`REGRESSION GUARD FAILED: ${failed.length} new failure(s) across ${WIDTHS.length} widths\n`);
+  report(failed, "new", console.error);
+  if (!process.env.SHOTS_NO_FAIL) process.exit(1);
+} else {
+  console.log("Regression guard: pass (no new failures)\n");
+}
