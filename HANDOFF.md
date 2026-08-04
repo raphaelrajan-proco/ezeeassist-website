@@ -1337,6 +1337,95 @@ emphasis on dark where the 5% tint nearly vanishes; the hero CTA scrolls to
 `enableSystem={false}`, so emulating `prefers-color-scheme` does nothing. Set
 `localStorage.theme = 'dark'` and reload instead.
 
+## /platform/compliance
+
+Ten sections, replacing the ComingSoon stub the Workflows page created.
+
+**Compliance is a crowded claim.** Every franchisor already owns an audit
+app or a compliance module, so this page cannot win on "we check
+compliance". It wins on two things and every section serves one:
+
+1. **Compliance is a state, not a snapshot.** An audit tells you what was
+   true that day; between audits nobody knows. §1, §4 and §6 carry this.
+2. **The chase, not the check.** Every tool checks, almost none chase,
+   and the chase is what consumes a coach's week. §2 and §5 carry it.
+
+**Vocabulary discipline, and it is checkable.** The page is present-tense
+and state-based: open, current, at risk, not current, holding, closes,
+state. Audit language is retrospective and pass/fail, so "passed",
+"failed", "audit score" and "compliance rate" never appear as the page's
+own framing — measured on the built page, all four are zero. "Audit"
+appears eight times, every one either describing a customer's existing
+process (LAST AUDIT / NEXT AUDIT, "an audit tells you what was true on
+the day of the audit", "audit packs" as a documentation example) or §6's
+auditor reading exported evidence. **It never claims to replace an
+existing compliance module.**
+
+Band sequence, part of the spec: dark, light, light, light, dark, light,
+light, light, light, dark. Light sections alternate `ed-bg`/`ed-bg-alt`,
+and no two adjacent share a device.
+
+Three new components:
+
+- **`NetworkState`** (§1). `LIVE` in the header carries the state claim
+  and gets accent treatment. **The three tiers are readable without
+  colour**: each has a distinct marker shape (filled, half, hollow), its
+  own type weight (500/600/700, verified on the built page) and its count
+  at its own size. Colour is the third signal, not the only one.
+- **`ContinuityTimeline`** (§4). **The shaded gaps are the argument** —
+  three checks in a year, everything between them hatched. Do not shorten
+  them for visual balance. **They are labelled `unknown`, not "risk" or
+  "exposure"**: risk implies someone assessed it. No chase mechanics in
+  this section; that is §5.
+- **`ChaseLadder`** (§5). The escalation is an actual ladder: measured on
+  the built page the day labels sit at 89 → 111 → 133 → 155 px and then
+  **back to 89** for Day 24, which resolves rather than continuing the
+  climb. Below `sm` the indent is dropped and the climb is carried by
+  weight alone, because rungs on a phone eat the text column.
+
+Things that must survive a copy pass:
+
+- **§5's five stages must not compress to three.** "Still outstanding"
+  repeating across three escalations is what makes it feel like four
+  weeks of someone's job.
+- **Day 7's detail stays** — *sent to the channel they actually use*. It
+  is why the second reminder works where the email did not.
+- **"Nobody on your team sent a single message" is the payoff** and has
+  the heaviest treatment in the section.
+- **The growth line appears once and is not elaborated.** One sentence.
+- **The Workflows link is one line.** This page does not explain plays.
+- **§6's `CHAIN` row stays**: it shows the trail includes the chase
+  itself, which matters if a franchisor has to demonstrate they enforced
+  a standard. **§6's `EXPIRES` second clause** connects back to §4.
+- **§3's `READ FROM` line is that section's differentiator.** A checklist
+  app makes someone confirm what the LMS already knows. Do not drop it.
+- **§7 is two columns and one line.** Control Center carries governance
+  depth; do not grow it into a permissions matrix.
+
+§3's cells are hairline-topped rather than carded on purpose: cards
+already carry §7, §8 and §9, and DESIGN.md §1.4 caps a form at two
+appearances per page.
+
+`{{TBD:}}` tokens, four, all §8: `compliance-proof-brand`, `-metric`,
+`-quote`, `-attribution`. **Time-to-close or completion rate is the right
+shape** — it proves the chase, not the check. Not a deflection metric.
+
+**Three claims flagged for confirmation before launch:**
+
+1. **§6 "Verified, not just received"** — that the product reads a
+   certificate and matches its expiry against a requirement rather than
+   accepting an upload. This is the most technically checkable claim on
+   the page.
+2. **§3's `READ FROM` column** — which categories are genuinely read from
+   connected systems versus captured directly.
+3. **§5's escalation ladder** — that owner → coach → HQ with settable day
+   thresholds is configurable as shown.
+
+Nav and footer: **Compliance was added, not repointed.** The brief said
+it pointed at `/#capabilities`; there was no Compliance item at all,
+because the Workflows work deliberately kept the stub out of the nav.
+Always On is now Workflows and Compliance.
+
 ## /platform/workflows
 
 Ten sections. **Vocabulary is the first thing to get right here.** The

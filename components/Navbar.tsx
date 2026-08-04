@@ -26,8 +26,8 @@ type NavGroup = { heading: string; items: NavItem[] };
 
    Automations was removed when the Workflows page shipped: its triggers
    section absorbed it and /platform/automations now 301s to
-   /platform/workflows. Always On is a one-item group until Compliance is
-   a real page rather than the stub the Workflows page links to.
+   /platform/workflows. Compliance joined Always On when its own page
+   replaced the stub.
 
    Note Control Center is inconsistent right now: this entry points at
    `/#trust`, while the Reporting and Apps pages link to
@@ -47,6 +47,7 @@ const platformGroups: NavGroup[] = [
     heading: "Always On",
     items: [
       { label: "Workflows",   href: "/platform/workflows",   desc: "Coach it once. It runs everywhere, in every location's context." },
+      { label: "Compliance",  href: "/platform/compliance",  desc: "Every location checked against your standard, continuously." },
     ],
   },
   {
