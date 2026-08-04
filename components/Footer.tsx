@@ -25,7 +25,7 @@ const platformLinks = [
 
 const solutionsLinks = [
   { label: "HQ team",     href: "/industries/franchising/franchisors" },
-  { label: "Coaches",     href: "/industries/franchising" },
+  { label: "Coaches",     href: "/solutions/coaches" },
   { label: "Franchisees", href: "/industries/franchising/multi-unit-franchisees" },
 ];
 
