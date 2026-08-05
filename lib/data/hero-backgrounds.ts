@@ -23,8 +23,31 @@ export type HeroBackground = {
   src: string;
   /** Solid fallback painted under the image. */
   base: string;
-  /** Flat scrim alpha, applied as rgba(4,32,54,α). */
+  /** Flat scrim alpha, applied as rgba(4,32,54,α) unless `scrimTint` says
+      otherwise. */
   scrim: number;
+  /**
+   * Scrim colour, when the default navy is wrong for this image.
+   *
+   * The navy `rgba(4,32,54)` is itself a hue. Over a cool image it
+   * reinforces what is already there, but over a **warm** one it is close
+   * to the complement, so at the alpha these lighter variants need it
+   * cancels the hue and leaves grey. Measured on the lightest pixel of
+   * the copy column, at each variant's own required alpha:
+   *
+   *     variant   navy result        sat   tinted result      sat
+   *     teal      rgb( 55,128,139)  0.60   rgb( 58,129,131)  0.56
+   *     indigo    rgb(107,117,157)  0.32   rgb(119,114,151)  0.25
+   *     forest    rgb( 81,127,118)  0.36   rgb( 89,127,102)  0.30
+   *     sand      rgb(122,113,152)  0.26   rgb(135,109,144)  0.24
+   *     sunset    rgb(114,120,107)  0.11   rgb(129,118,89)   0.31
+   *     mauve     rgb(137,109,140)  0.22   rgb(150,105,131)  0.30
+   *
+   * So the four cool variants keep the navy, and only sunset and mauve
+   * carry a tint. Each tint is that variant's own mean colour deepened to
+   * the navy's luminance, so it darkens by exactly as much.
+   */
+  scrimTint?: string;
 };
 
 /* All four are the same hazy blue treatment and are photometrically almost
@@ -50,6 +73,38 @@ export const HERO_BG = {
   haze2:   { src: "/hero/hero-bg-2.jpg",  base: "#0B2C48", scrim: 0.36 },
   haze3:   { src: "/hero/hero-bg-3.jpg",  base: "#0B2C48", scrim: 0.34 },
   haze4:   { src: "/hero/hero-bg-4.jpg",  base: "#0B2C48", scrim: 0.35 },
+
+  /* ── Recoloured variants ────────────────────────────────
+     Six recolours of the original, same grain and composition, supplied
+     so a sub-page hero can carry its own hue while staying visibly part
+     of one family. They exist to break the blue monotony across the
+     platform section; assignment lives in `lib/data/platform-heroes.ts`.
+
+     **These are materially lighter than the blues above** and the 0.45
+     sub-page scrim does not cover them. Measured the same way: lightest
+     pixel of the copy column (x 0-48%, y 22-72%), minimum alpha for white
+     body copy at 4.5:1, then rounded up with a little headroom.
+
+       variant   lightest px        min    set
+       teal      rgb( 92,196,199)   0.415  0.46
+       mauve     rgb(225,161,198)   0.40   0.45
+       sand      rgb(215,176,229)   0.44   0.52
+       indigo    rgb(205,198,255)   0.49   0.54
+       forest    rgb(161,226,184)   0.51   0.56
+       sunset    rgb(241,221,168)   0.535  0.58
+
+     For reference the method reproduces the original's documented 0.29 on
+     hero-bg.jpg exactly, which is what says it matches how these numbers
+     were derived in the first place.
+
+     `base` is sampled from each image's own darkest region, so a slow
+     load never flashes the wrong colour. */
+  teal:    { src: "/hero/hero-bg-teal.jpg",   base: "#0A3A40", scrim: 0.46 },
+  indigo:  { src: "/hero/hero-bg-indigo.jpg", base: "#1F1C2C", scrim: 0.54 },
+  forest:  { src: "/hero/hero-bg-forest.jpg", base: "#162119", scrim: 0.56 },
+  sand:    { src: "/hero/hero-bg-sand.jpg",   base: "#251B28", scrim: 0.52 },
+  sunset:  { src: "/hero/hero-bg-sunset.jpg", base: "#211E15", scrim: 0.58, scrimTint: "33,30,21" },
+  mauve:   { src: "/hero/hero-bg-mauve.jpg",  base: "#2B1923", scrim: 0.45, scrimTint: "43,25,35" },
 } as const satisfies Record<string, HeroBackground>;
 
 export type HeroBackgroundKey = keyof typeof HERO_BG;

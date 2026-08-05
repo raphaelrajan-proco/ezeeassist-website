@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
-import { HERO_BG, SCRIM } from "@/lib/data/hero-backgrounds";
+import { platformHero } from "@/lib/data/platform-heroes";
 import {
   Band, CARD, EASE, Eyebrow, JAKARTA, MONO, Meta, Reveal, SectionHead,
 } from "@/components/platform/shared";
@@ -37,7 +37,7 @@ import AuthorshipLoop from "./AuthorshipLoop";
  *
  * Deviations from the brief:
  *
- * - The hero is the **photographic** treatment on `HERO_BG.haze2`, not the
+ * - The hero is the **photographic** treatment, not the
  *   flat gradient the brief describes. Requested directly.
  * - The brief's nav/footer/tile item 3 says to "update the homepage tile's
  *   link". That tile is a `<button role="tab">` with no link at all, so
@@ -55,7 +55,8 @@ const ON_DARK_DIM = "rgba(238,242,248,0.55)";
 const ON_DARK_ACCENT = "#9FE0F8";
 const ON_IMAGE = "rgba(245,237,224,0.92)";
 
-const HERO = HERO_BG.haze2;
+/* Assignment and the revert switch live in lib/data/platform-heroes.ts. */
+const HERO = platformHero("apps");
 
 /* ── §2 ─────────────────────────────────────────────────────
    The dates are the artifact. A request from March 2023 still marked Open
@@ -116,7 +117,7 @@ export default function AppsContent() {
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.heroSubPage})` }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.scrimRgba})` }} />
           <div
             className="absolute inset-0"
             style={{ background: "radial-gradient(58% 52% at 82% 12%, rgba(159,224,248,0.16) 0%, rgba(159,224,248,0) 70%)" }}
@@ -489,7 +490,7 @@ export default function AppsContent() {
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.closing})` }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.closingRgba})` }} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 45%, ${CLOSING_BASE} 100%)` }} />
         </div>
 

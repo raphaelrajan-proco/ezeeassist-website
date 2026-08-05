@@ -1337,6 +1337,69 @@ emphasis on dark where the 5% tint nearly vanishes; the hero CTA scrolls to
 `enableSystem={false}`, so emulating `prefers-color-scheme` does nothing. Set
 `localStorage.theme = 'dark'` and reload instead.
 
+## Platform hero variants
+
+Six recolours of the homepage hero photograph, one hue per sub-page, so
+eight platform pages in a row stop reading as one page. Same grain and
+composition as the original, converted to JPEG at the same 2560x1440 as
+the existing set (0.97 to 1.12 MB each, 6.3 MB total). The supplied PNGs
+were 8 MB apiece and were not committed.
+
+**To revert: set `VARIANT_HEROES = false` in `lib/data/platform-heroes.ts`.**
+That one flag puts every page back on the blue and the scrim it shipped
+with. `PREVIOUS` in that file records the old assignment per page, so the
+revert is exact rather than approximate, and the images stay in the repo
+unused rather than needing to be re-added.
+
+Assignment, chosen so no two pages adjacent in the nav share a colour:
+
+    On demand    Answers          teal
+                 Reporting        indigo
+                 Apps             sunset   (once)
+    Always on    Workflows        forest
+                 Compliance       teal
+    Foundation   Ticketing        mauve    (once)
+                 Integrations     sand
+                 Control Center   indigo
+
+`sunset` and `mauve` appear once each on request. `teal` and `indigo`
+carry two pages each.
+
+**The 0.45 sub-page scrim does not cover any of these.** They are much
+lighter than the blues. Measured the same way the registry documents,
+lightest pixel of the copy column, minimum alpha for white body copy at
+4.5:1: teal 0.415, mauve 0.40, sand 0.44, indigo 0.49, forest 0.51,
+sunset 0.535. The method reproduces the original's documented 0.29 on
+hero-bg.jpg exactly, which is what says it matches how those numbers were
+derived.
+
+**The scrim is not always navy.** `rgba(4,32,54)` is itself a hue: over a
+cool image it reinforces what is there, but over a warm one it is near
+the complement and cancels to grey. At sunset's required alpha the navy
+scrim left rgb(114,120,107), saturation 0.11. So sunset and mauve carry
+`scrimTint`, each their own mean colour deepened to the navy's luminance,
+and the four cool variants keep the navy. See the table on
+`HeroBackground.scrimTint`.
+
+**The closing band takes a further +0.04** (`CLOSING_CROP_OFFSET`). It is
+shorter than the hero, so `object-cover` scales the same image up and
+crops to a brighter slice. Measured on the built pages, Apps sat at 4.49
+and Ticketing at 4.13 before the offset.
+
+Verified on all eight built pages, hero and closing band, sampling the
+lightest pixel inside the H1 and H2 boxes and compositing every scrim
+layer in order: 4.79 to 5.88 on the heroes, 4.55 to 5.32 on the closing
+bands. All clear 4.5:1 for white body copy.
+
+**Sunset does not look yellow in place.** At the 0.58 it needs, it reads
+warm olive rather than the pale yellow haze the source file is. It is
+distinct and warm, which was the point, but if it is not wanted the fix
+is one line in `ASSIGNED`.
+
+Out of scope and unchanged: the homepage, Trust Center, Why EZee, Case
+Studies and Leadership. The three gradient-hero pages carry their own
+specified blues and must not be added to this map.
+
 ## /case-studies and /case-studies/[slug]
 
 Rebuilt from a supplied design handoff. **The three per-story pages are

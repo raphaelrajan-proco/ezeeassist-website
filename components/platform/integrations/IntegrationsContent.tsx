@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Check, X } from "lucide-react";
 import { CLOSING_BASE } from "@/components/growth/closing-band";
-import { HERO_BG, SCRIM } from "@/lib/data/hero-backgrounds";
+import { platformHero } from "@/lib/data/platform-heroes";
 import {
   ACCENT, ACCENT_TINT, CARD, EASE, JAKARTA, MONO,
   Band, Eyebrow, GovernanceBand, Meta, Reveal, SectionHead, TextChip,
@@ -155,7 +155,8 @@ const RELATED = [
    different frame from the same hazy-blue family. Scrim is the sub-page
    value rather than the variant's own baseline, because this band holds
    an eyebrow, an H1, a subhead, two CTAs and the marquee strip. */
-const HERO = HERO_BG.haze4;
+/* Assignment and the revert switch live in lib/data/platform-heroes.ts. */
+const HERO = platformHero("integrations");
 const ON_DARK_ACCENT = "#9FE0F8";
 const ON_IMAGE = "rgba(245,237,224,0.92)";
 const ON_DARK_DIM = "rgba(245,237,224,0.55)";
@@ -185,7 +186,7 @@ export default function IntegrationsContent() {
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.heroSubPage})` }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.scrimRgba})` }} />
           <div className="absolute inset-0" style={{ background: "radial-gradient(58% 52% at 82% 12%, rgba(159,224,248,0.16) 0%, rgba(159,224,248,0) 70%)" }} />
         </div>
         <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-20 pb-10 md:pt-24">
@@ -641,7 +642,7 @@ export default function IntegrationsContent() {
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.closing})` }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.closingRgba})` }} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 45%, ${CLOSING_BASE} 100%)` }} />
         </div>
 

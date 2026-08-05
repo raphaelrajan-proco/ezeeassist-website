@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
-import { HERO_BG, SCRIM } from "@/lib/data/hero-backgrounds";
+import { platformHero } from "@/lib/data/platform-heroes";
 import {
   ACCENT_TINT, Band, CARD, EASE, Eyebrow, JAKARTA, MONO, Meta, Reveal, SectionHead,
 } from "@/components/platform/shared";
@@ -32,7 +32,7 @@ import OverlapChart from "./OverlapChart";
  *
  * Deviations from the brief, both deliberate:
  *
- * - The hero is the **photographic** treatment on `HERO_BG.haze2`, not the
+ * - The hero is the **photographic** treatment, not the
  *   flat gradient the brief describes. Requested directly, and it makes §2
  *   and §5 read as their own dark moments rather than three of a kind.
  * - **§9 is light.** The brief contradicts itself — its rhythm table and
@@ -58,7 +58,8 @@ const ON_IMAGE = "rgba(245,237,224,0.92)";
 /* #B45309 does not clear contrast on these bands; same warning role. */
 const WARN_ON_DARK = "#F5B26B";
 
-const HERO = HERO_BG.haze2;
+/* Assignment and the revert switch live in lib/data/platform-heroes.ts. */
+const HERO = platformHero("reporting");
 
 /* ── §3 ─────────────────────────────────────────────────────
    Eight inputs. Widths vary so the spectrum does not read as an even
@@ -163,7 +164,7 @@ export default function ReportingContent() {
   return (
     <>
       {/* ── 1. Hero ─────────────────────────────────────────
-          Photographic, per the direct request, on HERO_BG.haze2. The scrim
+          Photographic, per the direct request. The scrim
           is the sub-page value (0.45) rather than the variant's own 0.36:
           that baseline was measured for white body copy alone, and this
           band also carries a monospace query bar and its caption at 10.5px. */}
@@ -178,7 +179,7 @@ export default function ReportingContent() {
             className="object-cover"
             style={{ objectPosition: "left center" }}
           />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.heroSubPage})` }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.scrimRgba})` }} />
           {/* The soft highlight the brief asks for, top right, away from
               the copy column. */}
           <div
@@ -731,7 +732,7 @@ export default function ReportingContent() {
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.closing})` }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.closingRgba})` }} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 45%, ${CLOSING_BASE} 100%)` }} />
         </div>
 
