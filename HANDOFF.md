@@ -1337,6 +1337,67 @@ emphasis on dark where the 5% tint nearly vanishes; the hero CTA scrolls to
 `enableSystem={false}`, so emulating `prefers-color-scheme` does nothing. Set
 `localStorage.theme = 'dark'` and reload instead.
 
+## /platform/answers
+
+Rebuilt from a supplied design handoff. Ten sections: hero, problem, ask
+anywhere, scoping, sources, insights, handoff, quote, related, closing.
+
+**The framing changed and the old one must not come back.** The page used
+to argue "the same question arriving from different channels." The real
+problem is that self-serve is impossible: the answer is scattered across
+ten systems, some stale, some conflicting, much of it locked in video and
+call recordings, so people text their coach. Every section serves that
+now.
+
+Deleted deliberately: the five-step "how it works" strip, the standalone
+channels section (merged into Ask anywhere), the governance strip under
+the quote (those points live on Control Center), the trailing "Same
+question, same source" paragraph in Scoping, and **every mono eyebrow
+above a section heading**. The H2 leads each section.
+
+**Deviation from the handoff, on request.** The handoff specifies a
+cobalt gradient hero (`#0A2F6B`, accent `#8FB8FF`). The photographic teal
+hero is kept instead: this hero belongs to the platform variant set in
+`lib/data/platform-heroes.ts`, and pulling it onto a gradient would break
+that set. The on-band accent stays `#9FE0F8`, because cobalt's `#8FB8FF`
+reads wrong on teal. The closing band follows the hero, as on every other
+platform page.
+
+**Page tokens are scoped to `.ed-answers`**, not the root, the same
+arrangement `.ed-problem` and `.ed-showcase` use. `--ok`, `--warn`,
+`--bad` and `--purple` are names generic enough to collide with anything
+added later, and `--wash`/`--wash2` are one page's panel treatment. All
+eight carry light and dark values.
+
+The hero answer card **sits straight**. It previously had a 0.6deg tilt,
+which the handoff removed. Its ink is fixed dark hex, not tokens: it is a
+white card on a dark band in both themes.
+
+Icons live in `components/platform/answers/icons.tsx`, copied from the
+prototype verbatim. All decorative, all `currentColor` at stroke 1.8, so
+a caller sets the hue. The nine channel tiles are data, not nine
+hand-written blocks. Do not substitute an icon font or vendor logos.
+
+**Two layout fixes the prototype's 1240px min-width hid:**
+- The three Related titles are `nowrap` by design and must never wrap.
+  The longest needs 284px. At three columns that is only clear from
+  1200px up, so the grid is `min-[1200px]:grid-cols-3` and one column
+  below, which is what the handoff's 3/1 note asks for. At 375 the card
+  drops to `px-4`, which buys the 9px `px-6` left it short.
+- The insight rows were `lg:grid-cols-[auto_1fr_auto]`. The verdicts run
+  to 310px and are `auto`, so the topic was what gave way: at 1024 it
+  collapsed to 48px over four lines. Three columns now start at `xl`, the
+  verdict drops to its own row below that, and it is capped at 260px so
+  the topic keeps one line at every width. Each row is its own grid, so
+  the columns do not align across rows; that matches the prototype.
+
+Verified on the built page at 1440/1280/1205/1024/768/375 in both themes:
+no horizontal overflow, one h1 and seven h2s, zero em-dashes, no banned
+words, hero card `transform: none`, the portrait loads from
+`public/photos/jeffrey-grant.jpeg` (byte-identical to the supplied file),
+and no `#00AEEF` used as text on a light surface. The remaining
+scrollWidth reports at 375 are `truncate` elements clipping by design.
+
 ## Platform hero variants
 
 Six recolours of the homepage hero photograph, one hue per sub-page, so

@@ -246,6 +246,37 @@
   .ed-orbit { animation: none; }
 }
 
+/* ─── Answers page tokens ──────────────────────────────────
+   Scoped to .ed-answers rather than the root, the same arrangement
+   .ed-problem and .ed-showcase use: these are one page's palette, not
+   site tokens, and --ok/--warn/--bad/--purple are names generic enough
+   to collide with anything added later.
+
+   The two washes are what carry the page's artifacts. Every panel on it
+   sits on one of them, so the artifacts read as a set against the plain
+   card surfaces around them. */
+.theme-editorial .ed-answers {
+  --wash:   linear-gradient(150deg, #EAF3FB 0%, #DDEAF8 55%, #E7EFF9 100%);
+  --wash2:  linear-gradient(150deg, #E8F1F8 0%, #F1F5FA 60%, #DFEBF7 100%);
+  --ok:     #0D7C58;
+  --warn:   #B45309;
+  --bad:    #B42318;
+  --purple: #7C3AED;
+  --chip-bg: rgba(0, 119, 168, 0.06);
+  --chip-bd: rgba(0, 119, 168, 0.22);
+}
+.dark .theme-editorial .ed-answers,
+.theme-editorial.dark .ed-answers {
+  --wash:   linear-gradient(150deg, #0D1B2E 0%, #101F35 55%, #0C1626 100%);
+  --wash2:  linear-gradient(150deg, #0E1A28 0%, #121D2E 60%, #0C1522 100%);
+  --ok:     #34D399;
+  --warn:   #FBBF24;
+  --bad:    #F97066;
+  --purple: #A78BFA;
+  --chip-bg: rgba(0, 174, 239, 0.08);
+  --chip-bd: rgba(0, 174, 239, 0.30);
+}
+
 /* ─── Story cards ──────────────────────────────────────────
    Case study links. Hover lifts the border and a shadow only, never a
    translate: three stacked cards that shift on hover read as a jitter.
