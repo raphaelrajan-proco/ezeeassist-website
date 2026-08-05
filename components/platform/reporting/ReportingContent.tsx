@@ -1,492 +1,570 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-import { CLOSING_BASE } from "@/components/growth/closing-band";
-import { platformHero } from "@/lib/data/platform-heroes";
-import {
-  ACCENT_TINT, Band, CARD, EASE, Eyebrow, JAKARTA, MONO, Meta, Reveal, SectionHead,
-} from "@/components/platform/shared";
-import LiveQueryBar from "./LiveQueryBar";
-import OverlapChart from "./OverlapChart";
+import { HERO_GRADIENT } from "@/lib/data/hero-backgrounds";
+import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
+import { Glyph } from "./Glyph";
+import { CROSSINGS, INK, INPUTS, LIVE_SOURCES, RELATED, SCOPES, TILE, type Tone } from "./data";
 
 /**
  * /platform/reporting
  *
- * Built from the reporting brief. Two things about it are load-bearing and
- * should survive a copy pass:
+ * Rebuilt from the supplied design handoff. Ten sections: hero, what it
+ * costs now, inputs, ask anything, across systems, always on, scoping,
+ * alongside your BI, related, closing.
  *
- * 1. **The band sequence.** dark, dark, light, light, dark, light, light,
- *    light, light, light, light, dark. The brief calls this the spec rather
- *    than a styling preference, and it is what stops the page reading like
- *    the other Platform pages, which run white card grid into white card
- *    grid. §3, §6 and §7 deliberately use no cards at all.
+ * **This page moved off the photographic hero set onto a gradient.** The
+ * handoff specifies indigo `#242A5E`, registered as `HERO_GRADIENT.indigo`
+ * with its own base, gradients, accent and bottom resolve. Reporting was
+ * carrying the photographic `hero-bg-indigo.jpg` from the platform
+ * variant map and was removed from it; `lib/data/platform-heroes.ts`
+ * records how to put it back.
  *
- * 2. **No two adjacent sections share a layout device.** Spectrum bar,
- *    then a container card, then overlap charts, then a timeline spine,
- *    then nesting, then a concession pair. Convert any of those into a
- *    card grid and the rhythm is gone.
+ * Deleted deliberately, do not reintroduce: every mono eyebrow above a
+ * section heading (only the hero keeps one), the
+ * `SOURCED / LIVE / LOGGED / EXPORTABLE` governance strip, and the
+ * `{{TBD:reporting-proof-*}}` placeholder quote block. Several copy lines
+ * were rewritten away from the old page because they broke the house
+ * rules; the antithesis pair "The report isn't faster. It doesn't get
+ * built." and its three siblings are gone for good.
  *
- * Deviations from the brief, both deliberate:
+ * **The zigzag haze format appears once, in Always on.** Its whole value
+ * is that it is not the page's default layout. Do not extend it to
+ * another section here or copy it onto a sibling page without a reason.
  *
- * - The hero is the **photographic** treatment, not the
- *   flat gradient the brief describes. Requested directly, and it makes §2
- *   and §5 read as their own dark moments rather than three of a kind.
- * - **§9 is light.** The brief contradicts itself — its rhythm table and
- *   its verify step both say LIGHT, its section body says to reuse the
- *   governance band, which is dark. The rhythm table wins because the
- *   brief names it as the spec twice. The four-column label/value *form*
- *   is kept, per DESIGN.md §1.1; only the surface changed.
- *
- * Against DESIGN.md this page runs three dark moments where §4.1 allows
- * two, and the first two are adjacent. That is the brief's rhythm and it
- * was built as specified. The opening is treated as one extended dark
- * region rather than two separate bands, which is why §2 carries no
- * photograph and no second scrim.
+ * The page runs a larger type scale than the old one: section subs are
+ * 18px (were 15.5), alternating-row bodies 16.5px, and nothing in body
+ * copy sits below 13.5px.
  */
 
-/* On-dark palette (DESIGN.md §4.4). The page tokens assume a light or dark
-   *page* surface and do not apply over a photograph or these bands. */
-const ON_DARK = "rgba(238,242,248,0.92)";
-const ON_DARK_DIM = "rgba(238,242,248,0.55)";
-const ON_DARK_RULE = "rgba(238,242,248,0.16)";
-const ON_DARK_ACCENT = "#9FE0F8";
-const ON_IMAGE = "rgba(245,237,224,0.92)";
-/* #B45309 does not clear contrast on these bands; same warning role. */
-const WARN_ON_DARK = "#F5B26B";
+const IN = HERO_GRADIENT.indigo;
 
-/* Assignment and the revert switch live in lib/data/platform-heroes.ts. */
-const HERO = platformHero("reporting");
+const H2 = {
+  fontFamily: JAKARTA,
+  fontWeight: 700,
+  fontSize: "clamp(1.5rem, 0.6rem + 2vw, 2.375rem)",
+  textWrap: "pretty" as const,
+};
 
-/* ── §3 ─────────────────────────────────────────────────────
-   Eight inputs. Widths vary so the spectrum does not read as an even
-   split; the ramp descends from full accent to pale. */
-const INPUTS: { label: string; line: string; flex: number; alpha: number }[] = [
-  { label: "Sales & transactions",  line: "Tickets, services, discounts, refunds",       flex: 1.4, alpha: 1.00 },
-  { label: "Bookings & capacity",   line: "Appointments, utilization, open slots",       flex: 1.2, alpha: 0.88 },
-  { label: "Labour",                line: "Hours, cost against revenue, variance",       flex: 1.0, alpha: 0.76 },
-  { label: "Customers",             line: "Retention, lapse, frequency, LTV",            flex: 1.1, alpha: 0.64 },
-  { label: "Financials",            line: "P&L lines, invoices, payments, royalties",    flex: 1.0, alpha: 0.52 },
-  { label: "Compliance & training", line: "Certification, completion, open items",       flex: 0.9, alpha: 0.40 },
-  { label: "Onboarding",            line: "Ramp progress against cohort",                flex: 0.7, alpha: 0.30 },
-  { label: "Support",               line: "Questions asked, tickets, content gaps",      flex: 0.8, alpha: 0.22 },
+const H3 = {
+  fontFamily: JAKARTA,
+  fontWeight: 700,
+  fontSize: "clamp(1.25rem, 0.8rem + 1.1vw, 1.75rem)",
+  textWrap: "pretty" as const,
+};
+
+const MONO_META = {
+  fontFamily: MONO, fontSize: 12, fontWeight: 600,
+  letterSpacing: "0.12em", color: "var(--ed-fg-muted)",
+};
+
+/* Ink on the product cards inside the haze panels, and on the hero
+   console. Both are screenshots of a light-themed product sitting on a
+   coloured band, so they stay white with dark ink in both themes. */
+const CARD_INK = "#0A0A0A";
+const CARD_INK_MUTED = "#52525B";
+const CARD_RULE = "#E5E7EB";
+
+/* ── §2 ── */
+const FILES: { name: string; tone?: Tone }[] = [
+  { name: "week-42-v7.xlsx" },
+  { name: "rollup-FINAL.xlsx" },
+  { name: "FW: which version?", tone: "warn" },
+  { name: "regional-rollup.xlsx" },
+  { name: "labour-hours-v4.xlsx" },
+  { name: "RE: RE: numbers", tone: "bad" },
+  { name: "P&L-chart.png" },
+  { name: "q3-numbers-v3.xlsx" },
+  { name: "attach-by-store.csv", tone: "purple" },
+  { name: "deck-v2-final.pptx" },
+  { name: "rollup-v11.xlsx" },
+  { name: "sending mine over", tone: "purple" },
 ];
 
-/* ── §5 ─────────────────────────────────────────────────────
-   Opportunity questions lead, the diagnostic one is last. Do not reorder,
-   and do not normalise the widths: the short "Both" bar is the claim. */
-const CROSS: {
-  a: { label: string; width: number };
-  b: { label: string; width: number };
-  both: { label: string; width: number };
-  count: number;
-  tone?: "accent" | "warn";
-  question: string;
-}[] = [
-  {
-    a: { label: "Scheduling", width: 70 }, b: { label: "CRM", width: 52 },
-    both: { label: "Both", width: 31 }, count: 47,
-    question: "Which locations have open capacity next week and a lapsed client list over 200?",
-  },
-  {
-    a: { label: "POS", width: 64 }, b: { label: "Peers", width: 44 },
-    both: { label: "Both", width: 21 }, count: 31,
-    question: "Which locations sell the anchor service well but never attach the add-on their peers do?",
-  },
-  {
-    a: { label: "Quotes", width: 58 }, b: { label: "Win rate", width: 47 },
-    both: { label: "Both", width: 17 }, count: 18,
-    question: "Where are we quoting below the network average and still winning the job?",
-  },
-  {
-    a: { label: "POS", width: 42 }, b: { label: "Compliance", width: 36 },
-    both: { label: "Both", width: 8 }, count: 6, tone: "warn",
-    question: "Of my bottom quartile, which have open compliance items?",
-  },
+const MORNING: { at: string; what: string; last?: boolean }[] = [
+  { at: "7:40am", what: "Pull six weeks of bookings" },
+  { at: "7:55am", what: "Pull labour against target" },
+  { at: "8:10am", what: "Attach rate versus territory" },
+  { at: "8:25am", what: "Check open compliance items" },
+  { at: "8:40am", what: "Build the deck" },
+  { at: "9:00am", what: "Call starts", last: true },
 ];
 
-/* ── §6 ─────────────────────────────────────────────────────
-   The warning-tinted third dot is deliberate: unprompted anomaly detection
-   is the strongest claim here and the colour marks it. */
-const TIMELINE: { tone: "accent" | "muted" | "warn"; meta: string; title: string; body: string }[] = [
-  {
-    tone: "accent", meta: "Mon 4:00am · Teams",
-    title: "The brief is assembled before you start",
-    body: "Twelve locations, ranked by need. Not by who asked.",
-  },
-  {
-    tone: "muted", meta: "Tue 6:12am · SMS",
-    title: "A threshold broke overnight",
-    body: "Store #331 dropped below 70% booked. You hear this morning, not at month end.",
-  },
-  {
-    tone: "warn", meta: "Thu 9:04am · Slack",
-    title: "Something you weren't watching",
-    body: "Store #087's rebook rate has drifted for three weeks. Nobody set an alert for it.",
-  },
-  {
-    tone: "muted", meta: "Quarter close · Email",
-    title: "The pack, on whatever clock you set",
-    body: "Any report, any cadence, any channel.",
-  },
+/* ── §4 ── */
+const RANKED: { id: string; pct: number; tone: Tone }[] = [
+  { id: "#118", pct: 34, tone: "accent" },
+  { id: "#052", pct: 31, tone: "accent" },
+  { id: "#204", pct: 28, tone: "accent" },
+  { id: "#331", pct: 19, tone: "warn" },
+  { id: "#087", pct: 14, tone: "bad" },
 ];
 
-/* ── §7 ─────────────────────────────────────────────────────
-   Nested, not tabulated: each level sits inside the one above it, which is
-   the shape of the entitlement itself. */
-const SCOPES: { role: string; scope: string }[] = [
-  { role: "HQ",           scope: "The whole network. Every location, every cut." },
-  { role: "Field coach",  scope: "Their territory. Twelve locations, compared." },
-  { role: "Franchisee",   scope: "Their locations. Their P&L, bookings, team." },
-  { role: "Store manager", scope: "Their store. Today, this week, against target." },
+const EXCEPTIONS = [
+  { store: "Store #331", measure: "bookings",    delta: "−18%" },
+  { store: "Store #087", measure: "rebook rate", delta: "−12%" },
+  { store: "Store #219", measure: "attach rate", delta: "−8%" },
 ];
 
-/* ── §9 ─────────────────────────────────────────────────────
-   Four guarantees. "Scoped" is deliberately absent: §7 owns scoping and
-   restating it here would be the same idea shown twice. */
-const CONTROL: { label: string; body: string }[] = [
-  { label: "Sourced",    body: "Every number traced to the system it came from" },
-  { label: "Live",       body: "Read at the source. Not a copy, not last night's sync." },
-  { label: "Logged",     body: "Every question asked and every number returned" },
-  { label: "Exportable", body: "Any answer, out in a format your team already uses" },
+/* ── §6 ── */
+const BRIEF_ROWS = [
+  { id: "#331", what: "62% booked",  delta: "−18%" },
+  { id: "#087", what: "rebook drift", delta: "−12%" },
+  { id: "#219", what: "attach rate", delta: "−8%" },
 ];
 
-const RELATED: { eyebrow: string; title: string; href: string }[] = [
-  { eyebrow: "Integrations",   title: "Where the numbers come from",           href: "/platform/integrations" },
-  { eyebrow: "Workflows",      title: "When the answer should trigger an action", href: "/platform/workflows" },
-  { eyebrow: "Control Center", title: "How scoping is set",                    href: "/platform/control-center" },
-];
+function Bar({ pct, colour, track = true }: { pct: number; colour: string; track?: boolean }) {
+  return (
+    <span
+      className="relative block h-1.5 flex-1 overflow-hidden rounded-full"
+      style={{ background: track ? "var(--track)" : "transparent" }}
+      aria-hidden="true"
+    >
+      <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${pct}%`, background: colour }} />
+    </span>
+  );
+}
+
+/** A tinted square holding one glyph. */
+function Tile({ tone, d, size = 34, icon = 17 }: { tone: Tone; d: string; size?: number; icon?: number }) {
+  const [bg, fg] = TILE[tone];
+  return (
+    <span
+      className="flex flex-none items-center justify-center rounded-[10px]"
+      style={{ width: size, height: size, background: bg, color: fg }}
+    >
+      <Glyph d={d} size={icon} />
+    </span>
+  );
+}
+
+/** The white product card that sits inside a haze panel. */
+function HazePanel({ haze, children, tight = false }: { haze: string; children: React.ReactNode; tight?: boolean }) {
+  return (
+    <div
+      className={`flex items-center justify-center rounded-md px-6 py-8 sm:px-11 sm:py-12 ${tight ? "sm:px-[68px]" : ""}`}
+      style={{ background: `var(${haze})` }}
+    >
+      <div
+        className="w-full rounded-[10px]"
+        style={{ background: "#FFFFFF", boxShadow: "0 22px 54px -24px rgba(20,16,48,.5)", maxWidth: tight ? 300 : undefined }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
 
 export default function ReportingContent() {
   return (
-    <>
+    <div className="ed-reporting">
       {/* ── 1. Hero ─────────────────────────────────────────
-          Photographic, per the direct request. The scrim
-          is the sub-page value (0.45) rather than the variant's own 0.36:
-          that baseline was measured for white body copy alone, and this
-          band also carries a monospace query bar and its caption at 10.5px. */}
-      <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
-        <div className="absolute inset-0" aria-hidden="true">
-          <Image
-            src={HERO.src}
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-            style={{ objectPosition: "left center" }}
-          />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.scrimRgba})` }} />
-          {/* The soft highlight the brief asks for, top right, away from
-              the copy column. */}
-          <div
-            className="absolute inset-0"
-            style={{ background: "radial-gradient(58% 52% at 82% 12%, rgba(159,224,248,0.16) 0%, rgba(159,224,248,0) 70%)" }}
-          />
-        </div>
+          Indigo, its own blue. See HERO_GRADIENT.indigo. */}
+      <section className="relative w-full overflow-hidden" style={{ backgroundColor: IN.base }}>
+        <div className="absolute inset-0" aria-hidden="true" style={{ background: IN.hero }} />
 
-        {/* Single column, with the query bar under the CTAs where the brief
-            puts it. Built two-up first, which squeezed the copy column to
-            461px at 1205 and broke the H1 across four lines instead of the
-            two the brief asks for. Full width the first clause needs ~603px
-            at the 40px ceiling and clears it easily. */}
-        <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-20 pb-16 md:pt-24 md:pb-20">
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: EASE }}
-            >
-              <p
-                className="uppercase"
-                style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_ACCENT }}
-              >
-                Reporting
-              </p>
-              <h1
-                className="mt-5 max-w-[860px] leading-[1.06] tracking-[-0.03em]"
-                style={{
-                  color: "#FFFFFF",
-                  fontFamily: JAKARTA,
-                  fontWeight: 700,
-                  /* Ceiling derived at 1440: the longer clause, "However you
-                     want to see it.", measures ~640px at 40px, inside the
-                     860px cap. Below lg the explicit break is dropped and
-                     both clauses wrap naturally. */
-                  fontSize: "clamp(1.625rem, 0.55rem + 2.4vw, 2.5rem)",
-                  textWrap: "balance",
-                }}
-              >
-                Every number your network has.{" "}
-                <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>
-                  However you want to see it.
-                </span>
-              </h1>
-              <p className="mt-6 max-w-[640px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
-                Ask in plain language and get it back the way the question demands. Not the
-                way someone built a dashboard three years ago.
-              </p>
-              <div className="mt-9 flex flex-wrap items-center gap-3">
-                <Link
-                  href="/speak-to-an-expert"
-                  className="ed-btn ed-btn-arrow inline-flex"
-                  style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
-                >
-                  Speak to an expert
-                  <span className="ed-btn-arrow-badge" aria-hidden="true">
-                    <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
-                  </span>
-                </Link>
-                <a href="#cross-system" className="ed-btn ed-btn-secondary-dark inline-flex">
-                  See what it can answer
-                </a>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: EASE, delay: 0.12 }}
-              className="mt-12"
-            >
-              <LiveQueryBar />
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 2. The cost today ───────────────────────────────
-          The second half of one extended dark opening, not a second dark
-          moment: no photograph, no second scrim, just the hero's base
-          deepened. This is the only section on the page that discusses
-          current cost — nothing later restates the pain. */}
-      <section
-        className="w-full"
-        style={{ background: "linear-gradient(180deg, #0B2C48 0%, #071B29 100%)" }}
-      >
-        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
-          <Reveal>
-            <p
-              className="uppercase"
-              style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_DIM }}
-            >
-              What it costs now
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE }}
+          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-[1.05fr_.95fr] lg:gap-15"
+        >
+          <div className="flex flex-col items-start gap-5">
+            <p className="uppercase" style={{ fontFamily: MONO, fontSize: 12, letterSpacing: "0.16em", fontWeight: 600, color: IN.accent }}>
+              Reporting
             </p>
-            <h2
-              className="mt-4 max-w-[900px] leading-[1.08] tracking-[-0.03em]"
+            <h1
+              className="leading-[1.1] tracking-[-0.03em]"
               style={{
-                color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700,
-                fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)", textWrap: "pretty",
+                color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700, textWrap: "pretty",
+                fontSize: "clamp(1.75rem, 0.6rem + 2.65vw, 2.9375rem)",
               }}
             >
-              Twelve versions of the same spreadsheet. And the two hours before every call.
-            </h2>
-          </Reveal>
-
-          <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5">
-            <Reveal>
-              <ScrapPanel />
-            </Reveal>
-            <Reveal delay={0.1}>
-              <PrepPanel />
-            </Reveal>
+              Ask for any number your network has,{" "}
+              <span style={{ color: IN.accent }}>and get it back the way the question needs it.</span>
+            </h1>
+            <p className="max-w-[500px] text-base md:text-[17.5px] leading-[1.6]" style={{ color: IN.body }}>
+              Plain language in, a ranked list or a trend or a filtered exception out. Read live from
+              the systems your locations already run on, not from a dashboard someone built three
+              years ago.
+            </p>
+            <div className="mt-1 flex flex-wrap items-center gap-3.5">
+              <Link
+                href="/speak-to-an-expert"
+                className="ed-btn ed-btn-arrow inline-flex flex-none whitespace-nowrap"
+                style={{ backgroundColor: "#FFFFFF", color: CARD_INK }}
+              >
+                Speak to an expert
+                <span className="ed-btn-arrow-badge" aria-hidden="true">
+                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
+                </span>
+              </Link>
+              <a href="#ask" className="ed-btn ed-btn-secondary-dark inline-flex flex-none whitespace-nowrap">
+                See what it can answer
+              </a>
+            </div>
           </div>
 
-          <Reveal delay={0.16}>
-            <div className="mt-10 max-w-[720px]">
-              <p
-                className="tracking-[-0.02em]"
-                style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 600, fontSize: 24, lineHeight: 1.3 }}
-              >
-                The report isn&rsquo;t faster. It doesn&rsquo;t get built.
-              </p>
-              <p className="mt-3 text-base leading-relaxed" style={{ color: ON_DARK_DIM }}>
-                The prep was never the coaching. By the time the numbers were ready, the call
-                was a recap.
-              </p>
+          {/* Reporting console. Sits straight, and its ink is fixed dark:
+              a white card on a dark band in both themes. */}
+          <div
+            className="overflow-hidden rounded-[18px]"
+            style={{ background: "#FFFFFF", boxShadow: "0 30px 70px -30px rgba(8,10,32,.75)" }}
+          >
+            <div className="flex items-center gap-3 px-5 py-3" style={{ borderBottom: `1px solid ${CARD_RULE}` }}>
+              <span className="flex gap-1.5" aria-hidden="true">
+                {[0, 1, 2].map((i) => <span key={i} className="h-2 w-2 rounded-full" style={{ background: "#D4D4D8" }} />)}
+              </span>
+              <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", color: CARD_INK_MUTED }}>
+                EZEE ASSIST · REPORTING
+              </span>
+              <span className="ml-auto flex items-center gap-1.5 whitespace-nowrap" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, color: "#0D7C58" }}>
+                <span aria-hidden="true">●</span> LIVE FROM MINDBODY
+              </span>
             </div>
-          </Reveal>
-        </div>
+
+            <div className="flex items-center gap-2.5 px-5 py-3.5" style={{ background: "#F8FAFC" }}>
+              <span aria-hidden="true" style={{ fontFamily: MONO, fontSize: 13, color: CARD_INK_MUTED }}>&gt;</span>
+              <span className="text-[14px] font-medium" style={{ color: CARD_INK }}>
+                Which locations are behind plan this week?
+              </span>
+              <span className="ed-caret inline-block h-4 w-[2px] flex-none" style={{ background: CARD_INK }} aria-hidden="true" />
+            </div>
+
+            <div className="flex flex-col gap-2.5 px-5 py-4">
+              {[
+                { id: "Store #331", pct: 82, delta: "−18%", ink: "#B42318" },
+                { id: "Store #087", pct: 64, delta: "−12%", ink: "#B45309" },
+                { id: "Store #219", pct: 46, delta: "−8%",  ink: "#B45309" },
+              ].map((r) => (
+                <div key={r.id} className="flex items-center gap-3">
+                  <span className="w-[74px] flex-none text-[12.5px]" style={{ color: CARD_INK_MUTED }}>{r.id}</span>
+                  <span className="relative block h-1.5 flex-1 overflow-hidden rounded-full" style={{ background: "#E7E9EF" }} aria-hidden="true">
+                    <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${r.pct}%`, background: r.ink }} />
+                  </span>
+                  <span className="w-11 flex-none text-right" style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: r.ink }}>{r.delta}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-between gap-3 px-5 py-3" style={{ borderTop: `1px solid ${CARD_RULE}` }}>
+              <span className="text-[13px]" style={{ color: CARD_INK_MUTED }}>
+                <b style={{ color: CARD_INK }}>3 of 12 locations</b> behind plan. Bookings drive all three.
+              </span>
+              <span className="flex-none" style={{ fontFamily: MONO, fontSize: 12, color: "#A1A1AA" }}>1.4s</span>
+            </div>
+          </div>
+        </motion.div>
       </section>
 
-      {/* ── 3. Inputs ───────────────────────────────────────
-          No cards, by spec. One continuous spectrum, then plain text. The
-          section's job is coverage, and a card grid would make eight
-          categories look like eight features. */}
-      <Band>
-        <SectionHead
-          eyebrow="Inputs"
-          title="Everything your systems already hold. Nothing you have to move."
-          sub="It reads at the source when a question needs an answer. No warehouse to load, no model to build first."
-        />
+      {/* ── 2. What it costs now ────────────────────────── */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
+          <Reveal className="flex max-w-[820px] flex-col gap-3.5">
+            <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
+              Reporting is somebody&rsquo;s Monday morning.
+            </h2>
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              At HQ, twelve versions of the same spreadsheet are circulating and nobody is certain
+              which one is current. In the field, a coach spends the two hours before a call
+              assembling numbers by hand, so the call opens as a recap of a week that already
+              happened.
+            </p>
+          </Reveal>
 
-        <Reveal>
-          <div className="mt-10 flex h-[10px] w-full overflow-hidden" style={{ borderRadius: 5 }} aria-hidden="true">
-            {INPUTS.map((c) => (
-              <span key={c.label} style={{ flex: c.flex, backgroundColor: `rgba(0,119,168,${c.alpha})` }} />
-            ))}
-          </div>
-        </Reveal>
-
-        <div className="mt-9 grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-4">
-          {INPUTS.map((c, i) => (
-            <Reveal key={c.label} delay={i * 0.05}>
-              <p className="ed-fg text-[15px]" style={{ fontWeight: 600, letterSpacing: "-0.01em" }}>
-                {c.label}
-              </p>
-              <p className="ed-fg-muted mt-1.5 text-[14px] leading-relaxed">{c.line}</p>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.1}>
-          <p className="ed-fg-muted mt-10 max-w-[640px] text-base leading-relaxed">
-            Nothing to model, nothing to migrate, nothing to clean up first. If it&rsquo;s
-            connected, you can ask about it.{" "}
-            <Link href="/platform/integrations" className="ed-link" style={{ color: "var(--ed-accent-text)" }}>
-              See what connects
-            </Link>
-            .
-          </p>
-        </Reveal>
-      </Band>
-
-      {/* ── 4. Renderings ───────────────────────────────────
-          One card holding four sub-cards, not four freestanding cards: the
-          header says "one dataset", and four separate cards would argue
-          four datasets. Every render is a different shape on purpose. */}
-      <Band alt>
-        <SectionHead
-          eyebrow="Ask anything"
-          title="The same numbers. However the question needs them."
-          sub="Nobody built a dashboard first."
-        />
-
-        <Reveal>
-          <div className="mt-10 overflow-hidden" style={CARD}>
-            <div className="px-5 py-3.5 md:px-6" style={{ backgroundColor: "var(--ed-card-alt)", borderBottom: "1px solid var(--ed-border)" }}>
-              <Meta>One dataset · Twelve locations · Six weeks</Meta>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 p-5 md:grid-cols-2 md:p-6">
-              <SubCard ask="Rank my territory by attach rate">
-                <RankBars />
-              </SubCard>
-              <SubCard ask="Show me that as a trend instead">
-                <TrendMini />
-              </SubCard>
-              <SubCard ask="Just the ones behind plan">
-                <BehindRows />
-              </SubCard>
-              <SubCard ask="Send me this every Monday at 7">
-                <DeliveryCard />
-              </SubCard>
-            </div>
-
-            <div className="px-5 pb-5 md:px-6 md:pb-6">
-              <div style={{ borderTop: "1px solid var(--ed-rule)" }} className="pt-4">
-                <p className="ed-fg-muted text-[13.5px]">
-                  Four questions. One dataset. Nobody configured anything.
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <Reveal>
+              <div className="ed-border flex h-full flex-col gap-4 rounded-2xl border p-5 sm:p-7" style={{ background: "var(--wash)" }}>
+                <span className="ed-fg text-[15px] font-semibold">At HQ, this week&rsquo;s numbers</span>
+                <div className="flex flex-wrap gap-2">
+                  {FILES.map((f) => (
+                    <span
+                      key={f.name}
+                      className="rounded-md"
+                      style={{
+                        fontFamily: MONO, fontSize: 12, padding: "6px 10px",
+                        background: f.tone ? TILE[f.tone][0] : "var(--ed-card)",
+                        border: `1px solid ${f.tone ? TILE[f.tone][0] : "var(--ed-border)"}`,
+                        color: f.tone ? INK[f.tone] : "var(--ed-fg-muted)",
+                      }}
+                    >
+                      {f.name}
+                    </span>
+                  ))}
+                </div>
+                <p className="ed-rule ed-fg-muted mt-auto border-t pt-3.5 text-[13.5px] leading-[1.55]">
+                  Twelve files, four people, one number that should have one answer.
                 </p>
               </div>
-            </div>
-          </div>
-        </Reveal>
-      </Band>
+            </Reveal>
 
-      {/* ── 5. Across systems ───────────────────────────────
-          The section the page rests on. Deeper and warmer than the hero so
-          it reads as its own moment rather than a repeat of §2. */}
-      <section
-        id="cross-system"
-        className="w-full scroll-mt-24"
-        style={{ background: "linear-gradient(180deg, #0E2A38 0%, #0A1D26 100%)" }}
-      >
-        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
-          <Reveal>
-            <p
-              className="uppercase"
-              style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_ACCENT }}
-            >
-              Across systems
-            </p>
-            <h2
-              className="mt-4 max-w-[820px] leading-[1.08] tracking-[-0.03em]"
-              style={{
-                color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700,
-                fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)", textWrap: "pretty",
-              }}
-            >
-              The opportunity is usually sitting{" "}
-              <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>
-                between two systems.
-              </span>
+            <Reveal delay={0.08}>
+              <div className="ed-card ed-border flex h-full flex-col gap-4 rounded-2xl border p-5 sm:p-7">
+                <span className="ed-fg text-[15px] font-semibold">One coach, the morning of one call</span>
+                <div className="flex flex-col">
+                  {MORNING.map((m, i) => (
+                    <div key={m.at} className={`flex items-baseline gap-4 py-2.5 ${i === 0 ? "" : "ed-rule border-t"}`}>
+                      <span
+                        className="w-[62px] flex-none"
+                        style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: m.last ? 700 : 400, color: m.last ? "var(--bad)" : "var(--ed-fg-muted)" }}
+                      >
+                        {m.at}
+                      </span>
+                      <span className={`text-[14px] ${m.last ? "font-semibold" : ""}`} style={{ color: m.last ? "var(--bad)" : "var(--ed-fg)" }}>
+                        {m.what}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <p className="ed-rule ed-fg-muted mt-auto border-t pt-3.5 text-[13.5px] leading-[1.55]">
+                  Eighty minutes of preparation, thirty locations, every month. None of it was coaching.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3. Inputs ───────────────────────────────────── */}
+      <section className="ed-bg-alt w-full">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
+          <Reveal className="flex max-w-[820px] flex-col gap-3.5">
+            <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
+              It reads what your systems already hold, at the source.
             </h2>
-            <p className="mt-5 max-w-[640px] text-base md:text-lg leading-relaxed" style={{ color: ON_DARK }}>
-              Your POS knows what sold. Your scheduler knows what&rsquo;s empty. Neither one
-              knows you have a soft week and four hundred people who haven&rsquo;t been back.
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              There is no warehouse to load and no model to build first. When a question needs a
+              number, it goes and gets the current one from the system of record.
             </p>
           </Reveal>
 
-          <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5">
-            {CROSS.map((c, i) => (
-              <Reveal key={c.question} delay={i * 0.08}>
-                <div
-                  className="flex h-full flex-col p-5 md:p-6"
-                  style={{
-                    backgroundColor: "rgba(238,242,248,0.04)",
-                    border: `1px solid ${ON_DARK_RULE}`,
-                    borderRadius: 14,
-                  }}
-                >
-                  <OverlapChart
-                    a={c.a}
-                    b={c.b}
-                    both={c.both}
-                    count={c.count}
-                    tone={c.tone}
-                    title={`${c.a.label} ${c.a.width} percent, ${c.b.label} ${c.b.width} percent, both ${c.both.width} percent: ${c.count} locations.`}
-                  />
-                  <div className="mt-5 pt-4" style={{ borderTop: `1px solid ${ON_DARK_RULE}` }}>
-                    <p className="text-[15px] leading-relaxed" style={{ color: "#FFFFFF" }}>
-                      &ldquo;{c.question}&rdquo;
-                    </p>
-                  </div>
+          <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+            {INPUTS.map((t, i) => (
+              <Reveal key={t.title} delay={(i % 4) * 0.05}>
+                <div className="ed-card ed-border flex h-full flex-col gap-3 rounded-[14px] border p-5">
+                  <Tile tone={t.tone} d={t.d} />
+                  <span className="ed-fg tracking-[-0.015em]" style={{ fontFamily: JAKARTA, fontSize: 16.5, fontWeight: 700 }}>
+                    {t.title}
+                  </span>
+                  <span className="ed-fg-muted text-[14px] leading-[1.5]">{t.body}</span>
                 </div>
               </Reveal>
             ))}
           </div>
 
-          <Reveal delay={0.14}>
-            <p className="mt-6 text-[12px]" style={{ color: ON_DARK_DIM }}>
-              Counts are illustrative.
+          <Reveal delay={0.1}>
+            <div className="ed-card ed-border flex flex-col gap-3 rounded-[14px] border px-5 py-4 lg:flex-row lg:items-center">
+              <span className="ed-fg-muted flex-none text-[13.5px] font-semibold">Reads live from</span>
+              <div className="flex flex-wrap gap-2">
+                {LIVE_SOURCES.map((s) => (
+                  <span
+                    key={s}
+                    className="rounded-md"
+                    style={{
+                      fontFamily: MONO, fontSize: 12, padding: "5px 10px",
+                      background: "var(--chip-bg)", border: "1px solid var(--chip-bd)", color: "var(--ed-accent-text)",
+                    }}
+                  >
+                    {s}
+                  </span>
+                ))}
+              </div>
+              <span className="ed-fg-muted text-[13.5px] lg:ml-auto lg:whitespace-nowrap">
+                250+ more.{" "}
+                <Link href="/platform/integrations" className="ed-accent-text underline-offset-2 hover:underline">
+                  See what connects
+                </Link>
+              </span>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 4. Ask anything ─────────────────────────────────
+          The page's strongest claim. All four renderings must stay
+          visually distinct; do not normalise them into four bar charts. */}
+      <section id="ask" className="ed-bg w-full scroll-mt-24">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
+          <Reveal className="flex max-w-[820px] flex-col gap-3.5">
+            <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
+              One dataset, rendered however the question needs it.
+            </h2>
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              Four questions about the same twelve locations and the same six weeks. Nobody specified
+              a chart type, and nobody built a dashboard first.
             </p>
           </Reveal>
 
-          <Reveal delay={0.18}>
-            <div className="mt-10 max-w-[820px] pt-8" style={{ borderTop: `1px solid ${ON_DARK_RULE}` }}>
-              <p
-                className="tracking-[-0.02em]"
-                style={{
-                  color: ON_DARK, fontFamily: JAKARTA, fontWeight: 500,
-                  fontSize: "clamp(1.125rem, 0.5rem + 1.4vw, 1.625rem)", lineHeight: 1.3,
-                }}
-              >
-                Every one of the first three is revenue that already exists, sitting in a gap
-                between two systems.{" "}
-                <span style={{ color: ON_DARK_ACCENT, fontWeight: 700 }}>
-                  In a BI tool, each of these is a modeling request. Here it&rsquo;s a sentence.
-                </span>
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            {/* 1. Ranked bars */}
+            <Reveal>
+              <div className="ed-card ed-border flex h-full flex-col gap-4 rounded-2xl border p-5 sm:p-6">
+                <div className="flex items-center gap-3">
+                  <Tile tone="accent" d="M4 6h13 M4 12h9 M4 18h5" size={28} icon={15} />
+                  <span className="ed-fg text-[15px] font-medium">&ldquo;Rank my territory by attach rate&rdquo;</span>
+                </div>
+                <div className="flex flex-col gap-2.5">
+                  {RANKED.map((r) => (
+                    <div key={r.id} className="flex items-center gap-3">
+                      <span className="ed-fg-muted w-10 flex-none text-[12.5px]">{r.id}</span>
+                      <Bar pct={r.pct * 2.6} colour={INK[r.tone]} />
+                      <span className="ed-fg w-10 flex-none text-right" style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700 }}>{r.pct}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Reveal>
+
+            {/* 2. Trend line */}
+            <Reveal delay={0.06}>
+              <div className="ed-card ed-border flex h-full flex-col gap-4 rounded-2xl border p-5 sm:p-6">
+                <div className="flex items-center gap-3">
+                  <Tile tone="purple" d="M4 17l5-6 4 3 6-8" size={28} icon={15} />
+                  <span className="ed-fg text-[15px] font-medium">&ldquo;Show me that as a trend instead&rdquo;</span>
+                </div>
+                <svg viewBox="0 0 320 96" className="h-24 w-full" aria-hidden="true">
+                  {[24, 52, 80].map((y) => (
+                    <path key={y} d={`M4 ${y} H316`} stroke="var(--ed-rule)" strokeWidth="1" fill="none" />
+                  ))}
+                  <path
+                    d="M4 74 L 68 66 L 132 70 L 196 48 L 260 34 L 316 18"
+                    fill="none" stroke="var(--purple)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+                  />
+                  <circle cx="316" cy="18" r="3.5" fill="var(--purple)" />
+                </svg>
+                <div className="ed-rule flex items-center justify-between gap-3 border-t pt-3">
+                  <span className="ed-fg-muted text-[13.5px]">Six weeks, territory average</span>
+                  <span className="flex-none" style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: "var(--purple)" }}>median 23%</span>
+                </div>
+              </div>
+            </Reveal>
+
+            {/* 3. Filtered exceptions */}
+            <Reveal delay={0.12}>
+              <div className="ed-card ed-border flex h-full flex-col gap-4 rounded-2xl border p-5 sm:p-6">
+                <div className="flex items-center gap-3">
+                  <Tile tone="bad" d="M4 5h16l-6 7v7l-4-2v-5z" size={28} icon={15} />
+                  <span className="ed-fg text-[15px] font-medium">&ldquo;Just the ones behind plan&rdquo;</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {EXCEPTIONS.map((e) => (
+                    <div
+                      key={e.store}
+                      className="flex items-center gap-3 rounded-[10px] px-3.5 py-2.5"
+                      style={{ background: TILE.bad[0] }}
+                    >
+                      <span className="ed-fg flex-none text-[13.5px] font-semibold">{e.store}</span>
+                      <span className="ed-fg-muted text-[13px]">{e.measure}</span>
+                      <span className="ml-auto flex-none" style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: "var(--bad)" }}>{e.delta}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="ed-fg-muted mt-auto text-[13.5px]">Nine locations at or above plan are left out.</p>
+              </div>
+            </Reveal>
+
+            {/* 4. Scheduled digest */}
+            <Reveal delay={0.18}>
+              <div className="ed-card ed-border flex h-full flex-col gap-4 rounded-2xl border p-5 sm:p-6">
+                <div className="flex items-center gap-3">
+                  <Tile tone="ok" d="M8 3v4 M16 3v4 M4 6h16v14H4z M9 13l2.5 2.5L16 11" size={28} icon={15} />
+                  <span className="ed-fg text-[15px] font-medium">&ldquo;Send me this every Monday at 7&rdquo;</span>
+                </div>
+                <div className="ed-card-alt ed-border flex flex-col gap-2 rounded-xl border p-4">
+                  <span style={MONO_META}>TEAMS · MON 7:00AM</span>
+                  <span className="ed-fg text-[14px] font-semibold">West territory, week 43</span>
+                  <span className="ed-fg-muted text-[13.5px] leading-[1.55]">
+                    3 of 12 behind plan. #331 needs the reactivation play. Full cut attached.
+                  </span>
+                </div>
+                <div className="mt-auto flex flex-wrap items-center gap-3">
+                  <span
+                    className="rounded-full"
+                    style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", padding: "5px 12px", background: TILE.ok[0], color: "var(--ok)" }}
+                  >
+                    SCHEDULED
+                  </span>
+                  <span className="ed-fg-muted text-[13.5px]">Any cadence, any channel, no report to maintain.</span>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5. Across systems ───────────────────────────── */}
+      <section className="w-full" style={{ background: "#0B1220" }}>
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
+          <Reveal className="flex max-w-[820px] flex-col gap-3.5">
+            <h2 className="leading-[1.12] tracking-[-0.03em]" style={{ ...H2, color: "#EEF2F8" }}>
+              The opportunity is usually sitting{" "}
+              <span style={{ color: IN.accent }}>between two systems.</span>
+            </h2>
+            <p className="text-[18px] leading-[1.7]" style={{ color: "rgba(238,242,248,.72)" }}>
+              Your POS knows what sold. Your scheduler knows what is empty. Neither one knows you
+              have a soft week and four hundred people who have not been back.
+            </p>
+          </Reveal>
+
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            {CROSSINGS.map((c, i) => (
+              <Reveal key={c.question} delay={(i % 2) * 0.06}>
+                <div
+                  className="flex h-full flex-col gap-3.5 rounded-2xl p-5 sm:p-6"
+                  style={{ background: "rgba(238,242,248,.04)", border: "1px solid rgba(238,242,248,.12)" }}
+                >
+                  <div className="flex flex-col gap-2">
+                    {[
+                      { label: c.aLabel, w: c.aw, fill: "rgba(238,242,248,.3)", count: null },
+                      { label: c.bLabel, w: c.bw, fill: "rgba(238,242,248,.22)", count: null },
+                      { label: "BOTH",   w: c.cw, fill: c.tint, count: c.count },
+                    ].map((row) => (
+                      <div key={row.label} className="flex items-center gap-3">
+                        <span
+                          className="w-[86px] flex-none"
+                          style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", color: row.count ? c.tint : "rgba(238,242,248,.55)" }}
+                        >
+                          {row.label}
+                        </span>
+                        <span className="relative block h-1.5 flex-1 overflow-hidden rounded-full" style={{ background: "rgba(238,242,248,.08)" }} aria-hidden="true">
+                          <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${row.w}%`, background: row.fill }} />
+                        </span>
+                        <span
+                          className="w-7 flex-none text-right"
+                          style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: c.tint }}
+                        >
+                          {row.count ?? ""}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <p
+                    className="mt-auto pt-3.5 text-[15px] leading-[1.55]"
+                    style={{ borderTop: "1px solid rgba(238,242,248,.12)", color: "#EEF2F8" }}
+                  >
+                    &ldquo;{c.question}&rdquo;
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal delay={0.1}>
+            <div className="flex flex-col gap-3 pt-6" style={{ borderTop: "1px solid rgba(238,242,248,.12)" }}>
+              <p className="max-w-[900px] text-[16.5px] leading-[1.65]" style={{ color: "rgba(238,242,248,.82)" }}>
+                Three of those four are revenue that already exists, sitting in a gap between two
+                systems. In a BI tool each one is a modeling request that takes a quarter. Here it is
+                a sentence.
               </p>
               <Link
                 href="/platform/integrations"
-                className="mt-6 inline-block text-sm"
-                style={{ color: ON_DARK_ACCENT, fontWeight: 500, textDecoration: "underline", textUnderlineOffset: 4 }}
+                className="inline-flex w-fit items-center gap-2 text-[14px] font-semibold"
+                style={{ color: IN.accent }}
               >
                 The connections this rests on
+                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} aria-hidden="true" />
               </Link>
             </div>
           </Reveal>
@@ -494,597 +572,317 @@ export default function ReportingContent() {
       </section>
 
       {/* ── 6. Always on ────────────────────────────────────
-          A spine, not cards. Scheduled digests live in this section only:
-          §2 says the artifact stops being built, this says a different one
-          arrives unasked, and those are compatible only while they stay
-          apart. */}
-      <Band>
-        <SectionHead
-          eyebrow="Always on"
-          title="You stop checking. It tells you."
-          sub="A dashboard waits to be opened. Most weeks nobody opens it."
-        />
+          The zigzag haze format, used once on this page. Rows alternate
+          at lg; below that every row stacks copy above panel, including
+          the two whose panel sits left at desktop. */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto flex max-w-7xl flex-col gap-12 px-6 md:px-12 lg:px-16 py-16 md:py-20">
+          <Reveal className="flex flex-col gap-3.5">
+            {/* nowrap only where it fits; it wraps below lg by design. */}
+            <h2 className="ed-fg leading-[1.12] tracking-[-0.03em] lg:whitespace-nowrap" style={H2}>
+              The numbers come to you before you think to ask.
+            </h2>
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              A dashboard waits to be opened, and most weeks nobody opens it. Set the thresholds that
+              matter and the report arrives on your clock, in the channel you already have open.
+            </p>
+          </Reveal>
 
-        <div className="mt-10 max-w-[760px]">
-          {TIMELINE.map((t, i) => {
-            const dot =
-              t.tone === "accent" ? "var(--ed-accent-text)"
-              : t.tone === "warn" ? "#B45309"
-              : "var(--ed-fg-muted)";
-            const last = i === TIMELINE.length - 1;
-            return (
-              <Reveal key={t.title} delay={i * 0.08}>
-                <div className="relative flex gap-5 pb-9 last:pb-0">
-                  {/* The rule runs behind the dots and stops at the last
-                      one, so the sequence reads as finished rather than
-                      trailing off. */}
-                  {!last && (
+          {/* Row 1 — copy left, panel right */}
+          <Reveal>
+            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-16">
+              <div className="flex flex-col gap-3">
+                <h3 className="ed-fg leading-[1.15] tracking-[-0.025em]" style={H3}>
+                  Monday&rsquo;s brief is written before you start
+                </h3>
+                <p className="ed-fg-muted text-[16.5px] leading-[1.65]">
+                  Twelve locations ranked by need, at four in the morning. Nobody requested it and
+                  nobody assembled it.
+                </p>
+              </div>
+              <HazePanel haze="--haze-b">
+                <div className="flex flex-col gap-2.5 p-5">
+                  <div className="flex items-center gap-2.5">
                     <span
+                      className="flex h-6 w-6 flex-none items-center justify-center rounded-md"
+                      style={{ background: "#0077A8", color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 800, fontSize: 12 }}
                       aria-hidden="true"
-                      className="absolute left-[5px] top-3 bottom-0 w-px"
-                      style={{ backgroundColor: "var(--ed-rule)" }}
-                    />
-                  )}
-                  <span
-                    aria-hidden="true"
-                    className="relative mt-[7px] h-[11px] w-[11px] flex-none rounded-full"
-                    style={{ backgroundColor: dot, outline: "3px solid var(--ed-bg)" }}
-                  />
-                  <div className="min-w-0 flex-1">
-                    <Meta color={t.tone === "warn" ? "#B45309" : undefined}>{t.meta}</Meta>
-                    <p className="ed-fg mt-2 text-[17px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 600, lineHeight: 1.3 }}>
-                      {t.title}
-                    </p>
-                    <p className="ed-fg-muted mt-1.5 text-[14.5px] leading-relaxed">{t.body}</p>
+                    >
+                      E
+                    </span>
+                    <span className="text-[13px] font-semibold" style={{ color: CARD_INK }}>EZee Assist</span>
+                    <span className="ml-auto flex-none" style={{ fontFamily: MONO, fontSize: 12, letterSpacing: "0.1em", color: CARD_INK_MUTED }}>
+                      TEAMS · 4:00AM
+                    </span>
                   </div>
+                  <span className="text-[13.5px] font-semibold" style={{ color: CARD_INK }}>
+                    West territory, week 43. Ranked by need.
+                  </span>
+                  <div className="flex flex-col gap-1.5">
+                    {BRIEF_ROWS.map((r) => (
+                      <div key={r.id} className="flex items-center gap-3 rounded-md px-2.5 py-1.5" style={{ background: "rgba(180,35,24,.06)" }}>
+                        <span className="w-10 flex-none" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, color: CARD_INK }}>{r.id}</span>
+                        <span className="text-[12.5px]" style={{ color: CARD_INK_MUTED }}>{r.what}</span>
+                        <span className="ml-auto flex-none" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, color: "#B42318" }}>{r.delta}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <span className="pt-1 text-[12px]" style={{ color: CARD_INK_MUTED }}>
+                    Nine locations at or above plan. Full cut attached.
+                  </span>
+                </div>
+              </HazePanel>
+            </div>
+          </Reveal>
+
+          {/* Row 2 — panel left at lg, copy first when stacked */}
+          <Reveal>
+            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-16">
+              <div className="flex flex-col gap-3 lg:order-2">
+                <h3 className="ed-fg leading-[1.15] tracking-[-0.025em]" style={H3}>
+                  A threshold breaks and you hear about it that morning
+                </h3>
+                <p className="ed-fg-muted text-[16.5px] leading-[1.65]">
+                  Set the line that matters and the message finds you the morning something crosses
+                  it, rather than at month end in a dashboard nobody opened.
+                </p>
+              </div>
+              <div className="lg:order-1">
+                <HazePanel haze="--haze-a" tight>
+                  <div className="flex flex-col gap-3 p-4" style={{ borderRadius: 24 }}>
+                    <div className="flex items-center justify-between" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, color: CARD_INK_MUTED }}>
+                      <span>6:12</span>
+                      <span>TUE</span>
+                    </div>
+                    <div className="flex flex-col gap-2 rounded-2xl px-3.5 py-3" style={{ background: "#F1F1F3" }}>
+                      <span style={{ fontFamily: MONO, fontSize: 12, letterSpacing: "0.1em", color: CARD_INK_MUTED }}>EZEE ASSIST · SMS</span>
+                      <span className="text-[13px] leading-[1.55]" style={{ color: CARD_INK }}>
+                        Store #331 dropped below 70% booked overnight. 340 lapsed clients match the
+                        reactivation profile.
+                      </span>
+                      <span className="text-[12.5px] font-semibold" style={{ color: "#0077A8" }}>Show me the list</span>
+                    </div>
+                  </div>
+                </HazePanel>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Row 3 — copy left, panel right */}
+          <Reveal>
+            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-16">
+              <div className="flex flex-col gap-3">
+                <h3 className="ed-fg leading-[1.15] tracking-[-0.025em]" style={H3}>
+                  It flags the drift nobody set an alert for
+                </h3>
+                <p className="ed-fg-muted text-[16.5px] leading-[1.65]">
+                  Store #087&rsquo;s rebook rate has slid three weeks running. No threshold existed
+                  for it, which is exactly why it went unnoticed.
+                </p>
+                <Link href="/platform/workflows" className="ed-accent-text inline-flex w-fit items-center gap-2 text-[14px] font-semibold">
+                  How a workflow turns that into an action
+                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} aria-hidden="true" />
+                </Link>
+              </div>
+              <HazePanel haze="--haze-c">
+                <div className="flex flex-col gap-2.5 p-5">
+                  <div className="flex items-center gap-2.5">
+                    <span className="flex flex-none" style={{ color: "#7C3AED" }}>
+                      <Glyph d="M9 4L7.5 20 M16.5 4L15 20 M4 9h17 M3 15h17" size={13} />
+                    </span>
+                    <span className="text-[13px] font-semibold" style={{ color: CARD_INK }}>#west-territory</span>
+                    <span className="ml-auto flex-none" style={{ fontFamily: MONO, fontSize: 12, letterSpacing: "0.1em", color: CARD_INK_MUTED }}>
+                      THU 9:04AM
+                    </span>
+                  </div>
+                  <span className="text-[13px] leading-[1.55]" style={{ color: CARD_INK }}>
+                    Store #087&rsquo;s rebook rate has drifted down for three consecutive weeks.
+                  </span>
+                  <svg viewBox="0 0 300 76" className="h-[76px] w-full" aria-hidden="true">
+                    <path
+                      d="M4 22 L 78 26 L 152 41 L 226 52 L 296 64"
+                      fill="none" stroke="#B42318" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"
+                    />
+                    <circle cx="296" cy="64" r="3.5" fill="#B42318" />
+                  </svg>
+                  <span className="text-[12px]" style={{ color: CARD_INK_MUTED }}>Nobody set an alert for this one.</span>
+                </div>
+              </HazePanel>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 7. Scoping ────────────────────────────────────
+          The stepped indent carries the nesting at md and up. Below that
+          it is a left accent rule instead, so the hierarchy never rests
+          on indent alone. */}
+      <section className="ed-bg-alt w-full">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
+          <Reveal className="flex max-w-[820px] flex-col gap-3.5">
+            <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
+              Your franchisees can ask too, about their own locations.
+            </h2>
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              Every level gets the same capability, bounded by what they are entitled to see. Nobody
+              sees another owner&rsquo;s numbers, enforced by the permissions your systems already
+              hold.
+            </p>
+          </Reveal>
+
+          <div className="flex flex-col gap-3">
+            {SCOPES.map((s, i) => (
+              <Reveal key={s.role} delay={i * 0.06}>
+                <div
+                  className="ed-scope-row ed-card ed-border flex flex-col gap-2.5 rounded-[14px] border p-4 sm:flex-row sm:items-center sm:gap-5 sm:p-5"
+                  style={{
+                    "--indent": `${s.indent}px`,
+                    /* The accent rule is the indent's stand-in below md,
+                       not a desktop feature; .ed-scope-row drops it once
+                       the stepping is doing the work. */
+                    "--rule": INK[s.tone],
+                    background: i === 0 ? "var(--wash)" : undefined,
+                  } as React.CSSProperties}
+                >
+                  <span className="flex flex-none items-center gap-3.5 sm:w-[190px]">
+                    <Tile tone={s.tone} d={s.d} size={40} icon={19} />
+                    <span className="ed-fg tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontSize: 18, fontWeight: 700 }}>
+                      {s.role}
+                    </span>
+                  </span>
+                  <span className="ed-fg-muted text-[15px] leading-[1.55]">{s.body}</span>
                 </div>
               </Reveal>
-            );
-          })}
-        </div>
-
-        <Reveal delay={0.1}>
-          <p
-            className="ed-fg mt-10 max-w-[640px] tracking-[-0.02em]"
-            style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}
-          >
-            Having a pulse on the network isn&rsquo;t a dashboard you check. It&rsquo;s knowing
-            without having to look.
-          </p>
-          <Link href="/platform/workflows" className="ed-link mt-5 inline-block text-sm" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
-            How a workflow turns that into an action
-          </Link>
-        </Reveal>
-      </Band>
-
-      {/* ── 7. Who can ask ──────────────────────────────────
-          Nested containers, one level per role. The nesting *is* the
-          argument, so at 375 the padding steps shrink but the nesting
-          never flattens. This section owns scoping; §9 must not repeat it. */}
-      <Band alt>
-        <SectionHead
-          eyebrow="Everyone"
-          title="Your franchisees can ask too. About their own locations."
-          sub={<>Not a viewer seat on a report someone built for them. The same capability, bounded by what they&rsquo;re entitled to see.</>}
-        />
-
-        <Reveal>
-          <div className="mt-10 max-w-[860px]">
-            <ScopeNest depth={0} />
+            ))}
           </div>
-        </Reveal>
 
-        <Reveal delay={0.1}>
-          <p className="ed-fg-muted mt-9 max-w-[620px] text-base leading-relaxed">
-            Nobody sees another owner&rsquo;s numbers. Not by policy, by the permissions your
-            systems already enforce.{" "}
-            <Link href="/platform/control-center" className="ed-link" style={{ color: "var(--ed-accent-text)" }}>
-              How scoping is set
-            </Link>
-            .
-          </p>
-        </Reveal>
-      </Band>
-
-      {/* ── 8. Alongside your BI ────────────────────────────
-          The concession. Six bullets and a line, no more: any longer and
-          it becomes a comparison table, which invites a feature fight.
-          Nothing here claims a capability §4-§7 has not already shown. */}
-      <Band>
-        <SectionHead
-          eyebrow="Alongside what you run"
-          title="Your BI answers the questions someone anticipated."
-        />
-
-        <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
-          <Reveal>
-            <ConcessionCard
-              label="Your BI is still right for"
-              items={[
-                "Board reporting on a fixed set of measures",
-                "Financial consolidation and audit",
-                "Anything with a defined, unchanging format",
-              ]}
-            />
-          </Reveal>
           <Reveal delay={0.1}>
-            <ConcessionCard
-              accent
-              label="This is for"
-              items={[
-                "The question that came up in the meeting",
-                "The cut nobody modeled",
-                "Everyone who was never going to get a seat",
-              ]}
-            />
+            <p className="ed-fg-muted text-[15px]">
+              <Link href="/platform/control-center" className="ed-accent-text underline-offset-2 hover:underline">
+                How scoping is set
+              </Link>{" "}
+              in the Control Center.
+            </p>
           </Reveal>
         </div>
+      </section>
 
-        <Reveal delay={0.16}>
-          <p
-            className="ed-fg mt-9 tracking-[-0.02em]"
-            style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}
-          >
-            It reads your BI too. Nothing gets replaced.
-          </p>
-        </Reveal>
-      </Band>
+      {/* ── 8. Alongside your BI ────────────────────────── */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
+          <Reveal className="flex max-w-[820px] flex-col gap-3.5">
+            <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
+              It reads your BI, and answers what your BI never anticipated.
+            </h2>
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              Your dashboards keep doing the job they were built for. This covers the questions that
+              come up between them.
+            </p>
+          </Reveal>
 
-      {/* ── 9. Control ──────────────────────────────────────
-          Light, per the brief's rhythm table. The governance *form* is
-          kept — four label/value columns over hairline rules, no cards —
-          so it still reads as a guarantee band rather than a fifth grid. */}
-      <Band alt>
-        <div className="grid grid-cols-1 gap-x-8 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
-          {CONTROL.map((c, i) => (
-            <Reveal key={c.label} delay={i * 0.08}>
-              <div style={{ borderTop: "1px solid var(--ed-border)", paddingTop: 15 }}>
-                <Meta>{c.label}</Meta>
-                <p className="ed-fg mt-2.5 text-[15px] leading-relaxed">{c.body}</p>
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <Reveal>
+              <div className="ed-card ed-border flex h-full flex-col gap-3.5 rounded-2xl border p-5 sm:p-7">
+                <span className="ed-fg text-[15px] font-semibold">Your BI is still right for</span>
+                {[
+                  "Board reporting on a fixed set of measures",
+                  "Financial consolidation and audit",
+                  "Anything with a defined, unchanging format",
+                ].map((t) => (
+                  <span key={t} className="ed-fg-muted flex gap-2.5 text-[15px] leading-[1.55]">
+                    <span aria-hidden="true">·</span>{t}
+                  </span>
+                ))}
               </div>
             </Reveal>
-          ))}
-        </div>
-        <Reveal delay={0.12}>
-          <Link href="/platform/control-center" className="ed-link mt-10 inline-block text-sm" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
-            Inside the Control Center
-          </Link>
-        </Reveal>
-      </Band>
-
-      {/* ── 10. Proof ───────────────────────────────────────
-          Placeholders render visibly rather than the section being
-          omitted. Do not substitute a deflection metric from another
-          customer: deflection is a support number and argues for Answers,
-          not for this page. */}
-      <Band>
-        <SectionHead title="What changed when the reporting stopped being a job." />
-
-        <Reveal>
-          <div className="mt-9 max-w-[820px] p-6 md:p-8" style={CARD}>
-            <div className="flex flex-wrap items-baseline justify-between gap-4">
-              {/* Deliberately not <Meta>: it force-uppercases, and the
-                  placeholder rule says render the token exactly as
-                  written. Swap in <Meta> when a real brand name lands. */}
-              <span
-                style={{
-                  fontFamily: MONO, fontSize: 10, letterSpacing: "0.13em",
-                  fontWeight: 600, color: "var(--ed-fg-muted)",
-                }}
+            <Reveal delay={0.08}>
+              <div
+                className="flex h-full flex-col gap-3.5 rounded-2xl p-5 sm:p-7"
+                style={{ background: "var(--wash)", border: "1.5px solid var(--chip-bd)" }}
               >
-                {"{{TBD:reporting-proof-brand}}"}
-              </span>
-              <span
-                style={{
-                  fontFamily: JAKARTA, fontWeight: 500, fontSize: "2.25rem", lineHeight: 1,
-                  letterSpacing: "-0.03em", color: "var(--ed-accent-text)",
-                }}
-              >
-                {"{{TBD:reporting-proof-metric}}"}
-              </span>
-            </div>
-            <blockquote
-              className="ed-fg mt-6 text-[15px] md:text-base leading-relaxed"
-              style={{ fontFamily: JAKARTA, fontWeight: 500 }}
-            >
-              &ldquo;{"{{TBD:reporting-proof-quote}}"}&rdquo;
-            </blockquote>
-            <p className="ed-fg-muted mt-5 text-sm">{"{{TBD:reporting-proof-attribution}}"}</p>
+                <span className="ed-accent-text text-[15px] font-semibold">This is for</span>
+                {[
+                  "The question that came up in the meeting",
+                  "The cut nobody modeled",
+                  "Everyone who was never going to get a seat",
+                ].map((t) => (
+                  <span key={t} className="ed-fg flex gap-2.5 text-[15px] leading-[1.55]">
+                    <span aria-hidden="true">·</span>{t}
+                  </span>
+                ))}
+              </div>
+            </Reveal>
           </div>
-        </Reveal>
-      </Band>
+        </div>
+      </section>
 
-      {/* ── 11. Related ─────────────────────────────────── */}
-      <Band alt>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+      {/* ── 9. Related ────────────────────────────────────
+          Titles are nowrap by design; three up only where the longest
+          fits on one line. */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 px-6 md:px-12 lg:px-16 pb-14 md:pb-16 min-[1200px]:grid-cols-3">
           {RELATED.map((r, i) => (
-            <Reveal key={r.href} delay={i * 0.08}>
-              <Link
-                href={r.href}
-                className="group flex h-full flex-col justify-between gap-8 p-6 transition-transform hover:-translate-y-0.5"
-                style={CARD}
-              >
-                <div>
-                  <Eyebrow accent>{r.eyebrow}</Eyebrow>
-                  <p
-                    className="ed-fg mt-3 text-[17px] tracking-[-0.02em]"
-                    style={{ fontFamily: JAKARTA, fontWeight: 500, lineHeight: 1.3 }}
-                  >
-                    {r.title}
-                  </p>
-                </div>
-                <ArrowRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                  style={{ color: "var(--ed-accent-text)" }}
-                  strokeWidth={2}
-                  aria-hidden="true"
-                />
+            <Reveal key={r.href} delay={i * 0.06}>
+              <Link href={r.href} className="ed-border ed-story-card flex h-full flex-col gap-2 rounded-2xl border px-4 py-5 sm:px-6">
+                <span className="ed-accent-text uppercase" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.14em" }}>
+                  {r.kicker}
+                </span>
+                <span className="ed-fg whitespace-nowrap text-[14.5px] font-semibold leading-[1.45]">{r.title}</span>
+                <ArrowRight className="ed-accent-text h-4 w-4" strokeWidth={2.25} aria-hidden="true" />
               </Link>
             </Reveal>
           ))}
         </div>
-      </Band>
+      </section>
 
-      {/* ── 12. CTA ─────────────────────────────────────────
-          Matches the hero's photograph, resolving to CLOSING_BASE so the
-          editorial footer continues the band with no seam. No `priority`
-          here; that belongs to the hero image only. */}
-      <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
-        <div className="absolute inset-0" aria-hidden="true">
-          <Image src={HERO.src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.closingRgba})` }} />
-          <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 45%, ${CLOSING_BASE} 100%)` }} />
-        </div>
+      {/* ── 10. Closing ───────────────────────────────────
+          Same indigo family, mirrored, resolving to the variant's own
+          bottom colour rather than the teal-navy CLOSING_BASE. */}
+      <section className="relative w-full overflow-hidden" style={{ backgroundColor: IN.base }}>
+        <div className="absolute inset-0" aria-hidden="true" style={{ background: IN.closing }} />
+        <div
+          className="absolute inset-0"
+          aria-hidden="true"
+          style={{ background: `linear-gradient(to bottom, rgba(10,16,48,0) 45%, ${IN.resolve} 100%)` }}
+        />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.85, ease: EASE }}
-          className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24"
+          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-[1.2fr_.8fr] lg:gap-16"
         >
-          <h2
-            className="leading-[1.06] tracking-[-0.03em]"
-            style={{
-              color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700,
-              fontSize: "clamp(1.5rem, 0.4rem + 2.9vw, 3rem)", maxWidth: "820px",
-            }}
-          >
-            Send us the report your team rebuilds every week.
-          </h2>
-          <p className="mt-5 max-w-[640px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
-            We&rsquo;ll show you what it looks like when nobody has to build it, and three
-            questions you&rsquo;d never have been able to ask.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
+          <div className="flex flex-col gap-4">
+            <h2
+              className="leading-[1.12] tracking-[-0.03em]"
+              style={{
+                color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700, textWrap: "pretty",
+                fontSize: "clamp(1.5rem, 0.5rem + 2.7vw, 2.625rem)",
+              }}
+            >
+              Send us the report your team{" "}
+              <span style={{ color: IN.accent }}>rebuilds every week.</span>
+            </h2>
+            <p className="max-w-[480px] text-base leading-[1.6]" style={{ color: IN.body }}>
+              We&rsquo;ll show you the same numbers with nobody assembling them, and three questions
+              you were never able to ask.
+            </p>
+          </div>
+          <div className="flex items-start justify-start self-stretch lg:items-end lg:justify-end">
+            <Link
+              href="/speak-to-an-expert"
+              className="ed-btn ed-btn-arrow inline-flex flex-none whitespace-nowrap"
+              style={{ backgroundColor: "#FFFFFF", color: CARD_INK }}
+            >
               Speak to an expert
               <span className="ed-btn-arrow-badge" aria-hidden="true">
                 <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
               </span>
             </Link>
-            <a href="#cross-system" className="ed-btn ed-btn-secondary-dark inline-flex">
-              See what it can answer
-            </a>
           </div>
         </motion.div>
       </section>
-    </>
-  );
-}
-
-/* ── §2 panels ─────────────────────────────────────────────
-   Both sit on the dark opening, so they run a translucent white surface
-   rather than --ed-card, which would be a light card on light in dark
-   mode and a white slab here. */
-
-const DARK_PANEL: React.CSSProperties = {
-  backgroundColor: "rgba(238,242,248,0.05)",
-  border: "1px solid rgba(238,242,248,0.14)",
-  borderRadius: 14,
-};
-
-function PanelHead({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="px-5 py-3.5" style={{ borderBottom: "1px solid rgba(238,242,248,0.14)" }}>
-      <span
-        className="uppercase"
-        style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.13em", fontWeight: 600, color: ON_DARK_DIM }}
-      >
-        {children}
-      </span>
-    </div>
-  );
-}
-
-/* The by-hand reporting pile. Scattered rather than gridded, the same
-   argument the homepage's version makes: a tidy grid would say the problem
-   is already solved. Tilts come from the index so the server and the
-   client agree. */
-/* Twelve, because the headline above says twelve versions. A pile of ten
-   under that line is the contradiction check in DESIGN.md §1.3 failing in
-   the least visible way. */
-const SCRAPS: { name: string; tone?: "warn" }[] = [
-  { name: "week-42-v7.xlsx" },
-  { name: "rollup-FINAL.xlsx" },
-  { name: "regional-rollup.xlsx" },
-  { name: "labour-hours.xlsx" },
-  { name: "FW: which version?", tone: "warn" },
-  { name: "Q3-numbers-v3.xlsx" },
-  { name: "P&L-chart.png" },
-  { name: "RE: RE: numbers" },
-  { name: "attach-by-store.csv" },
-  { name: "rollup-v11.xlsx" },
-  { name: "deck-v2-final.pptx" },
-  { name: "sending mine over" },
-];
-
-const TILT = [-3.2, 2.4, 3.0, -2.0, 1.8, -3.6, 2.8, -1.6, 3.4, -2.6];
-
-function ScrapPanel() {
-  return (
-    <div className="flex h-full flex-col" style={DARK_PANEL}>
-      <PanelHead>HQ · This week&rsquo;s numbers, by hand</PanelHead>
-      <div className="flex flex-wrap content-start gap-x-2 gap-y-2 p-5" aria-hidden="true">
-        {SCRAPS.map((s, i) => (
-          <span
-            key={s.name}
-            className="inline-flex items-center px-2.5 py-[7px]"
-            style={{
-              fontFamily: MONO,
-              fontSize: 11,
-              lineHeight: 1.25,
-              borderRadius: 8,
-              transform: `rotate(${TILT[i % TILT.length]}deg)`,
-              backgroundColor: s.tone === "warn" ? "rgba(245,178,107,0.14)" : "rgba(238,242,248,0.08)",
-              border: `1px solid ${s.tone === "warn" ? "rgba(245,178,107,0.38)" : "rgba(238,242,248,0.16)"}`,
-              color: s.tone === "warn" ? WARN_ON_DARK : ON_DARK,
-            }}
-          >
-            {s.name}
-          </span>
-        ))}
-      </div>
-      <p className="mt-auto px-5 pb-5 text-[13px]" style={{ color: ON_DARK_DIM }}>
-        Nobody is sure which one is current.
-      </p>
-    </div>
-  );
-}
-
-const PREP: { time: string; task: string }[] = [
-  { time: "7:40am", task: "Pull six weeks of bookings" },
-  { time: "7:55am", task: "Pull labour against target" },
-  { time: "8:10am", task: "Attach rate vs territory" },
-  { time: "8:25am", task: "Check open compliance items" },
-  { time: "8:40am", task: "Build the deck" },
-];
-
-function PrepPanel() {
-  return (
-    <div className="flex h-full flex-col" style={DARK_PANEL}>
-      <PanelHead>One coach · Before one call</PanelHead>
-      <div className="flex flex-col px-5 py-2">
-        {PREP.map((p) => (
-          <div key={p.time} className="flex items-baseline gap-4 py-[9px]">
-            <span
-              className="flex-none"
-              style={{ fontFamily: MONO, fontSize: 11.5, color: ON_DARK_DIM, width: 58, fontVariantNumeric: "tabular-nums" }}
-            >
-              {p.time}
-            </span>
-            <span className="text-[14px] leading-snug" style={{ color: ON_DARK }}>{p.task}</span>
-          </div>
-        ))}
-        {/* The 2px rule sets the last row apart as the conclusion: every
-            line above it was spent getting to this one. */}
-        <div className="mt-2 flex items-baseline gap-4 pt-3" style={{ borderTop: "2px solid rgba(238,242,248,0.22)" }}>
-          <span
-            className="flex-none"
-            style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: WARN_ON_DARK, width: 58, fontVariantNumeric: "tabular-nums" }}
-          >
-            9:00am
-          </span>
-          <span className="text-[14px] leading-snug" style={{ color: "#FFFFFF", fontWeight: 600 }}>Call starts</span>
-        </div>
-      </div>
-      <p className="mt-auto px-5 pb-5 pt-4 text-[13px]" style={{ color: ON_DARK_DIM }}>
-        Thirty locations. Every month.
-      </p>
-    </div>
-  );
-}
-
-/* ── §4 sub-cards ──────────────────────────────────────────
-   Bordered panels inside the one card, on the nested surface so they read
-   as contained rather than as four cards that happen to be adjacent. */
-
-function SubCard({ ask, children }: { ask: string; children: React.ReactNode }) {
-  return (
-    <div
-      className="flex flex-col p-4 md:p-5"
-      style={{ backgroundColor: "var(--ed-card-alt)", border: "1px solid var(--ed-border)", borderRadius: 12 }}
-    >
-      <p className="text-[13.5px] leading-snug" style={{ color: "var(--ed-accent-text)", fontWeight: 600 }}>
-        &ldquo;{ask}&rdquo;
-      </p>
-      <div className="mt-4">{children}</div>
-    </div>
-  );
-}
-
-const RANK = [
-  { label: "#118", pct: 34, lead: true },
-  { label: "#052", pct: 31, lead: true },
-  { label: "#204", pct: 28, lead: true },
-  { label: "#331", pct: 19, lead: false },
-  { label: "#087", pct: 14, lead: false },
-];
-
-function RankBars() {
-  const max = Math.max(...RANK.map((r) => r.pct));
-  return (
-    <div className="flex flex-col gap-2" role="img" aria-label="Five locations ranked by attach rate, from 34 percent down to 14 percent.">
-      {RANK.map((r) => (
-        <div key={r.label} className="flex items-center gap-2.5">
-          <span className="flex-none ed-fg-muted" style={{ fontFamily: MONO, fontSize: 10.5, width: 30, fontVariantNumeric: "tabular-nums" }}>
-            {r.label}
-          </span>
-          <span className="h-[8px] flex-1 overflow-hidden rounded-full" style={{ backgroundColor: "var(--ed-border)" }}>
-            <span
-              className="block h-full rounded-full"
-              style={{ width: `${(r.pct / max) * 100}%`, backgroundColor: r.lead ? "var(--ed-accent-text)" : "var(--ed-fg-muted)", opacity: r.lead ? 1 : 0.45 }}
-            />
-          </span>
-          <span
-            className="flex-none text-right"
-            style={{ fontFamily: MONO, fontSize: 10.5, width: 26, color: r.lead ? "var(--ed-accent-text)" : "var(--ed-fg-muted)", fontVariantNumeric: "tabular-nums" }}
-          >
-            {r.pct}%
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function TrendMini() {
-  const pts = [18, 21, 20, 25, 27, 31];
-  const median = 23;
-  const W = 100, H = 42;
-  const lo = 14, hi = 35;
-  const x = (i: number) => (i / (pts.length - 1)) * W;
-  const y = (v: number) => H - ((v - lo) / (hi - lo)) * H;
-  const d = pts.map((v, i) => `${i === 0 ? "M" : "L"}${x(i).toFixed(2)} ${y(v).toFixed(2)}`).join(" ");
-  return (
-    <div>
-      <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" className="h-[86px] w-full" role="img" aria-labelledby="rnd-trend-t rnd-trend-d">
-        <title id="rnd-trend-t">The same attach rate as a trend</title>
-        <desc id="rnd-trend-d">Six weeks rising from 18 to 31 percent against a median of 23 percent.</desc>
-        <line x1="0" y1={y(median)} x2={W} y2={y(median)} stroke="var(--ed-fg-muted)" strokeWidth="0.8" strokeDasharray="3 2.5" opacity="0.5" vectorEffect="non-scaling-stroke" />
-        <path d={d} fill="none" stroke="var(--ed-accent-text)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-      </svg>
-      <div className="mt-2 flex items-center justify-between">
-        <span className="ed-fg-muted" style={{ fontFamily: MONO, fontSize: 10.5 }}>6 weeks</span>
-        <span className="ed-fg-muted" style={{ fontFamily: MONO, fontSize: 10.5 }}>median {median}%</span>
-      </div>
-    </div>
-  );
-}
-
-const BEHIND: { label: string; delta: string; tone: "danger" | "warn" }[] = [
-  { label: "Store #331", delta: "-18%", tone: "danger" },
-  { label: "Store #087", delta: "-12%", tone: "danger" },
-  { label: "Store #219", delta: "-9%",  tone: "warn" },
-];
-
-function BehindRows() {
-  return (
-    <div>
-      {BEHIND.map((r) => {
-        const c = r.tone === "danger" ? "#B42318" : "#B45309";
-        const tint = r.tone === "danger" ? "rgba(180,35,24,0.07)" : "rgba(180,83,9,0.08)";
-        return (
-          <div
-            key={r.label}
-            className="mb-1.5 flex items-center justify-between rounded-md px-2.5 py-2 last:mb-0"
-            style={{ backgroundColor: tint, border: `1px solid ${c}22` }}
-          >
-            <span className="ed-fg" style={{ fontFamily: MONO, fontSize: 11.5, fontVariantNumeric: "tabular-nums" }}>
-              {r.label}
-            </span>
-            <span style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: c, fontVariantNumeric: "tabular-nums" }}>
-              {r.delta}
-            </span>
-          </div>
-        );
-      })}
-      <p className="ed-fg-muted mt-3 text-[12px]">3 of 12</p>
-    </div>
-  );
-}
-
-function DeliveryCard() {
-  return (
-    <div className="rounded-md p-3.5" style={{ backgroundColor: "var(--ed-card)", border: "1px solid var(--ed-border)" }}>
-      <Meta>Teams · Mon 7:00am</Meta>
-      <p className="ed-fg mt-2.5 text-[13.5px] leading-relaxed">
-        Twelve locations ranked by attach rate. Three behind plan.
-      </p>
-      <div className="mt-3.5 flex items-center gap-2 pt-3" style={{ borderTop: "1px solid var(--ed-rule)" }}>
-        <span
-          className="inline-flex items-center rounded px-1.5 py-0.5"
-          style={{ fontSize: 11, fontWeight: 600, color: "var(--ed-accent-text)", backgroundColor: ACCENT_TINT, border: "1px solid rgba(0,119,168,0.22)" }}
-        >
-          Scheduled
-        </span>
-        <span className="ed-fg-muted text-[12px]">no setup</span>
-      </div>
-    </div>
-  );
-}
-
-/* ── §7 nesting ────────────────────────────────────────────
-   Recursive so the levels cannot drift out of step. Padding and tint step
-   with depth; at 375 the steps get tighter but the nesting is never
-   flattened, because the containment is the point. */
-function ScopeNest({ depth }: { depth: number }) {
-  const s = SCOPES[depth];
-  if (!s) return null;
-  const inner = depth > 0;
-  return (
-    <div
-      className={inner ? "p-3 md:p-4" : "p-4 md:p-5"}
-      style={{
-        borderRadius: 12 - depth,
-        border: `1px solid ${depth === 0 ? "var(--ed-border)" : "var(--ed-rule)"}`,
-        backgroundColor: `rgba(10,10,10,${0.015 * (depth + 1)})`,
-      }}
-    >
-      <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6">
-        <p className="ed-fg flex-none text-[15px]" style={{ fontWeight: 600, letterSpacing: "-0.01em" }}>
-          {s.role}
-        </p>
-        <p className="ed-fg-muted text-[14px] leading-relaxed sm:text-right">{s.scope}</p>
-      </div>
-      {depth < SCOPES.length - 1 && (
-        <div className="mt-3">
-          <ScopeNest depth={depth + 1} />
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* ── §8 concession ─────────────────────────────────────── */
-function ConcessionCard({ label, items, accent = false }: {
-  label: string;
-  items: string[];
-  accent?: boolean;
-}) {
-  return (
-    <div
-      className="flex h-full flex-col p-6 md:p-7"
-      style={{
-        ...CARD,
-        ...(accent
-          ? { borderLeft: "3px solid #0077A8", backgroundColor: ACCENT_TINT }
-          : {}),
-      }}
-    >
-      <Meta color={accent ? "var(--ed-accent-text)" : undefined}>{label}</Meta>
-      <ul className="mt-5 flex flex-col gap-3.5">
-        {items.map((it) => (
-          <li key={it} className="flex gap-3">
-            <span
-              aria-hidden="true"
-              className="mt-[9px] h-[5px] w-[5px] flex-none rounded-full"
-              style={{ backgroundColor: accent ? "var(--ed-accent-text)" : "var(--ed-fg-muted)" }}
-            />
-            <span className="ed-fg text-[14.5px] leading-relaxed">{it}</span>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

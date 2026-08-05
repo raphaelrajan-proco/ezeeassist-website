@@ -129,6 +129,18 @@ export type HeroGradient = {
   accent: string;
   /** Body copy on this band. */
   body: string;
+  /**
+   * Colour the closing band resolves to at its bottom edge.
+   *
+   * Only `/` and `/speak-to-an-expert` carry the dark editorial footer,
+   * so on a sub-page this is the bottom of the band rather than a colour
+   * that has to match what follows. It should stay inside the variant's
+   * own hue family: dropping an indigo band onto the teal-navy
+   * CLOSING_BASE reads as a hue shift right at the fold.
+   *
+   * Omit to use CLOSING_BASE.
+   */
+  resolve?: string;
 };
 
 export const HERO_GRADIENT = {
@@ -159,6 +171,21 @@ export const HERO_GRADIENT = {
       "linear-gradient(285deg, #062E44 0%, #0A4A6E 58%, #0E6D96 100%)",
     accent: "#7FE0FF",
     body: "rgba(238,249,255,0.92)",
+  },
+  /** Reporting. Violet-leaning and the darkest of the three, which suits
+      a page whose hero artwork is a console rather than a diagram: the
+      white card has to sit forward of the band. */
+  indigo: {
+    base: "#242A5E",
+    hero:
+      "radial-gradient(1000px 520px at 76% 128%, rgba(169,182,255,0.26), transparent 62%)," +
+      "linear-gradient(158deg, #15183C 0%, #242A5E 55%, #3D4A9E 100%)",
+    closing:
+      "radial-gradient(900px 460px at 24% 128%, rgba(169,182,255,0.22), transparent 60%)," +
+      "linear-gradient(285deg, #15183C 0%, #242A5E 55%, #3D4A9E 100%)",
+    accent: "#A9B6FF",
+    body: "rgba(238,241,255,0.92)",
+    resolve: "#0A1030",
   },
 } as const satisfies Record<string, HeroGradient>;
 

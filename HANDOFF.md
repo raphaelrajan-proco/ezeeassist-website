@@ -1966,70 +1966,67 @@ untouched, and that is the only homepage change in this work.
 
 ## /platform/reporting
 
-Twelve sections, built from the reporting brief. Two things are
-load-bearing and must survive a copy pass.
+Rebuilt from a supplied design handoff, replacing the twelve-section
+version this entry used to describe. Ten sections now: hero, what it
+costs now, inputs, ask anything, across systems, always on, scoping,
+alongside your BI, related, closing.
 
-**The band sequence is the spec, not styling:** dark, dark, light, light,
-dark, light, light, light, light, light, light, dark. The other Platform
-pages run white card grid into white card grid and read as monotonous;
-this one alternates deliberately. **§3, §6 and §7 use no cards at all** —
-a spectrum bar and plain text, a timeline spine, and four nested
-containers. Convert any of them to a card grid and the rhythm is gone.
-Verified on the built page in that exact order.
+**This page moved off the photographic hero set onto a gradient.** The
+handoff specifies indigo `#242A5E`, now `HERO_GRADIENT.indigo` with its
+own base, gradients, accent and bottom resolve. Reporting was carrying
+`hero-bg-indigo.jpg` from the platform variant map and was removed from
+it. `lib/data/platform-heroes.ts` records how to put it back: re-add
+`reporting: "indigo"` and point the hero at `platformHero("reporting")`.
 
-**No two adjacent sections share a layout device.** §4 is one card
-holding four sub-cards, not four cards, because its header says "one
-dataset" and four separate cards would argue four datasets.
+`HeroGradient` gained an optional **`resolve`**. Only `/` and
+`/speak-to-an-expert` carry the dark editorial footer, so on a sub-page
+the closing band's bottom colour is the end of the band rather than a
+seam-matcher. It should stay in the variant's own family: indigo
+resolving to the teal-navy `CLOSING_BASE` reads as a hue shift at the
+fold, so it resolves to `#0A1030` instead. Azure and ocean omit the field
+and still take `CLOSING_BASE`.
 
-Three deliberate deviations, all noted at the top of `ReportingContent.tsx`:
+Deleted deliberately, do not reintroduce: every mono eyebrow above a
+section heading (the hero keeps its one), the
+`SOURCED / LIVE / LOGGED / EXPORTABLE` governance strip, and the
+`{{TBD:reporting-proof-*}}` placeholder quote. Four copy lines were
+retired for breaking the house rules: "The report isn't faster. It
+doesn't get built.", "You stop checking. It tells you.", "Not a viewer
+seat on a report someone built for them.", and "It reads your BI too.
+Nothing gets replaced."
 
-1. **The hero is photographic on `HERO_BG.haze2`**, not the flat gradient
-   the brief describes. Requested directly. Scrim is `SCRIM.heroSubPage`
-   (0.45), not the variant's own 0.36: that baseline was measured for
-   white body copy alone and this band also carries a mono query bar and
-   a 10.5px caption.
-2. **§9 is light.** The brief contradicts itself — its rhythm table and
-   its verify step both say LIGHT, its section body says reuse the
-   governance band, which is dark. The rhythm table wins because the
-   brief names it as the spec twice. The four-column label/value *form*
-   is kept per DESIGN.md §1.1; only the surface changed, so
-   `GovernanceBand` is untouched.
-3. **Three dark moments where DESIGN.md §4.1 allows two**, and the first
-   two adjacent. That is the brief's rhythm. §2 carries no photograph and
-   no second scrim, so the opening reads as one extended dark region
-   rather than two bands.
+**The zigzag haze format appears once, in Always on.** Its whole value is
+that it is not the page's default layout. Three rows alternate at `lg`;
+below that every row stacks copy above panel, including the two whose
+panel sits left at desktop. The product cards inside the hazes **stay
+white with dark ink in both themes**: they are screenshots of a
+light-themed product, and only the haze gradients swap.
 
-**`OverlapChart`'s widths are the argument and must not be normalised.**
-Most locations have capacity, most have a lapsed list, only a few have
-both. The "Both" bar arriving visibly shorter than the two above it is
-the whole section. Measured on the built page: 107 vs 243/180, 73 vs
-222/152, 59 vs 201/163, 28 vs 146/125. Card 4 is amber because it is the
-one diagnostic question among three opportunities.
+**Page palettes were refactored when this page landed.** The semantic
+four (`--ok`/`--warn`/`--bad`/`--purple`) and the chip pair are now
+shared between `.ed-answers` and `.ed-reporting`, because they mean the
+same thing on both. The washes are not shared: each page tunes them to
+its own hero hue, so Answers reads blue-grey and Reporting violet-grey.
+Reporting adds `--track` (the unfilled part of every bar, which has to
+read as absent rather than as another value) and the three hazes.
 
-**`LiveQueryBar` holds the previous answer while the next question
-types.** The brief's beat is "clear, next state", which read literally
-leaves a 168px box empty for ~2.5s of every ~5.5s cycle — half the loop
-showing nothing, which reads as broken. The outgoing render stays at 34%
-opacity instead. First paint is state 1 complete, which also gives the
-reduced-motion case for free: with the effect disabled, what is on
-screen is already the static state the brief asks for.
+**The scoping rows' accent rule is a mobile substitute, not a desktop
+feature.** At `md` and up the stepped indent (0/44/88/132px) carries the
+nesting and the left border drops back to a hairline. Below `md` the
+indents go and a 3px tinted rule takes over, so the hierarchy never rests
+on indent alone on a phone. The rule is written as
+`.theme-editorial .ed-scope-row` because the `.ed-border` utility also
+sets `border-color` and out-specifies a bare class.
 
-The three renders are a discriminated union, not one chart with a data
-prop, **because the shapes must differ** — bars, then a line, then
-exception rows. Three bar charts would prove nothing.
+Icons are a table, not JSX: `data.ts` stores each as the prototype's
+space-separated subpath string and `Glyph` splits it back apart.
+`LiveQueryBar.tsx` and `OverlapChart.tsx` were deleted with the old page.
 
-`{{TBD:}}` tokens, four, all in §10 and all needing a real customer:
-`reporting-proof-brand`, `-metric`, `-quote`, `-attribution`. **Do not
-substitute a deflection metric** — deflection is a support number and
-argues for the Answers page. The brand token deliberately does not use
-`<Meta>`, which force-uppercases and would render the token as
-`{{TBD:REPORTING-PROOF-BRAND}}`.
-
-Stub created: `/platform/control-center`, `noindex`, `ComingSoon`. §7,
-§9 and the related block all link to it. **The nav still points Control
-Center at `/#trust`** — the brief authorised the stub but forbade
-restructuring the nav, so the two disagree on purpose. Repoint the nav
-when that page is real.
+Verified on the built page at 1440/1280/1205/1024/768/375 in both themes:
+no horizontal overflow, no text under 12px, one h1, eight h2s and three
+h3s, zero em-dashes, no banned words, none of the four retired lines
+present, scoping indents measured at 0/44/88/132, no `#00AEEF` used as
+text, and the hero caret freezes solid under `prefers-reduced-motion`.
 
 ## Platform pages (branch `platform-pages`)
 

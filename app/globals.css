@@ -246,35 +246,84 @@
   .ed-orbit { animation: none; }
 }
 
-/* ─── Answers page tokens ──────────────────────────────────
-   Scoped to .ed-answers rather than the root, the same arrangement
-   .ed-problem and .ed-showcase use: these are one page's palette, not
-   site tokens, and --ok/--warn/--bad/--purple are names generic enough
-   to collide with anything added later.
+/* ─── Page-scoped palettes ─────────────────────────────────
+   Scoped to a page class rather than the root, the same arrangement
+   .ed-problem and .ed-showcase use. `--ok`/`--warn`/`--bad`/`--purple`
+   are names generic enough to collide with anything added later, and the
+   washes are one page's panel treatment, not a site token.
 
-   The two washes are what carry the page's artifacts. Every panel on it
-   sits on one of them, so the artifacts read as a set against the plain
-   card surfaces around them. */
-.theme-editorial .ed-answers {
-  --wash:   linear-gradient(150deg, #EAF3FB 0%, #DDEAF8 55%, #E7EFF9 100%);
-  --wash2:  linear-gradient(150deg, #E8F1F8 0%, #F1F5FA 60%, #DFEBF7 100%);
-  --ok:     #0D7C58;
-  --warn:   #B45309;
-  --bad:    #B42318;
-  --purple: #7C3AED;
+   The semantic four and the chip pair are shared, because they mean the
+   same thing everywhere they appear. The washes are not: each page tunes
+   them to its own hero hue, so Answers reads blue-grey and Reporting
+   reads violet-grey. */
+.theme-editorial .ed-answers,
+.theme-editorial .ed-reporting {
+  --ok:      #0D7C58;
+  --warn:    #B45309;
+  --bad:     #B42318;
+  --purple:  #7C3AED;
   --chip-bg: rgba(0, 119, 168, 0.06);
   --chip-bd: rgba(0, 119, 168, 0.22);
 }
 .dark .theme-editorial .ed-answers,
-.theme-editorial.dark .ed-answers {
-  --wash:   linear-gradient(150deg, #0D1B2E 0%, #101F35 55%, #0C1626 100%);
-  --wash2:  linear-gradient(150deg, #0E1A28 0%, #121D2E 60%, #0C1522 100%);
-  --ok:     #34D399;
-  --warn:   #FBBF24;
-  --bad:    #F97066;
-  --purple: #A78BFA;
+.dark .theme-editorial .ed-reporting,
+.theme-editorial.dark .ed-answers,
+.theme-editorial.dark .ed-reporting {
+  --ok:      #34D399;
+  --warn:    #FBBF24;
+  --bad:     #F97066;
+  --purple:  #A78BFA;
   --chip-bg: rgba(0, 174, 239, 0.08);
   --chip-bd: rgba(0, 174, 239, 0.30);
+}
+
+.theme-editorial .ed-answers {
+  --wash:  linear-gradient(150deg, #EAF3FB 0%, #DDEAF8 55%, #E7EFF9 100%);
+  --wash2: linear-gradient(150deg, #E8F1F8 0%, #F1F5FA 60%, #DFEBF7 100%);
+}
+.dark .theme-editorial .ed-answers,
+.theme-editorial.dark .ed-answers {
+  --wash:  linear-gradient(150deg, #0D1B2E 0%, #101F35 55%, #0C1626 100%);
+  --wash2: linear-gradient(150deg, #0E1A28 0%, #121D2E 60%, #0C1522 100%);
+}
+
+/* Reporting. `--track` is the unfilled part of every bar on the page,
+   which needs to read as absent rather than as another value. The three
+   hazes back the Always on panels and appear nowhere else. */
+.theme-editorial .ed-reporting {
+  --wash:  linear-gradient(150deg, #EDF0FB 0%, #E1E7F8 55%, #EAEEF9 100%);
+  --wash2: linear-gradient(150deg, #E9EFF8 0%, #F2F5FA 60%, #E2EBF7 100%);
+  --track: #E7E9EF;
+  --haze-a: linear-gradient(180deg, #8E9BE8 0%, #B9A6DE 34%, #E8B6C8 62%, #7FC9C2 100%);
+  --haze-b: linear-gradient(180deg, #7FA8E0 0%, #A9A4E4 36%, #DDB4C6 66%, #8FCBBE 100%);
+  --haze-c: linear-gradient(180deg, #9DA9EC 0%, #C6AEE0 40%, #EFC0CE 70%, #93CFC6 100%);
+}
+.dark .theme-editorial .ed-reporting,
+.theme-editorial.dark .ed-reporting {
+  --wash:  linear-gradient(150deg, #12162C 0%, #141A33 55%, #0E1224 100%);
+  --wash2: linear-gradient(150deg, #0E1A28 0%, #121D2E 60%, #0C1522 100%);
+  --track: #26262B;
+  --haze-a: linear-gradient(180deg, #3B4590 0%, #5A4C8E 34%, #8A5C74 62%, #3F726C 100%);
+  --haze-b: linear-gradient(180deg, #2F4E88 0%, #4E4A8C 36%, #7E5A6C 66%, #43706A 100%);
+  --haze-c: linear-gradient(180deg, #414C92 0%, #664F86 40%, #8D6072 70%, #437069 100%);
+}
+
+/* ─── Reporting scoping rows ───────────────────────────────
+   The stepped indent is what carries the nesting, so it only applies
+   where there is room for it. Below md the rows sit flush and the left
+   accent rule plus the bold role label carry the hierarchy instead,
+   which keeps it off indent alone on a phone. */
+/* Scoped under .theme-editorial so it outranks the .ed-border utility,
+   which also sets border-color and would otherwise grey the rule out. */
+.theme-editorial .ed-scope-row {
+  border-left: 3px solid var(--rule);
+}
+@media (min-width: 768px) {
+  .theme-editorial .ed-scope-row {
+    margin-left: var(--indent, 0);
+    border-left-width: 1px;
+    border-left-color: var(--ed-border);
+  }
 }
 
 /* ─── Story cards ──────────────────────────────────────────

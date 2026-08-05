@@ -25,7 +25,6 @@ import { HERO_BG, SCRIM, type HeroBackgroundKey } from "@/lib/data/hero-backgrou
  * Nav order and assignment:
  *
  *   On demand    Answers          teal
- *                Reporting        indigo
  *                Apps             sunset   (once)
  *   Always on    Workflows        forest
  *                Compliance       teal
@@ -34,15 +33,18 @@ import { HERO_BG, SCRIM, type HeroBackgroundKey } from "@/lib/data/hero-backgrou
  *                Control Center   indigo
  *
  * The gradient-hero pages are **not** in here and must not be added.
- * Trust Center, Why EZee and Case Studies carry their own specified
- * blues from their own handoffs, and those are not photographic.
+ * Trust Center, Why EZee, Case Studies and **Reporting** carry their own
+ * specified blues from their own handoffs, and those are not
+ * photographic. Reporting was in this map and moved out when its rebuild
+ * specified the indigo gradient; to put it back on the photographic
+ * indigo, re-add `reporting: "indigo"` here and have its hero read
+ * `platformHero("reporting")` again.
  */
 
 export const VARIANT_HEROES = true;
 
 export type PlatformPage =
   | "answers"
-  | "reporting"
   | "apps"
   | "workflows"
   | "compliance"
@@ -52,7 +54,6 @@ export type PlatformPage =
 
 const ASSIGNED: Record<PlatformPage, HeroBackgroundKey> = {
   answers: "teal",
-  reporting: "indigo",
   apps: "sunset",
   workflows: "forest",
   compliance: "teal",
@@ -65,7 +66,6 @@ const ASSIGNED: Record<PlatformPage, HeroBackgroundKey> = {
     revert rather than an approximation. */
 const PREVIOUS: Record<PlatformPage, HeroBackgroundKey> = {
   answers: "haze3",
-  reporting: "haze2",
   apps: "haze2",
   workflows: "haze2",
   compliance: "haze2",
