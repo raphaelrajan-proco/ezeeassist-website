@@ -229,6 +229,23 @@
   .ed-caret { animation: none; opacity: 1; }
 }
 
+/* Orbiting dots on the Trust Center's shield mark. Duration and
+   direction come from the element, so one keyframe serves both rings.
+   Holds still under reduced motion, which leaves the dots at their
+   authored positions rather than hiding them. */
+@keyframes ed-orbit {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.ed-orbit {
+  animation-name: ed-orbit;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ed-orbit { animation: none; }
+}
+
 /* Editorial buttons (additive — used only inside theme-editorial scope) */
 .theme-editorial .ed-btn {
   display: inline-flex;
