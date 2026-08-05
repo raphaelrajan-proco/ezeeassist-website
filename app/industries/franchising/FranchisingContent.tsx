@@ -108,7 +108,7 @@ export default function FranchisingContent() {
                 icon: Building,
                 label: "For Franchisors & Brand Teams",
                 desc: "Reduce support burden, maintain brand consistency, and scale your support operations as you grow — without growing your team.",
-                href: "/industries/franchising/franchisors",
+                href: "/solutions/leadership",
                 linkLabel: "See the franchisor solution",
               },
               {

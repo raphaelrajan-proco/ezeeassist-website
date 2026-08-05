@@ -30,6 +30,8 @@ const nextConfig: NextConfig = {
       { source: "/solution/integrations",  destination: "/platform/integrations",  permanent: true },
       { source: "/solution/ticketing",     destination: "/platform/ticketing",     permanent: true },
       { source: "/platform/automations",   destination: "/platform/workflows",     permanent: true },
+      /* The HQ team page became /solutions/leadership. */
+      { source: "/industries/franchising/franchisors", destination: "/solutions/leadership", permanent: true },
       /* /solution/agents was a second mount of the legacy workflows
          content and went with it. Both legacy twins now point forward at
          the rebuilt page rather than at each other. */

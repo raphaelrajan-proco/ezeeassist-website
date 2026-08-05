@@ -169,7 +169,7 @@ const RELATED: { eyebrow: string; title: string; href: string }[] = [
   {
     eyebrow: "Franchisor / HQ",
     title: "What your leadership sees",
-    href: "/industries/franchising/franchisors",
+    href: "/solutions/leadership",
   },
   {
     eyebrow: "Franchisees",

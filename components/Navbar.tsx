@@ -88,7 +88,7 @@ const solutionsGroups: NavGroup[] = [
   {
     heading: "By role",
     items: [
-      { label: "HQ team",     href: "/industries/franchising/franchisors",            desc: "Publish the standard, then watch it hold." },
+      { label: "HQ Leadership", href: "/solutions/leadership",                        desc: "See the network, support every owner, without adding headcount." },
       { label: "Coaches",     href: "/solutions/coaches",                             desc: "Walk into every call already prepared." },
       { label: "Franchisees", href: "/industries/franchising/multi-unit-franchisees", desc: "Answers and tools at the hour you work.", hidden: true },
     ],

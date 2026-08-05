@@ -36,7 +36,7 @@ const routes: Route[] = [
   // ── Tier 2: Industries ────────────────────────────────────
   { url: "/industries",                                     priority: 0.9,  changeFrequency: "monthly" },
   { url: "/industries/franchising",                         priority: 0.9,  changeFrequency: "monthly" },
-  { url: "/industries/franchising/franchisors",             priority: 0.85, changeFrequency: "monthly" },
+  { url: "/solutions/leadership",                           priority: 0.85, changeFrequency: "monthly" },
   { url: "/industries/franchising/multi-unit-franchisees",  priority: 0.80, changeFrequency: "monthly" },
   { url: "/industries/multi-location",                      priority: 0.80, changeFrequency: "monthly" },
   { url: "/industries/universities",                        priority: 0.75, changeFrequency: "monthly" },
