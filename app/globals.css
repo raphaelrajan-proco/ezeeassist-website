@@ -246,6 +246,65 @@
   .ed-orbit { animation: none; }
 }
 
+/* ─── Inline dual-theme tints ──────────────────────────────
+   A card whose colour is data, not a token: the component passes a light
+   triple and a dark triple, and the theme picks. Used by the "tools that
+   failed" grid, where the four colours are the DESIGN.md semantic
+   families borrowed decoratively. */
+.theme-editorial .ed-tint {
+  background-color: var(--t-bg);
+  border: 1px solid var(--t-bd);
+}
+.theme-editorial .ed-tint-fg { color: var(--t-fg); }
+.dark .theme-editorial .ed-tint,
+.theme-editorial.dark .ed-tint {
+  background-color: var(--t-bg-d);
+  border-color: var(--t-bd-d);
+}
+.dark .theme-editorial .ed-tint-fg,
+.theme-editorial.dark .ed-tint-fg { color: var(--t-fg-d); }
+
+/* Warn mark. #B45309 is unreadable on the dark surface, so the dark
+   theme takes the amber from the same family. */
+.theme-editorial .ed-mark-warn { color: #B45309; }
+.dark .theme-editorial .ed-mark-warn,
+.theme-editorial.dark .ed-mark-warn { color: #FBBF24; }
+
+/* ─── Hairline quadrant ────────────────────────────────────
+   Four cells separated by a cross rather than four boxes. Stacked, the
+   cross degrades to one rule between rows, which is what the layout
+   actually means at one column. */
+.ed-quad > * {
+  border-top: 1px solid var(--ed-border);
+  padding: 26px 0;
+}
+.ed-quad > *:first-child { border-top: 0; }
+@media (min-width: 768px) {
+  .ed-quad > * { padding: 36px 0; }
+  .ed-quad > *:nth-child(2n+1) { border-right: 1px solid var(--ed-border); padding-right: 48px; }
+  .ed-quad > *:nth-child(2n)   { padding-left: 48px; }
+  .ed-quad > *:nth-child(-n+2) { border-top: 0; }
+}
+
+/* Value-row icons on the Why EZee page. Each is a small, slow loop that
+   gives the row a pulse without asking to be watched. All freeze under
+   reduced motion, leaving the icon at its authored position. */
+@keyframes ed-v-pulse { 0%, 100% { transform: scale(1); }        50% { transform: scale(1.1); } }
+@keyframes ed-v-tilt  { 0%, 100% { transform: rotate(-7deg); }   50% { transform: rotate(7deg); } }
+@keyframes ed-v-bob   { 0%, 100% { transform: translateY(0); }   50% { transform: translateY(-3px); } }
+@keyframes ed-v-dot   { 0%, 60%, 100% { opacity: 0.25; }         30% { opacity: 1; } }
+@keyframes ed-v-chev  { 0%, 100% { transform: translateX(0); opacity: 0.5; } 50% { transform: translateX(4px); opacity: 1; } }
+
+.ed-v-pulse { animation: ed-v-pulse 3.2s ease-in-out infinite; }
+.ed-v-tilt  { animation: ed-v-tilt  3.6s ease-in-out infinite; }
+.ed-v-bob   { animation: ed-v-bob   3.4s ease-in-out infinite; }
+.ed-v-dot   { animation: ed-v-dot   1.6s linear infinite; }
+.ed-v-chev  { animation: ed-v-chev  1.8s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ed-v-pulse, .ed-v-tilt, .ed-v-bob, .ed-v-dot, .ed-v-chev { animation: none; }
+}
+
 /* Editorial buttons (additive — used only inside theme-editorial scope) */
 .theme-editorial .ed-btn {
   display: inline-flex;

@@ -1337,6 +1337,76 @@ emphasis on dark where the 5% tint nearly vanishes; the hero CTA scrolls to
 `enableSystem={false}`, so emulating `prefers-color-scheme` does nothing. Set
 `localStorage.theme = 'dark'` and reload instead.
 
+## /why-ezeeassist
+
+Rebuilt from a supplied design handoff. Eight sections, each a different
+form, in this order: azure hero + constellation, white split narrative,
+alt hairline quadrant, white trio, alt comparison table, dark investor
+strip, white value rows, azure close. Surfaces measured at 1205:
+`#0C4A8C` / white / `#F4F4F5` / white / `#F4F4F5` / `#0B1220` / white /
+`#0C4A8C`. No form repeats adjacently.
+
+**The hero blue is deliberately not the homepage's, and normalising it is
+the one thing this handoff explicitly forbids.** It ships as
+`HERO_GRADIENT.azure` in `lib/data/hero-backgrounds.ts`, a second registry
+next to `HERO_BG` for heroes built from gradients rather than photographs.
+It carries its own `base` (`#0C4A8C`), its own `hero` and `closing`
+gradient stacks, its own `accent` (`#9FD9FF`) and its own body colour, so
+nothing is inherited from the photographic variants. `hero` and `closing`
+differ only in the direction of the linear pass and the position of the
+radial, which makes the two bands read as a pair rather than a repeat.
+**Each sub-page is supposed to have its own hero blue.** If a future page
+looks like it should reuse `default`, check the brief first.
+
+**Three CSS mechanisms were added to globals for this page** and are
+reusable:
+- `.ed-tint` / `.ed-tint-fg` — a card whose colour is data. The component
+  passes a light triple and a dark triple as `--t-bg/-bd/-fg` and
+  `--t-bg-d/-bd-d/-fg-d`, and the theme picks. Used by the four "tools
+  that failed" cards, which borrow the DESIGN.md semantic families
+  decoratively. They are deliberately not blue, so the failed tools read
+  apart from the EZee sections.
+- `.ed-mark-warn` — `#B45309` light, `#FBBF24` dark. The `◐` mark is
+  unreadable at `#B45309` on `#0A0A0A`.
+- `.ed-quad` — the four-decisions cross. Borders, padding and the
+  two-column rule all live in the class so the stacked case degrades to
+  one rule per row, which is what one column actually means. Measured at
+  1205: cells 1 and 3 carry `border-right`, cells 3 and 4 carry
+  `border-top`. Do not put the rules back on the cells inline; `Reveal`
+  wraps each one and the border would land on the wrong element.
+
+**The five value icons and the hero constellation are copied verbatim from
+the prototype**, coordinates and stroke widths included. Icon 2's hexagon
+is smaller than the others by design. The loops
+(`ed-v-pulse/tilt/bob/dot/chev`) are named for the prototype's
+`vPulse`/`vTilt`/`vBob`/`vDot`/`vChev` and all freeze under
+`prefers-reduced-motion`.
+
+**Copy is final and carried verbatim.** The investor is **10VC**, not 10x,
+which the previous version of this page had wrong. Zero em-dashes,
+verified on the built page.
+
+The comparison table is deliberately a third answers, a third workflows, a
+third control and apps, so it argues breadth. Marks differ in shape as
+well as colour (`●` / `◐` / `–`) and each carries an `sr-only` label; 18
+were counted on the built page. Below `md` it stacks label-above-value
+rather than scrolling.
+
+The closing CTA is bottom-aligned against the copy block, not centred
+(`self-stretch` beating the grid's `items-center`, then `lg:items-end`).
+Measured delta at 1205: 0px.
+
+The investor band carries a hairline top and bottom. They are invisible
+against the fill in light mode and are the only thing keeping the band
+readable as a band in dark mode, where `#0B1220` sits a hair off the
+page's own `#0A0A0A`.
+
+**Known, not introduced here:** the arrow-badge CTA is 48px tall and the
+secondary beside it is 58px, because `ed-btn-arrow` overrides the base
+`ed-btn` box and the secondary does not. This pairing is on the homepage
+and all thirteen sub-pages, so it was left alone rather than made
+inconsistent on one page.
+
 ## /platform/control-center
 
 Ten sections, replacing the ComingSoon stub Reporting created.

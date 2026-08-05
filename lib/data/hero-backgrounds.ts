@@ -54,6 +54,44 @@ export const HERO_BG = {
 
 export type HeroBackgroundKey = keyof typeof HERO_BG;
 
+/* ── Gradient hero bands ───────────────────────────────────
+   Not every hero is a photograph. **Each sub-page gets its own hero blue
+   so a visitor sees a visible change page to page**, and normalising them
+   back to the homepage's hazy blue defeats the point of having them.
+   These carry their own base, their own gradient stack and their own
+   on-band accent, so nothing is inherited from HERO_BG above.
+
+   `hero` and `closing` differ only in the direction of the linear pass
+   and the position of the radial, so the two bands on one page read as a
+   pair rather than a repeat. `closing` is always laid under the
+   CLOSING_BASE resolve, which is what seams it into the footer. */
+export type HeroGradient = {
+  /** Solid painted behind the gradients. */
+  base: string;
+  hero: string;
+  closing: string;
+  /** Accent for text and marks on this band. */
+  accent: string;
+  /** Body copy on this band. */
+  body: string;
+};
+
+export const HERO_GRADIENT = {
+  /** Why EZee Assist. Lighter and bluer than the teal-navy photographic
+      bands, so the page announces itself as a different room. */
+  azure: {
+    base: "#0C4A8C",
+    hero:
+      "radial-gradient(1000px 500px at 50% 135%, rgba(159,217,255,0.26), transparent 62%)," +
+      "linear-gradient(160deg, #082E5C 0%, #0C4A8C 55%, #1166A8 100%)",
+    closing:
+      "radial-gradient(900px 460px at 20% 130%, rgba(159,217,255,0.20), transparent 60%)," +
+      "linear-gradient(285deg, #082E5C 0%, #0C4A8C 55%, #1166A8 100%)",
+    accent: "#9FD9FF",
+    body: "rgba(240,247,255,0.92)",
+  },
+} as const satisfies Record<string, HeroGradient>;
+
 /* The scrim a band needs depends on how much copy sits on it, not only on the
    image. These are the measured values from the homepage; start from the
    closest one and re-check rather than guessing.
