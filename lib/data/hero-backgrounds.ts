@@ -90,6 +90,21 @@ export const HERO_GRADIENT = {
     accent: "#9FD9FF",
     body: "rgba(240,247,255,0.92)",
   },
+  /** Case studies, landing and every story detail. Greener and deeper
+      than azure, so the stories read as their own section of the site
+      rather than a continuation of Why EZee. The radial sits right of
+      centre on the hero because the landing hero's artwork lives there. */
+  ocean: {
+    base: "#083A54",
+    hero:
+      "radial-gradient(1000px 520px at 78% 130%, rgba(127,224,255,0.22), transparent 62%)," +
+      "linear-gradient(160deg, #062E44 0%, #0A4A6E 58%, #0E6D96 100%)",
+    closing:
+      "radial-gradient(900px 460px at 22% 130%, rgba(127,224,255,0.18), transparent 60%)," +
+      "linear-gradient(285deg, #062E44 0%, #0A4A6E 58%, #0E6D96 100%)",
+    accent: "#7FE0FF",
+    body: "rgba(238,249,255,0.92)",
+  },
 } as const satisfies Record<string, HeroGradient>;
 
 /* The scrim a band needs depends on how much copy sits on it, not only on the

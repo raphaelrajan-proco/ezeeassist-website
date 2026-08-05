@@ -6,280 +6,233 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
-import { HERO_BG, SCRIM } from "@/lib/data/hero-backgrounds";
-import { Band, CARD, EASE, JAKARTA, MONO, Meta, Reveal, SectionHead } from "@/components/platform/shared";
+import { CASE_STUDIES } from "@/lib/data/case-studies";
+import { HERO_GRADIENT } from "@/lib/data/hero-backgrounds";
+import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 
 /**
  * /case-studies
  *
- * Migrated off the legacy styling (raw Tailwind, hardcoded hex, the old
- * `bg-hero-gradient` band) onto the editorial system, per DESIGN.md §2:
- * legacy pages migrate when next touched.
+ * Built from the supplied design handoff. Three sections and no more:
+ * an ocean hero, the story cards, and the WSI quote. The page ends on the
+ * quote rather than a CTA band, which is why the quote strip carries the
+ * resolve to CLOSING_BASE itself.
  *
- * **Every figure here is already published**, on the detail page each card
- * links to. Nothing on this page is new or unsourced, and no fourth card
- * gets added without a story behind it. The three per-brand accent colours
- * the old page used (#C2185B, #7B1FA2) are gone: brand colour on a card
- * that is not that brand's own surface reads as decoration, and the site's
- * accent discipline is one blue used sparingly.
+ * **The hero blue is deliberately not the homepage's.** Ocean is
+ * registered as `HERO_GRADIENT.ocean` with its own base, gradients and
+ * accent. Trust Center is `#0B2C48`, Why EZee is azure `#0C4A8C`, this is
+ * `#083A54`; a visitor should see the room change page to page.
  *
- * The section forms, per DESIGN.md §1.1: the hero is *proof at scale*, so
- * it carries the three headline figures as an artifact rather than
- * describing them; the index is *a report* of what each network changed,
- * so it is one row per story with the number set large and the logo
- * carrying the brand rather than a coloured panel.
+ * The hero is deliberately minimal: no eyebrow above the H1 and no stat
+ * strip, both removed as repetitive against the cards below. Do not
+ * reintroduce them.
+ *
+ * Card content comes from `lib/data/case-studies.ts`, the same record the
+ * detail route reads, so a story is never described two different ways.
  */
 
-const ON_DARK_ACCENT = "#9FE0F8";
-const ON_DARK_DIM = "rgba(245,237,224,0.55)";
-const ON_IMAGE = "rgba(245,237,224,0.92)";
-const RULE = "rgba(245,237,224,0.16)";
+const OC = HERO_GRADIENT.ocean;
 
-const HERO = HERO_BG.default;
+/* Fixed inks for the brand panels, which stay light in both themes
+   because all three logos are dark-on-light artwork. */
+const PANEL_INK = "#0A0A0A";
+const PANEL_INK_MUTED = "#52525B";
 
-/* The three headline figures, each one lifted from the detail page it
-   links to. Order is by size of network, not by size of number. */
-const HEADLINE: { stat: string; label: string; brand: string }[] = [
-  { stat: "67%",    label: "fewer repetitive questions reaching the team", brand: "WSI" },
-  { stat: "93%",    label: "resolved without a person, through a cutover", brand: "DekaLash" },
-  { stat: "650+",   label: "hours of support time returned in six months", brand: "DivaDance" },
-];
+const QUOTE = {
+  text:
+    "EZee Assist is much more than just a chatbot. It truly made universal search possible at WSI, levelling the playing field for our franchisees across geographies and languages.",
+  name: "Jeffrey Grant",
+  role: "Systems Manager, WSI World",
+};
 
-const STORIES: {
-  brand: string;
-  logo: string;
-  slug: string;
-  problem: string;
-  stat: string;
-  statLabel: string;
-  secondary: { value: string; label: string }[];
-  body: string;
-}[] = [
-  {
-    brand: "WSI",
-    logo: "/logos/stories/wsi.svg",
-    slug: "/case-studies/wsi",
-    problem: "Questions piled up overnight, in every time zone",
-    stat: "67%",
-    statLabel: "fewer repetitive questions",
-    secondary: [
-      { value: "Global", label: "network served" },
-      { value: "24/7",   label: "across time zones" },
-    ],
-    body: "A global network of digital marketing consultants, spread across countries and time zones. Every morning started with a backlog of questions that already had documented answers. The knowledge existed; it just was not reachable at the hour anyone needed it.",
-  },
-  {
-    brand: "DekaLash",
-    logo: "/logos/stories/dekalash.png",
-    slug: "/case-studies/dekalash",
-    problem: "A technology cutover across 400 locations",
-    stat: "93%",
-    statLabel: "resolved without a person",
-    secondary: [
-      { value: "430+",  label: "questions deflected" },
-      { value: "< 30s", label: "average response" },
-    ],
-    body: "A cutover is the worst possible week to be short-staffed on support, because every location has the same question at the same time. Franchisees started telling each other to use it, which is the adoption number nobody plans for.",
-  },
-  {
-    brand: "DivaDance",
-    logo: "/logos/stories/divadance.png",
-    slug: "/case-studies/divadance",
-    problem: "A small team, and a network that asks at nine at night",
-    stat: "2,600+",
-    statLabel: "queries answered in six months",
-    secondary: [
-      { value: "650+",     label: "hours returned" },
-      { value: "6 months", label: "to get there" },
-    ],
-    body: "Scheduling, marketing, music licensing, event coordination. A passionate network asks a lot of questions, and a small team answering them one at a time is a ceiling on how fast the brand can grow.",
-  },
-];
+/* ── Hero artwork ───────────────────────────────────────────
+   Three curves rising from one baseline dot, the boldest ending in an
+   arrowhead. They must stay concave up: the point is acceleration, and an
+   S-curve or a plateau argues the opposite. Copied from the prototype. */
+function GrowthCurves() {
+  return (
+    <svg viewBox="0 0 360 300" aria-hidden="true" className="h-auto w-full max-w-[360px]">
+      <g stroke="rgba(127,224,255,.22)" strokeWidth="1.5" fill="none">
+        <path d="M52 60 H316" />
+        <path d="M52 124 H316" />
+        <path d="M52 188 H316" />
+      </g>
+      <path d="M52 252 H316" stroke="rgba(127,224,255,.45)" strokeWidth="1.5" fill="none" />
+      <path
+        d="M52 252 C 150 250, 220 240, 268 196 C 292 174, 304 140, 310 96"
+        fill="none" stroke="rgba(127,224,255,.35)" strokeWidth="1.5" strokeDasharray="4 6" strokeLinecap="round"
+      />
+      <path
+        d="M52 252 C 140 250, 204 244, 248 212 C 278 190, 296 148, 304 74"
+        fill="none" stroke="rgba(127,224,255,.6)" strokeWidth="1.5" strokeLinecap="round"
+      />
+      <path
+        d="M52 252 C 130 250, 190 246, 232 224 C 272 203, 292 156, 298 52"
+        fill="none" stroke="#7FE0FF" strokeWidth="2.5" strokeLinecap="round"
+      />
+      <path d="M286 66 L298 46 L306 68" fill="none" stroke="#7FE0FF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <g fill="#7FE0FF">
+        <circle cx="52" cy="252" r="4.5" />
+        <circle cx="176" cy="245" r="3.5" />
+        <circle cx="244" cy="217" r="3.5" />
+      </g>
+      <path d="M298 96 l8 4.6 v9.2 l-8 4.6 -8 -4.6 v-9.2 Z" fill="rgba(127,224,255,.18)" stroke="#7FE0FF" strokeWidth="1.5" />
+    </svg>
+  );
+}
 
 export default function CaseStudiesContent() {
   return (
     <>
-      {/* ── 1. Hero ───────────────────────────────────────
-          Photographic, matching every other sub-page. The three figures
-          sit in the hero as an artifact rather than being described,
-          because on a case-studies index the numbers are the argument. */}
-      <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
-        <div className="absolute inset-0" aria-hidden="true">
-          <Image src={HERO.src} alt="" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.heroSubPage})` }} />
-          <div className="absolute inset-0" style={{ background: "radial-gradient(58% 52% at 82% 12%, rgba(159,224,248,0.16) 0%, rgba(159,224,248,0) 70%)" }} />
-        </div>
+      {/* ── 1. Hero ───────────────────────────────────────── */}
+      <section className="relative w-full overflow-hidden" style={{ backgroundColor: OC.base }}>
+        <div className="absolute inset-0" aria-hidden="true" style={{ background: OC.hero }} />
 
-        <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-20 pb-16 md:pt-24 md:pb-20">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: EASE }}>
-            <p className="uppercase" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_ACCENT }}>
-              Case studies
-            </p>
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE }}
+          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-[1.15fr_.85fr] lg:gap-16"
+        >
+          <div className="flex flex-col items-start gap-5">
             <h1
-              className="mt-5 max-w-[880px] leading-[1.06] tracking-[-0.03em]"
+              className="leading-[1.06] tracking-[-0.03em]"
               style={{
                 color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700,
-                /* Ceiling derived at 1440: the longer clause measures
-                   ~620px at 40px inside the 880px cap. Break is lg-only. */
-                fontSize: "clamp(1.625rem, 0.55rem + 2.4vw, 2.5rem)",
-                textWrap: "balance",
+                fontSize: "clamp(2rem, 0.9rem + 2.9vw, 3.5rem)",
               }}
             >
-              The work stopped landing on a person.{" "}
-              <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>
-                Here&rsquo;s what that returned.
-              </span>
+              Case studies
             </h1>
-            <p className="mt-6 max-w-[660px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
-              A global agency network, a four-hundred-location technology cutover, and a studio
-              brand whose franchisees ask at nine at night. Three problems, three networks, and
-              the number each one moved.
+            <p className="max-w-[440px] text-base md:text-[18px] leading-[1.6]" style={{ color: OC.body }}>
+              Stories, playbooks, and results from the field.
             </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
+            {/* Both buttons are flex items and wrap their labels without
+                nowrap and flex-none. */}
+            <div className="mt-1 flex flex-wrap items-center gap-3.5">
+              <Link
+                href="/speak-to-an-expert"
+                className="ed-btn ed-btn-arrow inline-flex flex-none whitespace-nowrap"
+                style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
+              >
                 Speak to an expert
                 <span className="ed-btn-arrow-badge" aria-hidden="true">
                   <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
                 </span>
               </Link>
-              <a href="#stories" className="ed-btn ed-btn-secondary-dark inline-flex">Read the stories</a>
+              <a href="#stories" className="ed-btn ed-btn-secondary-dark inline-flex flex-none whitespace-nowrap">
+                Read the stories
+              </a>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: EASE, delay: 0.12 }}
-            className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-[14px] sm:grid-cols-3"
-            style={{ backgroundColor: RULE, border: `1px solid ${RULE}` }}
-          >
-            {HEADLINE.map((h) => (
-              <div key={h.brand} className="px-5 py-5" style={{ backgroundColor: "rgba(4,26,44,0.55)" }}>
-                <span
-                  style={{
-                    fontFamily: JAKARTA, fontWeight: 700, fontSize: 34, lineHeight: 1,
-                    letterSpacing: "-0.03em", color: ON_DARK_ACCENT, fontVariantNumeric: "tabular-nums",
-                  }}
-                >
-                  {h.stat}
-                </span>
-                <p className="mt-2.5 text-[13.5px] leading-snug" style={{ color: ON_IMAGE }}>{h.label}</p>
-                <p className="mt-3 uppercase" style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.13em", fontWeight: 600, color: ON_DARK_DIM }}>
-                  {h.brand}
-                </p>
-              </div>
-            ))}
-          </motion.div>
-        </div>
+          <div className="hidden items-center justify-center lg:flex">
+            <GrowthCurves />
+          </div>
+        </motion.div>
       </section>
 
-      {/* ── 2. The stories ────────────────────────────────
-          One row per story rather than a card grid: three cards side by
-          side make the networks look interchangeable, and the whole point
-          is that each had a different problem. The number is set large
-          and the logo carries the brand, so no per-brand accent colour is
-          needed. */}
-      <Band id="stories">
-        <SectionHead
-          eyebrow="Three networks"
-          title="Different problems. The same thing stopped happening."
-          sub="Every figure below is from the story it links to. Nothing here is a projection."
-        />
-
-        <div className="mt-10">
-          {STORIES.map((s, i) => (
-            <Reveal key={s.brand} delay={i * 0.08}>
+      {/* ── 2. Stories ────────────────────────────────────
+          No section heading; the cards follow the hero directly. Each
+          card is one link, with the headline as its accessible name. */}
+      <section id="stories" className="ed-bg w-full scroll-mt-24">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24">
+          {CASE_STUDIES.map((c, i) => (
+            <Reveal key={c.slug} delay={i * 0.08}>
               <Link
-                href={s.slug}
-                className="group grid grid-cols-1 gap-6 py-9 lg:grid-cols-[220px_1fr_auto] lg:gap-10"
-                style={{ borderTop: i === 0 ? "1px solid var(--ed-border)" : "1px solid var(--ed-rule)" }}
+                href={`/case-studies/${c.slug}`}
+                className="ed-card ed-border ed-story-card grid grid-cols-1 overflow-hidden rounded-[18px] border sm:grid-cols-[240px_1fr] lg:grid-cols-[340px_1fr]"
               >
-                {/* Brand. The logo does the identifying, so the old
-                    coloured initial tile is gone. */}
-                <div className="flex flex-col gap-4">
+                {/* Brand panel. Light in both themes: the logo is
+                    dark-on-light artwork. */}
+                <div
+                  className="flex min-h-[168px] flex-col justify-between gap-6 p-7 sm:p-8 lg:min-h-[210px]"
+                  style={{ backgroundColor: c.panel }}
+                >
                   <Image
-                    src={s.logo}
-                    alt={s.brand}
-                    width={160}
-                    height={40}
-                    className="h-auto w-[112px] object-contain object-left"
+                    src={c.logo.src}
+                    alt={c.logo.alt}
+                    width={220}
+                    height={c.logoH.card}
+                    className="w-auto self-start object-contain"
+                    style={{ height: c.logoH.card }}
                   />
-                  <div className="flex flex-wrap gap-x-5 gap-y-2">
-                    {s.secondary.map((x) => (
-                      <div key={x.label}>
-                        <span className="ed-fg block text-[15px]" style={{ fontFamily: MONO, fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>
-                          {x.value}
+                  <div className="flex gap-6">
+                    {c.cardStats.map((s) => (
+                      <div key={s.label} className="flex flex-col gap-0.5">
+                        <span
+                          className="tracking-[-0.02em]"
+                          style={{ fontFamily: JAKARTA, fontSize: 19, fontWeight: 800, color: PANEL_INK }}
+                        >
+                          {s.value}
                         </span>
-                        <span className="ed-fg-muted block text-[12px] leading-snug">{x.label}</span>
+                        <span style={{ fontSize: 12, color: PANEL_INK_MUTED }}>{s.label}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="min-w-0">
-                  <Meta>{s.problem}</Meta>
-                  <p
-                    className="ed-fg mt-3 text-[19px] tracking-[-0.02em] transition-colors group-hover:text-[color:var(--ed-accent-text)]"
-                    style={{ fontFamily: JAKARTA, fontWeight: 600, lineHeight: 1.3 }}
-                  >
-                    {s.stat} {s.statLabel}
-                  </p>
-                  <p className="ed-fg-muted mt-3 max-w-[560px] text-[14.5px] leading-relaxed">{s.body}</p>
-                </div>
-
-                <div className="flex items-end lg:items-center">
+                <div className="flex flex-col justify-center gap-3 p-7 sm:p-8 lg:px-10">
                   <span
-                    className="inline-flex items-center gap-2 text-sm"
-                    style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}
+                    className="ed-accent-text uppercase"
+                    style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.15em" }}
+                  >
+                    {c.kicker}
+                  </span>
+                  <span
+                    className="ed-fg leading-[1.15] tracking-[-0.025em]"
+                    style={{ fontFamily: JAKARTA, fontSize: 26, fontWeight: 700 }}
+                  >
+                    {c.headline}
+                  </span>
+                  <p className="ed-fg-muted max-w-[560px] text-[14.5px] leading-[1.6]">{c.summary}</p>
+                  <span
+                    className="ed-accent-text mt-1 inline-flex items-center gap-2"
+                    style={{ fontFamily: JAKARTA, fontSize: 14, fontWeight: 600 }}
                   >
                     Read the story
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={2} aria-hidden="true" />
+                    <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} aria-hidden="true" />
                   </span>
                 </div>
               </Link>
             </Reveal>
           ))}
         </div>
-      </Band>
+      </section>
 
-      {/* ── 3. CTA ────────────────────────────────────────
-          Replaces the old sticky sidebar. A sidebar that repeats the
-          numbers already on the page is the same idea shown twice, and
-          every other page closes on this band. */}
-      <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
-        <div className="absolute inset-0" aria-hidden="true">
-          <Image src={HERO.src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.closing})` }} />
-          <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 45%, ${CLOSING_BASE} 100%)` }} />
-        </div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+      {/* ── 3. Quote ──────────────────────────────────────
+          The page's last section, so it carries the resolve to
+          CLOSING_BASE itself. There is no CTA band after it. */}
+      <section className="relative w-full" style={{ backgroundColor: "#0B1220" }}>
+        <div
+          className="absolute inset-0"
+          aria-hidden="true"
+          style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 55%, ${CLOSING_BASE} 100%)` }}
+        />
+        <motion.figure
+          initial={{ opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.85, ease: EASE }}
-          className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24"
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.75, ease: EASE }}
+          className="relative m-0 mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-[72px] lg:grid-cols-[1fr_auto] lg:gap-14"
         >
-          <h2
-            className="leading-[1.06] tracking-[-0.03em]"
-            style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700, fontSize: "clamp(1.5rem, 0.4rem + 2.9vw, 3rem)", maxWidth: "820px" }}
+          <blockquote
+            className="m-0 leading-[1.4] tracking-[-0.02em]"
+            style={{
+              fontFamily: JAKARTA, fontWeight: 600, color: "#EEF2F8", textWrap: "pretty",
+              fontSize: "clamp(1.25rem, 0.85rem + 1vw, 1.625rem)",
+            }}
           >
-            Tell us what your network asks most.
-          </h2>
-          <p className="mt-5 max-w-[620px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
-            We&rsquo;ll show you which of it never needed a person, using your own material.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
-              Speak to an expert
-              <span className="ed-btn-arrow-badge" aria-hidden="true">
-                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
-              </span>
-            </Link>
-            <Link href="/platform/answers" className="ed-btn ed-btn-secondary-dark inline-flex">
-              How answers work
-            </Link>
-          </div>
-        </motion.div>
+            &ldquo;{QUOTE.text}&rdquo;
+          </blockquote>
+          <figcaption
+            className="flex flex-col gap-1 border-t pt-5 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0"
+            style={{ borderColor: "rgba(238,242,248,0.18)" }}
+          >
+            <span style={{ fontSize: 15, fontWeight: 600, color: "#EEF2F8" }}>{QUOTE.name}</span>
+            <span style={{ fontSize: 13, color: "rgba(238,242,248,0.65)" }}>{QUOTE.role}</span>
+          </figcaption>
+        </motion.figure>
       </section>
     </>
   );

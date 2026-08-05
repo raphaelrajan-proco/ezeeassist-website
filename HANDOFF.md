@@ -1337,6 +1337,70 @@ emphasis on dark where the 5% tint nearly vanishes; the hero CTA scrolls to
 `enableSystem={false}`, so emulating `prefers-color-scheme` does nothing. Set
 `localStorage.theme = 'dark'` and reload instead.
 
+## /case-studies and /case-studies/[slug]
+
+Rebuilt from a supplied design handoff. **The three per-story pages are
+gone**, replaced by one templated route. The URLs are unchanged, so no
+redirect was needed; only the files behind them moved. Deleted:
+`app/case-studies/{wsi,dekalash,divadance}/page.tsx` and
+`components/sections/CaseStudyDetail.tsx`.
+
+Everything that varies lives in `lib/data/case-studies.ts`, read by both
+the landing cards and the detail route, so a story is never described two
+different ways. **A new story is a record plus a committed logo**, not a
+new route and not a new component.
+
+**The hero blue is ocean, `HERO_GRADIENT.ocean`, `#083A54`.** Trust
+Center is `#0B2C48`, Why EZee is azure `#0C4A8C`. Each sub-page carries
+its own; do not normalise them.
+
+**Logos are committed files at `public/logos/stories/`** and were already
+byte-identical to the handoff's, so nothing was copied. Never a CDN,
+never a text wordmark, never a redrawn mark. **The brand panels stay
+light in both themes** because all three marks are dark-on-light artwork
+and invert into mud; that is why the panel stats use fixed `#0A0A0A` /
+`#52525B` rather than tokens. The three marks have very different aspect
+ratios, so `logoH` carries a separate height for the card, the rail and
+the More-stories chip.
+
+**Three fields are optional, and the omissions are deliberate.** A case
+study is the last place to invent a fact:
+- `quote` — DivaDance has no approved quote, so its prose starts at the
+  challenge with no empty card.
+- `channels` — only WSI's delivery channels were documented.
+- the Year row in `meta` — only WSI's engagement year is known.
+If those facts arrive, add them to the record and the UI picks them up.
+
+**The WSI quote was wrong on the old page.** It carried John Evans of
+EverLine Coatings under a WSI headline. It is now Jeffrey Grant, Systems
+Manager, WSI World, per the handoff README. Note the handoff's own detail
+HTML says "Jeffrey Small" in one place; the README corrects it to Grant
+and the README wins.
+
+**Deka Lash and DivaDance prose is carried forward** from the pages this
+route replaces, at the user's instruction, not drafted fresh. Em-dashes
+were resolved to commas and periods, and one sentence was rewritten to
+drop the banned word "seamless". Their H1s recombine approved facts only
+(Deka Lash's "400 locations" is from its approved kicker).
+
+Two mechanisms went into globals:
+- `.ed-story-card` — hover lifts border and shadow only, never a
+  translate. Three stacked cards that shift on hover read as a jitter.
+- `.ed-quote-card` — the accent-tint pull-quote, with its own dark
+  values, so it reads as a quotation rather than another section.
+
+The landing page ends on the quote strip, so **the quote carries the
+resolve to CLOSING_BASE itself**. There is no CTA band after it and one
+must not be added, or the resolve will seam into the wrong thing.
+
+The hero is deliberately minimal: no eyebrow above the H1 and no stat
+strip. Both were removed as repetitive against the cards below.
+
+Verified on the built pages at 1440/1280/1205/1024/768/375 in both
+themes, all four routes: no horizontal overflow, no text under 12px, one
+`h1` each, all buttons nowrap, every logo loading from its committed
+file, zero em-dashes and zero banned words.
+
 ## /why-ezeeassist
 
 Rebuilt from a supplied design handoff. Eight sections, each a different

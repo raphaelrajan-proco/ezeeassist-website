@@ -246,6 +246,32 @@
   .ed-orbit { animation: none; }
 }
 
+/* ─── Story cards ──────────────────────────────────────────
+   Case study links. Hover lifts the border and a shadow only, never a
+   translate: three stacked cards that shift on hover read as a jitter.
+   The shadow is the ocean base, so it reads as depth rather than grey. */
+.theme-editorial .ed-story-card {
+  color: var(--ed-fg);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.theme-editorial .ed-story-card:hover {
+  border-color: var(--ed-accent-text);
+  box-shadow: 0 20px 44px -30px rgba(8, 58, 84, 0.4);
+  text-decoration: none;
+}
+
+/* The pull-quote artifact on a case study. An accent tint rather than a
+   card, so it reads as a quotation and not another section. */
+.theme-editorial .ed-quote-card {
+  background-color: rgba(0, 119, 168, 0.05);
+  border: 1px solid rgba(0, 119, 168, 0.18);
+}
+.dark .theme-editorial .ed-quote-card,
+.theme-editorial.dark .ed-quote-card {
+  background-color: rgba(0, 174, 239, 0.07);
+  border-color: rgba(0, 174, 239, 0.24);
+}
+
 /* ─── Inline dual-theme tints ──────────────────────────────
    A card whose colour is data, not a token: the component passes a light
    triple and a dark triple, and the theme picks. Used by the "tools that
