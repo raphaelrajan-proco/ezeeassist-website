@@ -1676,65 +1676,92 @@ under `prefers-reduced-motion`.
 
 ## /platform/control-center
 
-Ten sections, replacing the ComingSoon stub Reporting created.
+Rebuilt from a supplied design handoff. Eleven sections, delivering a
+promise the homepage makes: ungoverned AI is a brand risk, and this is
+the system that removes it.
 
-**The split with Trust Center is the most important rule on this page.**
-Control Center is *what HQ configures* — policies, permissions, approval
-gates, the activity log, model choice. `/security` is *what EZee
-guarantees* — SOC 2, encryption, subprocessors, DPA, incident response,
-residency. **No certification, encryption or subprocessor content belongs
-here**, one pointer only. Verified on the built page: SOC, ISO,
-subprocessor, encryption and GDPR are all zero hits, and "Trust Center"
-appears once.
+**The page's real job is being forwarded**, so it is built to read like a
+document rather than a brochure. Three readers use it: the ops champion
+who needs material to hand to colleagues, the IT and security reviewer
+who needs enough specificity to say yes, and Legal, Finance and Marketing
+who each need one question answered fast.
 
-**The argument is consolidation, not deficiency, and the tone rule is
-load-bearing.** Nothing may imply the franchisor lacks IT capability,
-control, or failed at governance. Fragmentation is an architectural
-condition. §2's rows are neutral and only the HQ row is tinted, and even
-that names the situation rather than blaming anyone. **This page's whole
-job is being forwarded**, and a page that reads as an accusation does not
-get forwarded.
+### Decisions the handoff left open
 
-**Governance is a reason to buy, not reassurance.** It reads as
-capability, not as a compliance appendix.
+**The hero and closing bands stay the existing hazy indigo variant**, on
+request, rather than the handoff's charcoal gradient. The handoff itself
+offers this: it calls charcoal "a deliberate departure" and names the
+closing band as the one to switch back for continuity. The Capability
+band keeps its charcoal, since that is a mid-page surface.
 
-One new component, `RoleAnswers` (§4). **Four responses, not two** — the
-climb from one store to 214 locations is what makes the model legible.
-**The HQ answer keeps the analytical insight the others do not get** (the
-top-decile add-on script): scoping governs analysis, not just data
-access. **The third point must not be softened** — an owner's numbers
-being contractually theirs is what a franchisee-facing rollout depends
-on, and if it reads as a configurable setting the claim fails.
+**The three `/trust-center` links point at `/security`.** Verified on the
+built page: zero `/trust-center` links remain.
 
-- **§1's policy surface is five ON and one OFF**, and the OFF one is
-  model training on their content. All-ON reads as marketing; one switch
-  off reads as a real settings screen. Do not "fix" it.
-- **§3 is a settings surface, not a capability list**, with filled/hollow
-  markers and screen-reader labels so it reads in greyscale. Deliberately
-  not interactive.
-- **§5's log includes named humans** (Maria S. approving, Priya N.
-  publishing). A log of only system actions does not demonstrate the trail
-  a dispute would need. The closing line is aimed at legal.
-- **No model vendor is named.** The list dates fast and the claim is
-  swappability.
-- **§7 leads with IT and Security** (where enterprise deals stall) and
-  **keeps the Franchisees row** — including the governed party signals the
-  rollout survives contact with owners.
+**The four `{{TBD:control-center-proof-*}}` tokens are replaced** with
+the published WSI material. The handoff also suggested "67% ticket
+reduction in **30 days**"; nothing in the repo supports that timeframe,
+so the metric ships as published, "67% fewer repetitive questions". An IT
+or security voice would be the higher-value quote here if one is ever
+sourced.
 
-Inbound links: seven pointed at the homepage's `#trust` anchor and were
-retargeted, href-only, no copy touched — nav, footer, Answers (related
-card + governance band), Integrations (related card + access link), and
-Coaches' PlayGrid. Zero `/#trust` links remain.
+The prototype's `showUsagePanel` and `showRelated` authoring toggles are
+not carried across. The usage-against-limits panel the brief describes is
+not built; reinstate it as a second panel beside the log, visibly
+different from the chronological one, if cost becomes a live objection.
 
-`{{TBD:}}` tokens, four, all §8.
+### The matrix, and what must survive an edit
 
-**Five claims flagged for confirmation:** every §3 policy row being
-genuinely configurable (the most checkable section on the page, and a row
-that cannot be toggled is expensive in a demo); per-brand and per-region
-policy (multi-brand buyers ask first); §4's four-role scoping including
-HQ's analytical insight; log retention being customer-configurable; and
-model swapping genuinely requiring no reconfiguration of policies,
-permissions, plays or logs.
+**Three states, never two.** The approval state is what makes it read as
+an operating network rather than a lockdown. It is the single most
+important decision in the section.
+
+**Never reorder the rows.** Search is at the top because it is
+uncontentious; publish network-wide is at the bottom because it is what
+HQ actually worries about. Reading down, the reader moves from obviously
+fine to exactly my concern, and finds it closed. That descent is the
+structure, and the last row carries the emphasis treatment because it
+answers the biggest objection on the site.
+
+**State is never colour alone.** Fill, half-fill and ring differ in
+shape, and all 123 markers carry an `aria-label` of Allowed, Requires
+approval, or Not permitted. Verified on the built page.
+
+**No role is ever dropped.** The handoff asked for the five columns to
+survive tablet width, but at 768 each role column is ~70px and
+"Leadership" needs ~90 at the 12px type floor. The table form therefore
+starts at `lg`, and below it every capability becomes one card with the
+five states as a compact labelled row. Nothing is dropped and nothing
+scrolls sideways.
+
+The grid classes are written out literally, twice. A computed
+`` md:${GRID} `` produces a class Tailwind never generates; this already
+cost a rebuild on the Ticketing console.
+
+### Other constraints carried in comments
+
+- **Section 2's tone.** Nothing in the left panel may imply the
+  franchisor lacks IT capability or failed at governance. AI adoption
+  happened in a dozen places at once, which is an architectural
+  condition. A page that reads as an accusation will not get forwarded.
+- **Section 3 has no capability language.** What a person can *do*
+  belongs entirely to section 4. And "Locations stay independent" must
+  not be softened into something that reads as a configurable setting.
+- **Section 5 must not become a card grid.** Section 6 follows and is
+  data dense; the numbered spine is what keeps them distinct.
+- **The log keeps its human actions and its odd minutes.** Entries 3 and
+  5 involve named people approving and publishing, which is what makes
+  the record usable in a dispute. 9:14 is credible where 9:00 is not.
+- **Do not name a model vendor** in section 7. The claim is
+  swappability and a vendor list dates fast.
+- **The hero's last policy row stays OFF.** A surface where every toggle
+  is on reads as marketing.
+
+Anchors `#capability`, `#sandbox` and `#record` all resolve; verified on
+the built page.
+
+Verified at 1440/1280/1205/1024/768/375 in both themes: no horizontal
+overflow, no text under 12px, one h1 and nine h2s, zero em-dashes, no
+banned words, no `{{TBD}}` tokens, and no `#00AEEF` used as text.
 
 ## /platform/ticketing
 

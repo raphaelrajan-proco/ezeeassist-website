@@ -7,698 +7,527 @@ import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
 import { platformHero } from "@/lib/data/platform-heroes";
+import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
+import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
+import Matrix from "./Matrix";
 import {
-  ACCENT_TINT, Band, CARD, EASE, Eyebrow, JAKARTA, MONO, Meta, Reveal, SectionHead,
-} from "@/components/platform/shared";
-import RoleAnswers from "./RoleAnswers";
+  ACCESS_POINTS, LOG, MODEL_POINTS, POLICY, PROOF, RELATED, RESPONSES,
+  ROLLOUT, ROUTING, SEPARATE, UNIFIED,
+} from "./data";
 
 /**
  * /platform/control-center
  *
- * **The split with Trust Center is the most important rule here.**
+ * Rebuilt from the supplied design handoff. Eleven sections, delivering
+ * a promise the homepage makes: ungoverned AI is a brand risk, and this
+ * is the system that removes it.
  *
- *   Control Center (this page)  what HQ configures — policies,
- *                               permissions, approval gates, the activity
- *                               log, model choice
- *   Trust Center (/security)    what EZee guarantees — SOC 2, encryption,
- *                               subprocessors, DPA, incident response,
- *                               data residency
+ * **The page's real job is being forwarded**, so it is built to read
+ * like a document rather than a brochure. Three readers use it: the ops
+ * champion who needs material to hand to colleagues, the IT and security
+ * reviewer who needs enough specificity to say yes, and Legal, Finance
+ * and Marketing who each need one question answered fast.
  *
- * **No certifications, encryption detail, subprocessor lists or compliance
- * badges belong on this page.** One pointer to Trust Center, no more.
- * Duplicating that content makes both pages weaker and confuses which one
- * a security reviewer should read.
+ * ── Decisions the handoff left open ─────────────────────────
  *
- * **The argument is consolidation, not deficiency.** AI adoption in a
- * franchise network happened in a dozen places at once. That is an
- * architectural condition, not a failure of anyone's IT function.
- * **Nothing here may imply the franchisor lacks IT capability or control** —
- * this page's whole job is being forwarded, and a page that reads as an
- * accusation does not get forwarded. §2's left panel names the situation;
- * only the HQ row carries a warning tint, and even that names the
- * condition rather than blaming anyone.
+ * **The hero and closing bands stay the existing hazy indigo variant**,
+ * per direct instruction, rather than the handoff's charcoal gradient.
+ * The handoff itself offers this: it calls charcoal "a deliberate
+ * departure" and names the closing band as the one to switch back for
+ * continuity with other routes. The Capability band keeps its charcoal,
+ * since that is a mid-page surface rather than the hero.
  *
- * **Governance is a reason to buy, not reassurance.** The page reads as
- * capability, not as a compliance appendix.
+ * **The three `/trust-center` links point at `/security`**, which is
+ * where the live Trust Center is.
  *
- * Band sequence, part of the spec: dark, light, light, dark, light, light,
- * dark, light, light, dark. §5 and §6 are adjacent and both light, so §5
- * is a dense log artifact and §6 is a single diagram plus three points.
- * They must not both read as lists.
+ * **The four `{{TBD:control-center-proof-*}}` tokens are replaced** with
+ * the already-published WSI material. The handoff also suggested "in 30
+ * days"; nothing in the repo supports that timeframe, so the metric
+ * ships as published. See `data.ts`.
  *
- * Deviations: the hero is the **photographic** treatment on
- * photographic, not the flat gradient the brief describes. Requested
- * directly.
+ * The prototype's `showUsagePanel` and `showRelated` toggles are
+ * authoring affordances and are not carried across.
+ *
+ * Sections 5, 6 and 7 are three consecutive light surfaces and
+ * deliberately use three different devices: a numbered spine, a dense
+ * log, and a diagram. If any two become card grids the middle of the
+ * page collapses.
  */
 
-const ON_DARK = "rgba(238,242,248,0.92)";
-const ON_DARK_DIM = "rgba(238,242,248,0.55)";
-const ON_DARK_RULE = "rgba(238,242,248,0.16)";
-const ON_DARK_ACCENT = "#9FE0F8";
-const ON_IMAGE = "rgba(245,237,224,0.92)";
-const WARN = "#B45309";
-
-/* Assignment and the revert switch live in lib/data/platform-heroes.ts. */
 const HERO = platformHero("control-center");
+const SKY = "#9FE0F8";
+const ON_IMAGE = "rgba(245,237,224,0.9)";
 
-/* ── §1 ─────────────────────────────────────────────────────
-   The last row renders OFF, and that is deliberate. A surface where every
-   toggle is ON reads as marketing; one switch off, and it being the one
-   about training on their content, reads as a real settings screen. Do not
-   "fix" this to all-ON. */
-const POLICY_SURFACE: { label: string; on: boolean }[] = [
-  { label: "Answers from approved sources only",       on: true },
-  { label: "Cite the source on every answer",          on: true },
-  { label: "Scope by role and location",               on: true },
-  { label: "Customer-facing sends require approval",   on: true },
-  { label: "Franchisee-built tools require HQ review", on: true },
-  { label: "Model training on your content",           on: false },
-];
+const CHARCOAL = "linear-gradient(158deg, #171717 0%, #101010 50%, #060606 100%)";
+const CHARCOAL_GLOW = "radial-gradient(110% 80% at 82% -10%, rgba(159,224,248,0.07), transparent 60%)";
 
-/* ── §2 ─────────────────────────────────────────────────────
-   Every row is neutral. Only the HQ row is tinted, and it names the
-   situation rather than blaming anyone. */
-const SEPARATE: { who: string; what: string; warn?: boolean }[] = [
-  { who: "Franchisees", what: "Their own tools, their own prompts, their own data" },
-  { who: "Coaches",     what: "Whatever helps, chosen individually" },
-  { who: "Marketing",   what: "One assistant" },
-  { who: "IT",          what: "A different one" },
-  { who: "Support",     what: "Something built into the helpdesk" },
-  { who: "HQ",          what: "A policy document nobody can enforce", warn: true },
-];
+const H2 = {
+  fontFamily: JAKARTA, fontWeight: 700,
+  fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)",
+  letterSpacing: "-0.03em", lineHeight: 1.08, textWrap: "pretty" as const,
+};
 
-const ONE_SYSTEM: { who: string; what: string }[] = [
-  { who: "One policy set",       what: "Written once, applied everywhere" },
-  { who: "One permission model", what: "Role and location, enforced on every response" },
-  { who: "One activity log",     what: "Every question, answer, and action, in one place" },
-  { who: "One approval line",    what: "The same rule in every channel" },
-  { who: "One place to change",  what: "Move something, and every location follows" },
-];
+const EYEBROW = {
+  fontFamily: MONO, fontSize: 12, fontWeight: 600,
+  letterSpacing: "0.16em", textTransform: "uppercase" as const,
+};
 
-/* ── §3 ─────────────────────────────────────────────────────
-   A settings surface, not a capability list. A franchisor reading a list
-   of what a product won't do feels constrained; one reading a dial they
-   control feels equipped. Illustration only — deliberately not
-   interactive. */
-const POLICY_ROWS: { action: string; alone: boolean }[] = [
-  { action: "Answering from approved material",        alone: true },
-  { action: "Opening a ticket and routing it",         alone: true },
-  { action: "Compliance checks and evidence collection", alone: true },
-  { action: "Assembling briefs and reports",           alone: true },
-  { action: "Nudging an internal deadline",            alone: true },
-  { action: "Drafting a customer message",             alone: false },
-  { action: "Sending to a customer",                   alone: false },
-  { action: "Posting to a public channel",             alone: false },
-  { action: "Anything touching pricing or the books",  alone: false },
-  { action: "Publishing a tool network-wide",          alone: false },
-];
+const META = {
+  fontFamily: MONO, fontSize: 12, fontWeight: 600,
+  letterSpacing: "0.13em", textTransform: "uppercase" as const,
+};
 
-const POLICY_POINTS: { title: string; body: string }[] = [
-  { title: "One policy, everywhere",     body: "The line applies in Teams, SMS, the app, and every workflow. There is no channel where it's looser." },
-  { title: "Different by brand or region", body: "Multi-brand and multi-jurisdiction networks can set a different line per brand, per region, or per location." },
-  { title: "Changeable in a sentence",   body: "Move something across the line and every future action follows immediately. Nothing needs rebuilding." },
-];
-
-/* ── §4 ───────────────────────────────────────────────────── */
-const PERMISSION_POINTS: { title: string; body: string }[] = [
-  { title: "Inherited, not rebuilt",  body: "You don't re-model your org in here. It reads what your systems already enforce and layers your rules on top." },
-  { title: "Enforced per response",   body: "Scoping applies to every answer, every report, every action, not once at sign-in." },
-  { title: "Independent owners stay independent", body: "An owner's numbers are commercially sensitive and contractually theirs. That boundary is structural, not a setting someone could turn off." },
-];
-
-/* ── §5 ─────────────────────────────────────────────────────
-   The log must include human actions, not only system ones: entries 3 and
-   5 have named people approving and publishing, which is what a dispute
-   would actually need. */
-const LOG: { time: string; actor: string; action: string; detail: string }[] = [
-  { time: "09:14", actor: "Store #118 · shift lead · asked",  action: "Promo stacking rules",           detail: "Answered from summer-promo-guide.pdf, loyalty-policy.pdf" },
-  { time: "10:05", actor: "Store #214 · owner · asked",       action: "National retail pricing",        detail: "Answered · peer range surfaced from 4 locations" },
-  { time: "11:40", actor: "Store #263 · system · drafted",    action: "Review response",                detail: "Held for owner approval · approved 11:52 by Maria S." },
-  { time: "14:20", actor: "Store #087 · system · escalated",  action: "Refund outside policy",          detail: "Ticket #4471 · routed to Dana R. · replied 34m" },
-  { time: "16:02", actor: "HQ · Priya N. · published",        action: "Partner promo standing rule",    detail: "Applied to 214 locations" },
-];
-
-const LOG_POINTS: { title: string; body: string }[] = [
-  { title: "Shadow AI becomes visible AI", body: "Everything your network does with AI happens in one place, and you can see all of it." },
-  { title: "Attributable",                 body: "Person, location, role, channel, timestamp, and the sources used." },
-  { title: "Searchable and exportable",    body: "By location, by person, by topic, by date. Out in a format your counsel can use." },
-  { title: "Retained on your terms",       body: "You set the retention period." },
-];
-
-/* ── §6 ─────────────────────────────────────────────────────
-   No model vendor is named. The list dates fast, and the claim is about
-   swappability rather than about who is in the slot today. */
-const MODEL_POINTS: { title: string; body: string }[] = [
-  { title: "Chosen per task",         body: "Different models are better at different things. You're not locked to one for everything." },
-  { title: "Swapped without rebuilding", body: "Nothing you've configured, published, or authored has to change when the underlying model does." },
-  { title: "Constrained the same way", body: "Whichever model runs, your policy set, permissions, and approval gates apply identically." },
-];
-
-/* ── §7 ─────────────────────────────────────────────────────
-   IT and Security first: security review is where enterprise deals stall.
-   The Franchisees row stays — including the person being governed in a
-   list of stakeholders signals the rollout survives contact with owners.
-   One line per row; this is a routing table, not seven arguments. */
-const REVIEW: { fn: string; ask: string; where: string; href: string }[] = [
-  { fn: "IT and Security", ask: "Where does our data sit, who processes it, is it used for training, how does SSO work?", where: "Trust Center", href: "/security" },
-  { fn: "Legal",           ask: "What's logged, how long is it retained, and does this sit inside our franchise agreement?", where: "The log, above", href: "#the-log" },
-  { fn: "Compliance",      ask: "Can we produce an audit trail if a location disputes something?", where: "The log, above", href: "#the-log" },
-  { fn: "Operations",      ask: "What runs without a person, and can we change that line?", where: "Policy, above", href: "#policy" },
-  { fn: "Marketing",       ask: "Does anything generated stay on brand, and who approves what goes out?", where: "Policy, above", href: "#policy" },
-  { fn: "Franchisees",     ask: "What can HQ see about my business?", where: "Franchisees page", href: "/industries/franchising/multi-unit-franchisees" },
-  { fn: "Finance",         ask: "What does this replace, and what does it avoid?", where: "ROI calculator", href: "/roi-calculator" },
-];
-
-const RELATED: { eyebrow: string; title: string; href: string }[] = [
-  { eyebrow: "Trust Center", title: "How your data is handled, stored, and protected",  href: "/security" },
-  { eyebrow: "Workflows",    title: "Where the approval line applies in practice",      href: "/platform/workflows" },
-  { eyebrow: "Franchisees",  title: "What an owner sees on their side of the boundary", href: "/industries/franchising/multi-unit-franchisees" },
-];
+const ON_CHAR      = "rgba(245,245,247,0.92)";
+const ON_CHAR_MUTE = "rgba(245,245,247,0.55)";
+const ON_CHAR_RULE = "rgba(245,245,247,0.14)";
 
 export default function ControlCenterContent() {
   return (
-    <>
-      {/* ── 1. Hero ───────────────────────────────────────── */}
+    <div className="ed-control-center">
+      {/* ── 1. Hero ───────────────────────────────────────
+          Hazy indigo, kept on request rather than the handoff's
+          charcoal. The Capability band below still carries charcoal. */}
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.scrimRgba})` }} />
-          <div className="absolute inset-0" style={{ background: "radial-gradient(58% 52% at 82% 12%, rgba(159,224,248,0.16) 0%, rgba(159,224,248,0) 70%)" }} />
+          <div className="absolute inset-0" style={{ background: HERO.scrimCss ?? `rgba(${HERO.scrimRgba})` }} />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-20 pb-16 md:pt-24 md:pb-20">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: EASE }}>
-            <p className="uppercase" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_ACCENT }}>
-              Control Center
-            </p>
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE }}
+          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-2 lg:gap-16"
+        >
+          <div className="flex flex-col items-start">
+            <p style={{ ...EYEBROW, color: SKY }}>Control Center</p>
             <h1
-              className="mt-5 max-w-[880px] leading-[1.06] tracking-[-0.03em]"
+              className="mt-5 max-w-[900px]"
               style={{
-                color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700,
-                /* Ceiling derived at 1440: the longer clause measures
-                   ~680px at 40px inside the 880px cap. Break is lg-only. */
-                fontSize: "clamp(1.625rem, 0.55rem + 2.4vw, 2.5rem)",
-                textWrap: "balance",
+                fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.04,
+                fontSize: "clamp(1.75rem, 1rem + 2.6vw, 3.25rem)", color: "#FFFFFF", textWrap: "pretty",
               }}
             >
-              Your standards have always been contractual.{" "}
-              <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>Now they&rsquo;re enforceable.</span>
+              Every AI your network touches, running under one set of rules.
             </h1>
-            <p className="mt-6 max-w-[680px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
-              One policy set, one permission model, one log, applied across every location, every
-              channel, and every department. Set once at HQ. Nobody can work around it.
+            {/* The four clauses are the page's four arguments and work as
+                a table of contents. Keep the sentence structure. */}
+            <p className="mt-5 max-w-[660px] text-[17px] leading-[1.6]" style={{ color: ON_IMAGE }}>
+              Who can see what. What the AI is allowed to do for them. What it costs, and what it
+              did. Set once at HQ, applied at every location, in every channel, for every department.
             </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex flex-none whitespace-nowrap" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
                 Speak to an expert
-                <span className="ed-btn-arrow-badge" aria-hidden="true">
-                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
-                </span>
+                <span className="ed-btn-arrow-badge" aria-hidden="true"><ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} /></span>
               </Link>
-              <a href="#permissions" className="ed-btn ed-btn-secondary-dark inline-flex">See how permissions work</a>
+              {/* Anchors at capability, not data access: data
+                  permissions are expected, capability permissions are
+                  what converts. */}
+              <a href="#capability" className="ed-btn ed-btn-secondary-dark inline-flex flex-none whitespace-nowrap">
+                See what each person can do
+              </a>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: EASE, delay: 0.12 }}
-            className="mt-12 w-full max-w-[620px]"
-          >
-            <div
-              className="overflow-hidden rounded-[14px]"
-              style={{
-                backgroundColor: "rgba(4,26,44,0.55)", border: `1px solid ${ON_DARK_RULE}`,
-                backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)",
-              }}
-            >
-              <div className="px-5 py-3.5" style={{ borderBottom: `1px solid ${ON_DARK_RULE}` }}>
-                <span className="uppercase" style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.13em", fontWeight: 600, color: ON_DARK_DIM }}>
-                  Network policy · 214 locations · applied
+          <div className="max-w-[620px] overflow-hidden rounded-[14px]" style={{ background: "rgba(255,255,255,0.035)", border: `1px solid ${ON_CHAR_RULE}` }}>
+            <div className="px-5 py-3" style={{ background: "rgba(255,255,255,0.05)", ...META, color: "rgba(245,245,247,0.6)", fontVariantNumeric: "tabular-nums" }}>
+              Network policy · 214 locations · applied
+            </div>
+            {POLICY.map((r, i) => (
+              <div
+                key={r.label}
+                className="flex items-center justify-between gap-4 px-5 py-3.5"
+                style={{
+                  borderTop: i === 0 ? "none" : "1px solid rgba(245,245,247,0.1)",
+                  background: r.on ? undefined : "rgba(0,0,0,0.22)",
+                }}
+              >
+                <span className="text-[14.5px]" style={{ color: r.on ? ON_CHAR : "rgba(245,245,247,0.55)" }}>{r.label}</span>
+                <span
+                  className="flex flex-none items-center gap-1.5 rounded-full px-2.5 py-1"
+                  style={
+                    r.on
+                      ? { background: "rgba(159,224,248,0.12)", border: "1px solid rgba(159,224,248,0.34)", color: SKY }
+                      : { border: "1px solid rgba(245,245,247,0.24)", color: "rgba(245,245,247,0.6)" }
+                  }
+                >
+                  <span
+                    className="h-[7px] w-[7px] rounded-full"
+                    style={r.on ? { background: SKY } : { boxShadow: "inset 0 0 0 1px rgba(245,245,247,0.6)" }}
+                    aria-hidden="true"
+                  />
+                  <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600 }}>{r.on ? "ON" : "OFF"}</span>
                 </span>
               </div>
-              <div className="px-5 py-1">
-                {POLICY_SURFACE.map((r, i) => (
+            ))}
+          </div>
+        </motion.div>
+      </section>
+
+      <HeroLogoStrip />
+
+      {/* ── 2. One system ─────────────────────────────────── */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[760px] flex-col gap-3.5">
+            <p className="ed-fg-muted" style={EYEBROW}>One system</p>
+            <h2 className="ed-fg" style={H2}>One AI across your whole network. Not a dozen, running separately.</h2>
+            <p className="ed-fg-muted text-[15px] leading-[1.55]">
+              Your locations, your departments, and your coaches are already using AI. Right now
+              every one of them is a separate decision, with separate rules and no shared record.
+            </p>
+          </Reveal>
+
+          <div className="mt-9 grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <Reveal>
+              <div className="ed-card ed-border h-full overflow-hidden rounded-[14px] border">
+                <div className="ed-card-alt ed-fg-muted px-5 py-3" style={META}>Separate decisions</div>
+                {SEPARATE.map((r, i) => (
                   <div
-                    key={r.label}
-                    className="flex items-center justify-between gap-4 py-3"
-                    style={{ borderTop: i === 0 ? "none" : `1px solid ${ON_DARK_RULE}` }}
+                    key={r.who}
+                    className={`grid grid-cols-1 gap-x-4 gap-y-1 px-5 py-3 sm:grid-cols-[minmax(96px,0.42fr)_1fr] ${i === 0 ? "" : "ed-border border-t"}`}
+                    style={r.warn ? { background: "rgba(180,83,9,0.05)" } : undefined}
                   >
-                    <span className="min-w-0 flex-1 text-[13.5px] leading-snug" style={{ color: r.on ? ON_IMAGE : ON_DARK_DIM }}>
-                      {r.label}
-                    </span>
-                    {/* State by shape and label, not colour alone. */}
-                    <span
-                      className="flex flex-none items-center gap-2 rounded-full px-2 py-1"
-                      style={{
-                        backgroundColor: r.on ? "rgba(159,224,248,0.12)" : "rgba(245,237,224,0.06)",
-                        border: `1px solid ${r.on ? "rgba(159,224,248,0.34)" : "rgba(245,237,224,0.18)"}`,
-                      }}
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="h-[7px] w-[7px] rounded-full"
-                        style={r.on ? { backgroundColor: ON_DARK_ACCENT } : { border: `1.5px solid ${ON_DARK_DIM}` }}
-                      />
-                      <span style={{ fontFamily: MONO, fontSize: 9.5, letterSpacing: "0.12em", fontWeight: 700, color: r.on ? ON_DARK_ACCENT : ON_DARK_DIM }}>
-                        {r.on ? "ON" : "OFF"}
-                      </span>
-                    </span>
+                    <span style={{ fontFamily: MONO, fontSize: 12.5, color: r.warn ? "var(--warn)" : "var(--ed-fg)", fontWeight: r.warn ? 600 : 400 }}>{r.who}</span>
+                    <span className="text-[14.5px]" style={{ color: r.warn ? "var(--warn)" : "var(--ed-fg-muted)", fontWeight: r.warn ? 500 : 400 }}>{r.what}</span>
                   </div>
                 ))}
               </div>
-            </div>
-          </motion.div>
+            </Reveal>
+
+            <Reveal delay={0.08}>
+              <div
+                className="ed-card h-full overflow-hidden rounded-[14px]"
+                style={{ border: "1px solid rgba(0,119,168,0.3)", borderLeft: "3px solid #0077A8" }}
+              >
+                <div className="px-5 py-3" style={{ background: "rgba(0,119,168,0.06)", ...META, color: "var(--ed-accent-text)" }}>One system</div>
+                {UNIFIED.map(([k, v], i) => (
+                  <div key={k} className={`grid grid-cols-1 gap-x-4 gap-y-1 px-5 py-3 sm:grid-cols-[minmax(140px,0.5fr)_1fr] ${i === 0 ? "" : "ed-border border-t"}`}>
+                    <span className="ed-fg text-[14.5px] font-semibold">{k}</span>
+                    <span className="ed-fg-muted text-[14.5px]">{v}</span>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* ── 2. One system ─────────────────────────────────
-          The only section discussing the current state. Fragmentation, not
-          failure: every row is neutral except the HQ one, and that names
-          the condition rather than blaming anyone. */}
-      <Band>
-        <SectionHead
-          eyebrow="One system"
-          title="One AI across your whole network. Not a dozen, running separately."
-          sub="Your locations, your departments, and your coaches are already using AI. Right now every one of them is a separate decision, with separate rules and no shared record."
-        />
-
-        <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5">
-          <Reveal>
-            <div className="flex h-full flex-col overflow-hidden" style={CARD}>
-              <div className="px-5 py-3.5 md:px-6" style={{ backgroundColor: "var(--ed-card-alt)", borderBottom: "1px solid var(--ed-border)" }}>
-                <Meta>Separate decisions</Meta>
-              </div>
-              <div className="px-5 py-1 md:px-6">
-                {SEPARATE.map((r, i) => (
-                  <div key={r.who} className="flex flex-col gap-1 py-3.5 sm:flex-row sm:gap-5" style={{ borderTop: i === 0 ? "none" : "1px solid var(--ed-rule)" }}>
-                    <span className="flex-none sm:w-[104px]" style={{ fontFamily: MONO, fontSize: 12, fontWeight: r.warn ? 700 : 500, color: r.warn ? WARN : "var(--ed-fg)" }}>
-                      {r.who}
-                    </span>
-                    <span className="min-w-0 flex-1 text-[14px] leading-relaxed" style={r.warn ? { color: WARN, fontWeight: 600 } : { color: "var(--ed-fg-muted)" }}>
-                      {r.what}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="flex h-full flex-col overflow-hidden" style={{ ...CARD, borderLeft: "3px solid #0077A8" }}>
-              <div className="px-5 py-3.5 md:px-6" style={{ backgroundColor: ACCENT_TINT, borderBottom: "1px solid rgba(0,119,168,0.18)" }}>
-                <Meta color="var(--ed-accent-text)">One system</Meta>
-              </div>
-              <div className="px-5 py-1 md:px-6">
-                {ONE_SYSTEM.map((r, i) => (
-                  <div key={r.who} className="flex flex-col gap-1 py-3.5 sm:flex-row sm:gap-5" style={{ borderTop: i === 0 ? "none" : "1px solid var(--ed-rule)" }}>
-                    <span className="ed-fg flex-none text-[13.5px] sm:w-[150px]" style={{ fontWeight: 600 }}>{r.who}</span>
-                    <span className="ed-fg-muted min-w-0 flex-1 text-[14px] leading-relaxed">{r.what}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        <Reveal delay={0.16}>
-          <p className="ed-fg mt-9 max-w-[760px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 22, lineHeight: 1.35 }}>
-            Governing one system is a decision. Governing twelve is a project nobody finishes.
-          </p>
-        </Reveal>
-      </Band>
-
-      {/* ── 3. Policy ─────────────────────────────────────
-          A settings surface, not a capability list, and deliberately not
-          interactive: it is an illustration of a dial the reader controls. */}
-      <Band alt id="policy">
-        <SectionHead
-          eyebrow="Policy"
-          title="You draw the line. Everything on the far side stops for a person."
-          sub="Set once at HQ, applied at every location, in every channel."
-        />
-
-        <Reveal>
-          <div className="mt-10 max-w-[820px] overflow-hidden" style={CARD}>
-            <div className="flex gap-4 px-5 py-3.5 md:px-6" style={{ backgroundColor: "var(--ed-card-alt)", borderBottom: "1px solid var(--ed-border)" }}>
-              <span className="flex-1"><Meta>Action</Meta></span>
-              <span className="w-[86px] flex-none text-center"><Meta>Runs alone</Meta></span>
-              <span className="w-[60px] flex-none text-center"><Meta>Waits</Meta></span>
-            </div>
-            <div className="px-5 md:px-6">
-              {POLICY_ROWS.map((r, i) => (
-                <div key={r.action} className="flex items-center gap-4 py-3" style={{ borderTop: i === 0 ? "none" : "1px solid var(--ed-rule)" }}>
-                  <span className="ed-fg min-w-0 flex-1 text-[14px] leading-snug">{r.action}</span>
-                  <span className="flex w-[86px] flex-none justify-center">
-                    <Dot filled={r.alone} />
-                  </span>
-                  <span className="flex w-[60px] flex-none justify-center">
-                    <Dot filled={!r.alone} />
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </Reveal>
-
-        <div className="mt-9 grid grid-cols-1 gap-x-10 gap-y-7 md:grid-cols-3">
-          {POLICY_POINTS.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.08}>
-              <p className="ed-fg text-[15px]" style={{ fontWeight: 600, letterSpacing: "-0.01em" }}>{p.title}</p>
-              <p className="ed-fg-muted mt-1.5 text-[14px] leading-relaxed">{p.body}</p>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.14}>
-          <p className="ed-fg mt-9 max-w-[680px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}>
-            The defaults are conservative. The line is yours to move in either direction.
-          </p>
-        </Reveal>
-      </Band>
-
-      {/* ── 4. Permissions ────────────────────────────────
-          The section that carries the page. Deeper than the hero. */}
-      <section id="permissions" className="w-full scroll-mt-24" style={{ background: "linear-gradient(180deg, #0D2836 0%, #091C26 100%)" }}>
-        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
-          <Reveal>
-            <p className="uppercase" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_ACCENT }}>
-              Permissions
-            </p>
-            <h2
-              className="mt-4 max-w-[820px] leading-[1.08] tracking-[-0.03em]"
-              style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700, fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)", textWrap: "pretty" }}
-            >
-              The same question. Four people.{" "}
-              <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>Four different answers.</span>
-            </h2>
-            <p className="mt-5 max-w-[660px] text-base md:text-lg leading-relaxed" style={{ color: ON_DARK }}>
-              Role and location decide what any answer, report, or action can include. Enforced on
-              every response, not at login.
+      {/* ── 3. Data access ────────────────────────────────
+          No capability language here: what a person can *do* belongs
+          entirely to section 4. */}
+      <section className="ed-bg-alt w-full">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[760px] flex-col gap-3.5">
+            <p className="ed-fg-muted" style={EYEBROW}>Data access</p>
+            <h2 className="ed-fg" style={H2}>The same question. Answered inside what each user is entitled to see.</h2>
+            <p className="ed-fg-muted text-[15px] leading-[1.55]">
+              Role and location decide what any answer, report, or action can include. Enforced every
+              time.
             </p>
           </Reveal>
 
-          <Reveal delay={0.08}>
+          <Reveal delay={0.06}>
             <p
-              className="mt-10 max-w-[720px] tracking-[-0.02em]"
-              style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 500, fontSize: 20, lineHeight: 1.35 }}
+              className="ed-fg mt-9 pl-[18px]"
+              style={{ fontFamily: JAKARTA, fontSize: "clamp(1.125rem, 0.6rem + 1.3vw, 1.625rem)", fontWeight: 500, borderLeft: "3px solid #0077A8" }}
             >
               &ldquo;How did we do on attach rate last month?&rdquo;
             </p>
           </Reveal>
 
-          <div className="mt-9 max-w-[900px]">
-            <RoleAnswers />
-          </div>
-
-          <Reveal delay={0.12}>
-            <div className="mt-10 max-w-[820px] pt-8" style={{ borderTop: `1px solid ${ON_DARK_RULE}` }}>
-              <p className="text-[15px] leading-relaxed" style={{ color: ON_DARK }}>
-                Nobody sees another owner&rsquo;s numbers. Not by policy, by the permissions your
-                systems already enforce, inherited at the connection.
-              </p>
+          <Reveal delay={0.08} className="mt-7">
+            <div className="ed-card ed-border overflow-hidden rounded-[14px] border">
+              {RESPONSES.map((r, i) => (
+                <div key={r.role} className={`grid grid-cols-1 gap-x-6 gap-y-2.5 px-5 py-5 lg:grid-cols-[minmax(260px,0.5fr)_1fr] ${i === 0 ? "" : "ed-border border-t"}`}>
+                  <span className="flex flex-col gap-2">
+                    <span style={{ ...META, color: "var(--ed-accent-text)" }}>{r.role}</span>
+                    {/* The rule grows down the list; that growth is the
+                        visual half of the argument. */}
+                    <span className="block h-0.5" style={{ width: r.rule, background: "var(--ed-accent-text)" }} aria-hidden="true" />
+                  </span>
+                  <span className="ed-fg text-[15px] leading-[1.55]" style={{ fontVariantNumeric: "tabular-nums" }}>{r.text}</span>
+                </div>
+              ))}
             </div>
           </Reveal>
 
-          <div className="mt-10 grid grid-cols-1 gap-x-10 gap-y-7 md:grid-cols-3">
-            {PERMISSION_POINTS.map((p, i) => (
-              <Reveal key={p.title} delay={i * 0.08}>
-                <p className="text-[15px]" style={{ color: "#FFFFFF", fontWeight: 600, letterSpacing: "-0.01em" }}>{p.title}</p>
-                <p className="mt-1.5 text-[14px] leading-relaxed" style={{ color: ON_DARK_DIM }}>{p.body}</p>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal delay={0.1}>
+            <div className="ed-border mt-8 grid grid-cols-1 gap-7 border-t pt-7 sm:grid-cols-2 lg:grid-cols-3">
+              {ACCESS_POINTS.map((p) => (
+                <span key={p.title} className="flex flex-col gap-1.5">
+                  <span className="ed-fg text-[15px] font-semibold">{p.title}</span>
+                  <span className="ed-fg-muted text-[14px] leading-[1.5]">{p.body}</span>
+                </span>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* ── 5. The log ────────────────────────────────────
-          Dense on purpose. Includes human actions, not only system ones:
-          entries 3 and 5 have named people approving and publishing, which
-          is what a dispute would actually need. */}
-      <Band id="the-log">
-        <SectionHead
-          eyebrow="The log"
-          title="Every question, answer, action, and approval. With its sources."
-          sub="Searchable, exportable, and attributable to a person and a location."
-        />
+      {/* ── 4. Capability, the centrepiece ────────────────── */}
+      <section id="capability" className="relative w-full scroll-mt-24 overflow-hidden" style={{ background: CHARCOAL }}>
+        <div className="absolute inset-0" aria-hidden="true" style={{ background: CHARCOAL_GLOW }} />
+        <div className="relative mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-20 md:py-24">
+          <Reveal className="flex max-w-[820px] flex-col gap-3.5">
+            <p style={{ ...EYEBROW, color: ON_CHAR_MUTE }}>Capability</p>
+            <h2 style={{ ...H2, color: "#FFFFFF" }}>
+              You control what each person sees.
+              <span className="block" style={{ color: SKY }}>You also control what the AI does for them.</span>
+            </h2>
+            <p className="text-[15px] leading-[1.55]" style={{ color: "rgba(245,245,247,0.72)" }}>
+              Every AI product controls what a person can see. This controls what the AI is allowed
+              to do on their behalf.
+            </p>
+          </Reveal>
 
-        <Reveal>
-          <div className="mt-10 max-w-[880px] overflow-hidden" style={CARD}>
-            <div className="px-5 py-3.5 md:px-6" style={{ backgroundColor: "var(--ed-card-alt)", borderBottom: "1px solid var(--ed-border)" }}>
-              <Meta>Activity · West territory · last 24 hours</Meta>
-            </div>
-            <div className="px-5 py-1 md:px-6">
+          <div className="mt-9"><Matrix /></div>
+        </div>
+      </section>
+
+      {/* ── 5. Safe rollout ───────────────────────────────
+          A numbered spine, not a card grid. Section 6 follows and is
+          data dense; this is what keeps them distinct. */}
+      <section id="sandbox" className="ed-bg w-full scroll-mt-24">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[760px] flex-col gap-3.5">
+            <p className="ed-fg-muted" style={EYEBROW}>Safe rollout</p>
+            <h2 className="ed-fg" style={H2}>Franchisees can build in a secured system.</h2>
+            <p className="ed-fg-muted text-[15px] leading-[1.55]">
+              Franchisees writing their own tools sounds like a risk. It stops being one when the
+              environment is bounded, and every App or Workflow is inspectable before it moves.
+            </p>
+          </Reveal>
+
+          <div className="ed-border mt-9 flex max-w-[900px] flex-col border-l">
+            {ROLLOUT.map(([n, label, body], i) => (
+              <Reveal key={n} delay={i * 0.07}>
+                <div className="relative grid grid-cols-1 gap-x-8 gap-y-2 pb-8 pl-7 lg:grid-cols-[minmax(0,200px)_1fr]">
+                  <span
+                    className="absolute left-[-7px] top-1 h-[13px] w-[13px] rounded-full"
+                    style={i === ROLLOUT.length - 1
+                      ? { background: "var(--ed-accent-text)" }
+                      : { background: "var(--ed-card)", boxShadow: "inset 0 0 0 2px var(--ed-accent-text)" }}
+                    aria-hidden="true"
+                  />
+                  <span className="flex items-baseline gap-3">
+                    <span style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 600, color: "var(--ed-accent-text)" }}>{n}</span>
+                    <span className="ed-fg" style={{ fontFamily: JAKARTA, fontSize: 17, fontWeight: 600 }}>{label}</span>
+                  </span>
+                  <span className="ed-fg-muted text-[15px] leading-[1.55]">{body}</span>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal delay={0.1}>
+            <p className="ed-fg mt-2 max-w-[760px]" style={{ fontFamily: JAKARTA, fontSize: "clamp(1.0625rem, 0.6rem + 1.1vw, 1.375rem)", fontWeight: 600, lineHeight: 1.35 }}>
+              The safest network is not the one where nobody builds anything. It&rsquo;s the one
+              where building is bounded, visible, and reversible.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 6. The record ─────────────────────────────────
+          Keeps its human actions: entries 3 and 5 involve named people
+          approving and publishing, which is what makes the record usable
+          in a dispute. The odd minutes are deliberate. */}
+      <section id="record" className="ed-bg-alt w-full scroll-mt-24">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[760px] flex-col gap-3.5">
+            <p className="ed-fg-muted" style={EYEBROW}>The record</p>
+            <h2 className="ed-fg" style={H2}>Every question, answer, action, and approval is logged and verifiable.</h2>
+            <p className="ed-fg-muted text-[15px] leading-[1.55]">
+              Searchable, exportable, attributable to a person and a location, with sources.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.08} className="mt-9">
+            <div
+              className="ed-card ed-border overflow-hidden rounded-[14px] border"
+              style={{ boxShadow: "0 1px 2px rgba(10,10,10,0.04), 0 8px 24px rgba(10,10,10,0.04)" }}
+            >
+              <div className="ed-card-alt ed-fg-muted px-5 py-3" style={META}>Activity · West territory · last 24 hours</div>
               {LOG.map((e, i) => (
-                <div key={e.time} className="py-4" style={{ borderTop: i === 0 ? "none" : "1px solid var(--ed-rule)" }}>
-                  {/* Timestamp above the actor line below sm, beside it
-                      above, so nothing truncates on a phone. */}
-                  <div className="flex flex-col gap-1 sm:flex-row sm:gap-5">
-                    <span className="ed-fg-muted flex-none sm:w-[52px]" style={{ fontFamily: MONO, fontSize: 12, fontVariantNumeric: "tabular-nums" }}>
-                      {e.time}
+                <div key={e.time} className={`grid grid-cols-1 gap-x-4 gap-y-1.5 px-5 py-4 sm:grid-cols-[58px_1fr] ${i === 0 ? "" : "ed-border border-t"}`}>
+                  <span className="ed-fg-muted" style={{ fontFamily: MONO, fontSize: 12.5, fontVariantNumeric: "tabular-nums" }}>{e.time}</span>
+                  <span className="flex flex-col gap-1">
+                    <span className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                      <span className="ed-fg text-[14px] font-medium">{e.actor}</span>
+                      <span className="ed-accent-text text-[13px]">{e.topic}</span>
                     </span>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-col gap-0.5 md:flex-row md:items-baseline md:justify-between md:gap-5">
-                        <span className="ed-fg text-[14px]" style={{ fontWeight: 500 }}>{e.actor}</span>
-                        <span className="ed-fg flex-none text-[14px] md:text-right" style={{ fontWeight: 600 }}>{e.action}</span>
+                    <span style={{ fontFamily: MONO, fontSize: 12, color: e.hold ? "var(--warn)" : "var(--ed-fg-muted)" }}>{e.detail}</span>
+                  </span>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 7. Model choice ───────────────────────────────
+          Do not name a model vendor: the claim is swappability and a
+          vendor list dates fast. */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[760px] flex-col gap-3.5">
+            <p className="ed-fg-muted" style={EYEBROW}>Model choice</p>
+            <h2 className="ed-fg" style={H2}>The best model for a task changes every few months. Your platform shouldn&rsquo;t.</h2>
+          </Reveal>
+
+          <Reveal delay={0.08} className="mt-9">
+            <div className="mx-auto flex max-w-[620px] flex-col items-center">
+              {[0, 1].map((half) => (
+                <div key={half} className="contents">
+                  {half === 1 && (
+                    <>
+                      <span className="ed-border block h-[22px] w-px border-l" aria-hidden="true" />
+                      <div
+                        className="flex w-full flex-col items-center gap-1 rounded-xl px-5 py-4"
+                        style={{ border: "1px dashed rgba(0,119,168,0.5)", background: "rgba(0,119,168,0.06)" }}
+                      >
+                        <span style={{ ...META, color: "var(--ed-accent-text)" }}>Model provider</span>
+                        <span style={{ fontFamily: MONO, fontSize: 12, color: "var(--ed-accent-text)" }}>swappable</span>
                       </div>
-                      <p className="ed-fg-muted mt-1.5 text-[13px] leading-relaxed">{e.detail}</p>
-                    </div>
+                      <span className="ed-border block h-[22px] w-px border-l" aria-hidden="true" />
+                    </>
+                  )}
+                  <div className="ed-card ed-border flex w-full flex-col items-center gap-1 rounded-xl border px-5 py-4 text-center">
+                    <span className="ed-fg text-[14px] font-medium">
+                      Your policies · your access model · your capabilities · your plays · your log
+                    </span>
+                    <span className="ed-fg-muted" style={{ fontFamily: MONO, fontSize: 12 }}>unchanged</span>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-        </Reveal>
-
-        <div className="mt-9 grid grid-cols-1 gap-x-10 gap-y-7 sm:grid-cols-2 lg:grid-cols-4">
-          {LOG_POINTS.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.07}>
-              <p className="ed-fg text-[15px]" style={{ fontWeight: 600, letterSpacing: "-0.01em" }}>{p.title}</p>
-              <p className="ed-fg-muted mt-1.5 text-[14px] leading-relaxed">{p.body}</p>
-            </Reveal>
-          ))}
-        </div>
-
-        {/* Aimed at legal. Keep it. */}
-        <Reveal delay={0.14}>
-          <p className="ed-fg mt-9 max-w-[720px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}>
-            If someone asks what your network has been asking an AI, you have an answer.
-          </p>
-        </Reveal>
-      </Band>
-
-      {/* ── 6. Model choice ───────────────────────────────
-          §5 is dense, so this reads lighter and more open: one diagram and
-          three points, not another list. No model vendor is named. */}
-      <Band alt>
-        <SectionHead
-          eyebrow="Model choice"
-          title="The best model for a task changes every few months. Your platform shouldn't."
-        />
-
-        <Reveal>
-          <div className="mt-10 max-w-[640px]">
-            {[0, 1].map((half) => (
-              <div key={half}>
-                {half === 1 && (
-                  <div className="flex justify-center">
-                    <span aria-hidden="true" className="h-6 w-px" style={{ backgroundColor: "var(--ed-border)" }} />
-                  </div>
-                )}
-                {half === 1 && (
-                  /* The only interchangeable part. Everything framing it
-                     is repeated above and below to make that literal. */
-                  <div
-                    className="rounded-[12px] px-5 py-5 text-center"
-                    style={{ backgroundColor: ACCENT_TINT, border: "1px dashed rgba(0,119,168,0.42)" }}
-                  >
-                    <p className="uppercase" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 700, color: "var(--ed-accent-text)" }}>
-                      Model provider
-                    </p>
-                    <p className="ed-fg-muted mt-1.5 text-[13px]">swappable</p>
-                  </div>
-                )}
-                <div className={half === 1 ? "flex justify-center" : ""}>
-                  {half === 1 && <span aria-hidden="true" className="h-6 w-px" style={{ backgroundColor: "var(--ed-border)" }} />}
-                </div>
-                <div
-                  className="rounded-[12px] px-5 py-4 text-center"
-                  style={{ border: "1px solid var(--ed-border)", backgroundColor: "var(--ed-card)" }}
-                >
-                  <p className="ed-fg text-[13.5px]" style={{ fontWeight: 600 }}>
-                    Your policies · your permissions · your plays · your log
-                  </p>
-                  <p className="ed-fg-muted mt-1 text-[12px]">unchanged</p>
-                </div>
-                {half === 0 && (
-                  <div className="flex justify-center">
-                    <span aria-hidden="true" className="h-6 w-px" style={{ backgroundColor: "var(--ed-border)" }} />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </Reveal>
-
-        <div className="mt-10 grid grid-cols-1 gap-x-10 gap-y-7 md:grid-cols-3">
-          {MODEL_POINTS.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.08}>
-              <p className="ed-fg text-[15px]" style={{ fontWeight: 600, letterSpacing: "-0.01em" }}>{p.title}</p>
-              <p className="ed-fg-muted mt-1.5 text-[14px] leading-relaxed">{p.body}</p>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.14}>
-          <p className="ed-fg mt-9 max-w-[720px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}>
-            The question isn&rsquo;t which model is best today. It&rsquo;s whether you&rsquo;ll have
-            to rebuild when that changes.
-          </p>
-        </Reveal>
-      </Band>
-
-      {/* ── 7. Review-ready ───────────────────────────────
-          A routing table, one line per row. IT and Security first, because
-          security review is where enterprise deals stall. */}
-      <section className="w-full" style={{ background: "linear-gradient(180deg, #0B2C48 0%, #071B29 100%)" }}>
-        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
-          <Reveal>
-            <p className="uppercase" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_DIM }}>
-              Review-ready
-            </p>
-            <h2
-              className="mt-4 max-w-[860px] leading-[1.08] tracking-[-0.03em]"
-              style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700, fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)", textWrap: "pretty" }}
-            >
-              You&rsquo;ll have to answer to six people.{" "}
-              <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>Here&rsquo;s what each of them usually asks.</span>
-            </h2>
-            <p className="mt-5 max-w-[660px] text-base md:text-lg leading-relaxed" style={{ color: ON_DARK }}>
-              Most of this deal happens in rooms we&rsquo;re not in. This is the material for those
-              rooms.
-            </p>
           </Reveal>
 
-          {/* Stacked rows rather than a scrolling table at narrow widths. */}
-          <div className="mt-10 max-w-[980px]">
-            {REVIEW.map((r, i) => (
-              <Reveal key={r.fn} delay={i * 0.06}>
-                <div className="flex flex-col gap-2 py-4 lg:flex-row lg:items-baseline lg:gap-8" style={{ borderTop: i === 0 ? "none" : `1px solid ${ON_DARK_RULE}` }}>
-                  <span className="flex-none text-[15px] lg:w-[160px]" style={{ color: "#FFFFFF", fontWeight: 600 }}>{r.fn}</span>
-                  <span className="min-w-0 flex-1 text-[14px] leading-relaxed" style={{ color: ON_DARK_DIM }}>{r.ask}</span>
-                  {r.href.startsWith("#") ? (
-                    <a href={r.href} className="flex-none text-[13.5px] lg:w-[168px] lg:text-right" style={{ color: ON_DARK_ACCENT, fontWeight: 500, textDecoration: "underline", textUnderlineOffset: 4 }}>
-                      {r.where} &rarr;
-                    </a>
-                  ) : (
-                    <Link href={r.href} className="flex-none text-[13.5px] lg:w-[168px] lg:text-right" style={{ color: ON_DARK_ACCENT, fontWeight: 500, textDecoration: "underline", textUnderlineOffset: 4 }}>
-                      {r.where} &rarr;
-                    </Link>
-                  )}
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.14}>
-            <p className="mt-9 max-w-[720px] tracking-[-0.02em]" style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}>
-              Send this page to whichever of them asks first.
-            </p>
+          <Reveal delay={0.1}>
+            <div className="ed-border mt-9 grid grid-cols-1 gap-7 border-t pt-7 sm:grid-cols-2 lg:grid-cols-3">
+              {MODEL_POINTS.map((p) => (
+                <span key={p.title} className="flex flex-col gap-1.5">
+                  <span className="ed-fg text-[15px] font-semibold">{p.title}</span>
+                  <span className="ed-fg-muted text-[14px] leading-[1.5]">{p.body}</span>
+                </span>
+              ))}
+            </div>
           </Reveal>
         </div>
       </section>
 
-      {/* ── 8. Proof ──────────────────────────────────────── */}
-      <Band>
-        <SectionHead title="Rolled out across a governed network." />
-        <Reveal>
-          <div className="mt-9 max-w-[820px] p-6 md:p-8" style={CARD}>
-            <div className="flex flex-wrap items-baseline justify-between gap-4">
-              {/* Deliberately not <Meta>: it force-uppercases, and the
-                  placeholder rule says render the token exactly as written. */}
-              <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.13em", fontWeight: 600, color: "var(--ed-fg-muted)" }}>
-                {"{{TBD:control-center-proof-brand}}"}
-              </span>
-              <span style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: "2.25rem", lineHeight: 1, letterSpacing: "-0.03em", color: "var(--ed-accent-text)" }}>
-                {"{{TBD:control-center-proof-metric}}"}
-              </span>
-            </div>
-            <blockquote className="ed-fg mt-6 text-[15px] md:text-base leading-relaxed" style={{ fontFamily: JAKARTA, fontWeight: 500 }}>
-              &ldquo;{"{{TBD:control-center-proof-quote}}"}&rdquo;
-            </blockquote>
-            <p className="ed-fg-muted mt-5 text-sm">{"{{TBD:control-center-proof-attribution}}"}</p>
-          </div>
-        </Reveal>
-      </Band>
+      {/* ── 8. Review-ready ───────────────────────────────
+          A routing table, not seven arguments. One line per row. */}
+      <section className="w-full" style={{ background: "#0B1220" }}>
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-20 md:py-24">
+          <Reveal className="flex max-w-[760px] flex-col gap-3.5">
+            <p style={{ ...EYEBROW, color: "rgba(238,242,248,0.55)" }}>Review-ready</p>
+            <h2 style={{ ...H2, color: "#FFFFFF" }}>
+              Everything here is linkable, so you can send the part that matters
+            </h2>
+          </Reveal>
 
-      {/* ── 9. Related ────────────────────────────────────── */}
-      <Band alt>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {RELATED.map((r, i) => (
-            <Reveal key={r.href} delay={i * 0.08}>
-              <Link href={r.href} className="group flex h-full flex-col justify-between gap-8 p-6 transition-transform hover:-translate-y-0.5" style={CARD}>
-                <div>
-                  <Eyebrow accent>{r.eyebrow}</Eyebrow>
-                  <p className="ed-fg mt-3 text-[17px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 500, lineHeight: 1.3 }}>
-                    {r.title}
-                  </p>
+          <div className="mt-9 flex flex-col">
+            {ROUTING.map((r, i) => (
+              <Reveal key={r.fn} delay={i * 0.05}>
+                <div
+                  className="grid grid-cols-1 gap-x-6 gap-y-1.5 py-4 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,2fr)_minmax(0,0.9fr)]"
+                  style={{ borderTop: i === 0 ? "none" : "1px solid rgba(238,242,248,0.16)" }}
+                >
+                  <span className="text-[14.5px] font-semibold" style={{ color: "#FFFFFF" }}>{r.fn}</span>
+                  <span className="text-[14px]" style={{ color: "rgba(238,242,248,0.7)" }}>{r.q}</span>
+                  <Link href={r.href} className="inline-flex w-fit items-center gap-1.5 text-[13.5px]" style={{ color: SKY }}>
+                    {r.to}
+                    <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} aria-hidden="true" />
+                  </Link>
                 </div>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" style={{ color: "var(--ed-accent-text)" }} strokeWidth={2} aria-hidden="true" />
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 9. Proof ──────────────────────────────────────
+          The prototype's four {{TBD}} tokens, replaced with published
+          WSI material. See data.ts. */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex flex-col gap-3.5">
+            <h2 className="ed-fg" style={H2}>Rolled out across a governed network.</h2>
+          </Reveal>
+          <Reveal delay={0.08} className="mt-7">
+            <figure
+              className="ed-card m-0 max-w-[720px] rounded-[14px] p-6"
+              style={{ border: "1px solid var(--ed-border)", borderLeft: "3px solid #0077A8" }}
+            >
+              <span className="ed-fg-muted block" style={META}>{PROOF.brand}</span>
+              <p
+                className="mt-2"
+                style={{ fontFamily: JAKARTA, fontSize: "clamp(1.375rem, 0.8rem + 1.2vw, 2rem)", fontWeight: 700, color: "var(--ed-accent-text)", letterSpacing: "-0.02em" }}
+              >
+                {PROOF.metric}
+              </p>
+              <blockquote className="ed-fg m-0 mt-4 text-[16px] leading-[1.6]">&ldquo;{PROOF.quote}&rdquo;</blockquote>
+              <figcaption className="ed-fg-muted mt-4" style={{ fontFamily: MONO, fontSize: 12 }}>{PROOF.attribution}</figcaption>
+            </figure>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 10. Related ───────────────────────────────────── */}
+      <section className="ed-bg-alt w-full">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:grid-cols-3">
+          {RELATED.map((r, i) => (
+            <Reveal key={r.href} delay={i * 0.06}>
+              <Link href={r.href} className="ed-card ed-border ed-story-card flex h-full flex-col gap-2 rounded-[14px] border p-6">
+                <span className="ed-accent-text" style={{ ...META, letterSpacing: "0.14em" }}>{r.kicker}</span>
+                <span className="ed-fg-muted text-[14.5px] leading-[1.5]">{r.title}</span>
+                <ArrowRight className="ed-accent-text mt-1 h-4 w-4" strokeWidth={2.25} aria-hidden="true" />
               </Link>
             </Reveal>
           ))}
         </div>
-      </Band>
+      </section>
 
-      {/* ── 10. CTA ───────────────────────────────────────── */}
+      {/* ── 11. Closing ───────────────────────────────────── */}
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.closingRgba})` }} />
+          <div className="absolute inset-0" style={{ background: HERO.closingCss ?? `rgba(${HERO.closingRgba})` }} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 45%, ${CLOSING_BASE} 100%)` }} />
         </div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.85, ease: EASE }}
-          className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24"
+          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-[1.2fr_.8fr] lg:gap-16"
         >
-          <h2
-            className="leading-[1.06] tracking-[-0.03em]"
-            style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700, fontSize: "clamp(1.5rem, 0.4rem + 2.9vw, 3rem)", maxWidth: "820px" }}
-          >
-            Send us the questions your security review always asks.
-          </h2>
-          <p className="mt-5 max-w-[620px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
-            We&rsquo;ll answer them in writing before the first call.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
+          <div className="flex flex-col gap-4">
+            <h2
+              style={{
+                fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.08,
+                fontSize: "clamp(1.5rem, 0.5rem + 2.7vw, 2.625rem)", color: "#FFFFFF", textWrap: "pretty",
+              }}
+            >
+              Send us the questions your security review always asks.
+            </h2>
+            <p className="max-w-[480px] text-base leading-[1.6]" style={{ color: ON_IMAGE }}>
+              We&rsquo;ll answer them in writing before the first call.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-start gap-3 self-stretch lg:items-end lg:justify-end">
+            <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex flex-none whitespace-nowrap" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
               Speak to an expert
-              <span className="ed-btn-arrow-badge" aria-hidden="true">
-                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
-              </span>
+              <span className="ed-btn-arrow-badge" aria-hidden="true"><ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} /></span>
             </Link>
-            <a href="#permissions" className="ed-btn ed-btn-secondary-dark inline-flex">See how permissions work</a>
+            <a href="#capability" className="ed-btn ed-btn-secondary-dark inline-flex flex-none whitespace-nowrap">See what each person can do</a>
           </div>
         </motion.div>
       </section>
-    </>
-  );
-}
-
-/** Two-state marker for §3. Filled or hollow, so the setting reads in
-    greyscale; each one is also labelled for screen readers. */
-function Dot({ filled }: { filled: boolean }) {
-  return (
-    <span
-      className="h-[11px] w-[11px] rounded-full"
-      style={filled
-        ? { backgroundColor: "var(--ed-accent-text)" }
-        : { border: "1.5px solid var(--ed-border)" }}
-      role="img"
-      aria-label={filled ? "yes" : "no"}
-    />
+    </div>
   );
 }

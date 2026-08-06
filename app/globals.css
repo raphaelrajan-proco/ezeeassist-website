@@ -317,6 +317,13 @@
   --haze-c: linear-gradient(180deg, #414C92 0%, #664F86 40%, #8D6072 70%, #437069 100%);
 }
 
+/* ─── Control Center page ──────────────────────────────────
+   Only the semantic warn colour, used by the "One system" panel's HQ row
+   and by the log's approval-hold line. */
+.theme-editorial .ed-control-center { --warn: #B45309; }
+.dark .theme-editorial .ed-control-center,
+.theme-editorial.dark .ed-control-center { --warn: #FBBF24; }
+
 /* ─── Compliance page ──────────────────────────────────────
    The escalation ladder's stepped indent is the argument: each reminder
    moves further out, and the resolved row returns to the start. It
