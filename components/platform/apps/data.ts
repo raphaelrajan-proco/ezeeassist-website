@@ -40,12 +40,17 @@ export const WISHLIST: { date: string; title: string; tag: string; now?: boolean
 ];
 
 /* ── §3 One app, twenty minutes, five stages. ── */
+/* Six steps, and **the sixth is the point**. Shipping at 4:05 is the
+   mechanic; nine managers using it fifteen minutes later is the business
+   outcome. An earlier version ended at 4:05 and the section read as a
+   build demo. `live` marks the payoff card, not the deployment step. */
 export const TIMELINE: { label: string; body: string; d: string; live?: boolean }[] = [
   { label: "3:45PM · DESCRIBED", d: "M4 5h16v11H9l-5 4z M9 10h6", body: "“Build a daily digest for spa managers. Match today’s appointments to members due for an upsell.”" },
   { label: "3:47PM · GENERATED", d: "M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z", body: "A working tool with the day’s appointments, membership status, and talking points already wired" },
   { label: "3:52PM · ADJUSTED",  d: "M4 20l4-1 10-10-3-3L5 16z M14 6l3 3", body: "“Only guests with three or more visits”, requested in chat and applied in seconds" },
   { label: "3:58PM · SCOPED",    d: "M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z M9 12l2.2 2.2L15 10", body: "Already inside the rules you set, nothing to configure" },
-  { label: "4:05PM · LIVE",      d: "M4 11v3l12 4V7L4 11z M16 8.5a5 5 0 010 7 M8 15v4h3", body: "Running at every location you chose, making an impact right away", live: true },
+  { label: "4:05PM · LIVE",      d: "M4 11v3l12 4V7L4 11z M16 8.5a5 5 0 010 7 M8 15v4h3", body: "Running at every location you chose, with nothing left to configure" },
+  { label: "4:20PM · IN USE",    d: "M9 8a3 3 0 100-6 3 3 0 000 6z M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6 M17 9.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5z M16.5 20c0-2.6 1.6-4.6 3.8-4.6", body: "Nine managers across the network already have it open, working today’s guests", live: true },
 ];
 
 /* ── §4 ── */

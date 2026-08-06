@@ -235,12 +235,16 @@ export default function AppsContent() {
         </div>
       </section>
 
-      {/* ── 3. Described at 3:45, running at 4:05 ───────── */}
+      {/* ── 3. Described at 3:45, in use at 4:20 ────────── */}
       <section className="ed-bg-alt w-full">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
           <Reveal className="flex max-w-[860px] flex-col gap-3.5">
             <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
-              Described at 3:45, running at 4:05.
+              {/* 4:20, not 4:05, by request. "in use" rather than
+                  "running": the timeline still ships at 4:05 and the
+                  section now ends on adoption, so "running at 4:20" would
+                  contradict its own fifth step. */}
+              Described at 3:45, in use at 4:20.
             </h2>
             <p className="ed-fg-muted text-[18px] leading-[1.7]">
               No code to write, no ticket to file, no release to wait on. Every app inherits the
@@ -326,7 +330,7 @@ export default function AppsContent() {
                    would clamp it anyway, so it is authored at 12. */
                 style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.14em", color: "var(--ed-fg-muted)" }}
               >
-                4:05PM · WHAT WENT LIVE
+                4:20PM · ALREADY IN USE
               </span>
               <DigestApp />
             </Reveal>

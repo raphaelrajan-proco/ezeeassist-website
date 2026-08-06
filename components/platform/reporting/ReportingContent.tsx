@@ -11,6 +11,7 @@ import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 import IntegrationMarquee from "@/components/sections/IntegrationMarquee";
 import FlowerMark from "@/components/sections/FlowerMark";
 import StackHub from "./StackHub";
+import FileScatter from "./FileScatter";
 import { INK, INPUTS, RELATED, SCOPES, TILE, type Tone } from "./data";
 
 /**
@@ -76,22 +77,10 @@ const CARD_INK = "#0A0A0A";
 const CARD_INK_MUTED = "#52525B";
 const CARD_RULE = "#E5E7EB";
 
-/* ── §2 ── */
-const FILES: { name: string; tone?: Tone }[] = [
-  { name: "week-42-v7.xlsx" },
-  { name: "rollup-FINAL.xlsx" },
-  { name: "FW: which version?", tone: "warn" },
-  { name: "regional-rollup.xlsx" },
-  { name: "labour-hours-v4.xlsx" },
-  { name: "RE: RE: numbers", tone: "bad" },
-  { name: "P&L-chart.png" },
-  { name: "q3-numbers-v3.xlsx" },
-  { name: "attach-by-store.csv", tone: "purple" },
-  { name: "deck-v2-final.pptx" },
-  { name: "rollup-v11.xlsx" },
-  { name: "sending mine over", tone: "purple" },
-];
-
+/* ── §2 ──
+   FILES is gone with the chip cloud it drove. Its filenames live in
+   `FileScatter.tsx` now, beside the throw vectors and durations they are
+   positioned by, since name and trajectory are one decision per item. */
 const MORNING: { at: string; what: string; last?: boolean }[] = [
   { at: "7:40am", what: "Pull six weeks of bookings" },
   { at: "7:55am", what: "Pull labour against target" },
@@ -288,25 +277,12 @@ export default function ReportingContent() {
             <Reveal>
               <div className="ed-border flex h-full flex-col gap-4 rounded-2xl border p-5 sm:p-7" style={{ background: "var(--wash)" }}>
                 <span className="ed-fg text-[15px] font-semibold">At HQ, this week&rsquo;s numbers</span>
-                <div className="flex flex-wrap gap-2">
-                  {FILES.map((f) => (
-                    <span
-                      key={f.name}
-                      className="rounded-md"
-                      style={{
-                        fontFamily: MONO, fontSize: 12, padding: "6px 10px",
-                        background: f.tone ? TILE[f.tone][0] : "var(--ed-card)",
-                        border: `1px solid ${f.tone ? TILE[f.tone][0] : "var(--ed-border)"}`,
-                        color: f.tone ? INK[f.tone] : "var(--ed-fg-muted)",
-                      }}
-                    >
-                      {f.name}
-                    </span>
-                  ))}
-                </div>
-                <p className="ed-rule ed-fg-muted mt-auto border-t pt-3.5 text-[13.5px] leading-[1.55]">
-                  Twelve files, four people, one number that should have one answer.
-                </p>
+                {/* The scatter replaced a flat cloud of filename chips and
+                    the line "Twelve files, four people, one number that
+                    should have one answer." That line is deleted on
+                    purpose: it was the artifact explaining itself, and the
+                    animation makes the point without it. */}
+                <FileScatter />
               </div>
             </Reveal>
 

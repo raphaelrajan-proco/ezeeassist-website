@@ -21,6 +21,13 @@ import { JAKARTA, MONO } from "@/components/platform/shared";
  * any brand, not a customer, and naming a real one would make the mock a
  * claim about that customer.
  *
+ * **The pill and the footer both read as a live session, not a
+ * schedule.** "OPENED 4:19PM" and "9 OF 12 MANAGERS OPENED IT TODAY · 4
+ * UPSELLS LOGGED" are the same claim as the timeline's sixth step from
+ * the other direction: someone is looking at this right now. Do not
+ * revert the footer to a deployment count ("LIVE AT 12 LOCATIONS"),
+ * which says nothing about whether anyone used it.
+ *
  * Wholly decorative: `aria-hidden` at the root, nothing focusable, no
  * announced controls. Every fact it shows is stated in the timeline copy
  * beside it.
@@ -104,7 +111,7 @@ export default function DigestApp() {
           className="ml-auto flex-none whitespace-nowrap rounded-full px-2.5 py-1"
           style={{ background: "rgba(255,255,255,.18)", color: "#FFFFFF", fontFamily: MONO, fontSize: 12, fontWeight: 700 }}
         >
-          TODAY · 7:00AM
+          OPENED 4:19PM
         </span>
       </div>
 
@@ -161,7 +168,7 @@ export default function DigestApp() {
       >
         <span className="mt-[5px] h-[7px] w-[7px] flex-none rounded-full" style={{ background: "#12A150" }} />
         <span style={{ fontFamily: MONO, fontSize: 12, letterSpacing: "0.06em", lineHeight: 1.45, color: INK_MUTED }}>
-          LIVE AT 12 LOCATIONS · SENT TO EACH MANAGER DAILY
+          9 OF 12 MANAGERS OPENED IT TODAY · 4 UPSELLS LOGGED
         </span>
       </div>
     </div>

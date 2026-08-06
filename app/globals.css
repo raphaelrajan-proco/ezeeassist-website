@@ -919,6 +919,51 @@
   .ed-apps .ap-glow { animation: none; }
 }
 
+/* ─── Reporting HQ file scatter ────────────────────────────
+   Fourteen files fly in from off-panel and collapse into one master
+   spreadsheet.
+
+   **Every delay is negative and every duration differs**, both set
+   inline per item. Negative delays put each file mid-flight on first
+   paint, so the frenzy is already happening rather than starting when
+   the section scrolls in; mismatched durations stop the swarm ever
+   syncing into a pulse. Do not round either to a common value.
+
+   `translate(-50%,-50%)` appears in every frame. It centres the item on
+   the convergence point, and dropping it from one frame makes the whole
+   swarm jump sideways mid-flight. */
+@keyframes rp-file-fly {
+  0%   { opacity: 0; transform: translate(-50%,-50%) translate(var(--dx),var(--dy)) rotate(var(--r)) scale(1); }
+  10%  { opacity: 1; }
+  72%  { opacity: 1; }
+  92%  { opacity: 0; transform: translate(-50%,-50%) translate(0,0) rotate(0deg) scale(.42); }
+  100% { opacity: 0; transform: translate(-50%,-50%) translate(0,0) rotate(0deg) scale(.42); }
+}
+.ed-reporting .rp-file {
+  animation-name: rp-file-fly;
+  animation-timing-function: cubic-bezier(.45,.05,.55,.95);
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* **`animation: none` alone is not enough here, and the trap is
+     silent.** `rp-file-fly` starts at `opacity: 0`, so stopping the
+     animation leaves all fourteen files invisible and the panel empty.
+     This pulls them to roughly half their throw distance and forces them
+     visible, which reads as a static scattered pile: same message, no
+     motion.
+
+     Apply the same check to any keyframe on this site whose 0% frame is
+     invisible. */
+  .ed-reporting .rp-file {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: translate(-50%,-50%)
+               translate(calc(var(--dx) * .52), calc(var(--dy) * .58))
+               rotate(var(--r)) !important;
+  }
+}
+
 /* ─── Reporting stack-hub diagram ──────────────────────────
    Dots ride their wire with `offset-path`, so the only thing animating is
    `offset-distance`. Opacity fades at both ends rather than popping, which
