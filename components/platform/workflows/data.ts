@@ -78,7 +78,7 @@ export const VERTICALS: { id: string; name: string; photo: string; plays: Play[]
     ],
   },
   {
-    id: "qsr", name: "QSR & Food", photo: "/photos/industries/qsr.jpg",
+    id: "qsr", name: "QSR / F&B", photo: "/photos/industries/qsr.jpg",
     plays: [
       { category: "Revenue", name: "Daypart soft spot", detail: "Lunch below the four-week average → combo offer drafted" },
       { category: "Revenue", name: "Attach rate gap", detail: "Side attach below the median → the top quartile’s suggest-sell line" },

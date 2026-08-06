@@ -358,6 +358,17 @@ export default function LeadershipContent() {
             className="flex flex-col gap-1 border-t pt-5 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0"
             style={{ borderColor: "rgba(238,242,248,.18)" }}
           >
+            {/* Cut-out portrait, sized to sit with the attribution rather
+                than compete with the quote. Decorative beside her name,
+                so the alt is empty and she is not announced twice. */}
+            <Image
+              src="/photos/jami-stigliano-cut.png"
+              alt=""
+              width={52}
+              height={52}
+              className="mb-2 flex-none rounded-full object-cover"
+              style={{ width: 52, height: 52, background: "rgba(238,242,248,.08)" }}
+            />
             <span style={{ fontSize: 15, fontWeight: 600, color: "#EEF2F8" }}>Jami Stigliano</span>
             <span style={{ fontSize: 13, color: "rgba(238,242,248,.65)" }}>Founder &amp; CEO, DivaDance</span>
             <Link href="/case-studies" className="mt-2 inline-flex w-fit items-center gap-1.5 text-[13px] font-semibold" style={{ color: SKY }}>

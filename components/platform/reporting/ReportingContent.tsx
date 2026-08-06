@@ -305,7 +305,8 @@ export default function ReportingContent() {
                   ))}
                 </div>
                 <p className="ed-rule ed-fg-muted mt-auto border-t pt-3.5 text-[13.5px] leading-[1.55]">
-                  Eighty minutes of preparation, thirty locations, every month. None of it was coaching.
+                  Eighty minutes of preparing lagging KPIs, thirty locations, for one meeting. None
+                  of it was coaching. Still not the complete picture.
                 </p>
               </div>
             </Reveal>

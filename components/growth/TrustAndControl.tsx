@@ -41,7 +41,7 @@ const GUARANTEES = [
   {
     Icon: IconActivityLog,
     title: "Activity log",
-    body: "Every question, answer, action, and approval is recorded with its sources, searchable and exportable.",
+    body: "Every answer, workflow, and approval recorded with its sources, searchable and exportable.",
   },
   {
     Icon: IconSecurity,
@@ -116,8 +116,20 @@ export default function TrustAndControl() {
                 {title}
               </h3>
               {/* 0.8x of the 14.5 it launched at, by request: the bodies
-                  read as support under the titles, not as a second voice. */}
-              <p className="text-[11.5px]" style={{ lineHeight: 1.6, color: "var(--cc-muted)" }}>
+                  read as support under the titles, not as a second voice.
+
+                  Clamped to three lines. The Activity log body is the
+                  longest of the four and ran to four lines at 1205, where
+                  the column is at its narrowest before the grid reflows;
+                  every other width fits it in three. The clamp caps the
+                  worst case rather than shrinking the type everywhere. */}
+              <p
+                className="overflow-hidden text-[11.5px]"
+                style={{
+                  lineHeight: 1.6, color: "var(--cc-muted)",
+                  display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical",
+                }}
+              >
                 {body}
               </p>
             </motion.div>

@@ -182,7 +182,11 @@ export default function TicketingContent() {
             <div className="flex max-w-[840px] flex-col gap-3.5">
               <h2 className="leading-[1.12] tracking-[-0.03em]" style={{ ...H2, color: "#EEF2F8" }}>
                 Every request lands in one queue,{" "}
-                <span style={{ color: PL.accent }}>already classified, owned, and timed.</span>
+                {/* EZee blue, not the plum band's pink accent, by request.
+                    #00AEEF clears AA on this band, which is why the brand
+                    hue is usable directly rather than the darker #0077A8
+                    the light bands need. */}
+                <span style={{ color: "#00AEEF" }}>already classified, owned, and timed.</span>
               </h2>
               <p className="text-[18px] leading-[1.7]" style={{ color: "rgba(238,242,248,.72)" }}>
                 Watch #4471 arrive. It gets read for what it actually is, routed to the department
@@ -214,7 +218,8 @@ export default function TicketingContent() {
                 <div key={t.title} className="flex flex-col gap-2">
                   <h3
                     className="whitespace-nowrap tracking-[-0.025em]"
-                    style={{ fontFamily: JAKARTA, fontSize: 21, fontWeight: 700, color: t.accent ? PL.accent : "#EEF2F8" }}
+                    /* The accented step is EZee blue, same reason as the head above. */
+                    style={{ fontFamily: JAKARTA, fontSize: 21, fontWeight: 700, color: t.accent ? "#00AEEF" : "#EEF2F8" }}
                   >
                     {t.title}
                   </h3>
@@ -294,11 +299,15 @@ export default function TicketingContent() {
               {RECURRING.map((r) => (
                 <div
                   key={r.topic}
-                  className="ed-rule grid grid-cols-1 items-baseline gap-x-4 gap-y-1 border-t px-5 py-3.5 sm:grid-cols-[minmax(0,1fr)_86px_132px]"
+                  /* The avg column was 132px against "avg 6.2 days to
+                     close" at 12px mono, which wraps to two lines and
+                     makes that row taller than its siblings. 176px fits
+                     it on one; the topic column gives up the width. */
+                  className="ed-rule grid grid-cols-1 items-baseline gap-x-4 gap-y-1 border-t px-5 py-3.5 sm:grid-cols-[minmax(0,1fr)_86px_176px]"
                 >
                   <span className="ed-fg text-[14.5px]">{r.topic}</span>
                   <span style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: "var(--plum)" }}>raised {r.count}</span>
-                  <span className="ed-fg-muted sm:text-right" style={{ fontFamily: MONO, fontSize: 12 }}>{r.avg}</span>
+                  <span className="ed-fg-muted whitespace-nowrap sm:text-right" style={{ fontFamily: MONO, fontSize: 12 }}>{r.avg}</span>
                 </div>
               ))}
             </div>

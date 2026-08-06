@@ -341,14 +341,18 @@ export default function CustomerProof() {
         <StoryCard s={STORIES[3]} />
       </div>
 
-      {/* Partner memberships: a compartment pinned to the viewport bottom
-          for the length of the section, with a solid background so cards
-          scrolling beneath it disappear under it rather than covering it.
-          TODO: real partner badge images to replace text pills before publish. */}
-      <div
-        className="sticky bottom-0 mt-10 pt-5 pb-2"
-        style={{ zIndex: 6, backgroundColor: "var(--ed-bg)" }}
-      >
+      {/* Partner memberships, in normal flow at the end of the section.
+
+          **It used to be `sticky bottom-0`**, pinned to the viewport for
+          the section's whole length, so it hovered over every card in the
+          deck the entire way down. That made it read as chrome belonging
+          to the cards rather than as the section's closing note. In flow
+          it arrives once, as the last card clears, which is where it
+          belongs and is what the deck's exit already sets up.
+
+          The z-index goes with the sticky: nothing overlaps it now, and
+          leaving it would put the badges above the deck for no reason. */}
+      <div className="relative mt-10 pt-5 pb-2" style={{ backgroundColor: "var(--ed-bg)" }}>
         <p
           className="ed-fg-muted text-sm uppercase tracking-[0.2em] mb-4"
           style={{ fontWeight: 600 }}

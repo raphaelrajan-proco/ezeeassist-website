@@ -125,7 +125,7 @@ const INSIGHTS: { freq: string; topic: string; verdict: string; hue: string }[] 
   { freq: "Asked 340×", topic: "Refund edge cases",    verdict: "Add the two scenarios the policy skips",            hue: "var(--warn)" },
   { freq: "Asked 210×", topic: "New-hire first week",  verdict: "Refresh, material is two versions old",             hue: "var(--bad)" },
   { freq: "Asked 190×", topic: "Promo stacking rules", verdict: "Answering cleanly, leave it as is",                 hue: "var(--ok)" },
-  { freq: "Asked 84×",  topic: "Lease renewal terms",  verdict: "Opportunity: no content exists yet, write it once", hue: "var(--ed-accent-text)" },
+  { freq: "Asked 84×",  topic: "Lease renewal terms",  verdict: "No content exists yet, write it once", hue: "var(--ed-accent-text)" },
 ];
 
 /* ── §7 Handoff ── */
@@ -137,7 +137,7 @@ const QUEUE: { id: string; title: string; state: string; dot: string; selected?:
 
 const HANDOFF_CARDS = [
   { title: "Nothing is re-explained", body: "The person picking it up doesn’t ask the location to start over." },
-  { title: "Routed, not queued",      body: "By topic, territory, and load, not into a shared inbox." },
+  { title: "Routed to the right person", body: "By topic, territory, and load, not into a shared inbox." },
   { title: "It doesn’t happen twice", body: "The resolution becomes approved content. The next person gets an answer." },
 ];
 

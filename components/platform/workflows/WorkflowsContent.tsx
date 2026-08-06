@@ -315,7 +315,7 @@ export default function WorkflowsContent() {
                 argument is that the answer is "it keeps changing", not
                 "it sits there". */}
             <p className="ed-fg-muted text-[15.5px] leading-[1.6]">
-              <b className="ed-fg">They keep adapting after they ship.</b>{" "}
+              <b className="ed-fg">These workflows keep adapting after they ship.</b>{" "}
               A workflow reads the same live data your coaches do, so when a threshold stops being the right one, a
               play is rewritten, or a location&rsquo;s numbers move, it adjusts what it watches
               for and what it sends. Nobody reopens it to keep it current.

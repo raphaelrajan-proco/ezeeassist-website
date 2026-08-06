@@ -395,12 +395,14 @@ export default function ControlCenterContent() {
                         style={{ border: "1px dashed rgba(0,119,168,0.5)", background: "rgba(0,119,168,0.06)" }}
                       >
                         <span style={{ ...META, color: "var(--ed-accent-text)" }}>Model provider</span>
-                        {/* Not swappable. The diagram used to say it was,
-                            which read as a customer-facing choice; the
-                            provider is chosen for efficiency and cost and
-                            is not a dial anyone turns. */}
+                        {/* The provider is chosen for efficiency and cost
+                            and is not a dial anyone turns. It said
+                            "swappable", which read as a customer-facing
+                            choice; "not swappable" was then dropped as
+                            unnecessary, since stating the reason already
+                            says it is not an option being offered. */}
                         <span className="text-center" style={{ fontFamily: MONO, fontSize: 12, color: "var(--ed-accent-text)" }}>
-                          not swappable · optimized for efficiency and cost
+                          optimized for efficiency and cost
                         </span>
                       </div>
                       <span className="ed-border block h-[22px] w-px border-l" aria-hidden="true" />

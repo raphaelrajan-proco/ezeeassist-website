@@ -91,6 +91,10 @@ export const WRITE_BACK = [
   "Open task · closed, 24 days",
 ];
 
+/* Five blocks, and the last two were prose in the section lead until they
+   moved here. As paragraphs they crowded the head; in this list they are
+   the same claims at the same length as their siblings, beside the
+   visual that demonstrates them. Keep new entries to one sentence. */
 export const WRITE_BLOCKS = [
   { title: "Writes back to the system of record",
     body: "Documents, dates, completions, and acknowledgements land in the system that owns them, in the format that system expects." },
@@ -98,6 +102,10 @@ export const WRITE_BLOCKS = [
     body: "You choose which fields and which systems accept a write. Everything outside that set stays read-only." },
   { title: "Logged and attributable",
     body: "Every write records who asked, what changed, and which requirement it satisfied." },
+  { title: "Easy enough that it actually happens",
+    body: "A renewal filed in the thread someone is already in is a renewal that gets filed, so the record stays true between audits." },
+  { title: "Everything is logged",
+    body: "The document, the photo, who submitted it and when, held against the location it belongs to." },
 ];
 
 /* ── §7 Evidence ────────────────────────────────────────────

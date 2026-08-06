@@ -161,6 +161,17 @@
 .theme-editorial .ed-border      { border-color: var(--ed-border); }
 .theme-editorial .ed-rule        { border-color: var(--ed-rule); }
 .theme-editorial .ed-accent      { color: var(--ed-accent); }
+/* **This class did not exist**, while 63 usages across 34 files relied
+   on it. A missing class is silent: `className="ed-accent-text"` matched
+   nothing, so every one of those spans inherited its parent's colour and
+   rendered near-black. It looked like the accent "not being applied"
+   rather than like a broken selector, which is why it survived several
+   passes of being re-requested and re-applied.
+
+   The token is the AA-safe #0077A8 on light and #00AEEF on dark, so this
+   is the right way to mark accent TEXT; `.ed-accent` is the raw brand
+   hue and fails contrast at body sizes on white. */
+.theme-editorial .ed-accent-text { color: var(--ed-accent-text); }
 .theme-editorial .ed-accent-bg   { background-color: var(--ed-accent); color: #ffffff; }
 .theme-editorial .ed-overline    {
   font-size: 0.75rem;

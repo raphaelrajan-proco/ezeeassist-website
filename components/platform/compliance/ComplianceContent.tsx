@@ -201,24 +201,47 @@ export default function ComplianceContent() {
             <p className="ed-fg-muted text-[15px] leading-[1.55]">Read from the systems that already hold it.</p>
           </Reveal>
 
+          {/* Subgrid, so every card's tile, title, description, check and
+              source line sit on the SAME five tracks as its neighbours.
+
+              Fixed heights were tried first and do not hold: they align
+              the description but not the title, so at 1024 one wrapping
+              title pushed that card's check block 20px below the others.
+              Subgrid aligns all five rows at every width without a single
+              hardcoded height, and lets each row be as tall as its
+              tallest occupant rather than as tall as a guess.
+
+              `Reveal` sits between the grid and the card, so it has to
+              carry the span and be a grid itself; otherwise it breaks the
+              subgrid chain. */}
           <div className="mt-9 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {SCOPE.map((c, i) => (
-              <Reveal key={c.title} delay={(i % 4) * 0.07}>
-                <div className="ed-card ed-border flex h-full flex-col gap-3.5 rounded-[14px] border px-5 pb-6 pt-5">
+              <Reveal key={c.title} delay={(i % 4) * 0.07} className="grid grid-rows-subgrid row-span-5">
+                <div className="ed-card ed-border grid grid-rows-subgrid row-span-5 gap-3.5 rounded-[14px] border px-5 pb-6 pt-5">
                   <ScopeTile hue={c.hue} d={c.d} />
                   <span className="ed-fg text-[16px] font-semibold leading-[1.25] tracking-[-0.02em]">{c.title}</span>
-                  <span className="ed-fg-muted text-[14px] leading-[1.5]">{c.body}</span>
+                  {/* Two lines max, enforced by clamping rather than a
+                      fixed height: subgrid handles the alignment, this
+                      only stops a long description running to three.
+                      Write new ones to fit two lines at 14px. */}
+                  <span
+                    className="ed-fg-muted overflow-hidden text-[14px] leading-[1.5]"
+                    style={{ display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}
+                  >
+                    {c.body}
+                  </span>
                   {/* One real check, so the card shows the work rather
                       than only naming the category. Tinted to the card's
                       own hue at low alpha, which keeps the grid reading as
                       seven different areas without seven loud blocks. */}
                   <span
-                    className="ed-fg mt-1 rounded-[9px] px-3 py-2.5 text-[13px] leading-[1.45]"
+                    className="ed-fg mt-1 flex items-start rounded-[9px] px-3 py-2.5 text-[13px] leading-[1.45]"
+
                     style={{ background: `color-mix(in srgb, ${c.hue} 7%, transparent)` }}
                   >
                     {c.check}
                   </span>
-                  <span className="mt-auto pt-2" style={{ ...META, color: "var(--ed-fg-muted)" }}>{c.source}</span>
+                  <span className="pt-3" style={{ ...META, color: "var(--ed-fg-muted)" }}>{c.source}</span>
                 </div>
               </Reveal>
             ))}
@@ -240,10 +263,12 @@ export default function ComplianceContent() {
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-20 md:py-24">
           <Reveal className="flex max-w-[760px] flex-col gap-3.5">
             <h2 style={{ ...H2, color: "#FFFFFF" }}>
-              Every compliance tool checks.
-              <span className="block" style={{ color: SKY }}>Almost none chase.</span>
+              Plenty of tools will tell you what is missing.{" "}
+              <span className="block" style={{ color: SKY }}>Almost none of them go and get it.</span>
             </h2>
-            <p className="text-[15px] leading-[1.55]" style={{ color: "rgba(238,242,248,0.72)" }}>
+            {/* Bumped from 15px: this line is the section's argument, not
+                a caption under the head, and at 15 it read as one. */}
+            <p className="text-[18px] leading-[1.6]" style={{ color: "rgba(238,242,248,0.78)" }}>
               Finding the gap was never the hard part. Closing it is.
             </p>
           </Reveal>
@@ -256,7 +281,10 @@ export default function ComplianceContent() {
               Nobody on your team sent a single message.
             </p>
             <span className="mt-4 block h-px max-w-[640px]" style={{ background: ON_DARK_RULE }} aria-hidden="true" />
-            <p className="text-[13px]" style={{ color: ON_DARK_MUTE }}>
+            {/* 15.5px, not 13: this is the cost the whole section is
+                arguing about, and it was set smaller than the caption
+                above it. */}
+            <p className="text-[15.5px] leading-[1.6]" style={{ color: ON_DARK_MUTE }}>
               Every hour a coach spends chasing a document is an hour not spent on the
               location&rsquo;s numbers.
             </p>
@@ -265,7 +293,7 @@ export default function ComplianceContent() {
               className="w-fit text-[13px] underline-offset-[3px] hover:underline"
               style={{ color: SKY, textDecorationColor: "rgba(159,224,248,0.4)" }}
             >
-              Compliance is the flagship play
+              Compliance is a flagship play
             </Link>
           </Reveal>
         </div>
@@ -283,43 +311,12 @@ export default function ComplianceContent() {
               file it. They send it where they already talk to you, and the write happens on their
               behalf.
             </p>
-            {/* Two points folded in rather than given their own bands.
-
-                The first is the takeaway the section was missing: the
-                argument is not that replying is convenient, it is that
-                convenience is what makes the record stay true.
-
-                The second absorbs the deleted Evidence section. That
-                section existed to show a filed document, a photo and a
-                submitter, which is one claim, not a band: everything that
-                happens here is logged. */}
-            <ul className="ed-fg-muted mt-1 flex max-w-[660px] flex-col gap-2 text-[15px] leading-[1.55]">
-              <li className="flex gap-2.5">
-                <span
-                  className="mt-[9px] h-[6px] w-[6px] flex-none rounded-full"
-                  style={{ background: "var(--ed-accent-text)" }}
-                  aria-hidden="true"
-                />
-                <span>
-                  <b className="ed-fg">Updating has to be this easy or it stops happening.</b>{" "}
-                  A renewal filed in the thread someone is already in is a renewal that gets
-                  filed. That is what makes compliance stick between audits, rather than
-                  arriving in a rush before one.
-                </span>
-              </li>
-              <li className="flex gap-2.5">
-                <span
-                  className="mt-[9px] h-[6px] w-[6px] flex-none rounded-full"
-                  style={{ background: "var(--ed-accent-text)" }}
-                  aria-hidden="true"
-                />
-                <span>
-                  <b className="ed-fg">Everything is logged.</b> The document, the photo, who
-                  submitted it and when, held against the location it belongs to. When someone
-                  asks for proof, you are not asking your locations for it.
-                </span>
-              </li>
-            </ul>
+            {/* The two takeaways that used to sit here as prose are now
+                WRITE_BLOCKS entries beside the visual. They were three
+                and four sentences each and made this head the densest
+                block on the page; in the list they are one sentence, in
+                the same format as their siblings, next to the mock that
+                shows them happening. */}
           </Reveal>
 
           <div className="mt-10 grid grid-cols-1 items-start gap-6 lg:grid-cols-2 lg:gap-11">

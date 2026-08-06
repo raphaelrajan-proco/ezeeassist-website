@@ -1219,20 +1219,21 @@ Revised after the deck shipped; the current rules:
 - **The deck has its own wrapper div** so the cards' sticky containing block
   ends at the last card, not at the section end. The old 18vh spacer is gone
   with it.
-- **The partner bar is a bottom-sticky compartment** (`sticky bottom-0`,
-  `z-index: 6`, solid `--ed-bg` background): it pins to the viewport bottom
-  for the length of the section and cards scroll away beneath it. Four pills
-  only: IFA Supplier Forum, CFA Member, FSN Verified Member, WSI Partner.
+- **The partner bar is in normal flow at the end of the section.** It was
+  `sticky bottom-0` with `z-index: 6`, pinned to the viewport for the
+  section's whole length, which meant it hovered over every card in the
+  deck the entire way down and read as chrome belonging to the cards. In
+  flow it arrives once, as the last card clears. Three badges: IFA
+  Supplier Forum, CFA Member, FSN Verified Member.
 - **The stack rides OVER the headline on the way out.** The three z-indexes
-  are the whole mechanic: headline 4, cards 5, partner bar 6. The deck
+  are the whole mechanic: headline 4, cards 5. The deck
   releases the moment the fourth card lands, and the headline stays pinned
   for another 518px, so those 518px are the stack climbing up across the
   lead line. It used to be the reverse — cards at auto, headline at 4 — and
   the deck vanished behind the line instead. **The order matters more than
   the numbers: never give a card z-index above the partner bar's**, or the
-  deck covers the compartment it is supposed to disappear beneath. All four
-  cards share one z, so DOM order still decides the 18px staircase among
-  them. Measured at 1205x793: cards settle at viewport tops 181/199/217/235,
+  deck covers what it should pass beneath. All four cards share one z, so
+  DOM order still decides the 18px staircase among them. Measured at 1205x793: cards settle at viewport tops 181/199/217/235,
   and an `elementFromPoint` over the headline band 300px later lands inside
   a card.
 - **The headline pins above the deck from lg up** (`sticky`, `top:
