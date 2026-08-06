@@ -1272,70 +1272,61 @@ the legacy styling (hardcoded `#0A0A0A` / `#F0F0F0` / `#E5E7EB` Tailwind
 classes, which are the editorial tokens written the long way). Migrate a
 legacy page when it is next touched; do not extend the legacy style.
 
-## /solutions/coaches (branch `solutions-coaches`)
+## /solutions/coaches
 
-The field-coaches page, built from a two-file handoff. Twelve sections: hero,
-your week, what changes, a week with it, the Monday brief, build a play once,
-what stays yours, coverage metrics, proof, FAQ, related, closing CTA.
+Rebuilt from a supplied design handoff. Nine sections: hero with the
+Monday brief, what reaches you first, the week, the play, EZee clears the
+way, the quote, the FAQ, related, closing.
 
-**Route naming.** Plural `/solutions/`. `/solution` (singular) is a legacy SEO
-alias that renders `PlatformContent`, so the two do not collide.
+Deleted deliberately: the before/after toggle table, the
+`{{TBD:touchpoints/*}}` stat wall, every section eyebrow, and the
+duplicated brief artifact. **The brief appears once, in the hero.**
 
-**Two new components, both under `components/solutions/coaches/`:**
-- `CoachBrief.tsx` — the Monday brief, the page's centrepiece. One data set,
-  two variants: `compact` (hero: header plus the three Tier 1 rows) and `full`
-  (three tiers plus the separate "since you last spoke" block). The three tiers
-  are distinguished by **edge weight, marker glyph, and label**, never by colour
-  alone, so the ranking survives greyscale. Capped at `max-w-5xl` in the full
-  variant: past ~1024px the right-aligned note drifts too far from its row.
-  Rows stack deliberately below `md` rather than wrapping.
-- `PlayGrid.tsx` — the sentence on the left, four locations on the right. The
-  **variation between the four outcomes is the argument**; each row ends on a
-  different result rendered in accent. Never normalise them into one shape.
+**Voice rule, every line on this page:** never call the product "it" or
+"this". Name it, EZee Assist or EZee. Applied throughout; keep it for
+anything added.
 
-**Reuse.** The homepage's section components (`CoachsWeek`, `Objections`,
-`FinalCTA`, `CustomerProof`, `ImpactStats`) are content-hardcoded singletons
-with no props, so they cannot be reused without refactoring them, which would
-put the homepage at risk and is out of scope. This page reuses the shared layer
-instead: `SectionShell`, `SectionHeadline`, `MOCK_SURFACE` from
-`components/growth/shared.tsx`, `CLOSING_BASE` from `closing-band.ts`, and the
-`ed-*` classes. The FAQ accordion markup is duplicated rather than imported
-because `Objections` reads its content from `lib/data/objections`.
+**No lettermark "E" tile anywhere here.** Product console headers carry
+the EZee flower mark, committed at `public/logos/ezee-flower-black.png`
+and byte-identical to the supplied file. That was explicit in the
+handoff.
 
-**Hero.** The brief sits *beneath* the copy, not beside it. A side-by-side
-split starves the H1: at 1205 it forces the headline below 30px. Beneath, the
-H1 holds 39px at 1205 and 40px at 1440 across two lines, with the hard break
-applied from `lg` up only.
+**Deviation, on request:** the handoff specifies a wine gradient hero
+(`#4E1B26`, accent `#F2A9B8`) and says not to use the homepage haze. The
+existing hazy photographic hero is kept instead, as on Answers,
+Workflows, Compliance and Control Center. The on-band accent is
+`#9FE0F8`, what the other photographic bands use; wine's rose accent
+reads wrong on blue haze. Wine survives as `--wine` for the brief's
+ranking badges.
 
-**Deviations from the handoff, all deliberate:**
-- Em-dashes in two copy lines (Tuesday's card, FAQ answer 2) became full stops.
-  House style forbids em-dashes and the user's standing rules outrank a handoff.
-- Related cards point at `/industries/franchising/franchisors` and
-  `/industries/franchising/multi-unit-franchisees`, which exist, rather than
-  creating `/solutions/hq` and `/solutions/franchisees` stubs. Real pages beat
-  "coming soon" stubs.
-- `/platform/insights` **308-redirects to `/solution`** — there is no Coaching
-  Agent page. The handoff authorised linking there with a flag, and the nav
-  already does the same, so it stays consistent. A real Coaching Agent page
-  would fix both at once.
-- The metadata title keeps its em-dash separator (`Franchise Field Coaches —
-  EZee Assist`) to match every other title on the site.
+### The week is a state machine, not a keyframe
 
-**Ten `{{TBD:...}}` tokens render visibly on this page** and only on this page:
-eight in the coverage band (four values, four sources) and two on the proof card
-(network size, second metric). They are placeholders by design. Replacing one
-requires a source, not a plausible-looking number.
+Its five day columns are click-seekable, so it is React state with a six
+second auto-advance that a click resets. Verified on the built page:
+Monday initial, click Friday jumps forward, click Tuesday jumps back,
+and the timer resumes to Wednesday. The columns are real buttons with
+`aria-pressed`, and the narrative panel is `aria-live`.
 
-**Verified:** type-check and build pass; no horizontal overflow at 1440, 1280,
-1205, 1024, 768, or 390; H1 holds two lines from 768 up and wraps to four with
-no orphan at 390; the brief stays readable at 390 by stacking rows; both themes
-check out, with the tier markers and the row-four accent border carrying the
-emphasis on dark where the 5% tint nearly vanishes; the hero CTA scrolls to
-`#brief` and lands it at 96px, clear of the sticky nav.
+**Only the active day's panel is rendered.** The prototype stacked all
+five under motion-off because panels 2 to 5 relied on keyframes for
+their hidden state; rendering one avoids that class of bug entirely.
 
-**Dark-mode testing note:** `next-themes` runs with `attribute="class"` and
-`enableSystem={false}`, so emulating `prefers-color-scheme` does nothing. Set
-`localStorage.theme = 'dark'` and reload instead.
+Three columns at phone width, five from `md`. Five at 375 leaves each
+~60px, which cannot hold "Brief ready · 7:00" at the 12px type floor;
+three still reads Monday to Friday in order.
+
+The calendar's `--wine-tint` / `--wine-bd` are **blue** despite the
+names: they drive the active-day highlight, which is EZee blue, not the
+page's wine.
+
+Three loops otherwise: the 16s hero brief, the 18s play typing, and the
+icon micro-loops. All resolve to their finished state under reduced
+motion, verified.
+
+Verified on the built page at 1440/1280/1205/1024/768/375 in both themes:
+no horizontal overflow, no text under 12px, one h1, six h2s and one h3,
+zero em-dashes, no banned words, no `{{TBD}}` tokens, and no `#00AEEF`
+used as text.
 
 ## /platform/answers
 

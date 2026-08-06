@@ -317,6 +317,115 @@
   --haze-c: linear-gradient(180deg, #414C92 0%, #664F86 40%, #8D6072 70%, #437069 100%);
 }
 
+/* ─── Field Coaches page ───────────────────────────────────
+   Three loops: the 16s hero brief, the 18s play typing, and the small
+   icon loops. The week calendar is a React state machine rather than a
+   keyframe, because it has to be click-seekable. Base styles are the
+   finished state in every case. */
+.theme-editorial .ed-coaches {
+  --wash:  linear-gradient(150deg, #F8EEF0 0%, #F3E2E6 55%, #F7ECEE 100%);
+  --ok:    #0D7C58;
+  --warn:  #B45309;
+  --bad:   #B42318;
+  --purple:#7C3AED;
+  --wine:  #8C3A4B;
+  --chip-bg: rgba(0, 119, 168, 0.06);
+  --chip-bd: rgba(0, 119, 168, 0.22);
+  /* Blue despite the name: these drive the calendar's active-day
+     highlight, which is the EZee blue, not the page's wine. */
+  --wine-tint: rgba(0, 174, 239, 0.08);
+  --wine-bd:   rgba(0, 174, 239, 0.55);
+}
+.dark .theme-editorial .ed-coaches,
+.theme-editorial.dark .ed-coaches {
+  --wash:  linear-gradient(150deg, #241318 0%, #2B171D 55%, #1D0F13 100%);
+  --ok:    #34D399;
+  --warn:  #FBBF24;
+  --bad:   #F97066;
+  --purple:#A78BFA;
+  --wine:  #E8A9B6;
+  --chip-bg: rgba(0, 174, 239, 0.08);
+  --chip-bd: rgba(0, 174, 239, 0.30);
+  --wine-tint: rgba(0, 174, 239, 0.14);
+  --wine-bd:   rgba(0, 174, 239, 0.60);
+}
+
+/* Hero brief, 16s. */
+@keyframes cb-head   { 0%,2%{opacity:0} 6%,93%{opacity:1} 98%,100%{opacity:0} }
+@keyframes cb-scan   { 0%,4%{opacity:1} 18%,100%{opacity:0} }
+@keyframes cb-row1   { 0%,10%{opacity:0;transform:translateY(10px)} 15%,93%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes cb-row2   { 0%,17%{opacity:0;transform:translateY(10px)} 22%,93%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes cb-row3   { 0%,24%{opacity:0;transform:translateY(10px)} 29%,93%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes cb-rank1  { 0%,32%{opacity:0;transform:scale(.7)} 36%,93%{opacity:1;transform:scale(1)} 98%,100%{opacity:0} }
+@keyframes cb-rank2  { 0%,35%{opacity:0;transform:scale(.7)} 39%,93%{opacity:1;transform:scale(1)} 98%,100%{opacity:0} }
+@keyframes cb-rank3  { 0%,38%{opacity:0;transform:scale(.7)} 42%,93%{opacity:1;transform:scale(1)} 98%,100%{opacity:0} }
+@keyframes cb-since  { 0%,46%{opacity:0;transform:translateY(8px)} 52%,93%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes cb-check1 { 0%,54%{opacity:0} 58%,93%{opacity:1} 98%,100%{opacity:0} }
+@keyframes cb-check2 { 0%,60%{opacity:0} 64%,93%{opacity:1} 98%,100%{opacity:0} }
+@keyframes cb-check3 { 0%,66%{opacity:0} 70%,93%{opacity:1} 98%,100%{opacity:0} }
+@keyframes cb-foot   { 0%,74%{opacity:0} 80%,93%{opacity:1} 98%,100%{opacity:0} }
+@keyframes cb-dot    { 0%,80%,100%{opacity:.25} 40%{opacity:1} }
+
+[data-anim] .cb {
+  animation-duration: 16s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+[data-anim] .cb-head   { animation-name: cb-head }
+[data-anim] .cb-scan   { animation-name: cb-scan }
+[data-anim] .cb-row1   { animation-name: cb-row1 }
+[data-anim] .cb-row2   { animation-name: cb-row2 }
+[data-anim] .cb-row3   { animation-name: cb-row3 }
+[data-anim] .cb-rank1  { animation-name: cb-rank1 }
+[data-anim] .cb-rank2  { animation-name: cb-rank2 }
+[data-anim] .cb-rank3  { animation-name: cb-rank3 }
+[data-anim] .cb-since  { animation-name: cb-since }
+[data-anim] .cb-check1 { animation-name: cb-check1 }
+[data-anim] .cb-check2 { animation-name: cb-check2 }
+[data-anim] .cb-check3 { animation-name: cb-check3 }
+[data-anim] .cb-foot   { animation-name: cb-foot }
+[data-anim] .cb-dot    { animation: cb-dot 1.2s ease-in-out infinite both }
+[data-anim] .cb-dot:nth-child(2) { animation-delay: .2s }
+[data-anim] .cb-dot:nth-child(3) { animation-delay: .4s }
+
+/* Play typing, 18s. */
+@keyframes cp-1  { 0%,3%{opacity:0}  5%,93%{opacity:1} 98%,100%{opacity:0} }
+@keyframes cp-2  { 0%,8%{opacity:0}  10%,93%{opacity:1} 98%,100%{opacity:0} }
+@keyframes cp-3  { 0%,13%{opacity:0} 15%,93%{opacity:1} 98%,100%{opacity:0} }
+@keyframes cp-4  { 0%,18%{opacity:0} 20%,93%{opacity:1} 98%,100%{opacity:0} }
+@keyframes cp-5  { 0%,23%{opacity:0} 25%,93%{opacity:1} 98%,100%{opacity:0} }
+@keyframes cp-car{ 0%,28%{visibility:visible} 29%,100%{visibility:hidden} }
+@keyframes cp-blink { 0%,49%{opacity:1} 50%,100%{opacity:0} }
+
+[data-anim] .cp {
+  animation-duration: 18s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+[data-anim] .cp-1 { animation-name: cp-1 }
+[data-anim] .cp-2 { animation-name: cp-2 }
+[data-anim] .cp-3 { animation-name: cp-3 }
+[data-anim] .cp-4 { animation-name: cp-4 }
+[data-anim] .cp-5 { animation-name: cp-5 }
+[data-anim] .cp-car { animation-name: cp-car }
+[data-anim] .cp-blink { animation: cp-blink 1s steps(1, end) infinite }
+
+/* The four pressure icons. */
+@keyframes ico-pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.12)} }
+@keyframes ico-tick  { 0%,100%{transform:rotate(-6deg)} 50%{transform:rotate(9deg)} }
+@keyframes ico-rise  { 0%,100%{transform:translateY(1.5px)} 50%{transform:translateY(-1.5px)} }
+.ed-coaches .ico-pulse      { animation: ico-pulse 3.4s ease-in-out infinite; transform-origin: center }
+.ed-coaches .ico-tick       { animation: ico-tick 2.8s ease-in-out infinite; transform-origin: center }
+.ed-coaches .ico-rise       { animation: ico-rise 3s ease-in-out infinite; transform-origin: center }
+.ed-coaches .ico-pulse-late { animation: ico-pulse 3.4s ease-in-out .8s infinite; transform-origin: center }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-anim] * { animation: none !important; }
+  .ed-coaches [class*="ico-"] { animation: none !important; }
+}
+
 /* ─── Control Center page ──────────────────────────────────
    Only the semantic warn colour, used by the "One system" panel's HQ row
    and by the log's approval-hold line. */
