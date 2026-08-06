@@ -2631,6 +2631,14 @@ and both are flat. The eyebrow wraps to two lines below ~430.
   which silently dropped whole brands from the marquee. It now loads eagerly.
   If the tile ever goes back to lazy, the fallback has to become the default
   state rather than the error state.
+- **`overflow-x: clip` on `.theme-editorial` hides horizontal overflow, so a
+  screenshot cannot prove a row fits.** The footer's AI-summary band looked
+  correct at 1024 while the pills sat 112px past the band's right edge, clipped
+  invisibly. Anything laid out as a fixed-width row (`flex-none` children,
+  `whitespace-nowrap` text) has to be checked by comparing the child's
+  `getBoundingClientRect().right` against the container's, not by eye. The band
+  now goes to a row at `min-[1160px]`, which is 1008px of measured content plus
+  128px of container padding.
 - **No lint script exists** in this repo. `npx tsc --noEmit` is the check;
   add `--noUnusedLocals` to catch dead imports.
 - Deployment-specific Vercel URLs cannot be retrieved from this environment.

@@ -220,15 +220,28 @@ export default function Footer() {
 
         {/* ── Band 2: AI summary ────────────────────────────── */}
         <div
-          className="flex flex-col gap-5 py-6 md:flex-row md:items-center md:justify-between md:gap-10"
+          /* **1160px, and it is measured, not a guess.** On one row this
+             band needs 510 (label block, nowrap) + 40 (min gap) + 458
+             (three pills, `flex-none`) = 1008px of content, so the
+             viewport has to carry that plus 128px of container padding.
+             At `md` the sentence broke to four lines; at `lg` it fit on
+             one but shoved the pills 112px past the right edge, which
+             `overflow-x: clip` on the page wrapper hid completely. Below
+             1160 the band stacks and the sentence gets the full width,
+             which is the only reason it still fits on one line at 1024
+             and 768. */
+          className="flex flex-col gap-5 py-6 min-[1160px]:flex-row min-[1160px]:items-center min-[1160px]:justify-between min-[1160px]:gap-10"
           style={{ borderTop: `1px solid ${C.rule}` }}
         >
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:gap-3.5">
+          {/* The sentence sits UNDER the label, never beside it. Sharing
+              a row, the label ate the width the sentence needed and it
+              wrapped to two lines. */}
+          <div className="flex flex-col gap-1.5">
             {/* The only accent-coloured text in the footer. */}
             <span className="whitespace-nowrap text-[14.5px] font-semibold" style={{ color: C.accent }}>
               Request an AI summary
             </span>
-            <span className="text-[14px]" style={{ color: C.muted }}>
+            <span className="text-[14px] min-[1160px]:whitespace-nowrap" style={{ color: C.muted }}>
               Ask your assistant what EZee Assist does and how franchise networks use it.
             </span>
           </div>
