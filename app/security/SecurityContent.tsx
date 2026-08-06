@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
 import { HERO_BG } from "@/lib/data/hero-backgrounds";
-import LogoMarquee from "@/components/sections/LogoMarquee";
+import LogoMarquee from "@/components/logo-marquee";
 import { Band, EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 
 /**
@@ -493,9 +493,9 @@ export default function SecurityContent() {
             </h2>
           </Reveal>
         </div>
-        <div className="pb-14 pt-9 md:pb-16 lg:pb-20">
-          <LogoMarquee />
-        </div>
+        {/* Full-bleed, so it sits outside the section's inner container
+            rather than inside it. */}
+        <LogoMarquee className="pb-14 pt-9 md:pb-16 lg:pb-20" />
       </section>
 
       {/* ── 7. Responsible disclosure ─────────────────────

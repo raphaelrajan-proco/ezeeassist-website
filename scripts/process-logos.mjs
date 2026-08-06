@@ -219,10 +219,18 @@ function toLightVariant(data, w, h) {
 
     const [hh, ss, ll] = rgbToHsl(r, g, b);
     let nl = ll, out = [r, g, b], ok = false;
-    // Walk lightness up in small steps, keeping hue and saturation.
+    /* Walk lightness up, and push saturation up with it.
+
+       **Lightness alone is not enough.** Raising L in HSL desaturates a
+       colour perceptually, so the first pass left Sport Clips' red as
+       pale pink and Aqua-Tots as milky blue: legible, but visibly washed
+       against the same marks on the light band. Compensating saturation
+       as L climbs keeps the hue reading as the brand colour rather than
+       a tint of it. Neutrals have s=0 and are unaffected. */
     for (let step = 0; step < 40; step++) {
       nl = Math.min(1, nl + 0.025);
-      out = hslToRgb(hh, ss, nl);
+      const boost = Math.min(1, ss * (1 + (nl - ll) * 1.6));
+      out = hslToRgb(hh, boost, nl);
       if (ratioOf(lum(...out) / 255) >= 3.0) { ok = true; break; }
     }
     data[o] = out[0]; data[o + 1] = out[1]; data[o + 2] = out[2];

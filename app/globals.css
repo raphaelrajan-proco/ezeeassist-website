@@ -1234,30 +1234,63 @@
   animation: marquee 140s linear infinite;
 }
 
-/* ─── The customer strip always sits on a light band ───────
-   The marks float with no chip and no plate behind them, which only
-   works on a light surface: 26 of the 50 files ship opaque art, so on a
-   dark band they would be white rectangles, and a silhouette filter
-   turns them into rectangles too.
+/* ─── Trusted-by logo marquee ──────────────────────────────
+   Transform only, so the animation runs on the compositor. Never animate
+   `left` or `margin` here: both force layout on every frame across a
+   track holding 200 images.
 
-   Rather than treat half the roster differently, the BAND goes light
-   everywhere the page behind it is dark. One consistent surface, all 50
-   marks in their own colours, nothing per file.
-
-   Two surfaces need it: the homepage hero strip (`.ed-on-dark`, over a
-   scrimmed photograph) and `ed-bg` in dark mode. `--ed-logo-band` is the
-   light plate; it is deliberately not pure white, so it reads as a band
-   rather than as a hole punched in the page.
-
-   This is what makes the `opaque` flag in customer-logos.ts non-visual:
-   it still records which files need transparent art, and replacing them
-   is still worth doing, but nothing renders differently either way. */
-.theme-editorial .ed-logo-band {
-  background: #F4F6F9;
+   The track is rendered as N exact copies of the roster, so -50% lands
+   on a pixel-identical frame and the loop is seamless without measuring
+   anything at runtime. Duration comes from the component as
+   `--marquee-duration`, scaled to the roster size, so adding logos
+   lengthens the cycle instead of speeding the marks up. */
+@keyframes lm-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
 }
-.dark .theme-editorial .ed-logo-band,
-.theme-editorial.dark .ed-logo-band {
-  background: #EEF1F5;
+.lm-track {
+  animation-name: lm-scroll;
+  animation-duration: var(--marquee-duration, 50s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+/* Pause on hover and for keyboard users landing inside the row. */
+.lm:hover .lm-track,
+.lm:focus-within .lm-track {
+  animation-play-state: paused;
+}
+
+/* The edge fade is what replaces the deleted panel: the marks dissolve
+   into the band instead of being hard-clipped at the viewport edge. */
+.lm-viewport {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+
+/* The eyebrow. Muted on the light band, and on the hero it sits on a
+   scrimmed photograph, so it takes the on-band accent rather than the
+   page's muted token, which is too dark to clear there. */
+.lm-label {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-size: max(var(--ed-type-floor, 12px), 12px);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ed-fg-muted);
+}
+.ed-on-dark .lm-label { color: #9FE0F8; }
+
+@media (prefers-reduced-motion: reduce) {
+  /* No animation. One copy of the roster, in a row the reader scrolls
+     themselves. Snap-free by omission: no scroll-snap is set. */
+  .lm-track { animation: none; width: auto; }
+  .lm-track [data-copy]:not([data-copy="0"]) { display: none; }
+  .lm-viewport {
+    overflow-x: auto;
+    -webkit-mask-image: none;
+            mask-image: none;
+  }
 }
 
 /* Editorial motion primitives ───────────────────────── */
