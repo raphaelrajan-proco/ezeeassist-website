@@ -2,6 +2,7 @@
 
 import { JAKARTA, MONO } from "@/components/platform/shared";
 import { Glyph } from "@/components/platform/reporting/Glyph";
+import FlowerMark from "@/components/sections/FlowerMark";
 import { CHANNELS, CONTEXT, QUEUE, QUEUES, TONES, type Tone } from "./data";
 
 /**
@@ -101,12 +102,7 @@ export default function Console() {
     >
       {/* Title bar */}
       <div className="flex items-center gap-3 px-4 py-2.5 sm:px-5" style={{ background: "#F8FAFC", borderBottom: `1px solid ${RULE}` }}>
-        <span
-          className="flex h-5 w-5 flex-none items-center justify-center rounded-md"
-          style={{ background: "#0077A8", color: "#FFFFFF", fontFamily: JAKARTA, fontSize: 12, fontWeight: 800 }}
-        >
-          E
-        </span>
+        <FlowerMark size={20} />
         <span className="text-[13px] font-semibold" style={{ color: INK }}>EZee Assist</span>
         <span className="hidden sm:inline" style={{ fontFamily: MONO, fontSize: 12, letterSpacing: "0.12em", color: MUTED }}>TICKETING</span>
         <span className="ml-auto flex items-center gap-4">

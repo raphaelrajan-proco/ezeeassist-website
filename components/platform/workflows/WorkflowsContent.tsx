@@ -92,9 +92,9 @@ export default function WorkflowsContent() {
                 fontSize: "clamp(1.875rem, 1.2rem + 2.2vw, 3.25rem)", color: "#FFFFFF", textWrap: "pretty",
               }}
             >
-              Build the play once.
+              Workflows that orchestrate coaching.
               <br />
-              <span style={{ color: SKY }}>It runs at every location, on that location&rsquo;s numbers.</span>
+              <span style={{ color: SKY }}>Build the play once, it runs at every location.</span>
             </h1>
             <p className="mt-5 max-w-[440px] text-base leading-[1.6]" style={{ color: ON_IMAGE }}>
               A coach writes down the check they&rsquo;d run, the number that would worry them, and
@@ -119,12 +119,12 @@ export default function WorkflowsContent() {
       {/* ── 2. Industry plays ─────────────────────────────── */}
       <section className="ed-bg w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-16 md:py-20">
-          <Reveal className="mx-auto flex max-w-[640px] flex-col items-center gap-3.5 text-center">
-            <p className="ed-fg-muted" style={EYEBROW}>Written by coaches</p>
-            <h2 className="ed-fg max-w-[19ch]" style={H2}>
-              A coach&rsquo;s expertise, arriving the moment it matters
+          <Reveal className="flex max-w-[760px] flex-col gap-3.5">
+            <h2 className="ed-fg" style={H2}>
+              <span className="ed-accent-text">A coach&rsquo;s expertise</span>, arriving the moment
+              it matters
             </h2>
-            <p className="ed-fg-muted max-w-[520px] text-[15.5px] leading-[1.6]">
+            <p className="ed-fg-muted max-w-[620px] text-[18px] leading-[1.7]">
               Every workflow here was written by a coach who knew where the growth was hiding. Each
               one now runs at every location that fits, on that location&rsquo;s own numbers, at the
               hour it matters.
@@ -139,8 +139,10 @@ export default function WorkflowsContent() {
       <section className="ed-bg-alt w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-16 md:py-20">
           <Reveal className="flex max-w-[620px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>Authoring</p>
-            <h2 className="ed-fg" style={H2}>The coach types a play. The system builds the workflow.</h2>
+            <h2 className="ed-fg" style={H2}>
+              The coach types a play.{" "}
+              <span className="ed-accent-text">The system builds the workflow.</span>
+            </h2>
             <p className="ed-fg-muted text-[15.5px] leading-[1.6]">
               A coach who has never configured anything can write one in a couple of minutes. Dana
               never opens a canvas.
@@ -211,7 +213,6 @@ export default function WorkflowsContent() {
       <section className="ed-bg w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-16 md:py-20">
           <Reveal className="flex max-w-[620px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>Triggers</p>
             <h2 className="ed-fg" style={H2}>
               Knowing what to look for was never the problem. Watching for it everywhere was.
             </h2>
@@ -265,8 +266,10 @@ export default function WorkflowsContent() {
       <section className="ed-bg-alt w-full">
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-10 px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:grid-cols-2 lg:gap-16">
           <Reveal className="flex max-w-[420px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>Over time</p>
-            <h2 className="ed-fg" style={H2}>Every workflow developed is one nobody has to think about again.</h2>
+            <h2 className="ed-fg" style={H2}>
+              <span className="ed-accent-text">Every workflow developed</span> is one nobody has to
+              think about again.
+            </h2>
             <p className="ed-fg-muted text-[15.5px] leading-[1.6]">
               A workflow written for one problem keeps solving it, and one that works in a single
               location can get published to the rest.

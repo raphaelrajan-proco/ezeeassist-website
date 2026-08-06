@@ -8,6 +8,7 @@ import { HERO_GRADIENT } from "@/lib/data/hero-backgrounds";
 import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 import { Glyph } from "@/components/platform/reporting/Glyph";
 import { ConnectCard, WriteBackCard } from "./artifacts";
+import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 import { INTEGRATION_STRIP as MARQUEE } from "@/lib/data/integrations";
 import { BLUES, DIRECTORY, NOTES, NOTS, RELATED, ROLES } from "./data";
 
@@ -132,6 +133,8 @@ export default function IntegrationsContent() {
         </div>
       </section>
 
+      <HeroLogoStrip />
+
       {/* ── 2. Nothing migrates ───────────────────────────
           Four cards stepping through one blue, light to deep. */}
       <section className="ed-bg w-full">
@@ -175,7 +178,8 @@ export default function IntegrationsContent() {
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
           <Reveal className="flex max-w-[860px] flex-col gap-3.5">
             <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
-              Knowledge, data, channels, and the systems where the work gets done.
+              Knowledge, data, channels, and the systems{" "}
+              <span className="ed-accent-text">where the work gets done.</span>
             </h2>
             <p className="ed-fg-muted text-[18px] leading-[1.7]">
               Eight categories, 250+ systems, connected at the source. Proprietary platforms and
@@ -222,7 +226,7 @@ export default function IntegrationsContent() {
           <Reveal className="flex flex-col gap-4">
             <h2 className="ed-fg leading-[1.14] tracking-[-0.03em]" style={H2_SMALL}>
               Reading is what most platforms mean by integration.{" "}
-              <span className="ed-accent-text">This one acts.</span>
+              <span className="ed-accent-text">EZee Assist acts.</span>
             </h2>
             <p className="ed-fg-muted text-[18px] leading-[1.7]">
               A draft written back to your marketing tool, a ticket opened in your service desk, a
@@ -244,7 +248,7 @@ export default function IntegrationsContent() {
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
           <Reveal className="flex max-w-[860px] flex-col gap-3.5">
             <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
-              It cannot show someone what their own system wouldn&rsquo;t.
+              It cannot show someone what their own system would not.
             </h2>
             <p className="ed-fg-muted text-[18px] leading-[1.7]">
               Connections inherit the permissions already set in the systems they read from, plus the

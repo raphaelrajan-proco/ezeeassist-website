@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
-import { HERO_BG, SCRIM } from "@/lib/data/hero-backgrounds";
+import { HERO_BG } from "@/lib/data/hero-backgrounds";
 import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 import { Glyph } from "@/components/platform/reporting/Glyph";
@@ -32,12 +32,12 @@ import { DECIDES, FAQS, HANDLES, RELATED, TAXES, TONE } from "./data";
  * `public/logos/ezee-flower-black.png`.
  *
  * ── Deviation from the handoff, on request ──────────────────
- * The handoff specifies a wine gradient hero (`#4E1B26`, accent
- * `#F2A9B8`) and says not to use the homepage haze. **The existing hazy
- * photographic hero is kept instead**, per direct instruction, as on
- * Answers, Workflows, Compliance and Control Center. The on-band accent
- * is `#9FE0F8`, which is what the other photographic bands use; wine's
- * rose accent reads wrong on the blue haze. Wine survives as `--wine`
+ * The handoff specifies a wine gradient hero (`#4E1B26`). **The hazy
+ * photographic `mauve` variant is used instead**, per direct
+ * instruction: it is the rose-family recolour of the homepage
+ * photograph, so the page keeps a hazy hero while still reading warm
+ * rather than blue. It carries its own measured scrim and its own
+ * rose-tinted scrim colour from the registry. Wine survives as `--wine`
  * for the brief's ranking badges and section marks.
  *
  * Three loops: the 16s hero brief, the 18s play typing, and the icon
@@ -46,7 +46,7 @@ import { DECIDES, FAQS, HANDLES, RELATED, TAXES, TONE } from "./data";
  * state under reduced motion.
  */
 
-const HERO = HERO_BG.default;
+const HERO = HERO_BG.mauve;
 const SKY = "#9FE0F8";
 const ON_IMAGE = "rgba(245,237,224,0.92)";
 
@@ -70,7 +70,7 @@ export default function CoachesContent() {
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.heroSubPage})` }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.scrimTint},${HERO.scrim})` }} />
         </div>
 
         <motion.div
@@ -306,7 +306,7 @@ export default function CoachesContent() {
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.closing})` }} />
+          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.scrimTint},${(HERO.scrim + 0.04).toFixed(2)})` }} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 45%, ${CLOSING_BASE} 100%)` }} />
         </div>
 

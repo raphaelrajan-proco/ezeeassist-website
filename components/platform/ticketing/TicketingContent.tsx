@@ -181,7 +181,8 @@ export default function TicketingContent() {
           <Reveal className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
             <div className="flex max-w-[840px] flex-col gap-3.5">
               <h2 className="leading-[1.12] tracking-[-0.03em]" style={{ ...H2, color: "#EEF2F8" }}>
-                Every request lands in one queue, already classified, owned, and timed.
+                Every request lands in one queue,{" "}
+                <span style={{ color: PL.accent }}>already classified, owned, and timed.</span>
               </h2>
               <p className="text-[18px] leading-[1.7]" style={{ color: "rgba(238,242,248,.72)" }}>
                 Watch #4471 arrive. It gets read for what it actually is, routed to the department
@@ -249,18 +250,19 @@ export default function TicketingContent() {
               const [tint, ink] = TONES[d.tone];
               return (
                 <Reveal key={d.name} delay={(i % 3) * 0.06}>
-                  <div
-                    className="flex h-full flex-col gap-3 rounded-[14px] p-5"
-                    style={{ background: tint, border: `1px solid ${ink}33` }}
-                  >
+                  {/* Grey cards, colour only in the icon tile. Nine
+                      fully tinted cards read as a paint chart and drown
+                      the section's actual point, which is that every
+                      department is covered by one thing. */}
+                  <div className="ed-card-alt ed-border flex h-full flex-col gap-3 rounded-[14px] border p-5">
                     <span className="flex items-center gap-2.5">
                       <span
                         className="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-[10px]"
-                        style={{ background: "#ffffff8f", color: ink }}
+                        style={{ background: tint, color: ink }}
                       >
                         <Glyph d={d.d} size={17} />
                       </span>
-                      <span style={{ fontFamily: JAKARTA, fontSize: 16.5, fontWeight: 700, color: ink }}>{d.name}</span>
+                      <span className="ed-fg" style={{ fontFamily: JAKARTA, fontSize: 16.5, fontWeight: 700 }}>{d.name}</span>
                     </span>
                     <span className="ed-fg-muted text-[14px] leading-[1.5]">{d.examples}</span>
                   </div>
@@ -276,8 +278,9 @@ export default function TicketingContent() {
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:grid-cols-[.85fr_1.15fr] lg:gap-14">
           <Reveal className="flex flex-col gap-4">
             <h2 className="ed-fg leading-[1.14] tracking-[-0.03em]" style={H2_SMALL}>
-              Analytics across every team, and a content health report that{" "}
-              <span className="ed-accent-text">tells you what to write next.</span>
+              Analytics across every team, and{" "}
+              <span className="ed-accent-text">a content health report that tells you what to
+              write next.</span>
             </h2>
             <p className="ed-fg-muted text-[18px] leading-[1.7]">
               Volume and response times by team, the requests that keep coming back, and where your

@@ -1065,7 +1065,25 @@ newsletter and the blog strip.
 Gating is unchanged: 30s dwell plus 700px scroll, then desktop mouseleave or
 a 45s mobile inactivity timer, at most once per session.
 
-## The footer band
+## The footer
+
+**One footer, every route.** `components/Footer.tsx` is now a three-line
+re-export of `FooterEditorial`; editing that component changes every page,
+which is the point. It used to branch on `usePathname()` against an
+`EDITORIAL_FOOTER` route set: the homepage and the booking page got the dark
+editorial footer and every sub-page got a light banded one. Editing either
+meant remembering the other existed, and the two had drifted. The light
+variant, its `BANDED_GRID`/`bandedColumns` maps and the now-dead
+`footerLinks` and `Globe`/`Share2` imports are deleted, 523 lines down to
+338. **Do not reintroduce a per-route footer.** If a route needs something
+different, it belongs behind a prop or a flag on the one component.
+
+**The X/Twitter and Facebook rows are gone**, on request. LinkedIn and
+YouTube remain. They were deleted rather than flagged because there is no
+stated intent to bring them back; re-add the two `<a>` entries beside the
+LinkedIn one if that changes.
+
+### The footer band
 
 Directly under the tagline and above the six columns, no divider: a two-part
 row modelled on Ada's footer. Left is "Request an AI summary" with the
@@ -1133,14 +1151,27 @@ Revised after the deck shipped; the current rules:
   ends at the last card, not at the section end. The old 18vh spacer is gone
   with it.
 - **The partner bar is a bottom-sticky compartment** (`sticky bottom-0`,
-  `z-index: 3`, solid `--ed-bg` background): it pins to the viewport bottom
+  `z-index: 6`, solid `--ed-bg` background): it pins to the viewport bottom
   for the length of the section and cards scroll away beneath it. Four pills
   only: IFA Supplier Forum, CFA Member, FSN Verified Member, WSI Partner.
+- **The stack rides OVER the headline on the way out.** The three z-indexes
+  are the whole mechanic: headline 4, cards 5, partner bar 6. The deck
+  releases the moment the fourth card lands, and the headline stays pinned
+  for another 518px, so those 518px are the stack climbing up across the
+  lead line. It used to be the reverse — cards at auto, headline at 4 — and
+  the deck vanished behind the line instead. **The order matters more than
+  the numbers: never give a card z-index above the partner bar's**, or the
+  deck covers the compartment it is supposed to disappear beneath. All four
+  cards share one z, so DOM order still decides the 18px staircase among
+  them. Measured at 1205x793: cards settle at viewport tops 181/199/217/235,
+  and an `elementFromPoint` over the headline band 300px later lands inside
+  a card.
 - **The headline pins above the deck from lg up** (`sticky`, `top:
-  var(--nav-block)`, `z-index: 4`, solid `--ed-bg`): cards ride up and
-  disappear under it, and it unpins with the last card, exactly as the
-  partner bar arrives, because it shares the deck wrapper as its containing
-  block. Every card's sticky top is `calc(var(--pf-offset) + stagger)`;
+  var(--nav-block)`, `z-index: 4`, solid `--ed-bg`). It needs the solid
+  background so the stack passes across it rather than through it, and it
+  unpins with the last card, exactly as the partner bar arrives, because it
+  shares the deck wrapper as its containing block. Every card's sticky top
+  is `calc(var(--pf-offset) + stagger)`;
   `--pf-offset` is defined in `globals.css` as nav-block plus `--pf-head`,
   the headline block's measured height, which the component publishes from a
   ResizeObserver because the type is fluid. **Below lg the pin is off and
@@ -1271,6 +1302,36 @@ motion constants, copy rules, and a pre-ship checklist.
 the legacy styling (hardcoded `#0A0A0A` / `#F0F0F0` / `#E5E7EB` Tailwind
 classes, which are the editorial tokens written the long way). Migrate a
 legacy page when it is next touched; do not extend the legacy style.
+
+### The semantic palette is central, and a new page class must join it
+
+`--ok`, `--warn`, `--bad`, `--purple` and the `--chip-bg`/`--chip-bd` pair are
+defined once in `globals.css`, on one rule listing **every** `.ed-*` page
+class. **Add a new page class to that selector list when you create it.**
+
+Two pages were built without them and their artifacts silently lost colour:
+on Apps the daily-audit check circles and the New-hire D3 chip rendered as
+blank gaps, because `var(--purple)` and `var(--ok)` resolved to nothing. An
+undefined custom property fails quietly — no console warning, no fallback,
+just a transparent fill — which is why this is one shared rule rather than a
+copy per page. The reported symptom was "gaps in the visuals", and the cause
+was three selectors away from the component. The washes stay per page below
+it: each tunes them to its own hero hue.
+
+### Never an "E" lettermark tile
+
+`components/sections/FlowerMark.tsx` renders the EZee flower for
+product-console headers. **A lettermark "E" tile is not a substitute** — that
+was an explicit instruction on the Coaches, Ticketing and Answers handoffs,
+and it was violated three times before the component existed. If a console
+mock needs a product avatar, import `FlowerMark`; do not draw a letter in a
+rounded square.
+
+### The hero customer strip is on every platform and solutions page
+
+`HeroLogoStrip` sits directly under the hero on all ten. It is one component
+over one `customerLogos` list, so a change to the list changes every page,
+which is what was asked for. **Do not fork it per page.**
 
 ## /solutions/leadership
 
@@ -2416,6 +2477,12 @@ and both are flat. The eyebrow wraps to two lines below ~430.
   off until the linked asset exists.
 - `SHOW_AEO_BLOCK` in `components/Footer.tsx` — Ask ChatGPT/Claude/Perplexity
   block, a launch-gate item wanted back after publish.
+- `SHOW_GENERATE` in `components/growth/AlwaysOn.tsx` — the "Generate your own"
+  button. Hidden until the workflow generator ships, and wanted back the week
+  of 2026-08-10. A flag rather than a deletion, so unhiding is one word and the
+  button's styling, inverted badge and TODO all survive. With it off, "See more
+  workflows" is alone in a `justify-end` row, which is where it was asked to
+  sit; flipping the flag puts the pair back.
 
 **On**
 

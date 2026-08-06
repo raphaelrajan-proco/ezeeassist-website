@@ -108,7 +108,8 @@ export default function ControlCenterContent() {
                 fontSize: "clamp(1.75rem, 1rem + 2.6vw, 3.25rem)", color: "#FFFFFF", textWrap: "pretty",
               }}
             >
-              Every AI your network touches, running under one set of rules.
+              Every AI your network touches,{" "}
+              <span style={{ color: SKY }}>running under one set of rules.</span>
             </h1>
             {/* The four clauses are the page's four arguments and work as
                 a table of contents. Keep the sentence structure. */}
@@ -171,7 +172,6 @@ export default function ControlCenterContent() {
       <section className="ed-bg w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
           <Reveal className="flex max-w-[760px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>One system</p>
             <h2 className="ed-fg" style={H2}>One AI across your whole network. Not a dozen, running separately.</h2>
             <p className="ed-fg-muted text-[15px] leading-[1.55]">
               Your locations, your departments, and your coaches are already using AI. Right now
@@ -220,8 +220,10 @@ export default function ControlCenterContent() {
       <section className="ed-bg-alt w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
           <Reveal className="flex max-w-[760px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>Data access</p>
-            <h2 className="ed-fg" style={H2}>The same question. Answered inside what each user is entitled to see.</h2>
+            <h2 className="ed-fg" style={H2}>
+              The same question.{" "}
+              <span className="ed-accent-text">Answered inside what each user is entitled to see.</span>
+            </h2>
             <p className="ed-fg-muted text-[15px] leading-[1.55]">
               Role and location decide what any answer, report, or action can include. Enforced every
               time.
@@ -271,7 +273,6 @@ export default function ControlCenterContent() {
         <div className="absolute inset-0" aria-hidden="true" style={{ background: CHARCOAL_GLOW }} />
         <div className="relative mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-20 md:py-24">
           <Reveal className="flex max-w-[820px] flex-col gap-3.5">
-            <p style={{ ...EYEBROW, color: ON_CHAR_MUTE }}>Capability</p>
             <h2 style={{ ...H2, color: "#FFFFFF" }}>
               You control what each person sees.
               <span className="block" style={{ color: SKY }}>You also control what the AI does for them.</span>
@@ -292,8 +293,10 @@ export default function ControlCenterContent() {
       <section id="sandbox" className="ed-bg w-full scroll-mt-24">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
           <Reveal className="flex max-w-[760px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>Safe rollout</p>
-            <h2 className="ed-fg" style={H2}>Franchisees can build in a secured system.</h2>
+            <h2 className="ed-fg" style={H2}>
+              Franchisees can build in a{" "}
+              <span className="ed-accent-text">secure system.</span>
+            </h2>
             <p className="ed-fg-muted text-[15px] leading-[1.55]">
               Franchisees writing their own tools sounds like a risk. It stops being one when the
               environment is bounded, and every App or Workflow is inspectable before it moves.
@@ -337,8 +340,10 @@ export default function ControlCenterContent() {
       <section id="record" className="ed-bg-alt w-full scroll-mt-24">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
           <Reveal className="flex max-w-[760px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>The record</p>
-            <h2 className="ed-fg" style={H2}>Every question, answer, action, and approval is logged and verifiable.</h2>
+            <h2 className="ed-fg" style={H2}>
+              Every question, answer, action, and approval is{" "}
+              <span className="ed-accent-text">logged and verifiable.</span>
+            </h2>
             <p className="ed-fg-muted text-[15px] leading-[1.55]">
               Searchable, exportable, attributable to a person and a location, with sources.
             </p>
@@ -373,8 +378,9 @@ export default function ControlCenterContent() {
       <section className="ed-bg w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
           <Reveal className="flex max-w-[760px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>Model choice</p>
-            <h2 className="ed-fg" style={H2}>The best model for a task changes every few months. Your platform shouldn&rsquo;t.</h2>
+            <h2 className="ed-fg" style={H2}>
+              The best model for a task changes every few months. Your platform should not.
+            </h2>
           </Reveal>
 
           <Reveal delay={0.08} className="mt-9">
@@ -423,9 +429,8 @@ export default function ControlCenterContent() {
       <section className="w-full" style={{ background: "#0B1220" }}>
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-20 md:py-24">
           <Reveal className="flex max-w-[760px] flex-col gap-3.5">
-            <p style={{ ...EYEBROW, color: "rgba(238,242,248,0.55)" }}>Review-ready</p>
             <h2 style={{ ...H2, color: "#FFFFFF" }}>
-              Everything here is linkable, so you can send the part that matters
+              Everything is linked, so you can send the part that matters
             </h2>
           </Reveal>
 
@@ -455,7 +460,9 @@ export default function ControlCenterContent() {
       <section className="ed-bg w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
           <Reveal className="flex flex-col gap-3.5">
-            <h2 className="ed-fg" style={H2}>Rolled out across a governed network.</h2>
+            <h2 className="ed-fg" style={H2}>
+              Rolled out across a <span className="ed-accent-text">governed network.</span>
+            </h2>
           </Reveal>
           <Reveal delay={0.08} className="mt-7">
             <figure

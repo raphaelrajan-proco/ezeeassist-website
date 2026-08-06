@@ -245,6 +245,14 @@ function MomentCard({ card }: { card: Card }) {
 const CTA_BASE =
   "inline-flex min-h-[40px] items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00AEEF]";
 
+/* ── Flip to true to bring "Generate your own" back ──────────
+   Hidden on request until the workflow generator ships. A flag rather
+   than a deletion, so unhiding is one word and the button's styling,
+   inverted badge and TODO all survive intact. With it off, "See more
+   workflows" is the only button and the row's `justify-end` puts it
+   right, which is where it was asked to sit. */
+const SHOW_GENERATE = false;
+
 function BandCtas({ innerRef, className = "" }: {
   innerRef?: React.Ref<HTMLDivElement>;
   className?: string;
@@ -268,6 +276,7 @@ function BandCtas({ innerRef, className = "" }: {
       {/* `ed-btn-arrow` here is only for the badge's hover nudge: the
           padding rule it also drives is `.ed-btn.ed-btn-arrow`, and this
           is not an `.ed-btn`. */}
+      {SHOW_GENERATE && (
       <Link
         href="/speak-to-an-expert"
         className={`${CTA_BASE} ed-btn-arrow gap-2 pl-[1.125rem] pr-1 hover:brightness-110`}
@@ -286,6 +295,7 @@ function BandCtas({ innerRef, className = "" }: {
           <ArrowRight className="h-3 w-3" strokeWidth={2.25} />
         </span>
       </Link>
+      )}
     </div>
   );
 }

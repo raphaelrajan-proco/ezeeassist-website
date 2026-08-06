@@ -130,7 +130,6 @@ export default function ComplianceContent() {
       <section className="ed-bg w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
           <Reveal className="flex max-w-[760px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>The gap</p>
             <h2 className="ed-fg" style={H2}>You find out late. And someone spends their week asking.</h2>
           </Reveal>
 
@@ -199,7 +198,6 @@ export default function ComplianceContent() {
       <section className="ed-bg-alt w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
           <Reveal className="flex max-w-[780px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>Scope</p>
             <h2 className="ed-fg" style={H2}>Everything with a deadline, a certificate, or a standard behind it.</h2>
             <p className="ed-fg-muted text-[15px] leading-[1.55]">Read from the systems that already hold it.</p>
           </Reveal>
@@ -231,7 +229,6 @@ export default function ComplianceContent() {
       <section className="ed-bg w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
           <Reveal className="flex max-w-[620px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>Continuity</p>
             <h2 className="ed-fg" style={H2}>An audit is a snapshot. Compliance is a state.</h2>
             <p className="ed-fg-muted text-[15px] leading-[1.55]">
               Checking on a schedule tells you what was true on the schedule.
@@ -254,7 +251,6 @@ export default function ComplianceContent() {
       <section id="the-chase" className="w-full scroll-mt-24" style={{ background: "#0B1220" }}>
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-20 md:py-24">
           <Reveal className="flex max-w-[760px] flex-col gap-3.5">
-            <p style={{ ...EYEBROW, color: ON_DARK_MUTE }}>The chase</p>
             <h2 style={{ ...H2, color: "#FFFFFF" }}>
               Every compliance tool checks.
               <span className="block" style={{ color: SKY }}>Almost none chase.</span>
@@ -293,7 +289,6 @@ export default function ComplianceContent() {
       <section className="ed-bg-alt w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
           <Reveal className="flex max-w-[740px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>Closing it</p>
             <h2 className="ed-fg" style={H2}>The franchisee replies in a message. The systems get updated.</h2>
             <p className="ed-fg-muted max-w-[660px] text-[15px] leading-[1.55]">
               An owner holding a renewed certificate should not have to log into three portals to
@@ -330,7 +325,6 @@ export default function ComplianceContent() {
       <section className="ed-bg w-full">
         <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
           <Reveal className="flex max-w-[800px] flex-col gap-3.5">
-            <p className="ed-fg-muted" style={EYEBROW}>Evidence</p>
             {/* The handoff's own copy note flags its original H2 as the
                 banned antithesis construction and supplies this. */}
             <h2 className="ed-fg" style={H2}>The document, the photo, and who submitted it.</h2>

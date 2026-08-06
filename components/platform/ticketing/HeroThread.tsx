@@ -1,6 +1,7 @@
 "use client";
 
 import { JAKARTA, MONO } from "@/components/platform/shared";
+import FlowerMark from "@/components/sections/FlowerMark";
 
 /**
  * The hero's 12-second chat thread.
@@ -58,12 +59,7 @@ export default function HeroThread() {
         <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", color: "rgba(253,244,251,.6)" }}>
           EZEE ASSIST
         </span>
-        <span
-          className="flex h-[18px] w-[18px] items-center justify-center rounded-[5px]"
-          style={{ background: EZEE_BG, color: "#FFFFFF", fontFamily: JAKARTA, fontSize: 11, fontWeight: 800 }}
-        >
-          E
-        </span>
+        <FlowerMark size={18} />
       </span>
 
       <p
@@ -101,7 +97,7 @@ export default function HeroThread() {
       </div>
 
       <span className="tk-h tk-logged self-end text-right" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", color: "rgba(253,244,251,.5)" }}>
-        TRACKED UNTIL IT CLOSES · NO PORTAL, NO FORM
+        TRACKED UNTIL IT CLOSES
       </span>
     </div>
   );

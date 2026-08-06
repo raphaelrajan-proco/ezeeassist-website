@@ -107,9 +107,15 @@ function StoryCard({ s }: { s: Story }) {
   return (
     /* Almost flush: 4px between cards rather than 48. The deck effect comes
        from the staggered sticky tops, not from the gap. --pf-offset clears
-       the pinned headline above, which the cards run underneath, and is
-       zero below lg where the headline does not pin. */
-    <div className="sticky mb-1" style={{ top: `calc(var(--pf-offset) + ${s.top}px)` }}>
+       the pinned headline above, and is zero below lg where the headline
+       does not pin.
+
+       z 5 puts the deck ABOVE the headline (4) and below the partner bar
+       (6). Once the fourth card lands, the deck releases and the headline
+       stays pinned for another ~518px, so the stack rides up and passes
+       over the headline instead of vanishing behind it. The four cards
+       share one z, so DOM order still decides the staircase among them. */
+    <div className="sticky mb-1" style={{ top: `calc(var(--pf-offset) + ${s.top}px)`, zIndex: 5 }}>
       <div
         className="rounded-2xl overflow-hidden"
         style={{
@@ -264,9 +270,11 @@ export default function CustomerProof() {
           ref={headRef}
           className="static lg:sticky pb-12 md:pb-14 lg:pb-5"
           style={{
-            /* Below the floating nav pill, which is sticky too. Painted
-               above the cards so they disappear under it rather than
-               through it, and above the partner bar's 3. */
+            /* Below the floating nav pill, which is sticky too, and below
+               the deck's 5: the stack rides up OVER this line on the way
+               out. It keeps a solid background so the cards pass across it
+               rather than through it, and it stays pinned until the last
+               card has cleared, at which point it releases with them. */
             top: "var(--nav-block)",
             zIndex: 4,
             backgroundColor: "var(--ed-bg)",
@@ -327,7 +335,7 @@ export default function CustomerProof() {
           TODO: real partner badge images to replace text pills before publish. */}
       <div
         className="sticky bottom-0 mt-10 pt-5 pb-2"
-        style={{ zIndex: 3, backgroundColor: "var(--ed-bg)" }}
+        style={{ zIndex: 6, backgroundColor: "var(--ed-bg)" }}
       >
         <p
           className="ed-fg-muted text-sm uppercase tracking-[0.2em] mb-4"

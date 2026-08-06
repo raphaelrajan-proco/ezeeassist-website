@@ -1,6 +1,7 @@
 "use client";
 
 import { JAKARTA, MONO } from "@/components/platform/shared";
+import FlowerMark from "@/components/sections/FlowerMark";
 
 /**
  * The hero's phone chat mock, replacing the flat answer card.
@@ -8,10 +9,17 @@ import { JAKARTA, MONO } from "@/components/platform/shared";
  * Fixed light palette in both themes: it is a white phone sitting on a
  * dark band, and a phone does not follow this site's dark mode.
  *
+ * **The conversation plays out on a 14s loop** rather than sitting
+ * finished: the question lands, EZee types, the answer and its sources
+ * arrive, then the thanks and the input bar. Base styles are the
+ * finished thread, so reduced motion shows the whole exchange at once.
+ *
  * Decorative throughout. Nothing here is a real control, so the send
  * glyph and battery are `aria-hidden` and the "input" is a styled span
  * rather than an `<input>`, which keeps it out of the tab order and off
  * the accessibility tree as a form field.
+ *
+ * **The header carries the flower mark, never a lettermark "E".**
  *
  * **Type sizes are the site's 12px floor, not the prototype's.** The
  * handoff draws this at 8.5 to 10.5px for the meta lines and chips.
@@ -42,7 +50,7 @@ function Chip({ children }: { children: React.ReactNode }) {
 
 export default function PhoneMock() {
   return (
-    <div className="flex justify-center">
+    <div data-anim className="flex justify-center" aria-hidden="true">
       <div
         className="w-full max-w-[330px] rounded-[30px] p-3.5"
         style={{ background: "#FFFFFF", boxShadow: "0 34px 80px -30px rgba(3,16,40,.8)" }}
@@ -57,13 +65,7 @@ export default function PhoneMock() {
         </div>
 
         <div className="flex items-center gap-2.5 px-2.5 pb-3" style={{ borderBottom: "1px solid #EEF0F4" }}>
-          <span
-            className="flex h-[30px] w-[30px] flex-none items-center justify-center rounded-[9px]"
-            style={{ background: ACCENT, color: "#FFFFFF", fontFamily: JAKARTA, fontSize: 14, fontWeight: 800 }}
-            aria-hidden="true"
-          >
-            E
-          </span>
+          <FlowerMark size={30} />
           <span className="flex flex-col">
             <span style={{ fontFamily: JAKARTA, fontSize: 14, fontWeight: 700, color: INK }}>EZee Assist</span>
             <span className="flex items-center gap-1.5" style={{ fontSize: 12, color: "#0D7C58" }}>
@@ -74,35 +76,46 @@ export default function PhoneMock() {
         </div>
 
         <div className="flex flex-col gap-2.5 rounded-b-[18px] px-3 py-3.5" style={{ background: "#F6F8FB" }}>
-          <span className="text-center" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", color: FAINT }}>
+          <span className="ph ph-meta text-center" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", color: FAINT }}>
             STORE #118 · SHIFT LEAD · 9:14AM
           </span>
 
           <p
-            className="max-w-[240px] self-end px-3 py-2.5 text-[12.5px] leading-[1.5]"
+            className="ph ph-ask max-w-[240px] self-end px-3 py-2.5 text-[12.5px] leading-[1.5]"
             style={{ background: INK, color: "#FFFFFF", borderRadius: "15px 15px 4px 15px" }}
           >
             Can I run the summer promo alongside the loyalty offer?
           </p>
 
+          {/* Typing, in the answer's own column so the thread does not
+              jump when the reply replaces it. */}
+          <span
+            className="ph ph-type flex w-fit items-center gap-1.5 self-start px-3.5 py-3"
+            style={{ background: "#FFFFFF", border: `1px solid ${RULE}`, borderRadius: "15px 15px 15px 4px" }}
+          >
+            {[0, 1, 2].map((i) => (
+              <span key={i} className="ph-dot h-1.5 w-1.5 rounded-full" style={{ background: ACCENT }} />
+            ))}
+          </span>
+
           <div
-            className="flex max-w-[262px] flex-col gap-2 self-start px-3 py-2.5"
+            className="ph ph-ans flex max-w-[262px] flex-col gap-2 self-start px-3 py-2.5"
             style={{ background: "#FFFFFF", border: `1px solid ${RULE}`, borderRadius: "15px 15px 15px 4px" }}
           >
             <span className="text-[12.5px] leading-[1.55]" style={{ color: INK }}>
               No. Promotions don&rsquo;t stack with loyalty redemptions. Apply the higher of the two
               and note it at close.
             </span>
-            <span className="flex flex-wrap gap-1.5">
+            <span className="ph ph-chips flex flex-wrap gap-1.5">
               <Chip>summer-promo-guide.pdf</Chip>
               <Chip>loyalty-policy.pdf</Chip>
             </span>
           </div>
 
-          <span className="self-start pl-1" style={{ fontSize: 12, color: FAINT }}>answered in 6s</span>
+          <span className="ph ph-secs self-start pl-1" style={{ fontSize: 12, color: FAINT }}>answered in 6s</span>
 
           <p
-            className="max-w-[240px] self-end px-3 py-2.5 text-[12.5px] leading-[1.5]"
+            className="ph ph-thx max-w-[240px] self-end px-3 py-2.5 text-[12.5px] leading-[1.5]"
             style={{ background: INK, color: "#FFFFFF", borderRadius: "15px 15px 4px 15px" }}
           >
             Perfect, thanks!
@@ -111,7 +124,7 @@ export default function PhoneMock() {
           {/* A styled span, not an input: the mock must not land in the
               tab order or read as a form field. */}
           <div
-            className="mt-1 flex items-center gap-2.5 rounded-full py-2 pl-4 pr-2"
+            className="ph ph-bar mt-1 flex items-center gap-2.5 rounded-full py-2 pl-4 pr-2"
             style={{ background: "#FFFFFF", border: `1px solid ${RULE}` }}
           >
             <span className="flex-1" style={{ fontSize: 12, color: FAINT }}>Ask anything&hellip;</span>

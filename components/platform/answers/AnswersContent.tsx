@@ -252,8 +252,10 @@ export default function AnswersContent() {
             </p>
             <p className="ed-fg-muted text-[16.5px] leading-[1.7]">
               So franchisees do the reasonable thing: they text their coach.{" "}
-              <b className="ed-fg">The coach becomes the search engine for their locations</b>, and
-              the answer drifts a little every time it&rsquo;s retold.
+              <b className="ed-fg">
+                The coach becomes the search engine for their locations, and the answer drifts a
+                little every time it&rsquo;s retold.
+              </b>
             </p>
           </Reveal>
 
@@ -319,7 +321,9 @@ export default function AnswersContent() {
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:grid-cols-[.95fr_1.05fr] lg:gap-16">
           <Reveal className="flex flex-col gap-4">
             <h2 className="ed-fg leading-[1.14] tracking-[-0.03em]" style={H2}>
-              Send a message from whatever is already open.
+              Send a message from{" "}
+              <span className="ed-accent-text">which any preferred channels</span> you already have
+              open.
             </h2>
             <p className="ed-fg-muted text-[16.5px] leading-[1.7]">
               The answer comes back in seconds, in plain language, with the links and resources
@@ -403,7 +407,8 @@ export default function AnswersContent() {
         <div className="mx-auto flex max-w-7xl flex-col gap-9 px-6 md:px-12 lg:px-16 py-16 md:py-20">
           <Reveal className="flex max-w-[760px] flex-col gap-3.5">
             <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
-              Access controlled to each role, each unit, each person.
+              Access controlled to{" "}
+              <span className="ed-accent-text">each role, each unit, each person.</span>
             </h2>
             <p className="ed-fg-muted text-[16px] leading-[1.6]">
               Role and location decide what comes back. Nobody sees a number they shouldn&rsquo;t.
@@ -481,7 +486,8 @@ export default function AnswersContent() {
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
           <Reveal className="flex max-w-[800px] flex-col gap-3.5">
             <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
-              Only your trusted and approved sources, across your tech stack, your data, and beyond.
+              Only your <span className="ed-accent-text">trusted and approved sources</span>,
+              across your tech stack, your data, and beyond.
             </h2>
             <p className="ed-fg-muted text-[16px] leading-[1.6]">
               Any format, wherever it already lives. Nothing migrates, and every answer names the
@@ -511,19 +517,35 @@ export default function AnswersContent() {
                 ))}
               </div>
 
-              <div className="grid grid-cols-1 gap-x-8 gap-y-2.5 md:grid-cols-2">
-                <div className="md:col-span-2" style={MONO_LABEL}>WON&rsquo;T DO</div>
-                {WONT_DO.map((w) => (
-                  <div key={w.text} className="ed-rule ed-fg-muted flex items-baseline gap-2.5 border-t pt-2.5 text-[13.5px]">
-                    <span aria-hidden="true" style={{ color: "var(--bad)", fontWeight: 700 }}>✕</span>
-                    <span>
-                      {w.text}
-                      {w.link && (
-                        <a href={w.link.href} className="ed-accent-text underline-offset-2 hover:underline">{w.link.label}</a>
-                      )}
-                    </span>
+              {/* A scroller, not a two-column list. Spread across the
+                  panel the five points sat marooned in whitespace under
+                  the table; in one moving row they read as a set. */}
+              <div className="ed-rule flex flex-col gap-3 border-t pt-4">
+                <span style={MONO_LABEL}>WON&rsquo;T DO</span>
+                <div
+                  className="wd-track relative overflow-hidden"
+                  style={{
+                    WebkitMaskImage: "linear-gradient(to right, transparent, black 4%, black 96%, transparent)",
+                    maskImage: "linear-gradient(to right, transparent, black 4%, black 96%, transparent)",
+                  }}
+                >
+                  <div className="wd-marq flex w-max gap-3">
+                    {[0, 1].map((copy) =>
+                      WONT_DO.map((w) => (
+                        <span
+                          key={`${copy}-${w.text}`}
+                          className="ed-card ed-border ed-fg-muted flex flex-none items-baseline gap-2.5 whitespace-nowrap rounded-lg border px-4 py-2.5 text-[13.5px]"
+                        >
+                          <span aria-hidden="true" style={{ color: "var(--bad)", fontWeight: 700 }}>✕</span>
+                          <span>
+                            {w.text}
+                            {w.link && <span className="ed-accent-text">{w.link.label}</span>}
+                          </span>
+                        </span>
+                      ))
+                    )}
                   </div>
-                ))}
+                </div>
               </div>
             </div>
           </Reveal>
@@ -560,23 +582,20 @@ export default function AnswersContent() {
                    Under xl the verdict drops to its own row instead. */
                 <div
                   key={r.topic}
-                  className="ed-rule grid grid-cols-1 items-center gap-x-[18px] gap-y-1.5 border-t px-4 py-4 sm:grid-cols-[auto_1fr] sm:px-5 xl:grid-cols-[auto_1fr_auto]"
+                  className="ed-rule grid grid-cols-1 items-center gap-x-[18px] gap-y-1.5 border-t px-4 py-4 sm:grid-cols-[auto_1fr] sm:px-5 xl:grid-cols-[auto_1fr_268px]"
                 >
                   <span className="ed-fg-muted" style={{ fontFamily: MONO, fontSize: 12 }}>{r.freq}</span>
                   <span className="ed-fg text-[15px] font-semibold">{r.topic}</span>
                   {/* The square is decorative. The verdict itself carries
                       the meaning, so colour never does the work alone. */}
                   <span
-                    className="text-[13px] font-semibold sm:col-span-2 sm:col-start-2 xl:col-span-1 xl:col-start-3 xl:max-w-[260px]"
+                    className="text-[13px] font-semibold sm:col-span-2 sm:col-start-2 xl:col-span-1 xl:col-start-3"
                     style={{ color: r.hue }}
                   >
                     <span aria-hidden="true">■</span> {r.verdict}
                   </span>
                 </div>
               ))}
-              <div className="ed-rule ed-fg-muted border-t px-5 py-3 text-[12px]">
-                Illustrative. Figures show the shape of the report, not a customer&rsquo;s data.
-              </div>
             </div>
           </Reveal>
         </div>
@@ -590,7 +609,7 @@ export default function AnswersContent() {
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
           <Reveal className="flex max-w-[780px] flex-col gap-3.5">
             <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
-              When your material doesn&rsquo;t cover it, a person does.
+              When your material doesn&rsquo;t cover it, your team does.
             </h2>
             <p className="ed-fg-muted text-[16px] leading-[1.6]">
               Below the confidence threshold you set, the question becomes a ticket in the built-in

@@ -261,12 +261,26 @@
    are names generic enough to collide with anything added later, and the
    washes are one page's panel treatment, not a site token.
 
-   The semantic four and the chip pair are shared, because they mean the
-   same thing everywhere they appear. The washes are not: each page tunes
-   them to its own hero hue, so Answers reads blue-grey and Reporting
-   reads violet-grey. */
+   **Every page class is listed here, and a new one must be added.** The
+   semantic four and the chip pair mean the same thing everywhere, so
+   they belong in one rule. Two pages were built without them and their
+   artifacts silently lost colour: on Apps the daily-audit check circles
+   and the New-hire D3 chip rendered as blank gaps, because
+   `var(--purple)` and `var(--ok)` resolved to nothing. An undefined
+   custom property fails quietly, which is exactly why this is central
+   rather than per page.
+
+   The washes stay per page below: each tunes them to its own hero hue. */
 .theme-editorial .ed-answers,
-.theme-editorial .ed-reporting {
+.theme-editorial .ed-reporting,
+.theme-editorial .ed-apps,
+.theme-editorial .ed-workflows,
+.theme-editorial .ed-ticketing,
+.theme-editorial .ed-integrations,
+.theme-editorial .ed-compliance,
+.theme-editorial .ed-control-center,
+.theme-editorial .ed-coaches,
+.theme-editorial .ed-leadership {
   --ok:      #0D7C58;
   --warn:    #B45309;
   --bad:     #B42318;
@@ -276,8 +290,24 @@
 }
 .dark .theme-editorial .ed-answers,
 .dark .theme-editorial .ed-reporting,
+.dark .theme-editorial .ed-apps,
+.dark .theme-editorial .ed-workflows,
+.dark .theme-editorial .ed-ticketing,
+.dark .theme-editorial .ed-integrations,
+.dark .theme-editorial .ed-compliance,
+.dark .theme-editorial .ed-control-center,
+.dark .theme-editorial .ed-coaches,
+.dark .theme-editorial .ed-leadership,
 .theme-editorial.dark .ed-answers,
-.theme-editorial.dark .ed-reporting {
+.theme-editorial.dark .ed-reporting,
+.theme-editorial.dark .ed-apps,
+.theme-editorial.dark .ed-workflows,
+.theme-editorial.dark .ed-ticketing,
+.theme-editorial.dark .ed-integrations,
+.theme-editorial.dark .ed-compliance,
+.theme-editorial.dark .ed-control-center,
+.theme-editorial.dark .ed-coaches,
+.theme-editorial.dark .ed-leadership {
   --ok:      #34D399;
   --warn:    #FBBF24;
   --bad:     #F97066;
@@ -317,30 +347,61 @@
   --haze-c: linear-gradient(180deg, #414C92 0%, #664F86 40%, #8D6072 70%, #437069 100%);
 }
 
+/* ─── Answers hero phone ───────────────────────────────────
+   The conversation plays out rather than sitting finished: context line,
+   question, typing, answer, the "6s" meta, thanks, then the input bar.
+   14s, and the base styles are the finished thread so reduced motion
+   shows the whole exchange. */
+@keyframes ph-meta  { 0%,2%{opacity:0} 5%,94%{opacity:1} 98%,100%{opacity:0} }
+@keyframes ph-ask   { 0%,6%{opacity:0;transform:translateY(8px)} 11%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes ph-type  { 0%,14%{opacity:0} 17%,30%{opacity:1} 33%,100%{opacity:0} }
+@keyframes ph-ans   { 0%,32%{opacity:0;transform:translateY(8px)} 37%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes ph-chips { 0%,40%{opacity:0;transform:translateY(4px)} 45%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes ph-secs  { 0%,48%{opacity:0} 52%,94%{opacity:1} 98%,100%{opacity:0} }
+@keyframes ph-thx   { 0%,58%{opacity:0;transform:translateY(8px)} 63%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes ph-bar   { 0%,70%{opacity:0} 75%,94%{opacity:1} 98%,100%{opacity:0} }
+@keyframes ph-dot   { 0%,80%,100%{opacity:.25} 40%{opacity:1} }
+
+[data-anim] .ph {
+  animation-duration: 14s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+[data-anim] .ph-meta  { animation-name: ph-meta }
+[data-anim] .ph-ask   { animation-name: ph-ask }
+[data-anim] .ph-type  { animation-name: ph-type }
+[data-anim] .ph-ans   { animation-name: ph-ans }
+[data-anim] .ph-chips { animation-name: ph-chips }
+[data-anim] .ph-secs  { animation-name: ph-secs }
+[data-anim] .ph-thx   { animation-name: ph-thx }
+[data-anim] .ph-bar   { animation-name: ph-bar }
+[data-anim] .ph-dot   { animation: ph-dot 1.2s ease-in-out infinite both }
+[data-anim] .ph-dot:nth-child(2) { animation-delay: .2s }
+[data-anim] .ph-dot:nth-child(3) { animation-delay: .4s }
+
+/* The won't-do list scrolls rather than spreading across two columns,
+   which left the five points marooned in whitespace under the table. */
+@keyframes wd-marq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+[data-anim] .wd-marq,
+.ed-answers .wd-marq { animation: wd-marq 44s linear infinite; }
+.ed-answers .wd-track:hover .wd-marq { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .ed-answers .wd-marq { animation: none; }
+}
+
 /* ─── HQ Leadership page ───────────────────────────────────
    Two loops: the 18s network console and the 12s owner flywheel. Base
    styles are the finished state in both, so reduced motion leaves every
    node visible and every connector filled. */
 .theme-editorial .ed-leadership {
   --wash:  linear-gradient(150deg, #EEF6F1 0%, #E2EFE7 55%, #EDF5F0 100%);
-  --ok:    #0D7C58;
-  --warn:  #B45309;
-  --bad:   #B42318;
-  --purple:#7C3AED;
   --ever:  #1E6B4F;
-  --chip-bg: rgba(0, 119, 168, 0.06);
-  --chip-bd: rgba(0, 119, 168, 0.22);
 }
 .dark .theme-editorial .ed-leadership,
 .theme-editorial.dark .ed-leadership {
   --wash:  linear-gradient(150deg, #101F19 0%, #13241C 55%, #0D1915 100%);
-  --ok:    #34D399;
-  --warn:  #FBBF24;
-  --bad:   #F97066;
-  --purple:#A78BFA;
   --ever:  #7FD8B4;
-  --chip-bg: rgba(0, 174, 239, 0.08);
-  --chip-bd: rgba(0, 174, 239, 0.30);
 }
 
 /* Network console, 18s. */
@@ -407,13 +468,7 @@
    finished state in every case. */
 .theme-editorial .ed-coaches {
   --wash:  linear-gradient(150deg, #F8EEF0 0%, #F3E2E6 55%, #F7ECEE 100%);
-  --ok:    #0D7C58;
-  --warn:  #B45309;
-  --bad:   #B42318;
-  --purple:#7C3AED;
   --wine:  #8C3A4B;
-  --chip-bg: rgba(0, 119, 168, 0.06);
-  --chip-bd: rgba(0, 119, 168, 0.22);
   /* Blue despite the name: these drive the calendar's active-day
      highlight, which is the EZee blue, not the page's wine. */
   --wine-tint: rgba(0, 174, 239, 0.08);
@@ -422,13 +477,7 @@
 .dark .theme-editorial .ed-coaches,
 .theme-editorial.dark .ed-coaches {
   --wash:  linear-gradient(150deg, #241318 0%, #2B171D 55%, #1D0F13 100%);
-  --ok:    #34D399;
-  --warn:  #FBBF24;
-  --bad:   #F97066;
-  --purple:#A78BFA;
   --wine:  #E8A9B6;
-  --chip-bg: rgba(0, 174, 239, 0.08);
-  --chip-bd: rgba(0, 174, 239, 0.30);
   --wine-tint: rgba(0, 174, 239, 0.14);
   --wine-bd:   rgba(0, 174, 239, 0.60);
 }
@@ -522,15 +571,9 @@
    compresses below sm rather than disappearing, so the shape survives a
    phone without introducing a horizontal scroll. */
 .theme-editorial .ed-compliance {
-  --ok:   #0D7C58;
-  --warn: #B45309;
-  --bad:  #B42318;
 }
 .dark .theme-editorial .ed-compliance,
 .theme-editorial.dark .ed-compliance {
-  --ok:   #34D399;
-  --warn: #FBBF24;
-  --bad:  #F97066;
 }
 
 .ed-chase-row { padding-left: calc(1.25rem + var(--step) * 10px); }
@@ -554,26 +597,14 @@
    styles are the finished state, same arrangement as Apps and Ticketing. */
 .theme-editorial .ed-integrations {
   --wash:   linear-gradient(150deg, #EFF4F9 0%, #E4EDF6 55%, #EDF2F8 100%);
-  --ok:     #0D7C58;
-  --warn:   #B45309;
-  --bad:    #B42318;
-  --purple: #7C3AED;
   --steel:  #2F5C80;
   --track:  #E7E9EF;
-  --chip-bg: rgba(0, 119, 168, 0.06);
-  --chip-bd: rgba(0, 119, 168, 0.22);
 }
 .dark .theme-editorial .ed-integrations,
 .theme-editorial.dark .ed-integrations {
   --wash:   linear-gradient(150deg, #101B26 0%, #14202D 55%, #0D1720 100%);
-  --ok:     #34D399;
-  --warn:   #FBBF24;
-  --bad:    #F97066;
-  --purple: #A78BFA;
   --steel:  #8FB8D8;
   --track:  #26262B;
-  --chip-bg: rgba(0, 174, 239, 0.08);
-  --chip-bd: rgba(0, 174, 239, 0.30);
 }
 
 /* The four "nothing migrates" cards. Light and dark values arrive
@@ -652,26 +683,14 @@
    leaves the whole thread and the closed ticket. */
 .theme-editorial .ed-ticketing {
   --wash:  linear-gradient(150deg, #F6EEF6 0%, #EFE3F0 55%, #F4EBF4 100%);
-  --ok:     #0D7C58;
-  --warn:   #B45309;
-  --bad:    #B42318;
-  --purple: #7C3AED;
   --plum:   #8E3F7C;
   --track:  #E7E9EF;
-  --chip-bg: rgba(0, 119, 168, 0.06);
-  --chip-bd: rgba(0, 119, 168, 0.22);
 }
 .dark .theme-editorial .ed-ticketing,
 .theme-editorial.dark .ed-ticketing {
   --wash:  linear-gradient(150deg, #25162A 0%, #2C1A31 55%, #1E1224 100%);
-  --ok:     #34D399;
-  --warn:   #FBBF24;
-  --bad:    #F97066;
-  --purple: #A78BFA;
   --plum:   #E0A5D0;
   --track:  #26262B;
-  --chip-bg: rgba(0, 174, 239, 0.08);
-  --chip-bd: rgba(0, 174, 239, 0.30);
 }
 
 /* Hero chat thread, 12s. The order is the argument: ask, offer to raise,

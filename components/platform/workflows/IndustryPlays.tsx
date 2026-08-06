@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { MONO } from "@/components/platform/shared";
+import { JAKARTA, MONO } from "@/components/platform/shared";
 import { CATEGORY_COLOR, VERTICALS } from "./data";
 
 /**
@@ -41,6 +41,11 @@ export default function IndustryPlays() {
             aria-pressed={i === sel}
             className="rounded-full text-[13.5px] transition-colors duration-[180ms] lg:text-left"
             style={{
+              /* DESIGN.md 7.2: a pill-radius button runs --font-editorial.
+                 These were the one control on the page with no family set,
+                 so they inherited the Inter body face and read as a
+                 different typeface from the buttons and heads around them. */
+              fontFamily: JAKARTA,
               padding: "10px 16px",
               background: i === sel ? "#0A0A0A" : "var(--ed-card)",
               color: i === sel ? "#FFFFFF" : "var(--ed-fg-muted)",

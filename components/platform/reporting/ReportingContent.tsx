@@ -370,7 +370,7 @@ export default function ReportingContent() {
               <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-5">
                 <span className="ed-fg-muted flex-none text-[13.5px] font-semibold">Reads live from</span>
                 <span className="ed-fg-muted text-[13.5px]">
-                  250+ more.{" "}
+                  250+ integrations.{" "}
                   <Link href="/platform/integrations" className="ed-accent-text underline-offset-2 hover:underline">
                     See what connects
                   </Link>
