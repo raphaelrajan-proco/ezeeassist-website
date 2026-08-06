@@ -110,8 +110,11 @@ function FooterLink({ href, children, className = "", style }: {
 }) {
   const [hover, setHover] = useState(false);
   const external = href.startsWith("http") || href.startsWith("mailto:") || href.startsWith("tel:");
+  /* `min-h-[24px]` is the repo's tap-target floor, enforced by the
+     regression guard. Bare text links measure 20px and fail it; the
+     inline-flex is what lets the min-height apply to an inline element. */
   const props = {
-    className: `transition-colors ${className}`,
+    className: `inline-flex min-h-[24px] items-center transition-colors ${className}`,
     style: { color: hover ? C.fg : C.muted, ...style },
     onMouseEnter: () => setHover(true),
     onMouseLeave: () => setHover(false),
@@ -181,14 +184,14 @@ export default function Footer() {
           <div className="flex flex-none flex-wrap items-center gap-x-9 gap-y-4">
             <a
               href="mailto:sales@ezeeassist.com"
-              className="whitespace-nowrap text-[15px] transition-colors"
+              className="inline-flex min-h-[24px] items-center whitespace-nowrap text-[15px] transition-colors"
               style={{ color: mailHover ? C.accent : C.fg }}
               onMouseEnter={() => setMailHover(true)}
               onMouseLeave={() => setMailHover(false)}
             >
               sales@ezeeassist.com
             </a>
-            <a href="tel:+18557773933" className="whitespace-nowrap text-[15px]" style={{ color: C.muted }}>
+            <a href="tel:+18557773933" className="inline-flex min-h-[24px] items-center whitespace-nowrap text-[15px]" style={{ color: C.muted }}>
               +1 855-777-3933
             </a>
             {/* Icon-only, so the accessible name has to come from the
