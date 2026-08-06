@@ -709,7 +709,12 @@ const PILLARS = [
 export default function CoachsWeek() {
   return (
     <SectionShell alt id="the-week">
-      <div className="ed-problem flex flex-col gap-12 md:gap-14">
+      {/* Extra top padding, on top of SectionShell's own. This is the
+          first section under the hero's logo strip, and the strip is now
+          a full-bleed white band that runs straight into this one. The
+          space belongs here rather than on the strip: the strip is shared
+          with every sub-page hero and has to stay identical across them. */}
+      <div className="ed-problem flex flex-col gap-12 md:gap-14 pt-3 md:pt-6 lg:pt-8">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

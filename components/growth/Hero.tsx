@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, TrendingDown, TrendingUp } from "lucide-react";
 import GrowthTrustStrip from "./TrustStrip";
+import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 
 /**
  * Ada-style hero. Left: fluid-type lockup. Right: one fixed-size
@@ -490,12 +491,13 @@ function ConversationCard() {
 
 export default function GrowthHero() {
   return (
-    /* The nav pill floats over this section, so the hero starts at the top
-       of the document and pads its content past the pill. --nav-block is
-       the pill height plus its inset; --nav-gap is the breathing room
-       every hero on the site leaves under the pill. Both live on
-       .theme-editorial, so this hero and the sub-page `.ed-hero-pad`
-       clear the nav by the same amount. */
+    <>
+    {/* The nav pill floats over this section, so the hero starts at the top
+        of the document and pads its content past the pill. --nav-block is
+        the pill height plus its inset; --nav-gap is the breathing room
+        every hero on the site leaves under the pill. Both live on
+        .theme-editorial, so this hero and the sub-page `.ed-hero-pad`
+        clear the nav by the same amount. */}
     <section
       className="ed-hero-shot relative w-full overflow-hidden"
       style={{ paddingTop: "calc(var(--nav-block) + var(--nav-gap))", backgroundColor: HERO_SCRIM }}
@@ -707,6 +709,15 @@ export default function GrowthHero() {
       </div>
 
       <GrowthTrustStrip showTrustLine={EYEBROW_ABOVE_LOGOS} />
-    </section>
+      </section>
+
+      {/* The same strip as every sub-page hero, from the same file, so
+          the homepage and Answers cannot drift apart again. It is a
+          full-bleed white band BELOW the hero, not a panel inset on top
+          of it: the earlier homepage-only version sat inside the
+          container with hero blue down both sides, which is what made
+          the two pages look different. */}
+      <HeroLogoStrip />
+    </>
   );
 }
