@@ -11,6 +11,7 @@ import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 import { Glyph } from "@/components/platform/reporting/Glyph";
 import HeroBuildLoop from "./HeroBuildLoop";
 import BookingApp from "./BookingApp";
+import DigestApp from "./DigestApp";
 import { APPS, INK, STEPS, TILE, TIMELINE, WISHLIST, type Tone } from "./data";
 
 /**
@@ -242,25 +243,87 @@ export default function AppsContent() {
             </p>
           </Reveal>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
-            {TIMELINE.map((t, i) => (
-              <Reveal key={t.label} delay={i * 0.05}>
-                <div className="flex h-full flex-col gap-3">
-                  <div className="flex items-center gap-2" aria-hidden="true">
-                    <span className="h-3 w-3 flex-none rounded-full" style={{ background: t.live ? INK.accent : "var(--ed-border)" }} />
-                    {i < TIMELINE.length - 1 && <span className="ed-rule hidden h-px flex-1 border-t lg:block" />}
-                  </div>
-                  <div
-                    className={`ed-card flex h-full flex-col gap-2.5 rounded-xl p-4 ${t.live ? "ap-glow" : "ed-border border"}`}
-                    style={t.live ? { border: "1.5px solid var(--ed-accent-text)" } : undefined}
-                  >
-                    <Tile tone={t.live ? "accent" : "muted"} d={t.d} size={30} icon={15} />
-                    <span style={MONO_LABEL}>{t.label}</span>
-                    <span className={`text-[14.5px] leading-[1.5] ${t.live ? "ed-fg font-semibold" : "ed-fg-muted"}`}>{t.body}</span>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
+          {/* Two columns: the steps on the left, the app they produced on
+              the right. The old layout was five equal columns of cards
+              over a horizontal hairline, which read as a flat process
+              diagram and never showed the app that went live at 4:05.
+              Below lg it stacks, timeline first. */}
+          <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[1.02fr_.98fr] lg:gap-14">
+            {/* ── Left: the vertical timeline ── */}
+            <div className="flex flex-col">
+              {TIMELINE.map((t, i) => {
+                const last = i === TIMELINE.length - 1;
+                return (
+                  <Reveal key={t.label} delay={i * 0.05}>
+                    <div className="flex gap-4">
+                      {/* The rail. Vertical at every width: the connector
+                          is what makes five steps read as one sequence,
+                          and dropping it on mobile loses that. */}
+                      <div className="flex flex-none flex-col items-center self-stretch" aria-hidden="true">
+                        <span
+                          className="mt-1 h-3 w-3 flex-none rounded-full"
+                          style={{ background: t.live ? "var(--ed-accent-text)" : "var(--ed-fg-muted)" }}
+                        />
+                        {!last && <span className="w-[1.5px] flex-1" style={{ background: "var(--ed-border)" }} />}
+                      </div>
+
+                      <div className={`flex flex-1 flex-col gap-1.5 ${last ? "pb-0" : "pb-[22px]"}`}>
+                        {t.live ? (
+                          /* Four signals separate this step and all four
+                             are load-bearing: the accent dot above, the
+                             accent border over a wash fill, the pulsing
+                             glow, and bold full-contrast text. Colour
+                             alone would not survive monochrome. */
+                          <div
+                            className="ap-glow flex flex-col gap-1.5 rounded-[14px] px-[18px] py-4"
+                            style={{ background: "var(--wash)", border: "1.5px solid var(--ed-accent-text)" }}
+                          >
+                            <div className="flex items-center gap-2.5">
+                              <span
+                                className="flex h-7 w-7 flex-none items-center justify-center rounded-lg"
+                                style={{ background: "var(--chip-bg)", border: "1px solid var(--chip-bd)", color: "var(--ed-accent-text)" }}
+                                aria-hidden="true"
+                              >
+                                <Glyph d={t.d} size={15} />
+                              </span>
+                              <span style={{ ...MONO_LABEL, color: "var(--ed-accent-text)" }}>{t.label}</span>
+                            </div>
+                            <span className="ed-fg text-[15px] font-bold leading-[1.6]">{t.body}</span>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex items-center gap-2.5">
+                              <span
+                                className="ed-card ed-border flex h-7 w-7 flex-none items-center justify-center rounded-lg border"
+                                style={{ color: "var(--ed-fg-muted)" }}
+                                aria-hidden="true"
+                              >
+                                <Glyph d={t.d} size={15} />
+                              </span>
+                              <span style={MONO_LABEL}>{t.label}</span>
+                            </div>
+                            <span className="ed-fg-muted text-[15px] leading-[1.6]">{t.body}</span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </Reveal>
+                );
+              })}
+            </div>
+
+            {/* ── Right: the app that went live ── */}
+            <Reveal delay={0.12} className="flex flex-col items-center gap-3">
+              <span
+                className="self-center"
+                /* The handoff says 9.5px; the system's 12px type floor
+                   would clamp it anyway, so it is authored at 12. */
+                style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.14em", color: "var(--ed-fg-muted)" }}
+              >
+                4:05PM · WHAT WENT LIVE
+              </span>
+              <DigestApp />
+            </Reveal>
           </div>
         </div>
       </section>

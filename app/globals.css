@@ -214,6 +214,13 @@
   font-size: var(--ed-type-floor);
 }
 .theme-editorial :not(svg):not(svg *):is(
+  /* 8 and 8.5 were missing from THIS block while present in the class
+     block above, so an inline `font-size: 8.5px` sailed under a floor
+     that a `text-[8.5px]` class could not. The Apps digest mock was
+     written straight from a handoff specifying 8.5px labels and shipped
+     them at 8.5px. The two lists must stay in step. */
+  [style*="font-size:8px"],    [style*="font-size: 8px"],
+  [style*="font-size:8.5px"],  [style*="font-size: 8.5px"],
   [style*="font-size:9px"],    [style*="font-size: 9px"],
   [style*="font-size:9.5px"],  [style*="font-size: 9.5px"],
   [style*="font-size:10px"],   [style*="font-size: 10px"],
