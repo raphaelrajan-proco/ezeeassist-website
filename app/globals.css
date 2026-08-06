@@ -898,6 +898,45 @@
   .ed-apps .ap-glow { animation: none; }
 }
 
+/* ─── Reporting stack-hub diagram ──────────────────────────
+   Dots ride their wire with `offset-path`, so the only thing animating is
+   `offset-distance`. Opacity fades at both ends rather than popping, which
+   is what stops the loop reading as a stutter at the seam.
+
+   Every timing property is set inline per dot, because each one carries
+   its own negative delay and two run in reverse. Only the shared keyframe
+   lives here. */
+@keyframes rh-travel {
+  0%   { offset-distance: 0%;   opacity: 0 }
+  12%  { opacity: 1 }
+  88%  { opacity: 1 }
+  100% { offset-distance: 100%; opacity: 0 }
+}
+
+/* The hub breathes rather than sitting inert. Longhand, not the
+   shorthand: see the Apps note above about a name-less `animation`
+   shorthand being minified to `none`. */
+@keyframes rh-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(169,182,255,.25), 0 24px 60px -20px rgba(0,0,0,.8) }
+  50%      { box-shadow: 0 0 46px 8px rgba(169,182,255,.3), 0 24px 60px -20px rgba(0,0,0,.8) }
+}
+.ed-reporting .rh-hub {
+  box-shadow: 0 0 0 0 rgba(169,182,255,.25), 0 24px 60px -20px rgba(0,0,0,.8);
+  animation-name: rh-glow;
+  animation-duration: 4.5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Dots freeze on their wires rather than vanishing: a still diagram
+     with dots resting on the lines still reads as flow. The hub keeps
+     its resting shadow. */
+  .ed-reporting .rh-dot,
+  .ed-reporting .rh-hub { animation: none }
+  .ed-reporting .rh-dot { opacity: 1 }
+}
+
 /* ─── Reporting scoping rows ───────────────────────────────
    The stepped indent is what carries the nesting, so it only applies
    where there is room for it. Below md the rows sit flush and the left

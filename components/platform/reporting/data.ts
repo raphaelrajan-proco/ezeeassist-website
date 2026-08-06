@@ -45,26 +45,21 @@ export const INPUTS: { title: string; body: string; tone: Tone; d: string }[] = 
 export const LIVE_SOURCES = ["Mindbody", "ServiceTitan", "Toast", "QuickBooks", "ADP", "Salesforce"];
 
 /* ── §5 Across the stack ────────────────────────────────────
-   One question reading four systems at once. The vantage is HQ over a
-   300-location network, which is why **every row counts locations, not
-   records**. Restating a row as a network total ("9,400 lapsed clients")
-   is not decision-grade for HQ and breaks the funnel.
+   Deleted with the section rebuild: NETWORK_SIZE, STACK_ROWS and
+   STACK_JOIN. They drove four coloured progress bars plus a full-width
+   "ALL FOUR" bar and a 23-of-300 count, and that visual needed a caption
+   to stop the wide bar and the small count reading as a contradiction.
+   The section is a hub diagram now (`StackHub.tsx`), which carries no
+   counts at all, so the numbers had nowhere to live.
 
-   `fill` is the count as a share of the 300-location network, so a
-   changed count means a recomputed width. The set must stay internally
-   consistent: each filter narrows, and the intersection has to stay
-   smaller than the tightest single filter. */
-export const NETWORK_SIZE = 300;
+   **Do not resurrect them as decoration.** Each was a specific claim
+   about a 300-location network, unsourced, and the standing rule is that
+   an unsourced figure does not ship. If counts come back they need a
+   source first.
 
-export const STACK_ROWS: { label: string; tint: string; count: number; value: string }[] = [
-  { label: "SCHEDULING", tint: "#5BA8D8", count: 184, value: "184 locations with open capacity" },
-  { label: "CRM",        tint: "#A78BFA", count: 121, value: "121 locations with 200+ lapsed clients" },
-  { label: "MARKETING",  tint: "#FBBF24", count: 61,  value: "61 locations with no campaign live" },
-  { label: "POS",        tint: "#34D399", count: 38,  value: "38 locations pacing behind plan" },
-];
-
-/** What survives the join. Smaller than the tightest single filter. */
-export const STACK_JOIN = 23;
+   `LIVE_SOURCES` above is still in use. The hub's own eight systems are
+   `CHIPS` in StackHub.tsx, colocated with the wire geometry they are
+   positioned against. */
 
 /* ── §7 Scoping ─────────────────────────────────────────────
    The indent is what carries the nesting at desktop. Below md it is

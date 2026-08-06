@@ -10,7 +10,8 @@ import { Glyph } from "./Glyph";
 import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 import IntegrationMarquee from "@/components/sections/IntegrationMarquee";
 import FlowerMark from "@/components/sections/FlowerMark";
-import { INK, INPUTS, NETWORK_SIZE, RELATED, SCOPES, STACK_JOIN, STACK_ROWS, TILE, type Tone } from "./data";
+import StackHub from "./StackHub";
+import { INK, INPUTS, RELATED, SCOPES, TILE, type Tone } from "./data";
 
 /**
  * /platform/reporting
@@ -496,117 +497,36 @@ export default function ReportingContent() {
       </section>
 
       {/* ── 5. Across the stack ─────────────────────────────
-          Replaces the old "between two systems" 2x2. The argument moved
-          from pairwise overlap to one question reading the whole stack,
-          which is why this is a single wide panel rather than four
-          cards. */}
+          A hub diagram: eight source systems flow in, three products flow
+          out. It replaced four coloured progress bars plus a full-width
+          multi-colour "ALL FOUR" bar and a 23-of-300 count. That version
+          needed a caption to stop the wide bar and the small count reading
+          as a contradiction, which is the tell that the visual was
+          arguing against itself. A diagram of the join does not need one,
+          so the illustrative disclaimer is gone with it. */}
       <section className="w-full" style={{ background: "#0B1220" }}>
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
+        <div className="mx-auto flex max-w-7xl flex-col gap-9 px-6 md:px-12 lg:px-16 py-16 md:py-20">
           <Reveal className="flex max-w-[840px] flex-col gap-3.5">
             <h2 className="leading-[1.12] tracking-[-0.03em]" style={{ ...H2, color: "#EEF2F8" }}>
               The opportunity sits across your whole stack.{" "}
-              <span style={{ color: IN.accent }}>One question pulls it together.</span>
+              <span style={{ color: IN.accent }}>EZee Assist pulls it together.</span>
             </h2>
             <p className="text-[18px] leading-[1.7]" style={{ color: "rgba(238,242,248,.72)" }}>
               Your POS knows what sold. Your scheduler knows what is empty. The CRM holds who has
-              not been back, and the marketing calendar knows nothing is running to bring them in.
-              Ask once and all of it is read together, at every location at the same time.
+              not been back. EZee Assist reads all of it together and returns the insight, the
+              report, and the dashboard, with nobody assembling anything.
             </p>
           </Reveal>
 
           <Reveal delay={0.08}>
-            <div
-              className="flex flex-col gap-5 rounded-[18px] p-5 sm:p-8"
-              style={{ background: "rgba(238,242,248,.04)", border: "1px solid rgba(238,242,248,.12)" }}
-            >
-              {/* The vantage is load-bearing: HQ, over 300 locations. It
-                  is why every row below counts locations. */}
-              <div className="flex flex-col gap-2">
-                <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.16em", color: "rgba(169,182,255,.75)" }}>
-                  ASKED AT HQ · {NETWORK_SIZE} LOCATIONS
-                </span>
-                <p style={{ fontFamily: JAKARTA, fontSize: 18, fontWeight: 600, color: "#EEF2F8", lineHeight: 1.5 }}>
-                  &ldquo;Which locations have open capacity next week, a lapsed client list over 200,
-                  and no local campaign running?&rdquo;
-                </p>
-              </div>
-
-              <div className="flex flex-col gap-3">
-                {STACK_ROWS.map((r) => (
-                  <div key={r.label} className="grid grid-cols-1 items-center gap-x-4 gap-y-1.5 lg:grid-cols-[104px_1fr_190px]">
-                    <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", color: r.tint }}>
-                      {r.label}
-                    </span>
-                    <span
-                      className="relative block h-[7px] overflow-hidden rounded-full"
-                      style={{ background: "rgba(238,242,248,.1)" }}
-                      aria-hidden="true"
-                    >
-                      <span
-                        className="absolute inset-y-0 left-0 rounded-full"
-                        style={{ width: `${Math.round((r.count / NETWORK_SIZE) * 100)}%`, background: r.tint }}
-                      />
-                    </span>
-                    <span className="text-[12.5px] lg:text-right" style={{ color: "rgba(238,242,248,.6)" }}>
-                      {r.value}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex items-center gap-4">
-                <span className="h-px flex-1" style={{ borderTop: "1.5px dashed rgba(169,182,255,.35)" }} aria-hidden="true" />
-                <span className="whitespace-nowrap" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", color: "rgba(169,182,255,.75)" }}>
-                  READ TOGETHER, IN ONE PASS
-                </span>
-                <span className="h-px flex-1" style={{ borderTop: "1.5px dashed rgba(169,182,255,.35)" }} aria-hidden="true" />
-              </div>
-
-              {/* The bar is full width because it is the whole network
-                  being read, not a fifth filter. The count beside it is
-                  what survives the join, and the caption is what stops
-                  those two facts reading as a contradiction. Narrowing
-                  the bar to match the count makes the section argue
-                  shrinkage; do not. */}
-              <div className="grid grid-cols-1 items-center gap-x-4 gap-y-2 lg:grid-cols-[104px_1fr_190px]">
-                <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", color: IN.accent }}>
-                  ALL FOUR
-                </span>
-                <span
-                  className="relative block h-[11px] overflow-hidden rounded-full"
-                  style={{
-                    background: "linear-gradient(90deg,#5BA8D8,#A78BFA 38%,#FBBF24 70%,#34D399)",
-                    boxShadow: "0 0 14px rgba(169,182,255,.4)",
-                  }}
-                  aria-hidden="true"
-                />
-                <span className="flex flex-col lg:items-end">
-                  <span style={{ fontFamily: JAKARTA, fontSize: 22, fontWeight: 800, color: "#EEF2F8" }}>{STACK_JOIN}</span>
-                  <span className="text-[12px]" style={{ color: "rgba(238,242,248,.6)" }}>surface from all {NETWORK_SIZE} read</span>
-                </span>
-              </div>
-
-              <div
-                className="flex flex-col items-baseline justify-between gap-3 pt-5 lg:flex-row lg:gap-8"
-                style={{ borderTop: "1px solid rgba(238,242,248,.12)" }}
-              >
-                <p className="max-w-[720px] text-[15px] leading-[1.6]" style={{ color: "#EEF2F8" }}>
-                  {STACK_JOIN} of {NETWORK_SIZE} locations have the capacity, the list, and nothing
-                  running to fix it. A reactivation draft is ready for each owner, ranked by
-                  projected recovery.
-                </p>
-                <span className="flex-none whitespace-nowrap" style={{ fontFamily: MONO, fontSize: 12, color: "rgba(238,242,248,.45)" }}>
-                  Counts are illustrative · 1.4s
-                </span>
-              </div>
-            </div>
+            <StackHub />
           </Reveal>
 
           <Reveal delay={0.1}>
             <div className="flex max-w-[840px] flex-col gap-3 pt-6" style={{ borderTop: "1px solid rgba(238,242,248,.14)" }}>
               <p className="text-[17px] leading-[1.65]" style={{ color: "rgba(238,242,248,.9)" }}>
-                Each system above answers its own slice. The insight lives in the join, and in a BI
-                tool that join is a modeling request that takes a quarter. Here it is a sentence.
+                Each system answers its own slice. The insight lives in the join, and in a BI tool
+                that join is a modeling request that takes a quarter. Here it is a sentence.
               </p>
               <Link
                 href="/platform/integrations"
