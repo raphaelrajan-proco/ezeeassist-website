@@ -1136,27 +1136,36 @@ YouTube remain. They were deleted rather than flagged because there is no
 stated intent to bring them back; re-add the two `<a>` entries beside the
 LinkedIn one if that changes.
 
-### The footer band
+### Three bands, and no link grid
 
-Directly under the tagline and above the six columns, no divider: a two-part
-row modelled on Ada's footer. Left is "Request an AI summary" with the
-pre-filled answer-engine links; right is "Get the latest insights" with an
-email capture.
+Rebuilt from a supplied handoff. The footer is identity and contact, then
+the AI summary row, then legal.
 
-The grid is `lg:grid-cols-[1.7fr_1fr]`, not an even split: at 1fr each, the
-three Ask pills wrapped to a second row.
+**The four-column link grid is deleted and must not come back.** PLATFORM
+/ SOLUTIONS / RESOURCES / TRUST held 17 links, every destination was
+already in the primary nav, and it was most of the footer's height. Trust
+Center survived into the legal row because it is the one item from that
+grid people open a footer to find. `editorialFooterColumns`, the column
+maps and the email capture went with it.
 
-**Re-tune it whenever the pills change.** It was 1.35fr while they were
-label-only; adding the 16px provider marks put them at 421px against 387
-available at 1205, and Perplexity dropped to a second row. The fix was
-both sides: the pills lost 2px of padding and 2px of icon gap, and the
-column took the rest. Verified all three share one row from 1205 up.
-Below `lg` the grid is single-column and wrapping there is expected.
+- **The footer is dark in both site themes**, so its colours are local
+  constants rather than `--ed-*` tokens. Reading the theme tokens would
+  flip it to a light surface in dark mode.
+- **The logo is `public/logo-white.svg`, the real lockup.** Two wrong
+  ways to get a white lockup, both previously shipped here: hand-setting
+  the wordmark in Plus Jakarta Sans with a coloured "Zee" span, and
+  `filter: invert()` on the black lockup, which flattens the blue petals
+  to white and destroys the mark. It renders at 60px, larger than the
+  handoff's 34-38 on request; the SVG scales, so that is one number.
+- **The AEO pills keep their real vendor marks.** The handoff allows
+  text-only pills OR real marks as committed files, specifically to stop
+  anyone drawing approximations of third-party trademarks. The files in
+  `public/logos/aeo/` are the real thing, so the marks stay.
+- The copyright year is generated. A hardcoded one is the classic footer
+  bug and nobody notices until January.
 
-**The email field has no endpoint.** It is `onSubmit={e => e.preventDefault()}`,
-matching the blog's subscribe strip, which is also a no-op. **Neither collects
-anything.** Wire both to the real list before launch; there is a `TODO` on the
-form.
+Measured after the rebuild: 361px tall at 1440, byte-identical across ten
+routes checked, no horizontal overflow at 1440/1280/1024/768/375.
 
 ## The closing band and the booking page
 
