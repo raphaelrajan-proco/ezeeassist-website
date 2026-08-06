@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { JAKARTA, MONO } from "@/components/platform/shared";
+import { vendorLogo } from "@/lib/data/integration-logos";
 
 /**
  * The "opportunity across your whole stack" hub diagram.
@@ -40,27 +41,29 @@ const OUT = "#8FE3C0";
 const PAPER = "#EEF2F8";
 
 /**
- * `logo` is a committed file under `public/logos/integrations/`.
+ * `domain` is the key into `VENDOR_LOGOS`, so these chips and the
+ * Integrations directory resolve their marks from one place.
  *
- * **Six of the eight have no file yet** (Mindbody, Toast, Salesforce,
- * SharePoint, Slack, ADP). They render the neutral grey plate instead,
- * which is the requested interim state. The plate is the same 15px box as
- * a real mark, deliberately: the chip keeps its exact width and the wires
- * keep meeting it. Drop a file in and set `logo` to light it up.
+ * SharePoint has no usable mark: its favicon is the generic four-square
+ * Microsoft logo, shared byte-for-byte with OneDrive and Teams, so
+ * `vendorLogo` returns null and the chip draws a neutral plate. The plate
+ * is the same 15px box as a real mark, deliberately: the chip keeps its
+ * exact width and the wires keep meeting it.
  *
- * Never point these at a favicon service. The prototype did, and it is
- * rate limited, unversioned, and returns a generic globe often enough to
- * be a liability on a page that names customers' systems.
+ * Never point these at a favicon service at runtime. The prototype did,
+ * and it is rate limited, unversioned, and returns a generic globe often
+ * enough to be a liability on a page that names customers' systems. The
+ * files are fetched once and committed.
  */
-const CHIPS: { name: string; logo?: string; cy: number }[] = [
-  { name: "Mindbody", cy: 45 },
-  { name: "Toast", cy: 105 },
-  { name: "QuickBooks", logo: "/logos/integrations/quickbooks.svg", cy: 165 },
-  { name: "Salesforce", cy: 225 },
-  { name: "SharePoint", cy: 285 },
-  { name: "Slack", cy: 345 },
-  { name: "ADP", cy: 405 },
-  { name: "Mailchimp", logo: "/logos/integrations/mailchimp.svg", cy: 465 },
+const CHIPS: { name: string; domain: string; cy: number }[] = [
+  { name: "Mindbody", domain: "mindbodyonline.com", cy: 45 },
+  { name: "Toast", domain: "toasttab.com", cy: 105 },
+  { name: "QuickBooks", domain: "quickbooks.intuit.com", cy: 165 },
+  { name: "Salesforce", domain: "salesforce.com", cy: 225 },
+  { name: "SharePoint", domain: "sharepoint.com", cy: 285 },
+  { name: "Slack", domain: "slack.com", cy: 345 },
+  { name: "ADP", domain: "adp.com", cy: 405 },
+  { name: "Mailchimp", domain: "mailchimp.com", cy: 465 },
 ];
 
 /** Inbound wire for a chip centred at `cy`, ending at the hub's left edge. */
@@ -95,7 +98,8 @@ function Icon({ d, size = 16 }: { d: string; size?: number }) {
 }
 
 /** The 15px logo box, real mark or neutral plate. Same size either way. */
-function ChipLogo({ name, logo }: { name: string; logo?: string }) {
+function ChipLogo({ domain }: { domain: string }) {
+  const logo = vendorLogo(domain)?.src;
   if (!logo) {
     return (
       <span
@@ -113,13 +117,13 @@ function ChipLogo({ name, logo }: { name: string; logo?: string }) {
  * a hard 186 because the wires end at that edge; outside it there is no
  * wire to meet and a fixed 186 blows two columns past a 375 viewport.
  */
-function Chip({ name, logo, fluid = false }: { name: string; logo?: string; fluid?: boolean }) {
+function Chip({ name, domain, fluid = false }: { name: string; domain: string; fluid?: boolean }) {
   return (
     <span
       className="flex min-w-0 items-center gap-2 rounded-[10px]"
       style={{ width: fluid ? "100%" : 186, height: 38, padding: "0 13px", background: "#FFFFFF", color: "#0A0A0A", fontSize: 12.5, fontWeight: 600 }}
     >
-      <ChipLogo name={name} logo={logo} />
+      <ChipLogo domain={domain} />
       <span className="truncate">{name}</span>
     </span>
   );
@@ -184,7 +188,7 @@ export default function StackHub() {
         <div className={`flex flex-col items-center gap-7 ${scale === null ? "lg:hidden" : ""}`}>
           <div className="grid w-full max-w-[420px] grid-cols-2 gap-2.5">
             {CHIPS.map((c) => (
-              <Chip key={c.name} name={c.name} logo={c.logo} fluid />
+              <Chip key={c.name} name={c.name} domain={c.domain} fluid />
             ))}
           </div>
           <Hub />
@@ -263,7 +267,7 @@ export default function StackHub() {
 
             {CHIPS.map((c) => (
               <span key={c.name} className="absolute" style={{ left: 0, top: c.cy - 19 }}>
-                <Chip name={c.name} logo={c.logo} />
+                <Chip name={c.name} domain={c.domain} />
               </span>
             ))}
 

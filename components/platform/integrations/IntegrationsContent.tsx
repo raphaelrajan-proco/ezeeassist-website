@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -9,6 +10,7 @@ import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 import { Glyph } from "@/components/platform/reporting/Glyph";
 import { ConnectCard, WriteBackCard } from "./artifacts";
 import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
+import { vendorLogo } from "@/lib/data/integration-logos";
 import { INTEGRATION_STRIP as MARQUEE } from "@/lib/data/integrations";
 import { BLUES, DIRECTORY, NOTES, NOTS, RELATED, ROLES } from "./data";
 
@@ -202,15 +204,42 @@ export default function IntegrationsContent() {
                   </span>
                   <span className="ed-rule my-3.5 block border-t" aria-hidden="true" />
                   <span className="flex flex-wrap items-center gap-2">
-                    {c.chips.map((chip) => (
-                      <span
-                        key={chip.name}
-                        className="ed-border ed-fg flex-none whitespace-nowrap rounded-lg border"
-                        style={{ fontSize: 13, fontWeight: 500, padding: "7px 11px" }}
-                      >
-                        {chip.name}
-                      </span>
-                    ))}
+                    {c.chips.map((chip) => {
+                      /* The mark is committed under public/logos/integrations,
+                         never hotlinked. `vendorLogo` returns null for the
+                         four that resolved to a parent brand rather than the
+                         product, and those keep the plate: three chips
+                         showing one Microsoft logo reads as a bug, and a
+                         wrong mark is worse than none. Either way the chip
+                         carries a 15px box, so the row does not reflow when
+                         a real mark lands. */
+                      const v = vendorLogo(chip.domain);
+                      return (
+                        <span
+                          key={chip.name}
+                          className="ed-border ed-fg flex flex-none items-center gap-2 whitespace-nowrap rounded-lg border"
+                          style={{ fontSize: 13, fontWeight: 500, padding: "7px 11px" }}
+                        >
+                          {v ? (
+                            <Image
+                              src={v.src}
+                              alt=""
+                              width={15}
+                              height={15}
+                              className="flex-none rounded-[3px] object-contain"
+                              style={{ width: 15, height: 15 }}
+                            />
+                          ) : (
+                            <span
+                              className="ed-border flex-none rounded-[3px] border"
+                              style={{ width: 15, height: 15, background: "var(--ed-card-alt)" }}
+                              aria-hidden="true"
+                            />
+                          )}
+                          {chip.name}
+                        </span>
+                      );
+                    })}
                     <span className="ed-fg-muted flex-none text-[13px]">+ more</span>
                   </span>
                 </div>
