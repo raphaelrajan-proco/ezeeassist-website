@@ -7,614 +7,419 @@ import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
 import { HERO_BG, SCRIM } from "@/lib/data/hero-backgrounds";
-import { ACCENT_TINT, Band, CARD, EASE, Eyebrow, JAKARTA, MONO, Meta, Reveal, SectionHead } from "@/components/platform/shared";
-import NetworkView from "./NetworkView";
-import Flywheel from "./Flywheel";
+import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
+import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
+import { Glyph } from "@/components/platform/reporting/Glyph";
+import { Flywheel, NetworkConsole } from "./artifacts";
+import { ASKERS, GOV, PLAYS, RELATED, TONE } from "./data";
 
 /**
- * /solutions/leadership — replaces the HQ team page.
+ * /solutions/leadership
  *
- * **The reader is the buyer**: CEO, COO, President, VP Operations, or in a
- * PE-backed brand the operating partner.
+ * Rebuilt from the supplied design handoff. Nine sections: hero with the
+ * network console, visibility, leverage, the owner flywheel, governance,
+ * the approval kit, the quote, related, closing.
  *
- * **Five anchors, in this order, and the order is the spec.** Visibility,
- * leverage, owner experience, risk, no disruption. Two upside, one
- * flywheel, two risk-removal — the order a leadership conversation runs
- * in. Do not reorder §2 through §6.
+ * Deleted deliberately: the "keep the systems you chose" no-migration
+ * section (**we do not talk against other vendors on this page**), the
+ * `{{TBD:leadership-proof-*}}` quote block, the "Illustrative. Figures
+ * show the shape of the view" disclaimers, and every section eyebrow.
  *
- * Three copy rules that are load-bearing:
+ * **Voice rule, every line:** never call the product "it", "this", or
+ * "this one". Name it, EZee Assist or EZee.
  *
- * 1. **Never lead with cost savings.** Headcount is a second-order point
- *    inside §3, not the page's claim. Leading with cost signals a cost
- *    product to the one reader who could buy a growth product.
- * 2. **Never explain feature mechanics.** Every section states an outcome
- *    and links to a Platform page. Explaining how something works here is
- *    a sign the link is missing.
- * 3. **Never assert their franchisees have already adopted AI.** §5's
- *    hedge — some have, the rest will — is deliberate. Roughly half of
- *    prospects have not seen AI sprawl and an assertion loses them.
+ * ── Deviation from the handoff, on request ──────────────────
+ * The handoff specifies an evergreen gradient hero (`#1B4638`, accent
+ * `#9FE8C8`) and says not to normalise it. **The existing hazy
+ * photographic hero is kept instead**, per direct instruction, as on
+ * Answers, Workflows, Compliance, Control Center and Coaches. The
+ * on-band accent is `#9FE0F8`, what the other photographic bands use.
+ * Evergreen survives as `--ever` for the Operations icon tile.
  *
- * §4 is about what owner experience *produces for the business*, not what
- * owners receive. The Franchisees page carries that.
- *
- * Band sequence: dark, light, dark, light, light, light, dark, light,
- * light, dark. §4, §5 and §6 are three consecutive light sections and use
- * three different devices on purpose — a flywheel, a plain line stack, and
- * a two-column comparison. Two of them becoming card grids would flatten
- * the page.
- *
- * Deviation: the hero is the **photographic** treatment on
- * `HERO_BG.haze2`, not the flat gradient the brief describes. Requested
- * directly.
+ * Two loops: the 18s network console and the 12s flywheel. Both resolve
+ * to their finished state under reduced motion.
  */
 
-const ON_DARK = "rgba(238,242,248,0.92)";
-const ON_DARK_DIM = "rgba(238,242,248,0.55)";
-const ON_DARK_RULE = "rgba(238,242,248,0.16)";
-const ON_DARK_ACCENT = "#9FE0F8";
-const ON_IMAGE = "rgba(245,237,224,0.92)";
-const WARN_ON_DARK = "#F5B26B";
-
 const HERO = HERO_BG.haze2;
+const SKY = "#9FE0F8";
+const ON_IMAGE = "rgba(245,237,224,0.92)";
 
-/* The franchisees page lives on the industries route; there is no
-   /solutions/franchisees. Linking the real page rather than stubbing a
-   new one. */
-const FRANCHISEES = "/industries/franchising/multi-unit-franchisees";
-
-/* ── §2 ───────────────────────────────────────────────────── */
-const VISIBILITY_POINTS: { title: string; body: string }[] = [
-  { title: "Nobody built a report for this", body: "Ask for a different cut in plain language and get it. No analyst, no request queue." },
-  { title: "Current, not last night's sync", body: "Read at the source when the question is asked." },
-  { title: "Yours to scope",                 body: "Territory, brand, region, or a single location, with the permissions your systems already enforce." },
-];
-
-/* ── §3 beat 2 ─────────────────────────────────────────────
-   One acts, one declines, one adapts, one escalates. Uniform rows make
-   this a broadcast product and undercut §4's satisfaction claim. */
-const ROWS: { store: string; found: string; did: string; tone: "act" | "none" | "adapt" | "escalate" }[] = [
-  { store: "#331", found: "62% booked, third soft week",    did: "Reactivation draft ready",                  tone: "act" },
-  { store: "#052", found: "58% booked, seasonal",           did: "No action, below your regional threshold",  tone: "none" },
-  { store: "#118", found: "66% booked, promo running",      did: "Suggested extending it instead",            tone: "adapt" },
-  { store: "#402", found: "51% booked, new owner week six", did: "Escalated to the coach",                    tone: "escalate" },
-];
-const TONE: Record<string, string> = {
-  act: ON_DARK_ACCENT, none: ON_DARK_DIM, adapt: ON_DARK, escalate: WARN_ON_DARK,
+const H2 = {
+  fontFamily: JAKARTA, fontWeight: 700,
+  fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)",
+  letterSpacing: "-0.03em", lineHeight: 1.1, textWrap: "pretty" as const,
 };
 
-/* ── §4 ───────────────────────────────────────────────────── */
-const OWNER_LINES = [
-  "Answered in seconds, at the hour they actually work, not a callback on Thursday.",
-  "Reached before something goes wrong, not after.",
-  "Able to build the tool they've been asking for, themselves.",
-];
-
-/* ── §6 ─────────────────────────────────────────────────────
-   "Reorganize your documentation before anything works" stays. Every
-   knowledge-tool evaluation stalls there and almost nobody names it. */
-const STAYS = [
-  "Your POS, scheduling, and booking systems",
-  "Your LMS and your training library",
-  "Your CRM and your marketing stack",
-  "Your accounting and your BI",
-  "Your franchise management platform",
-  "Wherever your documents live today",
-];
-const AVOID = [
-  "Migrate content into a new repository",
-  "Reorganize your documentation before anything works",
-  "Load data into a warehouse someone maintains",
-  "Consolidate onto one vendor's suite",
-  "Retrain your network on a new system",
-];
-
-/* ── §7 ─────────────────────────────────────────────────────
-   IT and Security first: security review stalls more enterprise deals
-   than pricing. The Training row answers "No" before the link, because
-   ambiguity about LMS displacement produces a slow block from a function
-   with no other reason to care. The franchisee row stays. */
-const COMMITTEE: { fn: string; ask: string; lead?: string; where: string; href: string }[] = [
-  { fn: "IT and Security",       ask: "Where does our data sit, who processes it, is it used for training?", where: "Trust Center",   href: "/security" },
-  { fn: "Legal",                 ask: "What's logged, what's retained, and does this sit inside our franchise agreement?", where: "Control Center", href: "/platform/control-center" },
-  { fn: "Finance",               ask: "What's the cost model, and what does it avoid?", where: "ROI calculator", href: "/roi-calculator" },
-  { fn: "Franchise development", ask: "Does this improve validation and ramp? What do owners say?", where: "Case studies", href: "/case-studies" },
-  { fn: "Marketing",             ask: "Does anything generated stay on brand, and who approves what goes out?", where: "Control Center", href: "/platform/control-center" },
-  { fn: "Training",              ask: "Is this replacing our LMS?", lead: "No.", where: "Integrations", href: "/platform/integrations" },
-  { fn: "Your franchisees",      ask: "Will they use it, and what can HQ see?", where: "Franchisees", href: FRANCHISEES },
-];
-
-const RELATED: { eyebrow: string; title: string; href: string }[] = [
-  { eyebrow: "Field coaches", title: "What your team's week becomes", href: "/solutions/coaches" },
-  { eyebrow: "Franchisees",   title: "What your owners get",          href: FRANCHISEES },
-  { eyebrow: "Platform",      title: "How it's put together",         href: "/platform/answers" },
-];
+const META = {
+  fontFamily: MONO, fontSize: 12, fontWeight: 600,
+  letterSpacing: "0.13em", textTransform: "uppercase" as const,
+};
 
 export default function LeadershipContent() {
   return (
-    <>
-      {/* ── 1. Hero ───────────────────────────────────────── */}
+    <div className="ed-leadership">
+      {/* ── 1. Hero ───────────────────────────────────────
+          The hazy photograph, kept on request rather than the handoff's
+          evergreen gradient. */}
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
           <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.heroSubPage})` }} />
-          <div className="absolute inset-0" style={{ background: "radial-gradient(58% 52% at 82% 12%, rgba(159,224,248,0.16) 0%, rgba(159,224,248,0) 70%)" }} />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-20 pb-16 md:pt-24 md:pb-20">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: EASE }}>
-            <p className="uppercase" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_ACCENT }}>
-              For franchisor leadership
-            </p>
-            {/* Three clauses, the third carrying both constraints and set
-                apart. Breaks are lg-only; below that it wraps. */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE }}
+          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-[1.02fr_.98fr] lg:gap-14"
+        >
+          <div className="flex flex-col items-start">
+            <p style={{ ...META, letterSpacing: "0.16em", color: SKY }}>For franchisor leadership</p>
             <h1
-              className="mt-5 max-w-[900px] leading-[1.08] tracking-[-0.03em]"
+              className="mt-5"
               style={{
-                color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700,
-                fontSize: "clamp(1.625rem, 0.55rem + 2.4vw, 2.5rem)",
-                textWrap: "balance",
+                fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.1,
+                fontSize: "clamp(1.75rem, 0.9rem + 2.5vw, 2.9375rem)", color: "#FFFFFF", textWrap: "pretty",
               }}
             >
-              See what&rsquo;s happening. Support every owner.{" "}
-              <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>
-                Without adding headcount or changing systems.
-              </span>
+              The whole network, current as of this morning.{" "}
+              <span style={{ color: SKY }}>And a team that reaches all of it.</span>
             </h1>
-            <p className="mt-6 max-w-[680px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
-              One layer across the tools you already run, so your coaches reach further, your
-              owners get answers in seconds, and every AI your network touches follows your rules.
+            <p className="mt-5 max-w-[500px] text-base md:text-[17.5px] leading-[1.6]" style={{ color: ON_IMAGE }}>
+              One layer across the systems you already run. Your coaches reach every location instead
+              of the loudest ones, your owners get answers in seconds, and every AI output your
+              network generates follows your rules.
             </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
+            <div className="mt-8 flex flex-wrap items-center gap-3.5">
+              <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex flex-none whitespace-nowrap" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
                 Speak to an expert
-                <span className="ed-btn-arrow-badge" aria-hidden="true">
-                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
-                </span>
+                <span className="ed-btn-arrow-badge" aria-hidden="true"><ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} /></span>
               </Link>
-              <a href="#visibility" className="ed-btn ed-btn-secondary-dark inline-flex">See the network view</a>
+              <a href="#visibility" className="ed-btn ed-btn-secondary-dark inline-flex flex-none whitespace-nowrap">See the network view</a>
             </div>
-          </motion.div>
+          </div>
 
-          {/* A compressed version of §2, three rows only. The full
-              artifact is the next section. */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: EASE, delay: 0.12 }}
-            className="mt-12 w-full max-w-[600px] overflow-hidden rounded-[14px]"
-            style={{
-              backgroundColor: "rgba(4,26,44,0.55)", border: `1px solid ${ON_DARK_RULE}`,
-              backdropFilter: "blur(6px)", WebkitBackdropFilter: "blur(6px)",
-            }}
-          >
-            <div className="px-5 py-3.5" style={{ borderBottom: `1px solid ${ON_DARK_RULE}` }}>
-              <span className="uppercase" style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.13em", fontWeight: 600, color: ON_DARK_DIM }}>
-                Network · 214 locations
-              </span>
-            </div>
-            <div className="px-5 py-1">
-              {[
-                { l: "Locations reached this month", v: "198 of 214", accent: true },
-                { l: "Performance spread",           v: "9.6 pts",    note: "from 11.2" },
-                { l: "Attach rate, network-wide",    v: "+2.1%",      note: "34 locations adopted the top-quartile script" },
-              ].map((r, i) => (
-                <div key={r.l} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3.5" style={{ borderTop: i === 0 ? "none" : `1px solid ${ON_DARK_RULE}` }}>
-                  <span className="text-[13.5px]" style={{ color: ON_IMAGE }}>{r.l}</span>
-                  <span className="flex items-baseline gap-2.5">
-                    {r.note && <span style={{ fontFamily: MONO, fontSize: 10.5, color: ON_DARK_DIM }}>{r.note}</span>}
-                    <span style={{ fontFamily: MONO, fontSize: 14, fontWeight: 700, color: r.accent ? ON_DARK_ACCENT : "#FFFFFF", fontVariantNumeric: "tabular-nums" }}>
-                      {r.v}
-                    </span>
-                  </span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
+          <NetworkConsole />
+        </motion.div>
       </section>
 
-      {/* ── 2. Visibility ─────────────────────────────────
-          This section owns visibility; §3 must not restate coverage. */}
-      <Band id="visibility">
-        <SectionHead
-          eyebrow="Visibility"
-          title="Not a dashboard nobody opens. The three things you'd ask about if you could."
-          sub="Assembled from the systems you already run, current as of now."
-        />
+      <HeroLogoStrip />
 
-        <Reveal>
-          <div className="mt-10 max-w-[860px]">
-            <NetworkView />
-          </div>
-        </Reveal>
-
-        <div className="mt-9 grid grid-cols-1 gap-x-10 gap-y-7 md:grid-cols-3">
-          {VISIBILITY_POINTS.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.08}>
-              <p className="ed-fg text-[15px]" style={{ fontWeight: 600, letterSpacing: "-0.01em" }}>{p.title}</p>
-              <p className="ed-fg-muted mt-1.5 text-[14px] leading-relaxed">{p.body}</p>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.12}>
-          <p className="ed-fg mt-10 max-w-[760px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}>
-            Every other view in this category tells you what&rsquo;s wrong. This one tells you
-            whether what you&rsquo;re doing is working.
-          </p>
-          <Link href="/platform/reporting" className="ed-link mt-5 inline-block text-sm" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
-            How reporting works
-          </Link>
-        </Reveal>
-      </Band>
-
-      {/* ── 3. Leverage ───────────────────────────────────
-          Two beats with a visible break: beat 1 is the economics, beat 2
-          is personalization. Beat 1 alone is a cost argument, which is
-          the thing this page must not lead on. */}
-      <section className="w-full" style={{ background: "linear-gradient(180deg, #0D2836 0%, #091C26 100%)" }}>
-        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
-          <Reveal>
-            <p className="uppercase" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_ACCENT }}>
-              Leverage
-            </p>
-            <h2
-              className="mt-4 max-w-[820px] leading-[1.08] tracking-[-0.03em]"
-              style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700, fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)", textWrap: "pretty" }}
-            >
-              The same team, reaching further.{" "}
-              <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>Not by working harder.</span>
+      {/* ── 2. Visibility ─────────────────────────────────── */}
+      <section id="visibility" className="ed-bg w-full scroll-mt-24">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20 lg:grid-cols-[.84fr_1.16fr] lg:gap-14">
+          <Reveal className="flex flex-col gap-4">
+            <h2 className="ed-fg" style={H2}>
+              You&rsquo;re proactively on top of the key performance indicators{" "}
+              <span className="ed-accent-text">you&rsquo;d want to know.</span>
             </h2>
-            <p className="mt-5 max-w-[640px] text-base md:text-lg leading-relaxed" style={{ color: ON_DARK }}>
-              Coaching has always scaled with headcount. It doesn&rsquo;t have to.
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              Where the network is, who is getting attention, and what moved. Assembled from the
+              systems you already run, current when you ask, and scoped to territory, region, or a
+              single location.
             </p>
-          </Reveal>
-
-          {/* Beat 1 — the economics. */}
-          <div className="mt-12 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5">
-            <Reveal>
-              <div className="h-full rounded-[14px] p-6 md:p-7" style={{ backgroundColor: "rgba(238,242,248,0.04)", border: `1px solid ${ON_DARK_RULE}` }}>
-                <span className="uppercase" style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.14em", fontWeight: 700, color: ON_DARK_DIM }}>
-                  Today
-                </span>
-                <p className="mt-4 text-[15px] leading-relaxed" style={{ color: ON_DARK }}>
-                  Every twenty locations buys another coach. At 200 units, ten coaches. At 600,
-                  thirty. What any one location receives: unchanged.
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <div className="h-full rounded-[14px] p-6 md:p-7" style={{ backgroundColor: "rgba(159,224,248,0.08)", border: "1px solid rgba(159,224,248,0.30)" }}>
-                <span className="uppercase" style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.14em", fontWeight: 700, color: ON_DARK_ACCENT }}>
-                  With plays running
-                </span>
-                <p className="mt-4 text-[15px] leading-relaxed" style={{ color: "#FFFFFF" }}>
-                  Coverage per location rises while the team stays the size you chose.
-                </p>
-              </div>
-            </Reveal>
-          </div>
-
-          <Reveal delay={0.14}>
-            <div className="mt-8 flex max-w-[720px] flex-col gap-2.5">
-              {[
-                "Support cost per unit falls as the network grows, instead of holding flat.",
-                "Your field team's time moves from answering and chasing to the work you hired them for.",
-                "Adding units stops adding proportional G&A.",
-              ].map((l) => (
-                <p key={l} className="text-[14.5px] leading-relaxed" style={{ color: ON_DARK_DIM }}>{l}</p>
-              ))}
-            </div>
-          </Reveal>
-
-          {/* The break between the beats. They are two different
-              arguments and must not read as one list. */}
-          <Reveal delay={0.16}>
-            <div className="mt-14 pt-10" style={{ borderTop: `1px solid ${ON_DARK_RULE}` }}>
-              <p className="max-w-[720px] tracking-[-0.02em]" style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 600, fontSize: 22, lineHeight: 1.35 }}>
-                And none of it arrives as a broadcast.
-              </p>
-            </div>
-          </Reveal>
-
-          {/* Beat 2 — personalization. The differentiated half. */}
-          <div className="mt-8 max-w-[880px]">
-            {ROWS.map((r, i) => (
-              <Reveal key={r.store} delay={i * 0.07}>
-                <div className="flex flex-col gap-1.5 py-4 md:flex-row md:items-baseline md:gap-6" style={{ borderTop: i === 0 ? "none" : `1px solid ${ON_DARK_RULE}` }}>
-                  <span className="flex-none" style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: "#FFFFFF", width: 52, fontVariantNumeric: "tabular-nums" }}>
-                    {r.store}
-                  </span>
-                  <span className="min-w-0 flex-1 text-[13.5px]" style={{ color: ON_DARK_DIM }}>{r.found}</span>
-                  <span className="flex-none text-[14.5px] md:w-[300px]" style={{ color: TONE[r.tone] }}>{r.did}</span>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.16}>
-            <p className="mt-9 max-w-[820px] text-[17px] leading-relaxed" style={{ color: ON_DARK }}>
-              Four locations. One play. None of them treated the same. Your owners are independent
-              businesses, and this is the first thing that treats them that way at scale.
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              EZee Assist is not another dashboard nobody opens:{" "}
+              <b className="ed-fg">you see whether what you&rsquo;re doing is working, not just
+              what&rsquo;s wrong.</b>
             </p>
-            <Link href="/platform/workflows" className="mt-5 inline-block text-sm" style={{ color: ON_DARK_ACCENT, fontWeight: 500, textDecoration: "underline", textUnderlineOffset: 4 }}>
-              How a play runs
+            <Link href="/platform/reporting" className="ed-accent-text inline-flex w-fit items-center gap-2 text-[14px] font-semibold">
+              How reporting works
+              <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} aria-hidden="true" />
             </Link>
           </Reveal>
+
+          <Reveal delay={0.1}>
+            <div className="ed-border flex flex-col gap-3 rounded-3xl border p-4 sm:p-6" style={{ background: "var(--wash)" }}>
+              <span className="ed-fg-muted" style={META}>Network · 214 locations · this quarter</span>
+
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                <div className="ed-card ed-border flex flex-col gap-2 rounded-xl border p-4">
+                  <span className="ed-fg text-[14px] font-semibold">Where the network is</span>
+                  {[["Top decile", "+8.2%", "var(--ok)"], ["Median", "+3.1%", "var(--ok)"], ["Bottom quartile", "−1.4%", "var(--bad)"]].map(([l, v, c]) => (
+                    <span key={l} className="flex items-baseline justify-between gap-3">
+                      <span className="ed-fg-muted text-[13.5px]">{l}</span>
+                      <span style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: c }}>{v}</span>
+                    </span>
+                  ))}
+                  <span className="ed-rule ed-fg-muted border-t pt-2 text-[12.5px]">
+                    Spread narrowed from 11.2 to <b className="ed-fg">9.6 points</b>
+                  </span>
+                </div>
+
+                <div className="ed-card ed-border flex flex-col gap-2 rounded-xl border p-4">
+                  <span className="ed-fg text-[14px] font-semibold">Who is getting attention</span>
+                  <span className="ed-fg-muted text-[13px] leading-[1.45]">Locations with proactive contact this month</span>
+                  <span className="flex items-baseline gap-1.5">
+                    <span className="ed-fg" style={{ fontFamily: JAKARTA, fontSize: 26, fontWeight: 800, letterSpacing: "-0.03em" }}>198</span>
+                    <span className="ed-fg-muted text-[13px]">of 214</span>
+                  </span>
+                  <span className="ed-rule ed-fg-muted mt-auto border-t pt-2 text-[12.5px]">
+                    Same period last year: <b className="ed-fg">64 of 214</b>
+                  </span>
+                </div>
+              </div>
+
+              <div className="ed-card ed-border flex flex-col gap-2 rounded-xl border p-4">
+                <span className="ed-fg text-[14px] font-semibold">What moved, and why</span>
+                <span className="ed-fg-muted text-[13.5px] leading-[1.55]">
+                  Attach rate <b className="ed-fg">+2.1% network-wide</b>: 34 locations adopted the
+                  add-on script already working in the top quartile. Compliance completion{" "}
+                  <b className="ed-fg">94%, from 71%</b>. New units to competence:{" "}
+                  <b className="ed-fg">14 weeks, from 19</b>.
+                </span>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* ── 4. Owner experience ───────────────────────────
-          A flywheel. What owner experience produces for the business, not
-          a list of what owners receive. */}
-      <Band>
-        <SectionHead
-          eyebrow="Owner experience"
-          title="Supported owners validate. Validation is what sells the next unit."
-          sub="The most expensive thing in a franchise system is an owner who feels alone."
-        />
-
-        <div className="mt-12">
-          <Flywheel />
-        </div>
-
-        <Reveal delay={0.12}>
-          <div className="mt-12 flex max-w-[680px] flex-col gap-2.5">
-            {OWNER_LINES.map((l) => (
-              <p key={l} className="ed-fg-muted text-[14.5px] leading-relaxed">{l}</p>
-            ))}
-          </div>
-          <p className="ed-fg mt-8 max-w-[820px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}>
-            An owner who feels supported is a renewal, a second unit, and a good validation call.
-            An owner who doesn&rsquo;t is a transfer.
-          </p>
-          <Link href={FRANCHISEES} className="ed-link mt-5 inline-block text-sm" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
-            What your owners get
-          </Link>
-        </Reveal>
-      </Band>
-
-      {/* ── 5. Risk ───────────────────────────────────────
-          Deliberately the plainest section on the page. No cards, no
-          diagram: §4 is a flywheel and §6 is a two-column, and this
-          section's plainness is what separates them. */}
-      <Band alt>
-        <SectionHead eyebrow="Risk" title="Your brand is on every output your network generates." />
-        <Reveal>
-          <div className="mt-9 flex max-w-[680px] flex-col gap-5">
-            {/* The hedge in line one is deliberate. Roughly half of
-                prospects have not seen AI sprawl, and asserting it loses
-                them. Do not change it to an assertion. */}
-            <p className="ed-fg-muted text-[15px] leading-[1.75]">
-              Some of your owners have already started using AI on their own. The rest will.
+      {/* ── 3. Leverage ───────────────────────────────────── */}
+      <section className="ed-bg-alt w-full">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20 lg:grid-cols-[.84fr_1.16fr] lg:gap-14">
+          <Reveal className="flex flex-col gap-4">
+            <h2 className="ed-fg" style={H2}>
+              Your current team&rsquo;s expertise, <span className="ed-accent-text">reaching further.</span>
+            </h2>
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              Coaching has always scaled with headcount: every twenty locations buys another coach,
+              and what any one location receives stays flat. With plays running, coverage per
+              location rises while the team stays the size you chose.
             </p>
-            <p className="ed-fg-muted text-[15px] leading-[1.75]">
-              Different tools, different prompts, different data, and no admin panel. Everything
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              Your field team&rsquo;s time moves from answering and chasing to the work you hired
+              them for, and <b className="ed-fg">adding units stops adding proportional G&amp;A.</b>
+            </p>
+            <Link href="/solutions/coaches" className="ed-accent-text inline-flex w-fit items-center gap-2 text-[14px] font-semibold">
+              What your coaches&rsquo; week becomes
+              <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} aria-hidden="true" />
+            </Link>
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <div className="ed-card ed-border overflow-hidden rounded-2xl border">
+              <div className="ed-card-alt ed-fg-muted flex flex-wrap items-baseline justify-between gap-3 px-5 py-3" style={META}>
+                <span>One play · soft bookings · ran overnight</span>
+                <span>214 locations</span>
+              </div>
+              {PLAYS.map((p, i) => {
+                const [bg, fg] = TONE[p.tone];
+                return (
+                  <div key={p.store} className={`flex flex-wrap items-center gap-x-4 gap-y-1 px-5 py-3.5 ${i === 0 ? "" : "ed-rule border-t"}`}>
+                    <span className="w-12 flex-none" style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: "var(--ed-fg)" }}>{p.store}</span>
+                    <span className="flex min-w-0 flex-col">
+                      <span className="ed-fg text-[14px] font-semibold">{p.state}</span>
+                      <span className="ed-fg-muted text-[12.5px]">{p.context}</span>
+                    </span>
+                    <span
+                      className="ml-auto flex-none whitespace-nowrap rounded-md px-2.5 py-1"
+                      style={{ background: bg, color: fg, fontFamily: MONO, fontSize: 12, fontWeight: 700, textTransform: "uppercase" }}
+                    >
+                      {p.action}
+                    </span>
+                  </div>
+                );
+              })}
+              <div className="ed-rule ed-fg-muted border-t px-5 py-3.5 text-[15px] leading-[1.55]">
+                One play, four locations, none of them treated the same. Your owners are independent
+                businesses, and EZee Assist is the first thing that treats them that way at scale.
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 4. Owner flywheel ─────────────────────────────
+          Four nodes and a return line, not four text columns. The loop
+          closing is the argument. */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[820px] flex-col gap-3.5">
+            <h2 className="ed-fg" style={H2}>
+              With supported owners validating,{" "}
+              <span className="ed-accent-text">your next location sale just became easier.</span>
+            </h2>
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              The most expensive thing in a franchise system is an owner who feels alone. What they
+              tell a prospect on a validation call is the single biggest input to your development
+              pipeline.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.08} className="mt-9"><Flywheel /></Reveal>
+
+          <Reveal delay={0.1}>
+            <p className="ed-fg-muted mt-7 max-w-[760px] text-[16.5px] leading-[1.6]">
+              An owner who feels supported is a renewal, a second unit, and a good validation call.
+              An owner who doesn&rsquo;t is a transfer.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 5. Governance ─────────────────────────────────── */}
+      <section className="w-full" style={{ background: "#0B1220" }}>
+        <div className="mx-auto grid max-w-7xl grid-cols-1 items-start gap-10 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-2 lg:gap-14">
+          <Reveal className="flex flex-col gap-4">
+            <h2 style={{ ...H2, color: "#FFFFFF" }}>
+              Your brand is on every output{" "}
+              <span style={{ color: SKY }}>your network generates.</span>
+            </h2>
+            <p className="text-[18px] leading-[1.7]" style={{ color: "rgba(238,242,248,.72)" }}>
+              Some of your owners have already started using AI on their own. The rest will.
+              Different tools, different prompts, different data, no admin panel, and everything
               generated carries your name.
             </p>
-            <p className="ed-fg-muted text-[15px] leading-[1.75]">
+            <p className="text-[18px] leading-[1.7]" style={{ color: "rgba(238,242,248,.72)" }}>
+              Ungoverned AI is a brand risk.{" "}
+              <b style={{ color: "#FFFFFF" }}>EZee Assist is the layer that removes it.</b>
+            </p>
+            <Link href="/platform/control-center" className="inline-flex w-fit items-center gap-2 text-[14px] font-semibold" style={{ color: SKY }}>
+              Inside the Control Center
+              <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} aria-hidden="true" />
+            </Link>
+          </Reveal>
+
+          <Reveal delay={0.08} className="flex flex-col gap-3">
+            {GOV.map(([label, body]) => (
+              <div
+                key={label}
+                className="grid grid-cols-1 gap-x-4 gap-y-1.5 rounded-xl px-4 py-3.5 sm:grid-cols-[120px_1fr]"
+                style={{ background: "rgba(238,242,248,.04)", border: "1px solid rgba(238,242,248,.12)" }}
+              >
+                <span style={{ ...META, color: SKY }}>{label}</span>
+                <span className="text-[15px] leading-[1.5]" style={{ color: "rgba(238,242,248,.85)" }}>{body}</span>
+              </div>
+            ))}
+            <p className="mt-1 text-[15px] leading-[1.55]" style={{ color: "rgba(238,242,248,.65)" }}>
               One policy set, one permission model, one log, across every location, every channel,
               and every department.
             </p>
-          </div>
-        </Reveal>
-        <Reveal delay={0.1}>
-          <p className="ed-fg mt-9 max-w-[720px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}>
-            Ungoverned AI is a brand risk. This is the layer that removes it.
-          </p>
-          <Link href="/platform/control-center" className="ed-link mt-5 inline-block text-sm" style={{ color: "var(--ed-accent-text)", fontWeight: 500 }}>
-            Inside the Control Center
-          </Link>
-        </Reveal>
-      </Band>
-
-      {/* ── 6. No disruption ──────────────────────────────── */}
-      <Band>
-        <SectionHead
-          eyebrow="No migration"
-          title="Keep the systems you chose. Keep the vendors your team likes."
-          sub="This reads what you already run. It doesn't ask you to consolidate onto it."
-        />
-
-        <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
-          <Reveal>
-            <div className="flex h-full flex-col p-6 md:p-7" style={CARD}>
-              <Meta>What stays exactly as it is</Meta>
-              <ul className="mt-5 flex flex-col gap-3.5">
-                {STAYS.map((x) => (
-                  <li key={x} className="flex gap-3">
-                    <span aria-hidden="true" className="mt-[9px] h-[5px] w-[5px] flex-none rounded-full" style={{ backgroundColor: "var(--ed-fg-muted)" }} />
-                    <span className="ed-fg text-[14.5px] leading-relaxed">{x}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="flex h-full flex-col p-6 md:p-7" style={{ ...CARD, borderLeft: "3px solid #0077A8", backgroundColor: ACCENT_TINT }}>
-              <Meta color="var(--ed-accent-text)">What you don&rsquo;t have to do</Meta>
-              <ul className="mt-5 flex flex-col gap-3.5">
-                {AVOID.map((x, i) => (
-                  <li key={x} className="flex gap-3">
-                    <span aria-hidden="true" className="mt-[9px] h-[5px] w-[5px] flex-none rounded-full" style={{ backgroundColor: "var(--ed-accent-text)" }} />
-                    {/* Row two is the one every knowledge-tool evaluation
-                        stalls on and almost nobody names. */}
-                    <span className="ed-fg text-[14.5px] leading-relaxed" style={i === 1 ? { fontWeight: 600 } : undefined}>
-                      {x}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-
-        <Reveal delay={0.16}>
-          {/* The line a leader forwards, so it gets the weight. */}
-          <p className="ed-fg mt-9 max-w-[820px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}>
-            You&rsquo;ve been asked to choose between the best tools and one system. That was
-            always a false choice.
-          </p>
-          <p className="ed-fg-muted mt-3 max-w-[680px] text-base leading-relaxed">
-            The coherence comes from the layer, not from the tools sharing a logo.{" "}
-            <Link href="/platform/integrations" className="ed-link" style={{ color: "var(--ed-accent-text)" }}>
-              What connects
-            </Link>
-            .
-          </p>
-        </Reveal>
-      </Band>
-
-      {/* ── 7. The committee ──────────────────────────────── */}
-      <section className="w-full" style={{ background: "linear-gradient(180deg, #0B2C48 0%, #071B29 100%)" }}>
-        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
-          <Reveal>
-            <p className="uppercase" style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_DIM }}>
-              Getting it approved
-            </p>
-            <h2
-              className="mt-4 max-w-[880px] leading-[1.08] tracking-[-0.03em]"
-              style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700, fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)", textWrap: "pretty" }}
-            >
-              You already know who&rsquo;s going to ask.{" "}
-              <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>Here&rsquo;s what each of them usually wants to see.</span>
-            </h2>
-            <p className="mt-5 max-w-[660px] text-base md:text-lg leading-relaxed" style={{ color: ON_DARK }}>
-              Most of this decision happens in rooms we&rsquo;re not in. This is the material for
-              those rooms.
-            </p>
-          </Reveal>
-
-          <div className="mt-10 max-w-[980px]">
-            {COMMITTEE.map((r, i) => (
-              <Reveal key={r.fn} delay={i * 0.06}>
-                <div className="flex flex-col gap-2 py-4 lg:flex-row lg:items-baseline lg:gap-8" style={{ borderTop: i === 0 ? "none" : `1px solid ${ON_DARK_RULE}` }}>
-                  <span className="flex-none text-[15px] lg:w-[184px]" style={{ color: "#FFFFFF", fontWeight: 600 }}>{r.fn}</span>
-                  <span className="min-w-0 flex-1 text-[14px] leading-relaxed" style={{ color: ON_DARK_DIM }}>{r.ask}</span>
-                  <span className="flex-none text-[13.5px] lg:w-[188px] lg:text-right">
-                    {/* Training answers "No" before the link. Ambiguity
-                        about LMS displacement produces a slow block from a
-                        function with no other reason to care. */}
-                    {r.lead && <span style={{ color: "#FFFFFF", fontWeight: 700 }}>{r.lead} </span>}
-                    <Link href={r.href} style={{ color: ON_DARK_ACCENT, fontWeight: 500, textDecoration: "underline", textUnderlineOffset: 4 }}>
-                      {r.where} &rarr;
-                    </Link>
-                  </span>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.14}>
-            <p className="mt-9 max-w-[720px] tracking-[-0.02em]" style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}>
-              Send this page to whichever of them asks first.
-            </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ── 8. Proof ──────────────────────────────────────
-          Two network sizes, so a 40-unit and a 400-unit reader each see
-          themselves. **Not a deflection or hours-saved metric** — those
-          argue for other pages and other readers. */}
-      <Band>
-        <SectionHead title="Brands running this at scale." />
-        <div className="mt-9 grid grid-cols-1 gap-5 lg:grid-cols-2">
-          <Reveal>
-            <div className="flex h-full flex-col p-6 md:p-8" style={CARD}>
-              <div className="flex flex-wrap items-baseline justify-between gap-4">
-                <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.13em", fontWeight: 600, color: "var(--ed-fg-muted)" }}>
-                  {"{{TBD:leadership-proof-large-brand}}"}
-                </span>
-                <span style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: "2rem", lineHeight: 1, letterSpacing: "-0.03em", color: "var(--ed-accent-text)" }}>
-                  {"{{TBD:leadership-proof-large-metric}}"}
-                </span>
-              </div>
-              <p className="ed-fg-muted mt-6 flex-1 text-[14.5px] leading-relaxed">
-                {"{{TBD:leadership-proof-large-quote}}"}
-              </p>
-            </div>
+      {/* ── 6. Approval kit ───────────────────────────────
+          Light grey cards with colourful icon tiles. Do not tint the
+          whole cards; that was tried and rejected as too colourful. */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[820px] flex-col gap-3.5">
+            <h2 className="ed-fg" style={H2}>
+              You already know who&rsquo;s going to ask.{" "}
+              <span className="ed-accent-text">Here&rsquo;s what each of them wants to see.</span>
+            </h2>
+            <p className="ed-fg-muted text-[18px] leading-[1.7]">
+              Most of this decision happens in rooms we&rsquo;re not in. This is the material for
+              those rooms. Send this page to whichever of them asks first.
+            </p>
           </Reveal>
-          <Reveal delay={0.1}>
-            <Link href="/case-studies/divadance" className="group flex h-full flex-col p-6 md:p-8" style={CARD}>
-              <div className="flex flex-wrap items-baseline justify-between gap-4">
-                <Image src="/logos/stories/divadance.png" alt="DivaDance" width={140} height={36} className="h-auto w-[104px] object-contain object-left" />
-                <span style={{ fontFamily: JAKARTA, fontWeight: 500, fontSize: "2rem", lineHeight: 1, letterSpacing: "-0.03em", color: "var(--ed-accent-text)" }}>
-                  {"{{TBD:divadance-growth-metric}}"}
-                </span>
-              </div>
-              <blockquote className="ed-fg mt-6 flex-1 text-[15px] leading-relaxed" style={{ fontFamily: JAKARTA, fontWeight: 500 }}>
-                &ldquo;EZee Assist has increased owner retention and topline revenue, and given our
-                team back the hours we were spending answering the same questions.&rdquo;
-              </blockquote>
-              <div className="mt-6 flex items-end justify-between gap-4">
-                <Meta>DivaDance</Meta>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" style={{ color: "var(--ed-accent-text)" }} strokeWidth={2} aria-hidden="true" />
-              </div>
-            </Link>
-          </Reveal>
-        </div>
-      </Band>
 
-      {/* ── 9. Related ────────────────────────────────────── */}
-      <Band alt>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="mt-9 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {ASKERS.map((a, i) => {
+              const [bg, fg] = TONE[a.tone];
+              return (
+                <Reveal key={a.who} delay={(i % 4) * 0.05}>
+                  <Link href={a.href} className="ed-card-alt ed-border ed-story-card flex h-full flex-col gap-2.5 rounded-2xl border p-5">
+                    <span className="flex h-[38px] w-[38px] flex-none items-center justify-center rounded-[10px]" style={{ background: bg, color: fg }} aria-hidden="true">
+                      <Glyph d={a.d} size={18} />
+                    </span>
+                    <span className="ed-fg text-[15.5px] font-semibold">{a.who}</span>
+                    <span className="ed-fg-muted text-[13.5px] leading-[1.5]">{a.q}</span>
+                    <span className="ed-accent-text mt-auto inline-flex items-center gap-1.5 pt-2 text-[13px] font-semibold">
+                      {a.link}
+                      <ArrowRight className="h-3 w-3" strokeWidth={2.25} aria-hidden="true" />
+                    </span>
+                  </Link>
+                </Reveal>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 7. Quote ──────────────────────────────────────── */}
+      <section className="w-full" style={{ background: "#0B1220" }}>
+        <motion.figure
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.75, ease: EASE }}
+          className="m-0 mx-auto grid max-w-7xl grid-cols-1 items-center gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:grid-cols-[1fr_auto] lg:gap-14"
+        >
+          <blockquote
+            className="m-0 leading-[1.45] tracking-[-0.02em]"
+            style={{ fontFamily: JAKARTA, fontSize: "clamp(1.125rem, 0.7rem + 1.1vw, 1.5rem)", fontWeight: 600, color: "#EEF2F8", textWrap: "pretty" }}
+          >
+            &ldquo;EZee Assist has increased owner retention and topline revenue, and given our team
+            back the hours we were spending answering the same questions.&rdquo;
+          </blockquote>
+          <figcaption
+            className="flex flex-col gap-1 border-t pt-5 lg:border-l lg:border-t-0 lg:pl-7 lg:pt-0"
+            style={{ borderColor: "rgba(238,242,248,.18)" }}
+          >
+            <span style={{ fontSize: 15, fontWeight: 600, color: "#EEF2F8" }}>Jami Stigliano</span>
+            <span style={{ fontSize: 13, color: "rgba(238,242,248,.65)" }}>Founder &amp; CEO, DivaDance</span>
+            <Link href="/case-studies" className="mt-2 inline-flex w-fit items-center gap-1.5 text-[13px] font-semibold" style={{ color: SKY }}>
+              Read the case studies
+              <ArrowRight className="h-3 w-3" strokeWidth={2.25} aria-hidden="true" />
+            </Link>
+          </figcaption>
+        </motion.figure>
+      </section>
+
+      {/* ── 8. Related ────────────────────────────────────── */}
+      <section className="ed-bg-alt w-full">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 px-6 md:px-12 lg:px-16 py-14 md:py-16 min-[1200px]:grid-cols-3">
           {RELATED.map((r, i) => (
-            <Reveal key={r.href} delay={i * 0.08}>
-              <Link href={r.href} className="group flex h-full flex-col justify-between gap-8 p-6 transition-transform hover:-translate-y-0.5" style={CARD}>
-                <div>
-                  <Eyebrow accent>{r.eyebrow}</Eyebrow>
-                  <p className="ed-fg mt-3 text-[17px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 500, lineHeight: 1.3 }}>
-                    {r.title}
-                  </p>
-                </div>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" style={{ color: "var(--ed-accent-text)" }} strokeWidth={2} aria-hidden="true" />
+            <Reveal key={r.href} delay={i * 0.06}>
+              <Link href={r.href} className="ed-card ed-border ed-story-card flex h-full flex-col gap-2 rounded-2xl border px-4 py-5 sm:px-6">
+                <span className="ed-accent-text" style={{ ...META, letterSpacing: "0.14em" }}>{r.kicker}</span>
+                <span className="ed-fg whitespace-nowrap text-[14.5px] font-semibold leading-[1.45]">{r.title}</span>
+                <ArrowRight className="ed-accent-text h-4 w-4" strokeWidth={2.25} aria-hidden="true" />
               </Link>
             </Reveal>
           ))}
         </div>
-      </Band>
+      </section>
 
-      {/* ── 10. CTA ───────────────────────────────────────
-          TODO: the ask requires a leader to name their weakest locations.
-          If sales finds that creates friction, the softer replacement is
-          "Bring us one territory." */}
+      {/* ── 9. Closing ────────────────────────────────────── */}
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
           <div className="absolute inset-0" style={{ backgroundColor: `rgba(4,32,54,${SCRIM.closing})` }} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 45%, ${CLOSING_BASE} 100%)` }} />
         </div>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.85, ease: EASE }}
-          className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24"
+          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-[1.2fr_.8fr] lg:gap-16"
         >
-          <h2
-            className="leading-[1.06] tracking-[-0.03em]"
-            style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700, fontSize: "clamp(1.5rem, 0.4rem + 2.9vw, 3rem)", maxWidth: "820px" }}
-          >
-            Bring us your bottom quartile.
-          </h2>
-          <p className="mt-5 max-w-[660px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
-            We&rsquo;ll show you what would have surfaced for each of those locations this week,
-            and what your top decile is already doing that they aren&rsquo;t.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
+          <div className="flex flex-col gap-4">
+            <h2
+              style={{
+                fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.1,
+                fontSize: "clamp(1.5rem, 0.5rem + 2.7vw, 2.625rem)", color: "#FFFFFF", textWrap: "pretty",
+              }}
+            >
+              Bring us your <span style={{ color: SKY }}>bottom quartile.</span>
+            </h2>
+            <p className="max-w-[480px] text-base leading-[1.6]" style={{ color: ON_IMAGE }}>
+              We&rsquo;ll show you what would have surfaced for each of those locations this week,
+              and what your top decile is already doing that they aren&rsquo;t.
+            </p>
+          </div>
+          <div className="flex items-start justify-start self-stretch lg:items-end lg:justify-end">
+            <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex flex-none whitespace-nowrap" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
               Speak to an expert
-              <span className="ed-btn-arrow-badge" aria-hidden="true">
-                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
-              </span>
-            </Link>
-            <Link href="/roi-calculator" className="ed-btn ed-btn-secondary-dark inline-flex">
-              See what your network could recover
+              <span className="ed-btn-arrow-badge" aria-hidden="true"><ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} /></span>
             </Link>
           </div>
         </motion.div>
       </section>
-    </>
+    </div>
   );
 }

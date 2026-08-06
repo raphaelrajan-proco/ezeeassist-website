@@ -317,6 +317,89 @@
   --haze-c: linear-gradient(180deg, #414C92 0%, #664F86 40%, #8D6072 70%, #437069 100%);
 }
 
+/* ─── HQ Leadership page ───────────────────────────────────
+   Two loops: the 18s network console and the 12s owner flywheel. Base
+   styles are the finished state in both, so reduced motion leaves every
+   node visible and every connector filled. */
+.theme-editorial .ed-leadership {
+  --wash:  linear-gradient(150deg, #EEF6F1 0%, #E2EFE7 55%, #EDF5F0 100%);
+  --ok:    #0D7C58;
+  --warn:  #B45309;
+  --bad:   #B42318;
+  --purple:#7C3AED;
+  --ever:  #1E6B4F;
+  --chip-bg: rgba(0, 119, 168, 0.06);
+  --chip-bd: rgba(0, 119, 168, 0.22);
+}
+.dark .theme-editorial .ed-leadership,
+.theme-editorial.dark .ed-leadership {
+  --wash:  linear-gradient(150deg, #101F19 0%, #13241C 55%, #0D1915 100%);
+  --ok:    #34D399;
+  --warn:  #FBBF24;
+  --bad:   #F97066;
+  --purple:#A78BFA;
+  --ever:  #7FD8B4;
+  --chip-bg: rgba(0, 174, 239, 0.08);
+  --chip-bd: rgba(0, 174, 239, 0.30);
+}
+
+/* Network console, 18s. */
+@keyframes lc-kpi     { 0%,4%{opacity:0;transform:translateY(8px)} 8%,92%{opacity:1;transform:translateY(0)} 97%,100%{opacity:0} }
+@keyframes lc-spread  { 0%,10%{width:74%} 26%,92%{width:52%} 97%,100%{width:74%} }
+@keyframes lc-spread-a{ 0%,12%{opacity:1} 18%,90%{opacity:0} 96%,100%{opacity:1} }
+@keyframes lc-spread-b{ 0%,12%{opacity:0} 18%,90%{opacity:1} 96%,100%{opacity:0} }
+@keyframes lc-pulse   { 0%,100%{box-shadow:0 0 0 0 rgba(180,83,9,.5)} 50%{box-shadow:0 0 0 5px rgba(180,83,9,0)} }
+@keyframes lc-flip    { 0%,30%{background:#B45309} 38%,92%{background:#19A97B} 100%{background:#B45309} }
+@keyframes lc-feed1   { 0%,26%{opacity:0;transform:translateY(10px)} 31%,92%{opacity:1;transform:translateY(0)} 97%,100%{opacity:0} }
+@keyframes lc-feed2   { 0%,40%{opacity:0;transform:translateY(10px)} 45%,92%{opacity:1;transform:translateY(0)} 97%,100%{opacity:0} }
+@keyframes lc-feed3   { 0%,54%{opacity:0;transform:translateY(10px)} 59%,92%{opacity:1;transform:translateY(0)} 97%,100%{opacity:0} }
+@keyframes lc-feed4   { 0%,68%{opacity:0;transform:translateY(10px)} 73%,92%{opacity:1;transform:translateY(0)} 97%,100%{opacity:0} }
+@keyframes lc-live    { 0%,100%{opacity:.55} 50%{opacity:1} }
+
+[data-anim] .lc {
+  animation-duration: 18s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+[data-anim] .lc-kpi      { animation-name: lc-kpi }
+[data-anim] .lc-spread   { animation-name: lc-spread }
+[data-anim] .lc-spread-a { animation-name: lc-spread-a }
+[data-anim] .lc-spread-b { animation-name: lc-spread-b }
+[data-anim] .lc-feed1    { animation-name: lc-feed1 }
+[data-anim] .lc-feed2    { animation-name: lc-feed2 }
+[data-anim] .lc-feed3    { animation-name: lc-feed3 }
+[data-anim] .lc-feed4    { animation-name: lc-feed4 }
+[data-anim] .lc-live     { animation: lc-live 2s ease-in-out infinite }
+[data-anim] .lc-dot-pulse{ animation: lc-pulse 2.4s ease-out infinite }
+[data-anim] .lc-dot-flip { animation: lc-flip 18s linear infinite both }
+
+/* Owner flywheel, 12s. */
+@keyframes lf-stage {
+  0%,2%{border-color:var(--ed-border);box-shadow:0 0 0 0 rgba(0,0,0,0)}
+  5%,22%{border-color:var(--chip-bd);box-shadow:0 12px 32px -14px rgba(0,119,168,.45)}
+  27%,100%{border-color:var(--ed-border);box-shadow:0 0 0 0 rgba(0,0,0,0)}
+}
+@keyframes lf-con { 0%,20%{transform:scaleX(0)} 25%,100%{transform:scaleX(1)} }
+@keyframes lf-dot {
+  0%,80%{right:0;opacity:0} 82%{opacity:1}
+  96%{right:calc(100% - 8px);opacity:1} 100%{right:calc(100% - 8px);opacity:0}
+}
+
+[data-anim] .lf-stage {
+  animation: lf-stage 12s linear infinite both;
+}
+[data-anim] .lf-stage:nth-of-type(2) { animation-delay: -9s }
+[data-anim] .lf-stage:nth-of-type(3) { animation-delay: -6s }
+[data-anim] .lf-stage:nth-of-type(4) { animation-delay: -3s }
+[data-anim] .lf-con {
+  animation: lf-con 12s linear infinite both;
+  transform-origin: left center;
+}
+[data-anim] .lf-con:nth-of-type(2) { animation-delay: -9s }
+[data-anim] .lf-con:nth-of-type(3) { animation-delay: -6s }
+[data-anim] .lf-dot { animation: lf-dot 12s linear infinite both }
+
 /* ─── Field Coaches page ───────────────────────────────────
    Three loops: the 16s hero brief, the 18s play typing, and the small
    icon loops. The week calendar is a React state machine rather than a

@@ -1272,6 +1272,50 @@ the legacy styling (hardcoded `#0A0A0A` / `#F0F0F0` / `#E5E7EB` Tailwind
 classes, which are the editorial tokens written the long way). Migrate a
 legacy page when it is next touched; do not extend the legacy style.
 
+## /solutions/leadership
+
+Rebuilt from a supplied design handoff. Nine sections: hero with the
+network console, visibility, leverage, the owner flywheel, governance,
+the approval kit, the quote, related, closing.
+
+Deleted deliberately: the "keep the systems you chose" no-migration
+section (**we do not talk against other vendors on this page**), the
+`{{TBD:leadership-proof-*}}` quote block, the "Illustrative. Figures show
+the shape of the view" disclaimers, and every section eyebrow.
+
+**Voice rule, every line:** never call the product "it", "this", or "this
+one". Name it, EZee Assist or EZee.
+
+**Deviation, on request:** the handoff specifies an evergreen gradient
+hero (`#1B4638`, accent `#9FE8C8`) and says not to normalise it. The
+existing hazy photographic hero is kept, as on Answers, Workflows,
+Compliance, Control Center and Coaches. The on-band accent is `#9FE0F8`.
+Evergreen survives as `--ever` for the Operations icon tile.
+
+**The flywheel is a loop, not four columns.** Four nodes, three
+connectors that draw left to right, and a return line whose dot travels
+right to left under the label "Growth funds the support that produced
+it". The loop closing is the argument. At narrow widths the connectors
+drop but the return label stays, because the label is what carries it.
+
+**The approval kit's cards stay grey with colourful icon tiles.** Tinting
+the whole cards was tried and rejected as too colourful; do not
+reintroduce it.
+
+Two loops: the 18s network console and the 12s flywheel. Both resolve to
+their finished state under reduced motion, verified: KPIs at opacity 1,
+feed rows visible, and every connector at `transform: none`, which is
+scaleX(1), fully drawn.
+
+The console's dot grid is decorative and `aria-hidden`; every number it
+stands for also appears as text above it. Two amber dots flip to green
+mid-loop, which is the "narrowing" claim shown rather than asserted.
+
+Verified on the built page at 1440/1280/1205/1024/768/375 in both themes:
+no horizontal overflow, no text under 12px, one h1 and six h2s, zero
+em-dashes, no banned words, no `{{TBD}}` tokens, and no `#00AEEF` used as
+text.
+
 ## /solutions/coaches
 
 Rebuilt from a supplied design handoff. Nine sections: hero with the
