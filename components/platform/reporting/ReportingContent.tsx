@@ -812,7 +812,10 @@ export default function ReportingContent() {
           Titles are nowrap by design; three up only where the longest
           fits on one line. */}
       <section className="ed-bg w-full">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 px-6 md:px-12 lg:px-16 pb-14 md:pb-16 min-[1200px]:grid-cols-3">
+        {/* Needs its own top padding. It used to inherit a gap from the
+            BI section above it, and when that section was deleted the
+            cards butted straight against the alt band's edge. */}
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 px-6 md:px-12 lg:px-16 pb-14 pt-14 md:pb-16 md:pt-16 min-[1200px]:grid-cols-3">
           {RELATED.map((r, i) => (
             <Reveal key={r.href} delay={i * 0.06}>
               <Link href={r.href} className="ed-border ed-story-card flex h-full flex-col gap-2 rounded-2xl border px-4 py-5 sm:px-6">

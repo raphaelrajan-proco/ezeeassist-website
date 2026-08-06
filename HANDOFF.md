@@ -1670,69 +1670,84 @@ permissions, plays or logs.
 
 ## /platform/ticketing
 
-Ten sections replacing the legacy page. **This is not franchisee support,
-it is the whole HQ request system.** A franchisee raises a ticket by
-asking, in whatever channel they already use, and it is classified, given
-the location's context, and routed to whichever of nine departments owns
-it. The pain removed is that today they have to know the franchisor's org
-chart before they can ask for help.
+Rebuilt from a supplied design handoff. The old page had nine thin
+sections; this has five plus related and closing, built around one
+full-width animated console that does most of the work.
 
-**Three copy rules, all verified on the built page:**
+Deleted deliberately: every section eyebrow, the separate intake section,
+the "It arrives owned" detail cards (folded into the console drawer), the
+department SLA table, the before/after block, and the whole "The helpdesk
+was only ever half of it" displacement section.
 
-1. **No competitor is named anywhere** (Zendesk, Freshdesk, Zoho,
-   Intercom, HubSpot all zero). §7 says "a helpdesk" and lets the reader
-   supply the name; naming one invites a rebuttal we do not control and
-   dates the page.
-2. **It never claims to replace external customer support.** §7 concedes
-   it, and the concession is what makes the internal claim credible.
-3. **No form, portal or category picker appears anywhere.** The entire
-   intake claim is that none of those exist.
+**The hero is plum**, `HERO_GRADIENT.plum`, and this page left the
+photographic variant map to take it (as Reporting did for indigo). It is
+the warmest band in the family and needs to be: the centrepiece is a long
+dark console, so the hero is what says which page you are on.
 
-No section leads with agent productivity, which is where every helpdesk
-vendor's page leads.
+Two loops: the 12s hero thread and the 22s console lifecycle. The hero
+order is the argument, ask then offer then **consent** then logged; the
+consent step is the point and must not be cut. The console's four status
+badges are stacked in one slot and crossfade, sized to ONGOING so the row
+never reflows. Base styles are the finished state in both, so reduced
+motion leaves the whole thread and the closed ticket.
 
-One new component, `DepartmentMap`: one intake point fanning to nine
-departments with **twenty-seven example requests**. Those examples are
-the section — nine labels prove nothing, and a franchisee reading
-"partner terms · lease review · trademark use" recognises their own week.
-Do not abbreviate to one each.
+The hero uses **bare bubbles, no device frame**. Answers and Apps both
+use a phone shell; this page deliberately does not repeat it.
 
-- **§6's three panels use three different devices** — a table, a ranked
-  list, a two-column prescription. All three as tables makes it one long
-  report. **Panel 3 is the differentiated one and is visually dominant**:
-  nobody else turns a support queue into a content roadmap.
-- **§6 panel 1 is never performance management.** The Legal line reframes
-  the outlier as a capacity finding, which is safer and more often true.
-  Do not cut it.
-- **§5 keeps the precedent row** ("two similar partner promos approved in
-  the last year") and **shows the SLA breach**. A perfect board is less
-  credible than one with a problem on it.
-- **§1's two-department routing stays.** Marketing *and* a legal check
-  shows classification doing real work rather than keyword-matching.
-- **§6's payoff keeps "2 raised because the terms were unusual."** Not
-  every request disappears.
+### Three Tailwind traps this page hit, in order
 
-§6's performance table **stacks below `sm` rather than scrolling**: it
-needs 560px, 375 gives it 327, and forcing the scroll grew the document
-to 565px. DESIGN.md §8 prefers stacking on a narrative section anyway.
+**1. Computed class names do not exist.** The table row grid was built as
+`ROW.replace("grid-cols-", "md:grid-cols-")`. Tailwind only generates
+what it can literally see, so the class was never emitted, the table fell
+back to one column and rows went from ~86px to ~265px tall. It rendered
+without error and looked plausible in a thumbnail. Both grids are written
+out in full now, twice, on purpose.
 
-Routing: this route was **unreachable** before now, the same shadowing
-that hid `/platform/workflows` — `next.config.ts` 308'd it to
-`/solution/ticketing`. Reversed, and the legacy twin now points forward.
-`app/solution/ticketing` is deleted; it was a second mount of the same
-content.
+**2. `min-[1440px]:` sorts before the named breakpoints.** With
+`md:grid-cols-[…]` and `min-[1440px]:grid-cols-[…]` on one element, both
+matched at 1560 and **md won**, so the drawer never moved beside the
+table.
 
-Nav and footer: the brief said to update a Ticketing descriptor. **Neither
-entry existed**, so both are adds, into Foundation.
+**3. A px-valued custom breakpoint sorts before the rem-valued defaults.**
+Replacing the arbitrary variant with `--breakpoint-wide: 1440px` did not
+fix it: Tailwind emits px breakpoints ahead of its own rem ones, so it
+still landed before `sm`/`md`/`lg` and still lost. **In rem (`90rem`) it
+sorts where its width says it should.** `--breakpoint-nav` is still px
+and works only because nothing it sets collides with a named breakpoint.
 
-`{{TBD:}}` tokens, four, all §8.
+The lesson for all three: a breakpoint bug here is silent. Verify by
+reading `grid-template-columns` off the built page at each width, not by
+looking at it.
 
-**Five claims flagged:** the nine departments and twenty-seven examples
-matching what customers actually send; multi-department routing with one
-named owner; §5's precedent attachment; §6 panel 3's prevention estimate
-(if the product surfaces recurrence but not the estimate, drop the
-PREVENTS column rather than approximating it); and §6 panel 1's per
-department first-response, time-to-close and SLA tracking.
+### The console's measurements
+
+Row grid is `92px minmax(240px,1fr) 92px 122px 84px`. An earlier build
+used `118px minmax(0,1fr) 116px 150px 96px` inside a 186/1fr/344 outer
+grid at 1240px: the REQUEST column collapsed to 38px, titles wrapped one
+word per line, and the category pills overflowed into LOCATION.
+
+Measured after the fix: request cells 400px at 1440 up to 520px at 1560
+with the drawer beside, 465px at 1205 with it below, and rows a flat 86px
+throughout. The five columns need ~686px, which is not there at `md`
+once the 158px rail is subtracted, so **`lg` is the floor** for both the
+rail and the table grid; below it each ticket is a stacked card.
+
+The queue deliberately has no Legal queue and no breached row, and
+Coaches and Operations carry the largest volumes: the section argues that
+the load is operational, not a support desk.
+
+The four takeaway titles are nowrap and the longest needs 207px, which is
+2px short at four columns at 1024, so the 4-up starts at `xl`.
+
+Verified on the built page at 1560/1440/1280/1205/1024/768/375 in both
+themes: the document never scrolls horizontally, no text under 12px, one
+h1, five h2s and four h3s, zero em-dashes, no banned words, none of the
+deleted sections or eyebrows present, no `#00AEEF` as text, the console
+stepping row → classify → categorise → assign → drawer → context →
+resolve → rule with the badges crossfading, and both loops resolving to
+their finished state under `prefers-reduced-motion`. The one remaining
+scrollWidth report is the drawer's own `translateX(24px)` entry state,
+clipped by the console's `overflow-hidden`.
 
 ## /platform/compliance
 

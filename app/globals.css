@@ -36,6 +36,15 @@
    keeps the pill and the sheet the same width through the new range. */
 @theme {
   --breakpoint-nav: 1120px;
+  /* The Ticketing console's three-column layout, 1440px.
+     **Declared in rem, and that matters.** Tailwind v4 emits px-valued
+     breakpoints ahead of its own rem-valued ones, so `--breakpoint-wide:
+     1440px` landed before `sm`/`md`/`lg` in the stylesheet and lost every
+     conflict to them; the console stayed two columns at 1560. The same
+     trap swallows `min-[1440px]:`. In rem it sorts where its width says
+     it should. (`--breakpoint-nav` above is px and works only because
+     nothing it sets ever collides with a named breakpoint.) */
+  --breakpoint-wide: 90rem;
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -306,6 +315,110 @@
   --haze-a: linear-gradient(180deg, #3B4590 0%, #5A4C8E 34%, #8A5C74 62%, #3F726C 100%);
   --haze-b: linear-gradient(180deg, #2F4E88 0%, #4E4A8C 36%, #7E5A6C 66%, #43706A 100%);
   --haze-c: linear-gradient(180deg, #414C92 0%, #664F86 40%, #8D6072 70%, #437069 100%);
+}
+
+/* ─── Ticketing page ───────────────────────────────────────
+   Two loops: the 12s hero chat thread and the 22s console lifecycle.
+   Both follow the prototype's timings, both use longhand duration (see
+   the Apps note: a name-less `animation` shorthand is minified away),
+   and in both the base styles are the finished state so reduced motion
+   leaves the whole thread and the closed ticket. */
+.theme-editorial .ed-ticketing {
+  --wash:  linear-gradient(150deg, #F6EEF6 0%, #EFE3F0 55%, #F4EBF4 100%);
+  --ok:     #0D7C58;
+  --warn:   #B45309;
+  --bad:    #B42318;
+  --purple: #7C3AED;
+  --plum:   #8E3F7C;
+  --track:  #E7E9EF;
+  --chip-bg: rgba(0, 119, 168, 0.06);
+  --chip-bd: rgba(0, 119, 168, 0.22);
+}
+.dark .theme-editorial .ed-ticketing,
+.theme-editorial.dark .ed-ticketing {
+  --wash:  linear-gradient(150deg, #25162A 0%, #2C1A31 55%, #1E1224 100%);
+  --ok:     #34D399;
+  --warn:   #FBBF24;
+  --bad:    #F97066;
+  --purple: #A78BFA;
+  --plum:   #E0A5D0;
+  --track:  #26262B;
+  --chip-bg: rgba(0, 174, 239, 0.08);
+  --chip-bd: rgba(0, 174, 239, 0.30);
+}
+
+/* Hero chat thread, 12s. The order is the argument: ask, offer to raise,
+   consent, logged. */
+@keyframes tk-ask    { 0%,3%{opacity:0;transform:translateY(8px)}  7%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes tk-dots   { 0%,8%{opacity:0} 10%,20%{opacity:1} 22%,100%{opacity:0} }
+@keyframes tk-reply  { 0%,21%{opacity:0;transform:translateY(8px)} 26%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes tk-ack    { 0%,40%{opacity:0;transform:translateY(8px)} 45%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes tk-logged { 0%,52%{opacity:0;transform:translateY(10px)} 58%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes tk-tag    { 0%,62%{opacity:0;transform:scale(.94)} 67%,94%{opacity:1;transform:scale(1)} 98%,100%{opacity:0} }
+@keyframes tk-dot    { 0%,80%,100%{opacity:.25} 40%{opacity:1} }
+
+[data-anim] .tk-h {
+  animation-duration: 12s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+[data-anim] .tk-ask    { animation-name: tk-ask }
+[data-anim] .tk-dots   { animation-name: tk-dots }
+[data-anim] .tk-reply  { animation-name: tk-reply }
+[data-anim] .tk-ack    { animation-name: tk-ack }
+[data-anim] .tk-logged { animation-name: tk-logged }
+[data-anim] .tk-tag    { animation-name: tk-tag }
+[data-anim] .tk-dot    { animation: tk-dot 1.2s ease-in-out infinite both }
+[data-anim] .tk-dot:nth-child(2) { animation-delay: .2s }
+[data-anim] .tk-dot:nth-child(3) { animation-delay: .4s }
+
+/* Console lifecycle, 22s. The four status badges are stacked in one slot
+   and crossfade; never animate one element's text. */
+@keyframes tk-row      { 0%,3%{opacity:0;transform:translateY(-10px)} 7%,96%{opacity:1;transform:translateY(0)} 99%,100%{opacity:0} }
+@keyframes tk-classify { 0%,8%{opacity:0} 10%,21%{opacity:1} 23%,100%{opacity:0} }
+@keyframes tk-cat      { 0%,22%{opacity:0;transform:translateY(4px)} 26%,96%{opacity:1;transform:translateY(0)} 99%,100%{opacity:0} }
+@keyframes tk-assign   { 0%,26%{opacity:0;transform:translateX(-6px)} 30%,96%{opacity:1;transform:translateX(0)} 99%,100%{opacity:0} }
+@keyframes tk-b-new    { 0%,7%{opacity:0}  9%,28%{opacity:1}  31%,100%{opacity:0} }
+@keyframes tk-b-routed { 0%,28%{opacity:0} 31%,57%{opacity:1} 60%,100%{opacity:0} }
+@keyframes tk-b-ongoing{ 0%,57%{opacity:0} 60%,82%{opacity:1} 85%,100%{opacity:0} }
+@keyframes tk-b-closed { 0%,82%{opacity:0} 85%,96%{opacity:1} 99%,100%{opacity:0} }
+@keyframes tk-drawer   { 0%,32%{opacity:0;transform:translateX(24px)} 38%,96%{opacity:1;transform:translateX(0)} 99%,100%{opacity:0} }
+@keyframes tk-ctx1     { 0%,39%{opacity:0} 42%,96%{opacity:1} 99%,100%{opacity:0} }
+@keyframes tk-ctx2     { 0%,42%{opacity:0} 45%,96%{opacity:1} 99%,100%{opacity:0} }
+@keyframes tk-ctx3     { 0%,45%{opacity:0} 48%,96%{opacity:1} 99%,100%{opacity:0} }
+@keyframes tk-ctx4     { 0%,48%{opacity:0} 51%,96%{opacity:1} 99%,100%{opacity:0} }
+@keyframes tk-sla      { 0%,52%{width:6%} 96%,100%{width:46%} }
+@keyframes tk-resolve  { 0%,68%{opacity:0;transform:translateY(8px);max-height:0} 74%,96%{opacity:1;transform:translateY(0);max-height:170px} 99%,100%{opacity:0} }
+@keyframes tk-rule     { 0%,78%{opacity:0;transform:scale(.94)} 83%,96%{opacity:1;transform:scale(1)} 99%,100%{opacity:0} }
+@keyframes tk-queue    { 0%,86%{opacity:.55} 90%,96%{opacity:1} 99%,100%{opacity:.55} }
+
+[data-anim] .tk-c {
+  animation-duration: 22s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+[data-anim] .tk-row       { animation-name: tk-row }
+[data-anim] .tk-classify  { animation-name: tk-classify }
+[data-anim] .tk-cat       { animation-name: tk-cat }
+[data-anim] .tk-assign    { animation-name: tk-assign }
+[data-anim] .tk-b-new     { animation-name: tk-b-new }
+[data-anim] .tk-b-routed  { animation-name: tk-b-routed }
+[data-anim] .tk-b-ongoing { animation-name: tk-b-ongoing }
+[data-anim] .tk-b-closed  { animation-name: tk-b-closed }
+[data-anim] .tk-drawer    { animation-name: tk-drawer }
+[data-anim] .tk-ctx1      { animation-name: tk-ctx1 }
+[data-anim] .tk-ctx2      { animation-name: tk-ctx2 }
+[data-anim] .tk-ctx3      { animation-name: tk-ctx3 }
+[data-anim] .tk-ctx4      { animation-name: tk-ctx4 }
+[data-anim] .tk-sla       { animation-name: tk-sla }
+[data-anim] .tk-resolve   { animation-name: tk-resolve; overflow: hidden }
+[data-anim] .tk-rule      { animation-name: tk-rule }
+[data-anim] .tk-queue     { animation-name: tk-queue }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-anim] * { animation: none !important; }
 }
 
 /* ─── Apps page ────────────────────────────────────────────

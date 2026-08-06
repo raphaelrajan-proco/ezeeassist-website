@@ -209,6 +209,22 @@ export const HERO_GRADIENT = {
     body: "rgba(238,241,255,0.92)",
     resolve: "#0A1030",
   },
+  /** Ticketing. The warmest of the gradient bands, and the furthest from
+      the rest of the family: the page's centrepiece is a long dark
+      console, so the hero has to be the thing that says which page you
+      are on. */
+  plum: {
+    base: "#4A2747",
+    hero:
+      "radial-gradient(1000px 520px at 78% 130%, rgba(242,185,223,0.20), transparent 62%)," +
+      "linear-gradient(160deg, #2B1530 0%, #4A2747 55%, #7C4270 100%)",
+    closing:
+      "radial-gradient(900px 460px at 22% 130%, rgba(242,185,223,0.18), transparent 60%)," +
+      "linear-gradient(285deg, #2B1530 0%, #4A2747 55%, #7C4270 100%)",
+    accent: "#F2B9DF",
+    body: "rgba(253,244,251,0.92)",
+    resolve: "#1E0E20",
+  },
 } as const satisfies Record<string, HeroGradient>;
 
 /* The scrim a band needs depends on how much copy sits on it, not only on the

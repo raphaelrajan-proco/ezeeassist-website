@@ -1,49 +1,42 @@
 "use client";
 
-import { integrations } from "@/lib/data/integrations";
-import { MONO } from "@/components/platform/shared";
+import { INTEGRATION_STRIP } from "@/lib/data/integrations";
 
 /**
- * Continuously scrolling strip of the systems EZee reads from.
+ * The integrations strip, shared with the Integrations page hero.
  *
- * **Names, not logos.** Only four of the fifty integration SVGs
- * `lib/data/integrations.ts` declares are actually committed, and the
- * house rule is that a logo is a committed local file or it is not shown.
- * Mixing four real marks with forty-six text chips would read as broken
- * rather than deliberate, so every entry is a chip. The platform page's
- * own scroller already does the same. If the missing files ever land,
- * this is the one place to swap.
+ * Same names, same `.ig-strip` scroll, same chip proportions, so the two
+ * read as one object rather than two takes on it. The only difference is
+ * the chip surface: the Integrations hero sits on a dark photograph and
+ * uses cream-on-transparent, this one sits on a light card, so it takes
+ * the light tokens. Everything else is deliberately identical.
  *
- * The set is duplicated so the loop is seamless, and the whole strip is
- * `aria-hidden`: it is decoration over a list that already exists in full
- * on the Integrations page, which the caller links to.
+ * Decorative: the full list lives on the Integrations page, which the
+ * caller links to, so the strip is `aria-hidden`.
  */
 export default function IntegrationMarquee() {
-  const names = integrations.map((i) => i.name);
-
   return (
     <div
-      className="relative overflow-hidden"
+      className="ig-strip relative flex gap-2.5 overflow-hidden py-1"
       style={{
-        maskImage: "linear-gradient(to right, transparent, black 4%, black 96%, transparent)",
-        WebkitMaskImage: "linear-gradient(to right, transparent, black 4%, black 96%, transparent)",
+        WebkitMaskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
+        maskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
       }}
       aria-hidden="true"
     >
-      <div className="ed-logo-marquee flex w-max items-center gap-2.5">
-        {[...names, ...names].map((n, i) => (
-          <span
-            key={`${n}-${i}`}
-            className="flex-shrink-0 whitespace-nowrap rounded-md"
-            style={{
-              fontFamily: MONO, fontSize: 12, padding: "6px 12px",
-              background: "var(--chip-bg)", border: "1px solid var(--chip-bd)", color: "var(--ed-accent-text)",
-            }}
-          >
-            {n}
-          </span>
-        ))}
-      </div>
+      {[0, 1].map((copy) => (
+        <div key={copy} className="ig-strip-run flex flex-none gap-2.5">
+          {INTEGRATION_STRIP.map((s) => (
+            <span
+              key={`${copy}-${s}`}
+              className="ed-card-alt ed-border ed-fg-muted inline-flex flex-none items-center rounded-md border px-2.5 py-1"
+              style={{ fontSize: 12.5, fontWeight: 500, lineHeight: 1.3 }}
+            >
+              {s}
+            </span>
+          ))}
+        </div>
+      ))}
     </div>
   );
 }

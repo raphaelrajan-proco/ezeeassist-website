@@ -110,3 +110,23 @@ export function groupedIntegrations(): Record<IntegrationCategory, Integration[]
 
 /** Subset used for the Platform page scrolling marquee bar (first 20 unique names) */
 export const platformMarqueeIntegrations = integrations.slice(0, 20);
+
+/**
+ * The scrolling strip's names, shared by the Integrations hero and the
+ * Reporting "Reads live from" row so the two read as the same object.
+ *
+ * A curated 24, not the full fifty: these are the systems a franchise
+ * operator recognises, and a strip is a texture rather than a catalogue.
+ * The full list lives on the Integrations page.
+ *
+ * Names, not logos. Only four of the fifty SVGs this file declares are
+ * committed, and the house rule is that a logo is a committed local file
+ * or it is not shown; four real marks among twenty text chips reads as
+ * broken rather than deliberate.
+ */
+export const INTEGRATION_STRIP = [
+  "FranConnect", "ServiceTitan", "Mindbody", "Zenoti", "ServiceMinder", "Thryv",
+  "Toast", "Square", "QuickBooks", "Xero", "SharePoint", "Google Drive",
+  "Trainual", "Docebo", "Salesforce", "HubSpot", "Microsoft Teams", "Slack",
+  "Mailchimp", "Stripe", "Notion", "Dropbox", "Airtable", "Canva",
+];

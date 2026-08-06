@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowRight, Check, X } from "lucide-react";
 import { CLOSING_BASE } from "@/components/growth/closing-band";
 import { platformHero } from "@/lib/data/platform-heroes";
+import { INTEGRATION_STRIP } from "@/lib/data/integrations";
 import {
   ACCENT, ACCENT_TINT, CARD, EASE, JAKARTA, MONO,
   Band, Eyebrow, GovernanceBand, Meta, Reveal, SectionHead, TextChip,
@@ -33,12 +34,7 @@ import {
 /* ── §1 hero strip ───────────────────────────────────────
    A thin moving band. It is the page's only run of system names now
    that §4 is a count rather than a second grid. */
-const STRIP = [
-  "FranConnect", "ServiceTitan", "Mindbody", "Zenoti", "ServiceMinder", "Thryv",
-  "Toast", "Square", "QuickBooks", "Xero", "SharePoint", "Google Drive",
-  "Trainual", "Docebo", "Salesforce", "HubSpot", "Microsoft Teams", "Slack",
-  "Mailchimp", "Stripe", "Notion", "Dropbox", "Airtable", "Canva",
-];
+const STRIP = INTEGRATION_STRIP;
 
 /* ── §2 ─────────────────────────────────────────────────
    Four refusals. Each card names the migration step a competitor asks
