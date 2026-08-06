@@ -1,18 +1,29 @@
-import LogoMarquee from "@/components/logo-marquee";
+import LogoMarquee from "@/components/sections/LogoMarquee";
 
 /**
- * The customer marquee as it sits under a sub-page hero.
+ * The customer logo marquee, sized to sit directly under a sub-page hero.
  *
- * A thin wrapper that owns only the vertical rhythm, so the gap between
- * every hero and its first real section stays identical. Everything about
- * how the strip looks lives in `LogoMarquee`.
- *
- * **No horizontal padding and no max-width here.** The marquee is
- * full-bleed and anything that constrains it is the bug this replaced:
- * the strip used to sit inside `mx-auto max-w-7xl px-6`, which clipped
- * the track to 1136px in a 1440px viewport and left about six logos
- * visible, so a running marquee read as a short static row.
+ * One component rather than three copies of the same padding, so the gap
+ * between every hero and its first real section stays identical. The
+ * padding is deliberately shorter than a normal band's: this is a strip
+ * riding under the hero, not a section of its own, and giving it full
+ * section padding pushed the first heading well below the fold.
  */
 export default function HeroLogoStrip() {
-  return <LogoMarquee tone="auto" className="py-10 md:py-12" />;
+  return (
+    /* `ed-logo-band` (pure white), not `ed-bg`.
+
+       The chips behind the marks are white and carry no outline, which
+       makes them invisible on a white band. `ed-bg` is white in light
+       mode, so that held there, but in dark mode it is near-black and the
+       strip came back as fifty white boxes with the page showing through
+       the gaps. The band has to be white for the chips to disappear, and
+       the chips have to stay because half these files ship an opaque
+       white background of their own. Same treatment as the homepage. */
+    <section className="ed-logo-band w-full" aria-label="Customers">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-10 md:py-12">
+        <LogoMarquee />
+      </div>
+    </section>
+  );
 }
