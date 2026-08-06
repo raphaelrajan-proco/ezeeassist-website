@@ -17,42 +17,41 @@ export default function GrowthTrustStrip({ showTrustLine = false }: { showTrustL
        an absolutely-positioned layer, and positioned elements paint above
        static ones in the same stacking context. Without it this whole
        strip renders underneath the scrim. */
-    <div className="ed-on-dark relative w-full pt-4 md:pt-6">
-      {showTrustLine && (
-        <p
-          className="mx-auto mb-4 max-w-7xl px-6 text-center uppercase md:px-12 lg:px-16"
-          style={{
-            /* Measured 9.7px at 390 and 10.7px at 1205, both under the
-               type floor. The clamp tops out at 11.25px, so the floor
-               governs at every width and this is a flat 12px. */
-            fontSize: "max(var(--ed-type-floor, 12px), clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem))",
-            fontWeight: 600,
-            letterSpacing: "0.16em",
-            color: "#9FE0F8",
-          }}
-        >
-          Trusted by leading franchise and multi-location brands.
-        </p>
-      )}
+    <div className="ed-on-dark relative w-full pt-4 pb-10 md:pt-6 md:pb-14">
+      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16">
+        {showTrustLine && (
+          <p
+            className="mb-4 text-center uppercase"
+            style={{
+              /* Measured 9.7px at 390 and 10.7px at 1205, both under the
+                 type floor. The clamp tops out at 11.25px, so the floor
+                 governs at every width and this is a flat 12px. */
+              fontSize: "max(var(--ed-type-floor, 12px), clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem))",
+              fontWeight: 600,
+              letterSpacing: "0.16em",
+              color: "#9FE0F8",
+            }}
+          >
+            Trusted by leading franchise and multi-location brands.
+          </p>
+        )}
 
-      {/* One pure white band, edge to edge.
+        {/* A white strip INSIDE the container, not full-bleed.
 
-          The chips used to be individually visible on the dark hero, so
-          the strip read as fifty white boxes with the hero showing through
-          the gaps between them. Making the whole band white removes the
-          gaps entirely: the chips become invisible against it and the
-          marks read as sitting on one white strip.
+            It sits within the page margins so the hero blue shows down
+            both sides, and the wrapper's bottom padding leaves blue
+            below it too. **Do not make this edge to edge and do not mask
+            its edges**: both have been tried, and the point of the strip
+            is that it reads as a band laid on the hero, which needs the
+            hero visible around it.
 
-          **White, not a page token.** Half these files ship an opaque
-          white background, so any other colour puts a box back around
-          them.
-
-          Full-bleed by the site's own convention: this sits outside the
-          `mx-auto max-w-7xl` wrapper the eyebrow uses, rather than behind
-          a viewport-unit breakout, which `.theme-editorial`'s
-          `overflow-x: clip` would clip anyway. */}
-      <div className="ed-logo-band w-full py-3">
-        <LogoMarquee />
+            White because half these files ship an opaque white
+            background; on any other colour each mark shows as a box. The
+            chips inside carry no border, so on white they disappear and
+            the marks read as floating. */}
+        <div className="ed-logo-band w-full py-3.5">
+          <LogoMarquee />
+        </div>
       </div>
     </div>
   );
