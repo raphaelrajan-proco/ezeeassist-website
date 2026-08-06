@@ -109,6 +109,13 @@ const editorialFooterColumns: { heading: string; links: { label: string; href: s
 /** Gate for the answer-engine + newsletter band under the tagline. */
 const SHOW_AEO_BLOCK = true;
 
+/* ── Flip to true to bring the subscribe capture back ────────
+   "Get the latest insights" plus its business-email field, hidden on
+   request. **The form has no endpoint** and never did: it is
+   `onSubmit={e => e.preventDefault()}`, so unhiding it ships a field that
+   silently discards what people type. Wire it to the real list first. */
+const SHOW_SUBSCRIBE = false;
+
 /* Both marks share viewBox 0 0 583.2 151.2. */
 const FOOTER_LOGO_H = 64;
 const FOOTER_LOGO_W = Math.round((583.2 / 151.2) * FOOTER_LOGO_H);
@@ -217,7 +224,7 @@ function FooterEditorial() {
         {/* Answer engines + newsletter, one band directly under the
             tagline and above the columns. No divider by request. */}
         {SHOW_AEO_BLOCK && (
-          <div className="mt-10 md:mt-12 grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-10 lg:gap-12">
+          <div className={`mt-10 md:mt-12 grid grid-cols-1 gap-10 lg:gap-12 ${SHOW_SUBSCRIBE ? "lg:grid-cols-[1.7fr_1fr]" : ""}`}>
             <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-8">
               <p
                 className="text-[15px] whitespace-nowrap flex-none"
@@ -257,6 +264,13 @@ function FooterEditorial() {
               </div>
             </div>
 
+            {/* ── Flip SHOW_SUBSCRIBE to true to bring this back ──
+                "Get the latest insights" and its email field, hidden on
+                request across every footer. A flag rather than a deletion:
+                the markup, the styling and the TODO about the missing
+                endpoint all survive, and the form still has nowhere to
+                post, so it must not come back before that is wired. */}
+            {SHOW_SUBSCRIBE && (
             <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-8">
               <p
                 className="text-[15px] whitespace-nowrap flex-none"
@@ -294,6 +308,7 @@ function FooterEditorial() {
                 </button>
               </form>
             </div>
+            )}
           </div>
         )}
 

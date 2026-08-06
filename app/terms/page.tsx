@@ -2,29 +2,27 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import LegalBody from "@/components/legal/LegalBody";
-import { PRIVACY_BLOCKS } from "@/lib/data/legal-privacy";
+import { TERMS_BLOCKS } from "@/lib/data/legal-terms";
 
 /**
- * /privacy
+ * /terms
  *
  * **The body is a verbatim copy of the published policy** at
- * ezeeassist.com/privacy-policy-ezee-assist, held in
- * `lib/data/legal-privacy.ts`.
+ * ezeeassist.com/terms-policy-ezee-assist, held in
+ * `lib/data/legal-terms.ts`.
  *
- * What used to be here was a hand-written policy: its own numbered
- * sections, its own intro paragraph, its own "Effective date: April 10,
- * 2026". None of it matched the published document, so the site was
- * serving two different privacy policies. Nothing on this page writes
- * legal copy any more, including the date, which the document supplies
- * itself as its first line.
+ * **This route did not exist.** The footer linked `/terms` from every
+ * page on the site and every one of those links was a 404. Nothing on
+ * this page writes legal copy, including the date, which the document
+ * supplies itself as its first line.
  */
 export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description: "How EZee Assist collects, uses, and protects your data.",
-  alternates: { canonical: "/privacy" },
+  title: "Terms of Use",
+  description: "The terms governing use of the EZee Assist site and services.",
+  alternates: { canonical: "/terms" },
 };
 
-export default function PrivacyPage() {
+export default function TermsPage() {
   return (
     <>
       <Navbar />
@@ -39,7 +37,7 @@ export default function PrivacyPage() {
               className="text-4xl font-bold text-[#0A0A0A] dark:text-[#F0F0F0] sm:text-5xl"
               style={{ letterSpacing: "-0.02em" }}
             >
-              Privacy Policy
+              Terms of Use
             </h1>
           </div>
         </section>
@@ -47,7 +45,7 @@ export default function PrivacyPage() {
         {/* Body */}
         <section className="w-full bg-white dark:bg-[#0D0D0D]">
           <div className="mx-auto max-w-3xl px-6 py-16 lg:px-8 lg:py-20">
-            <LegalBody blocks={PRIVACY_BLOCKS} />
+            <LegalBody blocks={TERMS_BLOCKS} />
           </div>
         </section>
       </main>

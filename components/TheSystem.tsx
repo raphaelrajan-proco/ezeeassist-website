@@ -590,23 +590,24 @@ export default function TheSystem() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.85, ease: EASE }}
-          className="max-w-4xl"
+          className="max-w-5xl"
           style={{
             /* The whole sentence is the accent, by request, rather than
                one phrase inside a white line. */
             color: "var(--os-accent-ink)",
             fontFamily: JAKARTA,
             fontWeight: 700,
-            /* **This no longer holds to one line, and must not try to.**
-               The previous copy was six words and the clamp was fitted to
-               keep it unbroken at 390/768/1024; this sentence is 21 words
-               and any clamp that fits it on one line would put it under
-               the type floor. It wraps to two or three lines and the size
-               is now chosen for reading, not for fitting. */
-            fontSize: "clamp(1.375rem, 0.6rem + 2.4vw, 2.5rem)",
-            letterSpacing: "-0.028em",
-            lineHeight: 1.15,
-            textWrap: "pretty",
+            /* **Two lines, not three.** 21 words over a 1216px column
+               needs roughly 30px to break twice and about 26 to break
+               once; the clamp tops out at 1.875rem so the line count is
+               stable from lg up, and `max-w-5xl` below widens the column
+               so it does not run to three at mid widths. `balance` rather
+               than `pretty`: with a two-line target the two lines should
+               be even, which is what balance optimises for. */
+            fontSize: "clamp(1.25rem, 0.55rem + 1.9vw, 1.875rem)",
+            letterSpacing: "-0.026em",
+            lineHeight: 1.2,
+            textWrap: "balance",
           }}
         >
           EZee is the operating layer that connects your people, playbooks, and live

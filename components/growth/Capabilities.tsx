@@ -45,7 +45,7 @@ const PHOTO = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit
 const TABS = [
   {
     id: "answers",
-    label: "Eliminate repetitive questions",
+    label: "Eliminate repeat questions",
     sub: "One question, any channel. Cited from your approved sources, scoped to that person’s role and location.",
     photo: PHOTO("photo-1560066984-138dadb4c035"),
     alt: "Front desk at a location",
@@ -800,16 +800,12 @@ export default function Capabilities() {
                  2.53:1 on this light band and fails AA at headline weight.
                  --sc-accent-ink is the darker pass-rated value. */
               color: "var(--sc-accent-ink)",
-              /* One line from 640 up, topping out at 42px. **Re-derived
-                 for the current copy.** The old string needed 27.97px of
-                 width per 1px of font size; this one is shorter at 25.1,
-                 so the one-line ceilings rise to 23.6 / 27.4 / 37.5 / 44.7
-                 / 47.5px at 640 / 768 / 1024 / 1205 / 1280. The clamp sits
-                 under each. `.theme-editorial` sets `overflow-x: clip`, so
-                 an overrun here is silently cut rather than scrolling:
-                 re-derive these if the copy changes again.
-                 Below 640 it wraps; one line there would need 15px type. */
-              fontSize: "clamp(1.25rem, 3.4vw, 2.625rem)",
+              /* The same scale as Always On's headline, by request, so
+                 the two section leads read as peers rather than one
+                 shouting over the other. That clamp tops out at 2rem
+                 instead of 2.625, which also gives this string more
+                 one-line headroom than it had. */
+              fontSize: "clamp(1.25rem, 0.25rem + 2vw, 2rem)",
             }}
           >
             Free your coaches from everything that isn&apos;t coaching.

@@ -644,18 +644,23 @@ export default function GrowthHero() {
                   <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
                 </span>
               </Link>
-              {/* Unfilled and arrowless, by request. The badge marks the
-                  page's one lead CTA; a second badge makes the pair
-                  compete, and only one of them can be the primary action.
-                  `ed-btn-secondary-dark` is the outline built for a
-                  photographic band, so it needs no inline colour. It
-                  carries `min-h` rather than matching padding, because the
-                  sibling's badge is taller than a text line and padding
-                  alone leaves the two boxes mismatched. */}
+              {/* Unfilled and still arrowless: it borrows `ed-btn-arrow`
+                  for that class's PADDING and type size only, so the two
+                  buttons are the same size, and renders no badge. Matching
+                  by padding alone does not work, because the sibling's
+                  badge is taller than a text line; `min-h` is what makes
+                  the boxes equal. `ed-btn-secondary-dark` supplies the
+                  outline built for a photographic band. */}
               <Link
-                href="/solutions/coaches"
-                className="ed-btn ed-btn-secondary-dark inline-flex flex-none items-center"
-                style={{ minHeight: 60 }}
+                href="/platform/workflows"
+                className="ed-btn ed-btn-secondary-dark ed-btn-arrow inline-flex flex-none items-center"
+                /* 48 is the primary's measured height: its 2rem badge plus
+                   the 8px top and bottom padding `ed-btn-arrow` sets. This
+                   button has no badge, so without the min-height it comes
+                   out at 40 and the pair sits mismatched. Width is left to
+                   the label; forcing that equal too would pad one of them
+                   with dead space. */
+                style={{ minHeight: 48 }}
               >
                 See coaching in action
               </Link>
