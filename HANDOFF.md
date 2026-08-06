@@ -2631,6 +2631,11 @@ and both are flat. The eyebrow wraps to two lines below ~430.
   which silently dropped whole brands from the marquee. It now loads eagerly.
   If the tile ever goes back to lazy, the fallback has to become the default
   state rather than the error state.
+- **`HeroLogoStrip` is the customer marquee's only sanctioned placement on a
+  sub-page**: directly under the hero, inside the margins, white band. Answers,
+  Reporting, Apps and Trust Center all use it. Do not drop a bare `LogoMarquee`
+  into the middle of a page as its own full-bleed section, which is what Trust
+  Center had.
 - **`overflow-x: clip` on `.theme-editorial` hides horizontal overflow, so a
   screenshot cannot prove a row fits.** The footer's AI-summary band looked
   correct at 1024 while the pills sat 112px past the band's right edge, clipped

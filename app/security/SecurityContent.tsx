@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
 import { HERO_BG } from "@/lib/data/hero-backgrounds";
-import LogoMarquee from "@/components/sections/LogoMarquee";
+import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 import { Band, EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 
 /**
@@ -247,6 +247,13 @@ export default function SecurityContent() {
         </div>
       </section>
 
+      {/* The same strip Answers, Reporting and Apps carry, in the same
+          place: directly under the hero, inside the margins, so the blue
+          shows below it. It sat mid-page here instead, as a lone
+          full-bleed marquee between two bands, which is not what the
+          other pages do. */}
+      <HeroLogoStrip />
+
       {/* ── 2. Responsible AI ─────────────────────────────
           Three top-ruled columns and no card boxes. The rule is the whole
           structure; boxing these would make them the fourth card grid on
@@ -477,15 +484,7 @@ export default function SecurityContent() {
         </div>
       </Band>
 
-      {/* ── 6. Customer logos ─────────────────────────────
-          The "Trusted by." heading is deleted; the marquee carries the
-          claim on its own and the heading was the section restating what
-          the logos already say. Full-bleed, the site's own convention. */}
-      <div className="py-14 md:py-16 lg:py-20">
-        <LogoMarquee />
-      </div>
-
-      {/* ── 7. Responsible disclosure ─────────────────────
+      {/* ── 6. Responsible disclosure ─────────────────────
           Dark solid, the hero's second CTA anchors here. */}
       <section id="disclosure" className="w-full scroll-mt-24" style={{ backgroundColor: "#0B1220" }}>
         <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
@@ -538,7 +537,7 @@ export default function SecurityContent() {
         </div>
       </section>
 
-      {/* ── 8. Closing CTA ────────────────────────────────
+      {/* ── 7. Closing CTA ────────────────────────────────
           Centred, and resolving to CLOSING_BASE so it seams into the
           footer with no visible join. */}
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
@@ -560,8 +559,8 @@ export default function SecurityContent() {
           >
             We look forward to connecting.
           </h2>
-          <p className="max-w-[480px] text-base leading-relaxed" style={{ color: ON_IMAGE }}>
-            To learn about how we can help your brand amplify operations with EZee Assist.
+          <p className="max-w-[620px] text-base leading-relaxed" style={{ color: ON_IMAGE }}>
+            Reach out to learn more about how we can help your brand transform growth coaching and operations with EZee Assist
           </p>
           <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow mt-3 inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
             Speak to an expert

@@ -400,9 +400,12 @@ export default function ControlCenterContent() {
                             "swappable", which read as a customer-facing
                             choice; "not swappable" was then dropped as
                             unnecessary, since stating the reason already
-                            says it is not an option being offered. */}
-                        <span className="text-center" style={{ fontFamily: MONO, fontSize: 12, color: "var(--ed-accent-text)" }}>
-                          optimized for efficiency and cost
+                            says it is not an option being offered. The
+                            reach line leads now: the point is the whole
+                            field is on the table before the point about
+                            how one gets picked. */}
+                        <span className="text-center" style={{ fontFamily: MONO, fontSize: 12, color: "var(--ed-accent-text)", lineHeight: 1.45 }}>
+                          connects to all the best models. optimized for efficiency and cost
                         </span>
                       </div>
                       <span className="ed-border block h-[22px] w-px border-l" aria-hidden="true" />
