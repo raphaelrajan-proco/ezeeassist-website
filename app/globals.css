@@ -1234,46 +1234,30 @@
   animation: marquee 140s linear infinite;
 }
 
-/* ─── Customer marks on dark bands ─────────────────────────
-   The marks sit on a transparent background now, with no white chip
-   behind them. Most of this roster is dark ink, so on the homepage's
-   scrimmed hero photograph and on `ed-bg` in dark mode they would be
-   invisible. A white silhouette is the usual answer for a logo wall on a
-   dark band, and it also hides the fact that four of the files are JPGs
-   on white rather than transparent PNGs.
+/* ─── The customer strip always sits on a light band ───────
+   The marks float with no chip and no plate behind them, which only
+   works on a light surface: 26 of the 50 files ship opaque art, so on a
+   dark band they would be white rectangles, and a silhouette filter
+   turns them into rectangles too.
 
-   **Brand colour is deliberately lost on dark surfaces.** Deleting these
-   two rules restores it, and the dark wordmarks vanish with it. The real
-   fix for the four JPGs is transparent replacements.
+   Rather than treat half the roster differently, the BAND goes light
+   everywhere the page behind it is dark. One consistent surface, all 50
+   marks in their own colours, nothing per file.
 
-   `.ed-on-dark` is the homepage hero strip; the `.dark` rules cover dark
-   mode everywhere else. */
-.theme-editorial .ed-on-dark .ed-logo-mark,
-.dark .theme-editorial .ed-logo-mark,
-.theme-editorial.dark .ed-logo-mark {
-  filter: brightness(0) invert(1);
-  opacity: 0.82;
+   Two surfaces need it: the homepage hero strip (`.ed-on-dark`, over a
+   scrimmed photograph) and `ed-bg` in dark mode. `--ed-logo-band` is the
+   light plate; it is deliberately not pure white, so it reads as a band
+   rather than as a hole punched in the page.
+
+   This is what makes the `opaque` flag in customer-logos.ts non-visual:
+   it still records which files need transparent art, and replacing them
+   is still worth doing, but nothing renders differently either way. */
+.theme-editorial .ed-logo-band {
+  background: #F4F6F9;
 }
-
-/* Half the roster ships with an opaque background, so `brightness(0)
-   invert(1)` paints the whole rectangle white rather than silhouetting
-   the mark. Those keep their own colours on a light plate instead.
-
-   **The plate is a stopgap for missing art**, not the intended look: it
-   is the white chip this change removed, surviving only where the file
-   gives no alternative. Every file replaced with a transparent PNG can
-   drop its `opaque` flag and lose the plate. */
-.theme-editorial .ed-on-dark .ed-logo-mark-opaque,
-.dark .theme-editorial .ed-logo-mark-opaque,
-.theme-editorial.dark .ed-logo-mark-opaque {
-  filter: none;
-  opacity: 1;
-  background: #FFFFFF;
-  border-radius: 6px;
-  padding: 3px 6px;
-}
-.theme-editorial .ed-logo-marquee:hover {
-  animation-play-state: paused;
+.dark .theme-editorial .ed-logo-band,
+.theme-editorial.dark .ed-logo-band {
+  background: #EEF1F5;
 }
 
 /* Editorial motion primitives ───────────────────────── */

@@ -17,24 +17,22 @@ import { customerLogos, type CustomerLogo } from "@/lib/data/customer-logos";
  * The white chip used to solve three things at once. Two of them still
  * need solving without it:
  *
- *  1. **Dark-ink marks on dark bands.** On the homepage's scrimmed hero
- *     photograph and on `ed-bg` in dark mode, most of these marks are
- *     near-invisible. Marks with transparent art take a white-silhouette
- *     filter there, the usual answer for a logo wall on a dark band.
- *     Brand colour is lost on those two surfaces by design; the
- *     alternative is marks nobody can see.
- *  2. **Half the roster has opaque art**, 26 of 50 including four JPGs.
- *     A silhouette filter turns those into solid white rectangles, so
- *     they get a light plate on dark surfaces instead. On light surfaces
- *     neither treatment is needed: a white background is invisible on
- *     white, which is why the strip looks right there and only there.
- *
- *     **That plate is a stopgap for missing art.** Replacing a file with
- *     a transparent PNG and clearing its `opaque` flag removes it, and
- *     doing that for all 26 is what makes dark mode look intentional.
+ *  1. **Dark-ink marks are unreadable on a dark band**, and 26 of the
+ *     50 files ship opaque art, so a silhouette filter turns half the
+ *     roster into white rectangles. Both problems are solved once by
+ *     putting the BAND on a light surface everywhere the page behind it
+ *     is dark, rather than treating individual marks differently. See
+ *     `.ed-logo-band` in globals.css; `HeroLogoStrip` and the homepage
+ *     strip both carry it.
+ *  2. Four of the files are JPGs on white. On a light band that is
+ *     invisible, so it needs nothing further.
  *
  * The third job, giving mismatched marks a common frame, is now done by
  * the fixed box.
+ *
+ * `opaque` in the data is no longer read here. It still records which
+ * files want transparent art, which is worth fixing, but nothing renders
+ * differently until it is.
  */
 
 /**
@@ -104,7 +102,7 @@ export function LogoTile({ logo }: { logo: CustomerLogo }) {
         alt={logo.alt}
         width={Math.round(h * (logo.ar ?? 3))}
         height={h}
-        className={logo.opaque ? "ed-logo-mark ed-logo-mark-opaque" : "ed-logo-mark"}
+        className="ed-logo-mark"
         /* Height drives the size; `maxWidth` is the backstop for the one
            mark wide enough to outrun the slot at its area-matched height,
            where object-contain shrinks it the rest of the way. */

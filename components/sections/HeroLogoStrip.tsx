@@ -11,7 +11,9 @@ import LogoMarquee from "@/components/sections/LogoMarquee";
  */
 export default function HeroLogoStrip() {
   return (
-    <section className="ed-bg w-full" aria-label="Customers">
+    /* `ed-logo-band` rather than `ed-bg`: the marks float with no
+       chip, which only reads on a light surface. See globals.css. */
+    <section className="ed-logo-band w-full" aria-label="Customers">
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-10 md:py-12">
         <LogoMarquee />
       </div>

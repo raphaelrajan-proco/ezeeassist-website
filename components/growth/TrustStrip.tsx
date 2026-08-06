@@ -36,7 +36,15 @@ export default function GrowthTrustStrip({ showTrustLine = false }: { showTrustL
             Trusted by leading franchise and multi-location brands.
           </p>
         )}
-        <LogoMarquee />
+        {/* The marquee alone takes the light band, not the whole strip:
+            the trust line above is #9FE0F8 on the scrimmed photograph and
+            would be invisible on a light surface. Rounded, so a light
+            block inside a dark hero reads as a deliberate logo bar rather
+            than as a hole. See `.ed-logo-band` in globals.css for why the
+            band exists at all. */}
+        <div className="ed-logo-band overflow-hidden rounded-2xl px-2 py-1.5">
+          <LogoMarquee />
+        </div>
       </div>
     </div>
   );
