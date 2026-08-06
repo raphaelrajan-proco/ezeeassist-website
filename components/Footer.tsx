@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -113,12 +114,48 @@ const FOOTER_LOGO_H = 64;
 const FOOTER_LOGO_W = Math.round((583.2 / 151.2) * FOOTER_LOGO_H);
 
 /** Pre-filled queries so answer engines can summarize the product. */
+/**
+ * The 16px provider mark on an "Ask ..." button.
+ *
+ * Renders nothing until the file exists, so the buttons degrade to
+ * label-only rather than showing a broken image. `onError` is what
+ * catches a missing file; there is no build-time check that the path
+ * resolves, which is why this guard is here at all.
+ *
+ * The mark is decorative: the visible label already names the provider,
+ * so `alt` is empty and nothing is announced twice.
+ */
+function AeoIcon({ src }: { src: string }) {
+  const [missing, setMissing] = useState(false);
+  if (missing) return null;
+  return (
+    <Image
+      src={src}
+      alt=""
+      width={16}
+      height={16}
+      className="flex-none rounded-[3px] object-contain"
+      style={{ width: 16, height: 16 }}
+      onError={() => setMissing(true)}
+    />
+  );
+}
+
 const AEO_QUERY =
   "What is EZee Assist and how do franchise and multi-location brands use it?";
 const aeoLinks = [
-  { label: "Ask ChatGPT",    href: `https://chatgpt.com/?q=${encodeURIComponent(AEO_QUERY)}` },
-  { label: "Ask Claude",     href: `https://claude.ai/new?q=${encodeURIComponent(AEO_QUERY)}` },
-  { label: "Ask Perplexity", href: `https://www.perplexity.ai/search?q=${encodeURIComponent(AEO_QUERY)}` },
+  /* `icon` is a committed file under `public/logos/aeo/`, never
+     hotlinked. **The three files are not in the repo yet**, so each
+     button renders label-only until they land; `onError` is not involved,
+     the icon simply is not drawn when the file is missing. Drop
+     chatgpt.png, claude.png and perplexity.png in and they appear, with
+     no code change.
+
+     Trademark: each mark is used unmodified, at small size, beside the
+     vendor's own name, and implies no partnership or endorsement. */
+  { label: "Ask ChatGPT",    icon: "/logos/aeo/chatgpt.png",    href: `https://chatgpt.com/?q=${encodeURIComponent(AEO_QUERY)}` },
+  { label: "Ask Claude",     icon: "/logos/aeo/claude.png",     href: `https://claude.ai/new?q=${encodeURIComponent(AEO_QUERY)}` },
+  { label: "Ask Perplexity", icon: "/logos/aeo/perplexity.png", href: `https://www.perplexity.ai/search?q=${encodeURIComponent(AEO_QUERY)}` },
 ];
 
 const socialLinks = [
@@ -198,13 +235,13 @@ function FooterEditorial() {
                     subscribe button below and the two link groups further
                     down: box only, no type changes. */}
                 <div className="flex flex-wrap gap-2 max-w-none">
-                  {aeoLinks.map(({ label, href }) => (
+                  {aeoLinks.map(({ label, icon, href }) => (
                     <a
                       key={label}
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-[44px] items-center rounded-full px-3.5 text-[13px] transition-opacity hover:opacity-70"
+                      className="inline-flex min-h-[44px] items-center gap-2 rounded-full px-3.5 text-[13px] transition-opacity hover:opacity-70"
                       style={{
                         backgroundColor: "var(--ed-card)",
                         border: "1px solid var(--ed-rule)",
@@ -212,6 +249,7 @@ function FooterEditorial() {
                         fontWeight: 500,
                       }}
                     >
+                      <AeoIcon src={icon} />
                       {label}
                     </a>
                   ))}
