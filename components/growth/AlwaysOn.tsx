@@ -471,11 +471,12 @@ export default function AlwaysOn() {
                 fontSize: "clamp(1.25rem, 0.25rem + 2vw, 2rem)",
               }}
             >
-              Coaching amplified across every location. At the hours it matters most.
+              At the moment it matters most.
             </h2>
-            <p className="max-w-[780px]" style={{ lineHeight: 1.5, color: "var(--wl-muted)", fontWeight: 400, fontSize: "calc(0.6 * clamp(1.25rem, 0.25rem + 2vw, 2rem))" }}>
+            <p className="max-w-[780px]" style={{ lineHeight: 1.5, color: "var(--wl-muted)", fontWeight: 600, fontSize: "calc(0.6 * clamp(1.25rem, 0.25rem + 2vw, 2rem))" }}>
               Nobody pulled any of this. Each play orchestrated by a coach once, and
-              some plays built directly from what the rest of your network already learned.
+              some plays built directly from what the rest of your network already
+              learned. Just-in-time coaching unlocked.
             </p>
             <Legend />
           </div>

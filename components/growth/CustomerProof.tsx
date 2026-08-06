@@ -96,11 +96,23 @@ const STORIES: Story[] = [
   },
 ];
 
-const PARTNERS = [
-  "IFA Supplier Forum",
-  "CFA Member",
-  "FSN Verified Member",
-  "WSI Partner",
+/**
+ * Real badge art, committed under `public/logos/partners/`.
+ *
+ * These replaced text pills. **WSI Partner is deliberately gone**: WSI is
+ * a customer with a case study on this site, not a membership body, so a
+ * badge here read as an accreditation it is not.
+ *
+ * `h` is per badge rather than shared. They are issued at three different
+ * proportions (IFA is a 1:1 seal, CFA a 1.67:1 lockup, FSN a 0.89:1
+ * shield) and one flat height makes the tall shield tower over the wide
+ * lockup. These were tuned by eye to the same apparent weight; re-tune
+ * them together, not one at a time.
+ */
+const PARTNERS: { name: string; src: string; h: number }[] = [
+  { name: "IFA Supplier Forum",  src: "/logos/partners/ifa.png", h: 54 },
+  { name: "CFA Member",          src: "/logos/partners/cfa.png", h: 44 },
+  { name: "FSN Verified Member", src: "/logos/partners/fsn.png", h: 60 },
 ];
 
 function StoryCard({ s }: { s: Story }) {
@@ -343,22 +355,20 @@ export default function CustomerProof() {
         >
           Collaborating with trusted partners
         </p>
-        <div className="flex flex-wrap gap-2">
+        {/* The badge IS the label, so alt carries the full name and there
+            is no visible caption. items-center, not a grid: three
+            different proportions never line up on a shared baseline. */}
+        <div className="flex flex-wrap items-center gap-x-7 gap-y-4">
           {PARTNERS.map((p) => (
-            <span
-              key={p}
-              className="rounded-full whitespace-nowrap flex-none"
-              style={{
-                backgroundColor: "var(--ed-card)",
-                border: "1px solid var(--ed-rule)",
-                color: "var(--ed-fg)",
-                fontWeight: 500,
-                padding: "0.5rem 0.875rem",
-                fontSize: "0.8125rem",
-              }}
-            >
-              {p}
-            </span>
+            <Image
+              key={p.name}
+              src={p.src}
+              alt={p.name}
+              width={Math.round(p.h * 2)}
+              height={p.h}
+              className="ed-partner-badge w-auto flex-none object-contain"
+              style={{ height: p.h }}
+            />
           ))}
         </div>
       </div>

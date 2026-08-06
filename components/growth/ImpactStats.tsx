@@ -39,8 +39,8 @@ const EASE = [0.22, 1, 0.36, 1] as const;
  * Do not add a fifth figure without a source.
  */
 const STATS: { end: number; suffix: string; label: string }[] = [
-  { end: 10,  suffix: "X",  label: "increased productivity" },
-  { end: 350, suffix: "%+", label: "base-case ROI on AI investment" },
+  { end: 9,   suffix: "X",  label: "increased productivity" },
+  { end: 354, suffix: "%",  label: "ROI on AI investment" },
   { end: 150, suffix: "%+", label: "increase in CSAT scores" },
   { end: 75,  suffix: "%+", label: "AI-automated resolutions" },
 ];

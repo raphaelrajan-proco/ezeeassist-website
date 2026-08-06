@@ -8,44 +8,59 @@ import { customerLogos, type CustomerLogo } from "@/lib/data/customer-logos";
  * Shared auto-scrolling customer logo marquee.
  * Seamless loop (duplicated set), edge fade masks, pauses on hover.
  *
- * **Every logo sits on a white chip, in both themes.** That is one
- * mechanism answering the three problems the logo handoff flagged, and it
- * is why the chip is not conditional:
+ * **Every slot is the same fixed box and the background is transparent.**
+ * The marks float on the band rather than sitting on white chips. Each
+ * logo is `object-contain` inside the box, so a 7.59:1 wordmark and a 1:1
+ * square occupy the same footprint and none renders smaller than another.
  *
- *  1. This same component renders on three different surfaces — the
- *     homepage's scrimmed hero photograph, `ed-bg` white on sub-pages, and
- *     `ed-bg` near-black in dark mode. Most of these marks are dark ink on
- *     transparent, so on two of those three they would disappear.
- *  2. Four files are JPGs on white (Sport Clips, Corporate Cleaning Group,
- *     Fuzz Wax Bar, Fresh Burger). Without a chip they render as white
- *     rectangles wherever the band is not white.
- *  3. It gives 47 marks of wildly different aspect ratio a common frame,
- *     so the row reads as a roster rather than as jumble.
+ * ── Why the chip is gone, and what replaced the job it did ──
+ * The white chip used to solve three things at once. Two of them still
+ * need solving without it:
+ *
+ *  1. **Dark-ink marks on dark bands.** On the homepage's scrimmed hero
+ *     photograph and on `ed-bg` in dark mode, most of these marks are
+ *     near-invisible. Marks with transparent art take a white-silhouette
+ *     filter there, the usual answer for a logo wall on a dark band.
+ *     Brand colour is lost on those two surfaces by design; the
+ *     alternative is marks nobody can see.
+ *  2. **Half the roster has opaque art**, 26 of 50 including four JPGs.
+ *     A silhouette filter turns those into solid white rectangles, so
+ *     they get a light plate on dark surfaces instead. On light surfaces
+ *     neither treatment is needed: a white background is invisible on
+ *     white, which is why the strip looks right there and only there.
+ *
+ *     **That plate is a stopgap for missing art.** Replacing a file with
+ *     a transparent PNG and clearing its `opaque` flag removes it, and
+ *     doing that for all 26 is what makes dark mode look intentional.
+ *
+ * The third job, giving mismatched marks a common frame, is now done by
+ * the fixed box.
  */
 
 /**
- * Height for a mark of aspect ratio `ar`, normalised roughly by area.
+ * Every slot is exactly this box. Equal boxes were the point.
  *
- * The handoff asks for one fixed height in the 28-34 band. That reads
- * badly across this roster: aspect ratios run 1.00 to 7.59, so at a flat
- * 30px New Creations gets 228px of width and Athletic Republic gets 30,
- * and the square marks shrink to stamps beside the wordmarks. Holding
- * `h * sqrt(ar)` near constant instead keeps the marks at a similar
- * apparent SIZE, which is what the eye compares.
+ * **The box being equal is not enough on its own.** Aspect ratios run
+ * 1.00 to 7.59, so plain `object-contain` inside a fixed box gives a
+ * square mark 40x40 and a wide wordmark 152x20: the wide one covers four
+ * times the area and the square ones read as shrunken. The mark is
+ * therefore sized by AREA within the box, holding `h * sqrt(ar)` near
+ * constant, then clamped so nothing escapes the slot.
  *
  * `REF_AR` is the roster's typical wordmark ratio, and a mark at exactly
- * that ratio gets exactly `REF_H`. The clamp stops the two extremes from
- * running away: nothing is shorter than 22px or taller than 40px, so the
- * chip height is stable and the row never jitters.
+ * that ratio gets exactly `REF_H`.
  */
+const BOX_W = 168;
+const BOX_H = 64;
+/** Inset so marks never touch the next slot. */
+const PAD = 8;
+
 const REF_AR = 3.2;
 const REF_H = 34;
-const MIN_H = 22;
-const MAX_H = 40;
-/** Chip inner height, sized to the tallest mark plus breathing room. */
-const CHIP_H = MAX_H + 20;
+const MIN_H = 18;
+const MAX_H = BOX_H - PAD * 2;
 
-function logoHeight(ar: number | undefined) {
+function markHeight(ar: number | undefined) {
   if (!ar) return REF_H;
   return Math.round(Math.min(MAX_H, Math.max(MIN_H, REF_H * Math.sqrt(REF_AR / ar))));
 }
@@ -53,20 +68,22 @@ function logoHeight(ar: number | undefined) {
 export function LogoTile({ logo }: { logo: CustomerLogo }) {
   const [failed, setFailed] = useState(false);
 
-  /* Three brands have no file yet. The grey pill is the requested interim
-     state for them, kept in the roster so the ordering does not shift when
-     the files land. */
+  /* The pill is reached only through onError. It carries an entry whose
+     art has not landed yet, holding its slot so the order never shifts. */
   if (failed) {
     return (
       <span
-        className="inline-flex items-center rounded-full px-4 py-1.5 text-sm whitespace-nowrap"
+        className="inline-flex items-center justify-center rounded-full px-4 text-sm"
         style={{
-          backgroundColor: "var(--ed-bg-alt)",
+          width: BOX_W,
+          height: BOX_H,
           border: "1px solid var(--ed-rule)",
           color: "var(--ed-fg-muted)",
           fontFamily: "var(--font-editorial)",
           fontWeight: 500,
           letterSpacing: "-0.01em",
+          textAlign: "center",
+          lineHeight: 1.2,
         }}
         title={logo.alt}
       >
@@ -75,29 +92,27 @@ export function LogoTile({ logo }: { logo: CustomerLogo }) {
     );
   }
 
-  const h = logoHeight(logo.ar);
+  const h = markHeight(logo.ar);
 
   return (
     <span
-      className="inline-flex items-center justify-center rounded-lg px-4"
-      style={{
-        height: CHIP_H,
-        backgroundColor: "#FFFFFF",
-        border: "1px solid rgba(10,20,36,0.08)",
-      }}
+      className="inline-flex items-center justify-center"
+      style={{ width: BOX_W, height: BOX_H, padding: PAD }}
     >
       <Image
         src={logo.src}
         alt={logo.alt}
-        width={240}
+        width={Math.round(h * (logo.ar ?? 3))}
         height={h}
-        className="w-auto object-contain"
-        style={{ height: h, maxWidth: 150 }}
-        /* The text pill is reached only through onError, and a lazy image
-           that never enters the viewport never loads, never errors, and
-           leaves a zero-width tile. In a marquee most tiles start
-           off-screen, so whole brands were silently dropping out of the
-           strip. Eager loading makes the fallback deterministic. */
+        className={logo.opaque ? "ed-logo-mark ed-logo-mark-opaque" : "ed-logo-mark"}
+        /* Height drives the size; `maxWidth` is the backstop for the one
+           mark wide enough to outrun the slot at its area-matched height,
+           where object-contain shrinks it the rest of the way. */
+        style={{ height: h, width: "auto", maxWidth: "100%", objectFit: "contain" }}
+        /* A lazy image that never enters the viewport never loads, never
+           errors, and leaves a zero-width tile, which silently dropped
+           whole brands from the strip. Eager makes the fallback
+           deterministic. */
         loading="eager"
         onError={() => setFailed(true)}
       />
@@ -116,7 +131,7 @@ export default function LogoMarquee() {
           "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
       }}
     >
-      <div className="ed-logo-marquee flex w-max items-center gap-5">
+      <div className="ed-logo-marquee flex w-max items-center gap-6">
         {[...customerLogos, ...customerLogos].map((logo, i) => (
           <div key={`${logo.name}-${i}`} className="flex-shrink-0">
             <LogoTile logo={logo} />

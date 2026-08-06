@@ -34,7 +34,7 @@ export const VENDOR_LOGOS: Record<string, VendorLogo> = {
   "drive.google.com":              { src: "/logos/integrations/drives-storage/google-drive.png", name: "Google Drive", generic: true },
   "dropbox.com":                   { src: "/logos/integrations/drives-storage/dropbox.png", name: "Dropbox" },
   "box.com":                       { src: "/logos/integrations/drives-storage/box.png", name: "Box" },
-  "onedrive.live.com":             { src: "/logos/integrations/drives-storage/onedrive.png", name: "OneDrive", generic: true },
+  "onedrive.live.com":             { src: "/logos/integrations/drives-storage/onedrive.png", name: "OneDrive" },
   "notion.so":                     { src: "/logos/integrations/drives-storage/notion.png", name: "Notion" },
   "aws.amazon.com":                { src: "/logos/integrations/drives-storage/amazon-s3.png", name: "Amazon S3" },
   "talentlms.com":                 { src: "/logos/integrations/lms-training/talentlms.png", name: "TalentLMS" },

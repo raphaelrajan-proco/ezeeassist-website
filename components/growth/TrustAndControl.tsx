@@ -124,25 +124,41 @@ export default function TrustAndControl() {
           ))}
         </div>
 
-        <Link
-          href="/security"
-          className="mt-14 md:mt-[76px] inline-flex items-center gap-3.5 rounded-full transition-opacity hover:opacity-90"
-          style={{
-            padding: "12px 12px 12px 26px",
-            background: "var(--cc-accent)",
-            color: "#FFFFFF",
-            fontFamily: JAKARTA, fontSize: 15.5, fontWeight: 600,
-          }}
-        >
-          See the full trust page
-          <span
-            aria-hidden="true"
-            className="flex items-center justify-center rounded-full"
-            style={{ width: 34, height: 34, background: "rgba(255,255,255,.2)", fontSize: 16, flex: "none" }}
+        {/* Two destinations, and neither takes an arrow badge: the badge
+            marks the page's single lead CTA and putting it on a pair makes
+            them compete. Control Center sits left as the product answer to
+            the section's question; the trust page is the proof behind it,
+            so it takes the outline rather than the fill. Both are one flex
+            row that wraps, so the second never orphans mid-line. */}
+        <div className="mt-14 md:mt-[76px] flex flex-wrap items-center gap-3.5">
+          <Link
+            href="/platform/control-center"
+            className="inline-flex flex-none items-center rounded-full transition-opacity hover:opacity-90"
+            style={{
+              padding: "14px 26px",
+              background: "var(--cc-accent)",
+              color: "#FFFFFF",
+              fontFamily: JAKARTA, fontSize: 15.5, fontWeight: 600,
+            }}
           >
-            →
-          </span>
-        </Link>
+            Explore the Control Center
+          </Link>
+          <Link
+            href="/security"
+            className="inline-flex flex-none items-center rounded-full transition-colors"
+            style={{
+              padding: "14px 26px",
+              /* Outline on the band's own surface rather than a second
+                 fill. An inset shadow, not a border, so both buttons keep
+                 the same box height without padding compensation. */
+              boxShadow: "inset 0 0 0 1px var(--cc-border-strong)",
+              color: "var(--cc-text)",
+              fontFamily: JAKARTA, fontSize: 15.5, fontWeight: 600,
+            }}
+          >
+            See the full trust page
+          </Link>
+        </div>
       </div>
     </section>
   );

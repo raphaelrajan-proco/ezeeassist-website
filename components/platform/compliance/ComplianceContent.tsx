@@ -93,7 +93,7 @@ export default function ComplianceContent() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: EASE }}
-          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-16 md:py-24 lg:grid-cols-2 lg:gap-16"
+          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-2 lg:gap-16"
         >
           <div className="flex flex-col items-start">
             <p style={{ ...EYEBROW, color: "rgba(255,255,255,0.62)" }}>Compliance</p>

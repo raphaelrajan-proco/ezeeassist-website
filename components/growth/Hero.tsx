@@ -626,6 +626,7 @@ export default function GrowthHero() {
             </motion.p>
 
             <motion.div
+              className="flex flex-wrap items-center gap-3.5"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: "easeOut", delay: 0.45 }}
@@ -635,13 +636,28 @@ export default function GrowthHero() {
                   separated from it, and its white label was 2.53:1. */}
               <Link
                 href="/speak-to-an-expert"
-                className="ed-btn ed-btn-arrow inline-flex"
+                className="ed-btn ed-btn-arrow inline-flex flex-none"
                 style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
               >
                 Speak to an expert
                 <span className="ed-btn-arrow-badge" aria-hidden="true">
                   <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
                 </span>
+              </Link>
+              {/* Unfilled and arrowless, by request. The badge marks the
+                  page's one lead CTA; a second badge makes the pair
+                  compete, and only one of them can be the primary action.
+                  `ed-btn-secondary-dark` is the outline built for a
+                  photographic band, so it needs no inline colour. It
+                  carries `min-h` rather than matching padding, because the
+                  sibling's badge is taller than a text line and padding
+                  alone leaves the two boxes mismatched. */}
+              <Link
+                href="/solutions/coaches"
+                className="ed-btn ed-btn-secondary-dark inline-flex flex-none items-center"
+                style={{ minHeight: 60 }}
+              >
+                See coaching in action
               </Link>
             </motion.div>
           </div>

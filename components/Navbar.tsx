@@ -61,7 +61,7 @@ const platformGroups: NavGroup[] = [
   {
     heading: "On Demand",
     items: [
-      { label: "Answers",          href: "/platform/answers",   desc: "Every question answered from your own material, scoped to who asks." },
+      { label: "Answers",          href: "/platform/answers",   desc: "Answered from your own material, scoped to who asks." },
       { label: "Reporting", href: "/platform/reporting", desc: "Any number, rendered however you ask." },
       { label: "Apps",             href: "/platform/apps",      desc: "Purpose-built tools your locations open on a phone." },
     ],
@@ -69,7 +69,7 @@ const platformGroups: NavGroup[] = [
   {
     heading: "Always On",
     items: [
-      { label: "Workflows",   href: "/platform/workflows",   desc: "Coach it once. It runs everywhere, in every location's context." },
+      { label: "Workflows",   href: "/platform/workflows",   desc: "Coach it once. It runs in every location." },
       { label: "Compliance",  href: "/platform/compliance",  desc: "Every location checked against your standard, continuously." },
     ],
   },
@@ -223,9 +223,18 @@ export default function Navbar() {
 
   const pathname = usePathname();
   const isEditorial = pathname === "/";
-  /* The pill overlays the hero, which only the homepage has. Every other
-     route keeps the banded header it already had. */
-  const floating = isEditorial;
+  /* **The floating pill is the nav on every route.** It used to be
+     homepage-only, on the reasoning that the pill overlays a hero and
+     only the homepage had one. That stopped being true as the platform
+     and solutions pages were rebuilt with full-bleed heroes of their own,
+     and the site was left running two different navs.
+
+     The pill sits `position: sticky` at `--nav-inset` with a negative
+     `margin-bottom` of the pill height, so it takes no space in the
+     document and the page below starts at y=0. **Any hero must therefore
+     clear `--nav-block` (inset + pill height) with its own top padding**
+     or the pill lands on top of its content. Verified on every route. */
+  const floating = true;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);

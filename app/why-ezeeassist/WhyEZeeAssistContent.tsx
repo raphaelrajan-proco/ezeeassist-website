@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 import { CLOSING_BASE } from "@/components/growth/closing-band";
 import { HERO_GRADIENT } from "@/lib/data/hero-backgrounds";
 import { Band, EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
+import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 
 /**
  * /why-ezeeassist
@@ -289,6 +290,8 @@ export default function WhyEZeeAssistContent() {
           </div>
         </div>
       </section>
+
+      <HeroLogoStrip />
 
       {/* ── 2. Narrative ──────────────────────────────────── */}
       <Band>

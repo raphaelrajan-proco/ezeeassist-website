@@ -9,7 +9,6 @@ import { HERO_GRADIENT } from "@/lib/data/hero-backgrounds";
 import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 import { Glyph } from "@/components/platform/reporting/Glyph";
 import { ConnectCard, WriteBackCard } from "./artifacts";
-import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 import { vendorLogo } from "@/lib/data/integration-logos";
 import { INTEGRATION_STRIP as MARQUEE } from "@/lib/data/integrations";
 import { BLUES, DIRECTORY, NOTES, NOTS, RELATED, ROLES } from "./data";
@@ -134,8 +133,6 @@ export default function IntegrationsContent() {
           </div>
         </div>
       </section>
-
-      <HeroLogoStrip />
 
       {/* ── 2. Nothing migrates ───────────────────────────
           Four cards stepping through one blue, light to deep. */}

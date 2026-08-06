@@ -45,7 +45,7 @@ const PHOTO = (id: string) => `https://images.unsplash.com/${id}?auto=format&fit
 const TABS = [
   {
     id: "answers",
-    label: "Ask for anything",
+    label: "Eliminate repetitive questions",
     sub: "One question, any channel. Cited from your approved sources, scoped to that person’s role and location.",
     photo: PHOTO("photo-1560066984-138dadb4c035"),
     alt: "Front desk at a location",
@@ -53,7 +53,7 @@ const TABS = [
   },
   {
     id: "reporting",
-    label: "See the data how you want",
+    label: "Visualize data real-time",
     sub: "The same numbers, rendered however you ask. No analyst, no queue, no dashboard.",
     photo: PHOTO("photo-1551288049-bebda4e38f71"),
     alt: "Performance numbers on a laptop",
@@ -796,20 +796,23 @@ export default function Capabilities() {
             className="whitespace-normal sm:whitespace-nowrap"
             style={{
               fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.028em", lineHeight: 1.1,
-              color: "var(--sc-text)",
-              /* One line from 640 up, which is what the handoff asks for,
-                 topping out at its 42px. The string needs 27.97px of width
-                 per 1px of font size, so the one-line ceilings are 21.2 /
-                 24.6 / 33.7 / 40.2 / 42.9px at 640 / 768 / 1024 / 1205 /
-                 1280. This sits 3 to 5 percent under each.
-                 `.theme-editorial` sets `overflow-x: clip`, so an overrun
-                 here is silently cut rather than scrolling: re-derive
-                 these if the headline copy ever changes.
-                 Below 640 it wraps; one line there would need 16px type. */
-              fontSize: "clamp(1.25rem, 3.18vw, 2.625rem)",
+              /* EZee blue, by request, via the ink token: #00AEEF measures
+                 2.53:1 on this light band and fails AA at headline weight.
+                 --sc-accent-ink is the darker pass-rated value. */
+              color: "var(--sc-accent-ink)",
+              /* One line from 640 up, topping out at 42px. **Re-derived
+                 for the current copy.** The old string needed 27.97px of
+                 width per 1px of font size; this one is shorter at 25.1,
+                 so the one-line ceilings rise to 23.6 / 27.4 / 37.5 / 44.7
+                 / 47.5px at 640 / 768 / 1024 / 1205 / 1280. The clamp sits
+                 under each. `.theme-editorial` sets `overflow-x: clip`, so
+                 an overrun here is silently cut rather than scrolling:
+                 re-derive these if the copy changes again.
+                 Below 640 it wraps; one line there would need 15px type. */
+              fontSize: "clamp(1.25rem, 3.4vw, 2.625rem)",
             }}
           >
-            Ask for anything. See it how you like. Build what&apos;s missing.
+            Free your coaches from everything that isn&apos;t coaching.
           </h2>
         </div>
 

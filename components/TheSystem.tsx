@@ -592,23 +592,25 @@ export default function TheSystem() {
           transition={{ duration: 0.85, ease: EASE }}
           className="max-w-4xl"
           style={{
-            color: "var(--os-text)",
+            /* The whole sentence is the accent, by request, rather than
+               one phrase inside a white line. */
+            color: "var(--os-accent-ink)",
             fontFamily: JAKARTA,
             fontWeight: 700,
-            /* Held to one line at every width. The string needs 17.39px of
-               width per 1px of font size, up from 16.21 before "AI" was
-               added, and the column is 342px at 390, 688 at 768 and 1360
-               at 1024, so the one-line ceilings are 19.7 / 39.6 / 54.3px.
-               Measured directly at 390: 19.5 fits, 20 wraps. The whole
-               clamp is refitted rather than just the floor, since the
-               middle term was what bound there. Tops at the spec's 44. */
-            fontSize: "clamp(1.1875rem, 0.246rem + 3.91vw, 2.75rem)",
+            /* **This no longer holds to one line, and must not try to.**
+               The previous copy was six words and the clamp was fitted to
+               keep it unbroken at 390/768/1024; this sentence is 21 words
+               and any clamp that fits it on one line would put it under
+               the type floor. It wraps to two or three lines and the size
+               is now chosen for reading, not for fitting. */
+            fontSize: "clamp(1.375rem, 0.6rem + 2.4vw, 2.5rem)",
             letterSpacing: "-0.028em",
-            lineHeight: 1.1,
+            lineHeight: 1.15,
+            textWrap: "pretty",
           }}
         >
-          EZee Assist is the{" "}
-          <span style={{ color: "var(--os-accent-ink)" }}>AI Operating System</span>
+          EZee is the operating layer that connects your people, playbooks, and live
+          data, so coaching reaches its full potential.
         </motion.h2>
 
         {/* Sits under the lead line as one sentence, at a lighter weight
@@ -624,10 +626,13 @@ export default function TheSystem() {
             fontFamily: JAKARTA, fontWeight: 500, letterSpacing: "-0.015em",
             /* Brighter than --os-muted by request, dimmer than the pure
                white headline so the hierarchy holds. */
-            color: "rgba(238, 242, 248, 0.92)", whiteSpace: "nowrap",
+            /* `nowrap` is gone with the longer headline above: this line
+               is no longer the narrower of the two, so forcing it onto one
+               line overflowed the clip at small widths. */
+            color: "rgba(238, 242, 248, 0.92)",
           }}
         >
-          Your coaches multiplied. Your standards held. Your numbers growing.
+          Your coaches multiplied. Your standards held. Franchisees&rsquo; numbers growing.
         </motion.p>
 
         <p className="sr-only">

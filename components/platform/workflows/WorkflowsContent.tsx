@@ -81,7 +81,13 @@ export default function WorkflowsContent() {
           initial={{ opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: EASE }}
-          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-18 md:py-20 lg:grid-cols-2 lg:gap-16"
+          /* py-20/24, matching every other platform hero. The pill nav is
+             sticky with a negative margin so it takes no space in the
+             document, and a hero must clear --nav-block (72 at base, 88
+             from md) with its own padding. py-18/20 gave 72/80 and the
+             pill landed on the eyebrow at 768 and on the demo pills at
+             1205. */
+          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-2 lg:gap-16"
         >
           <div className="flex max-w-[500px] flex-col items-start">
             <p style={{ ...EYEBROW, color: SKY }}>Coaching orchestration</p>

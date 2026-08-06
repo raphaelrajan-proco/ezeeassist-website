@@ -335,10 +335,13 @@ function HexFrame({ id, title, desc, children }: {
 /** Chart label. Sits above its chart, aligned to the left edge, so each
     shape is named before it is read rather than after. No rule: the two
     charts are already separated by the gap between them. */
+/* Sized to match `TimeBar`'s title exactly (19px, 22 from md). The two
+   pairs make the same before/after argument one section apart, so a 15px
+   label under a 22px one read as a caption rather than as its equal. */
 function HexLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="mb-2">
-      <span className="text-[15px]" style={{ fontWeight: 600, color: "var(--pb-text)" }}>
+      <span className="text-[19px] md:text-[22px]" style={{ fontWeight: 600, color: "var(--pb-text)" }}>
         {children}
       </span>
     </div>
@@ -421,7 +424,7 @@ function CoverageHexagon() {
       </div>
 
       <div className="w-full max-w-[560px]">
-        <HexLabel>What it could be</HexLabel>
+        <HexLabel>What it should be</HexLabel>
         <HexFrame
           id="pb-hex-could"
           title="Radar chart of personalized coaching coverage with EZee Assist, across six areas"
@@ -821,14 +824,14 @@ export default function CoachsWeek() {
               color: "var(--pb-text)",
             }}
           >
-            Even with the time freed up, one coach&rsquo;s expertise only reaches so far.
+            Even with the time freed up, each coach&rsquo;s expertise only reaches so far.
           </motion.h3>
 
           <CoverageHexagon />
 
           <p
             className="mt-0.5 text-[21px] md:text-[22px]"
-            style={{ color: "var(--pb-muted)", lineHeight: 1.45, fontWeight: 400 }}
+            style={{ color: "var(--pb-muted)", lineHeight: 1.45, fontWeight: 600 }}
           >
             A coach&rsquo;s time is capped by the hours in a day. That cap is what
             limits coverage,
