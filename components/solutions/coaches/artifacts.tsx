@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { JAKARTA, MONO } from "@/components/platform/shared";
+import FlowerMark from "@/components/sections/FlowerMark";
 import { Glyph } from "@/components/platform/reporting/Glyph";
 import { DAYS, PLAY_CHUNKS, PLAYS, SINCE, TICKETS, TONE } from "./data";
 
@@ -15,7 +15,9 @@ import { DAYS, PLAY_CHUNKS, PLAYS, SINCE, TICKETS, TONE } from "./data";
  * already are it.
  *
  * **The console headers carry the EZee flower mark, never a lettermark
- * "E" tile.** That was an explicit instruction in the handoff.
+ * "E" tile.** That was an explicit instruction in the handoff. It renders
+ * through the shared `FlowerMark`; this file used to carry its own copy of
+ * the same component, which is exactly how the two drift apart.
  */
 
 const INK = "#0A0A0A";
@@ -28,20 +30,6 @@ const META = {
   letterSpacing: "0.12em", textTransform: "uppercase" as const,
 };
 
-function Flower({ size = 22 }: { size?: number }) {
-  return (
-    <Image
-      src="/logos/ezee-flower-black.png"
-      alt=""
-      width={size}
-      height={size}
-      className="flex-none object-contain"
-      style={{ width: size, height: size }}
-      aria-hidden="true"
-    />
-  );
-}
-
 /** ── §1: the Monday brief, 16s ── */
 export function BriefConsole() {
   return (
@@ -52,7 +40,7 @@ export function BriefConsole() {
       aria-hidden="true"
     >
       <div className="cb cb-head flex items-center gap-2.5 px-4 py-3" style={{ borderBottom: `1px solid ${RULE}` }}>
-        <Flower />
+        <FlowerMark />
         <span style={{ ...META, color: MUTED }}>West territory · Monday 7:00am · 12 locations</span>
         <span className="ml-auto flex-none" style={{ ...META, color: WINE }}>Your brief</span>
       </div>
@@ -136,7 +124,7 @@ export function WeekCalendar() {
         style={{ background: "#FFFFFF", border: "1px solid #E5E7EB", boxShadow: "0 20px 50px -30px rgba(10,10,10,.35)" }}
       >
         <div className="flex items-center gap-2.5 px-4 py-3" style={{ borderBottom: `1px solid ${RULE}` }}>
-          <Flower />
+          <FlowerMark />
           <span style={{ ...META, color: MUTED }}>West territory · this week</span>
           <span className="ml-auto flex-none" style={{ ...META, color: MUTED }}>12 locations</span>
         </div>

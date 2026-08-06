@@ -1,8 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="8" fill="#00AEEF"/>
-  <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle"
-    font-family="Inter, ui-sans-serif, sans-serif"
-    font-weight="800"
-    font-size="18"
-    fill="white">E</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!--
+    The EZee flower, never a lettermark "E".
+
+    Geometry is lifted verbatim from public/logo-white.svg, which is the
+    authoritative lockup, then translated so the mark's bounding box
+    (x 32.25-109.91, y 32.64-120.50 in the lockup's coordinates) centres in
+    a square. Do not redraw it by hand.
+
+    White rounded tile rather than the brand blue the old "E" tile used:
+    the mark's own accent IS brand blue, so on a blue tile the coloured
+    petal and hexagon disappear and the whole thing reads as a grey
+    asterisk. White also holds up against light and dark browser chrome.
+  -->
+  <rect width="100" height="100" rx="22" fill="#FFFFFF"/>
+  <g transform="translate(-21.08,-26.57)" fill="#0A0A0A">
+    <circle cx="71.06" cy="38.48" r="5.84"/>
+    <path d="m78.6,63.49v-9.33c0-4.16-3.38-7.54-7.54-7.54s-7.54,3.38-7.54,7.54v9.33h15.08Z"/>
+    <circle cx="71.09" cy="114.66" r="5.84"/>
+    <path d="m63.53,89.66v9.33c.02,4.16,3.4,7.54,7.56,7.53,4.16,0,7.54-3.38,7.53-7.55v-9.33s-15.09.02-15.09.02Z"/>
+    <circle cx="38.09" cy="57.54" r="5.84"/>
+    <path d="m63.51,63.51l-8.08-4.66c-3.61-2.08-8.22-.85-10.3,2.76-2.08,3.61-.85,8.22,2.76,10.3l8.08,4.66,7.54-13.06Z"/>
+    <circle cx="104.07" cy="95.59" r="5.84"/>
+    <path d="m78.64,89.64l8.08,4.65c3.61,2.08,8.22.84,10.3-2.77s.84-8.22-2.77-10.3l-8.08-4.65-7.53,13.07Z"/>
+    <circle cx="38.1" cy="95.62" r="5.84"/>
+    <path d="m55.99,76.59l-8.08,4.66c-3.61,2.08-4.84,6.69-2.76,10.3s6.69,4.84,10.3,2.76l8.08-4.66-7.54-13.06Z"/>
+  </g>
+  <g transform="translate(-21.08,-26.57)" fill="#00AEEF">
+    <polygon points="75.96 68.08 66.16 68.08 61.26 76.57 66.16 85.05 75.96 85.05 80.86 76.57 75.96 68.08"/>
+    <circle cx="104.05" cy="57.5" r="5.84"/>
+    <path d="m86.18,76.56l8.07-4.67c3.6-2.09,4.83-6.7,2.75-10.3-2.09-3.6-6.7-4.83-10.3-2.75l-8.07,4.67,7.56,13.05Z"/>
+  </g>
 </svg>

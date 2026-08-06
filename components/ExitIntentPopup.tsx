@@ -6,6 +6,14 @@ import { ArrowRight, X } from "lucide-react";
 
 // TODO: Wire form submission to HubSpot Forms API or custom endpoint
 
+/* ── Flip to true to bring the "Before you go" modal back ─────
+   Hidden for the MVP launch and wanted back within days, so this is a flag
+   rather than an unmount in layout.tsx: the component keeps its dwell and
+   scroll gates, its session keys, its copy and its styling, and one word
+   turns it on. Gating here rather than at the mount point also means the
+   listeners are never attached while it is off. */
+const SHOW_EXIT_INTENT = false;
+
 const DISMISSED_KEY = "exit-intent-dismissed";
 const SUBMITTED_KEY = "gated-content-submitted";
 /** Session-scoped so the modal can fire at most once per visit. */
@@ -38,6 +46,7 @@ export default function ExitIntentPopup() {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
+    if (!SHOW_EXIT_INTENT) return;
     // Don't show if already dismissed, already submitted, or already
     // shown once in this session.
     if (

@@ -15,6 +15,7 @@ import {
   SearchIcon, SlackIcon, SmsIcon,
 } from "./icons";
 import PhoneMock from "./PhoneMock";
+import FlowerMark from "@/components/sections/FlowerMark";
 
 /**
  * /platform/answers
@@ -360,13 +361,7 @@ export default function AnswersContent() {
               </div>
 
               <div className="flex items-start gap-3">
-                <span
-                  className="flex h-[30px] w-[30px] flex-none items-center justify-center rounded-[9px]"
-                  style={{ background: "var(--ed-accent-text)", color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 800, fontSize: 14 }}
-                  aria-hidden="true"
-                >
-                  E
-                </span>
+                <FlowerMark size={30} />
                 <div
                   className="ed-card ed-border flex max-w-[420px] flex-col gap-2.5 border px-4 py-3.5"
                   style={{ borderRadius: "4px 14px 14px 14px" }}

@@ -2,6 +2,7 @@
 
 import { JAKARTA, MONO } from "@/components/platform/shared";
 import { Glyph } from "@/components/platform/reporting/Glyph";
+import FlowerMark from "@/components/sections/FlowerMark";
 import { FEED, STAGES, TONE } from "./data";
 
 /**
@@ -44,12 +45,7 @@ export function NetworkConsole() {
       aria-hidden="true"
     >
       <div className="flex items-center gap-2.5 px-4 py-3" style={{ borderBottom: `1px solid ${RULE}` }}>
-        <span
-          className="flex h-5 w-5 flex-none items-center justify-center rounded-md"
-          style={{ background: "#0077A8", color: "#FFFFFF", fontFamily: JAKARTA, fontSize: 12, fontWeight: 800 }}
-        >
-          E
-        </span>
+        <FlowerMark size={18} />
         <span style={{ ...META, color: MUTED }}>Network · 214 locations</span>
         <span className="lc-live ml-auto flex flex-none items-center gap-1.5" style={{ ...META, color: "#0D7C58" }}>
           <span className="h-1.5 w-1.5 rounded-full" style={{ background: "#0D7C58" }} />

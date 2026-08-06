@@ -9,6 +9,7 @@ import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 import { Glyph } from "./Glyph";
 import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 import IntegrationMarquee from "@/components/sections/IntegrationMarquee";
+import FlowerMark from "@/components/sections/FlowerMark";
 import { INK, INPUTS, NETWORK_SIZE, RELATED, SCOPES, STACK_JOIN, STACK_ROWS, TILE, type Tone } from "./data";
 
 /**
@@ -652,13 +653,7 @@ export default function ReportingContent() {
               <HazePanel haze="--haze-b">
                 <div className="flex flex-col gap-2.5 p-5">
                   <div className="flex items-center gap-2.5">
-                    <span
-                      className="flex h-6 w-6 flex-none items-center justify-center rounded-md"
-                      style={{ background: "#0077A8", color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 800, fontSize: 12 }}
-                      aria-hidden="true"
-                    >
-                      E
-                    </span>
+                    <FlowerMark size={20} />
                     <span className="text-[13px] font-semibold" style={{ color: CARD_INK }}>EZee Assist</span>
                     <span className="ml-auto flex-none" style={{ fontFamily: MONO, fontSize: 12, letterSpacing: "0.1em", color: CARD_INK_MUTED }}>
                       TEAMS · 4:00AM

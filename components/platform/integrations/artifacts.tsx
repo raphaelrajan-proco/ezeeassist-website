@@ -1,6 +1,7 @@
 "use client";
 
 import { JAKARTA, MONO } from "@/components/platform/shared";
+import FlowerMark from "@/components/sections/FlowerMark";
 
 /**
  * The two animated artifacts on the Integrations page.
@@ -30,12 +31,7 @@ export function ConnectCard() {
       aria-hidden="true"
     >
       <div className="flex items-center gap-2.5 px-5 py-3" style={{ background: "#F8FAFC", borderBottom: `1px solid ${RULE}` }}>
-        <span
-          className="flex h-5 w-5 flex-none items-center justify-center rounded-md"
-          style={{ background: ACCENT, color: "#FFFFFF", fontFamily: JAKARTA, fontSize: 12, fontWeight: 800 }}
-        >
-          E
-        </span>
+        <FlowerMark size={18} />
         <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", color: MUTED }}>
           CONNECTIONS · ADD A SYSTEM
         </span>

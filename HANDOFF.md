@@ -2477,6 +2477,19 @@ and both are flat. The eyebrow wraps to two lines below ~430.
   off until the linked asset exists.
 - `SHOW_AEO_BLOCK` in `components/Footer.tsx` — Ask ChatGPT/Claude/Perplexity
   block, a launch-gate item wanted back after publish.
+- `SHOW_HUBSPOT_CHAT` in `components/HubSpotChat.tsx` — the HubSpot chat
+  widget. Paused for the MVP launch, wanted back within days. **It gates
+  `hs-script-loader`, which is HubSpot's whole tracking tag**, so while it is
+  off HubSpot's own pageview and contact tracking is off too. GA, Clarity and
+  Snitcher are separate and unaffected, as are HubSpot forms, the meetings
+  embed and the lead endpoint. To keep HubSpot analytics with the widget
+  hidden, load the script and suppress the widget in HubSpot's chat settings
+  rather than using this flag.
+- `SHOW_EXIT_INTENT` in `components/ExitIntentPopup.tsx` — the "Before you go"
+  modal. Hidden for the MVP launch, wanted back within days. Gated inside the
+  component rather than unmounted in `layout.tsx`, so its dwell gate (30s),
+  scroll gate (700px), session keys, copy and styling all survive and the
+  listeners are never attached while it is off.
 - `SHOW_GENERATE` in `components/growth/AlwaysOn.tsx` — the "Generate your own"
   button. Hidden until the workflow generator ships, and wanted back the week
   of 2026-08-10. A flag rather than a deletion, so unhiding is one word and the
