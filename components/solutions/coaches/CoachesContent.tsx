@@ -77,7 +77,7 @@ export default function CoachesContent() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: EASE }}
-          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-[1.02fr_.98fr] lg:gap-14"
+          className="ed-hero-pad relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-[1.02fr_.98fr] lg:gap-14"
         >
           <div className="flex flex-col items-start">
             <p style={{ ...META, letterSpacing: "0.16em", color: SKY }}>For field coaches and FBCs</p>

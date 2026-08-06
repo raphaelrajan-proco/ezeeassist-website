@@ -178,7 +178,7 @@ export default function SecurityContent() {
           <div className="absolute inset-0" style={{ background: "radial-gradient(1100px 560px at 85% 120%, rgba(159,224,248,0.22), transparent 62%)" }} />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
+        <div className="ed-hero-pad relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.15fr_.85fr] lg:gap-16">
             <motion.div
               initial={{ opacity: 0, y: 18 }}

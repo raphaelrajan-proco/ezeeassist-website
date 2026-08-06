@@ -76,6 +76,12 @@
   --nav-pill-h:  56px;
   --nav-block:   calc(var(--nav-inset) + var(--nav-pill-h));
 
+  /* Breathing room between the bottom of the nav pill and the first
+     thing in a hero. **This is the whole gap, not an addition to a
+     page's own padding**: `.ed-hero-pad` sets padding-top to
+     nav-block + this, so one edit here moves every hero at once. */
+  --nav-gap:     34px;
+
   /* Type floor. Read the block below `.ed-type-floor` before changing
      either number: they are enforced across the whole editorial system,
      not per component. */
@@ -118,6 +124,21 @@
      create a horizontal scrollbar. Clip x only; sticky is unaffected. */
   overflow-x: clip;
 }
+/* Hero top padding, owned centrally.
+
+   The pill is `position: sticky` with a negative margin, so it takes no
+   space in the document and every hero has to clear `--nav-block` with
+   its own padding. Each page had picked that number by hand: the common
+   value was `py-20 md:py-24`, which is 80/96 against a block of 72/88,
+   leaving an 8px gap that read as content touching the nav.
+
+   The selector carries `.theme-editorial` so it outranks the `py-*`
+   utility it overrides; the utility keeps supplying the BOTTOM padding,
+   which is still a per-page decision. */
+.theme-editorial .ed-hero-pad {
+  padding-top: calc(var(--nav-block) + var(--nav-gap));
+}
+
 .theme-editorial h1,
 .theme-editorial h2,
 .theme-editorial h3,

@@ -93,7 +93,7 @@ export default function WorkflowsContent() {
              from md) with its own padding. py-18/20 gave 72/80 and the
              pill landed on the eyebrow at 768 and on the demo pills at
              1205. */
-          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-2 lg:gap-16"
+          className="ed-hero-pad relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-2 lg:gap-16"
         >
           <div className="flex max-w-[500px] flex-col items-start">
             <p style={{ ...EYEBROW, color: SKY }}>Workflows that orchestrate coaching</p>

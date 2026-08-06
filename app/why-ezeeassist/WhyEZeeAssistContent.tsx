@@ -196,7 +196,7 @@ export default function WhyEZeeAssistContent() {
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: AZ.base }}>
         <div className="absolute inset-0" aria-hidden="true" style={{ background: AZ.hero }} />
 
-        <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
+        <div className="ed-hero-pad relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1.15fr_.85fr] lg:gap-16">
             <motion.div
               initial={{ opacity: 0, y: 18 }}

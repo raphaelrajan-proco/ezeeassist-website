@@ -492,10 +492,13 @@ export default function GrowthHero() {
   return (
     /* The nav pill floats over this section, so the hero starts at the top
        of the document and pads its content past the pill. --nav-block is
-       the pill height plus its inset, defined on .theme-editorial. */
+       the pill height plus its inset; --nav-gap is the breathing room
+       every hero on the site leaves under the pill. Both live on
+       .theme-editorial, so this hero and the sub-page `.ed-hero-pad`
+       clear the nav by the same amount. */
     <section
       className="ed-hero-shot relative w-full overflow-hidden"
-      style={{ paddingTop: "var(--nav-block)", backgroundColor: HERO_SCRIM }}
+      style={{ paddingTop: "calc(var(--nav-block) + var(--nav-gap))", backgroundColor: HERO_SCRIM }}
     >
       {/* Background. The photograph runs to the top of the document, behind
           the nav pill. object-position keeps the dark left of the frame and
