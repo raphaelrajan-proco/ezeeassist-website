@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import MultiUnitContent from "./MultiUnitContent";
 
 export const metadata: Metadata = {
-  title: "For Multi-Unit Franchisees — EZee Assist",
+  title: "For Multi-Unit Franchisees",
   description: "Run every location with confidence. EZee Assist gives your staff instant access to brand knowledge, reduces manager burden, and keeps every location consistent.",
   alternates: { canonical: "/industries/franchising/multi-unit-franchisees" },
 };

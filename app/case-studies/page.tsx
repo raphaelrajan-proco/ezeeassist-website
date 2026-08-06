@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import CaseStudiesContent from "./CaseStudiesContent";
 
 export const metadata = {
-  title: "Case Studies — EZee Assist",
+  title: "Case Studies",
   description:
     "How leading franchise brands reduce support volume and improve franchisee satisfaction with EZee Assist.",
   alternates: { canonical: "/case-studies" },

@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import BlogContent from "./BlogContent";
 
 export const metadata: Metadata = {
-  title: "Blog — EZee Assist",
+  title: "Blog",
   description:
     "Insights on franchise operations, AI-powered support, and scaling multi-location brands from the team at EZee Assist.",
   alternates: { canonical: "/blog" },

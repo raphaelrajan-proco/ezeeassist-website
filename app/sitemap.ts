@@ -2,9 +2,14 @@ import type { MetadataRoute } from "next";
 
 const BASE_URL = "https://www.ezeeassist.com";
 
-// Using a fixed recent date for static pages; swap for actual last-edited
-// dates once Sanity CMS is connected and can supply real timestamps.
-const NOW = new Date("2026-04-18");
+/* One date for every static page, bumped by hand.
+   TODO: swap for real last-edited timestamps once Sanity is connected.
+
+   **Do not replace this with `new Date()`.** It would evaluate at build
+   time and tell crawlers that all 35 URLs changed on every deploy, which
+   is worse than a slightly stale date: it makes the field meaningless and
+   crawlers learn to ignore it. Bump it when a content pass lands. */
+const NOW = new Date("2026-08-06");
 
 type Route = {
   url: string;
@@ -34,9 +39,17 @@ const routes: Route[] = [
   { url: "/platform/integrations",                          priority: 0.85, changeFrequency: "monthly" },
 
   // ── Tier 2: Industries ────────────────────────────────────
+  { url: "/solution",                                       priority: 0.85, changeFrequency: "monthly" },
+
+  // ── Tier 2: Industries and audiences ──────────────────────
   { url: "/industries",                                     priority: 0.9,  changeFrequency: "monthly" },
   { url: "/industries/franchising",                         priority: 0.9,  changeFrequency: "monthly" },
   { url: "/solutions/leadership",                           priority: 0.85, changeFrequency: "monthly" },
+  /* Both /solutions pages are linked from the nav and the footer and are
+     indexable; only leadership was listed. A page that is linked
+     site-wide and missing from the sitemap is the easy one to miss,
+     because nothing on the page itself looks wrong. */
+  { url: "/solutions/coaches",                              priority: 0.85, changeFrequency: "monthly" },
   { url: "/industries/franchising/multi-unit-franchisees",  priority: 0.80, changeFrequency: "monthly" },
   { url: "/industries/multi-location",                      priority: 0.80, changeFrequency: "monthly" },
   { url: "/industries/universities",                        priority: 0.75, changeFrequency: "monthly" },

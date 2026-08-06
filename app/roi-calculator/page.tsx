@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import ROICalculatorContent from "./ROICalculatorContent";
 
 export const metadata: Metadata = {
-  title: "ROI Calculator — EZee Assist",
+  title: "ROI Calculator",
   description: "Calculate how much time and money EZee Assist can save your franchise network.",
   alternates: { canonical: "/roi-calculator" },
 };

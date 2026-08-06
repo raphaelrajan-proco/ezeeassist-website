@@ -7,7 +7,7 @@ import ReportingContent from "@/components/platform/reporting/ReportingContent";
 /* Replaces the ComingSoon stub. The og/twitter blocks are written out
    rather than inherited: the homepage's are stale and would describe the
    wrong page. */
-const TITLE = "Reporting — EZee Assist";
+const TITLE = "Reporting";
 const DESCRIPTION =
   "Every number your network has, however you want to see it. Ask in plain language, get it rendered the way the question demands, and stop rebuilding the weekly report.";
 
@@ -20,11 +20,13 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: "/platform/reporting",
     type: "website",
+    images: ["/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
+    images: ["/og-image.png"],
   },
 };
 

@@ -7,7 +7,7 @@ import LeadershipContent from "@/components/solutions/leadership/LeadershipConte
 /* Replaces /industries/franchising/franchisors, which now 301s here.
    og/twitter are written out rather than inherited: the homepage's are
    stale. */
-const TITLE = "For franchisor leadership — EZee Assist";
+const TITLE = "For franchisor leadership";
 const DESCRIPTION =
   "See what's happening across your network, support every owner, and multiply your coaching team, without adding headcount or changing the systems you already run.";
 
@@ -15,8 +15,8 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/solutions/leadership" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/solutions/leadership", type: "website" },
-  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/solutions/leadership", type: "website", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: ["/og-image.png"] },
 };
 
 export default function LeadershipPage() {

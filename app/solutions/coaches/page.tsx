@@ -16,7 +16,7 @@ import CoachesContent from "@/components/solutions/coaches/CoachesContent";
  * stale.
  */
 
-const TITLE = "Franchise Field Coaches — EZee Assist";
+const TITLE = "Franchise Field Coaches";
 const DESCRIPTION =
   "Walk into every call already prepared, then have your plays run where you can't be. EZee takes the questions, the chasing, and the report building off your coaches.";
 

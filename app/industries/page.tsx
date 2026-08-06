@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import IndustriesContent from "./IndustriesContent";
 
 export const metadata: Metadata = {
-  title: "Industries — EZee Assist",
+  title: "Industries",
   description: "Purpose-built AI support for franchise brands, multi-location businesses, and universities. Instant answers from your own knowledge base, 24/7.",
   alternates: { canonical: "/industries" },
 };

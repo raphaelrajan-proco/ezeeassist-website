@@ -3,8 +3,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy — EZee Assist",
-  description: "EZee Assist privacy policy — how we collect, use, and protect your data.",
+  title: "Privacy Policy",
+  description: "How EZee Assist collects, uses, and protects your data.",
+  alternates: { canonical: "/privacy" },
 };
 
 const sections = [

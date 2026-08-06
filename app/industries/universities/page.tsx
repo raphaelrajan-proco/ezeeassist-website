@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import UniversitiesContent from "./UniversitiesContent";
 
 export const metadata: Metadata = {
-  title: "Universities & Campus Systems — EZee Assist",
+  title: "Universities and Campus Systems",
   description: "Instant answers for every department, campus, and team. EZee Assist centralizes university knowledge and makes it searchable and instantly answerable.",
   alternates: { canonical: "/industries/universities" },
 };

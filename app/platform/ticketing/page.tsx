@@ -8,7 +8,7 @@ import TicketingContent from "@/components/platform/ticketing/TicketingContent";
    308'd this path to /solution/ticketing, the same shadowing that hid
    /platform/workflows. og/twitter are written out rather than inherited,
    since the homepage's are stale. */
-const TITLE = "Ticketing — EZee Assist";
+const TITLE = "Ticketing";
 const DESCRIPTION =
   "One place for your franchisees to ask HQ for anything. Raised by asking, classified, routed to the department that owns it, and tracked until it closes. No portal, no forms, no guessing.";
 
@@ -16,8 +16,8 @@ export const metadata: Metadata = {
   title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/platform/ticketing" },
-  openGraph: { title: TITLE, description: DESCRIPTION, url: "/platform/ticketing", type: "website" },
-  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION },
+  openGraph: { title: TITLE, description: DESCRIPTION, url: "/platform/ticketing", type: "website", images: ["/og-image.png"] },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: ["/og-image.png"] },
 };
 
 export default function TicketingPage() {

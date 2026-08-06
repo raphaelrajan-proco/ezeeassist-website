@@ -8,7 +8,11 @@ export const metadata: Metadata = {
   title: "Platform Overview",
   description:
     "Explore the EZee Assist platform: AI-powered knowledge delivery, omnichannel support, intelligent escalation, and deep analytics — built for franchise and multi-location brands.",
-  alternates: { canonical: "/platform" },
+  /* Unreachable: next.config.ts 308s /platform to /solution. A
+     self-canonical here would name a URL that redirects away, so it
+     points at the destination instead. Delete this file, or drop the
+     redirect, rather than leaving both. */
+  alternates: { canonical: "/solution" },
   keywords: [
     "franchise support platform",
     "AI knowledge engine",
@@ -30,7 +34,7 @@ const softwareSchema = {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
-    description: "Contact for pricing — custom plans based on network size",
+    description: "Contact for pricing. Custom plans based on network size.",
   },
   featureList: [
     "AI-powered instant answers from brand knowledge base",

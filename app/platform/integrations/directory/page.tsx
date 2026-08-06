@@ -8,7 +8,7 @@ import ComingSoon from "@/components/platform/ComingSoon";
    keep them from being dead links. Replace with the real searchable
    directory; do not let this rank in the meantime. */
 export const metadata: Metadata = {
-  title: "Integration directory — EZee Assist",
+  title: "Integration directory",
   description: "Every system EZee Assist connects to, by category.",
   alternates: { canonical: "/platform/integrations/directory" },
   robots: { index: false, follow: true },

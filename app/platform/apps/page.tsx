@@ -7,7 +7,7 @@ import AppsContent from "@/components/platform/apps/AppsContent";
 /* New route. The nav and footer both pointed Apps at the homepage's
    #capabilities section until this shipped. og/twitter are written out
    rather than inherited: the homepage's are stale. */
-const TITLE = "Apps — EZee Assist";
+const TITLE = "Apps";
 const DESCRIPTION =
   "Describe the tool your network needs and it's running this afternoon. Purpose-built tools for your locations, connected to your systems, with no developer and no release cycle.";
 
@@ -20,11 +20,13 @@ export const metadata: Metadata = {
     description: DESCRIPTION,
     url: "/platform/apps",
     type: "website",
+    images: ["/og-image.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: TITLE,
     description: DESCRIPTION,
+    images: ["/og-image.png"],
   },
 };
 

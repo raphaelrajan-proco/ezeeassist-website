@@ -1046,7 +1046,60 @@ with the layout's.** `siteName` and `type` are therefore repeated in
 `page.tsx`; without them the homepage share card loses its site name. Verified
 `og:site_name` renders as "EZee Assist" on `/`.
 
+**That same wholesale replacement silently dropped `og:image` on ten
+routes.** Every platform and solutions page declared its own `openGraph`
+with a title, description and url but no `images`, which does not inherit
+the layout's image, it removes it. Those pages shared with no card at all.
+Every page-level `openGraph` and `twitter` block now carries
+`images: ["/og-image.png"]` explicitly. **If you add a page-level
+`openGraph`, add the image with it.**
+
+`public/og-image.png` is generated, not hand-drawn: a 1200x630 card built
+by compositing `public/logo-white.svg` onto the indigo band, so the mark is
+the real vector rather than a screenshot. It did not exist at all before,
+so every share card on the site pointed at a 404. The Organization JSON-LD
+had the same problem pointing at `/logo.svg`; it reads `/logo-black.svg`
+now, which is a file that exists.
+
+### Titles must not name the brand
+
+`app/layout.tsx` sets `title.template` to `"%s | EZee Assist"`. Twenty-eight
+routes carried titles like `"Answers — EZee Assist"`, which rendered as
+**"Answers — EZee Assist | EZee Assist"**. All of them are the bare page
+name now. The em-dashes went with them, which the house copy rules forbid
+anyway.
+
+### Metadata state at launch
+
+Verified on the built site across 31 rendered routes: title, description,
+canonical, `og:image` and `twitter:image` all present, no double-branding,
+no em-dashes. All 35 sitemap URLs return 200 with no redirects.
+
+- `/changelog` was a single `"use client"` file, so it could not export
+  metadata and shipped with only the root defaults. Split into a server
+  `page.tsx` plus `ChangelogContent.tsx`. **A client page needs this split
+  to own its metadata**; there is no other way.
+- `/solutions/coaches` and `/solution` were missing from the sitemap while
+  being linked from the nav, footer and body. A linked, indexable page
+  absent from the sitemap is the easy one to miss because nothing on the
+  page looks wrong.
+- `/platform`, `/platform/ai-agent` and `/platform/insights` are
+  unreachable (`next.config.ts` 308s each away) but still declared
+  self-referential canonicals naming the URL that redirects. They point at
+  their destinations now. **Delete those three files or drop the
+  redirects; leaving both is what produced the wrong canonical.**
+- `/demo` and `/platform/integrations/directory` remain `noindex, follow`
+  by meta tag, with no path exclusion in `robots.ts`. That is correct: a
+  `Disallow` would stop the crawler ever reading the `noindex`.
+- The sitemap's `lastModified` is one hand-bumped constant. **Do not
+  replace it with `new Date()`** — it evaluates at build time and would
+  claim all 35 URLs changed on every deploy, which teaches crawlers to
+  ignore the field.
+
 ## The exit intent modal
+
+**Hidden for the MVP launch behind `SHOW_EXIT_INTENT` in the component.**
+Everything below still describes it and stays true when the flag flips.
 
 `ExitIntentPopup.tsx` runs on the homepage's editorial tokens so its type and
 surfaces match the hero: Jakarta headline at -0.035em, the same arrow-badge
@@ -1332,6 +1385,51 @@ rounded square.
 `HeroLogoStrip` sits directly under the hero on all ten. It is one component
 over one `customerLogos` list, so a change to the list changes every page,
 which is what was asked for. **Do not fork it per page.**
+
+The roster is 47 real marks, committed under `public/logos/brands/` and
+driven by `lib/data/customer-logos.ts`. Three rules govern it:
+
+1. **Every mark sits on a white chip, in both themes.** The component
+   renders on three surfaces: the homepage's scrimmed hero photograph,
+   `ed-bg` white, and `ed-bg` near-black in dark mode. Most marks are dark
+   ink on transparent, so on two of those three they vanish without a
+   chip. Four files are JPGs on white and would show as white rectangles.
+   The chip is one mechanism for both, plus it gives 47 mismatched marks a
+   common frame. Do not make it conditional.
+2. **Marks are sized by area, not by a flat height.** Aspect ratios run
+   1.00 to 7.59. At one fixed height the widest wordmark takes 228px and a
+   square mark takes 30, so the square ones read as stamps. `LogoTile`
+   holds `h * sqrt(ar)` near constant, clamped 22-40px. Each entry carries
+   its file's measured `ar`; **re-measure it when a file changes**, since
+   nothing validates it at runtime.
+3. **Missing brands stay in the roster as grey text pills.** UPS Store,
+   Heights Wellness Retreat and Home Helpers have no file. Their `src`
+   points at a path that does not exist and `onError` renders the pill.
+   Drop a file at the named path and the pill becomes a logo, with no code
+   change and no reordering.
+
+`components/sections/TrustBar.tsx` on the legacy franchising route renders
+the same `LogoTile`, so the roster stays genuinely single-source.
+
+### The type floor is enforced in CSS, and it applies to inline styles
+
+`--ed-type-floor: 12px` in `globals.css` is not advisory. Two selector
+blocks clamp anything smaller: one matches Tailwind arbitrary classes
+(`text-[8.5px]` and friends), the other matches inline `font-size` by
+attribute substring **with `!important`**, which is the only thing that
+outranks a style attribute.
+
+**Both lists must stay in step.** 8px and 8.5px were in the class block but
+not the inline block, so an inline `font-size: 8.5px` sailed under a floor
+that the equivalent class could not. The Apps digest mock was written
+straight from a handoff specifying 8.5px labels and shipped them at 8.5px.
+Fixed, but the shape of the bug will recur if a value is added to one list
+only.
+
+The practical consequence for handoffs: **a handoff that specifies 8.5px,
+9.5px or 10.5px type cannot be implemented as written.** Author at 12px so
+the source says what ships, ease off the tracking to pay for the width, and
+note the deviation. Do not write the smaller number and assume it renders.
 
 ## /solutions/leadership
 
@@ -2096,6 +2194,27 @@ build and HQ publishes network-wide. In particular **do not revert the
 five SHIPPED pills to OPEN**: a cleared queue is the argument of that
 section in miniature.
 
+### The 3:45/4:05 section is a timeline beside the app it produced
+
+Rebuilt from a second handoff. It was five equal columns of cards over a
+horizontal hairline, which read as a flat process diagram and never showed
+the app that went live at 4:05, the only thing the section actually
+claims. Now a two-column split: a vertical timeline on the left, and
+`DigestApp.tsx` on the right.
+
+- **The rail stays vertical at every width.** The connector is what makes
+  five steps read as one sequence.
+- **The LIVE step carries four signals and all four are load-bearing**:
+  accent dot, accent border over the `--wash` fill, the pulsing `ap-glow`,
+  and bold full-contrast text. Colour alone does not survive monochrome or
+  colour-blind viewing.
+- **`DigestApp` is a fixed light palette in both themes**, same rule as the
+  hero build mock and the swim-school phone. Its teal is deliberately NOT
+  the site accent: the section's point is that a brand describes a tool and
+  gets its own tool, so the screen must read as a white-labeled spa brand.
+  The header name stays generic; naming a real customer would turn the mock
+  into a claim about them.
+
 Deleted deliberately: the "Opened on a phone, between customers" section
 (its content is now carried by the authorship band's phone mock), the
 `{{TBD:apps-proof-*}}` quote block, the governance strip, every section
@@ -2177,6 +2296,37 @@ Rebuilt from a supplied design handoff, replacing the twelve-section
 version this entry used to describe. Ten sections now: hero, what it
 costs now, inputs, ask anything, across systems, always on, scoping,
 alongside your BI, related, closing.
+
+### Across the stack is a hub diagram
+
+Rebuilt from a second handoff. It was four coloured progress bars, a
+full-width multi-colour "ALL FOUR" bar and a 23-of-300 count, and it needed
+a caption to stop the wide bar and the small count reading as a
+contradiction. That is the tell that a visual is arguing against itself.
+
+`StackHub.tsx` now shows eight source systems flowing into the EZee
+lockup and three products flowing out, both directions animated.
+
+- **The stage is a fixed 1096x510 coordinate space.** The SVG viewBox and
+  the absolutely positioned HTML are 1:1, which is the only reason the
+  wires meet the chips exactly. **Never nudge an individual position to fit
+  a width**: every wire endpoint is hard-coded to a chip or card centre.
+  The whole stage scales as one unit down to ~900px and hands over to a
+  stacked static version below that.
+- In the stacked version the chips and cards go **fluid**. Their in-stage
+  widths are a hard 186/224 to meet wire endpoints, and carrying those into
+  a 375 viewport pushed four elements off-screen.
+- Two hues carry direction: periwinkle in, green out. Two of the eight
+  inbound dots run reversed so a couple of lines read as two-way.
+- **The chip logos are self-hosted or nothing.** The prototype pointed at
+  Google's favicon service; that is rate limited, unversioned, and returns
+  a generic globe often enough to be a liability on a page naming
+  customers' systems. Only QuickBooks and Mailchimp have committed marks;
+  the other six render a neutral grey plate at the same 15px box so chip
+  width and wire alignment stay exact.
+- `NETWORK_SIZE`, `STACK_ROWS` and `STACK_JOIN` are deleted. Each was an
+  unsourced claim about a 300-location network. **Do not resurrect them as
+  decoration**; they need a source first.
 
 **Trimmed after the rebuild, on request:** the "Alongside your BI" split
 section and the scoping section's closing "How scoping is set in the

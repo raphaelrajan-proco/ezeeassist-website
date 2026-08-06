@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import CareersContent from "./CareersContent";
 
 export const metadata = {
-  title: "Careers — EZee Assist",
+  title: "Careers",
   description:
     "Join our team at EZee Assist. We're hiring talented engineers to help build the future of franchise support.",
   alternates: { canonical: "/careers" },

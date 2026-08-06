@@ -16,7 +16,7 @@ import IntegrationsContent from "@/components/platform/integrations/Integrations
  * the Platform pages.
  */
 
-const TITLE = "Integrations — EZee Assist";
+const TITLE = "Integrations";
 const DESCRIPTION =
   "Connect what you already run. EZee reads your knowledge, your performance data, and the channels your locations work in, at the source and with the permissions they already have. Nothing migrates.";
 

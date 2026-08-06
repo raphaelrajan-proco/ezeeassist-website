@@ -3,8 +3,9 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Accessibility Statement — EZee Assist",
+  title: "Accessibility Statement",
   description: "EZee Assist's commitment to digital accessibility for all users.",
+  alternates: { canonical: "/accessibility" },
 };
 
 export default function AccessibilityPage() {

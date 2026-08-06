@@ -3,9 +3,9 @@ import Footer from "@/components/Footer";
 import AboutContent from "./AboutContent";
 
 export const metadata = {
-  title: "About — EZee Assist",
+  title: "About",
   description:
-    "Meet the team behind EZee Assist — AI-powered operational support for franchise and multi-location brands.",
+    "Meet the team behind EZee Assist, the AI operating system for franchise and multi-location brands.",
   alternates: { canonical: "/about" },
 };
 

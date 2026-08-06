@@ -47,9 +47,11 @@ const organizationSchema = {
   "@type": "Organization",
   name: "EZee Assist",
   url: BASE_URL,
-  logo: `${BASE_URL}/logo.svg`,
+  // /logo.svg does not exist and never did; this pointed at a 404 that
+  // search engines fetch. The committed lockup is logo-black.svg.
+  logo: `${BASE_URL}/logo-black.svg`,
   description:
-    "AI-powered operational support platform for franchise and multi-location brands. Instant, accurate answers from your brand's own knowledge — 24/7.",
+    "AI-powered operational support platform for franchise and multi-location brands. Instant, accurate answers from your brand's own knowledge, around the clock.",
   foundingDate: "2023",
   founders: [
     { "@type": "Person", name: "Raphael Rajan", jobTitle: "Co-founder & CEO" },

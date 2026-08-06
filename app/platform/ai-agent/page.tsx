@@ -4,10 +4,11 @@ import Footer from "@/components/Footer";
 import AIAgentContent from "./AIAgentContent";
 
 export const metadata: Metadata = {
-  title: "AI Agent — Instant Franchisee Support",
+  title: "AI Agent: Instant Franchisee Support",
   description:
     "EZee Assist's AI Agent delivers instant, brand-accurate answers to any franchisee question — 24/7, through SMS, email, Slack, Teams, WhatsApp, and web.",
-  alternates: { canonical: "/platform/ai-agent" },
+  /* Unreachable: 308s to /platform/answers. */
+  alternates: { canonical: "/platform/answers" },
   keywords: [
     "franchise AI agent",
     "franchisee support AI",

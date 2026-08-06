@@ -15,7 +15,7 @@ import AnswersContent from "@/components/platform/answers/AnswersContent";
  * out of scope for this branch and left as a follow-up.
  */
 
-const TITLE = "Answers — EZee Assist";
+const TITLE = "Answers";
 const DESCRIPTION =
   "Every question answered from your own material, scoped to the person asking. Cited, logged, and available in the channels your locations already use.";
 

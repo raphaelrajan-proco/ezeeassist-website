@@ -5,9 +5,9 @@ import JsonLd from "@/components/JsonLd";
 import PlatformContent from "@/app/platform/PlatformContent";
 
 export const metadata: Metadata = {
-  title: "Solution — EZee Assist",
+  title: "Solution",
   description:
-    "One AI agent. Your entire tech stack. Support, coaching, compliance workflows — built conversationally, executed at scale. 250+ integrations.",
+    "One AI agent. Your entire tech stack. Support, coaching, compliance workflows, built conversationally and executed at scale. 250+ integrations.",
   alternates: { canonical: "/solution" },
   keywords: [
     "AI support agent",
@@ -26,18 +26,18 @@ const softwareSchema = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web-based",
   description:
-    "AI support agent for multi-location execution. Connects to 250+ integrations — drives, CRMs, POS, LMS, marketing, accounting — and delivers support, coaching, and compliance workflows at scale.",
+    "AI support agent for multi-location execution. Connects to 250+ integrations across drives, CRMs, POS, LMS, marketing and accounting, and delivers support, coaching, and compliance workflows at scale.",
   offers: {
     "@type": "Offer",
     price: "0",
     priceCurrency: "USD",
-    description: "Contact for pricing — custom plans based on network size",
+    description: "Contact for pricing. Custom plans based on network size.",
   },
   featureList: [
     "AI-powered instant answers from brand knowledge base",
     "250+ integrations across drives, CRMs, POS, LMS, marketing, accounting",
     "Multi-channel delivery (SMS, email, Slack, Teams, WhatsApp, web)",
-    "Agentic workflow builder — conversational automation at scale",
+    "Agentic workflow builder. Conversational automation at scale.",
     "Intelligent ticketing with auto-categorization and routing",
     "Support, coaching, and compliance in one AI agent",
     "Role-based access control for franchisors, operators, and staff",

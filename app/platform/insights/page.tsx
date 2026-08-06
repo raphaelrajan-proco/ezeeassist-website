@@ -4,10 +4,11 @@ import Footer from "@/components/Footer";
 import InsightsContent from "./InsightsContent";
 
 export const metadata: Metadata = {
-  title: "Knowledge & Insights — EZee Assist Platform",
+  title: "Knowledge and Insights",
   description:
     "Real-time visibility into every question across your franchise network — what's being asked, where content gaps exist, and how your knowledge base is performing.",
-  alternates: { canonical: "/platform/insights" },
+  /* Unreachable: 308s to /solution. See the note on app/platform. */
+  alternates: { canonical: "/solution" },
 };
 
 export default function InsightsPage() {

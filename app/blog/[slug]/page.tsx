@@ -136,8 +136,7 @@ export async function generateMetadata({
       title: post.title,
       description: post.excerpt,
       publishedTime: post.publishedAt,
-      authors: [post.author],
-    },
+      authors: [post.author], images: ["/og-image.png"] },
   };
 }
 
