@@ -1606,6 +1606,74 @@ secondary beside it is 58px, because `ed-btn-arrow` overrides the base
 and all thirteen sub-pages, so it was left alone rather than made
 inconsistent on one page.
 
+## /platform/integrations
+
+Rebuilt from a supplied design handoff (the second revision, which
+replaced the directory treatment). Seven sections: hero with the connect
+artifact and the marquee, nothing migrates, the directory, write back,
+access, related, closing.
+
+Deleted deliberately: every section eyebrow, the per-system READ/WRITE
+badge matrix (it asserted vendor capabilities nobody can verify), the
+separate "how connection works" step strip, and every `{{TBD:*}}` block.
+Read and write are stated once, generically, in Write back and Access.
+
+**The directory is a card grid on the alt surface.** Two earlier
+treatments were replaced and neither should come back: the clickable
+eight-row console with its fake search pill, and the oversized `250+`
+numeral on a dark band. Each card's description block is a fixed 43px,
+which is what keeps the hairline under it level across a row;
+descriptions are written to fit two lines and must not run to three.
+
+**The hero is steel**, `HERO_GRADIENT.steel`, and this page left the
+photographic variant map to take it, as Reporting did for indigo and
+Ticketing for plum. Steel is the most neutral band in the family on
+purpose: the page is about other people's systems, so the hero should
+not compete with forty wordmarks scrolling under it.
+
+Three loops, all under `data-anim`, all freezing to their finished state:
+the 15s connect sequence, the 42s marquee, the 18s write-back. **Step 2's
+`HELD FOR OWNER` is the point of the write-back section**, not pacing,
+and must not be cut.
+
+### Vendor logos are the one thing this page does not have
+
+The handoff draws the directory chips with real vendor marks, and the
+prototype gets them from **Google's favicon service**. That is not
+shippable and the handoff says so itself: rate-limited, unversioned, and
+it sometimes returns a generic globe. The house rule is firmer, a logo is
+a committed local file or it is not shown.
+
+Sourcing forty official marks is not a code change. Each has to come from
+that vendor's own brand or press page, and each carries trademark terms,
+most requiring the mark unmodified and forbidding any implication of
+partnership. That is a legal review.
+
+So **every chip carries its name only**, which is how vendor names are
+already treated everywhere else on the site. `domain` is kept on every
+chip in `components/platform/integrations/data.ts` for exactly this job:
+it is the download list. When the files land in
+`public/logos/vendors/<slug>.svg`, swap the chip body for a 15px
+`next/image` with an empty `alt` (the name is already the label) and
+nothing else changes. Verified on the built page: **zero external
+images**.
+
+`INTEGRATION_STRIP` in `lib/data/integrations.ts` is the single list
+behind both this hero's marquee and the Reporting "Reads live from"
+strip, so the two stay the same object.
+
+The four "nothing migrates" cards step through one blue, light to deep.
+Their light and dark values arrive inline as `--nb`/`--nf` and
+`--nbd`/`--nfd` because **blue4's `#16375C` is unreadable on the dark
+card** and has to lift to `#BFDBFE`. Two separate values on purpose; do
+not collapse them.
+
+Verified on the built page at 1440/1280/1205/1024/768/375 in both themes:
+no horizontal overflow, no text under 12px, one h1 and five h2s, zero
+em-dashes, no banned words, none of the old console artefacts present, no
+`#00AEEF` as text, and all three loops resolving to their finished state
+under `prefers-reduced-motion`.
+
 ## /platform/control-center
 
 Ten sections, replacing the ComingSoon stub Reporting created.

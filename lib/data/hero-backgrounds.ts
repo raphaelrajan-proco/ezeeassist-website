@@ -225,6 +225,21 @@ export const HERO_GRADIENT = {
     body: "rgba(253,244,251,0.92)",
     resolve: "#1E0E20",
   },
+  /** Integrations. The most neutral of the gradient bands on purpose:
+      the page is about other people's systems, so the hero should not
+      compete with forty vendor wordmarks scrolling under it. */
+  steel: {
+    base: "#25405C",
+    hero:
+      "radial-gradient(1000px 520px at 78% 130%, rgba(159,211,238,0.22), transparent 62%)," +
+      "linear-gradient(160deg, #152838 0%, #25405C 55%, #4C7BA0 100%)",
+    closing:
+      "radial-gradient(900px 460px at 22% 130%, rgba(159,211,238,0.20), transparent 60%)," +
+      "linear-gradient(285deg, #152838 0%, #25405C 55%, #4C7BA0 100%)",
+    accent: "#9FD3EE",
+    body: "rgba(240,248,255,0.92)",
+    resolve: "#0C1824",
+  },
 } as const satisfies Record<string, HeroGradient>;
 
 /* The scrim a band needs depends on how much copy sits on it, not only on the

@@ -317,6 +317,102 @@
   --haze-c: linear-gradient(180deg, #414C92 0%, #664F86 40%, #8D6072 70%, #437069 100%);
 }
 
+/* ─── Integrations page ────────────────────────────────────
+   Three loops: the 15s hero connect sequence, the ~60s two-direction
+   marquee, and the 18s write-back sequence. Longhand durations, base
+   styles are the finished state, same arrangement as Apps and Ticketing. */
+.theme-editorial .ed-integrations {
+  --wash:   linear-gradient(150deg, #EFF4F9 0%, #E4EDF6 55%, #EDF2F8 100%);
+  --ok:     #0D7C58;
+  --warn:   #B45309;
+  --bad:    #B42318;
+  --purple: #7C3AED;
+  --steel:  #2F5C80;
+  --track:  #E7E9EF;
+  --chip-bg: rgba(0, 119, 168, 0.06);
+  --chip-bd: rgba(0, 119, 168, 0.22);
+}
+.dark .theme-editorial .ed-integrations,
+.theme-editorial.dark .ed-integrations {
+  --wash:   linear-gradient(150deg, #101B26 0%, #14202D 55%, #0D1720 100%);
+  --ok:     #34D399;
+  --warn:   #FBBF24;
+  --bad:    #F97066;
+  --purple: #A78BFA;
+  --steel:  #8FB8D8;
+  --track:  #26262B;
+  --chip-bg: rgba(0, 174, 239, 0.08);
+  --chip-bd: rgba(0, 174, 239, 0.30);
+}
+
+/* The four "nothing migrates" cards. Light and dark values arrive
+   inline as --nb/--nf and --nbd/--nfd, because blue4's #16375C is
+   unreadable on the dark card and has to lift to #BFDBFE. Two separate
+   values on purpose; do not collapse them. */
+.theme-editorial .ed-nots-card { background: var(--nb); border: 1px solid transparent; }
+.theme-editorial .ed-nots-tile { background: rgba(255,255,255,.55); color: var(--nf); }
+.theme-editorial .ed-nots-fg   { color: var(--nf); }
+.dark .theme-editorial .ed-nots-card,
+.theme-editorial.dark .ed-nots-card { background: var(--nbd); }
+.dark .theme-editorial .ed-nots-tile,
+.theme-editorial.dark .ed-nots-tile { background: rgba(0,0,0,.25); color: var(--nfd); }
+.dark .theme-editorial .ed-nots-fg,
+.theme-editorial.dark .ed-nots-fg { color: var(--nfd); }
+
+@keyframes ig-req    { 0%,3%{opacity:0;transform:translateY(8px)} 7%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes ig-scope1 { 0%,10%{opacity:0} 14%,94%{opacity:1} 98%,100%{opacity:0} }
+@keyframes ig-scope2 { 0%,14%{opacity:0} 18%,94%{opacity:1} 98%,100%{opacity:0} }
+@keyframes ig-scope3 { 0%,18%{opacity:0} 22%,94%{opacity:1} 98%,100%{opacity:0} }
+@keyframes ig-wait   { 0%,24%{opacity:0} 26%,36%{opacity:1} 38%,100%{opacity:0} }
+@keyframes ig-live   { 0%,37%{opacity:0;transform:scale(.9)} 42%,94%{opacity:1;transform:scale(1)} 98%,100%{opacity:0} }
+@keyframes ig-sync   { 0%,44%{opacity:0;transform:translateY(6px)} 49%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes ig-read   { 0%,52%{width:0} 62%,94%{width:100%} 98%,100%{width:0} }
+@keyframes ig-ask    { 0%,64%{opacity:0;transform:translateY(8px)} 69%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+@keyframes ig-ans    { 0%,74%{opacity:0;transform:translateY(8px)} 79%,94%{opacity:1;transform:translateY(0)} 98%,100%{opacity:0} }
+
+[data-anim] .ig-k {
+  animation-duration: 15s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+[data-anim] .ig-req    { animation-name: ig-req }
+[data-anim] .ig-scope1 { animation-name: ig-scope1 }
+[data-anim] .ig-scope2 { animation-name: ig-scope2 }
+[data-anim] .ig-scope3 { animation-name: ig-scope3 }
+[data-anim] .ig-wait   { animation-name: ig-wait }
+[data-anim] .ig-live   { animation-name: ig-live }
+[data-anim] .ig-sync   { animation-name: ig-sync }
+[data-anim] .ig-read   { animation-name: ig-read }
+[data-anim] .ig-ask    { animation-name: ig-ask }
+[data-anim] .ig-ans    { animation-name: ig-ans }
+
+/* Write-back, 18s. Step 2's approval hold is the point of the section. */
+@keyframes ig-w1   { 0%,3%{opacity:0;transform:translateX(-8px)}  8%,96%{opacity:1;transform:translateX(0)} 99%,100%{opacity:0} }
+@keyframes ig-w2   { 0%,20%{opacity:0;transform:translateX(-8px)} 25%,96%{opacity:1;transform:translateX(0)} 99%,100%{opacity:0} }
+@keyframes ig-w3   { 0%,38%{opacity:0;transform:translateX(-8px)} 43%,96%{opacity:1;transform:translateX(0)} 99%,100%{opacity:0} }
+@keyframes ig-w4   { 0%,56%{opacity:0;transform:translateX(-8px)} 61%,96%{opacity:1;transform:translateX(0)} 99%,100%{opacity:0} }
+@keyframes ig-hold { 0%,62%{opacity:0;transform:scale(.94)} 67%,96%{opacity:1;transform:scale(1)} 99%,100%{opacity:0} }
+@keyframes ig-done { 0%,78%{opacity:0;transform:scale(.94)} 83%,96%{opacity:1;transform:scale(1)} 99%,100%{opacity:0} }
+
+[data-anim] .ig-w {
+  animation-duration: 18s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+[data-anim] .ig-w1   { animation-name: ig-w1 }
+[data-anim] .ig-w2   { animation-name: ig-w2 }
+[data-anim] .ig-w3   { animation-name: ig-w3 }
+[data-anim] .ig-w4   { animation-name: ig-w4 }
+[data-anim] .ig-hold { animation-name: ig-hold }
+[data-anim] .ig-done { animation-name: ig-done }
+
+/* Hero marquee. The track holds the list twice, so a -50% translate
+   loops seamlessly. One row, inside the steel band, under the copy. */
+@keyframes ig-marq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+[data-anim] .ig-marq { animation: ig-marq 42s linear infinite; }
+
 /* ─── Ticketing page ───────────────────────────────────────
    Two loops: the 12s hero chat thread and the 22s console lifecycle.
    Both follow the prototype's timings, both use longhand duration (see

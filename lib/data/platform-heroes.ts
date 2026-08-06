@@ -28,19 +28,19 @@ import { HERO_BG, SCRIM, type HeroBackgroundKey } from "@/lib/data/hero-backgrou
  *                Apps             sunset   (once)
  *   Always on    Workflows        forest
  *                Compliance       teal
- *   Foundation   Integrations     sand
- *                Control Center   indigo
+ *   Foundation   Control Center   indigo
  *
  * The gradient-hero pages are **not** in here and must not be added.
  * Trust Center, Why EZee, Case Studies and **Reporting** carry their own
  * specified blues from their own handoffs, and those are not
  * photographic. Reporting was in this map and moved out when its rebuild
- * specified the indigo gradient, and Ticketing followed it out for plum.
- * To put either back, re-add its row here and point that page's hero at
- * `platformHero(...)` again.
+ * specified the indigo gradient. Ticketing followed it out for plum and
+ * Integrations for steel, so what is left here is Answers, Apps,
+ * Workflows, Compliance and Control Center. To put any of them back,
+ * re-add its row and point that page's hero at `platformHero(...)`.
  *
- * `mauve` is unused since Ticketing left, and `sunset` is now the only
- * variant carrying a gradient scrim.
+ * `mauve` and `sand` are unused since those two left, and `sunset` is
+ * the only variant carrying a gradient scrim.
  */
 
 export const VARIANT_HEROES = true;
@@ -50,7 +50,6 @@ export type PlatformPage =
   | "apps"
   | "workflows"
   | "compliance"
-  | "integrations"
   | "control-center";
 
 const ASSIGNED: Record<PlatformPage, HeroBackgroundKey> = {
@@ -58,7 +57,6 @@ const ASSIGNED: Record<PlatformPage, HeroBackgroundKey> = {
   apps: "sunset",
   workflows: "forest",
   compliance: "teal",
-  integrations: "sand",
   "control-center": "indigo",
 };
 
@@ -69,7 +67,6 @@ const PREVIOUS: Record<PlatformPage, HeroBackgroundKey> = {
   apps: "haze2",
   workflows: "haze2",
   compliance: "haze2",
-  integrations: "haze4",
   "control-center": "haze2",
 };
 

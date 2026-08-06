@@ -112,12 +112,13 @@ export function groupedIntegrations(): Record<IntegrationCategory, Integration[]
 export const platformMarqueeIntegrations = integrations.slice(0, 20);
 
 /**
- * The scrolling strip's names, shared by the Integrations hero and the
- * Reporting "Reads live from" row so the two read as the same object.
+ * The scrolling strip's names, shared by the Integrations hero marquee
+ * and the Reporting "Reads live from" row so the two read as the same
+ * object rather than two takes on it.
  *
- * A curated 24, not the full fifty: these are the systems a franchise
- * operator recognises, and a strip is a texture rather than a catalogue.
- * The full list lives on the Integrations page.
+ * Forty, not the full fifty: these are the systems a franchise operator
+ * recognises, and a strip is texture rather than a catalogue. The
+ * categorised list lives on the Integrations page.
  *
  * Names, not logos. Only four of the fifty SVGs this file declares are
  * committed, and the house rule is that a logo is a committed local file
@@ -125,8 +126,10 @@ export const platformMarqueeIntegrations = integrations.slice(0, 20);
  * broken rather than deliberate.
  */
 export const INTEGRATION_STRIP = [
-  "FranConnect", "ServiceTitan", "Mindbody", "Zenoti", "ServiceMinder", "Thryv",
-  "Toast", "Square", "QuickBooks", "Xero", "SharePoint", "Google Drive",
-  "Trainual", "Docebo", "Salesforce", "HubSpot", "Microsoft Teams", "Slack",
-  "Mailchimp", "Stripe", "Notion", "Dropbox", "Airtable", "Canva",
+  "Mindbody", "ServiceTitan", "Toast", "Square", "QuickBooks", "Xero", "SharePoint",
+  "Google Drive", "Trainual", "Docebo", "Salesforce", "HubSpot", "Microsoft Teams",
+  "Slack", "Mailchimp", "Notion", "Zenoti", "Lightspeed", "FranConnect", "Dropbox",
+  "Box", "OneDrive", "Stripe", "ADP", "Zoom", "Google Meet", "Airtable", "Monday",
+  "Canva", "Constant Contact", "TouchBistro", "Thryv", "HighLevel", "Zoho",
+  "TalentLMS", "Loom", "Vimeo", "Amazon S3", "ProfitKeeper", "Qvinci",
 ];
