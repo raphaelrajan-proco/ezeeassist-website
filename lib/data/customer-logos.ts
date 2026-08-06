@@ -1,90 +1,108 @@
-// Single source of truth for customer logos used in TrustBar and any page that shows customer logos.
-// TODO: Drop the real SVG files into /public/logos/customers/ and the <Image> tags will pick them up automatically.
+/**
+ * Single source of truth for the customer logo marquee.
+ *
+ * Every page that shows customer logos reads this list through
+ * `LogoMarquee`, so one edit here changes the homepage hero strip and the
+ * strip under all ten platform and solutions heroes at once. That is the
+ * point: do not fork the list per page.
+ *
+ * **Files live in `public/logos/brands/`, committed, never hotlinked.**
+ * 47 came from the IFA 2026 slide as PNG/JPG at wildly different aspect
+ * ratios, 1.00 for Athletic Republic through 7.59 for New Creations.
+ *
+ * **`ar` is the file's measured width/height**, and `LogoTile` sizes each
+ * mark from it. A single fixed height across that range does not work: at
+ * 30px tall a 7.59 wordmark gets 228px of width and a square mark gets 30,
+ * so the square ones shrink to illegible stamps beside them. The tile
+ * normalises roughly by area instead, giving square marks more height and
+ * long wordmarks less. Setting a fixed WIDTH is the other failure mode: it
+ * squashes the wordmarks.
+ *
+ * **Re-measure `ar` when a file changes.** It is derived data and there is
+ * no runtime check that it still matches the bitmap; a stale value just
+ * renders the mark at the wrong size. Values below were read from the
+ * committed files.
+ *
+ * **Three brands have no file yet** and are deliberately left in the list:
+ * UPS Store, Heights Wellness Retreat, Home Helpers. Their `src` points at
+ * a path that does not exist, so `LogoTile`'s `onError` renders the grey
+ * text pill instead. That fallback is the requested interim state, not a
+ * bug. Drop a file at the named path and the pill becomes a logo with no
+ * code change.
+ *
+ * Order is the marquee's opening sequence, requested: it launches on a
+ * handful of brands from the back of the roster, the featured run lands
+ * from position six (UPS Store first), and the rest follow in the slide's
+ * alphabetical order. Display names are spelled the way each brand writes
+ * them (WSI, DivaDance, iFOAM, The DRIPBaR, NEXTAFF, QC Kinetix, STOR-X).
+ */
 
 export interface CustomerLogo {
   name: string;
   src: string;
   alt: string;
+  /** Measured width/height of the file. Absent when no file exists yet,
+      in which case the entry renders as a text pill and never needs one. */
+  ar?: number;
 }
 
-// Order is the marquee's opening sequence, requested: it launches on a
-// handful of brands from the back of the roster, the featured run lands
-// from position six (UPS Store first), and the rest follow. Oasis Senior
-// Advisors and QC Kinetix render as text pills until their SVGs land.
 export const customerLogos: CustomerLogo[] = [
   // ── Openers, pulled from the back of the roster ──────────────
-  { name: "Bumble Bee Blinds",       src: "/logos/customers/bumble-bee-blinds.svg",       alt: "Bumble Bee Blinds" },
-  { name: "Wisdom Senior Care",      src: "/logos/customers/wisdom-senior-care.svg",      alt: "Wisdom Senior Care" },
-  { name: "The Drip Bar",            src: "/logos/customers/the-drip-bar.svg",            alt: "The Drip Bar" },
-  { name: "New Creations",           src: "/logos/customers/new-creations.svg",           alt: "New Creations" },
-  { name: "Athletic Republic",       src: "/logos/customers/athletic-republic.svg",       alt: "Athletic Republic" },
+  { name: "Bumble Bee Blinds", src: "/logos/brands/bumble-bee-blinds.png", alt: "Bumble Bee Blinds", ar: 1.43 },
+  { name: "Wisdom Senior Care", src: "/logos/brands/wisdom-senior-care.png", alt: "Wisdom Senior Care", ar: 2.64 },
+  { name: "The DRIPBaR", src: "/logos/brands/the-dripbar.png", alt: "The DRIPBaR", ar: 1.56 },
+  { name: "New Creations", src: "/logos/brands/new-creations.png", alt: "New Creations", ar: 7.59 },
+  { name: "Athletic Republic", src: "/logos/brands/athletic-republic.png", alt: "Athletic Republic", ar: 1.00 },
+
   // ── Featured run, order requested ────────────────────────────
-  { name: "UPS Store",               src: "/logos/customers/ups-store.svg",               alt: "The UPS Store" },
-  { name: "Sport Clips",             src: "/logos/customers/sport-clips.svg",             alt: "Sport Clips" },
-  { name: "Fastest Labs",            src: "/logos/customers/fastest-labs.svg",            alt: "Fastest Labs" },
-  { name: "Aqua-Tots",               src: "/logos/customers/aqua-tots.svg",               alt: "Aqua-Tots Swim Schools" },
-  { name: "DivaDance",               src: "/logos/customers/divadance.svg",               alt: "DivaDance" },
-  { name: "Deka+",                   src: "/logos/customers/deka-plus.svg",               alt: "Deka+" },
-  { name: "Horse Power",             src: "/logos/customers/horse-power.svg",             alt: "HorsePower Brands" },
-  { name: "Oasis Senior Advisors",   src: "/logos/customers/oasis-senior-advisors.svg",   alt: "Oasis Senior Advisors" },
-  { name: "EverLine",                src: "/logos/customers/everline.svg",                alt: "EverLine Coatings and Services" },
-  { name: "CEFA",                    src: "/logos/customers/cefa.svg",                    alt: "CEFA Early Learning" },
-  { name: "QC Kinetix",              src: "/logos/customers/qc-kinetix.svg",              alt: "QC Kinetix" },
-  // ── The others ───────────────────────────────────────────────
-  { name: "WSI",                     src: "/logos/customers/wsi.svg",                     alt: "WSI" },
-  { name: "Real Property Management",src: "/logos/customers/real-property-mgmt.svg",     alt: "Real Property Management" },
-  { name: "Spray-Net",               src: "/logos/customers/spray-net.svg",               alt: "Spray-Net" },
-  { name: "Modern PurAir",           src: "/logos/customers/modern-purair.svg",           alt: "Modern PurAir" },
-  { name: "Zoom Drain",              src: "/logos/customers/zoom-drain.svg",              alt: "Zoom Drain" },
-  { name: "Heights Wellness",        src: "/logos/customers/heights-wellness.svg",        alt: "Heights Wellness Retreat" },
-  { name: "Home Helpers",            src: "/logos/customers/home-helpers.svg",            alt: "Home Helpers Home Care" },
-  // ── Placeholder entries (replace names + swap SVGs later) ────
-  { name: "Customer 12",  src: "/logos/customers/customer-12.svg",  alt: "Customer 12" },
-  { name: "Customer 13",  src: "/logos/customers/customer-13.svg",  alt: "Customer 13" },
-  { name: "Customer 14",  src: "/logos/customers/customer-14.svg",  alt: "Customer 14" },
-  { name: "Customer 15",  src: "/logos/customers/customer-15.svg",  alt: "Customer 15" },
-  { name: "Customer 16",  src: "/logos/customers/customer-16.svg",  alt: "Customer 16" },
-  { name: "Customer 17",  src: "/logos/customers/customer-17.svg",  alt: "Customer 17" },
-  { name: "Customer 18",  src: "/logos/customers/customer-18.svg",  alt: "Customer 18" },
-  { name: "Customer 19",  src: "/logos/customers/customer-19.svg",  alt: "Customer 19" },
-  { name: "Customer 20",  src: "/logos/customers/customer-20.svg",  alt: "Customer 20" },
-  { name: "Customer 21",  src: "/logos/customers/customer-21.svg",  alt: "Customer 21" },
-  { name: "Customer 22",  src: "/logos/customers/customer-22.svg",  alt: "Customer 22" },
-  { name: "Customer 23",  src: "/logos/customers/customer-23.svg",  alt: "Customer 23" },
-  { name: "Customer 24",  src: "/logos/customers/customer-24.svg",  alt: "Customer 24" },
-  { name: "Customer 25",  src: "/logos/customers/customer-25.svg",  alt: "Customer 25" },
-  { name: "Customer 26",  src: "/logos/customers/customer-26.svg",  alt: "Customer 26" },
-  { name: "Customer 27",  src: "/logos/customers/customer-27.svg",  alt: "Customer 27" },
-  { name: "Customer 28",  src: "/logos/customers/customer-28.svg",  alt: "Customer 28" },
-  { name: "Customer 29",  src: "/logos/customers/customer-29.svg",  alt: "Customer 29" },
-  { name: "Customer 30",  src: "/logos/customers/customer-30.svg",  alt: "Customer 30" },
-  { name: "Customer 31",  src: "/logos/customers/customer-31.svg",  alt: "Customer 31" },
-  { name: "Customer 32",  src: "/logos/customers/customer-32.svg",  alt: "Customer 32" },
-  { name: "Customer 33",  src: "/logos/customers/customer-33.svg",  alt: "Customer 33" },
-  { name: "Customer 34",  src: "/logos/customers/customer-34.svg",  alt: "Customer 34" },
-  { name: "Customer 35",  src: "/logos/customers/customer-35.svg",  alt: "Customer 35" },
-  { name: "Customer 36",  src: "/logos/customers/customer-36.svg",  alt: "Customer 36" },
-  { name: "Customer 37",  src: "/logos/customers/customer-37.svg",  alt: "Customer 37" },
-  { name: "Customer 38",  src: "/logos/customers/customer-38.svg",  alt: "Customer 38" },
-  { name: "Customer 39",  src: "/logos/customers/customer-39.svg",  alt: "Customer 39" },
-  { name: "Customer 40",  src: "/logos/customers/customer-40.svg",  alt: "Customer 40" },
-  { name: "Customer 41",  src: "/logos/customers/customer-41.svg",  alt: "Customer 41" },
-  { name: "Customer 42",  src: "/logos/customers/customer-42.svg",  alt: "Customer 42" },
-  { name: "Customer 43",  src: "/logos/customers/customer-43.svg",  alt: "Customer 43" },
-  { name: "Customer 44",  src: "/logos/customers/customer-44.svg",  alt: "Customer 44" },
-  { name: "Customer 45",  src: "/logos/customers/customer-45.svg",  alt: "Customer 45" },
-  { name: "Customer 46",  src: "/logos/customers/customer-46.svg",  alt: "Customer 46" },
-  { name: "Customer 47",  src: "/logos/customers/customer-47.svg",  alt: "Customer 47" },
-  { name: "Customer 48",  src: "/logos/customers/customer-48.svg",  alt: "Customer 48" },
-  { name: "Customer 49",  src: "/logos/customers/customer-49.svg",  alt: "Customer 49" },
-  { name: "Customer 50",  src: "/logos/customers/customer-50.svg",  alt: "Customer 50" },
-  { name: "Customer 51",  src: "/logos/customers/customer-51.svg",  alt: "Customer 51" },
-  { name: "Customer 52",  src: "/logos/customers/customer-52.svg",  alt: "Customer 52" },
-  { name: "Customer 53",  src: "/logos/customers/customer-53.svg",  alt: "Customer 53" },
-  { name: "Customer 54",  src: "/logos/customers/customer-54.svg",  alt: "Customer 54" },
-  { name: "Customer 55",  src: "/logos/customers/customer-55.svg",  alt: "Customer 55" },
-  { name: "Customer 56",  src: "/logos/customers/customer-56.svg",  alt: "Customer 56" },
-  { name: "Customer 57",  src: "/logos/customers/customer-57.svg",  alt: "Customer 57" },
-  { name: "Customer 58",  src: "/logos/customers/customer-58.svg",  alt: "Customer 58" },
-  { name: "Customer 59",  src: "/logos/customers/customer-59.svg",  alt: "Customer 59" },
+  // TODO: UPS Store logo is in the sales-deck asset folder, not the IFA
+  // slide. Drop it at this path to replace the text pill.
+  { name: "UPS Store", src: "/logos/brands/ups-store.png", alt: "The UPS Store" },
+  { name: "Sport Clips", src: "/logos/brands/sport-clips.jpg", alt: "Sport Clips", ar: 3.33 },
+  { name: "Fastest Labs", src: "/logos/brands/fastest-labs.png", alt: "Fastest Labs", ar: 3.08 },
+  { name: "Aqua-Tots", src: "/logos/brands/aqua-tots.png", alt: "Aqua-Tots Swim School", ar: 3.17 },
+  { name: "DivaDance", src: "/logos/brands/divadance.png", alt: "DivaDance", ar: 1.00 },
+  { name: "Deka Lash", src: "/logos/brands/deka-lash.png", alt: "Deka Lash", ar: 5.63 },
+  { name: "HorsePower Brands", src: "/logos/brands/horsepower-brands.png", alt: "HorsePower Brands", ar: 2.53 },
+  { name: "Oasis Senior Advisors", src: "/logos/brands/oasis-senior-advisors.png", alt: "Oasis Senior Advisors", ar: 1.49 },
+  { name: "EverLine", src: "/logos/brands/everline.png", alt: "EverLine Coatings and Services", ar: 1.07 },
+  { name: "CEFA Early Learning", src: "/logos/brands/cefa-early-learning.png", alt: "CEFA Early Learning", ar: 2.33 },
+  { name: "QC Kinetix", src: "/logos/brands/qc-kinetix.png", alt: "QC Kinetix", ar: 4.03 },
+  { name: "WSI", src: "/logos/brands/wsi.png", alt: "WSI", ar: 2.40 },
+  { name: "Real Property Management", src: "/logos/brands/real-property-management.png", alt: "Real Property Management", ar: 2.92 },
+  { name: "Spray-Net", src: "/logos/brands/spray-net.png", alt: "Spray-Net", ar: 3.60 },
+  { name: "Modern PurAir", src: "/logos/brands/modern-purair.png", alt: "Modern PurAir", ar: 3.35 },
+  { name: "Zoom Drain", src: "/logos/brands/zoom-drain.png", alt: "Zoom Drain", ar: 1.80 },
+  // TODO: no file supplied for either. Renders as a text pill until one lands.
+  { name: "Heights Wellness", src: "/logos/brands/heights-wellness-retreat.png", alt: "Heights Wellness Retreat" },
+  { name: "Home Helpers", src: "/logos/brands/home-helpers.png", alt: "Home Helpers Home Care" },
+
+  // ── The rest of the roster ───────────────────────────────────
+  { name: "Art of Drawers", src: "/logos/brands/art-of-drawers.png", alt: "Art of Drawers", ar: 2.42 },
+  { name: "Blingle", src: "/logos/brands/blingle.png", alt: "Blingle", ar: 3.72 },
+  { name: "Cabinet IQ", src: "/logos/brands/cabinet-iq.png", alt: "Cabinet IQ", ar: 2.08 },
+  { name: "Corporate Cleaning Group", src: "/logos/brands/corporate-cleaning-group.jpg", alt: "Corporate Cleaning Group", ar: 4.13 },
+  { name: "Egg Bred", src: "/logos/brands/egg-bred.png", alt: "Egg Bred", ar: 2.94 },
+  { name: "Fresh Burger", src: "/logos/brands/fresh-burger.jpg", alt: "Fresh Burger", ar: 1.90 },
+  { name: "Garage Floors 4 Less", src: "/logos/brands/garage-floors-4-less.png", alt: "Garage Floors 4 Less", ar: 1.00 },
+  { name: "Gatsby Glass", src: "/logos/brands/gatsby-glass.png", alt: "Gatsby Glass", ar: 5.24 },
+  { name: "GoPainting", src: "/logos/brands/gopainting.png", alt: "GoPainting", ar: 2.00 },
+  { name: "Gotcha Covered", src: "/logos/brands/gotcha-covered.png", alt: "Gotcha Covered", ar: 2.63 },
+  { name: "GradePower Learning", src: "/logos/brands/gradepower-learning.png", alt: "GradePower Learning", ar: 2.18 },
+  { name: "Groovy Hues", src: "/logos/brands/groovy-hues.png", alt: "Groovy Hues", ar: 1.78 },
+  { name: "Heroes Lawn Care", src: "/logos/brands/heroes-lawn-care.png", alt: "Heroes Lawn Care", ar: 2.06 },
+  { name: "Home Clean Heroes", src: "/logos/brands/home-clean-heroes.png", alt: "Home Clean Heroes", ar: 1.90 },
+  { name: "Home Run Franchises", src: "/logos/brands/home-run-franchises.png", alt: "Home Run Franchises", ar: 2.64 },
+  { name: "iFOAM", src: "/logos/brands/ifoam.png", alt: "iFOAM", ar: 3.09 },
+  { name: "Massage Heights", src: "/logos/brands/massage-heights.png", alt: "Massage Heights", ar: 1.40 },
+  { name: "MAX Strength Fitness", src: "/logos/brands/max-strength-fitness.png", alt: "MAX Strength Fitness", ar: 1.00 },
+  { name: "Mighty Dog Roofing", src: "/logos/brands/mighty-dog-roofing.png", alt: "Mighty Dog Roofing", ar: 1.49 },
+  { name: "Nani's Gelato", src: "/logos/brands/nanis-gelato.png", alt: "Nani's Gelato", ar: 1.50 },
+  { name: "NEXTAFF", src: "/logos/brands/nextaff.png", alt: "NEXTAFF", ar: 4.71 },
+  { name: "Oxford Learning", src: "/logos/brands/oxford-learning.png", alt: "Oxford Learning", ar: 2.70 },
+  { name: "PMI", src: "/logos/brands/pmi.png", alt: "PMI", ar: 2.65 },
+  { name: "Stand Strong Fencing", src: "/logos/brands/stand-strong-fencing.png", alt: "Stand Strong Fencing", ar: 1.78 },
+  { name: "STOR-X", src: "/logos/brands/stor-x.png", alt: "STOR-X", ar: 4.85 },
+  { name: "Up Closets", src: "/logos/brands/up-closets.png", alt: "Up Closets", ar: 2.23 },
+  { name: "Fuzz Wax Bar", src: "/logos/brands/waxbar-fuzz.jpg", alt: "Fuzz Wax Bar", ar: 1.00 },
 ];

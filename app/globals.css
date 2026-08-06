@@ -1180,8 +1180,12 @@
 }
 
 /* Proof-section logo marquee — slow scroll, pauses on hover */
+/* 140s, not the 70s this ran at while the strip held 23 text pills. The
+   roster is 47 logos now and the track is about twice as long, so the old
+   duration doubled the apparent speed. Scale this with the roster: the
+   readable rate is roughly 3s per logo. */
 .theme-editorial .ed-logo-marquee {
-  animation: marquee 70s linear infinite;
+  animation: marquee 140s linear infinite;
 }
 .theme-editorial .ed-logo-marquee:hover {
   animation-play-state: paused;

@@ -1,13 +1,21 @@
 "use client";
 
 import { customerLogos } from "@/lib/data/customer-logos";
+import { LogoTile } from "@/components/sections/LogoMarquee";
 
-// TODO: Once SVG files land in /public/logos/customers/, replace the <span> text
-// inside each card with:
-//   import Image from "next/image";
-//   <Image src={logo.src} alt={logo.alt} width={120} height={40} className="object-contain" />
-// and remove the min-w and text classes from the card.
-
+/**
+ * The trust bar on the legacy `/industries/franchising` route.
+ *
+ * It renders `LogoTile`, the same tile the editorial marquee uses, so the
+ * roster stays genuinely single-source: one edit to `customer-logos.ts`
+ * changes this, the homepage hero strip and all ten sub-page strips
+ * together. It used to draw its own text cards, so real logos landing
+ * everywhere else would have left this page alone showing 47 grey names.
+ *
+ * The section chrome below is still legacy styling (hardcoded hex rather
+ * than `.theme-editorial` tokens) because the route is. Migrate the whole
+ * page rather than half of it.
+ */
 export default function TrustBar() {
   // Duplicate so the scroll loops seamlessly without visible gaps
   const track = [...customerLogos, ...customerLogos];
@@ -29,18 +37,12 @@ export default function TrustBar() {
             "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
         }}
       >
-        {/* 59 logos × 2 ≈ 118 items — speed bumped from 40s → 60s to stay smooth */}
-        <div className="flex gap-6 w-max" style={{ animation: "marquee 60s linear infinite" }}>
+        {/* 47 logos x 2. The duration matches the editorial marquee's 140s
+            for the same roster, so the two read at the same speed. */}
+        <div className="flex gap-5 w-max" style={{ animation: "marquee 140s linear infinite" }}>
           {track.map((logo, i) => (
-            <div
-              key={`${logo.name}-${i}`}
-              className="flex items-center justify-center rounded-lg bg-white dark:bg-[#161616] border border-[#E5E7EB] dark:border-white/[0.08] px-7 py-3 min-w-[160px] h-[52px] shadow-sm flex-shrink-0"
-              title={logo.alt}
-            >
-              {/* Text fallback — replace with <Image> once SVG files exist */}
-              <span className="text-sm font-semibold text-gray-400 dark:text-gray-500 whitespace-nowrap">
-                {logo.name}
-              </span>
+            <div key={`${logo.name}-${i}`} className="flex-shrink-0">
+              <LogoTile logo={logo} />
             </div>
           ))}
         </div>
