@@ -217,7 +217,7 @@ function FooterEditorial() {
         {/* Answer engines + newsletter, one band directly under the
             tagline and above the columns. No divider by request. */}
         {SHOW_AEO_BLOCK && (
-          <div className="mt-10 md:mt-12 grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] gap-10 lg:gap-12">
+          <div className="mt-10 md:mt-12 grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-10 lg:gap-12">
             <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-8">
               <p
                 className="text-[15px] whitespace-nowrap flex-none"
@@ -234,14 +234,14 @@ function FooterEditorial() {
                     rather than py, so the label keeps its 13px. Same for the
                     subscribe button below and the two link groups further
                     down: box only, no type changes. */}
-                <div className="flex flex-wrap gap-2 max-w-none">
+                <div className="flex flex-wrap gap-1.5 max-w-none">
                   {aeoLinks.map(({ label, icon, href }) => (
                     <a
                       key={label}
                       href={href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-[44px] items-center gap-2 rounded-full px-3.5 text-[13px] transition-opacity hover:opacity-70"
+                      className="inline-flex min-h-[44px] items-center gap-1.5 rounded-full px-3 text-[13px] transition-opacity hover:opacity-70"
                       style={{
                         backgroundColor: "var(--ed-card)",
                         border: "1px solid var(--ed-rule)",

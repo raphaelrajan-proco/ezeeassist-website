@@ -1143,8 +1143,15 @@ row modelled on Ada's footer. Left is "Request an AI summary" with the
 pre-filled answer-engine links; right is "Get the latest insights" with an
 email capture.
 
-The grid is `lg:grid-cols-[1.35fr_1fr]`, not an even split: at 1fr each, the
-three Ask pills wrapped to a second row. Verified all three share one row.
+The grid is `lg:grid-cols-[1.7fr_1fr]`, not an even split: at 1fr each, the
+three Ask pills wrapped to a second row.
+
+**Re-tune it whenever the pills change.** It was 1.35fr while they were
+label-only; adding the 16px provider marks put them at 421px against 387
+available at 1205, and Perplexity dropped to a second row. The fix was
+both sides: the pills lost 2px of padding and 2px of icon gap, and the
+column took the rest. Verified all three share one row from 1205 up.
+Below `lg` the grid is single-column and wrapping there is expected.
 
 **The email field has no endpoint.** It is `onSubmit={e => e.preventDefault()}`,
 matching the blog's subscribe strip, which is also a no-op. **Neither collects
