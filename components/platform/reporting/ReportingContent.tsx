@@ -365,8 +365,9 @@ export default function ReportingContent() {
           </div>
 
           {/* A scroller rather than six chips: the claim is breadth, and
-              six names read as a shortlist. Names not logos, see
-              IntegrationMarquee for why. */}
+              six names read as a shortlist. Real vendor marks beside the
+              names, from the shared IntegrationMarquee, so this and the
+              Answers strip stay one object. */}
           <Reveal delay={0.1}>
             <div className="ed-card ed-border flex flex-col gap-3 overflow-hidden rounded-[14px] border py-4">
               <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-5">
@@ -509,7 +510,11 @@ export default function ReportingContent() {
           <Reveal className="flex max-w-[840px] flex-col gap-3.5">
             <h2 className="leading-[1.12] tracking-[-0.03em]" style={{ ...H2, color: "#EEF2F8" }}>
               The opportunity sits across your whole stack.{" "}
-              <span style={{ color: IN.accent }}>EZee Assist pulls it together.</span>
+              {/* EZee blue, not the band's periwinkle `IN.accent`, by
+                  request. #00AEEF clears AA on this #0B1220 band, which is
+                  why the brand hue can be used directly here rather than
+                  the darker #0077A8 the light bands need. */}
+              <span style={{ color: "#00AEEF" }}>EZee Assist pulls it together.</span>
             </h2>
             <p className="text-[18px] leading-[1.7]" style={{ color: "rgba(238,242,248,.72)" }}>
               Your POS knows what sold. Your scheduler knows what is empty. The CRM holds who has
@@ -685,7 +690,8 @@ export default function ReportingContent() {
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
           <Reveal className="flex max-w-[820px] flex-col gap-3.5">
             <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
-              Your franchisees can ask too, about their own locations.
+              Now, franchisees can generate reports too, and see only what&rsquo;s relevant to
+              their locations.
             </h2>
             <p className="ed-fg-muted text-[18px] leading-[1.7]">
               Every level gets the same capability, bounded by what they are entitled to see. Nobody

@@ -7,6 +7,7 @@ import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
 import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
+import IntegrationMarquee from "@/components/sections/IntegrationMarquee";
 import { platformHero } from "@/lib/data/platform-heroes";
 import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 import {
@@ -323,7 +324,7 @@ export default function AnswersContent() {
           <Reveal className="flex flex-col gap-4">
             <h2 className="ed-fg leading-[1.14] tracking-[-0.03em]" style={H2}>
               Send a message from{" "}
-              <span className="ed-accent-text">which any preferred channels</span> you already have
+              <span className="ed-accent-text">any preferred channels</span> you already have
               open.
             </h2>
             <p className="ed-fg-muted text-[16.5px] leading-[1.7]">
@@ -402,8 +403,8 @@ export default function AnswersContent() {
         <div className="mx-auto flex max-w-7xl flex-col gap-9 px-6 md:px-12 lg:px-16 py-16 md:py-20">
           <Reveal className="flex max-w-[760px] flex-col gap-3.5">
             <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
-              Access controlled to{" "}
-              <span className="ed-accent-text">each role, each unit, each person.</span>
+              <span className="ed-accent-text">Access controlled</span> to each role, each unit,
+              each person.
             </h2>
             <p className="ed-fg-muted text-[16px] leading-[1.6]">
               Role and location decide what comes back. Nobody sees a number they shouldn&rsquo;t.
@@ -488,6 +489,26 @@ export default function AnswersContent() {
               Any format, wherever it already lives. Nothing migrates, and every answer names the
               document it came from.
             </p>
+          </Reveal>
+
+          {/* The same strip Reporting carries, from the shared component,
+              so the two pages show one object rather than two takes on
+              it. It sits under the lead and before the ledger: the ledger
+              says what KINDS of material are read, and this says which
+              systems they come out of. */}
+          <Reveal delay={0.05}>
+            <div className="ed-card ed-border flex flex-col gap-3 overflow-hidden rounded-[14px] border py-4">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-5">
+                <span className="ed-fg-muted flex-none text-[13.5px] font-semibold">Reads live from</span>
+                <span className="ed-fg-muted text-[13.5px]">
+                  250+ integrations.{" "}
+                  <Link href="/platform/integrations" className="ed-accent-text underline-offset-2 hover:underline">
+                    See what connects
+                  </Link>
+                </span>
+              </div>
+              <IntegrationMarquee />
+            </div>
           </Reveal>
 
           <Reveal delay={0.08}>

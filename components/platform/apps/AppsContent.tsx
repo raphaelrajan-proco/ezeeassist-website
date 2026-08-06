@@ -47,7 +47,13 @@ import { APPS, INK, STEPS, TILE, TIMELINE, WISHLIST, type Tone } from "./data";
 const HERO = platformHero("apps");
 const GOLD = "#F2DE8A";
 const ON_IMAGE = "rgba(247,243,224,0.92)";
-const MINT = "#8BE8DD";
+/* The Network-authorship band's accent. It was a mint #8BE8DD; EZee blue
+   by request, and #00AEEF is usable directly because this band is
+   #0B1220, where the brand hue clears AA. One constant covers the
+   headline highlight, the step pills and their labels, so they cannot
+   drift apart. The name is kept so the diff reads as a colour change
+   rather than a rename. */
+const MINT = "#00AEEF";
 
 const H2 = {
   fontFamily: JAKARTA, fontWeight: 700,
@@ -193,7 +199,7 @@ export default function AppsContent() {
             <p className="ed-fg-muted text-[18px] leading-[1.7]">
               HQ, field coaches, marketing, FBCs, franchisees, everyone carries one. Some entries are
               a checklist, some are a full dashboard or a customer-facing app. Described in plain
-              language, <b className="ed-fg">each is an afternoon of work</b>. Below, what one
+              language, each is an afternoon of work. Below, what one
               brand&rsquo;s list looked like once they started clearing it.
             </p>
           </Reveal>
@@ -397,8 +403,8 @@ export default function AppsContent() {
                   <div
                     className="flex items-start gap-4 rounded-2xl px-5 py-4"
                     style={{
-                      background: s.published ? "rgba(139,232,221,.07)" : "rgba(238,242,248,.04)",
-                      border: `1px solid ${s.published ? "rgba(139,232,221,.3)" : "rgba(238,242,248,.12)"}`,
+                      background: s.published ? "rgba(0,174,239,.09)" : "rgba(238,242,248,.04)",
+                      border: `1px solid ${s.published ? "rgba(0,174,239,.35)" : "rgba(238,242,248,.12)"}`,
                     }}
                   >
                     <span
@@ -426,11 +432,11 @@ export default function AppsContent() {
           {/* The loop restarts; nothing follows this line. */}
           <Reveal delay={0.1}>
             <div className="flex items-center gap-4">
-              <span className="h-px flex-1" style={{ borderTop: "1px dashed rgba(139,232,221,.4)" }} aria-hidden="true" />
-              <span className="text-center" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.14em", color: "rgba(139,232,221,.75)" }}>
+              <span className="h-px flex-1" style={{ borderTop: "1px dashed rgba(0,174,239,.4)" }} aria-hidden="true" />
+              <span className="text-center" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.14em", color: "rgba(0,174,239,.85)" }}>
                 AND THE NEXT ONE STARTS AT A LOCATION AGAIN
               </span>
-              <span className="h-px flex-1" style={{ borderTop: "1px dashed rgba(139,232,221,.4)" }} aria-hidden="true" />
+              <span className="h-px flex-1" style={{ borderTop: "1px dashed rgba(0,174,239,.4)" }} aria-hidden="true" />
             </div>
           </Reveal>
         </div>

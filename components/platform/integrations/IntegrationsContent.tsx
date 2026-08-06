@@ -103,8 +103,11 @@ export default function IntegrationsContent() {
           <ConnectCard />
         </motion.div>
 
-        {/* The marquee rides inside the band, edge to edge. Names, not
-            marks: see data.ts for why the chips carry no logos. */}
+        {/* The marquee rides inside the band, edge to edge. **Names
+            only here**, unlike the light-band `IntegrationMarquee`: this
+            one sits on a dark photograph, and vendor marks with their own
+            white or coloured backgrounds would each need a chip, which
+            turns a clean strip into forty boxes. */}
         <div
           data-anim
           className="relative overflow-hidden pb-9"
@@ -116,9 +119,9 @@ export default function IntegrationsContent() {
         >
           <div className="ig-marq flex w-max gap-2.5">
             {[0, 1].map((copy) =>
-              MARQUEE.map((m) => (
+              MARQUEE.map(({ name }) => (
                 <span
-                  key={`${copy}-${m}`}
+                  key={`${copy}-${name}`}
                   className="flex-none whitespace-nowrap rounded-lg"
                   style={{
                     fontSize: 12.5, fontWeight: 600, padding: "8px 14px",
@@ -126,7 +129,7 @@ export default function IntegrationsContent() {
                     border: "1px solid rgba(255,255,255,.18)",
                   }}
                 >
-                  {m}
+                  {name}
                 </span>
               ))
             )}

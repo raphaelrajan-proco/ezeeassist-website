@@ -45,26 +45,30 @@ export const WEEK: [string, string][] = [
    That is intentional and matches the reference. The colours are the
    semantic set used here as category identity, so keep the assignment
    stable if the set is reused. */
-export const SCOPE: { title: string; body: string; source: string; hue: string; d: string }[] = [
-  { title: "Licensing and insurance", hue: "#0077A8", source: "Read from · Document store, expiry dates",
+/* `check` is one real check the system runs for that category, added so
+   each card shows the work rather than only naming the category. Keep
+   them specific and phrased as an action: "Check if the annual liquor
+   licence is current" says more than "monitors licences". */
+export const SCOPE: { title: string; body: string; check: string; source: string; hue: string; d: string }[] = [
+  { title: "Licensing and insurance", check: "Check the annual liquor licence is current and flag it 60 days out", hue: "#0077A8", source: "Read from · Document store, expiry dates",
     body: "Business licence, liability cover, bonding, vehicle insurance",
     d: "M3 5h18v14H3z M3 9h18" },
-  { title: "Certification", hue: "#7C3AED", source: "Read from · LMS, HR, certification bodies",
+  { title: "Certification", check: "Confirm every practitioner on the schedule holds a live certification", hue: "#7C3AED", source: "Read from · LMS, HR, certification bodies",
     body: "Staff credentials, practitioner licences, food safety, background checks",
     d: "M12 3a9 9 0 100 18 9 9 0 000-18z M8.5 12l2.4 2.4L15.5 9.8" },
-  { title: "Training", hue: "#0F856F", source: "Read from · LMS",
+  { title: "Training", check: "Find new hires past week two who have not completed food safety", hue: "#0F856F", source: "Read from · LMS",
     body: "Required modules, refreshers, new-hire completion",
     d: "M12 3a9 9 0 100 18 9 9 0 000-18z M12 7v5.2l3.4 2" },
-  { title: "Documentation", hue: "#B45309", source: "Read from · Accounting, document store",
+  { title: "Documentation", check: "Chase the P&L submission that has not landed for the closed month", hue: "#B45309", source: "Read from · Accounting, document store",
     body: "P&L submission, audit packs, incident reports, signed acknowledgements",
     d: "M7 3h7l4 4v14H7z M14 3v4h4 M10 12h6 M10 16h4" },
-  { title: "Operational standards", hue: "#0077A8", source: "Read from · Direct capture",
+  { title: "Operational standards", check: "Ask for closing photos from any station that skipped last night", hue: "#0077A8", source: "Read from · Direct capture",
     body: "Opening and closing procedures, cleanliness, presentation, photo evidence",
     d: "M4 17l5-6 4 3 6-8 M4 21h17" },
-  { title: "Brand standards", hue: "#7C3AED", source: "Read from · Direct capture, marketing systems",
+  { title: "Brand standards", check: "Scan local franchisee websites and listings for off-brand pricing or signage", hue: "#7C3AED", source: "Read from · Direct capture, marketing systems",
     body: "Signage, uniform, menu, pricing, local marketing",
     d: "M12 3l8 9-8 9-8-9z" },
-  { title: "Regulatory", hue: "#B42318", source: "Read from · Varies by industry",
+  { title: "Regulatory", check: "Verify staff-to-child ratios against the roster for every site in the state", hue: "#B42318", source: "Read from · Varies by industry",
     body: "Ratios, inspections, jurisdiction-specific requirements",
     d: "M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z" },
 ];
@@ -99,19 +103,10 @@ export const WRITE_BLOCKS = [
 /* ── §7 Evidence ────────────────────────────────────────────
    The `Chain` row and the Day 24 row in §5 describe the same close from
    two angles. That is a deliberate callback, not duplication. */
-export const EVIDENCE: [string, string][] = [
-  ["Document",  "cert-liability-2026.pdf"],
-  ["Submitted", "Mar 14, 2:41pm · Maria S., owner"],
-  ["Verified",  "Policy number, coverage amount, and expiry read and matched against your requirement"],
-  ["Expires",   "Mar 14, 2027 · next check scheduled Feb 12"],
-  ["Chain",     "4 reminders, 1 escalation, 24 days to close"],
-];
+/* EVIDENCE and EVIDENCE_COLS are deleted with the section they drove.
 
-export const EVIDENCE_COLS = [
-  { title: "Timestamped and attributed", body: "Who submitted it, when, and from where" },
-  /* The handoff's own copy note flags "Verified, not just received" as
-     the antithesis construction the house style bans, and supplies this
-     replacement. Using it rather than shipping the banned form silently. */
-  { title: "Read and matched, not filed", body: "The document is read and matched against the requirement, not filed unopened" },
-  { title: "Exportable", body: "The whole network's evidence, in a pack an auditor or franchisor counsel can use" },
-];
+   That section showed a filed document, a photo and a submitter under
+   the heading "The document, the photo, and who submitted it." It was
+   one claim stretched into a band, and the claim now lives as an
+   "Everything is logged" bullet in Closing it, beside the mechanism it
+   is actually about. Do not rebuild the band; extend the bullet. */

@@ -9,8 +9,8 @@ import { CLOSING_BASE } from "@/components/growth/closing-band";
 import { platformHero } from "@/lib/data/platform-heroes";
 import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
-import { BLIND_WINDOW, EVIDENCE, EVIDENCE_COLS, SCOPE, WEEK, WRITE_BLOCKS } from "./data";
-import { ChaseLadderCard, ChatMock, ContinuityDiagram, NetworkStateCard, ScopeTile } from "./artifacts";
+import { BLIND_WINDOW, SCOPE, WEEK, WRITE_BLOCKS } from "./data";
+import { ChaseLadderCard, ChatMock, NetworkStateCard, ScopeTile } from "./artifacts";
 
 /**
  * /platform/compliance
@@ -75,7 +75,6 @@ const META = {
   letterSpacing: "0.13em", textTransform: "uppercase" as const,
 };
 
-const ON_DARK      = "rgba(238,242,248,0.92)";
 const ON_DARK_MUTE = "rgba(238,242,248,0.55)";
 const ON_DARK_RULE = "rgba(238,242,248,0.16)";
 
@@ -109,7 +108,7 @@ export default function ComplianceContent() {
             </h1>
             <p className="mt-5 max-w-[520px] text-base leading-[1.6]" style={{ color: ON_IMAGE }}>
               Every licence, certificate, deadline, and standard, checked continuously against the
-              systems that already hold them. Gaps get chased until they close.
+              systems and documentation that already hold them. Gaps get chased until they close.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex flex-none whitespace-nowrap" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
@@ -209,6 +208,16 @@ export default function ComplianceContent() {
                   <ScopeTile hue={c.hue} d={c.d} />
                   <span className="ed-fg text-[16px] font-semibold leading-[1.25] tracking-[-0.02em]">{c.title}</span>
                   <span className="ed-fg-muted text-[14px] leading-[1.5]">{c.body}</span>
+                  {/* One real check, so the card shows the work rather
+                      than only naming the category. Tinted to the card's
+                      own hue at low alpha, which keeps the grid reading as
+                      seven different areas without seven loud blocks. */}
+                  <span
+                    className="ed-fg mt-1 rounded-[9px] px-3 py-2.5 text-[13px] leading-[1.45]"
+                    style={{ background: `color-mix(in srgb, ${c.hue} 7%, transparent)` }}
+                  >
+                    {c.check}
+                  </span>
                   <span className="mt-auto pt-2" style={{ ...META, color: "var(--ed-fg-muted)" }}>{c.source}</span>
                 </div>
               </Reveal>
@@ -220,27 +229,6 @@ export default function ComplianceContent() {
               If a system already knows it, the check reads it. If nobody&rsquo;s system knows it,
               the check asks for it.{" "}
               <Link href="/platform/integrations" className="ed-accent-text underline-offset-[3px] hover:underline">What connects</Link>
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ── 4. Continuity ─────────────────────────────────── */}
-      <section className="ed-bg w-full">
-        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
-          <Reveal className="flex max-w-[620px] flex-col gap-3.5">
-            <h2 className="ed-fg" style={H2}>An audit is a snapshot. Compliance is a state.</h2>
-            <p className="ed-fg-muted text-[15px] leading-[1.55]">
-              Checking on a schedule tells you what was true on the schedule.
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.08} className="mt-10"><ContinuityDiagram /></Reveal>
-
-          <Reveal delay={0.1}>
-            <p className="ed-fg mt-10 max-w-[700px] font-medium" style={STATEMENT}>
-              The question stops being &ldquo;did we pass.&rdquo; It becomes &ldquo;what&rsquo;s open
-              right now.&rdquo;
             </p>
           </Reveal>
         </div>
@@ -295,6 +283,43 @@ export default function ComplianceContent() {
               file it. They send it where they already talk to you, and the write happens on their
               behalf.
             </p>
+            {/* Two points folded in rather than given their own bands.
+
+                The first is the takeaway the section was missing: the
+                argument is not that replying is convenient, it is that
+                convenience is what makes the record stay true.
+
+                The second absorbs the deleted Evidence section. That
+                section existed to show a filed document, a photo and a
+                submitter, which is one claim, not a band: everything that
+                happens here is logged. */}
+            <ul className="ed-fg-muted mt-1 flex max-w-[660px] flex-col gap-2 text-[15px] leading-[1.55]">
+              <li className="flex gap-2.5">
+                <span
+                  className="mt-[9px] h-[6px] w-[6px] flex-none rounded-full"
+                  style={{ background: "var(--ed-accent-text)" }}
+                  aria-hidden="true"
+                />
+                <span>
+                  <b className="ed-fg">Updating has to be this easy or it stops happening.</b>{" "}
+                  A renewal filed in the thread someone is already in is a renewal that gets
+                  filed. That is what makes compliance stick between audits, rather than
+                  arriving in a rush before one.
+                </span>
+              </li>
+              <li className="flex gap-2.5">
+                <span
+                  className="mt-[9px] h-[6px] w-[6px] flex-none rounded-full"
+                  style={{ background: "var(--ed-accent-text)" }}
+                  aria-hidden="true"
+                />
+                <span>
+                  <b className="ed-fg">Everything is logged.</b> The document, the photo, who
+                  submitted it and when, held against the location it belongs to. When someone
+                  asks for proof, you are not asking your locations for it.
+                </span>
+              </li>
+            </ul>
           </Reveal>
 
           <div className="mt-10 grid grid-cols-1 items-start gap-6 lg:grid-cols-2 lg:gap-11">
@@ -318,57 +343,6 @@ export default function ComplianceContent() {
               </p>
             </Reveal>
           </div>
-        </div>
-      </section>
-
-      {/* ── 7. Evidence ───────────────────────────────────── */}
-      <section className="ed-bg w-full">
-        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
-          <Reveal className="flex max-w-[800px] flex-col gap-3.5">
-            {/* The handoff's own copy note flags its original H2 as the
-                banned antithesis construction and supplies this. */}
-            <h2 className="ed-fg" style={H2}>The document, the photo, and who submitted it.</h2>
-          </Reveal>
-
-          <Reveal delay={0.08} className="mt-9">
-            <div
-              className="max-w-[840px] overflow-hidden rounded-[14px]"
-              style={{ background: "#FFFFFF", border: "1px solid #E5E7EB", boxShadow: "0 1px 2px rgba(10,10,10,0.04), 0 12px 28px rgba(10,10,10,0.06)" }}
-            >
-              <div className="px-5 py-3" style={{ background: "#F4F4F5", ...META, color: "#7A7A85" }}>
-                Store #263 · General liability · <span style={{ color: "#0077A8" }}>Verified</span>
-              </div>
-              {EVIDENCE.map(([label, value], i) => (
-                <div
-                  key={label}
-                  className="grid grid-cols-1 gap-x-4 gap-y-1 px-5 py-4 md:grid-cols-[minmax(96px,132px)_1fr]"
-                  style={{ borderTop: i === 0 ? "none" : "1px solid #E5E7EB" }}
-                >
-                  <span style={{ ...META, color: "#7A7A85" }}>{label}</span>
-                  <span
-                    className="text-[14px]"
-                    style={{ color: "#0A0A0A", fontFamily: label === "Document" ? MONO : undefined, fontSize: label === "Document" ? 12.5 : undefined, fontWeight: label === "Document" ? 500 : undefined, fontVariantNumeric: "tabular-nums" }}
-                  >
-                    {value}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="mt-9 grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
-              {EVIDENCE_COLS.map((c) => (
-                <span key={c.title} className="flex flex-col gap-1.5">
-                  <span className="ed-fg text-[14.5px] font-semibold tracking-[-0.01em]">{c.title}</span>
-                  <span className="ed-fg-muted text-[13.5px] leading-[1.5]">{c.body}</span>
-                </span>
-              ))}
-            </div>
-            <p className="ed-fg mt-9 max-w-[660px] font-medium" style={STATEMENT}>
-              When someone asks for proof, you&rsquo;re not asking your locations for it.
-            </p>
-          </Reveal>
         </div>
       </section>
 

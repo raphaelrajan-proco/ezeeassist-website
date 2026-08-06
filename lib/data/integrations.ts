@@ -125,11 +125,53 @@ export const platformMarqueeIntegrations = integrations.slice(0, 20);
  * or it is not shown; four real marks among twenty text chips reads as
  * broken rather than deliberate.
  */
-export const INTEGRATION_STRIP = [
-  "Mindbody", "ServiceTitan", "Toast", "Square", "QuickBooks", "Xero", "SharePoint",
-  "Google Drive", "Trainual", "Docebo", "Salesforce", "HubSpot", "Microsoft Teams",
-  "Slack", "Mailchimp", "Notion", "Zenoti", "Lightspeed", "FranConnect", "Dropbox",
-  "Box", "OneDrive", "Stripe", "ADP", "Zoom", "Google Meet", "Airtable", "Monday",
-  "Canva", "Constant Contact", "TouchBistro", "Thryv", "HighLevel", "Zoho",
-  "TalentLMS", "Loom", "Vimeo", "Amazon S3", "ProfitKeeper", "Qvinci",
+/**
+ * The strip shared by the Integrations hero, Reporting, and Answers.
+ *
+ * Each entry carries the domain that keys `VENDOR_LOGOS`, so the strip
+ * can show the real mark beside the name rather than the name alone.
+ * ADP is in this list but not in the directory grid, which is why the
+ * domains are stored here rather than derived from `DIRECTORY`.
+ */
+export const INTEGRATION_STRIP: { name: string; domain: string }[] = [
+  { name: "Mindbody", domain: "mindbodyonline.com" },
+  { name: "ServiceTitan", domain: "servicetitan.com" },
+  { name: "Toast", domain: "toasttab.com" },
+  { name: "Square", domain: "squareup.com" },
+  { name: "QuickBooks", domain: "quickbooks.intuit.com" },
+  { name: "Xero", domain: "xero.com" },
+  { name: "SharePoint", domain: "sharepoint.com" },
+  { name: "Google Drive", domain: "drive.google.com" },
+  { name: "Trainual", domain: "trainual.com" },
+  { name: "Docebo", domain: "docebo.com" },
+  { name: "Salesforce", domain: "salesforce.com" },
+  { name: "HubSpot", domain: "hubspot.com" },
+  { name: "Microsoft Teams", domain: "microsoft.com" },
+  { name: "Slack", domain: "slack.com" },
+  { name: "Mailchimp", domain: "mailchimp.com" },
+  { name: "Notion", domain: "notion.so" },
+  { name: "Zenoti", domain: "zenoti.com" },
+  { name: "Lightspeed", domain: "lightspeedhq.com" },
+  { name: "FranConnect", domain: "franconnect.com" },
+  { name: "Dropbox", domain: "dropbox.com" },
+  { name: "Box", domain: "box.com" },
+  { name: "OneDrive", domain: "onedrive.live.com" },
+  { name: "Stripe", domain: "stripe.com" },
+  { name: "ADP", domain: "adp.com" },
+  { name: "Zoom", domain: "zoom.us" },
+  { name: "Google Meet", domain: "meet.google.com" },
+  { name: "Airtable", domain: "airtable.com" },
+  { name: "Monday", domain: "monday.com" },
+  { name: "Canva", domain: "canva.com" },
+  { name: "Constant Contact", domain: "constantcontact.com" },
+  { name: "TouchBistro", domain: "touchbistro.com" },
+  { name: "Thryv", domain: "thryv.com" },
+  { name: "HighLevel", domain: "gohighlevel.com" },
+  { name: "Zoho", domain: "zoho.com" },
+  { name: "TalentLMS", domain: "talentlms.com" },
+  { name: "Loom", domain: "loom.com" },
+  { name: "Vimeo", domain: "vimeo.com" },
+  { name: "Amazon S3", domain: "aws.amazon.com" },
+  { name: "ProfitKeeper", domain: "profitkeeper.com" },
+  { name: "Qvinci", domain: "qvinci.com" },
 ];

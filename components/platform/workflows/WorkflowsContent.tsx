@@ -48,6 +48,12 @@ const HERO = platformHero("workflows");
 const SKY = "#8CC5DC";
 const ON_IMAGE = "rgba(240,246,243,0.92)";
 
+/* Five steps of grey for the trigger cards, light to slightly deeper.
+   `--ed-card-alt` repeated six times was the monotone this replaces.
+   Deliberately shallow: enough separation to read as six distinct
+   things, not enough to imply an order. */
+const GREYS = ["#FAFAFB", "#F5F5F7", "#F0F0F3", "#EBEBEF", "#F5F5F7"];
+
 const H2 = {
   fontFamily: JAKARTA, fontWeight: 700,
   fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)",
@@ -90,7 +96,7 @@ export default function WorkflowsContent() {
           className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-2 lg:gap-16"
         >
           <div className="flex max-w-[500px] flex-col items-start">
-            <p style={{ ...EYEBROW, color: SKY }}>Coaching orchestration</p>
+            <p style={{ ...EYEBROW, color: SKY }}>Workflows that orchestrate coaching</p>
             <h1
               className="mt-5"
               style={{
@@ -98,9 +104,9 @@ export default function WorkflowsContent() {
                 fontSize: "clamp(1.875rem, 1.2rem + 2.2vw, 3.25rem)", color: "#FFFFFF", textWrap: "pretty",
               }}
             >
-              Workflows that orchestrate coaching.
+              Build the play once.
               <br />
-              <span style={{ color: SKY }}>Build the play once, it runs at every location.</span>
+              <span style={{ color: SKY }}>It runs at every location.</span>
             </h1>
             <p className="mt-5 max-w-[440px] text-base leading-[1.6]" style={{ color: ON_IMAGE }}>
               A coach writes down the check they&rsquo;d run, the number that would worry them, and
@@ -147,7 +153,7 @@ export default function WorkflowsContent() {
           <Reveal className="flex max-w-[620px] flex-col gap-3.5">
             <h2 className="ed-fg" style={H2}>
               The coach types a play.{" "}
-              <span className="ed-accent-text">The system builds the workflow.</span>
+              <span className="ed-accent-text">EZee Assist builds the workflow.</span>
             </h2>
             <p className="ed-fg-muted text-[15.5px] leading-[1.6]">
               A coach who has never configured anything can write one in a couple of minutes. Dana
@@ -224,29 +230,52 @@ export default function WorkflowsContent() {
             </h2>
           </Reveal>
 
-          <div className="mt-9 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* One key, not a label on every card.
+
+              Every one of these IS a trigger, so stamping "Trigger" on
+              five of six said nothing and left the sixth looking like a
+              different kind of thing. The key states it once and the
+              cards then only have to distinguish the one that matters:
+              drift, which is the one nobody catches by hand. */}
+          <Reveal delay={0.04}>
+            <div className="ed-rule mt-7 flex flex-wrap items-center gap-x-6 gap-y-2 border-t pt-4">
+              <span style={{ ...LABEL, letterSpacing: "0.14em", color: "var(--ed-fg-muted)" }}>
+                Six kinds of trigger
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="h-[7px] w-[7px] flex-none rounded-full" style={{ background: "#0077A8" }} aria-hidden="true" />
+                <span className="ed-fg-muted text-[13px]">Hardest to catch by hand</span>
+              </span>
+            </div>
+          </Reveal>
+
+          <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {TRIGGERS.map((t, i) => (
               <Reveal key={t.name} delay={(i % 3) * 0.05}>
                 <div
-                  className="ed-card flex h-full flex-col rounded-[14px] px-5 py-5"
+                  className="flex h-full flex-col rounded-[14px] px-5 py-5"
                   style={{
+                    /* Stepped greys rather than one card colour repeated
+                       six times. The step is small on purpose: enough that
+                       the grid reads as a set of distinct things, not so
+                       much that it looks like a ranking. Drift keeps the
+                       accent ring and sits on the wash instead. */
+                    background: t.drift ? "var(--wash)" : GREYS[i % GREYS.length],
                     boxShadow: t.drift
                       ? "0 0 0 1.5px #0077A8, 0 6px 20px rgba(0,119,168,0.12)"
-                      : "0 0 0 1px var(--ed-border), 0 4px 14px rgba(10,10,10,0.05)",
+                      : "0 0 0 1px var(--ed-border)",
                   }}
                 >
-                  <span className="flex items-center gap-2">
-                    <span
-                      className="h-[7px] w-[7px] flex-none rounded-full"
-                      style={{ background: t.drift ? "#0077A8" : "#D4D4D8" }}
-                      aria-hidden="true"
-                    />
-                    <span style={{ ...LABEL, letterSpacing: "0.14em", color: t.drift ? "var(--ed-accent-text)" : "var(--ed-fg-muted)" }}>
-                      {t.drift ? "Hardest to catch" : "Trigger"}
+                  {t.drift && (
+                    <span className="flex items-center gap-2">
+                      <span className="h-[7px] w-[7px] flex-none rounded-full" style={{ background: "#0077A8" }} aria-hidden="true" />
+                      <span style={{ ...LABEL, letterSpacing: "0.14em", color: "var(--ed-accent-text)" }}>
+                        Hardest to catch
+                      </span>
                     </span>
-                  </span>
+                  )}
                   <span
-                    className="ed-fg mt-3.5"
+                    className={`ed-fg ${t.drift ? "mt-3.5" : ""}`}
                     style={{ fontFamily: JAKARTA, fontSize: 20, fontWeight: 700, letterSpacing: "-0.025em", lineHeight: 1.15 }}
                   >
                     {t.name}
@@ -256,7 +285,7 @@ export default function WorkflowsContent() {
                     className="ed-fg mt-auto rounded-[10px] px-3.5 py-3"
                     style={{
                       marginTop: 18, fontFamily: MONO, fontSize: 12, lineHeight: 1.5,
-                      background: t.drift ? "rgba(0,119,168,0.06)" : "var(--ed-card-alt)",
+                      background: t.drift ? "rgba(0,119,168,0.06)" : "rgba(10,10,10,0.045)",
                     }}
                   >
                     {t.example}
@@ -280,8 +309,17 @@ export default function WorkflowsContent() {
               A workflow written for one problem keeps solving it, and one that works in a single
               location can get published to the rest.
             </p>
-            {/* Stays until real customer figures replace these. */}
-            <p className="ed-fg-muted mt-2 text-[12px]">Counts are illustrative.</p>
+            {/* The living-workflow point, added on request. It belongs
+                here rather than in its own band: this section is already
+                about what happens to a workflow after it ships, and the
+                argument is that the answer is "it keeps changing", not
+                "it sits there". */}
+            <p className="ed-fg-muted text-[15.5px] leading-[1.6]">
+              <b className="ed-fg">They keep adapting after they ship.</b>{" "}
+              A workflow reads the same live data your coaches do, so when a threshold stops being the right one, a
+              play is rewritten, or a location&rsquo;s numbers move, it adjusts what it watches
+              for and what it sends. Nobody reopens it to keep it current.
+            </p>
           </Reveal>
 
           <Reveal delay={0.08}>
