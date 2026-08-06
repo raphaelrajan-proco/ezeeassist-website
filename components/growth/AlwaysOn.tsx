@@ -558,7 +558,8 @@ export default function AlwaysOn() {
                   was, by request. */}
               <p style={{ lineHeight: 1.5, color: "var(--wl-muted)", fontWeight: 400, fontSize: "calc(0.6 * clamp(1.25rem, 0.25rem + 2vw, 2rem))" }}>
                 Nobody pulled any of this. Each play orchestrated by a coach once, and
-                some plays built directly from what the rest of your network already learned.
+                some plays built directly from what the rest of your network already
+                learned. Just-in-time coaching unlocked.
               </p>
               {/* Breathing room above the key, and the key hugging the
                   compartment below it, by request. */}
