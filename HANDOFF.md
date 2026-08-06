@@ -1819,92 +1819,74 @@ clipped by the console's `overflow-hidden`.
 
 ## /platform/compliance
 
-Ten sections, replacing the ComingSoon stub the Workflows page created.
+Rebuilt from a supplied design handoff. Seven sections plus a closing
+band: hero, the gap, scope, continuity, the chase, closing it, evidence.
 
-**Compliance is a crowded claim.** Every franchisor already owns an audit
-app or a compliance module, so this page cannot win on "we check
-compliance". It wins on two things and every section serves one:
+The page makes one argument: a network's compliance state can be known
+continuously rather than sampled at audits, gaps can be chased to close
+without a person sending reminders, and every close leaves verifiable
+evidence.
 
-1. **Compliance is a state, not a snapshot.** An audit tells you what was
-   true that day; between audits nobody knows. §1, §4 and §6 carry this.
-2. **The chase, not the check.** Every tool checks, almost none chase,
-   and the chase is what consumes a coach's week. §2 and §5 carry it.
+### Three open questions the handoff asked to be settled
 
-**Vocabulary discipline, and it is checkable.** The page is present-tense
-and state-based: open, current, at risk, not current, holding, closes,
-state. Audit language is retrospective and pass/fail, so "passed",
-"failed", "audit score" and "compliance rate" never appear as the page's
-own framing — measured on the built page, all four are zero. "Audit"
-appears eight times, every one either describing a customer's existing
-process (LAST AUDIT / NEXT AUDIT, "an audit tells you what was true on
-the day of the audit", "audit packs" as a documentation example) or §6's
-auditor reading exported evidence. **It never claims to replace an
-existing compliance module.**
+**The hero.** Kept as the existing hazy teal variant, on request. The
+handoff asked for a variant with its own base and scrim and said the
+committed image should be the teal one, which is what
+`platformHero("compliance")` already resolves to, so the two agree.
 
-Band sequence, part of the spec: dark, light, light, light, dark, light,
-light, light, light, dark. Light sections alternate `ed-bg`/`ed-bg-alt`,
-and no two adjacent share a device.
+**The dark band is `#0B1220`**, not the prototype's teal-leaning
+`#0C2633`. The handoff flagged the conflict and asked which was
+canonical; `#0B1220` is what every other dark solid on this site uses.
 
-Three new components:
+**A closing CTA band is appended.** The handoff's reference stopped
+before one and asked for confirmation. DESIGN.md puts a dark photographic
+CTA at the end of every sub-page and every sibling has one.
 
-- **`NetworkState`** (§1). `LIVE` in the header carries the state claim
-  and gets accent treatment. **The three tiers are readable without
-  colour**: each has a distinct marker shape (filled, half, hollow), its
-  own type weight (500/600/700, verified on the built page) and its count
-  at its own size. Colour is the third signal, not the only one.
-- **`ContinuityTimeline`** (§4). **The shaded gaps are the argument** —
-  three checks in a year, everything between them hatched. Do not shorten
-  them for visual balance. **They are labelled `unknown`, not "risk" or
-  "exposure"**: risk implies someone assessed it. No chase mechanics in
-  this section; that is §5.
-- **`ChaseLadder`** (§5). The escalation is an actual ladder: measured on
-  the built page the day labels sit at 89 → 111 → 133 → 155 px and then
-  **back to 89** for Day 24, which resolves rather than continuing the
-  climb. Below `sm` the indent is dropped and the climb is carried by
-  weight alone, because rungs on a phone eat the text column.
+### Two copy lines were replaced, not shipped
 
-Things that must survive a copy pass:
+The handoff's own copy notes flag both as the "not X, it's Y"
+construction the house style bans, and supply the replacements used:
 
-- **§5's five stages must not compress to three.** "Still outstanding"
-  repeating across three escalations is what makes it feel like four
-  weeks of someone's job.
-- **Day 7's detail stays** — *sent to the channel they actually use*. It
-  is why the second reminder works where the email did not.
-- **"Nobody on your team sent a single message" is the payoff** and has
-  the heaviest treatment in the section.
-- **The growth line appears once and is not elaborated.** One sentence.
-- **The Workflows link is one line.** This page does not explain plays.
-- **§6's `CHAIN` row stays**: it shows the trail includes the chase
-  itself, which matters if a franchisor has to demonstrate they enforced
-  a standard. **§6's `EXPIRES` second clause** connects back to §4.
-- **§3's `READ FROM` line is that section's differentiator.** A checklist
-  app makes someone confirm what the LMS already knows. Do not drop it.
-- **§7 is two columns and one line.** Control Center carries governance
-  depth; do not grow it into a permissions matrix.
+- §7 H2: "Not a checkbox. The document, the photo, and who submitted it."
+  became **"The document, the photo, and who submitted it."**
+- §7 column: "Verified, not just received" became **"Read and matched,
+  not filed"**.
 
-§3's cells are hairline-topped rather than carded on purpose: cards
-already carry §7, §8 and §9, and DESIGN.md §1.4 caps a form at two
-appearances per page.
+Raise both with the copy owner if the originals were wanted.
 
-`{{TBD:}}` tokens, four, all §8: `compliance-proof-brand`, `-metric`,
-`-quote`, `-attribution`. **Time-to-close or completion rate is the right
-shape** — it proves the chase, not the check. Not a deflection metric.
+### Load-bearing details
 
-**Three claims flagged for confirmation before launch:**
+**Every figure on this page is illustrative** and two visible
+"Illustrative" footers say so, on the hero card and the chat mock. Both
+must ship. They are deliberately **not** read from
+`lib/data/network-scale.ts`: that file holds confirmed network figures
+and putting demo numbers in it would corrupt its contract.
 
-1. **§6 "Verified, not just received"** — that the product reads a
-   certificate and matches its expiry against a requirement rather than
-   accepting an upload. This is the most technically checkable claim on
-   the page.
-2. **§3's `READ FROM` column** — which categories are genuinely read from
-   connected systems versus captured directly.
-3. **§5's escalation ladder** — that owner → coach → HQ with settable day
-   thresholds is configurable as shown.
+**The escalation ladder's stepped indent is the argument.** Each reminder
+moves further out (0 → 1 → 2 → 3) and the resolved row returns to the
+start, which is the close. `.ed-chase-row` compresses the step from 32px
+to 10px below `sm` rather than dropping it, so the shape survives a phone
+without a horizontal scroll.
 
-Nav and footer: **Compliance was added, not repointed.** The brief said
-it pointed at `/#capabilities`; there was no Compliance item at all,
-because the Workflows work deliberately kept the stub out of the nav.
-Always On is now Workflows and Compliance.
+**The continuity diagram's two treatments must stay different.** A dashed
+track with three dots against an unbroken bar is the whole argument; do
+not normalise them to match.
+
+**Scope reads, Closing it writes.** Both sections touch integrations and
+are deliberately split. Do not let either drift into enumerating the
+other's systems.
+
+The Evidence table's `Chain` row and the Day 24 row in The chase describe
+the same close from two angles. That is a deliberate callback, not
+duplication; both stay.
+
+Seven Scope cards on a four-up grid leaves the last row short by one.
+Intentional, and it matches the reference.
+
+Verified on the built page at 1440/1280/1205/1024/768/375 in both themes:
+no horizontal overflow, no text under 12px, one h1 and seven h2s, zero
+em-dashes, no banned words, both Illustrative labels present, no
+`{{TBD}}` tokens, and no `#00AEEF` used as text.
 
 ## /platform/workflows
 

@@ -7,607 +7,384 @@ import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
 import { platformHero } from "@/lib/data/platform-heroes";
-import {
-  ACCENT_TINT, Band, CARD, EASE, Eyebrow, JAKARTA, MONO, Meta, Reveal, SectionHead,
-} from "@/components/platform/shared";
-import NetworkState from "./NetworkState";
-import ContinuityTimeline from "./ContinuityTimeline";
-import ChaseLadder from "./ChaseLadder";
+import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
+import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
+import { BLIND_WINDOW, EVIDENCE, EVIDENCE_COLS, SCOPE, WEEK, WRITE_BLOCKS } from "./data";
+import { ChaseLadderCard, ChatMock, ContinuityDiagram, NetworkStateCard, ScopeTile } from "./artifacts";
 
 /**
  * /platform/compliance
  *
- * **Compliance is a crowded claim.** Every franchisor already owns an audit
- * app or a compliance module, so this page cannot win on "we check
- * compliance". It wins on two things and every section serves one:
+ * Rebuilt from the supplied design handoff. Seven sections plus a
+ * closing band: hero, the gap, scope, continuity, the chase, closing it,
+ * evidence.
  *
- *   1. Compliance is a **state**, not a snapshot. An audit tells you what
- *      was true that day; between audits nobody knows. (§1, §4, §6)
- *   2. **The chase, not the check.** Every tool checks. Almost none chase,
- *      and the chase is what consumes a coach's week. (§2, §5)
+ * The page makes one argument: a network's compliance state can be known
+ * continuously rather than sampled at audits, gaps can be chased to close
+ * without a person sending reminders, and every close leaves verifiable
+ * evidence.
  *
- * **Vocabulary discipline.** Present-tense and state-based: open, current,
- * at risk, not current, holding, closes, state. Audit language is
- * retrospective and pass/fail, so "passed", "failed", "audit score" and
- * "compliance rate" never appear as the page's own framing. The word
- * "audit" appears only where a customer's existing process is being
- * described, and in §6 where an auditor reads exported evidence.
+ * ── Three decisions the handoff asked to be made ────────────
  *
- * **Never claims to replace an existing compliance module.** It reads from
- * it, the same no-replacement position as every other page here.
+ * **The hero stays the existing hazy teal variant**, per direct
+ * instruction. The handoff wanted a variant registered with its own base
+ * and scrim and said the committed image should be the teal one, which
+ * is what `platformHero("compliance")` already resolves to, so the two
+ * agree.
  *
- * Band sequence, part of the spec: dark, light, light, light, dark, light,
- * light, light, light, dark. Light sections alternate `ed-bg`/`ed-bg-alt`,
- * and no two adjacent share a device: two panels, a category grid, a
- * comparison timeline, an escalation ladder, an evidence artifact, a
- * two-column comparison.
+ * **The dark band is `#0B1220`**, not the prototype's teal-leaning
+ * `#0C2633`. The handoff flagged the conflict and asked which was
+ * canonical: `#0B1220` is what every other dark solid on this site uses.
  *
- * §3's cells are hairline-topped rather than carded on purpose. Cards
- * already carry §7, §8 and §9, and DESIGN.md §1.4 caps a form at two
- * appearances per page.
+ * **A closing CTA band is appended.** The handoff's reference stopped
+ * before one and asked for confirmation. DESIGN.md puts a dark
+ * photographic CTA at the end of every sub-page and every sibling has
+ * one.
  *
- * Deviations from the brief:
+ * Two copy lines were replaced rather than shipped. The handoff itself
+ * flags its §7 H2 and one column title as the "not X, it's Y"
+ * construction the house style bans, and supplies plain replacements.
+ * Those are used, and the originals are recorded in HANDOFF.md.
  *
- * - The hero is the **photographic** treatment, not the
- *   flat gradient the brief describes. Requested directly.
- * - The brief says the nav points Compliance at `/#capabilities`. There was
- *   no Compliance nav item at all, so it was **added** rather than
- *   repointed, and the ComingSoon stub this page replaces was deliberately
- *   never in the nav.
+ * Every figure here is illustrative. The hero card and the chat mock
+ * both carry a visible "Illustrative" footer and those must ship.
  */
 
-const ON_DARK = "rgba(238,242,248,0.92)";
-const ON_DARK_DIM = "rgba(238,242,248,0.55)";
-const ON_DARK_RULE = "rgba(238,242,248,0.16)";
-const ON_DARK_ACCENT = "#9FE0F8";
-const ON_IMAGE = "rgba(245,237,224,0.92)";
-const WARN = "#B45309";
-
-/* Assignment and the revert switch live in lib/data/platform-heroes.ts. */
 const HERO = platformHero("compliance");
+const SKY = "#9FE0F8";
+const ON_IMAGE = "rgba(245,237,224,0.9)";
 
-/* ── §2 ───────────────────────────────────────────────────── */
-const BLIND: string[] = [
-  "a certification lapsed at #263",
-  "two locations missed a training deadline",
-  "one insurance policy expired and renewed late",
-];
+const H2 = {
+  fontFamily: JAKARTA, fontWeight: 700,
+  fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)",
+  letterSpacing: "-0.03em", lineHeight: 1.08, textWrap: "pretty" as const,
+};
 
-const WEEK: { day: string; task: string; repeat?: boolean }[] = [
-  { day: "Mon", task: "Emailed 7 locations about outstanding P&L" },
-  { day: "Tue", task: "Called 3 that hadn't replied" },
-  { day: "Wed", task: "Chased insurance certificates from 4" },
-  { day: "Thu", task: "Followed up on training completions" },
-  { day: "Fri", task: "Started again with the ones from Monday", repeat: true },
-];
+const STATEMENT = {
+  fontSize: "clamp(1.0625rem, 0.5rem + 0.9vw, 1.25rem)",
+  letterSpacing: "-0.02em", lineHeight: 1.35,
+};
 
-/* ── §3 ─────────────────────────────────────────────────────
-   The READ FROM line is the differentiator here: a checklist app makes
-   someone confirm what the LMS already knows. Do not drop it for visual
-   tidiness. */
-const SCOPE: { name: string; examples: string; readFrom: string }[] = [
-  { name: "Licensing and insurance", examples: "Business licence, liability cover, bonding, vehicle insurance",        readFrom: "Document store, expiry dates" },
-  { name: "Certification",           examples: "Staff credentials, practitioner licences, food safety, background checks", readFrom: "LMS, HR, certification bodies" },
-  { name: "Training",                examples: "Required modules, refreshers, new-hire completion",                    readFrom: "LMS" },
-  { name: "Documentation",           examples: "P&L submission, audit packs, incident reports, signed acknowledgements", readFrom: "Accounting, document store" },
-  { name: "Operational standards",   examples: "Opening and closing procedures, cleanliness, presentation, photo evidence", readFrom: "Direct capture" },
-  { name: "Brand standards",         examples: "Signage, uniform, menu, pricing, local marketing",                     readFrom: "Direct capture, marketing systems" },
-  { name: "Regulatory",              examples: "Ratios, inspections, jurisdiction-specific requirements",              readFrom: "Varies by industry" },
-];
+const EYEBROW = {
+  fontFamily: MONO, fontSize: 12, fontWeight: 600,
+  letterSpacing: "0.16em", textTransform: "uppercase" as const,
+};
 
-/* ── §6 ─────────────────────────────────────────────────────
-   The CHAIN row stays: it shows the trail includes the chase itself,
-   which is what a franchisor needs if they have to demonstrate they
-   enforced a standard. The EXPIRES row's second clause connects back to
-   §4's continuity argument. */
-const EVIDENCE: { label: string; value: string }[] = [
-  { label: "Document",  value: "cert-liability-2026.pdf" },
-  { label: "Submitted", value: "Mar 14, 2:41pm · Maria S., owner" },
-  { label: "Verified",  value: "Policy number, coverage amount, and expiry read and matched against your requirement" },
-  { label: "Expires",   value: "Mar 14, 2027 · next check scheduled Feb 12" },
-  { label: "Chain",     value: "4 reminders, 1 escalation, 24 days to close" },
-];
+const META = {
+  fontFamily: MONO, fontSize: 12, fontWeight: 600,
+  letterSpacing: "0.13em", textTransform: "uppercase" as const,
+};
 
-const EVIDENCE_POINTS: { title: string; body: string }[] = [
-  { title: "Timestamped and attributed", body: "Who submitted it, when, and from where" },
-  { title: "Verified, not just received", body: "The document is read and matched against the requirement, not filed unopened" },
-  { title: "Exportable", body: "The whole network's evidence, in a pack an auditor or franchisor counsel can use" },
-];
-
-/* ── §7 ─────────────────────────────────────────────────────
-   Two columns and one line. Control Center carries governance depth; do
-   not grow this into a permissions matrix. */
-const ALONE = [
-  "Checking every location against every standard",
-  "Notifying an owner and opening a task",
-  "Reminding on the schedule you set",
-  "Collecting and verifying evidence",
-  "Updating the network state",
-];
-const REACHES = [
-  "Anything still open past your escalation threshold",
-  "Anything that fails verification",
-  "Anything a location disputes",
-  "Anything you decide belongs on this side of the line",
-];
-
-const RELATED: { eyebrow: string; title: string; href: string }[] = [
-  { eyebrow: "Workflows",      title: "Compliance is the flagship play. Here's the engine.",        href: "/platform/workflows" },
-  { eyebrow: "Reporting",      title: "When you want to ask about compliance rather than be told",  href: "/platform/reporting" },
-  { eyebrow: "Control Center", title: "How thresholds and escalation are set",                      href: "/platform/control-center" },
-];
+const ON_DARK      = "rgba(238,242,248,0.92)";
+const ON_DARK_MUTE = "rgba(238,242,248,0.55)";
+const ON_DARK_RULE = "rgba(238,242,248,0.16)";
 
 export default function ComplianceContent() {
   return (
-    <>
+    <div className="ed-compliance">
       {/* ── 1. Hero ───────────────────────────────────────── */}
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill priority sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.scrimRgba})` }} />
-          <div
-            className="absolute inset-0"
-            style={{ background: "radial-gradient(58% 52% at 82% 12%, rgba(159,224,248,0.16) 0%, rgba(159,224,248,0) 70%)" }}
-          />
+          <div className="absolute inset-0" style={{ background: HERO.scrimCss ?? `rgba(${HERO.scrimRgba})` }} />
         </div>
 
-        <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-20 pb-16 md:pt-24 md:pb-20">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: EASE }}>
-            <p
-              className="uppercase"
-              style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_ACCENT }}
-            >
-              Compliance
-            </p>
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: EASE }}
+          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-16 md:py-24 lg:grid-cols-2 lg:gap-16"
+        >
+          <div className="flex flex-col items-start">
+            <p style={{ ...EYEBROW, color: "rgba(255,255,255,0.62)" }}>Compliance</p>
             <h1
-              className="mt-5 max-w-[880px] leading-[1.06] tracking-[-0.03em]"
+              className="mt-5"
               style={{
-                color: "#FFFFFF",
-                fontFamily: JAKARTA,
-                fontWeight: 700,
-                /* Ceiling derived at 1440: the longer clause, "Know where
-                   every location stands.", measures ~600px at 40px inside
-                   the 880px cap. Break is lg-only; below that it wraps. */
-                fontSize: "clamp(1.625rem, 0.55rem + 2.4vw, 2.5rem)",
-                textWrap: "balance",
+                fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.04,
+                fontSize: "clamp(1.75rem, 1rem + 2.4vw, 3.25rem)", color: "#FFFFFF", textWrap: "pretty",
               }}
             >
-              Know where every location stands.{" "}
-              <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>
-                Without anyone having to ask.
-              </span>
+              Know where your network stands, every day.
+              <span className="block" style={{ color: SKY }}>Not four times a year.</span>
             </h1>
-            <p className="mt-6 max-w-[680px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
-              Certifications, insurance, training, audits, documentation, checked continuously
-              against your standard, chased until they close, and evidenced without a single
-              follow-up email.
+            <p className="mt-5 max-w-[520px] text-base leading-[1.6]" style={{ color: ON_IMAGE }}>
+              Every licence, certificate, deadline, and standard, checked continuously against the
+              systems that already hold them. Gaps get chased until they close.
             </p>
-            <div className="mt-9 flex flex-wrap items-center gap-3">
-              <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex flex-none whitespace-nowrap" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
                 Speak to an expert
-                <span className="ed-btn-arrow-badge" aria-hidden="true">
-                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
-                </span>
+                <span className="ed-btn-arrow-badge" aria-hidden="true"><ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} /></span>
               </Link>
-              <a href="#the-chase" className="ed-btn ed-btn-secondary-dark inline-flex">
-                See what the chase looks like
-              </a>
+              <a href="#the-chase" className="ed-btn ed-btn-secondary-dark inline-flex flex-none whitespace-nowrap">See how it closes</a>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: EASE, delay: 0.12 }}
-            className="mt-12"
-          >
-            <NetworkState />
-          </motion.div>
-        </div>
+          <NetworkStateCard />
+        </motion.div>
       </section>
 
-      {/* ── 2. The gap ────────────────────────────────────
-          The only section that discusses current cost. Nothing later
-          restates the pain. */}
-      <Band>
-        <SectionHead
-          eyebrow="The gap"
-          title="You find out late. And someone spends their week asking."
-        />
+      <HeroLogoStrip />
 
-        <div className="mt-10 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5">
-          <Reveal>
-            <div className="flex h-full flex-col overflow-hidden" style={CARD}>
-              <div className="px-5 py-3.5 md:px-6" style={{ backgroundColor: "var(--ed-card-alt)", borderBottom: "1px solid var(--ed-border)" }}>
-                <Meta>The blind window</Meta>
-              </div>
-              <div className="p-5 md:p-6">
-                <div className="flex gap-8">
-                  {[["Last audit", "Q1"], ["Next audit", "Q3"]].map(([k, v]) => (
-                    <div key={k}>
-                      <Meta>{k}</Meta>
-                      <p className="ed-fg mt-1.5" style={{ fontFamily: MONO, fontSize: 17, fontWeight: 700 }}>{v}</p>
-                    </div>
-                  ))}
-                </div>
-                <p className="ed-fg-muted mt-6 text-[14px] leading-relaxed">Between them, five months in which:</p>
-                <ul className="mt-3 flex flex-col gap-2">
-                  {BLIND.map((b) => (
-                    <li key={b} className="flex gap-2.5">
-                      <span aria-hidden="true" className="mt-[9px] h-[5px] w-[5px] flex-none rounded-full" style={{ backgroundColor: "var(--ed-fg-muted)" }} />
-                      <span className="ed-fg text-[14px] leading-relaxed">{b}</span>
-                    </li>
-                  ))}
-                </ul>
-                {/* The line that lands. Weight as well as colour, so it
-                    still reads as the conclusion in greyscale. */}
-                <p className="mt-4 text-[14.5px] leading-relaxed" style={{ color: WARN, fontWeight: 600 }}>
-                  nobody knew about any of it
-                </p>
-              </div>
-            </div>
+      {/* ── 2. The gap ────────────────────────────────────── */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[760px] flex-col gap-3.5">
+            <p className="ed-fg-muted" style={EYEBROW}>The gap</p>
+            <h2 className="ed-fg" style={H2}>You find out late. And someone spends their week asking.</h2>
           </Reveal>
+
+          <div className="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2">
+            <Reveal>
+              <div className="ed-card ed-border h-full overflow-hidden rounded-[14px] border">
+                <div className="ed-card-alt ed-fg-muted px-5 py-3" style={META}>The blind window</div>
+                <div className="flex flex-col gap-3.5 px-5 pb-5 pt-5">
+                  <div className="flex gap-10">
+                    {[["Last audit", "Q1"], ["Next audit", "Q3"]].map(([l, v]) => (
+                      <span key={l} className="flex flex-col gap-1">
+                        <span className="ed-fg-muted" style={META}>{l}</span>
+                        <span className="ed-fg" style={{ fontFamily: JAKARTA, fontSize: 20, fontWeight: 700, letterSpacing: "-0.02em", fontVariantNumeric: "tabular-nums" }}>{v}</span>
+                      </span>
+                    ))}
+                  </div>
+                  <p className="ed-fg text-[14px]">Between them, five months in which:</p>
+                  <div className="flex flex-col gap-2.5">
+                    {BLIND_WINDOW.map((t) => (
+                      <span key={t} className="ed-fg-muted flex gap-2.5 text-[14px] leading-[1.5]">
+                        <span className="flex-none" style={{ color: "var(--bad)" }} aria-hidden="true">–</span>{t}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-[14px] font-medium" style={{ color: "var(--bad)" }}>all three surfaced at the Q3 audit</p>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.08}>
+              <div className="ed-card ed-border h-full overflow-hidden rounded-[14px] border">
+                <div className="ed-card-alt ed-fg-muted px-5 py-3" style={META}>One person&rsquo;s week</div>
+                <div>
+                  {WEEK.map(([day, entry], i) => {
+                    const friday = i === WEEK.length - 1;
+                    return (
+                      <div
+                        key={day}
+                        className={`grid grid-cols-1 gap-x-4 gap-y-1 px-5 py-3.5 sm:grid-cols-[56px_1fr] ${i === 0 ? "" : "ed-border border-t"}`}
+                      >
+                        <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: friday ? 600 : 400, color: friday ? "var(--bad)" : "var(--ed-fg-muted)" }}>{day}</span>
+                        <span className="text-[14px]" style={{ color: friday ? "var(--bad)" : "var(--ed-fg)", fontWeight: friday ? 500 : 400 }}>{entry}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </Reveal>
+          </div>
 
           <Reveal delay={0.1}>
-            <div className="flex h-full flex-col overflow-hidden" style={CARD}>
-              <div className="px-5 py-3.5 md:px-6" style={{ backgroundColor: "var(--ed-card-alt)", borderBottom: "1px solid var(--ed-border)" }}>
-                <Meta>One person&rsquo;s week</Meta>
-              </div>
-              <div className="px-5 py-2 md:px-6">
-                {WEEK.map((w, i) => (
-                  <div
-                    key={w.day}
-                    className="flex items-baseline gap-4 py-3.5"
-                    style={{ borderTop: i === 0 ? "none" : "1px solid var(--ed-rule)" }}
-                  >
-                    <span
-                      className="flex-none"
-                      style={{
-                        fontFamily: MONO, fontSize: 11.5, width: 34,
-                        fontWeight: w.repeat ? 700 : 500,
-                        color: w.repeat ? WARN : "var(--ed-fg-muted)",
-                      }}
-                    >
-                      {w.day}
-                    </span>
-                    <span
-                      className="min-w-0 flex-1 text-[14px] leading-snug"
-                      style={w.repeat ? { color: WARN, fontWeight: 600 } : { color: "var(--ed-fg)" }}
-                    >
-                      {w.task}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-
-        <Reveal delay={0.16}>
-          <div className="mt-9 max-w-[720px]">
-            <p
-              className="ed-fg tracking-[-0.02em]"
-              style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}
-            >
+            <p className="ed-fg mt-9 max-w-[640px] font-medium" style={STATEMENT}>
               An audit tells you what was true on the day of the audit. The rest of the year,
               you&rsquo;re guessing.
             </p>
-            <p className="ed-fg-muted mt-3 text-base leading-relaxed">
+            <p className="ed-fg-muted mt-3 text-[13.5px] leading-[1.55]">
               Meanwhile someone on your team is a full-time reminder service.
             </p>
-          </div>
-        </Reveal>
-      </Band>
+          </Reveal>
+        </div>
+      </section>
 
       {/* ── 3. Scope ──────────────────────────────────────
-          Hairline-topped cells rather than cards: cards already carry §7,
-          §8 and §9, and a fourth grid of them would read as a template. */}
-      <Band alt>
-        <SectionHead
-          eyebrow="Scope"
-          title="Everything with a deadline, a certificate, or a standard behind it."
-          sub="Read from the systems that already hold it. Nobody re-enters anything."
-        />
+          Seven cards, so the last row of four is short by one. That is
+          intentional and matches the reference. */}
+      <section className="ed-bg-alt w-full">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[780px] flex-col gap-3.5">
+            <p className="ed-fg-muted" style={EYEBROW}>Scope</p>
+            <h2 className="ed-fg" style={H2}>Everything with a deadline, a certificate, or a standard behind it.</h2>
+            <p className="ed-fg-muted text-[15px] leading-[1.55]">Read from the systems that already hold it.</p>
+          </Reveal>
 
-        <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-          {SCOPE.map((c, i) => (
-            <Reveal key={c.name} delay={i * 0.05}>
-              <div style={{ borderTop: "1px solid var(--ed-border)", paddingTop: 15 }}>
-                <p className="ed-fg text-[15px]" style={{ fontWeight: 600, letterSpacing: "-0.01em" }}>
-                  {c.name}
-                </p>
-                <p className="ed-fg-muted mt-2 text-[14px] leading-relaxed">{c.examples}</p>
-                <p className="mt-3">
-                  <Meta>Read from · {c.readFrom}</Meta>
-                </p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.12}>
-          <p className="ed-fg-muted mt-10 max-w-[680px] text-base leading-relaxed">
-            If a system already knows it, the check reads it. If nobody&rsquo;s system knows it,
-            the check asks for it.{" "}
-            <Link href="/platform/integrations" className="ed-link" style={{ color: "var(--ed-accent-text)" }}>
-              What connects
-            </Link>
-            .
-          </p>
-        </Reveal>
-      </Band>
-
-      {/* ── 4. Continuity ─────────────────────────────────
-          No chase mechanics here. That is §5, and an escalation example in
-          this section collapses the distinction. */}
-      <Band>
-        <SectionHead
-          eyebrow="Continuity"
-          title="An audit is a snapshot. Compliance is a state."
-          sub="Checking on a schedule tells you what was true on the schedule."
-        />
-
-        <Reveal>
-          <div className="mt-10 max-w-[820px]">
-            <ContinuityTimeline />
+          <div className="mt-9 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {SCOPE.map((c, i) => (
+              <Reveal key={c.title} delay={(i % 4) * 0.07}>
+                <div className="ed-card ed-border flex h-full flex-col gap-3.5 rounded-[14px] border px-5 pb-6 pt-5">
+                  <ScopeTile hue={c.hue} d={c.d} />
+                  <span className="ed-fg text-[16px] font-semibold leading-[1.25] tracking-[-0.02em]">{c.title}</span>
+                  <span className="ed-fg-muted text-[14px] leading-[1.5]">{c.body}</span>
+                  <span className="mt-auto pt-2" style={{ ...META, color: "var(--ed-fg-muted)" }}>{c.source}</span>
+                </div>
+              </Reveal>
+            ))}
           </div>
-        </Reveal>
 
-        <Reveal delay={0.12}>
-          <p
-            className="ed-fg mt-10 max-w-[720px] tracking-[-0.02em]"
-            style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}
-          >
-            The question stops being &ldquo;did we pass.&rdquo; It becomes &ldquo;what&rsquo;s open
-            right now.&rdquo;
-          </p>
-        </Reveal>
-      </Band>
+          <Reveal delay={0.1}>
+            <p className="ed-fg-muted mt-7 max-w-[560px] text-[14px] leading-[1.6]">
+              If a system already knows it, the check reads it. If nobody&rsquo;s system knows it,
+              the check asks for it.{" "}
+              <Link href="/platform/integrations" className="ed-accent-text underline-offset-[3px] hover:underline">What connects</Link>
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ── 4. Continuity ─────────────────────────────────── */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[620px] flex-col gap-3.5">
+            <p className="ed-fg-muted" style={EYEBROW}>Continuity</p>
+            <h2 className="ed-fg" style={H2}>An audit is a snapshot. Compliance is a state.</h2>
+            <p className="ed-fg-muted text-[15px] leading-[1.55]">
+              Checking on a schedule tells you what was true on the schedule.
+            </p>
+          </Reveal>
+
+          <Reveal delay={0.08} className="mt-10"><ContinuityDiagram /></Reveal>
+
+          <Reveal delay={0.1}>
+            <p className="ed-fg mt-10 max-w-[700px] font-medium" style={STATEMENT}>
+              The question stops being &ldquo;did we pass.&rdquo; It becomes &ldquo;what&rsquo;s open
+              right now.&rdquo;
+            </p>
+          </Reveal>
+        </div>
+      </section>
 
       {/* ── 5. The chase ──────────────────────────────────
-          The section the page rests on. Deeper than the hero so it reads as
-          its own moment. */}
-      <section
-        id="the-chase"
-        className="w-full scroll-mt-24"
-        style={{ background: "linear-gradient(180deg, #0D2836 0%, #091C26 100%)" }}
-      >
-        <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24">
-          <Reveal>
-            <p
-              className="uppercase"
-              style={{ fontFamily: MONO, fontSize: 11, letterSpacing: "0.16em", fontWeight: 600, color: ON_DARK_ACCENT }}
-            >
-              The chase
-            </p>
-            <h2
-              className="mt-4 max-w-[820px] leading-[1.08] tracking-[-0.03em]"
-              style={{
-                color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700,
-                fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.375rem)", textWrap: "pretty",
-              }}
-            >
-              Every compliance tool checks.{" "}
-              <span className="lg:block" style={{ color: ON_DARK_ACCENT }}>
-                Almost none chase.
-              </span>
+          The page's differentiator: closing, not detecting. */}
+      <section id="the-chase" className="w-full scroll-mt-24" style={{ background: "#0B1220" }}>
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-20 md:py-24">
+          <Reveal className="flex max-w-[760px] flex-col gap-3.5">
+            <p style={{ ...EYEBROW, color: ON_DARK_MUTE }}>The chase</p>
+            <h2 style={{ ...H2, color: "#FFFFFF" }}>
+              Every compliance tool checks.
+              <span className="block" style={{ color: SKY }}>Almost none chase.</span>
             </h2>
-            <p className="mt-5 max-w-[620px] text-base md:text-lg leading-relaxed" style={{ color: ON_DARK }}>
+            <p className="text-[15px] leading-[1.55]" style={{ color: "rgba(238,242,248,0.72)" }}>
               Finding the gap was never the hard part. Closing it is.
             </p>
           </Reveal>
 
-          <div className="mt-12 max-w-[900px]">
-            <ChaseLadder />
-          </div>
+          <Reveal delay={0.08} className="mt-10"><ChaseLadderCard /></Reveal>
 
-          <Reveal delay={0.14}>
-            <div className="mt-10 max-w-[820px]">
-              <p className="text-[17px] leading-relaxed" style={{ color: ON_DARK_DIM }}>
-                Twenty-four days. Four escalations.
-              </p>
-              {/* The payoff, and the heaviest thing in the section. */}
-              <p
-                className="mt-4 tracking-[-0.02em]"
-                style={{ color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700, fontSize: 24, lineHeight: 1.3 }}
-              >
-                Nobody on your team sent a single message.
-              </p>
-
-              <div className="mt-8 pt-7" style={{ borderTop: `1px solid ${ON_DARK_RULE}` }}>
-                {/* The growth line appears once and is not elaborated. */}
-                <p className="text-[15px] leading-relaxed" style={{ color: ON_DARK_DIM }}>
-                  Every hour a coach spends chasing a document is an hour not spent on the
-                  location&rsquo;s numbers.
-                </p>
-                {/* One line out. This page does not explain how plays work. */}
-                <Link
-                  href="/platform/workflows"
-                  className="mt-5 inline-block text-sm"
-                  style={{ color: ON_DARK_ACCENT, fontWeight: 500, textDecoration: "underline", textUnderlineOffset: 4 }}
-                >
-                  Compliance is the flagship play
-                </Link>
-              </div>
-            </div>
+          <Reveal delay={0.1} className="mt-9 flex flex-col gap-3">
+            <p className="text-[14px]" style={{ color: "rgba(238,242,248,0.6)" }}>Twenty-four days. Four escalations.</p>
+            <p className="font-semibold" style={{ ...STATEMENT, color: "#FFFFFF" }}>
+              Nobody on your team sent a single message.
+            </p>
+            <span className="mt-4 block h-px max-w-[640px]" style={{ background: ON_DARK_RULE }} aria-hidden="true" />
+            <p className="text-[13px]" style={{ color: ON_DARK_MUTE }}>
+              Every hour a coach spends chasing a document is an hour not spent on the
+              location&rsquo;s numbers.
+            </p>
+            <Link
+              href="/platform/answers"
+              className="w-fit text-[13px] underline-offset-[3px] hover:underline"
+              style={{ color: SKY, textDecorationColor: "rgba(159,224,248,0.4)" }}
+            >
+              Compliance is the flagship play
+            </Link>
           </Reveal>
         </div>
       </section>
 
-      {/* ── 6. Evidence ───────────────────────────────────── */}
-      <Band>
-        <SectionHead
-          eyebrow="Evidence"
-          title="Not a checkbox. The document, the photo, and who submitted it."
-        />
+      {/* ── 6. Closing it ─────────────────────────────────
+          Scope is what the platform reads; this is what it writes.
+          Do not let either drift into enumerating the other's systems. */}
+      <section className="ed-bg-alt w-full">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[740px] flex-col gap-3.5">
+            <p className="ed-fg-muted" style={EYEBROW}>Closing it</p>
+            <h2 className="ed-fg" style={H2}>The franchisee replies in a message. The systems get updated.</h2>
+            <p className="ed-fg-muted max-w-[660px] text-[15px] leading-[1.55]">
+              An owner holding a renewed certificate should not have to log into three portals to
+              file it. They send it where they already talk to you, and the write happens on their
+              behalf.
+            </p>
+          </Reveal>
 
-        <Reveal>
-          <div className="mt-10 max-w-[820px] overflow-hidden" style={CARD}>
+          <div className="mt-10 grid grid-cols-1 items-start gap-6 lg:grid-cols-2 lg:gap-11">
+            <Reveal><ChatMock /></Reveal>
+
+            <Reveal delay={0.08} className="flex flex-col">
+              <p className="ed-fg max-w-[520px] font-medium" style={STATEMENT}>
+                The admin work happens in the conversation. The owner never opens a portal.
+              </p>
+              <div className="mt-7 flex max-w-[520px] flex-col">
+                {WRITE_BLOCKS.map((b) => (
+                  <div key={b.title} className="ed-rule border-t py-4">
+                    <span className="ed-fg block text-[15px] font-semibold tracking-[-0.01em]">{b.title}</span>
+                    <span className="ed-fg-muted mt-1.5 block text-[13.5px] leading-[1.5]">{b.body}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="ed-fg-muted mt-5 text-[13.5px]">
+                Which systems accept writes today:{" "}
+                <Link href="/platform/integrations" className="ed-accent-text underline-offset-[3px] hover:underline">see the list</Link>
+              </p>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 7. Evidence ───────────────────────────────────── */}
+      <section className="ed-bg w-full">
+        <div className="mx-auto flex max-w-7xl flex-col px-6 md:px-12 lg:px-16 py-14 md:py-16 lg:py-20">
+          <Reveal className="flex max-w-[800px] flex-col gap-3.5">
+            <p className="ed-fg-muted" style={EYEBROW}>Evidence</p>
+            {/* The handoff's own copy note flags its original H2 as the
+                banned antithesis construction and supplies this. */}
+            <h2 className="ed-fg" style={H2}>The document, the photo, and who submitted it.</h2>
+          </Reveal>
+
+          <Reveal delay={0.08} className="mt-9">
             <div
-              className="flex flex-wrap items-baseline gap-x-2 px-5 py-3.5 md:px-6"
-              style={{ backgroundColor: "var(--ed-card-alt)", borderBottom: "1px solid var(--ed-border)" }}
+              className="max-w-[840px] overflow-hidden rounded-[14px]"
+              style={{ background: "#FFFFFF", border: "1px solid #E5E7EB", boxShadow: "0 1px 2px rgba(10,10,10,0.04), 0 12px 28px rgba(10,10,10,0.06)" }}
             >
-              <Meta>Store #263 · General liability ·</Meta>
-              {/* Success tint, with weight behind it so the state is not
-                  carried by colour alone. */}
-              <span
-                className="uppercase"
-                style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.14em", fontWeight: 700, color: "#146C43" }}
-              >
-                Verified
-              </span>
-            </div>
-            <div className="px-5 py-1 md:px-6">
-              {EVIDENCE.map((r, i) => (
+              <div className="px-5 py-3" style={{ background: "#F4F4F5", ...META, color: "#7A7A85" }}>
+                Store #263 · General liability · <span style={{ color: "#0077A8" }}>Verified</span>
+              </div>
+              {EVIDENCE.map(([label, value], i) => (
                 <div
-                  key={r.label}
-                  className="flex flex-col gap-1 py-3.5 sm:flex-row sm:gap-5"
-                  style={{ borderTop: i === 0 ? "none" : "1px solid var(--ed-rule)" }}
+                  key={label}
+                  className="grid grid-cols-1 gap-x-4 gap-y-1 px-5 py-4 md:grid-cols-[minmax(96px,132px)_1fr]"
+                  style={{ borderTop: i === 0 ? "none" : "1px solid #E5E7EB" }}
                 >
-                  <span className="flex-none sm:w-[110px]">
-                    <Meta>{r.label}</Meta>
+                  <span style={{ ...META, color: "#7A7A85" }}>{label}</span>
+                  <span
+                    className="text-[14px]"
+                    style={{ color: "#0A0A0A", fontFamily: label === "Document" ? MONO : undefined, fontSize: label === "Document" ? 12.5 : undefined, fontWeight: label === "Document" ? 500 : undefined, fontVariantNumeric: "tabular-nums" }}
+                  >
+                    {value}
                   </span>
-                  <span className="ed-fg min-w-0 flex-1 text-[14px] leading-relaxed">{r.value}</span>
                 </div>
               ))}
             </div>
-          </div>
-        </Reveal>
-
-        <div className="mt-9 grid grid-cols-1 gap-x-10 gap-y-7 md:grid-cols-3">
-          {EVIDENCE_POINTS.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.08}>
-              <p className="ed-fg text-[15px]" style={{ fontWeight: 600, letterSpacing: "-0.01em" }}>
-                {p.title}
-              </p>
-              <p className="ed-fg-muted mt-1.5 text-[14px] leading-relaxed">{p.body}</p>
-            </Reveal>
-          ))}
-        </div>
-
-        <Reveal delay={0.14}>
-          <p
-            className="ed-fg mt-10 max-w-[680px] tracking-[-0.02em]"
-            style={{ fontFamily: JAKARTA, fontWeight: 600, fontSize: 20, lineHeight: 1.35 }}
-          >
-            When someone asks for proof, you&rsquo;re not asking your locations for it.
-          </p>
-        </Reveal>
-      </Band>
-
-      {/* ── 7. The line ───────────────────────────────────
-          Two columns and one line. Not a permissions matrix. */}
-      <Band alt>
-        <SectionHead eyebrow="The line" title="You decide what escalates, and when." />
-
-        <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
-          <Reveal>
-            <div className="flex h-full flex-col p-6 md:p-7" style={CARD}>
-              <Meta>Runs on its own</Meta>
-              <ul className="mt-5 flex flex-col gap-3.5">
-                {ALONE.map((x) => (
-                  <li key={x} className="flex gap-3">
-                    <span aria-hidden="true" className="mt-[9px] h-[5px] w-[5px] flex-none rounded-full" style={{ backgroundColor: "var(--ed-fg-muted)" }} />
-                    <span className="ed-fg text-[14.5px] leading-relaxed">{x}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
           </Reveal>
+
           <Reveal delay={0.1}>
-            <div className="flex h-full flex-col p-6 md:p-7" style={{ ...CARD, borderLeft: "3px solid #0077A8", backgroundColor: ACCENT_TINT }}>
-              <Meta color="var(--ed-accent-text)">Reaches a person</Meta>
-              <ul className="mt-5 flex flex-col gap-3.5">
-                {REACHES.map((x, i) => (
-                  <li key={x} className="flex gap-3">
-                    <span aria-hidden="true" className="mt-[9px] h-[5px] w-[5px] flex-none rounded-full" style={{ backgroundColor: "var(--ed-accent-text)" }} />
-                    {/* The last row is the point, so it carries weight as
-                        well as position. */}
-                    <span className="ed-fg text-[14.5px] leading-relaxed" style={i === REACHES.length - 1 ? { fontWeight: 600 } : undefined}>
-                      {x}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+            <div className="mt-9 grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
+              {EVIDENCE_COLS.map((c) => (
+                <span key={c.title} className="flex flex-col gap-1.5">
+                  <span className="ed-fg text-[14.5px] font-semibold tracking-[-0.01em]">{c.title}</span>
+                  <span className="ed-fg-muted text-[13.5px] leading-[1.5]">{c.body}</span>
+                </span>
+              ))}
             </div>
+            <p className="ed-fg mt-9 max-w-[660px] font-medium" style={STATEMENT}>
+              When someone asks for proof, you&rsquo;re not asking your locations for it.
+            </p>
           </Reveal>
         </div>
+      </section>
 
-        <Reveal delay={0.16}>
-          <p className="ed-fg-muted mt-9 max-w-[620px] text-base leading-relaxed">
-            The last row is the point. The thresholds are yours.{" "}
-            <Link href="/platform/control-center" className="ed-link" style={{ color: "var(--ed-accent-text)" }}>
-              How they&rsquo;re set
-            </Link>
-            .
-          </p>
-        </Reveal>
-      </Band>
-
-      {/* ── 8. Proof ──────────────────────────────────────
-          Time-to-close or completion rate is the right shape here: it
-          proves the chase, not the check. Not a deflection metric. */}
-      <Band>
-        <SectionHead title="What changed when the chasing stopped." />
-
-        <Reveal>
-          <div className="mt-9 max-w-[820px] p-6 md:p-8" style={CARD}>
-            <div className="flex flex-wrap items-baseline justify-between gap-4">
-              {/* Deliberately not <Meta>: it force-uppercases, and the
-                  placeholder rule says render the token exactly as written. */}
-              <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: "0.13em", fontWeight: 600, color: "var(--ed-fg-muted)" }}>
-                {"{{TBD:compliance-proof-brand}}"}
-              </span>
-              <span
-                style={{
-                  fontFamily: JAKARTA, fontWeight: 500, fontSize: "2.25rem", lineHeight: 1,
-                  letterSpacing: "-0.03em", color: "var(--ed-accent-text)",
-                }}
-              >
-                {"{{TBD:compliance-proof-metric}}"}
-              </span>
-            </div>
-            <blockquote className="ed-fg mt-6 text-[15px] md:text-base leading-relaxed" style={{ fontFamily: JAKARTA, fontWeight: 500 }}>
-              &ldquo;{"{{TBD:compliance-proof-quote}}"}&rdquo;
-            </blockquote>
-            <p className="ed-fg-muted mt-5 text-sm">{"{{TBD:compliance-proof-attribution}}"}</p>
-          </div>
-        </Reveal>
-      </Band>
-
-      {/* ── 9. Related ────────────────────────────────────── */}
-      <Band alt>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {RELATED.map((r, i) => (
-            <Reveal key={r.href} delay={i * 0.08}>
-              <Link
-                href={r.href}
-                className="group flex h-full flex-col justify-between gap-8 p-6 transition-transform hover:-translate-y-0.5"
-                style={CARD}
-              >
-                <div>
-                  <Eyebrow accent>{r.eyebrow}</Eyebrow>
-                  <p className="ed-fg mt-3 text-[17px] tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontWeight: 500, lineHeight: 1.3 }}>
-                    {r.title}
-                  </p>
-                </div>
-                <ArrowRight
-                  className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                  style={{ color: "var(--ed-accent-text)" }}
-                  strokeWidth={2}
-                  aria-hidden="true"
-                />
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </Band>
-
-      {/* ── 10. CTA ───────────────────────────────────────── */}
+      {/* ── 8. Closing ────────────────────────────────────
+          Appended: the handoff's reference stopped before a CTA band and
+          asked for confirmation. Every sibling sub-page has one. */}
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: HERO.base }}>
         <div className="absolute inset-0" aria-hidden="true">
           <Image src={HERO.src} alt="" fill sizes="100vw" className="object-cover" style={{ objectPosition: "left center" }} />
-          <div className="absolute inset-0" style={{ backgroundColor: `rgba(${HERO.closingRgba})` }} />
+          <div className="absolute inset-0" style={{ background: HERO.closingCss ?? `rgba(${HERO.closingRgba})` }} />
           <div className="absolute inset-0" style={{ background: `linear-gradient(to bottom, rgba(4,32,54,0) 45%, ${CLOSING_BASE} 100%)` }} />
         </div>
 
@@ -616,33 +393,31 @@ export default function ComplianceContent() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.85, ease: EASE }}
-          className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-20 md:py-24"
+          className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 md:px-12 lg:px-16 py-20 md:py-24 lg:grid-cols-[1.2fr_.8fr] lg:gap-16"
         >
-          <h2
-            className="leading-[1.06] tracking-[-0.03em]"
-            style={{
-              color: "#FFFFFF", fontFamily: JAKARTA, fontWeight: 700,
-              fontSize: "clamp(1.5rem, 0.4rem + 2.9vw, 3rem)", maxWidth: "820px",
-            }}
-          >
-            Tell us what your team chases every month.
-          </h2>
-          <p className="mt-5 max-w-[620px] text-base md:text-lg leading-relaxed" style={{ color: ON_IMAGE }}>
-            We&rsquo;ll show you the same chase, running without them.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
-            <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
+          <div className="flex flex-col gap-4">
+            <h2
+              style={{
+                fontFamily: JAKARTA, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.08,
+                fontSize: "clamp(1.5rem, 0.5rem + 2.7vw, 2.625rem)", color: "#FFFFFF", textWrap: "pretty",
+              }}
+            >
+              Tell us what your network is behind on{" "}
+              <span style={{ color: SKY }}>and how you find out.</span>
+            </h2>
+            <p className="max-w-[480px] text-base leading-[1.6]" style={{ color: ON_IMAGE }}>
+              We&rsquo;ll show you the same week checked continuously, with the gaps already chased
+              and the evidence already filed.
+            </p>
+          </div>
+          <div className="flex items-start justify-start self-stretch lg:items-end lg:justify-end">
+            <Link href="/speak-to-an-expert" className="ed-btn ed-btn-arrow inline-flex flex-none whitespace-nowrap" style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}>
               Speak to an expert
-              <span className="ed-btn-arrow-badge" aria-hidden="true">
-                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} />
-              </span>
+              <span className="ed-btn-arrow-badge" aria-hidden="true"><ArrowRight className="h-3.5 w-3.5" strokeWidth={2.25} /></span>
             </Link>
-            <a href="#the-chase" className="ed-btn ed-btn-secondary-dark inline-flex">
-              See what the chase looks like
-            </a>
           </div>
         </motion.div>
       </section>
-    </>
+    </div>
   );
 }

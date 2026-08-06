@@ -317,6 +317,28 @@
   --haze-c: linear-gradient(180deg, #414C92 0%, #664F86 40%, #8D6072 70%, #437069 100%);
 }
 
+/* ─── Compliance page ──────────────────────────────────────
+   The escalation ladder's stepped indent is the argument: each reminder
+   moves further out, and the resolved row returns to the start. It
+   compresses below sm rather than disappearing, so the shape survives a
+   phone without introducing a horizontal scroll. */
+.theme-editorial .ed-compliance {
+  --ok:   #0D7C58;
+  --warn: #B45309;
+  --bad:  #B42318;
+}
+.dark .theme-editorial .ed-compliance,
+.theme-editorial.dark .ed-compliance {
+  --ok:   #34D399;
+  --warn: #FBBF24;
+  --bad:  #F97066;
+}
+
+.ed-chase-row { padding-left: calc(1.25rem + var(--step) * 10px); }
+@media (min-width: 640px) {
+  .ed-chase-row { padding-left: calc(1.25rem + var(--step) * 32px); }
+}
+
 /* ─── Workflows hero demo ──────────────────────────────────
    The callout row is one column per callout where there is room. At a
    phone width four of them are 70px wide and their store numbers and
