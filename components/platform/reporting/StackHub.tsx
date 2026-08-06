@@ -44,11 +44,15 @@ const PAPER = "#EEF2F8";
  * `domain` is the key into `VENDOR_LOGOS`, so these chips and the
  * Integrations directory resolve their marks from one place.
  *
- * SharePoint has no usable mark: its favicon is the generic four-square
- * Microsoft logo, shared byte-for-byte with OneDrive and Teams, so
- * `vendorLogo` returns null and the chip draws a neutral plate. The plate
- * is the same 15px box as a real mark, deliberately: the chip keeps its
- * exact width and the wires keep meeting it.
+ * **Every chip here resolves to a real mark.** Two did not: SharePoint's
+ * file was the generic four-square Microsoft logo until a product mark
+ * replaced it, and ADP had no entry in `VENDOR_LOGOS` at all, so its chip
+ * silently drew the neutral plate. ADP is now Dropbox, which has a mark
+ * and is as plausible a system for this diagram.
+ *
+ * The plate still exists for anything that resolves to null, and is the
+ * same 15px box as a real mark so the chip keeps its exact width and the
+ * wires keep meeting it.
  *
  * Never point these at a favicon service at runtime. The prototype did,
  * and it is rate limited, unversioned, and returns a generic globe often
@@ -62,7 +66,7 @@ const CHIPS: { name: string; domain: string; cy: number }[] = [
   { name: "Salesforce", domain: "salesforce.com", cy: 225 },
   { name: "SharePoint", domain: "sharepoint.com", cy: 285 },
   { name: "Slack", domain: "slack.com", cy: 345 },
-  { name: "ADP", domain: "adp.com", cy: 405 },
+  { name: "Dropbox", domain: "dropbox.com", cy: 405 },
   { name: "Mailchimp", domain: "mailchimp.com", cy: 465 },
 ];
 

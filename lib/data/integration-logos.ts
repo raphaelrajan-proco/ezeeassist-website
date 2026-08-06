@@ -7,15 +7,16 @@
  * and committed; that service is rate limited, unversioned, and returns a
  * generic mark often enough that it cannot back a production page.
  *
- * `generic: true` flags a mark that came back as the vendor's PARENT
- * brand rather than the product. SharePoint, OneDrive and Microsoft Teams
- * all resolved to the same four-square Microsoft logo, byte-identical, and
- * Google Drive resolved to the Google "G". Those four render the neutral
- * plate instead: three chips showing one logo reads as a bug, and a wrong
- * mark is worse than none.
+ * `generic?: true` marks a logo whose file is the vendor's PARENT brand
+ * rather than the product, so callers can skip it instead of showing a
+ * misleading mark. **Nothing carries it today.** SharePoint, OneDrive,
+ * Microsoft Teams and Google Drive all did, because the favicon fetch
+ * returned the four-square Microsoft logo for three of them and the
+ * Google "G" for the fourth; real product marks have since replaced all
+ * four, so the flag is cleared.
  *
- * **To fix one:** drop the product mark from that vendor's brand page at
- * the path below and delete its `generic` flag. Nothing else changes.
+ * Keep the field. If a future logo comes back as a parent brand, setting
+ * it is how that chip falls back to its name rather than lying.
  *
  * Trademark: each mark is used unmodified, at small size, beside the
  * vendor's own name, and implies no partnership. Microsoft, Google and
@@ -30,8 +31,8 @@ export const VENDOR_LOGOS: Record<string, VendorLogo> = {
   "zenoti.com":                    { src: "/logos/integrations/erp-fms/zenoti.png", name: "Zenoti" },
   "serviceminder.io":              { src: "/logos/integrations/erp-fms/serviceminder.png", name: "ServiceMinder" },
   "thryv.com":                     { src: "/logos/integrations/erp-fms/thryv.png", name: "Thryv" },
-  "sharepoint.com":                { src: "/logos/integrations/drives-storage/sharepoint.png", name: "SharePoint", generic: true },
-  "drive.google.com":              { src: "/logos/integrations/drives-storage/google-drive.png", name: "Google Drive", generic: true },
+  "sharepoint.com":                { src: "/logos/integrations/drives-storage/sharepoint.png", name: "SharePoint" },
+  "drive.google.com":              { src: "/logos/integrations/drives-storage/google-drive.png", name: "Google Drive" },
   "dropbox.com":                   { src: "/logos/integrations/drives-storage/dropbox.png", name: "Dropbox" },
   "box.com":                       { src: "/logos/integrations/drives-storage/box.png", name: "Box" },
   "onedrive.live.com":             { src: "/logos/integrations/drives-storage/onedrive.png", name: "OneDrive" },
@@ -59,7 +60,7 @@ export const VENDOR_LOGOS: Record<string, VendorLogo> = {
   "gohighlevel.com":               { src: "/logos/integrations/crm/highlevel.png", name: "HighLevel" },
   "airtable.com":                  { src: "/logos/integrations/crm/airtable.png", name: "Airtable" },
   "monday.com":                    { src: "/logos/integrations/crm/monday.png", name: "Monday" },
-  "microsoft.com":                 { src: "/logos/integrations/video-comms/microsoft-teams.png", name: "Microsoft Teams", generic: true },
+  "microsoft.com":                 { src: "/logos/integrations/video-comms/microsoft-teams.png", name: "Microsoft Teams" },
   "slack.com":                     { src: "/logos/integrations/video-comms/slack.png", name: "Slack" },
   "zoom.us":                       { src: "/logos/integrations/video-comms/zoom.png", name: "Zoom" },
   "meet.google.com":               { src: "/logos/integrations/video-comms/google-meet.png", name: "Google Meet" },

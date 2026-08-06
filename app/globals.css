@@ -1253,6 +1253,19 @@
   background: #FFFFFF;
 }
 
+/* On the hero the white band DISSOLVES into the blue at both margins
+   rather than stopping at a hard edge.
+
+   The mask sits on the band, not on the marquee inside it, so the white
+   and the marks fade together as one object. The marquee keeps its own
+   narrower mask, and the two compose: a child is masked inside an
+   already-masked parent, which is what gives the soft double falloff
+   instead of a visible seam where one fade ends. */
+.theme-editorial .ed-on-dark .ed-logo-band {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);
+          mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+
 /* Editorial motion primitives ───────────────────────── */
 
 /* Soft ambient blue blob — used behind the hero headline.

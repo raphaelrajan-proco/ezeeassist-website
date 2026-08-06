@@ -477,26 +477,13 @@ export default function SecurityContent() {
         </div>
       </Band>
 
-      {/* ── 6. Trusted by ─────────────────────────────────
-          The homepage's own scroller, not a rebuild: same component, same
-          committed logo assets, same behaviour. Full-bleed, so the marquee
-          sits outside the container while the heading stays on the
-          gutter. */}
-      <section className="ed-bg w-full overflow-hidden">
-        <div className="mx-auto max-w-7xl px-6 pt-14 md:px-12 md:pt-16 lg:px-16 lg:pt-20">
-          <Reveal>
-            <h2
-              className="ed-fg leading-[1.12] tracking-[-0.03em]"
-              style={{ fontFamily: JAKARTA, fontWeight: 700, fontSize: "clamp(1.5rem, 0.8rem + 1.7vw, 2.125rem)" }}
-            >
-              Trusted by.
-            </h2>
-          </Reveal>
-        </div>
-        <div className="pb-14 pt-9 md:pb-16 lg:pb-20">
-          <LogoMarquee />
-        </div>
-      </section>
+      {/* ── 6. Customer logos ─────────────────────────────
+          The "Trusted by." heading is deleted; the marquee carries the
+          claim on its own and the heading was the section restating what
+          the logos already say. Full-bleed, the site's own convention. */}
+      <div className="py-14 md:py-16 lg:py-20">
+        <LogoMarquee />
+      </div>
 
       {/* ── 7. Responsible disclosure ─────────────────────
           Dark solid, the hero's second CTA anchors here. */}

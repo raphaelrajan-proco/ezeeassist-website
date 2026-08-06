@@ -103,35 +103,49 @@ export default function IntegrationsContent() {
           <ConnectCard />
         </motion.div>
 
-        {/* The marquee rides inside the band, edge to edge. **Names
-            only here**, unlike the light-band `IntegrationMarquee`: this
-            one sits on a dark photograph, and vendor marks with their own
-            white or coloured backgrounds would each need a chip, which
-            turns a clean strip into forty boxes. */}
+      </section>
+
+      {/* The vendor marquee, moved off the hero and onto its own white
+          band underneath it.
+
+          On the hero it had to be names in outlined pills: a dark
+          photograph gives forty marks with their own backgrounds nowhere
+          to sit, so each needed a chip and the strip read as forty boxes.
+          On white the marks need nothing at all, which is why this moved
+          rather than being restyled in place. Full colour, no fill, no
+          border. Full-bleed by the section convention. */}
+      <section className="w-full" style={{ background: "#FFFFFF" }} aria-label="Integrations">
         <div
           data-anim
-          className="relative overflow-hidden pb-9"
+          className="relative overflow-hidden py-7"
           style={{
-            WebkitMaskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
-            maskImage: "linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)",
+            WebkitMaskImage: "linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent)",
+            maskImage: "linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent)",
           }}
           aria-hidden="true"
         >
-          <div className="ig-marq flex w-max gap-2.5">
+          <div className="ig-marq flex w-max items-center gap-11">
             {[0, 1].map((copy) =>
-              MARQUEE.map(({ name }) => (
-                <span
-                  key={`${copy}-${name}`}
-                  className="flex-none whitespace-nowrap rounded-lg"
-                  style={{
-                    fontSize: 12.5, fontWeight: 600, padding: "8px 14px",
-                    color: "rgba(240,248,253,.9)", background: "rgba(255,255,255,.09)",
-                    border: "1px solid rgba(255,255,255,.18)",
-                  }}
-                >
-                  {name}
-                </span>
-              ))
+              MARQUEE.map(({ name, domain }) => {
+                const mark = vendorLogo(domain);
+                return (
+                  <span key={`${copy}-${name}`} className="flex flex-none items-center gap-2.5">
+                    {mark && (
+                      <Image
+                        src={mark.src}
+                        alt=""
+                        width={26}
+                        height={26}
+                        className="flex-none object-contain"
+                        style={{ width: 26, height: 26 }}
+                      />
+                    )}
+                    <span className="whitespace-nowrap" style={{ fontSize: 14.5, fontWeight: 600, color: "#0A0A0A" }}>
+                      {name}
+                    </span>
+                  </span>
+                );
+              })
             )}
           </div>
         </div>
@@ -246,6 +260,28 @@ export default function IntegrationsContent() {
               </Reveal>
             ))}
           </div>
+
+          {/* The takeaway the directory could not make on its own: a grid
+              of eight categories answers "is my system here?", and the
+              honest answer for a long tail of franchise software is "not
+              yet". Saying so, and saying it gets built, is what stops the
+              list reading as a ceiling. */}
+          <Reveal delay={0.12}>
+            <div
+              className="ed-border flex flex-col gap-2.5 rounded-2xl border px-6 py-6 sm:px-8"
+              style={{ background: "var(--chip-bg)", borderColor: "var(--chip-bd)" }}
+            >
+              <span className="ed-accent-text tracking-[-0.02em]" style={{ fontFamily: JAKARTA, fontSize: 19, fontWeight: 700 }}>
+                The integrations we don&rsquo;t have, we build.
+              </span>
+              <span className="ed-fg-muted max-w-[720px] text-[15.5px] leading-[1.6]">
+                Franchise networks run on software nobody else has heard of, and a directory can
+                only ever list what exists today. Anything missing gets built as a custom
+                connection through the API, so coverage is a question of time rather than of
+                whether your stack qualifies.
+              </span>
+            </div>
+          </Reveal>
         </div>
       </section>
 
