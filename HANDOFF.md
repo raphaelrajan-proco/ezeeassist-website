@@ -1903,66 +1903,66 @@ before launch.
 
 ## /platform/apps
 
-Nine sections. **This page is capability, not governance.** An earlier
-draft of its brief led with permissions tables and a wall of "no app
-can", which read as a page apologising for itself. Governance is stated
-exactly twice, one line each: step 4 of §3 ("Already inside the rules
-you set. Nothing to configure.") and the 13px line beneath that
-timeline. There is deliberately no permissions section, no can/can't
-table, no publishing-rights matrix, no guardrails band. **If the page
-looks like it is missing a governance section, that is the design.**
-Measured on the built page: "permission" appears once, "approval" once,
-"guardrail" not at all.
+Rebuilt from a supplied design handoff. Seven sections: hero, the wish
+list, the build timeline, six shipped apps, network authorship, related,
+closing.
 
-Band sequence, part of the spec: dark, light, light, light, light, dark,
-light, light, dark. The four light sections alternate `ed-bg` and
-`ed-bg-alt` so neighbours still separate (DESIGN.md §4.1), and no two
-adjacent sections share a device: request log, timeline, gallery grid,
-three bare facts.
+**The framing is possibility, not neglect.** Earlier drafts argued "these
+tools never get funded." That is gone and must not come back. The wish
+list is a build queue, apps ship the week they are described, owners
+build and HQ publishes network-wide. In particular **do not revert the
+five SHIPPED pills to OPEN**: a cleared queue is the argument of that
+section in miniature.
 
-**No builder UI anywhere**, including as decoration. No nodes, no
-canvas, no drag handles. A sentence typed in plain language is the whole
-claim; a reader who infers an interface to learn has read the opposite.
-That is why `DescribePanel`'s left side is a bare bordered box.
+Deleted deliberately: the "Opened on a phone, between customers" section
+(its content is now carried by the authorship band's phone mock), the
+`{{TBD:apps-proof-*}}` quote block, the governance strip, every section
+eyebrow, and the closing line "Good ideas travel...".
 
-Details that carry an argument and must not be tidied:
+**The hero is a photo variant, not a gradient**, unlike every other
+sub-page. It is `HERO_BG.sunset` with a **gradient scrim** rather than a
+flat one, which is new: `HeroBackground.scrimGradient` carries a hero and
+a closing pass, and `platformHero()` returns them as `scrimCss` /
+`closingCss` when present. The reason is measured. A flat alpha darkens
+the whole frame equally, and at the 0.58 this image needs for white body
+copy it read olive-grey, saturation 0.11. The handoff's gradient sits
+heavy over the copy column (.74) and light where the artwork is (.44), so
+the gold survives. This is the fix for the "sunset looks olive" note
+raised when the variants landed.
 
-- **§2's dates are the artifact.** A request from March 2023 still
-  marked Open is the point. Do not convert them to relative labels.
-- **§3's timestamps are irregular** — 3:45, 3:47, 3:52, 3:58, 4:05.
-  Even five-minute intervals read as a diagram rather than as twenty
-  real minutes.
-- **§4's scopes vary on purpose** (214 locations, All locations, 68,
-  140, Northern region, West territory). Normalising them would argue
-  these are features rather than things a particular brand needed.
-- **§6's return arc is the section.** Four stages in a row is a
-  pipeline, and a pipeline happens once. Stage 2 must stay: HQ is
-  publishing something with two weeks of evidence. "Store #214 is still
-  the author" must stay: it is what makes an operator build a second
-  one. The closing line's order is fixed, upside before control;
-  reversed it reads as risk management.
+**Two loops, and the base styles are the finished state in both.** The
+16s hero build sequence (`ap-*` keyframes) and the 14s swim booking flow
+run from `[data-hero-anim]` and `[data-book-anim]`, and the keyframes
+impose the hidden start rather than the end. That is what makes the
+reduced-motion rule one line: killing the animations leaves the complete
+artifact instead of an empty frame. The hero order is the product
+argument, prompt then generating then app then iteration then live; keep
+it. The LIVE card on the timeline carries its own 3.2s glow.
 
-The closing-audit sentence in §1, the twenty minutes in §3 and Store
-#214 in §6 are one story, and the same one the homepage's on-demand
-section already tells at 3:45pm. **Deliberate callback, not repetition**
-(DESIGN.md §1.4). Do not renumber the store or reword the ask in one
-place only.
+### The minifier eats name-less animation shorthands
 
-`{{TBD:}}` tokens, four, all §7: `apps-proof-brand`, `-metric`,
-`-quote`, `-attribution`. **Do not substitute a deflection or support
-metric** — those argue for the Answers page.
+`animation: 16s linear infinite both` with no `animation-name` was
+rewritten to **`animation:none`** in the production CSS, which silently
+killed both loops and left only their final states. It looked correct in
+a screenshot, which is how it nearly shipped. The base rules are longhand
+now (`animation-duration`, `-timing-function`, `-iteration-count`,
+`-fill-mode`) and must not be folded back into a shorthand. Shorthands
+that *do* name their animation, like `.ap-blink`, survive fine.
 
-**TODO: the §9 CTA subline promises a live build on a sales call**
-("We'll build it on the call"). The brief flagged it for confirmation
-that it is deliverable. If it is not, it needs a softer replacement
-before launch.
+Verify a loop by sampling opacity over time, not by one screenshot:
+measured at ~1s / 3.5s / 7s / 11s the stages come in prompt, then
+generating and card, then the checklist rows, then the follow-up, the
+grown fourth row and the LIVE pill.
 
-**The homepage tile link is not what the brief assumed.** Item 3 said to
-repoint the third on-demand tile's link at `/platform/apps`. Those tiles
-are `role="tab"` buttons that swap the stage and have never had a link,
-so there was nothing to repoint; a "How apps get built" link was added
-beneath the rail, shown only on that tab. The tile's own copy is
-untouched, and that is the only homepage change in this work.
+The LIVE pill overhangs the hero card by 8px by design. Measured
+clearance to the viewport edge is 56px at 1205 and 16px at 375, so it
+never clips.
+
+Verified on the built page at 1440/1280/1205/1024/768/375 in both themes:
+no horizontal overflow, no text under 12px, one h1 and five h2s, zero
+em-dashes, no banned words, no scarcity copy, five SHIPPED and one THIS
+WEEK, no `#00AEEF` used as text, and both loops resolving to their
+finished state under `prefers-reduced-motion`.
 
 ## /platform/reporting
 

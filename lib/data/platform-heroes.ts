@@ -81,6 +81,10 @@ export type ResolvedHero = {
   scrimRgba: string;
   /** The same image also backs each page's closing band. */
   closingRgba: string;
+  /** Set only when the variant carries a gradient scrim, in which case
+      it replaces the flat one on that band. */
+  scrimCss?: string;
+  closingCss?: string;
 };
 
 /**
@@ -110,12 +114,15 @@ export function platformHero(page: PlatformPage): ResolvedHero {
   const key = VARIANT_HEROES ? ASSIGNED[page] : PREVIOUS[page];
   const v = HERO_BG[key];
   const tint = "scrimTint" in v ? (v.scrimTint as string) : "4,32,54";
+  const grad = VARIANT_HEROES && "scrimGradient" in v ? v.scrimGradient : undefined;
   return {
     src: v.src,
-    base: v.base,
+    base: VARIANT_HEROES ? v.base : HERO_BG[PREVIOUS[page]].base,
     scrimRgba: `${tint},${VARIANT_HEROES ? v.scrim : SCRIM.heroSubPage}`,
     closingRgba: `${tint},${
       VARIANT_HEROES ? +(v.scrim + CLOSING_CROP_OFFSET).toFixed(2) : SCRIM.closing
     }`,
+    scrimCss: grad?.hero,
+    closingCss: grad?.closing,
   };
 }

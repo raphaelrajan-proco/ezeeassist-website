@@ -48,6 +48,20 @@ export type HeroBackground = {
    * the navy's luminance, so it darkens by exactly as much.
    */
   scrimTint?: string;
+  /**
+   * A full gradient scrim, when a flat one is wrong for the image.
+   *
+   * A flat alpha darkens every part of the frame equally, which on a
+   * strongly-lit photograph means the bright corner still fights the copy
+   * while the dark corner goes to mud. A gradient can sit heavy over the
+   * copy column and light where the artwork is, so more of the image's
+   * own colour survives. Sunset needed this: at the flat 0.58 it takes to
+   * clear white body copy it read olive-grey rather than gold.
+   *
+   * `hero` and `closing` mirror each other's direction, as the gradient
+   * variants do. When set, these replace the flat scrim entirely.
+   */
+  scrimGradient?: { hero: string; closing: string };
 };
 
 /* All four are the same hazy blue treatment and are photometrically almost
@@ -103,7 +117,15 @@ export const HERO_BG = {
   indigo:  { src: "/hero/hero-bg-indigo.jpg", base: "#1F1C2C", scrim: 0.54 },
   forest:  { src: "/hero/hero-bg-forest.jpg", base: "#162119", scrim: 0.56 },
   sand:    { src: "/hero/hero-bg-sand.jpg",   base: "#251B28", scrim: 0.52 },
-  sunset:  { src: "/hero/hero-bg-sunset.jpg", base: "#211E15", scrim: 0.58, scrimTint: "33,30,21" },
+  /* Apps. The dark-olive gradient keeps the gold alive where the flat
+     scrim flattened it; `base` follows the handoff's own fallback. */
+  sunset: {
+    src: "/hero/hero-bg-sunset.jpg", base: "#5C5530", scrim: 0.58, scrimTint: "33,30,21",
+    scrimGradient: {
+      hero:    "linear-gradient(160deg, rgba(43,40,14,.74) 0%, rgba(62,56,22,.56) 55%, rgba(80,70,26,.44) 100%)",
+      closing: "linear-gradient(285deg, rgba(43,40,14,.74) 0%, rgba(62,56,22,.56) 55%, rgba(80,70,26,.44) 100%)",
+    },
+  },
   mauve:   { src: "/hero/hero-bg-mauve.jpg",  base: "#2B1923", scrim: 0.45, scrimTint: "43,25,35" },
 } as const satisfies Record<string, HeroBackground>;
 
