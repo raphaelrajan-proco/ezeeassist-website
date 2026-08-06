@@ -317,6 +317,16 @@
   --haze-c: linear-gradient(180deg, #414C92 0%, #664F86 40%, #8D6072 70%, #437069 100%);
 }
 
+/* ─── Workflows hero demo ──────────────────────────────────
+   The callout row is one column per callout where there is room. At a
+   phone width four of them are 70px wide and their store numbers and
+   reasons cannot fit, so it drops to two. The connector row above uses
+   the same rule, which keeps every marker over its own card. */
+.ed-demo-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media (min-width: 480px) {
+  .ed-demo-row { grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); }
+}
+
 /* ─── Integrations page ────────────────────────────────────
    Three loops: the 15s hero connect sequence, the ~60s two-direction
    marquee, and the 18s write-back sequence. Longhand durations, base

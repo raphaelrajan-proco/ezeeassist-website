@@ -1908,92 +1908,75 @@ Always On is now Workflows and Compliance.
 
 ## /platform/workflows
 
-Ten sections. **Vocabulary is the first thing to get right here.** The
-route and the nav item stay "Workflows" because that is what a
-franchisor searches for. The page's own word is **play**. One line after
-the hero does the handoff, and after it the body copy says play
-consistently: "Most tools call these workflows. A coach calls them
-plays, and that difference is the point." Do not alternate, do not write
-"workflow (play)". Measured on the built page: `workflow` appears once
-in the body, in that line. The other four hits are the
-`{{TBD:workflows-proof-*}}` token names and go when real proof lands.
-`play` appears 17 times.
+Rebuilt from a supplied design handoff. Six sections: hero with the
+animated demo, the industry library, authoring, triggers, over time, and
+the closing band. The handoff also specs a navbar and a footer; those
+are the prototype standing in for this repo's shared ones and are not
+rebuilt.
 
-**What the page has to prove: a play is not a broadcast.** The same play
-reaches forty locations and behaves differently at each because it reads
-each location's numbers first. §5 is where that is proven and it carries
-the strongest treatment on the page.
+The page argues one idea end to end: a coach writes a judgment call down
+once, in plain language, and it then runs at every location the coach
+covers, reading each location's own numbers before it acts.
 
-**The divergence is the argument, in two places.** §1's four chips and
-§5's four rows each show one act, one decline, one adapt, one escalate.
-Make them uniform and the product becomes mass email. **§5's rows 2 and
-4 must not be cut for length** — a play that declines because a region
-set its own threshold, and one that escalates rather than acting because
-the owner is six weeks in, are what prove judgment rather than logic.
+**Deviation, on request: the hazy forest hero is kept.** The handoff
+specifies its own deep-green band (`#1F3630`) with a photo that was
+never chosen. Workflows stays on `platformHero("workflows")`, which also
+settles the handoff's open item about the hero and CTA photos since both
+bands now use a committed image. The on-band accent stays `#8CC5DC`, the
+handoff's, which sits correctly on forest. Workflows is one of the five
+pages still in the photographic variant map.
 
-Band sequence, part of the spec: dark, light, light, light, dark, light,
-light, light, light, dark. Light sections alternate `ed-bg`/`ed-bg-alt`,
-and no two adjacent share a device: prose, split panels, trigger grid,
-divergence rows, two-column comparison, accumulation timeline.
+**The hero demo is the only animated thing on the page.** Do not add a
+second loop: the demo carries the argument and a competing animation
+would dilute it.
 
-**No builder UI anywhere.** No canvas, no node graph, no if-then blocks,
-no drag handles, not even as decoration. §3's right panel is a summary
-of what the system understood, **not an editor**: no fields, no toggles,
-no edit affordances. The `canvas` / `node` / `if-then` strings that do
-appear are all denials in the brief's own copy.
+### The demo's three load-bearing behaviours
 
-Details that carry an argument:
+**The fill is seeded, not random.** Each play has its own seed
+(`20260805` / `41220931` / `77310457`) so the scatter is identical on
+every load. Random order would make the same page look different to two
+people looking at it together, and the scatter is the point: it must not
+read as a left-to-right sweep, which would imply the locations are
+processed in sequence.
 
-- **§4 lists Schedule first and then dismisses it.** Every tool a
-  franchisor has already evaluated is schedule-based, so leading with it
-  and demoting it in the closing line is the positioning move. **Drift
-  carries the accent** because it is the differentiated trigger: a
-  threshold needs someone to know what to watch, drift does not.
-- **No per-location examples in §4.** That is §5, and putting one there
-  collapses the section the page rests on.
-- **§3's AUTHOR row stays.** A play having a named author is what makes
-  a coach willing to write a second one.
-- **§6 is two columns and one line.** Control Center carries governance
-  depth; this page is capability. Do not grow it into a permissions
-  matrix.
-- **§7's counts are illustrative** and labelled as such.
+**It starts on visibility, once.** An IntersectionObserver at 0.35, so
+the animation is not already over when the section is reached, and never
+replays on scroll.
 
-### Routing changed here, and it mattered
+**Reduced motion jumps straight to `done`.** No typing, no fill.
+Verified: 210 of 210 tiles settled and the closing line at opacity 1
+immediately.
 
-`/platform/workflows` was **unreachable** before this: `next.config.ts`
-308'd it to `/solution/agents` while a real page sat behind it, so the
-nav, the footer and the Reporting and Apps Related cards all landed on
-the legacy Agents page. That redirect is gone.
+Measured on the built page: typing runs 170 characters at 16ms, the fill
+completes by ~5.4s, and all 210 tiles resolve. **210 tiles against a
+count of 214 is correct**, not an off-by-four: the four callout stores
+are drawn out of the field.
 
-- `/platform/automations` now 301s here; its route and its ComingSoon
-  stub are deleted, and §4's trigger grid is what absorbed it.
-- `/solution/agents` was a second mount of the same legacy
-  `WorkflowsContent` and went with it. It and `/solution/workflows` now
-  both point forward at `/platform/workflows` rather than at each other.
-- **The sitemap was listing four redirected URLs** (`/platform`,
-  `/platform/ai-agent`, `/platform/ticketing`, `/platform/insights`)
-  plus `/solution/agents`, and was missing every page built since. It
-  now lists only routes that render. Check `next.config.ts` before
-  adding another.
+### Two places the handoff's layout does not survive a phone
 
-Nav: Automations is gone, so **Always On is a one-item group**. The
-brief allows adding Compliance "if it exists" — it does not, and the
-stub created here for §9's card is a ComingSoon page. A stub in the nav
-is what the Automations entry was already doing wrong.
+- **The industry grid.** The handoff says the 3x3 stays at every width
+  "by design". At 375 the panel leaves each of three cards about 62px of
+  content and the category label alone needs ~78px at the 12px type
+  floor, so it overflowed. It is three across from `sm` and two below.
+- **The demo callout row.** Four callouts at 375 are ~70px each and
+  their store numbers and reasons do not fit. `.ed-demo-row` drops to two
+  columns below 480px, and the connector row above follows the same rule
+  so every marker stays over its own card.
 
-Stub created: `/platform/compliance`, `noindex`, deliberately not in the
-nav.
+Content is data: `components/platform/workflows/data.ts` carries all 54
+industry plays, the three demo plays, the six triggers and the four
+timeline rows, generated from the handoff's `content/*.json`. The six
+industry photographs are committed under `public/photos/industries/`,
+converted from the supplied PNGs to JPEG at 202 to 381KB each.
 
-`{{TBD:}}` tokens, four, all §8: `workflows-proof-brand`, `-metric`,
-`-quote`, `-attribution`. **This page needs an outcome, not an
-efficiency stat** — a play count proves activity, a play count plus what
-changed proves the growth claim. Not a deflection metric; that argues
-for Answers.
+**Every count on this page is illustrative**, which is why Over time
+carries a visible "Counts are illustrative." line. That line stays until
+real figures replace them.
 
-**TODO: the §10 CTA subline promises two things on a sales call** —
-writing the play live, and showing what it would have done at four of
-the prospect's own locations. Confirm both are deliverable or soften it
-before launch.
+Verified on the built page at 1440/1280/1205/1024/768/375 in both themes:
+no horizontal overflow, no text under 12px, one h1 and five h2s, zero
+em-dashes, none of the handoff's banned words, no `#00AEEF` used as text,
+and the demo resolving to its finished state under reduced motion.
 
 ## /platform/apps
 
