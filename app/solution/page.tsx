@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import JsonLd from "@/components/JsonLd";
-import PlatformContent from "@/app/platform/PlatformContent";
+import SolutionContent from "./SolutionContent";
 
 export const metadata: Metadata = {
   title: "Solution",
@@ -58,7 +58,7 @@ export default function SolutionPage() {
       <JsonLd data={softwareSchema} />
       <Navbar />
       <main className="flex flex-1 flex-col">
-        <PlatformContent />
+        <SolutionContent />
       </main>
       <Footer />
     </>

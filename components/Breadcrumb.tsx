@@ -14,8 +14,8 @@ const BASE_URL = "https://www.ezeeassist.com";
  *
  * Usage:
  *   <Breadcrumb items={[
- *     { name: "Platform", href: "/platform" },
- *     { name: "AI Agent", href: "/platform/ai-agent" },
+ *     { name: "Solution", href: "/solution" },
+ *     { name: "Answers", href: "/platform/answers" },
  *   ]} />
  */
 export function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {

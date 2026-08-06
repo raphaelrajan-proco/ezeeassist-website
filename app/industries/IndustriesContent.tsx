@@ -168,7 +168,7 @@ export default function IndustriesContent() {
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Link href="/contact"><Button size="lg">Book a Demo</Button></Link>
-              <Link href="/platform"><Button size="lg" variant="secondary">Explore the Platform <ArrowRight size={16} className="ml-2" /></Button></Link>
+              <Link href="/solution"><Button size="lg" variant="secondary">Explore the Platform <ArrowRight size={16} className="ml-2" /></Button></Link>
             </div>
           </motion.div>
         </div>

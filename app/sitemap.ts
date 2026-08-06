@@ -24,11 +24,12 @@ const routes: Route[] = [
 
   // ── Tier 2: Core product & high-intent pages ──────────────
   /* Only routes that actually render belong here. `/platform`,
-     `/platform/ai-agent`, `/platform/ticketing` and `/platform/insights`
-     were listed while next.config.ts redirected all four away, and
-     `/solution/agents` was a second mount of the legacy workflows content
-     that no longer exists. Every URL below is a real page; check
-     next.config.ts before adding another. */
+     `/platform/ai-agent` and `/platform/insights` were listed while
+     next.config.ts redirected all three away; those page files are now
+     deleted outright and only the redirects remain, so old inbound links
+     still land. `/solution/agents` was a second mount of the legacy
+     workflows content that no longer exists. Every URL below is a real
+     page; check next.config.ts before adding another. */
   { url: "/platform/answers",                               priority: 0.85, changeFrequency: "monthly" },
   { url: "/platform/reporting",                             priority: 0.85, changeFrequency: "monthly" },
   { url: "/platform/apps",                                  priority: 0.85, changeFrequency: "monthly" },
@@ -38,7 +39,6 @@ const routes: Route[] = [
   { url: "/platform/control-center",                        priority: 0.85, changeFrequency: "monthly" },
   { url: "/platform/integrations",                          priority: 0.85, changeFrequency: "monthly" },
 
-  // ── Tier 2: Industries ────────────────────────────────────
   { url: "/solution",                                       priority: 0.85, changeFrequency: "monthly" },
 
   // ── Tier 2: Industries and audiences ──────────────────────

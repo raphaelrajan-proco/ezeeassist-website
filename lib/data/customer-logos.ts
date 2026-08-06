@@ -7,8 +7,9 @@
  * point: do not fork the list per page.
  *
  * **Files live in `public/logos/brands/`, committed, never hotlinked.**
- * 47 came from the IFA 2026 slide as PNG/JPG at wildly different aspect
- * ratios, 1.00 for Athletic Republic through 7.59 for New Creations.
+ * 47 came from the IFA 2026 slide as PNG/JPG, plus UPS Store, Heights
+ * Wellness Retreat and Home Helpers supplied separately. Aspect ratios run
+ * 1.00 for Athletic Republic to 7.59 for New Creations.
  *
  * **`ar` is the file's measured width/height**, and `LogoTile` sizes each
  * mark from it. A single fixed height across that range does not work: at
@@ -20,15 +21,16 @@
  *
  * **Re-measure `ar` when a file changes.** It is derived data and there is
  * no runtime check that it still matches the bitmap; a stale value just
- * renders the mark at the wrong size. Values below were read from the
+ * renders the mark at the wrong size, with nothing to flag it. This has
+ * already happened once: a replacement `deka-lash.png` went from 5.63 to
+ * a square 1.00 and the mark rendered at less than half the height it
+ * should have until the value was re-read. Values below were read from the
  * committed files.
  *
- * **Three brands have no file yet** and are deliberately left in the list:
- * UPS Store, Heights Wellness Retreat, Home Helpers. Their `src` points at
- * a path that does not exist, so `LogoTile`'s `onError` renders the grey
- * text pill instead. That fallback is the requested interim state, not a
- * bug. Drop a file at the named path and the pill becomes a logo with no
- * code change.
+ * **Every brand now has a file.** `LogoTile` still falls back to a grey
+ * text pill through `onError`, which is what carries a new entry whose art
+ * has not landed yet: add the row, point `src` at the intended path, and
+ * the pill holds the slot without shifting the order.
  *
  * Order is the marquee's opening sequence, requested: it launches on a
  * handful of brands from the back of the roster, the featured run lands
@@ -55,14 +57,12 @@ export const customerLogos: CustomerLogo[] = [
   { name: "Athletic Republic", src: "/logos/brands/athletic-republic.png", alt: "Athletic Republic", ar: 1.00 },
 
   // ── Featured run, order requested ────────────────────────────
-  // TODO: UPS Store logo is in the sales-deck asset folder, not the IFA
-  // slide. Drop it at this path to replace the text pill.
-  { name: "UPS Store", src: "/logos/brands/ups-store.png", alt: "The UPS Store" },
+  { name: "UPS Store", src: "/logos/brands/ups-store.png", alt: "The UPS Store", ar: 5.89 },
   { name: "Sport Clips", src: "/logos/brands/sport-clips.jpg", alt: "Sport Clips", ar: 3.33 },
   { name: "Fastest Labs", src: "/logos/brands/fastest-labs.png", alt: "Fastest Labs", ar: 3.08 },
   { name: "Aqua-Tots", src: "/logos/brands/aqua-tots.png", alt: "Aqua-Tots Swim School", ar: 3.17 },
   { name: "DivaDance", src: "/logos/brands/divadance.png", alt: "DivaDance", ar: 1.00 },
-  { name: "Deka Lash", src: "/logos/brands/deka-lash.png", alt: "Deka Lash", ar: 5.63 },
+  { name: "Deka Lash", src: "/logos/brands/deka-lash.png", alt: "Deka Lash", ar: 1.00 },
   { name: "HorsePower Brands", src: "/logos/brands/horsepower-brands.png", alt: "HorsePower Brands", ar: 2.53 },
   { name: "Oasis Senior Advisors", src: "/logos/brands/oasis-senior-advisors.png", alt: "Oasis Senior Advisors", ar: 1.49 },
   { name: "EverLine", src: "/logos/brands/everline.png", alt: "EverLine Coatings and Services", ar: 1.07 },
@@ -73,9 +73,8 @@ export const customerLogos: CustomerLogo[] = [
   { name: "Spray-Net", src: "/logos/brands/spray-net.png", alt: "Spray-Net", ar: 3.60 },
   { name: "Modern PurAir", src: "/logos/brands/modern-purair.png", alt: "Modern PurAir", ar: 3.35 },
   { name: "Zoom Drain", src: "/logos/brands/zoom-drain.png", alt: "Zoom Drain", ar: 1.80 },
-  // TODO: no file supplied for either. Renders as a text pill until one lands.
-  { name: "Heights Wellness", src: "/logos/brands/heights-wellness-retreat.png", alt: "Heights Wellness Retreat" },
-  { name: "Home Helpers", src: "/logos/brands/home-helpers.png", alt: "Home Helpers Home Care" },
+  { name: "Heights Wellness", src: "/logos/brands/heights-wellness-retreat.png", alt: "Heights Wellness Retreat", ar: 1.91 },
+  { name: "Home Helpers", src: "/logos/brands/home-helpers.png", alt: "Home Helpers Home Care", ar: 3.43 },
 
   // ── The rest of the roster ───────────────────────────────────
   { name: "Art of Drawers", src: "/logos/brands/art-of-drawers.png", alt: "Art of Drawers", ar: 2.42 },
