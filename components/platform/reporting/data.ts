@@ -44,19 +44,27 @@ export const INPUTS: { title: string; body: string; tone: Tone; d: string }[] = 
 
 export const LIVE_SOURCES = ["Mindbody", "ServiceTitan", "Toast", "QuickBooks", "ADP", "Salesforce"];
 
-/* ── §5 Across systems ──────────────────────────────────────
-   `aw`/`bw`/`cw` are bar widths as percentages. The BOTH bar is always
-   the shortest: the point is that the overlap is the small, valuable
-   part neither system can see on its own. */
-export const CROSSINGS: {
-  aLabel: string; bLabel: string; aw: number; bw: number; cw: number;
-  count: number; tint: string; question: string;
-}[] = [
-  { aLabel: "SCHEDULING", bLabel: "CRM",        aw: 62, bw: 44, cw: 34, count: 47, tint: "#5BA8D8", question: "Which locations have open capacity next week and a lapsed client list over 200?" },
-  { aLabel: "POS",        bLabel: "PEERS",      aw: 71, bw: 50, cw: 27, count: 31, tint: "#A78BFA", question: "Which locations sell the anchor service well but never attach the add-on their peers do?" },
-  { aLabel: "QUOTES",     bLabel: "WIN RATE",   aw: 58, bw: 41, cw: 22, count: 18, tint: "#34D399", question: "Where are we quoting below the network average and still winning the job?" },
-  { aLabel: "POS",        bLabel: "COMPLIANCE", aw: 66, bw: 47, cw: 14, count: 6,  tint: "#FBBF24", question: "Of my bottom quartile, which have open compliance items?" },
+/* ── §5 Across the stack ────────────────────────────────────
+   One question reading four systems at once. The vantage is HQ over a
+   300-location network, which is why **every row counts locations, not
+   records**. Restating a row as a network total ("9,400 lapsed clients")
+   is not decision-grade for HQ and breaks the funnel.
+
+   `fill` is the count as a share of the 300-location network, so a
+   changed count means a recomputed width. The set must stay internally
+   consistent: each filter narrows, and the intersection has to stay
+   smaller than the tightest single filter. */
+export const NETWORK_SIZE = 300;
+
+export const STACK_ROWS: { label: string; tint: string; count: number; value: string }[] = [
+  { label: "SCHEDULING", tint: "#5BA8D8", count: 184, value: "184 locations with open capacity" },
+  { label: "CRM",        tint: "#A78BFA", count: 121, value: "121 locations with 200+ lapsed clients" },
+  { label: "MARKETING",  tint: "#FBBF24", count: 61,  value: "61 locations with no campaign live" },
+  { label: "POS",        tint: "#34D399", count: 38,  value: "38 locations pacing behind plan" },
 ];
+
+/** What survives the join. Smaller than the tightest single filter. */
+export const STACK_JOIN = 23;
 
 /* ── §7 Scoping ─────────────────────────────────────────────
    The indent is what carries the nesting at desktop. Below md it is

@@ -1369,9 +1369,20 @@ arrangement `.ed-problem` and `.ed-showcase` use. `--ok`, `--warn`,
 added later, and `--wash`/`--wash2` are one page's panel treatment. All
 eight carry light and dark values.
 
-The hero answer card **sits straight**. It previously had a 0.6deg tilt,
-which the handoff removed. Its ink is fixed dark hex, not tokens: it is a
-white card on a dark band in both themes.
+The hero artifact is a **phone chat mock**, which replaced the flat
+answer card in a later handoff. Its ink is fixed hex, not tokens: it is a
+white phone on a dark band and stays light in both themes. Nothing in it
+is a real control, so the "input" is a styled span rather than an
+`<input>`, keeping it out of the tab order.
+
+**Its type is the site's 12px floor, not the prototype's.** The handoff
+draws the meta lines and source chips at 8.5 to 10.5px, below the floor
+the regression guard enforces, and that text is still read. Everything
+sits at 12px or above and the shell grew from 310px to 330px to absorb
+it; the proportions are otherwise the handoff's.
+
+Two channel tiles were renamed in the same pass: Yammer to **Intranet**
+and Chrome Extension to **Chrome**. Icons and tile styling unchanged.
 
 Icons live in `components/platform/answers/icons.tsx`, copied from the
 prototype verbatim. All decorative, all `currentColor` at stroke 1.8, so
@@ -1964,12 +1975,51 @@ em-dashes, no banned words, no scarcity copy, five SHIPPED and one THIS
 WEEK, no `#00AEEF` used as text, and both loops resolving to their
 finished state under `prefers-reduced-motion`.
 
+## The hero customer strip
+
+`components/sections/HeroLogoStrip.tsx` wraps the shared `LogoMarquee`
+for the three rebuilt platform pages (Answers, Reporting, Apps). One
+component rather than three copies of the same padding, so the gap under
+every hero stays identical: measured at **48px above the logos and 48px
+below**, a 130px strip. That is deliberately shorter than a normal band.
+It is a strip riding under the hero, not a section of its own, and at
+full section padding it pushed the first heading well below the fold.
+
+`IntegrationMarquee` is the same idea for the systems EZee reads from,
+used on Reporting under a left-justified "Reads live from".
+
+**Both scroll names, not logos.** Only four of the fifty integration
+SVGs `lib/data/integrations.ts` declares are actually committed, and
+`LogoMarquee` falls back to text pills for the customer logos for the
+same reason. The rule is that a logo is a committed local file or it is
+not shown, and mixing four real marks with forty-six text chips reads as
+broken rather than deliberate. The platform page's own scroller already
+does the same. If the files land, `IntegrationMarquee` is the one place
+to swap.
+
+Both inherit `ed-logo-marquee`, so both already pause on hover and freeze
+under `prefers-reduced-motion`.
+
 ## /platform/reporting
 
 Rebuilt from a supplied design handoff, replacing the twelve-section
 version this entry used to describe. Ten sections now: hero, what it
 costs now, inputs, ask anything, across systems, always on, scoping,
 alongside your BI, related, closing.
+
+**Trimmed after the rebuild, on request:** the "Alongside your BI" split
+section and the scoping section's closing "How scoping is set in the
+Control Center." line are both gone. The Control Center is still reached
+from Related. The old "opportunity between two systems" 2x2 was replaced
+by a single wide panel: the argument moved from pairwise overlap to one
+question reading the whole stack. Its vantage tag is load-bearing, HQ
+over 300 locations, which is why **every row counts locations rather
+than records**, and the ALL FOUR bar is full width because it represents
+the whole network being read, not a fifth filter. Narrowing it to match
+the count made the section argue shrinkage; do not. Bar widths are the
+count as a share of `NETWORK_SIZE`, so a changed count means a
+recomputed width, and the intersection must stay smaller than the
+tightest single filter.
 
 **This page moved off the photographic hero set onto a gradient.** The
 handoff specifies indigo `#242A5E`, now `HERO_GRADIENT.indigo` with its

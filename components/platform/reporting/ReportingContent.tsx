@@ -7,14 +7,20 @@ import { ArrowRight } from "lucide-react";
 import { HERO_GRADIENT } from "@/lib/data/hero-backgrounds";
 import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 import { Glyph } from "./Glyph";
-import { CROSSINGS, INK, INPUTS, LIVE_SOURCES, RELATED, SCOPES, TILE, type Tone } from "./data";
+import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
+import IntegrationMarquee from "@/components/sections/IntegrationMarquee";
+import { INK, INPUTS, NETWORK_SIZE, RELATED, SCOPES, STACK_JOIN, STACK_ROWS, TILE, type Tone } from "./data";
 
 /**
  * /platform/reporting
  *
- * Rebuilt from the supplied design handoff. Ten sections: hero, what it
- * costs now, inputs, ask anything, across systems, always on, scoping,
- * alongside your BI, related, closing.
+ * Rebuilt from the supplied design handoff, then trimmed: hero, the
+ * customer strip, what it costs now, inputs, ask anything, across the
+ * stack, always on, scoping, related, closing.
+ *
+ * The "Alongside your BI" split and the scoping section's closing
+ * "How scoping is set in the Control Center." line were both removed on
+ * request. The Control Center is still reached from Related.
  *
  * **This page moved off the photographic hero set onto a gradient.** The
  * handoff specifies indigo `#242A5E`, registered as `HERO_GRADIENT.indigo`
@@ -259,6 +265,8 @@ export default function ReportingContent() {
         </motion.div>
       </section>
 
+      <HeroLogoStrip />
+
       {/* ── 2. What it costs now ────────────────────────── */}
       <section className="ed-bg w-full">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
@@ -354,29 +362,21 @@ export default function ReportingContent() {
             ))}
           </div>
 
+          {/* A scroller rather than six chips: the claim is breadth, and
+              six names read as a shortlist. Names not logos, see
+              IntegrationMarquee for why. */}
           <Reveal delay={0.1}>
-            <div className="ed-card ed-border flex flex-col gap-3 rounded-[14px] border px-5 py-4 lg:flex-row lg:items-center">
-              <span className="ed-fg-muted flex-none text-[13.5px] font-semibold">Reads live from</span>
-              <div className="flex flex-wrap gap-2">
-                {LIVE_SOURCES.map((s) => (
-                  <span
-                    key={s}
-                    className="rounded-md"
-                    style={{
-                      fontFamily: MONO, fontSize: 12, padding: "5px 10px",
-                      background: "var(--chip-bg)", border: "1px solid var(--chip-bd)", color: "var(--ed-accent-text)",
-                    }}
-                  >
-                    {s}
-                  </span>
-                ))}
+            <div className="ed-card ed-border flex flex-col gap-3 overflow-hidden rounded-[14px] border py-4">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 px-5">
+                <span className="ed-fg-muted flex-none text-[13.5px] font-semibold">Reads live from</span>
+                <span className="ed-fg-muted text-[13.5px]">
+                  250+ more.{" "}
+                  <Link href="/platform/integrations" className="ed-accent-text underline-offset-2 hover:underline">
+                    See what connects
+                  </Link>
+                </span>
               </div>
-              <span className="ed-fg-muted text-[13.5px] lg:ml-auto lg:whitespace-nowrap">
-                250+ more.{" "}
-                <Link href="/platform/integrations" className="ed-accent-text underline-offset-2 hover:underline">
-                  See what connects
-                </Link>
-              </span>
+              <IntegrationMarquee />
             </div>
           </Reveal>
         </div>
@@ -494,69 +494,118 @@ export default function ReportingContent() {
         </div>
       </section>
 
-      {/* ── 5. Across systems ───────────────────────────── */}
+      {/* ── 5. Across the stack ─────────────────────────────
+          Replaces the old "between two systems" 2x2. The argument moved
+          from pairwise overlap to one question reading the whole stack,
+          which is why this is a single wide panel rather than four
+          cards. */}
       <section className="w-full" style={{ background: "#0B1220" }}>
         <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
-          <Reveal className="flex max-w-[820px] flex-col gap-3.5">
+          <Reveal className="flex max-w-[840px] flex-col gap-3.5">
             <h2 className="leading-[1.12] tracking-[-0.03em]" style={{ ...H2, color: "#EEF2F8" }}>
-              The opportunity is usually sitting{" "}
-              <span style={{ color: IN.accent }}>between two systems.</span>
+              The opportunity sits across your whole stack.{" "}
+              <span style={{ color: IN.accent }}>One question pulls it together.</span>
             </h2>
             <p className="text-[18px] leading-[1.7]" style={{ color: "rgba(238,242,248,.72)" }}>
-              Your POS knows what sold. Your scheduler knows what is empty. Neither one knows you
-              have a soft week and four hundred people who have not been back.
+              Your POS knows what sold. Your scheduler knows what is empty. The CRM holds who has
+              not been back, and the marketing calendar knows nothing is running to bring them in.
+              Ask once and all of it is read together, at every location at the same time.
             </p>
           </Reveal>
 
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            {CROSSINGS.map((c, i) => (
-              <Reveal key={c.question} delay={(i % 2) * 0.06}>
-                <div
-                  className="flex h-full flex-col gap-3.5 rounded-2xl p-5 sm:p-6"
-                  style={{ background: "rgba(238,242,248,.04)", border: "1px solid rgba(238,242,248,.12)" }}
-                >
-                  <div className="flex flex-col gap-2">
-                    {[
-                      { label: c.aLabel, w: c.aw, fill: "rgba(238,242,248,.3)", count: null },
-                      { label: c.bLabel, w: c.bw, fill: "rgba(238,242,248,.22)", count: null },
-                      { label: "BOTH",   w: c.cw, fill: c.tint, count: c.count },
-                    ].map((row) => (
-                      <div key={row.label} className="flex items-center gap-3">
-                        <span
-                          className="w-[86px] flex-none"
-                          style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", color: row.count ? c.tint : "rgba(238,242,248,.55)" }}
-                        >
-                          {row.label}
-                        </span>
-                        <span className="relative block h-1.5 flex-1 overflow-hidden rounded-full" style={{ background: "rgba(238,242,248,.08)" }} aria-hidden="true">
-                          <span className="absolute inset-y-0 left-0 rounded-full" style={{ width: `${row.w}%`, background: row.fill }} />
-                        </span>
-                        <span
-                          className="w-7 flex-none text-right"
-                          style={{ fontFamily: MONO, fontSize: 13, fontWeight: 700, color: c.tint }}
-                        >
-                          {row.count ?? ""}
-                        </span>
-                      </div>
-                    ))}
+          <Reveal delay={0.08}>
+            <div
+              className="flex flex-col gap-5 rounded-[18px] p-5 sm:p-8"
+              style={{ background: "rgba(238,242,248,.04)", border: "1px solid rgba(238,242,248,.12)" }}
+            >
+              {/* The vantage is load-bearing: HQ, over 300 locations. It
+                  is why every row below counts locations. */}
+              <div className="flex flex-col gap-2">
+                <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.16em", color: "rgba(169,182,255,.75)" }}>
+                  ASKED AT HQ · {NETWORK_SIZE} LOCATIONS
+                </span>
+                <p style={{ fontFamily: JAKARTA, fontSize: 18, fontWeight: 600, color: "#EEF2F8", lineHeight: 1.5 }}>
+                  &ldquo;Which locations have open capacity next week, a lapsed client list over 200,
+                  and no local campaign running?&rdquo;
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                {STACK_ROWS.map((r) => (
+                  <div key={r.label} className="grid grid-cols-1 items-center gap-x-4 gap-y-1.5 lg:grid-cols-[104px_1fr_190px]">
+                    <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", color: r.tint }}>
+                      {r.label}
+                    </span>
+                    <span
+                      className="relative block h-[7px] overflow-hidden rounded-full"
+                      style={{ background: "rgba(238,242,248,.1)" }}
+                      aria-hidden="true"
+                    >
+                      <span
+                        className="absolute inset-y-0 left-0 rounded-full"
+                        style={{ width: `${Math.round((r.count / NETWORK_SIZE) * 100)}%`, background: r.tint }}
+                      />
+                    </span>
+                    <span className="text-[12.5px] lg:text-right" style={{ color: "rgba(238,242,248,.6)" }}>
+                      {r.value}
+                    </span>
                   </div>
-                  <p
-                    className="mt-auto pt-3.5 text-[15px] leading-[1.55]"
-                    style={{ borderTop: "1px solid rgba(238,242,248,.12)", color: "#EEF2F8" }}
-                  >
-                    &ldquo;{c.question}&rdquo;
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-4">
+                <span className="h-px flex-1" style={{ borderTop: "1.5px dashed rgba(169,182,255,.35)" }} aria-hidden="true" />
+                <span className="whitespace-nowrap" style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", color: "rgba(169,182,255,.75)" }}>
+                  READ TOGETHER, IN ONE PASS
+                </span>
+                <span className="h-px flex-1" style={{ borderTop: "1.5px dashed rgba(169,182,255,.35)" }} aria-hidden="true" />
+              </div>
+
+              {/* The bar is full width because it is the whole network
+                  being read, not a fifth filter. The count beside it is
+                  what survives the join, and the caption is what stops
+                  those two facts reading as a contradiction. Narrowing
+                  the bar to match the count makes the section argue
+                  shrinkage; do not. */}
+              <div className="grid grid-cols-1 items-center gap-x-4 gap-y-2 lg:grid-cols-[104px_1fr_190px]">
+                <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", color: IN.accent }}>
+                  ALL FOUR
+                </span>
+                <span
+                  className="relative block h-[11px] overflow-hidden rounded-full"
+                  style={{
+                    background: "linear-gradient(90deg,#5BA8D8,#A78BFA 38%,#FBBF24 70%,#34D399)",
+                    boxShadow: "0 0 14px rgba(169,182,255,.4)",
+                  }}
+                  aria-hidden="true"
+                />
+                <span className="flex flex-col lg:items-end">
+                  <span style={{ fontFamily: JAKARTA, fontSize: 22, fontWeight: 800, color: "#EEF2F8" }}>{STACK_JOIN}</span>
+                  <span className="text-[12px]" style={{ color: "rgba(238,242,248,.6)" }}>surface from all {NETWORK_SIZE} read</span>
+                </span>
+              </div>
+
+              <div
+                className="flex flex-col items-baseline justify-between gap-3 pt-5 lg:flex-row lg:gap-8"
+                style={{ borderTop: "1px solid rgba(238,242,248,.12)" }}
+              >
+                <p className="max-w-[720px] text-[15px] leading-[1.6]" style={{ color: "#EEF2F8" }}>
+                  {STACK_JOIN} of {NETWORK_SIZE} locations have the capacity, the list, and nothing
+                  running to fix it. A reactivation draft is ready for each owner, ranked by
+                  projected recovery.
+                </p>
+                <span className="flex-none whitespace-nowrap" style={{ fontFamily: MONO, fontSize: 12, color: "rgba(238,242,248,.45)" }}>
+                  Counts are illustrative · 1.4s
+                </span>
+              </div>
+            </div>
+          </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="flex flex-col gap-3 pt-6" style={{ borderTop: "1px solid rgba(238,242,248,.12)" }}>
-              <p className="max-w-[900px] text-[16.5px] leading-[1.65]" style={{ color: "rgba(238,242,248,.82)" }}>
-                Three of those four are revenue that already exists, sitting in a gap between two
-                systems. In a BI tool each one is a modeling request that takes a quarter. Here it is
-                a sentence.
+            <div className="flex max-w-[840px] flex-col gap-3 pt-6" style={{ borderTop: "1px solid rgba(238,242,248,.14)" }}>
+              <p className="text-[17px] leading-[1.65]" style={{ color: "rgba(238,242,248,.9)" }}>
+                Each system above answers its own slice. The insight lives in the join, and in a BI
+                tool that join is a modeling request that takes a quarter. Here it is a sentence.
               </p>
               <Link
                 href="/platform/integrations"
@@ -756,67 +805,10 @@ export default function ReportingContent() {
             ))}
           </div>
 
-          <Reveal delay={0.1}>
-            <p className="ed-fg-muted text-[15px]">
-              <Link href="/platform/control-center" className="ed-accent-text underline-offset-2 hover:underline">
-                How scoping is set
-              </Link>{" "}
-              in the Control Center.
-            </p>
-          </Reveal>
         </div>
       </section>
 
-      {/* ── 8. Alongside your BI ────────────────────────── */}
-      <section className="ed-bg w-full">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-6 md:px-12 lg:px-16 py-16 md:py-20">
-          <Reveal className="flex max-w-[820px] flex-col gap-3.5">
-            <h2 className="ed-fg leading-[1.12] tracking-[-0.03em]" style={H2}>
-              It reads your BI, and answers what your BI never anticipated.
-            </h2>
-            <p className="ed-fg-muted text-[18px] leading-[1.7]">
-              Your dashboards keep doing the job they were built for. This covers the questions that
-              come up between them.
-            </p>
-          </Reveal>
-
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            <Reveal>
-              <div className="ed-card ed-border flex h-full flex-col gap-3.5 rounded-2xl border p-5 sm:p-7">
-                <span className="ed-fg text-[15px] font-semibold">Your BI is still right for</span>
-                {[
-                  "Board reporting on a fixed set of measures",
-                  "Financial consolidation and audit",
-                  "Anything with a defined, unchanging format",
-                ].map((t) => (
-                  <span key={t} className="ed-fg-muted flex gap-2.5 text-[15px] leading-[1.55]">
-                    <span aria-hidden="true">·</span>{t}
-                  </span>
-                ))}
-              </div>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <div
-                className="flex h-full flex-col gap-3.5 rounded-2xl p-5 sm:p-7"
-                style={{ background: "var(--wash)", border: "1.5px solid var(--chip-bd)" }}
-              >
-                <span className="ed-accent-text text-[15px] font-semibold">This is for</span>
-                {[
-                  "The question that came up in the meeting",
-                  "The cut nobody modeled",
-                  "Everyone who was never going to get a seat",
-                ].map((t) => (
-                  <span key={t} className="ed-fg flex gap-2.5 text-[15px] leading-[1.55]">
-                    <span aria-hidden="true">·</span>{t}
-                  </span>
-                ))}
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 9. Related ────────────────────────────────────
+      {/* ── 8. Related ────────────────────────────────────
           Titles are nowrap by design; three up only where the longest
           fits on one line. */}
       <section className="ed-bg w-full">
@@ -835,7 +827,7 @@ export default function ReportingContent() {
         </div>
       </section>
 
-      {/* ── 10. Closing ───────────────────────────────────
+      {/* ── 9. Closing ────────────────────────────────────
           Same indigo family, mirrored, resolving to the variant's own
           bottom colour rather than the teal-navy CLOSING_BASE. */}
       <section className="relative w-full overflow-hidden" style={{ backgroundColor: IN.base }}>

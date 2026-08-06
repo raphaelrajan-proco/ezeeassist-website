@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
+import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 import { platformHero } from "@/lib/data/platform-heroes";
 import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 import {
@@ -13,6 +14,7 @@ import {
   MegaphoneIcon, MicIcon, MobileIcon, PeopleIcon, PersonIcon, PlayIcon,
   SearchIcon, SlackIcon, SmsIcon,
 } from "./icons";
+import PhoneMock from "./PhoneMock";
 
 /**
  * /platform/answers
@@ -93,8 +95,8 @@ const CHANNELS: { label: string; Icon: (p: { size?: number }) => React.JSX.Eleme
   { label: "Google Chat",      Icon: ChatIcon,      hue: "var(--ok)" },
   { label: "Web App",          Icon: GlobeIcon,     hue: "var(--ed-accent-text)" },
   { label: "Mobile",           Icon: MobileIcon,    hue: "var(--purple)" },
-  { label: "Chrome Extension", Icon: GridIcon,      hue: "var(--warn)" },
-  { label: "Yammer",           Icon: MegaphoneIcon, hue: "var(--ok)" },
+  { label: "Chrome",           Icon: GridIcon,      hue: "var(--warn)" },
+  { label: "Intranet",         Icon: MegaphoneIcon, hue: "var(--ok)" },
 ];
 
 /* ── §5 Sources ── */
@@ -228,43 +230,11 @@ export default function AnswersContent() {
             </div>
           </div>
 
-          {/* The card sits straight. It previously had a 0.6deg tilt; that
-              was removed and must not come back. Ink is fixed dark: it is
-              a white card on a dark band in both themes. */}
-          <div
-            className="flex flex-col gap-3 rounded-[18px] p-6"
-            style={{ backgroundColor: "#FFFFFF", boxShadow: "0 30px 70px -30px rgba(3,16,40,.7)" }}
-          >
-            <span style={{ fontFamily: MONO, fontSize: 12, fontWeight: 600, letterSpacing: "0.13em", color: "#52525B" }}>
-              STORE #118 · SHIFT LEAD · 9:14AM
-            </span>
-            <p className="text-[14.5px] font-semibold leading-[1.5]" style={{ color: "#0A0A0A" }}>
-              Can I run the summer promo alongside the loyalty offer?
-            </p>
-            <p className="pt-3 text-[13.5px] leading-[1.6]" style={{ borderTop: "1px solid #E5E7EB", color: "#3F3F46" }}>
-              No. Promotions don&rsquo;t stack with loyalty redemptions. Apply the higher of the two
-              and note it at close.
-            </p>
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap gap-1.5">
-                {["summer-promo-guide.pdf", "loyalty-policy.pdf"].map((c) => (
-                  <span
-                    key={c}
-                    className="rounded-md"
-                    style={{
-                      fontFamily: MONO, fontSize: 12, padding: "5px 10px",
-                      background: "rgba(0,119,168,.06)", border: "1px solid rgba(0,119,168,.22)", color: "#0077A8",
-                    }}
-                  >
-                    {c}
-                  </span>
-                ))}
-              </div>
-              <span className="whitespace-nowrap" style={{ fontSize: 12, color: "#A1A1AA" }}>answered in 6s</span>
-            </div>
-          </div>
+          <PhoneMock />
         </motion.div>
       </section>
+
+      <HeroLogoStrip />
 
       {/* ── 2. Problem ────────────────────────────────────
           The sequence search bar → results → connector → text message is

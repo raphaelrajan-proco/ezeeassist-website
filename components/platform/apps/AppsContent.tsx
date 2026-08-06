@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import { platformHero } from "@/lib/data/platform-heroes";
+import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 import { Glyph } from "@/components/platform/reporting/Glyph";
 import HeroBuildLoop from "./HeroBuildLoop";
@@ -175,6 +176,8 @@ export default function AppsContent() {
           <HeroBuildLoop />
         </motion.div>
       </section>
+
+      <HeroLogoStrip />
 
       {/* ── 2. The wish list ──────────────────────────────
           Copy is deliberately the narrower column so the ledger gets the
