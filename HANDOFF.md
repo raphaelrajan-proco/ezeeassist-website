@@ -2631,6 +2631,17 @@ and both are flat. The eyebrow wraps to two lines below ~430.
   which silently dropped whole brands from the marquee. It now loads eagerly.
   If the tile ever goes back to lazy, the fallback has to become the default
   state rather than the error state.
+- **Replacing an image file at the same path serves the OLD bitmap.**
+  `.next/cache/images` keys on the request path, so a rebuild does not
+  invalidate it. Ten trimmed logos measured at exactly their previous aspect
+  ratios after a full `npm run build`, which reads as "the trim did not work"
+  rather than "you are looking at a cached bitmap". `rm -rf .next/cache/images`
+  before verifying any asset replacement.
+- **A logo file must be cropped to its ink before it is added to the roster.**
+  `LogoTile` sizes from the file's aspect ratio, so baked-in margin silently
+  shrinks the mark. `REF_H * sqrt(REF_AR)` is the constant apparent size the
+  formula guarantees (61); a mark that misses it either has padding in the file
+  or is hitting `MIN_H`/`MAX_H`/`maxWidth`.
 - **`HeroLogoStrip` is the customer marquee's only sanctioned placement on a
   sub-page**: directly under the hero, inside the margins, white band. Answers,
   Reporting, Apps and Trust Center all use it. Do not drop a bare `LogoMarquee`

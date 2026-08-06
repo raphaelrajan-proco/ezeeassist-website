@@ -34,16 +34,32 @@ import { customerLogos, type CustomerLogo } from "@/lib/data/customer-logos";
  * apparent SIZE, which is what the eye compares.
  *
  * `REF_AR` is the roster's typical wordmark ratio, and a mark at exactly
- * that ratio gets exactly `REF_H`. The clamp stops the two extremes from
- * running away: nothing is shorter than 22px or taller than 40px, so the
- * chip height is stable and the row never jitters.
+ * that ratio gets exactly `REF_H`.
+ *
+ * **The apparent size this produces is `REF_H * sqrt(REF_AR)` = 61, and it
+ * is identical for every mark**, which is the whole point: a square logo at
+ * 50x75 and a long wordmark at 22x170 read as equally big. The formula
+ * cannot make one logo look smaller than another. Only two things can, and
+ * both did.
+ *
+ * 1. **Padding inside the file.** `ar` is the FILE's ratio, so transparent
+ *    or white margin counts as part of the mark. Max Strength shipped
+ *    2048x2048 at 30% ink and rendered a third the size of its neighbours.
+ *    Every file in `public/logos/brands/` is now cropped to its ink box, so
+ *    **a new logo has to be trimmed before it is added** or it will be
+ *    quietly undersized with nothing to flag it.
+ * 2. **The clamps.** `MAX_H` binds below `REF_AR * (REF_H / MAX_H)^2`, so at
+ *    the old 40px every mark squarer than 2.31 came out short. That is why
+ *    Nani's Gelato looked small with no padding at all. 54px moves the
+ *    threshold to 1.27, under the roster's squarest mark (The DRIPBaR at
+ *    1.25). Lowering it again re-breaks the square marks first.
  */
 const REF_AR = 3.2;
 const REF_H = 34;
 const MIN_H = 22;
-const MAX_H = 40;
+const MAX_H = 54;
 /** Chip inner height, sized to the tallest mark plus breathing room. */
-const CHIP_H = MAX_H + 20;
+const CHIP_H = MAX_H + 16;
 
 function logoHeight(ar: number | undefined) {
   if (!ar) return REF_H;
@@ -94,7 +110,10 @@ export function LogoTile({ logo }: { logo: CustomerLogo }) {
         width={240}
         height={h}
         className="w-auto object-contain"
-        style={{ height: h, maxWidth: 150 }}
+        /* 170, not 150. At 150 the two widest marks were width-capped
+           rather than height-capped, which is the one way a mark can miss
+           the constant size the formula otherwise guarantees. */
+        style={{ height: h, maxWidth: 170 }}
         /* The text pill is reached only through onError, and a lazy image
            that never enters the viewport never loads, never errors, and
            leaves a zero-width tile. In a marquee most tiles start
