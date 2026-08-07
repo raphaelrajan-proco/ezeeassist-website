@@ -122,7 +122,7 @@ export default function ImpactStats() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: EASE }}
-          className="text-center leading-[1.12] tracking-[-0.028em] max-w-[860px]"
+          className="m-stats-h2 text-center leading-[1.12] tracking-[-0.028em] max-w-[860px]"
           style={{
             fontFamily: JAKARTA,
             fontWeight: 700,
@@ -139,7 +139,7 @@ export default function ImpactStats() {
           <span className="block">that scales your system&rsquo;s growth.</span>
         </motion.h2>
 
-        <div ref={gridRef} className="grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div ref={gridRef} className="m-stats grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {STATS.map((s, i) => (
             /* The unit is two fused pieces: the bar is part of the box. */
             <div
@@ -163,7 +163,7 @@ export default function ImpactStats() {
                 }}
               />
               <div
-                className="flex min-h-[195px] flex-1 flex-col justify-between"
+                className="m-stat-body flex min-h-[195px] flex-1 flex-col justify-between"
                 style={{
                   padding: "26px 22px 24px",
                   backgroundColor: "var(--imp-card)",
@@ -173,7 +173,7 @@ export default function ImpactStats() {
                   boxShadow: "var(--imp-shadow)",
                 }}
               >
-                <div className="ed-fg flex items-baseline whitespace-nowrap">
+                <div className="m-stat-num ed-fg flex items-baseline whitespace-nowrap">
                   {/* Suffix matches the digits exactly: same size, same
                       weight, inherited colour, not superscript. */}
                   <span
@@ -195,7 +195,7 @@ export default function ImpactStats() {
                     {s.suffix}
                   </span>
                 </div>
-                <div className="ed-fg-muted max-w-[200px] text-[14.5px]" style={{ lineHeight: 1.55, textWrap: "pretty" }}>
+                <div className="m-stat-label ed-fg-muted max-w-[200px] text-[14.5px]" style={{ lineHeight: 1.55, textWrap: "pretty" }}>
                   {s.label}
                 </div>
               </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useIsMobile } from "@/lib/useIsMobile";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
@@ -352,6 +353,62 @@ function Legend() {
 
 /* ── Section ───────────────────────────────────────────── */
 
+/**
+ * One band below 768px: its heading, the first two cards, and a control
+ * that expands the rest in place.
+ *
+ * **Below 768 only.** The 768-1023 range keeps the full list it has
+ * always rendered, because that range is tablet and the approved design,
+ * so `useIsMobile` gates the collapse rather than the existing
+ * `useIsDesktop` branch doing it. Both hooks run here on purpose: this
+ * component already renders a separate tree under 1024.
+ *
+ * Each band owns its own open state, so expanding one leaves the others
+ * alone, and the control is a real button rather than a link so it is
+ * reachable by keyboard and announces its state.
+ */
+function MobileBand({ band }: { band: (typeof BANDS)[number] }) {
+  const [open, setOpen] = useState(false);
+  const isMobile = useIsMobile();
+  const hidden = isMobile && !open ? band.cards.length - 2 : 0;
+  const shown = isMobile && !open ? band.cards.slice(0, 2) : band.cards;
+
+  return (
+    <div>
+      <BandHeading band={band} />
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {shown.map((c) => <MomentCard key={c.title} card={c} />)}
+      </div>
+      {isMobile && band.cards.length > 2 && (
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="mt-3 inline-flex items-center gap-2 rounded-full px-4"
+          style={{
+            minHeight: 44, boxSizing: "border-box",
+            border: "1px solid var(--wl-rule)", color: "var(--wl-accent)",
+            fontFamily: "var(--font-editorial)", fontSize: 14, fontWeight: 700,
+            background: "transparent",
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{
+              display: "inline-block", fontSize: 16, lineHeight: 1,
+              transform: open ? "rotate(45deg)" : "none",
+              transition: "transform .2s ease",
+            }}
+          >
+            +
+          </span>
+          {open ? "Show less" : `${hidden} more`}
+        </button>
+      )}
+    </div>
+  );
+}
+
 export default function AlwaysOn() {
   const isDesktop = useIsDesktop();
 
@@ -481,12 +538,7 @@ export default function AlwaysOn() {
             <Legend />
           </div>
           {BANDS.map((b) => (
-            <div key={b.title}>
-              <BandHeading band={b} />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {b.cards.map((c) => <MomentCard key={c.title} card={c} />)}
-              </div>
-            </div>
+            <MobileBand key={b.title} band={b} />
           ))}
           {/* The section's py-16 already makes the bottom margin match
               the top, so nothing extra is needed here. */}

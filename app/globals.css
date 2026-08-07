@@ -337,6 +337,51 @@
   .theme-editorial .m-hex-grid { gap: 22px !important; }
   .theme-editorial .m-hex-label { font-size: 15.5px !important; font-weight: 700 !important; }
 
+  /* ── Proven AI: 2x2, not a 4-deep column ──────────────── */
+  /* All four stats did render; each card just ran ~380px tall, so the
+     section was four screens of scrolling for four numbers. */
+  .theme-editorial .m-stats { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .theme-editorial .m-stats-h2 { font-size: 24px !important; line-height: 1.22 !important; }
+  .theme-editorial .m-stat-body { min-height: 112px !important; gap: 8px; justify-content: flex-start !important; }
+  .theme-editorial .m-stat-num span { font-size: 27px !important; line-height: 1 !important; }
+  .theme-editorial .m-stat-label { font-size: 12.5px !important; line-height: 1.4 !important; }
+
+  /* ── On demand: snap row + pager ──────────────────────── */
+  /* The row runs edge to edge while its first and last pills still line
+     up with the page gutter, which is why the gutter moves onto the
+     scroller as padding rather than staying on the parent. */
+  .theme-editorial .m-tabs {
+    margin-left: -24px; margin-right: -24px;
+    padding: 2px 20px 4px;
+    gap: 10px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .theme-editorial .m-tabs::-webkit-scrollbar { display: none; }
+  /* 244px is deliberately narrower than any phone: it is what keeps the
+     second pill part-way in frame, which is the only thing that tells a
+     reader the row scrolls. */
+  .theme-editorial .m-tab {
+    width: 244px; min-width: 244px !important; min-height: 64px;
+    scroll-snap-align: start; padding: 14px 16px !important; box-sizing: border-box;
+  }
+  .theme-editorial .m-tab-label { font-size: 14px !important; line-height: 1.3 !important; }
+  /* **The button is the target, the span is the dot.** A 7px button is
+     a 7px tap target and fails the 24px floor the guard enforces, so the
+     control is 26x26 and the visual pill lives inside it. */
+  .theme-editorial .m-pager-dot {
+    display: flex; align-items: center; justify-content: center;
+    min-width: 26px; height: 26px; flex: none;
+    padding: 0; border: 0; background: none; cursor: pointer;
+  }
+  .theme-editorial .m-pager-dot > span {
+    display: block; width: 7px; height: 7px; border-radius: 999px;
+    background: var(--sc-border); transition: width .25s ease, background .25s ease;
+  }
+  .theme-editorial .m-pager-dot[data-active] > span { width: 22px; background: var(--sc-accent-ink); }
+  .theme-editorial .m-pager { min-height: 44px; }
+
   /* ── Logo strip ───────────────────────────────────────── */
   /* Edge to edge on phones: the gutters that frame it on desktop cost
      ~40px of a 390px viewport and the marquee reads as cramped. The

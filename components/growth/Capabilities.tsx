@@ -818,7 +818,7 @@ export default function Capabilities() {
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-7 lg:items-stretch">
           {/* Rail */}
           <div className="lg:w-[268px] lg:flex-none flex flex-col lg:justify-center gap-3.5">
-            <div className="flex flex-row lg:flex-col gap-3.5 overflow-x-auto lg:overflow-visible" role="tablist" aria-label="On demand">
+            <div className="m-tabs flex flex-row lg:flex-col gap-3.5 overflow-x-auto lg:overflow-visible" role="tablist" aria-label="On demand">
               {TABS.map((t, i) => {
                 const active = i === tab;
                 return (
@@ -829,7 +829,7 @@ export default function Capabilities() {
                     aria-selected={active}
                     aria-controls="on-demand-stage"
                     onClick={() => select(i)}
-                    className="relative overflow-hidden text-left flex-none lg:flex-auto scroll-mt-28 min-w-[240px] lg:min-w-0"
+                    className="m-tab relative overflow-hidden text-left flex-none lg:flex-auto scroll-mt-28 min-w-[240px] lg:min-w-0"
                     style={{
                       padding: "18px 20px", borderRadius: 16, boxSizing: "border-box",
                       background: active ? "var(--sc-panel)" : "var(--sc-chip)",
@@ -838,10 +838,12 @@ export default function Capabilities() {
                       transition: "background .3s, border-color .3s",
                     }}
                   >
-                    <div style={{ fontFamily: JAKARTA, fontSize: 17, fontWeight: 700, letterSpacing: "-0.015em", lineHeight: 1.25, color: "var(--sc-text)" }}>
+                    <div className="m-tab-label" style={{ fontFamily: JAKARTA, fontSize: 17, fontWeight: 700, letterSpacing: "-0.015em", lineHeight: 1.25, color: "var(--sc-text)" }}>
                       {t.label}
                     </div>
-                    <div style={{ fontSize: 12.5, lineHeight: 1.5, color: "var(--sc-muted)", marginTop: 4 }}>
+                    {/* The pill is label-only below 768: with the sub it ran
+                        past 100px tall and two pills filled the screen. */}
+                    <div className="max-md:hidden" style={{ fontSize: 12.5, lineHeight: 1.5, color: "var(--sc-muted)", marginTop: 4 }}>
                       {t.sub}
                     </div>
                     {active && (
@@ -864,6 +866,30 @@ export default function Capabilities() {
                   </button>
                 );
               })}
+            </div>
+
+            {/* ── Pager, below 768 only ──────────────────────────
+                The reported bug was that the section reads as having one
+                option: at 390 a pill plus the gutter leaves almost no
+                second pill in frame, and a scroll row with nothing to
+                count against is invisible. The dots and the "n of 3" are
+                what make the count unmistakable, so they are not
+                optional. `md:hidden` keeps them off desktop entirely. */}
+            <div className="m-pager flex items-center gap-[7px] md:hidden">
+              {TABS.map((t, i) => (
+                <button
+                  key={`dot-${t.id}`}
+                  aria-label={`Show ${t.label}`}
+                  onClick={() => select(i)}
+                  className="m-pager-dot"
+                  data-active={i === tab ? "true" : undefined}
+                >
+                  <span aria-hidden="true" />
+                </button>
+              ))}
+              <span className="ml-auto text-[12px]" style={{ color: "var(--sc-muted)" }}>
+                {tab + 1} of {TABS.length}
+              </span>
             </div>
             {/* The Apps brief asked for "the third tile's link" to be
                 repointed at /platform/apps. The tiles are `role="tab"`
