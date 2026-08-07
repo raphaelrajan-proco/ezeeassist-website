@@ -489,21 +489,25 @@ export default function GrowthHero() {
         .theme-editorial, so this hero and the sub-page `.ed-hero-pad`
         clear the nav by the same amount. */}
     <section
-      className="ed-hero-shot relative w-full overflow-hidden"
+      /* `justify-center` matters once the section is viewport-tall: the
+         content is a single block under the nav padding, so without it
+         all the added blue pools below the CTAs as one dead band. */
+      className="ed-hero-shot relative flex w-full flex-col justify-center overflow-hidden"
       style={{
         paddingTop: "calc(var(--nav-block) + var(--nav-gap))",
         backgroundColor: HERO_SCRIM,
-        /* Fill a 1080 screen exactly: hero + the 216px logo strip below
-           it land on the fold. `min-height` never shrinks an element
-           below its content, so this only ever ADDS blue, and the extra
-           falls at the bottom because the section is a block box with its
-           content top-aligned under the nav padding.
+        /* The blue runs to just above the fold, leaving a 40px sliver of
+           the white strip showing so the page reads as continuing.
 
-           No floor value is needed and none should be added: on any
-           viewport shorter than ~915 the calc comes out under the hero's
-           natural height and is simply ignored, which is why 1440x900,
-           1205x793 and every phone are untouched. */
-        minHeight: "calc(100vh - 216px)",
+           **The subtrahend is what matters here.** It was 216px, the full
+           strip height, which put the strip's BOTTOM on the fold. On a
+           1512x768 laptop that computes to 552px, under the hero's own
+           ~699px content height, so `min-height` ignored it and the hero
+           did not grow at all: the setting only did anything above about
+           915px of viewport. 40px makes it bind on every real desktop
+           height while still doing nothing on short viewports, since
+           `min-height` cannot shrink an element below its content. */
+        minHeight: "calc(100vh - 40px)",
       }}
     >
       {/* Background. The photograph runs to the top of the document, behind

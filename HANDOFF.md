@@ -2631,6 +2631,13 @@ and both are flat. The eyebrow wraps to two lines below ~430.
   which silently dropped whole brands from the marquee. It now loads eagerly.
   If the tile ever goes back to lazy, the fallback has to become the default
   state rather than the error state.
+- **A viewport-relative `min-height` can be inert and look like a no-op.**
+  `min-height` cannot shrink an element below its content, so if the calc
+  lands under the natural height it is silently ignored. The hero's
+  `calc(100vh - 216px)` did nothing on any laptop (552px against a ~699px
+  natural height) and only bound above ~915px of viewport, which read as
+  "the change did not deploy". Check the calc against the natural height at
+  the SHORT end of the range, not just the tall end.
 - **`ed-logo-band` is #FFFFFF in BOTH themes, so anything drawn on it must
   use a literal colour, never `--ed-fg`.** The trust line read the token and
   went white-on-white in dark mode, invisible with no error. Same rule the
