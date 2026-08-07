@@ -544,15 +544,18 @@ export default function AlwaysOn() {
                   /* EZee blue, via the token so the light band gets the
                      darker pass-rated value and dark gets the brand hue. */
                   color: "var(--wl-accent)",
-                  /* One line at ordinary desktop widths: the 71-char
-                     string measures ~0.494px per char per 1px of font,
-                     so the one-line ceilings are 25.5 at 1024, 30.7 at
-                     1205 and 32.8 in the capped 1152 container. This
-                     sits under each; re-derive if the copy changes. */
+                  /* One line at ordinary desktop widths. Re-derived for
+                     the 72-char string ("hours" -> "moment"): at ~0.494px
+                     per char per 1px of font the ceilings are 25.1 at
+                     1024, 30.3 at 1205 and 32.3 in the capped 1152
+                     container, against a clamp giving 24.5 / 28.1 / 32.
+                     1024 and 1440 both clear by under a pixel, so this
+                     copy is at the length limit: anything longer wraps.
+                     Measured on the built page, not just derived. */
                   fontSize: "clamp(1.25rem, 0.25rem + 2vw, 2rem)",
                 }}
               >
-                Coaching amplified across every location. At the hours it matters most.
+                Coaching amplified across every location. At the moment it matters most.
               </h2>
               {/* 0.6x the lead line, regular weight: 0.8 of the 0.75 it
                   was, by request. */}
