@@ -490,7 +490,21 @@ export default function GrowthHero() {
         clear the nav by the same amount. */}
     <section
       className="ed-hero-shot relative w-full overflow-hidden"
-      style={{ paddingTop: "calc(var(--nav-block) + var(--nav-gap))", backgroundColor: HERO_SCRIM }}
+      style={{
+        paddingTop: "calc(var(--nav-block) + var(--nav-gap))",
+        backgroundColor: HERO_SCRIM,
+        /* Fill a 1080 screen exactly: hero + the 216px logo strip below
+           it land on the fold. `min-height` never shrinks an element
+           below its content, so this only ever ADDS blue, and the extra
+           falls at the bottom because the section is a block box with its
+           content top-aligned under the nav padding.
+
+           No floor value is needed and none should be added: on any
+           viewport shorter than ~915 the calc comes out under the hero's
+           natural height and is simply ignored, which is why 1440x900,
+           1205x793 and every phone are untouched. */
+        minHeight: "calc(100vh - 216px)",
+      }}
     >
       {/* Background. The photograph runs to the top of the document, behind
           the nav pill. object-position keeps the dark left of the frame and

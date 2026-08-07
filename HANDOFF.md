@@ -2631,6 +2631,13 @@ and both are flat. The eyebrow wraps to two lines below ~430.
   which silently dropped whole brands from the marquee. It now loads eagerly.
   If the tile ever goes back to lazy, the fallback has to become the default
   state rather than the error state.
+- **`ed-logo-band` is #FFFFFF in BOTH themes, so anything drawn on it must
+  use a literal colour, never `--ed-fg`.** The trust line read the token and
+  went white-on-white in dark mode, invisible with no error. Same rule the
+  footer follows with its own palette. Playwright's `colorScheme: "dark"` does
+  not flip this site either: next-themes reads its own storage, so force it
+  with `addInitScript(() => localStorage.setItem("theme", "dark"))` or a dark
+  check silently passes against the light theme.
 - **Replacing an image file at the same path serves the OLD bitmap.**
   `.next/cache/images` keys on the request path, so a rebuild does not
   invalidate it. Ten trimmed logos measured at exactly their previous aspect

@@ -39,7 +39,12 @@ export default function HeroLogoStrip({ trustLine = false }: { trustLine?: boole
                  photograph at the same tracking, so holding 0.16em here
                  read as stretched rather than spaced. */
               letterSpacing: "0.13em",
-              color: "var(--ed-fg)",
+              /* A literal, NOT `--ed-fg`. This band is `ed-logo-band`,
+                 which is #FFFFFF in both themes, while `--ed-fg` flips to
+                 near-white in dark mode. Reading the token here put white
+                 text on a white band and the line vanished. Same reason
+                 the footer carries its own palette. */
+              color: "#0A0A0A",
             }}
           >
             Trusted by leading franchise and multi-location brands.
