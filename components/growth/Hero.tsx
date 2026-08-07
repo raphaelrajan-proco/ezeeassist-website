@@ -496,18 +496,23 @@ export default function GrowthHero() {
       style={{
         paddingTop: "calc(var(--nav-block) + var(--nav-gap))",
         backgroundColor: HERO_SCRIM,
-        /* The blue runs to just above the fold, leaving a 40px sliver of
-           the white strip showing so the page reads as continuing.
+        /* The blue fills the fold exactly. The white logo strip begins
+           at the first pixel of scroll and none of it is visible at rest.
 
-           **The subtrahend is what matters here.** It was 216px, the full
-           strip height, which put the strip's BOTTOM on the fold. On a
-           1512x768 laptop that computes to 552px, under the hero's own
-           ~699px content height, so `min-height` ignored it and the hero
-           did not grow at all: the setting only did anything above about
-           915px of viewport. 40px makes it bind on every real desktop
-           height while still doing nothing on short viewports, since
-           `min-height` cannot shrink an element below its content. */
-        minHeight: "calc(100vh - 40px)",
+           This has been walked down twice and the history is the useful
+           part. `calc(100vh - 216px)` put the strip's BOTTOM on the fold,
+           which on a 1512x768 laptop computed to 552px, under the hero's
+           own ~699px content height, so `min-height` ignored it entirely
+           and nothing moved. `calc(100vh - 40px)` bound everywhere but
+           left a 40px sliver of white at rest. Neither was what was
+           asked for, which was a full-bleed fold.
+
+           `min-height` still cannot shrink an element below its content,
+           so this is inert wherever the content is taller than the
+           viewport: mobile keeps its ~1108px natural hero rather than
+           being crushed to 667. `vh` and not `dvh` on purpose, since
+           `dvh` resizes the hero as mobile browser chrome hides. */
+        minHeight: "100vh",
       }}
     >
       {/* Background. The photograph runs to the top of the document, behind
