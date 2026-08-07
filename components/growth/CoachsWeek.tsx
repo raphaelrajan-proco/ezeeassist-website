@@ -62,9 +62,12 @@ function TimeBar({
       {/* The header row spans the bar, so the eyebrow sits over the bar's
           right end. Now that the bar runs the full row, that is the
           margin, which is where it should be. */}
-      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+      {/* Below md the eyebrow drops UNDER the title instead of sitting at
+          the far end of the row. On one row at 390 it had ~90px and broke
+          mid-word. */}
+      <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 max-md:flex-col max-md:items-start max-md:gap-y-1.5">
         <span
-          className="text-[19px] md:text-[22px]"
+          className="m-tb-title text-[19px] md:text-[22px]"
           style={{
             fontFamily: "var(--font-editorial)",
             fontWeight: 700,
@@ -75,7 +78,7 @@ function TimeBar({
           {title}
         </span>
         <span
-          className="text-[9.5px] uppercase"
+          className="ed-mono-label m-tb-eyebrow text-[9.5px] uppercase"
           style={{ fontFamily: "var(--pb-mono)", letterSpacing: "0.14em", color: "var(--pb-muted)" }}
         >
           {eyebrow}
@@ -84,10 +87,34 @@ function TimeBar({
 
       {/* The whole bar scales rather than each segment, which keeps the
           proportions exact and never re-lays-out the flex row. */}
+      {/* ── The observer sits on this wrapper, never on the bar ──
+          **This is the fix for "the bar does not render".** The bar
+          animates `scaleX` from 0, and `getBoundingClientRect` reflects
+          transforms, so at rest it is a ZERO-WIDTH box. `whileInView`
+          watches the element it is declared on via IntersectionObserver,
+          and a zero-area target never reports as intersecting, so the
+          animation that would give the bar its width could never fire.
+          Collapsed because unseen, unseen because collapsed.
+
+          It survived because it happened to work at exactly 1440, where
+          the bar is already inside the viewport as the observer attaches.
+          Every narrower width rendered no bar at all, desktop included:
+          1205 and 1024 shipped this section with both charts missing.
+
+          The wrapper is full width and never scaled, so it is always a
+          real target. The scale moves to a variant the parent drives,
+          which keeps the 1440 animation identical rather than swapping
+          the wipe for a clip-path. */}
+      <motion.div
+        className="w-full"
+        initial={reduceMotion ? false : "hidden"}
+        whileInView="shown"
+        viewport={{ once: true, margin: "-80px" }}
+      >
       <motion.div
         role="img"
         aria-label={ariaLabel}
-        className="flex overflow-hidden"
+        className="m-tb-bar flex overflow-hidden"
         style={{
           /* Full 48 thickness, running the whole row to the margin. The
              earlier 70% stop existed to mark the line the deleted
@@ -99,9 +126,7 @@ function TimeBar({
           border: "1px solid var(--pb-border)",
           transformOrigin: "left",
         }}
-        initial={reduceMotion ? false : { scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true, margin: "-80px" }}
+        variants={{ hidden: { scaleX: 0 }, shown: { scaleX: 1 } }}
         transition={{ duration: 0.7, ease: EASE }}
       >
         {segments.map((s, i) => (
@@ -120,8 +145,12 @@ function TimeBar({
           {/* At 390 the 20 percent segment is 68px wide, which cannot hold
               both the word and the figure. The figure is the part that
               carries the meaning, so the word steps aside below sm. */}
+          {/* `max-md:hidden`, not deleted. **No in-bar text at all below
+              768.** At 390 the 20% segment is 68px wide and neither the
+              word nor the figure survives it; the legend under the bar
+              carries both numbers instead. Desktop keeps this untouched. */}
           <div
-            className={`flex h-full w-full items-center gap-2 px-4 md:px-[18px] min-w-0 ${
+            className={`flex h-full w-full items-center gap-2 px-4 md:px-[18px] min-w-0 max-md:hidden ${
               coachingFlex < 50 ? "justify-center sm:justify-between" : "justify-between"
             }`}
           >
@@ -146,7 +175,21 @@ function TimeBar({
           </div>
         </div>
       </motion.div>
+      </motion.div>
 
+      {/* Mobile legend. `md:hidden` means it is `display: none` from 768
+          up, so it cannot touch the desktop layout even though it is in
+          the DOM at every width. */}
+      <div className="flex items-center gap-4 md:hidden">
+        <span className="flex items-center gap-[7px] text-[13px]" style={{ color: "var(--pb-muted)" }}>
+          <span aria-hidden="true" style={{ width: 9, height: 9, borderRadius: 2, background: "var(--pb-admin-2)", display: "inline-block", flex: "none" }} />
+          Admin <b style={{ color: "var(--pb-text)" }}>{100 - coachingFlex}%</b>
+        </span>
+        <span className="flex items-center gap-[7px] text-[13px]" style={{ color: "var(--pb-muted)" }}>
+          <span aria-hidden="true" style={{ width: 9, height: 9, borderRadius: 2, background: "var(--pb-accent)", display: "inline-block", flex: "none" }} />
+          Coaching <b style={{ color: "var(--pb-text)" }}>{coachingFlex}%</b>
+        </span>
+      </div>
     </div>
   );
 }
@@ -341,7 +384,7 @@ function HexFrame({ id, title, desc, children }: {
 function HexLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="mb-2">
-      <span className="text-[19px] md:text-[22px]" style={{ fontWeight: 600, color: "var(--pb-text)" }}>
+      <span className="m-hex-label text-[19px] md:text-[22px]" style={{ fontWeight: 600, color: "var(--pb-text)" }}>
         {children}
       </span>
     </div>
@@ -389,7 +432,7 @@ function CoverageHexagon() {
        is the argument, so they sit side by side from lg up and stack
        below it, where a half-width chart would render its labels too
        small to read. */
-    <div ref={wrapRef} className="mt-4 grid w-full grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-6">
+    <div ref={wrapRef} className="m-hex-grid mt-4 grid w-full grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-6">
       <div className="w-full max-w-[560px]">
         <HexLabel>Today</HexLabel>
         <HexFrame

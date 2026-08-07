@@ -207,6 +207,13 @@ const AUDIT = `(() => {
     if (cs.visibility === 'hidden' || cs.display === 'none') continue;
     const size = parseFloat(cs.fontSize);
     if (size >= 12) continue;
+    // The one carve-out, agreed for the mobile pass: uppercase mono
+    // labels carrying letter-spacing may sit at 10.5px below 768px.
+    // They are tagged .ed-mono-label and globals.css re-points the
+    // floor variable for them. Nothing else may go under 12.
+    // (No backticks in this comment: the whole block is a template
+    // literal, and one backtick here ends the string.)
+    if (vw < 768 && size >= 10.5 && el.closest('.ed-mono-label')) continue;
     out.failures.push({ rule: 'text-under-12', detail: size.toFixed(1) + 'px ' + label(el) + ' — ' + section(el) });
   }
 

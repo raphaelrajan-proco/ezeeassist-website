@@ -263,6 +263,88 @@
   font-size: var(--ed-type-floor) !important;
 }
 
+/* ── Mobile floor for letter-spaced mono labels ──────────────
+   The two blocks above force anything declared 8-11.5px up to
+   `--ed-type-floor` (12px). At phone width that is too heavy for the
+   uppercase mono eyebrows the mobile design leans on, so `.ed-mono-label`
+   opts an element down to 10.5px BELOW 768px only. Above 768 the class
+   does nothing at all and the 12px floor governs as before.
+
+   **It works by re-pointing the variable, not by out-specifying the
+   floor.** The floor rules declare `font-size: var(--ed-type-floor)
+   !important`, and a custom property resolves against the element the
+   declaration lands on, so setting the variable here changes what that
+   `!important` computes to. Trying to win on specificity instead means
+   fighting a selector carrying two `:not()`s and an `:is()`, and any
+   future edit to those blocks silently breaks the override.
+
+   Tag ONLY uppercase mono labels that carry letter-spacing. Body copy,
+   chips and meta keep the 12px floor; they have no tracking to keep them
+   legible once they shrink. The guard in `scripts/shots.mjs` knows about
+   this class and allows 10.5px for it under 768, and nothing else. */
+@media (max-width: 767.98px) {
+  .theme-editorial .ed-mono-label { --ed-type-floor: 10.5px; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   HOMEPAGE MOBILE (< 768px)
+
+   **Every rule for the phone homepage lives in this one block.** It is a
+   single `@media (max-width: 767.98px)`, so nothing here can reach the
+   desktop or tablet homepage, which is approved and must stay
+   pixel-identical. If a mobile fix seems to need a rule outside this
+   block, it is not a reflow and needs asking about first.
+
+   767.98 rather than 767: `md:` is `min-width: 768px`, and a fractional
+   upper bound leaves no gap on fractional-DPI viewports where 767.6px is
+   a real width.
+
+   `!important` is load-bearing throughout. Most of these components carry
+   their type and layout as inline `style={{}}`, which outranks any class
+   selector, so a plain class rule would be silently ignored. That is a
+   property of the existing code, not a preference.
+   ══════════════════════════════════════════════════════════════ */
+@media (max-width: 767.98px) {
+
+  /* ── Hero ─────────────────────────────────────────────── */
+  .theme-editorial .m-hero-eyebrow { font-size: 10.5px !important; letter-spacing: 0.15em !important; }
+  .theme-editorial .m-hero-h1 {
+    font-size: 30px !important;
+    line-height: 1.14 !important;
+    letter-spacing: -0.03em !important;
+  }
+  .theme-editorial .m-hero-sub { font-size: 15px !important; line-height: 1.6 !important; }
+  /* Both CTAs go full width and stack. */
+  .theme-editorial .m-hero-ctas { flex-direction: column; align-items: stretch; gap: 10px; }
+  .theme-editorial .m-hero-ctas > a { width: 100%; min-height: 48px; box-sizing: border-box; white-space: nowrap; }
+  /* The primary keeps its label-left / badge-right split. */
+  .theme-editorial .m-hero-cta-primary { justify-content: space-between !important; }
+  /* The secondary's label is LEFT aligned, which was the reported bug:
+     centred, it read as a different control from the one above it. */
+  .theme-editorial .m-hero-cta-secondary { justify-content: flex-start !important; }
+
+  /* ── Problem: the time bars ───────────────────────────── */
+  .theme-editorial .m-tb-title { font-size: 15.5px !important; line-height: 1.3 !important; letter-spacing: -0.015em !important; }
+  .theme-editorial .m-tb-eyebrow { font-size: 10.5px !important; letter-spacing: 0.13em !important; }
+  /* 38px and radius 9, and the border goes: at this height a 1px rule
+     around a five-tone bar reads as a sixth tone. */
+  .theme-editorial .m-tb-bar { height: 38px !important; border-radius: 9px !important; border: 0 !important; }
+
+  /* ── Reach: the two radars ────────────────────────────── */
+  /* They already stack below lg; mobile only resizes the label and
+     tightens the gap. The chart's own viewBox is shared with desktop and
+     is deliberately NOT touched. */
+  .theme-editorial .m-hex-grid { gap: 22px !important; }
+  .theme-editorial .m-hex-label { font-size: 15.5px !important; font-weight: 700 !important; }
+
+  /* ── Logo strip ───────────────────────────────────────── */
+  /* Edge to edge on phones: the gutters that frame it on desktop cost
+     ~40px of a 390px viewport and the marquee reads as cramped. The
+     eyebrow keeps its page gutter and its black ink. */
+  .theme-editorial .m-logostrip-inner { padding-left: 0 !important; padding-right: 0 !important; }
+  .theme-editorial .m-logostrip-eyebrow { padding-left: 20px; padding-right: 20px; font-size: 10.5px !important; }
+}
+
 /* Terminal caret for the reporting hero's query bar. Steps rather than
    fades, because a fading block reads as a loading state. Holds solid
    under reduced motion, where the bar renders one static query. */
@@ -1425,6 +1507,10 @@
 html {
   scroll-behavior: smooth;
   color-scheme: light;
+  /* iOS Safari inflates text when a phone is rotated to landscape,
+     which breaks every measured line count on this site. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 .dark {
   color-scheme: dark;
@@ -1433,6 +1519,8 @@ html {
 body {
   background-color: #FFFFFF;
   color: #0A0A0A;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

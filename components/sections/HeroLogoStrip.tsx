@@ -25,10 +25,10 @@ export default function HeroLogoStrip({ trustLine = false }: { trustLine?: boole
        the chips have to stay because half these files ship an opaque
        white background of their own. Same treatment as the homepage. */
     <section className="ed-logo-band w-full" aria-label="Customers">
-      <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-10 md:py-12">
+      <div className="m-logostrip-inner mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-10 md:py-12">
         {trustLine && (
           <p
-            className="mb-7 text-center uppercase md:mb-8"
+            className="ed-mono-label m-logostrip-eyebrow mb-7 text-center uppercase md:mb-8"
             style={{
               /* Measured 9.7px at 390 and 10.7px at 1205, both under the
                  type floor, so this is a flat 12px at every width. */

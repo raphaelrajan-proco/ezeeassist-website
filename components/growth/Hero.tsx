@@ -561,7 +561,7 @@ export default function GrowthHero() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
-              className="uppercase mb-4"
+              className="ed-mono-label m-hero-eyebrow uppercase mb-4"
               style={{
                 /* Was 0.7x the run above by request, which measured 8.4px at
                    390 and was the smallest text on the page. The type floor
@@ -590,7 +590,7 @@ export default function GrowthHero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.95, ease: EASE, delay: 0.1 }}
-              className="mb-4"
+              className="m-hero-h1 mb-4"
               style={{
                 fontFamily: "var(--font-editorial)",
                 fontSize: "clamp(1.40625rem, 0.519rem + 1.92vw, 2.25rem)",
@@ -610,7 +610,7 @@ export default function GrowthHero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.7, ease: "easeOut", delay: 0.25 }}
-              className="mb-6"
+              className="m-hero-sub mb-6"
               style={{
                 /* Three lines at every width. This copy is 168 characters, so
                    the ceiling is tight: 12.25px at 390, 15.25px at 1024,
@@ -630,7 +630,7 @@ export default function GrowthHero() {
             </motion.p>
 
             <motion.div
-              className="flex flex-wrap items-center gap-3.5"
+              className="m-hero-ctas flex flex-wrap items-center gap-3.5"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: "easeOut", delay: 0.45 }}
@@ -640,7 +640,7 @@ export default function GrowthHero() {
                   separated from it, and its white label was 2.53:1. */}
               <Link
                 href="/speak-to-an-expert"
-                className="ed-btn ed-btn-arrow inline-flex flex-none"
+                className="m-hero-cta-primary ed-btn ed-btn-arrow inline-flex flex-none"
                 style={{ backgroundColor: "#FFFFFF", color: "#0A0A0A" }}
               >
                 Speak to an expert
@@ -657,7 +657,7 @@ export default function GrowthHero() {
                   outline built for a photographic band. */}
               <Link
                 href="/platform/workflows"
-                className="ed-btn ed-btn-secondary-dark ed-btn-arrow inline-flex flex-none items-center justify-center"
+                className="m-hero-cta-secondary ed-btn ed-btn-secondary-dark ed-btn-arrow inline-flex flex-none items-center justify-center"
                 /* 48 is the primary's measured height: its 2rem badge plus
                    the 8px top and bottom padding `ed-btn-arrow` sets. This
                    button has no badge, so without the min-height it comes
