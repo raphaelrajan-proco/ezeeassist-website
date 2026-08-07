@@ -543,17 +543,84 @@ function OsCanvas() {
 
 /* ── Stacked, below lg ─────────────────────────────────── */
 
+/**
+ * A mobile connector band: curved wires converging on, or fanning out
+ * from, the hub, each carrying a travelling dot.
+ *
+ * **The dots ride `<animateMotion>` inside the SVG, not CSS
+ * `offset-path`.** The handoff specifies `offset-path: path(...)` with a
+ * `d` string identical to the wire's, and warns that a one-character
+ * difference throws the dot off the line. The deeper problem is that the
+ * two never share a coordinate space: `offset-path` resolves in CSS
+ * pixels against the element's containing block, while the wire is in
+ * viewBox units scaled to whatever the container happens to be. They
+ * agree only at exactly 350px wide, which is the reference file's pinned
+ * width and no real viewport. At 390 the column is 342px and every dot
+ * sits beside its wire; at 320 it is worse.
+ *
+ * `animateMotion` is inside the viewBox, so it scales with the artwork
+ * and stays welded to the line at every width. `preserveAspectRatio
+ * ="none"` is what lets the band stretch to the column instead of
+ * letterboxing, and the dots stretch with it because they are the same
+ * coordinate space.
+ */
+function ConnectorBand({ dir }: { dir: "in" | "out" }) {
+  const H = dir === "in" ? 56 : 52;
+  const wires =
+    dir === "in"
+      ? ["M92 0 C 92 30, 175 26, 175 56", "M175 0 L 175 56", "M258 0 C 258 30, 175 26, 175 56"]
+      : ["M175 0 C 175 28, 92 24, 92 52", "M175 0 L 175 52", "M175 0 C 175 28, 258 24, 258 52"];
+  const colour = dir === "in" ? "#35A8E0" : "#8FE3C0";
+  const dur = dir === "in" ? 3.4 : 3;
+  const begins = dir === "in" ? ["0s", "-1.1s", "-2.2s"] : ["0s", "-1s", "-2s"];
+
+  return (
+    <div className="m-conn md:hidden" style={{ width: "100%", height: H }} aria-hidden="true">
+      <svg viewBox={`0 0 350 ${H}`} preserveAspectRatio="none" style={{ width: "100%", height: "100%", overflow: "visible" }}>
+        {wires.map((d) => (
+          <path key={d} d={d} fill="none" stroke="rgba(53,168,224,.3)" strokeWidth={1.4} />
+        ))}
+        {wires.map((d, i) => (
+          <circle key={`dot-${d}`} className="m-conn-dot" r={2.6} fill={colour}>
+            {/* The path here is the SAME string as the wire above, taken
+                from the same array rather than retyped, so the two cannot
+                drift apart. One dot per band runs backwards so the flow
+                reads two-way. */}
+            <animateMotion
+              dur={`${dur}s`}
+              begin={begins[i]}
+              repeatCount="indefinite"
+              path={d}
+              keyPoints={i === 1 ? "1;0" : undefined}
+              keyTimes={i === 1 ? "0;1" : undefined}
+              calcMode={i === 1 ? "linear" : undefined}
+            />
+          </circle>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
 function StackedDiagram() {
   return (
     <div className="min-[1200px]:hidden" aria-hidden="true">
+      {/* The canvas above carries these two labels; the stack lost them.
+          `md:hidden` so 768-1199 keeps exactly what it renders today. */}
+      <div className="ed-mono-label m-conn-label md:hidden" style={{ fontFamily: MONO, letterSpacing: ".16em", color: "var(--os-muted)", marginBottom: 10 }}>
+        HQ
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-start">
         <PeopleCard />
         <PlaybooksCard />
         <SystemsCard />
       </div>
 
-      <div className="flex justify-center py-5">
+      <div className="flex justify-center py-5 max-md:hidden">
         <span style={{ width: 1, height: 40, background: "var(--os-wire)" }} />
+      </div>
+      <div className="py-4 md:hidden">
+        <ConnectorBand dir="in" />
       </div>
 
       {/* Same order as the canvas: legend, then the governed pill. */}
@@ -563,10 +630,16 @@ function StackedDiagram() {
         <GovernedPill />
       </div>
 
-      <div className="flex justify-center py-5">
+      <div className="flex justify-center py-5 max-md:hidden">
         <span style={{ width: 1, height: 40, background: "var(--os-wire)" }} />
       </div>
+      <div className="py-4 md:hidden">
+        <ConnectorBand dir="out" />
+      </div>
 
+      <div className="ed-mono-label m-conn-label md:hidden" style={{ fontFamily: MONO, letterSpacing: ".16em", color: "var(--os-muted)", marginBottom: 10, textAlign: "right" }}>
+        EVERY LOCATION
+      </div>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         {Array.from({ length: NAMED_STORES }, (_, i) => (
           <StoreChip key={i} label={`Store #${i + 1}`} />

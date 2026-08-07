@@ -382,6 +382,9 @@
   .theme-editorial .m-pager-dot[data-active] > span { width: 22px; background: var(--sc-accent-ink); }
   .theme-editorial .m-pager { min-height: 44px; }
 
+  /* ── Operating system: mobile connector bands ─────────── */
+  .theme-editorial .m-conn-label { font-size: 10.5px !important; }
+
   /* ── Logo strip ───────────────────────────────────────── */
   /* Edge to edge on phones: the gutters that frame it on desktop cost
      ~40px of a 390px viewport and the marquee reads as cramped. The
@@ -401,6 +404,9 @@
   animation: ed-caret-blink 1.05s steps(1, end) infinite;
 }
 @media (prefers-reduced-motion: reduce) {
+  /* SMIL ignores this query, so the dots are removed rather than
+     paused; a dot frozen mid-wire reads as a rendering fault. */
+  .m-conn-dot { display: none !important; }
   .ed-caret { animation: none; opacity: 1; }
 }
 
