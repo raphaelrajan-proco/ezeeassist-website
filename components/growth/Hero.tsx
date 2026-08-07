@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, TrendingDown, TrendingUp } from "lucide-react";
-import GrowthTrustStrip from "./TrustStrip";
 import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 
 /**
@@ -17,15 +16,6 @@ import HeroLogoStrip from "@/components/sections/HeroLogoStrip";
 // TODO: Replace with real product screen recording
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-
-/**
- * Layout switch. true  = trust line sits above the logo marquee and the
- *                        copy stack starts on the H1 (current).
- *                false = trust line is the hero eyebrow above the H1
- *                        (previous layout). Flip this one boolean to
- *                        revert; nothing else needs to change.
- */
-export const EYEBROW_ABOVE_LOGOS = true;
 
 /* ── Hero background ───────────────────────────────────────
    The photograph is a blue gradient, deep at the left and near-white at
@@ -529,29 +519,15 @@ export default function GrowthHero() {
         />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-4">
+      {/* The blue ends higher than it did. The trust line used to sit
+          below this grid inside the hero and carried its own bottom
+          padding, so removing it took ~52px of blue with it; this leaves
+          enough that the mock is not flush against the white band. */}
+      <div className="relative mx-auto max-w-7xl px-6 md:px-12 lg:px-16 pt-4 pb-8 md:pb-10">
         <div className="grid grid-cols-1 lg:grid-cols-[48fr_46fr] gap-16 xl:gap-24 items-center">
 
           {/* Left: copy */}
           <div className="max-w-[38rem]">
-            {!EYEBROW_ABOVE_LOGOS && (
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: "easeOut" }}
-                className="uppercase mb-4"
-                style={{
-                  /* Same declaration as TrustStrip's line, same floor. */
-                  fontSize: "max(var(--ed-type-floor, 12px), clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem))",
-                  fontWeight: 600,
-                  letterSpacing: "0.16em",
-                  color: "var(--ed-accent-text)",
-                }}
-              >
-                Trusted by leading franchise and multi-location brands.
-              </motion.p>
-            )}
-
             {/* Eyebrow: a label, not a headline. Small, uppercase, letter
                 spaced and muted, so it reads as context in peripheral vision
                 and hands off to the statement below. It is no longer the h1;
@@ -713,7 +689,6 @@ export default function GrowthHero() {
         </div>
       </div>
 
-      <GrowthTrustStrip showTrustLine={EYEBROW_ABOVE_LOGOS} />
       </section>
 
       {/* The same strip as every sub-page hero, from the same file, so
@@ -722,7 +697,7 @@ export default function GrowthHero() {
           of it: the earlier homepage-only version sat inside the
           container with hero blue down both sides, which is what made
           the two pages look different. */}
-      <HeroLogoStrip />
+      <HeroLogoStrip trustLine />
     </>
   );
 }

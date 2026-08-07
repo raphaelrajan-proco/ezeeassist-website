@@ -8,8 +8,12 @@ import LogoMarquee from "@/components/sections/LogoMarquee";
  * padding is deliberately shorter than a normal band's: this is a strip
  * riding under the hero, not a section of its own, and giving it full
  * section padding pushed the first heading well below the fold.
+ *
+ * `trustLine` is the homepage's only difference, and it is a prop rather
+ * than a second component because a second component is exactly how the
+ * two strips drifted apart the first time. Sub-page heroes pass nothing.
  */
-export default function HeroLogoStrip() {
+export default function HeroLogoStrip({ trustLine = false }: { trustLine?: boolean }) {
   return (
     /* `ed-logo-band` (pure white), not `ed-bg`.
 
@@ -22,6 +26,25 @@ export default function HeroLogoStrip() {
        white background of their own. Same treatment as the homepage. */
     <section className="ed-logo-band w-full" aria-label="Customers">
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16 py-10 md:py-12">
+        {trustLine && (
+          <p
+            className="mb-7 text-center uppercase md:mb-8"
+            style={{
+              /* Measured 9.7px at 390 and 10.7px at 1205, both under the
+                 type floor, so this is a flat 12px at every width. */
+              fontSize: "max(var(--ed-type-floor, 12px), clamp(0.609rem, 0.525rem + 0.19vw, 0.703rem))",
+              fontWeight: 600,
+              /* 0.13em, down from the 0.16em it carried on the blue. Dark
+                 text on white sets visually wider than pale text on a dark
+                 photograph at the same tracking, so holding 0.16em here
+                 read as stretched rather than spaced. */
+              letterSpacing: "0.13em",
+              color: "var(--ed-fg)",
+            }}
+          >
+            Trusted by leading franchise and multi-location brands.
+          </p>
+        )}
         <LogoMarquee />
       </div>
     </section>

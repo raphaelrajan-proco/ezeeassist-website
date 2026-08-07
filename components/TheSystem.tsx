@@ -614,9 +614,9 @@ export default function TheSystem() {
           }}
         >
           EZee is the operating layer that connects your people, playbooks, and live
-          data, so{" "}
+          data.{" "}
           <span style={{ color: "var(--os-accent-ink)" }}>
-            coaching reaches its full potential.
+            Coaching reaches its full potential.
           </span>
         </motion.h2>
 
