@@ -658,14 +658,19 @@ export default function GrowthHero() {
                   outline built for a photographic band. */}
               <Link
                 href="/platform/workflows"
-                className="ed-btn ed-btn-secondary-dark ed-btn-arrow inline-flex flex-none items-center"
+                className="ed-btn ed-btn-secondary-dark ed-btn-arrow inline-flex flex-none items-center justify-center"
                 /* 48 is the primary's measured height: its 2rem badge plus
                    the 8px top and bottom padding `ed-btn-arrow` sets. This
                    button has no badge, so without the min-height it comes
                    out at 40 and the pair sits mismatched. Width is left to
                    the label; forcing that equal too would pad one of them
                    with dead space. */
-                style={{ minHeight: 48 }}
+                /* `ed-btn-arrow` pads 1.5rem left and 0.5rem right, which is
+                   right for the sibling because the badge fills the short
+                   side. This button renders no badge, so that asymmetry
+                   just pushed the label 8px off centre. Even padding, and
+                   `justify-center` for the same reason. */
+                style={{ minHeight: 48, paddingRight: "1.5rem" }}
               >
                 See coaching in action
               </Link>

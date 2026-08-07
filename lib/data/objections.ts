@@ -9,9 +9,10 @@ export interface Objection {
   link?: { label: string; href: string };
 }
 
-// TODO: Build the dedicated comparison pages before linking them. The ops-platform
-// question currently points at /why-ezeeassist, the closest existing page, rather
-// than an empty /compare.
+// No question carries a link. `link` stays on the interface and the
+// accordion still renders one if present, so restoring a call to action is
+// a one-line change; it also means nothing here depends on the comparison
+// pages existing yet.
 
 export const objections: Objection[] = [
   {
@@ -21,12 +22,10 @@ export const objections: Objection[] = [
   {
     q: "We already have a franchise operations platform. Where does EZee fit?",
     a: "EZee runs above it. FranConnect, Naranga, ServiceTitan and the rest hold your records. EZee reads them, acts on them, and gives your operators one place to ask a question and get work done. Nothing migrates.",
-    link: { label: "See the full comparison", href: "/why-ezeeassist" },
   },
   {
     q: "Will franchisees actually use it?",
     a: "They reach it in the channels they already work in, at the hours they actually work. They can also build their own reports and tools inside the guardrails HQ sets. Owners tend to adopt a tool they can shape for their own location.",
-    link: { label: "See adoption evidence", href: "#proof" },
   },
   {
     q: "How long does implementation take?",

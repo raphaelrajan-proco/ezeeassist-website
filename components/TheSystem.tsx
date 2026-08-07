@@ -592,9 +592,12 @@ export default function TheSystem() {
           transition={{ duration: 0.85, ease: EASE }}
           className="max-w-5xl"
           style={{
-            /* The whole sentence is the accent, by request, rather than
-               one phrase inside a white line. */
-            color: "var(--os-accent-ink)",
+            /* White line with ONE accent phrase, which is where this
+               started. It went all-accent in between; this is back. The
+               accent is `--os-accent-ink` (#00AEEF), correct here because
+               the panel is #05070D. On a light band the accent text token
+               is #0077A8 and #00AEEF fails contrast. */
+            color: "var(--os-text)",
             fontFamily: JAKARTA,
             fontWeight: 700,
             /* **Two lines, not three.** 21 words over a 1216px column
@@ -611,7 +614,10 @@ export default function TheSystem() {
           }}
         >
           EZee is the operating layer that connects your people, playbooks, and live
-          data, so coaching reaches its full potential.
+          data, so{" "}
+          <span style={{ color: "var(--os-accent-ink)" }}>
+            coaching reaches its full potential.
+          </span>
         </motion.h2>
 
         {/* Sits under the lead line as one sentence, at a lighter weight
