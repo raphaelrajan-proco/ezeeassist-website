@@ -132,7 +132,7 @@ function Pill({ href, children, label }: { href: string; children: React.ReactNo
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
-      className="inline-flex flex-none items-center gap-2 whitespace-nowrap rounded-full transition-colors"
+      className="m-tap inline-flex flex-none items-center gap-2 whitespace-nowrap rounded-full transition-colors"
       style={{
         padding: "10px 18px",
         background: C.chip,
@@ -201,7 +201,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="inline-flex flex-none items-center justify-center rounded-full transition-colors"
+              className="m-tap-circle inline-flex flex-none items-center justify-center rounded-full transition-colors"
               style={{
                 width: 38, height: 38,
                 background: C.chip,

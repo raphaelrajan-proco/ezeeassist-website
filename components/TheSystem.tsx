@@ -189,7 +189,7 @@ function SystemsCard() {
           above, in motion. */}
       <div
         aria-hidden="true"
-        className="ed-os-marquee"
+        className="ed-os-marquee m-vendor-marquee"
         style={{
           position: "relative", overflow: "hidden",
           maskImage: "linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)",
@@ -283,9 +283,10 @@ function FlowLegend() {
 
 /* The ticker chip inverts: light fill and dark ink, so it separates from
    the seven dark chips above it rather than getting lost among them. */
-function StoreChip({ label, live = false }: { label: string; live?: boolean }) {
+function StoreChip({ label, live = false, className }: { label: string; live?: boolean; className?: string }) {
   return (
     <span
+      className={className}
       style={{
         height: 46, boxSizing: "border-box", borderRadius: 10,
         /* Same panel as the named chips; the ticker stands out through
@@ -640,11 +641,21 @@ function StackedDiagram() {
       <div className="ed-mono-label m-conn-label md:hidden" style={{ fontFamily: MONO, letterSpacing: ".16em", color: "var(--os-muted)", marginBottom: 10, textAlign: "right" }}>
         EVERY LOCATION
       </div>
+      {/* Six named chips below 768, seven above, so the mobile grid ends
+          on a complete row and the ticker becomes the full-width accent
+          bar under it rather than an odd eighth cell. `max-md:hidden` on
+          the seventh keeps 768-1199 exactly as it was. The chip itself is
+          already the static label here; the counting ticker lives on the
+          desktop canvas and is untouched. */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
         {Array.from({ length: NAMED_STORES }, (_, i) => (
-          <StoreChip key={i} label={`Store #${i + 1}`} />
+          <StoreChip
+            key={i}
+            label={`Store #${i + 1}`}
+            className={i >= 6 ? "m-store-extra" : undefined}
+          />
         ))}
-        <StoreChip label={TICKER_END_LABEL} live />
+        <StoreChip label={TICKER_END_LABEL} live className="max-md:col-span-2 max-md:justify-center" />
       </div>
     </div>
   );

@@ -372,7 +372,9 @@
      control is 26x26 and the visual pill lives inside it. */
   .theme-editorial .m-pager-dot {
     display: flex; align-items: center; justify-content: center;
-    min-width: 26px; height: 26px; flex: none;
+    /* 44 tall for the hit area; the visible dot is the 7px span inside,
+       so this costs nothing visually. The row is already 44. */
+    min-width: 44px; height: 44px; flex: none;
     padding: 0; border: 0; background: none; cursor: pointer;
   }
   .theme-editorial .m-pager-dot > span {
@@ -394,6 +396,33 @@
     width: 100%; min-height: 48px; box-sizing: border-box;
     justify-content: center; white-space: nowrap;
   }
+
+  /* The seventh chip goes below 768 so the grid ends on a full row.
+     `!important`, because StoreChip sets `display: flex` inline and an
+     inline style outranks any class: `max-md:hidden` matched and was
+     ignored, which is silent. */
+  .theme-editorial .m-store-extra { display: none !important; }
+
+  /* The vendor run cut mid-word at both card edges. Same fade the logo
+     strip uses, so names dissolve instead of being sliced. */
+  .theme-editorial .m-vendor-marquee {
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+
+  /* ── Touch targets ────────────────────────────────────── */
+  /* Real controls to 44. Inline text links in the footer legal row stay
+     at the repo's 24px floor: the guard's own note rejects 44 for them,
+     and stacking four 44px rows would add ~80px of footer for no gain. */
+  .theme-editorial a.ed-btn,
+  .theme-editorial button.ed-btn,
+  .theme-editorial .m-tab,
+  .theme-editorial .m-trust-cta,
+  .m-tap { min-height: 44px !important; box-sizing: border-box; }
+  /* The LinkedIn button is a circle, so it needs both axes, not a floor
+     on one. `.m-tap` is unscoped by `.theme-editorial` on purpose: the
+     footer sits outside that wrapper. */
+  .m-tap-circle { width: 44px !important; height: 44px !important; box-sizing: border-box; }
 
   /* ── Logo strip ───────────────────────────────────────── */
   /* Edge to edge on phones: the gutters that frame it on desktop cost

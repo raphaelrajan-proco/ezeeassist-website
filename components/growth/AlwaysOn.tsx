@@ -244,7 +244,7 @@ function MomentCard({ card }: { card: Card }) {
    make that button 4px taller than its neighbour. 40px is the nav
    button's own height, which both are sized to. */
 const CTA_BASE =
-  "inline-flex min-h-[40px] items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00AEEF]";
+  "inline-flex m-tap min-h-[40px] items-center justify-center rounded-full text-sm font-semibold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#00AEEF]";
 
 /* ── Flip to true to bring "Generate your own" back ──────────
    Hidden on request until the workflow generator ships. A flag rather
