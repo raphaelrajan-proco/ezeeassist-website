@@ -14,7 +14,8 @@ export function SnitcherTracker() {
             "apiEndpoint": "radar.snitcher.com",
             "cdn": "cdn.snitcher.com",
             "namespace": "Snitcher",
-            "profileId": "8433867"
+            "profileId": "8433867",
+            "waitForConsent": true,
           });
         `,
       }}
