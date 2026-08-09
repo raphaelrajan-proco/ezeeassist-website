@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Onest, Inter_Tight } from "next/font/google";
-import { GoogleAnalytics } from '@next/third-parties/google'
 import "./globals.css";
 import { Suspense } from "react";
 import ThemeProvider from "@/components/ThemeProvider";
@@ -9,7 +8,9 @@ import JsonLd from "@/components/JsonLd";
 import CookieConsent from "@/components/CookieConsent";
 import AnalyticsProvider from "@/components/AnalyticsProvider";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
-import { SnitcherTracker } from "@/components/SnitcherTracker";
+
+import { GoogleAnalytics } from "@/components/trackers/GoogleAnalytics";
+import { SnitcherTracker } from "@/components/trackers/SnitcherTracker";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -158,7 +159,7 @@ export default function RootLayout({
         </ThemeProvider>
         <SnitcherTracker />
       </body>
-      <GoogleAnalytics gaId="G-NJ0639NTE7" />
+      <GoogleAnalytics />
     </html>
   );
 }
