@@ -19,6 +19,7 @@ export default function CookieConsent() {
     localStorage.setItem(STORAGE_KEY, "accepted");
     dispatchConsentEvent();
     setVisible(false);
+    window.Snitcher.giveCookieConsent();
   }
 
   function handleDecline() {
@@ -59,10 +60,7 @@ export default function CookieConsent() {
                 Decline
               </button>
               <button
-                onClick={() => {
-                  handleAccept();
-                  Snitcher.giveCookieConsent();
-                }}
+                onClick={handleAccept}
                 className="rounded-full bg-[#00AEEF] px-3.5 py-1 text-[12px] text-white transition-opacity hover:opacity-90"
                 style={{ fontWeight: 600 }}
               >
