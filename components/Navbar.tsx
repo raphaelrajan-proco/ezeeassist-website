@@ -424,7 +424,19 @@ export default function Navbar() {
     <div className="mt-4 flex items-center gap-3">
       <ThemeToggle />
       <Link href="/speak-to-an-expert" className="flex-1" onClick={closeMobile}>
-        <Button size="sm" className="w-full ed-btn-arrow gap-2" style={{ paddingRight: "0.25rem", paddingLeft: "1.125rem" }}>
+        {/* Label left, badge hard right. This button is `w-full` in the
+            sheet, and `Button` centres its contents, so the two sat as a
+            centred pair with dead space either side.
+
+            `justifyContent` inline rather than a `justify-between` class:
+            `Button`'s own `justify-center` is the same specificity, so
+            which one won would come down to CSS order. An inline style
+            outranks both and cannot be reordered out. */}
+        <Button
+          size="sm"
+          className="w-full ed-btn-arrow gap-2"
+          style={{ paddingRight: "0.25rem", paddingLeft: "1.125rem", justifyContent: "space-between" }}
+        >
           Speak to an expert
           <span className="ed-btn-arrow-badge ed-btn-arrow-badge-sm" aria-hidden="true">
             <ArrowRight className="h-3 w-3" strokeWidth={2.25} />
