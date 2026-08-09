@@ -20,7 +20,7 @@ export default function CookieConsent() {
     }
   }, []);
 
-  function deferredEnablement(grantConsent) {
+  function deferredEnablement(grantConsent: function) {
     let attempts = 0;
     let interval = setInterval(
       () => {
