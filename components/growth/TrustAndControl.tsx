@@ -142,10 +142,10 @@ export default function TrustAndControl() {
             the section's question; the trust page is the proof behind it,
             so it takes the outline rather than the fill. Both are one flex
             row that wraps, so the second never orphans mid-line. */}
-        <div className="mt-14 md:mt-[76px] flex flex-wrap items-center gap-3.5">
+        <div className="m-trust-ctas mt-14 md:mt-[76px] flex flex-wrap items-center gap-3.5">
           <Link
             href="/platform/control-center"
-            className="inline-flex flex-none items-center rounded-full transition-opacity hover:opacity-90"
+            className="m-trust-cta inline-flex flex-none items-center rounded-full transition-opacity hover:opacity-90"
             style={{
               padding: "14px 26px",
               background: "var(--cc-accent)",
@@ -157,7 +157,7 @@ export default function TrustAndControl() {
           </Link>
           <Link
             href="/security"
-            className="inline-flex flex-none items-center rounded-full transition-colors"
+            className="m-trust-cta inline-flex flex-none items-center rounded-full transition-colors"
             style={{
               padding: "14px 26px",
               /* Outline on the band's own surface rather than a second

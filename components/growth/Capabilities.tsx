@@ -678,6 +678,7 @@ export default function Capabilities() {
      lockstep with the timers, including dot jumps within tab 3. */
   const [cycle, setCycle] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
+  const railRef = useRef<HTMLDivElement>(null);
   const tabTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const appTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   /* Where the rotation is, readable without being a dependency: the
@@ -769,6 +770,25 @@ export default function Capabilities() {
      reads as broken. */
   const select = (i: number) => { setPaused(false); go(i); };
 
+  /* Below 768 the rail is a snap scroller, so the auto-advance could move
+     to a pill sitting off-screen and the section looked frozen: the panel
+     changed while the visibly-active pill did not. This slides the active
+     pill to the start of the row whenever the tab changes, from any
+     cause, so the current one is always the one in view.
+
+     `scrollLeft`, not `scrollIntoView`: the latter scrolls every
+     scrollable ancestor, which drags the PAGE to the section on each
+     auto-advance. Guarded on the rail actually being scrollable, which is
+     only true below lg, so desktop never runs it. */
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    if (rail.scrollWidth <= rail.clientWidth + 1) return;
+    const pill = rail.children[tab] as HTMLElement | undefined;
+    if (!pill) return;
+    rail.scrollTo({ left: pill.offsetLeft - rail.offsetLeft, behavior: "smooth" });
+  }, [tab]);
+
   /* A dot click jumps to that app example and restarts the per-app
      timer from it; rotation keeps running, next advance a full
      interval later. */
@@ -818,7 +838,7 @@ export default function Capabilities() {
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-7 lg:items-stretch">
           {/* Rail */}
           <div className="lg:w-[268px] lg:flex-none flex flex-col lg:justify-center gap-3.5">
-            <div className="m-tabs flex flex-row lg:flex-col gap-3.5 overflow-x-auto lg:overflow-visible" role="tablist" aria-label="On demand">
+            <div ref={railRef} className="m-tabs flex flex-row lg:flex-col gap-3.5 overflow-x-auto lg:overflow-visible" role="tablist" aria-label="On demand">
               {TABS.map((t, i) => {
                 const active = i === tab;
                 return (

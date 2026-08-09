@@ -385,6 +385,16 @@
   /* ── Operating system: mobile connector bands ─────────── */
   .theme-editorial .m-conn-label { font-size: 10.5px !important; }
 
+  /* ── Ungoverned AI: the two CTAs match ────────────────── */
+  /* They already shared padding and type; what differed was width,
+     because each sized to its own label. Stacked and full width they are
+     the same box, which is what "same size" means here. */
+  .theme-editorial .m-trust-ctas { flex-direction: column; align-items: stretch; gap: 10px; }
+  .theme-editorial .m-trust-cta {
+    width: 100%; min-height: 48px; box-sizing: border-box;
+    justify-content: center; white-space: nowrap;
+  }
+
   /* ── Logo strip ───────────────────────────────────────── */
   /* Edge to edge on phones: the gutters that frame it on desktop cost
      ~40px of a 390px viewport and the marquee reads as cramped. The

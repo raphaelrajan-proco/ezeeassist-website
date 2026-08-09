@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useIsMobile } from "@/lib/useIsMobile";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
@@ -248,6 +249,20 @@ function StoryCard({ s }: { s: Story }) {
 }
 
 export default function CustomerProof() {
+  /* Below 768 the deck opens on DekaLash and WSI, with the other two
+     behind a control, the same pattern the Always On bands use. Four
+     full-height case studies is a long scroll before the section that
+     follows, and the first two carry the claim. */
+  const isMobile = useIsMobile();
+  const [showAll, setShowAll] = useState(false);
+  const collapsed = isMobile && !showAll;
+  /* `display: contents` is what makes this safe. The deck's sticky
+     behaviour depends on each card's containing block, and wrapping a
+     card in a normal div would change that block at every width. A
+     `contents` box is not generated at all, so desktop lays out exactly
+     as it did; only the mobile branch swaps it to `none`. */
+  const hideRest = collapsed ? "contents max-md:hidden" : "contents";
+
   /* The headline pins above the deck from lg up, so every card's sticky
      top has to clear it. The height is measured rather than assumed: the
      type is fluid, so the block runs from 71px at 390 to 70px at 1440,
@@ -335,11 +350,43 @@ export default function CustomerProof() {
             <StoryCard s={STORIES[1]} />
             <div aria-hidden="true" className="hidden lg:block" style={{ height: 844 }} />
           </div>
-          <StoryCard s={STORIES[2]} />
-          <div aria-hidden="true" className="hidden lg:block" style={{ height: 422 }} />
+          <div className={hideRest}>
+            <StoryCard s={STORIES[2]} />
+            <div aria-hidden="true" className="hidden lg:block" style={{ height: 422 }} />
+          </div>
         </div>
-        <StoryCard s={STORIES[3]} />
+        <div className={hideRest}>
+          <StoryCard s={STORIES[3]} />
+        </div>
       </div>
+
+      {/* Mobile only. Mirrors the Always On control: the + rotates to an x
+          and the label flips, so one affordance reads both ways. */}
+      {isMobile && (
+        <button
+          type="button"
+          onClick={() => setShowAll((v) => !v)}
+          aria-expanded={showAll}
+          className="mt-4 inline-flex items-center gap-2 rounded-full px-4"
+          style={{
+            minHeight: 44, boxSizing: "border-box",
+            border: "1px solid var(--ed-border)", color: "var(--ed-accent-text)",
+            fontFamily: JAKARTA, fontSize: 14, fontWeight: 700, background: "transparent",
+          }}
+        >
+          <span
+            aria-hidden="true"
+            style={{
+              display: "inline-block", fontSize: 16, lineHeight: 1,
+              transform: showAll ? "rotate(45deg)" : "none",
+              transition: "transform .2s ease",
+            }}
+          >
+            +
+          </span>
+          {showAll ? "Show less" : `${STORIES.length - 2} more`}
+        </button>
+      )}
 
       {/* Partner memberships, in normal flow at the end of the section.
 
