@@ -19,6 +19,7 @@ export default function CookieConsent() {
     localStorage.setItem(STORAGE_KEY, "accepted");
     dispatchConsentEvent();
     setVisible(false);
+    Snitcher.giveCookieConsent();
   }
 
   function handleDecline() {
