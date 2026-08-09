@@ -453,11 +453,6 @@
     padding-bottom: 0;
     box-sizing: border-box;
   }
-  /* The primary keeps its label-left / badge-right split; the badge is
-     what the extra right padding exists for. */
-  .theme-editorial div:has(> .ed-btn-arrow):has(> .ed-btn-secondary-dark) > .ed-btn-arrow {
-    justify-content: space-between;
-  }
 
   /* ── Logo strip ───────────────────────────────────────── */
   /* Edge to edge on phones: the gutters that frame it on desktop cost
@@ -1376,6 +1371,36 @@
   font-size: 0.9375rem;
   gap: 0.75rem;
 }
+/* ── Sub-page hero CTA pairs: labels sit left ───────────────
+   Both buttons in a sub-page hero read left-aligned at EVERY width, not
+   just on mobile, so the pair scans as one column of controls.
+
+   `.ed-btn` centres by default, which is right for a lone button and
+   wrong for a stacked pair: the primary's label started at one x and the
+   secondary's at another. The primary uses `space-between` rather than
+   `flex-start` because its arrow badge belongs on the far edge, which is
+   what its asymmetric padding is for.
+
+   `:not(.m-hero-ctas)` keeps the HOMEPAGE hero out of this. Its secondary
+   carries both `ed-btn-secondary-dark` and `ed-btn-arrow`, so it would
+   otherwise match, and that hero is approved and separately specified.
+
+   Where these buttons are sized to their own content, which is every
+   sub-page above 768, this is a no-op: there is no free space to
+   distribute. It bites once the row stacks and both fill the width. */
+.theme-editorial div:not(.m-hero-ctas):has(> .ed-btn-arrow):has(> .ed-btn-secondary-dark) > .ed-btn-arrow {
+  justify-content: space-between;
+}
+.theme-editorial div:not(.m-hero-ctas):has(> .ed-btn-arrow):has(> .ed-btn-secondary-dark) > .ed-btn-secondary-dark {
+  justify-content: flex-start;
+  /* 1.5rem to match `.ed-btn-arrow`, not the 2rem `.ed-btn` sets. Both
+     labels are left-aligned now, but left-aligned to different x reads
+     as a mistake rather than as a column: the primary started at 24px
+     and this at 33. Scoped to these rows, so every other button on the
+     site keeps its 2rem. */
+  padding-left: 1.5rem;
+}
+
 .ed-btn-arrow-badge {
   display: inline-flex;
   align-items: center;
