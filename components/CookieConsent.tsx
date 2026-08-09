@@ -13,6 +13,11 @@ export default function CookieConsent() {
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) setVisible(true);
+
+    if (stored === "accepted") {
+      grantSnitcherConsent();
+      grantGoogleAnalyticsConsent();
+    }
   }, []);
 
   function handleAccept() {
