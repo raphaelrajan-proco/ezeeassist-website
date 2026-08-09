@@ -9,7 +9,7 @@ import JsonLd from "@/components/JsonLd";
 import CookieConsent from "@/components/CookieConsent";
 import AnalyticsProvider from "@/components/AnalyticsProvider";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
-import SnitcherTracker from "@/components/SnitcherTracker";
+import { SnitcherTracker } from "@/components/SnitcherTracker";
 
 const inter = Inter({
   subsets: ["latin"],
