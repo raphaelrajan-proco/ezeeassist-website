@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Onest, Inter_Tight } from "next/font/google";
+import { GoogleAnalytics } from '@next/third-parties/google'
 import "./globals.css";
 import { Suspense } from "react";
 import ThemeProvider from "@/components/ThemeProvider";
@@ -157,6 +158,7 @@ export default function RootLayout({
         </ThemeProvider>
         <SnitcherTracker />
       </body>
+      <GoogleAnalytics gaId="G-NJ0639NTE7" />
     </html>
   );
 }
