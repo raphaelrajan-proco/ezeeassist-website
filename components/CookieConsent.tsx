@@ -19,7 +19,13 @@ export default function CookieConsent() {
     localStorage.setItem(STORAGE_KEY, "accepted");
     dispatchConsentEvent();
     setVisible(false);
-    window.Snitcher.giveCookieConsent();
+    grantSnitcherConsent();
+  }
+
+  function grantSnitcherConsent() {
+    if (window.Snitcher) {
+      window.Snitcher.giveCookieConsent();
+    }
   }
 
   function handleDecline() {
