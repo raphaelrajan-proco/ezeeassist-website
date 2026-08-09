@@ -15,41 +15,28 @@ export default function CookieConsent() {
     if (!stored) setVisible(true);
 
     if (stored === "accepted") {
-      let snitcherAttempts = 0;
-      let snitcherInterval = setInterval(
-        () => {
-          if (window.Snitcher) {
-            clearInterval(snitcherInterval);
-            grantSnitcherConsent();
-          }
-          else if (snitcherAttempts > 10) {
-            clearInterval(snitcherInterval);
-          }
-          else {
-            snitcherAttempts++;
-          }
-        },
-        500
-      );
-
-      let gaAttempts = 0;
-      let gaInterval = setInterval(
-        () => {
-          if (window.gtag) {
-            clearInterval(gaInterval);
-            grantGoogleAnalyticsConsent();
-          }
-          else if (gaAttempts > 10) {
-            clearInterval(gaInterval);
-          }
-          else {
-            gaAttempts++;
-          }
-        },
-        500
-      );
+      deferredEnablement(grantSnitcherConsent);
+      deferredEnablement(grantGoogleAnalyticsConsent);
     }
   }, []);
+
+  function deferredEnablement(grantConsent) {
+    let attempts = 0;
+    let interval = setInterval(
+      () => {
+        if (grantConsent() === true) {
+          clearInterval(interval);
+        }
+        else if (attempts > 10) {
+          clearInterval(interval);
+        }
+        else {
+          attempts++;
+        }
+      },
+      500
+    );
+  }
 
   function handleAccept() {
     localStorage.setItem(STORAGE_KEY, "accepted");
@@ -61,16 +48,19 @@ export default function CookieConsent() {
 
   function grantSnitcherConsent() {
     console.log('Enabling Snitcher');
+
     if (window.Snitcher) {
       window.Snitcher.giveCookieConsent();
       console.log('Enabled Snitcher');
+      return true;
     }
-    else {
-    }
+
+    return false;
   }
 
   function grantGoogleAnalyticsConsent() {
     console.log('Enabling Google Analytics');
+
     if (window.gtag) {
       window.gtag("consent", "update", {
         ad_storage: "granted",
@@ -79,9 +69,10 @@ export default function CookieConsent() {
         analytics_storage: "granted",
       });
       console.log('Enabled Google Analytics');
+      return true;
     }
-    else {
-    }
+
+    return false;
   }
 
   function handleDecline() {
