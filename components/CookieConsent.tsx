@@ -15,8 +15,39 @@ export default function CookieConsent() {
     if (!stored) setVisible(true);
 
     if (stored === "accepted") {
-      grantSnitcherConsent();
-      grantGoogleAnalyticsConsent();
+      let snitcherAttempts = 0;
+      let snitcherInterval = setInterval(
+        () => {
+          if (window.Snitcher) {
+            clearInterval(snitcherInterval);
+            grantSnitcherConsent();
+          }
+          else if (snitcherAttempts > 10) {
+            clearInterval(snitcherInterval);
+          }
+          else {
+            snitcherAttempts++;
+          }
+        },
+        500
+      );
+
+      let gaAttempts = 0;
+      let gaInterval = setInterval(
+        () => {
+          if (window.gtag) {
+            clearInterval(gaInterval);
+            grantGoogleAnalyticsConsent();
+          }
+          else if (gaAttempts > 10) {
+            clearInterval(gaInterval);
+          }
+          else {
+            gaAttempts++;
+          }
+        },
+        500
+      );
     }
   }, []);
 
@@ -34,6 +65,8 @@ export default function CookieConsent() {
       window.Snitcher.giveCookieConsent();
       console.log('Enabled Snitcher');
     }
+    else {
+    }
   }
 
   function grantGoogleAnalyticsConsent() {
@@ -46,6 +79,8 @@ export default function CookieConsent() {
         analytics_storage: "granted",
       });
       console.log('Enabled Google Analytics');
+    }
+    else {
     }
   }
 
