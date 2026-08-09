@@ -31,6 +31,7 @@ export default function CookieConsent() {
   function grantSnitcherConsent() {
     if (window.Snitcher) {
       window.Snitcher.giveCookieConsent();
+      console.log('Enabled Snitcher');
     }
   }
 
@@ -42,6 +43,7 @@ export default function CookieConsent() {
         ad_personalization: "granted",
         analytics_storage: "granted",
       });
+      console.log('Enabled Google Analytics');
     }
   }
 
