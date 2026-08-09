@@ -424,6 +424,41 @@
      footer sits outside that wrapper. */
   .m-tap-circle { width: 44px !important; height: 44px !important; box-sizing: border-box; }
 
+  /* ── Sub-page hero CTA pairs ──────────────────────────── */
+  /* Every sub-page hero pairs an arrow primary with a dark outline
+     secondary in a `flex flex-wrap` row. On a phone the two sized to
+     their own labels, so they came out different widths, and the
+     secondary was also TALLER: `.ed-btn` pads 1rem/2rem, while
+     `.ed-btn-arrow` pads 0.5rem and takes its height from the 2rem
+     badge. Two buttons of two different sizes read as two different
+     kinds of control.
+
+     Matched by `:has()` rather than a marker class on twelve pages, so a
+     new sub-page inherits it by writing the same markup. The `>` matters:
+     without it this would climb to every ancestor of the row. */
+  .theme-editorial div:has(> .ed-btn-arrow):has(> .ed-btn-secondary-dark) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .theme-editorial div:has(> .ed-btn-arrow):has(> .ed-btn-secondary-dark) > .ed-btn {
+    /* Same width, and the primary's height for BOTH. 48px is what the
+       arrow primary already measures: its 2rem badge plus 8px top and
+       bottom. Fixing the height is what stops the secondary from
+       standing taller than the button it is meant to match. */
+    width: 100%;
+    height: 48px;
+    min-height: 48px;
+    padding-top: 0;
+    padding-bottom: 0;
+    box-sizing: border-box;
+  }
+  /* The primary keeps its label-left / badge-right split; the badge is
+     what the extra right padding exists for. */
+  .theme-editorial div:has(> .ed-btn-arrow):has(> .ed-btn-secondary-dark) > .ed-btn-arrow {
+    justify-content: space-between;
+  }
+
   /* ── Logo strip ───────────────────────────────────────── */
   /* Edge to edge on phones: the gutters that frame it on desktop cost
      ~40px of a 390px viewport and the marquee reads as cramped. The
