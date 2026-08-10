@@ -528,6 +528,20 @@
   --purple:  #7C3AED;
   --chip-bg: rgba(0, 119, 168, 0.06);
   --chip-bd: rgba(0, 119, 168, 0.22);
+  /* Stepped card greys, for grids that want to read as a set of distinct
+     things rather than one colour repeated. They were five hardcoded
+     near-white hexes inside the Workflows trigger grid, which meant the
+     cards stayed white in dark mode while their text flipped to
+     near-white: five of the six cards lost their titles and examples
+     entirely. Any card fill has to flip with the theme or the ink that
+     sits on it will not. `--card-inset` is the tint for a panel INSIDE
+     such a card, for the same reason. */
+  --card-step-1: #FAFAFB;
+  --card-step-2: #F5F5F7;
+  --card-step-3: #F0F0F3;
+  --card-step-4: #EBEBEF;
+  --card-step-5: #F5F5F7;
+  --card-inset:  rgba(10, 10, 10, 0.045);
 }
 .dark .theme-editorial .ed-answers,
 .dark .theme-editorial .ed-reporting,
@@ -555,6 +569,15 @@
   --purple:  #A78BFA;
   --chip-bg: rgba(0, 174, 239, 0.08);
   --chip-bd: rgba(0, 174, 239, 0.30);
+  /* Same rhythm as the light set: small steps, the fifth repeating the
+     second, all sitting just above the page surface rather than below
+     it. */
+  --card-step-1: #131316;
+  --card-step-2: #17171A;
+  --card-step-3: #1B1B1F;
+  --card-step-4: #1F1F24;
+  --card-step-5: #17171A;
+  --card-inset:  rgba(238, 242, 248, 0.07);
 }
 
 .theme-editorial .ed-answers {

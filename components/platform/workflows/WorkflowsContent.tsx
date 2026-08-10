@@ -52,7 +52,15 @@ const ON_IMAGE = "rgba(240,246,243,0.92)";
    `--ed-card-alt` repeated six times was the monotone this replaces.
    Deliberately shallow: enough separation to read as six distinct
    things, not enough to imply an order. */
-const GREYS = ["#FAFAFB", "#F5F5F7", "#F0F0F3", "#EBEBEF", "#F5F5F7"];
+/* Tokens, not hexes. These were five literal near-whites, so the cards
+   stayed white in dark mode while `.ed-fg` and `.ed-fg-muted` flipped to
+   near-white on top of them: five of the six trigger cards rendered with
+   invisible titles and examples. The steps live in globals.css with a
+   dark counterpart. */
+const GREYS = [
+  "var(--card-step-1)", "var(--card-step-2)", "var(--card-step-3)",
+  "var(--card-step-4)", "var(--card-step-5)",
+];
 
 const H2 = {
   fontFamily: JAKARTA, fontWeight: 700,
@@ -285,7 +293,7 @@ export default function WorkflowsContent() {
                     className="ed-fg mt-auto rounded-[10px] px-3.5 py-3"
                     style={{
                       marginTop: 18, fontFamily: MONO, fontSize: 12, lineHeight: 1.5,
-                      background: t.drift ? "rgba(0,119,168,0.06)" : "rgba(10,10,10,0.045)",
+                      background: t.drift ? "var(--chip-bg)" : "var(--card-inset)",
                     }}
                   >
                     {t.example}
