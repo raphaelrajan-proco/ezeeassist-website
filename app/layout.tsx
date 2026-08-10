@@ -9,6 +9,9 @@ import CookieConsent from "@/components/CookieConsent";
 import AnalyticsProvider from "@/components/AnalyticsProvider";
 import ExitIntentPopup from "@/components/ExitIntentPopup";
 
+import { GoogleAnalytics } from "@/components/trackers/GoogleAnalytics";
+import { SnitcherTracker } from "@/components/trackers/SnitcherTracker";
+
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -154,7 +157,9 @@ export default function RootLayout({
           <AnalyticsProvider />
           <ExitIntentPopup />
         </ThemeProvider>
+        <SnitcherTracker />
       </body>
+      <GoogleAnalytics />
     </html>
   );
 }

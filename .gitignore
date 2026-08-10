@@ -42,3 +42,5 @@ next-env.d.ts
 
 # screenshot harness output (npm run shots)
 /screenshots
+
+.*.sw*

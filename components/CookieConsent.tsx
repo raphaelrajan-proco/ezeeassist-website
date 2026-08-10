@@ -13,12 +13,66 @@ export default function CookieConsent() {
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (!stored) setVisible(true);
+
+    if (stored === "accepted") {
+      deferredEnablement(grantSnitcherConsent);
+      deferredEnablement(grantGoogleAnalyticsConsent);
+    }
   }, []);
+
+  function deferredEnablement(grantConsent: () => boolean) {
+    let attempts = 0;
+    let interval = setInterval(
+      () => {
+        if (grantConsent() === true) {
+          clearInterval(interval);
+        }
+        else if (attempts > 10) {
+          clearInterval(interval);
+        }
+        else {
+          attempts++;
+        }
+      },
+      500
+    );
+  }
 
   function handleAccept() {
     localStorage.setItem(STORAGE_KEY, "accepted");
     dispatchConsentEvent();
     setVisible(false);
+    grantSnitcherConsent();
+    grantGoogleAnalyticsConsent();
+  }
+
+  function grantSnitcherConsent() {
+    console.log('Enabling Snitcher');
+
+    if (window.Snitcher) {
+      window.Snitcher.giveCookieConsent();
+      console.log('Enabled Snitcher');
+      return true;
+    }
+
+    return false;
+  }
+
+  function grantGoogleAnalyticsConsent() {
+    console.log('Enabling Google Analytics');
+
+    if (window.gtag) {
+      window.gtag("consent", "update", {
+        ad_storage: "granted",
+        ad_user_data: "granted",
+        ad_personalization: "granted",
+        analytics_storage: "granted",
+      });
+      console.log('Enabled Google Analytics');
+      return true;
+    }
+
+    return false;
   }
 
   function handleDecline() {
