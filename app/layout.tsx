@@ -177,6 +177,7 @@ const visitObserver = new IntersectionObserver(
       }
 
       const element = entry.target;
+      console.log(entry);
       if (element.attributes['data-visit']?.value) {
         continue;
       }
