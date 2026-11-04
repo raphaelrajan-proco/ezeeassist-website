@@ -147,6 +147,10 @@ export default function RootLayout({
     >
       <head>
         <JsonLd data={organizationSchema} />
+        <Script 
+          src="https://code.jquery.com/jquery-4.0.0.slim.min.js" 
+          strategy="beforeInteractive" 
+        />
       </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
@@ -159,12 +163,6 @@ export default function RootLayout({
           <ExitIntentPopup />
         </ThemeProvider>
         <SnitcherTracker />
-
-        <Script 
-          src="https://code.jquery.com/jquery-4.0.0.slim.min.js" 
-          strategy="beforeInteractive" 
-        />
-
 
         <Script
           id="track-section-visit"
