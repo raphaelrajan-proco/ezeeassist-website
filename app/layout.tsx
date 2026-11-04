@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from 'next/script';
 import { Inter, Plus_Jakarta_Sans, Onest, Inter_Tight } from "next/font/google";
 import "./globals.css";
 import { Suspense } from "react";
@@ -158,6 +159,62 @@ export default function RootLayout({
           <ExitIntentPopup />
         </ThemeProvider>
         <SnitcherTracker />
+
+        <Script 
+          src="https://code.jquery.com/jquery-4.0.0.slim.min.js" 
+          strategy="beforeInteractive" 
+        />
+
+
+        <Script
+          id="track-section-visit"
+          strategy="afterInteractive"
+        >{`
+const visitRatio = 0.5;
+const visitObserver = new IntersectionObserver(
+  (entries) => {
+    for (const entry of entries) {
+      if (entry.intersectionRatio < visitRatio) {
+        continue;
+      }
+
+      const element = entry.target;
+      if (element.attributes['data-visit']?.value) {
+        continue;
+      }
+
+      element.attributes['data-visit'].value = entry.time;
+
+      const eventInfo = {
+        url: document.URL,
+      };
+      for (const attr of element.attributes) {
+        if (attr.name === 'id') eventInfo['id'] = attr.value;
+
+        if (!attr.name.startsWith('data-')) continue;
+        eventInfo[attr.name.replace(/^data-/, '')] = attr.value;
+      }
+
+      //console.log(entry, entry.intersectionRatio, eventInfo);
+      const eventName = (
+        eventInfo['id']
+          ? ('Viewed ' + eventInfo['id'])
+          : 'Element Viewed'
+      );
+      Snitcher.track(eventName, eventInfo);
+    }
+  },
+  {
+    threshold: visitRatio,
+  }
+);
+
+jQuery().ready(() => {
+  jQuery('section').each(function() {
+    visitObserver.observe(this);
+  });
+});
+        `}</Script>
       </body>
       <GoogleAnalytics />
     </html>
