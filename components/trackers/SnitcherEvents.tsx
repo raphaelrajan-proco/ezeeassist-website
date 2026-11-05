@@ -52,7 +52,7 @@ export function SnitcherEvents() {
       for (const section of document.getElementsByTagName("section")) {
         visitObserver.observe(section)
       }
-    }, 0);
+    }, 500);
   }, [pathname]);
 
   return null;
