@@ -19,6 +19,7 @@ export default function SnitcherTracking() {
 
   useEffect(() => {
     if (!SNITCHER_ID || !consented) return;
+
     // Inject Snitcher script dynamically after consent
     const script = document.createElement("script");
     script.type = "text/javascript";
@@ -37,6 +38,7 @@ export default function SnitcherTracking() {
       })(window, document, "snid", "script");
       snid("verify", "${SNITCHER_ID}");
     `;
+
     document.head.appendChild(script);
   }, [consented]);
 
