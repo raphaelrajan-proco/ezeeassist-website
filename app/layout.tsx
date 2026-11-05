@@ -177,12 +177,11 @@ const visitObserver = new IntersectionObserver(
       }
 
       const element = entry.target;
-      console.log(element.attributes);
-      if (element.attributes['data-visit']?.value) {
+      if (element.hasAttribute('data-visit')) {
         continue;
       }
 
-      element.attributes['data-visit'].value = entry.time;
+      element.setAttribute('data-visit', entry.time);
 
       const eventInfo = {
         url: document.URL,
