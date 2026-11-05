@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 export function SnitcherEvents() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const visitRatio = 0.5;
 
@@ -53,7 +54,7 @@ export function SnitcherEvents() {
         visitObserver.observe(section)
       }
     }, 500);
-  }, [pathname]);
+  }, [pathname, searchParams]);
 
   return null;
 }
