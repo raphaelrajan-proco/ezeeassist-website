@@ -48,11 +48,11 @@ export function SnitcherEvents() {
     );
 
     setTimeout(() => {
-      console.log('Page changed');
+      //console.log('Page changed');
       for (const section of document.getElementsByTagName("section")) {
         visitObserver.observe(section)
       }
-    }, 500);
+    }, 250);
   }, [pathname]);
 
   return null;
