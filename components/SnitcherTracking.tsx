@@ -58,7 +58,7 @@ export default function SnitcherTracking() {
 
         element.setAttribute('data-visit', String(entry.time));
 
-        const eventInfo = {
+        const eventInfo: Record<string, any> = {
           url: document.URL,
         };
         for (const attr of element.attributes) {
