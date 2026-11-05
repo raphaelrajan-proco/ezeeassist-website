@@ -7,7 +7,7 @@ export function SnitcherEvents() {
   const pathname = usePathname();
 
   const visitRatio = 0.5;
-  const visitObserver = new IntersectionObserver(
+  const visitObserver = new window.IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
         if (entry.intersectionRatio < visitRatio) {
