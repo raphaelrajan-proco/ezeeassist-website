@@ -11,6 +11,7 @@ import ExitIntentPopup from "@/components/ExitIntentPopup";
 
 import { GoogleAnalytics } from "@/components/trackers/GoogleAnalytics";
 import { SnitcherTracker } from "@/components/trackers/SnitcherTracker";
+import { SnitcherEvents } from "@/components/trackers/SnitcherEvents";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -158,6 +159,7 @@ export default function RootLayout({
           <ExitIntentPopup />
         </ThemeProvider>
         <SnitcherTracker />
+        <SnitcherEvents />
       </body>
       <GoogleAnalytics />
     </html>
