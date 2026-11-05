@@ -74,7 +74,7 @@ export default function SnitcherTracking() {
             ? `Viewed ${eventInfo['id']}`
             : 'Element Viewed'
         );
-        Snitcher?.track(eventName, eventInfo);
+        window.Snitcher?.track(eventName, eventInfo);
       }
     },
     {
