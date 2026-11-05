@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from 'next/navigation';
 
-export default function SnitcherEvents() {
+export function SnitcherEvents() {
   const pathname = usePathname();
 
   const visitRatio = 0.5;
