@@ -56,7 +56,7 @@ export default function SnitcherTracking() {
           continue;
         }
 
-        element.setAttribute('data-visit', entry.time);
+        element.setAttribute('data-visit', String(entry.time));
 
         const eventInfo = {
           url: document.URL,
@@ -71,7 +71,7 @@ export default function SnitcherTracking() {
         console.log(entry, entry.intersectionRatio, eventInfo);
         const eventName = (
           eventInfo['id']
-            ? ('Viewed ' + eventInfo['id'])
+            ? `Viewed ${eventInfo['id']}`
             : 'Element Viewed'
         );
         Snitcher?.track(eventName, eventInfo);
