@@ -33,7 +33,7 @@ export function SnitcherEvents() {
             eventInfo[attr.name.replace(/^data-/, '')] = attr.value;
           }
 
-          //console.log(entry, entry.intersectionRatio, eventInfo);
+          console.log(entry, entry.intersectionRatio, eventInfo);
           const eventName = (
             eventInfo['id']
               ? `Viewed ${eventInfo['id']}`
