@@ -1283,6 +1283,52 @@
   border-color: rgba(0, 174, 239, 0.24);
 }
 
+/* ─── DKI case study (/case-studies/dki) ───────────────────
+   The handoff's palette for the white sections, light mode as supplied.
+   Dark mode maps it onto the editorial dark tokens so those sections
+   switch with the rest of the site. The navy hero, the numbers band and
+   the navy CTA use literals in the component and never switch. */
+.theme-editorial .dki-page {
+  --dki-surface:    #FFFFFF;
+  --dki-card:       #FFFFFF;
+  --dki-ink:        #13253D;
+  --dki-body:       #44566C;
+  --dki-muted:      #6B7F96;
+  --dki-line:       #D5E1EC;
+  --dki-label:      #0075A8;
+  --dki-icon:       #0086BF;
+  --dki-tint:       #E6F4FC;
+  --dki-quote-bg:   rgba(0, 174, 239, 0.04);
+  --dki-quote-bd:   rgba(0, 174, 239, 0.2);
+  --dki-speed-bg:   #BDE5F8;
+  --dki-speed-bd:   #5CC6F0;
+  --dki-speed-ink:  #13253D;
+  --dki-speed-body: #1B2E48;
+}
+.dark .theme-editorial .dki-page,
+.theme-editorial.dark .dki-page {
+  --dki-surface:    var(--ed-bg);
+  --dki-card:       var(--ed-card);
+  --dki-ink:        var(--ed-fg);
+  --dki-body:       var(--ed-fg-muted);
+  --dki-muted:      var(--ed-fg-muted);
+  --dki-line:       var(--ed-border);
+  --dki-label:      #00AEEF;
+  --dki-icon:       #00AEEF;
+  --dki-tint:       rgba(0, 174, 239, 0.08);
+  --dki-quote-bg:   rgba(0, 174, 239, 0.07);
+  --dki-quote-bd:   rgba(0, 174, 239, 0.24);
+  /* The Speed highlight stays a blue panel, darkened so cream text
+     clears AA on it with room to spare. */
+  --dki-speed-bg:   #0C3A55;
+  --dki-speed-bd:   #00AEEF;
+  --dki-speed-ink:  var(--ed-fg);
+  --dki-speed-body: var(--ed-fg);
+}
+.theme-editorial .dki-btn:hover {
+  box-shadow: 0 8px 25px rgba(0, 174, 239, 0.3);
+}
+
 /* ─── Inline dual-theme tints ──────────────────────────────
    A card whose colour is data, not a token: the component passes a light
    triple and a dark triple, and the theme picks. Used by the "tools that

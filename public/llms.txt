@@ -7,8 +7,9 @@
 - Founded: 2023
 - Headquarters: Toronto, Ontario, Canada (325 Front Street West, 4th Floor)
 - Category: Franchise Operations Software / AI Support Platform
-- Customers: 59+ franchise brands including WSI, DekaLash, DivaDance, EverLine, Aqua-Tots, BeaverTails, Spray-Net, Sport Clips
+- Customers: 59+ franchise brands including DKI Canada, WSI, DekaLash, DivaDance, EverLine, Aqua-Tots, BeaverTails, Spray-Net, Sport Clips
 - Key results:
+  - 2,800+ questions to Ki, DKI Canada's AI assistant built on EZee Assist, in the first 6 months, with 53% focused on program-specific rules (DKI Canada, property restoration network)
   - 67% reduction in support questions (WSI — world's largest digital marketing franchise network)
   - 93% AI resolution rate (DekaLash — 430+ questions deflected)
   - 2,600+ queries answered in 6 months (DivaDance)
@@ -89,6 +90,7 @@ Pricing is based on network size and usage. Flexible plans for growing brands an
 - For franchisors: https://www.ezeeassist.com/industries/franchising/franchisors
 - Security: https://www.ezeeassist.com/security
 - Case studies: https://www.ezeeassist.com/case-studies
+- DKI Canada case study: https://www.ezeeassist.com/case-studies/dki
 - WSI case study: https://www.ezeeassist.com/case-studies/wsi
 - DekaLash case study: https://www.ezeeassist.com/case-studies/dekalash
 - DivaDance case study: https://www.ezeeassist.com/case-studies/divadance

@@ -133,6 +133,11 @@ Operational questions about: vendor contacts and approvals, equipment and mainte
 
 ## Case Studies
 
+### DKI Canada: Faster estimates, built on the right rules
+DKI Canada's property restoration network works across 24 insurer and client programs. Each program has its own fees, estimating guidelines, approval and documentation requirements. Getting an estimate right means finding the right rule for the right program while the estimate is being written. DKI launched Ki, its AI assistant built on EZee Assist and grounded in DKI's own program documents. Ki delivers actionable, program-specific guidance with sources, right when members need it, from the office or the job site. Results: members asked Ki more than 2,800 questions in the first 6 months, with monthly question volume tripling, and 53% of those questions focused on program-specific rules. The outcome is faster estimates, a faster path to approval and a better experience for property owners. Case study: https://www.ezeeassist.com/case-studies/dki
+
+Quote from Chris Schmidt, FCIP, MBA, CEO of DKI Canada: "Speed to estimate is a competitive advantage in restoration. Through our partnership with EZee Assist, we're equipping our members to deliver accurate estimates faster, move jobs forward with confidence and better serve property owners."
+
 ### WSI — 67% Support Question Reduction
 WSI is the world's largest network of digital marketing consultants, operating across multiple countries and time zones. Before EZee Assist, their support team was overwhelmed by repetitive operational questions from franchisees in different time zones, creating daily backlogs. After deploying EZee Assist: 67% reduction in repetitive support questions reaching the human team. Franchisees in every time zone gained 24/7 access to accurate brand knowledge.
 

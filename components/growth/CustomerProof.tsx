@@ -31,6 +31,7 @@ type Story = {
   logoAlt: string;
   logoW: number;
   logoRounded?: boolean;
+  logoTile?: boolean;
   headline: [string, string];
   statLead: string;
   statRest: string;
@@ -38,6 +39,7 @@ type Story = {
   href: string;
   quote: string;
   photo: string;
+  photoRound?: boolean;
   name: string;
   role: string;
   /* Staggered sticky offsets are what leave each covered card's edge
@@ -47,15 +49,20 @@ type Story = {
 
 const STORIES: Story[] = [
   {
-    brand: "DekaLash",
-    edge: "oklch(0.55 0.16 350)",
-    haze: { c1: "oklch(0.8 0.16 345)", c2: "oklch(0.7 0.19 345)", c3: "oklch(0.97 0.02 345)", base: "oklch(0.92 0.05 345)" },
-    logo: "/logos/stories/dekalash.png", logoAlt: "DekaLash", logoW: 250,
-    headline: ["Answers owners trust,", "around the clock"],
-    statLead: "94%", statRest: "AI deflection on the Mindbody migration",
-    cta: "View DekaLash's case study", href: "/case-studies/dekalash",
-    quote: "AI is now an expectation in franchisee support. Our owners get accurate, brand-specific answers 24/7, not generic internet advice, while our team focuses on bigger initiatives. It's become part of daily operations, with franchisees telling each other, 'Use Alpha!'",
-    photo: "/photos/troy-mccullen-cut.png", name: "Troy McCullen", role: "Vice President of Operations, DekaLash",
+    brand: "DKI Canada",
+    /* Sampled from the DKI logo's red. White label text on it is 5.5:1. */
+    edge: "#C8282D",
+    haze: { c1: "oklch(0.83 0.09 25)", c2: "oklch(0.75 0.13 25)", c3: "oklch(0.97 0.015 25)", base: "oklch(0.93 0.035 25)" },
+    /* The supplied PNG has a solid white background, so it sits on a white
+       tile rather than on the haze. Never recolour or knock it out. */
+    logo: "/logos/stories/dki.png", logoAlt: "DKI Canada", logoW: 170, logoTile: true,
+    headline: ["Faster estimates,", "built on the right rules"],
+    statLead: "53%", statRest: "of questions to Ki focused on program-specific rules",
+    cta: "View DKI Canada’s case study", href: "/case-studies/dki",
+    quote: "Speed to estimate is a competitive advantage in restoration. Through our partnership with EZee Assist, we’re equipping our members to deliver accurate estimates faster, move jobs forward with confidence and better serve property owners.",
+    /* A square studio portrait rather than a cut-out, so it is cropped to
+       a circle instead of sitting free like the others. */
+    photo: "/photos/chris-schmidt.jpg", photoRound: true, name: "Chris Schmidt, FCIP, MBA", role: "CEO, DKI Canada",
     top: 24,
   },
   {
@@ -162,15 +169,32 @@ function StoryCard({ s }: { s: Story }) {
                 filter: "blur(34px)",
               }}
             />
-            <Image
-              src={s.logo}
-              alt={s.logoAlt}
-              width={s.logoW}
-              height={Math.round(s.logoW * 0.4)}
-              unoptimized
-              className="relative h-auto"
-              style={{ width: s.logoW, maxWidth: "100%", borderRadius: s.logoRounded ? 20 : undefined }}
-            />
+            {s.logoTile ? (
+              <span
+                className="relative flex items-center justify-center rounded-xl bg-white"
+                style={{ padding: "14px 18px", maxWidth: "100%" }}
+              >
+                <Image
+                  src={s.logo}
+                  alt={s.logoAlt}
+                  width={s.logoW}
+                  height={Math.round(s.logoW * 0.25)}
+                  unoptimized
+                  className="block h-auto"
+                  style={{ width: s.logoW, maxWidth: "100%" }}
+                />
+              </span>
+            ) : (
+              <Image
+                src={s.logo}
+                alt={s.logoAlt}
+                width={s.logoW}
+                height={Math.round(s.logoW * 0.4)}
+                unoptimized
+                className="relative h-auto"
+                style={{ width: s.logoW, maxWidth: "100%", borderRadius: s.logoRounded ? 20 : undefined }}
+              />
+            )}
           </div>
 
           {/* Headline, stat and CTA */}
@@ -230,7 +254,11 @@ function StoryCard({ s }: { s: Story }) {
               width={64}
               height={64}
               className="flex-none"
-              style={{ width: 64, height: 64, objectFit: "contain", objectPosition: "left bottom" }}
+              style={
+                s.photoRound
+                  ? { width: 64, height: 64, objectFit: "cover", borderRadius: "50%" }
+                  : { width: 64, height: 64, objectFit: "contain", objectPosition: "left bottom" }
+              }
             />
             <blockquote className="ed-fg text-[13.5px]" style={{ lineHeight: 1.6 }}>
               {s.quote}
@@ -249,7 +277,7 @@ function StoryCard({ s }: { s: Story }) {
 }
 
 export default function CustomerProof() {
-  /* Below 768 the deck opens on DekaLash and WSI, with the other two
+  /* Below 768 the deck opens on DKI Canada and WSI, with the other two
      behind a control, the same pattern the Always On bands use. Four
      full-height case studies is a long scroll before the section that
      follows, and the first two carry the claim. */

@@ -6,7 +6,8 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
-import type { CaseStudy } from "@/lib/data/case-studies";
+import type { CaseStudy, StoryCard } from "@/lib/data/case-studies";
+import MoreStories from "../MoreStories";
 import { HERO_GRADIENT } from "@/lib/data/hero-backgrounds";
 import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 
@@ -39,7 +40,7 @@ const SECTIONS = [
   { id: "results", n: "03", title: "What it returned" },
 ] as const;
 
-export default function CaseStudyContent({ study, more }: { study: CaseStudy; more: CaseStudy[] }) {
+export default function CaseStudyContent({ study, more }: { study: CaseStudy; more: StoryCard[] }) {
   return (
     <>
       {/* ── 1. Hero ───────────────────────────────────────── */}
@@ -268,50 +269,8 @@ export default function CaseStudyContent({ study, more }: { study: CaseStudy; mo
         </div>
       </section>
 
-      {/* ── 3. More stories ───────────────────────────────── */}
-      <section className="ed-bg-alt w-full">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 md:px-12 lg:px-16 py-14 md:py-16">
-          <h2
-            className="ed-fg tracking-[-0.025em]"
-            style={{ fontFamily: JAKARTA, fontSize: 28, fontWeight: 700 }}
-          >
-            More stories
-          </h2>
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-            {more.map((m, i) => (
-              <Reveal key={m.slug} delay={i * 0.08}>
-                <Link
-                  href={`/case-studies/${m.slug}`}
-                  className="ed-card ed-border ed-story-card flex h-full items-center gap-6 rounded-2xl border px-7 py-6"
-                >
-                  <span
-                    className="flex h-16 w-[110px] flex-none items-center justify-center rounded-[10px]"
-                    style={{ backgroundColor: m.panel }}
-                  >
-                    <Image
-                      src={m.logo.src}
-                      alt={m.logo.alt}
-                      width={110}
-                      height={m.logoH.chip}
-                      className="w-auto object-contain"
-                      style={{ height: m.logoH.chip }}
-                    />
-                  </span>
-                  <span className="flex flex-col gap-1">
-                    <span
-                      className="ed-fg tracking-[-0.015em]"
-                      style={{ fontFamily: JAKARTA, fontSize: 16.5, fontWeight: 700 }}
-                    >
-                      {m.headline}
-                    </span>
-                    <span className="ed-fg-muted text-[13px]">{m.kicker}</span>
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ── 3. More stories ─────────────────────────────── */}
+      <MoreStories more={more} />
 
       {/* ── 4. Closing ────────────────────────────────────
           Same ocean family as the hero, mirrored to 285deg and resolving

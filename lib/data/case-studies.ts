@@ -28,7 +28,12 @@
 export type ResultRow = { label: string; value: string };
 export type MetaRow = { label: string; value: string };
 
-export type CaseStudy = {
+/**
+ * What the landing card and the "More stories" chip need. Every story
+ * has one, including DKI, whose detail page is bespoke rather than this
+ * template (see `app/case-studies/dki`).
+ */
+export type StoryCard = {
   slug: string;
   /** Brand name as written in prose. */
   brand: string;
@@ -39,13 +44,20 @@ export type CaseStudy = {
       "More stories" chip. The three marks have very different aspect
       ratios, so one height cannot serve all of them. */
   logoH: { card: number; rail: number; chip: number };
+  /** The supplied artwork has a solid white background, so the mark sits
+      on a white tile instead of directly on the tint. Never recolour or
+      knock it out instead. */
+  logoTile?: boolean;
 
   /* ── Landing card ── */
   kicker: string;
   headline: string;
   summary: string;
   cardStats: [ResultRow, ResultRow];
+};
 
+/** A story rendered by the `/case-studies/[slug]` template. */
+export type CaseStudy = StoryCard & {
   /* ── Detail hero ── */
   pill: string;
   /** Split so the closing clause can take the accent colour. */
@@ -241,7 +253,39 @@ export const CASE_STUDIES: CaseStudy[] = [
   },
 ];
 
+/**
+ * DKI Canada. Card only: the detail page is a bespoke design at
+ * `app/case-studies/dki` and does not use the template, so it is not in
+ * `CASE_STUDIES` (which would also make `[slug]` generate a clashing
+ * `/case-studies/dki`). Copy is approved by DKI's CEO and is verbatim.
+ * No insurer or client names, ever.
+ */
+export const DKI_CARD: StoryCard = {
+  slug: "dki",
+  brand: "DKI Canada",
+  logo: { src: "/logos/stories/dki.png", alt: "DKI Canada" },
+  /* A light tint of the logo red (#C8282D). */
+  panel: "#FBECEC",
+  logoH: { card: 34, rail: 40, chip: 18 },
+  logoTile: true,
+
+  kicker: "Every program has its own rulebook",
+  headline: "Faster estimates across 24 insurer programs",
+  summary:
+    "DKI Canada’s restoration network works across 24 insurer and client programs, each with its own fees, estimating guidelines and approval rules. Ki, DKI’s AI assistant built on EZee Assist, brings that guidance into the estimating process, so members move jobs forward faster and property owners get accurate estimates sooner.",
+  cardStats: [
+    { value: "24", label: "insurer and client programs" },
+    { value: "2,800+", label: "questions in 6 months" },
+  ],
+};
+
 export const bySlug = (slug: string) => CASE_STUDIES.find((c) => c.slug === slug);
 
-/** The other stories, in registry order. Used by "More stories". */
-export const siblings = (slug: string) => CASE_STUDIES.filter((c) => c.slug !== slug);
+/** Every story card, in the order the landing page lists them. */
+export const STORY_CARDS: StoryCard[] = [
+  DKI_CARD,
+  ...(["wsi", "divadance", "dekalash"] as const).map((s) => bySlug(s)!),
+];
+
+/** The other stories, in landing order. Used by "More stories". */
+export const siblings = (slug: string) => STORY_CARDS.filter((c) => c.slug !== slug);

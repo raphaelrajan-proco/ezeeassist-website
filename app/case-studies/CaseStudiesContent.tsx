@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
 import { CLOSING_BASE } from "@/components/growth/closing-band";
-import { CASE_STUDIES } from "@/lib/data/case-studies";
+import { STORY_CARDS } from "@/lib/data/case-studies";
+import { StoryLogo } from "./MoreStories";
 import { HERO_GRADIENT } from "@/lib/data/hero-backgrounds";
 import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 
@@ -34,7 +34,7 @@ import { EASE, JAKARTA, MONO, Reveal } from "@/components/platform/shared";
 const OC = HERO_GRADIENT.ocean;
 
 /* Fixed inks for the brand panels, which stay light in both themes
-   because all three logos are dark-on-light artwork. */
+   because every logo is dark-on-light artwork. */
 const PANEL_INK = "#0A0A0A";
 const PANEL_INK_MUTED = "#52525B";
 
@@ -137,7 +137,7 @@ export default function CaseStudiesContent() {
           card is one link, with the headline as its accessible name. */}
       <section id="stories" className="ed-bg w-full scroll-mt-24">
         <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 md:px-12 lg:px-16 py-16 md:py-20 lg:py-24">
-          {CASE_STUDIES.map((c, i) => (
+          {STORY_CARDS.map((c, i) => (
             <Reveal key={c.slug} delay={i * 0.08}>
               <Link
                 href={`/case-studies/${c.slug}`}
@@ -149,14 +149,7 @@ export default function CaseStudiesContent() {
                   className="flex min-h-[168px] flex-col justify-between gap-6 p-7 sm:p-8 lg:min-h-[210px]"
                   style={{ backgroundColor: c.panel }}
                 >
-                  <Image
-                    src={c.logo.src}
-                    alt={c.logo.alt}
-                    width={220}
-                    height={c.logoH.card}
-                    className="w-auto self-start object-contain"
-                    style={{ height: c.logoH.card }}
-                  />
+                  <StoryLogo story={c} h={c.logoH.card} className="self-start" />
                   <div className="flex gap-6">
                     {c.cardStats.map((s) => (
                       <div key={s.label} className="flex flex-col gap-0.5">
