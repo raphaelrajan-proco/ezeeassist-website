@@ -56,6 +56,7 @@ const routes: Route[] = [
 
   // ── Tier 2: Case studies ──────────────────────────────────
   { url: "/case-studies",                                   priority: 0.85, changeFrequency: "monthly" },
+  { url: "/case-studies/dki",                               priority: 0.80, changeFrequency: "monthly" },
   { url: "/case-studies/wsi",                               priority: 0.80, changeFrequency: "monthly" },
   { url: "/case-studies/dekalash",                          priority: 0.80, changeFrequency: "monthly" },
   { url: "/case-studies/divadance",                         priority: 0.80, changeFrequency: "monthly" },
